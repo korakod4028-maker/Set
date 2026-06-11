@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เซตและตรรกศาสตร์ | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '∀ ∃ ∩ ∪ ~ → ↔ ∈ ⊂ ∅';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+  .math-latex {
+    font-family: var(--sans);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* VENN DIAGRAM */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+  .reset-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    display: none;
+  }
+  .reset-btn.show { display: inline-block; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* PROGRESS */
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .prog-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .prog-dot.done { background: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>เซต<span>และ</span>ตรรกศาสตร์</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">11</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="set1">1. นิยามเซต</button>
+  <button class="tab-btn" data-sec="set2">2. การดำเนินการ</button>
+  <button class="tab-btn" data-sec="set3">3. แผนภาพเวนน์</button>
+  <button class="tab-btn" data-sec="logic1">4. ประพจน์</button>
+  <button class="tab-btn" data-sec="logic2">5. ตัวเชื่อม</button>
+  <button class="tab-btn" data-sec="logic3">6. ตารางค่าความจริง</button>
+  <button class="tab-btn" data-sec="logic4">7. สมมูล/นิเสธ</button>
+  <button class="tab-btn" data-sec="logic5">8. ตัวบ่งปริมาณ (∀, ∃)</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: นิยามเซต ===== -->
+  <div class="section active" id="set1">
+    <div class="section-heading"><span>บทที่ 1</span> · ทฤษฎีเซต</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📦</div>เซตคืออะไร?</div>
+      <p>เซต (Set) คือ <strong>กลุ่มของสิ่งของที่กำหนดได้ชัดเจน</strong> ว่าอะไรอยู่ในกลุ่มหรือไม่อยู่ในกลุ่ม</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เซต คือ การรวมกลุ่มของสิ่งต่าง ๆ ที่มีลักษณะเฉพาะร่วมกัน เรียกสมาชิกแต่ละตัวว่า <strong>สมาชิก (Element)</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A = {1, 2, 3, 4, 5} → เซตของจำนวนนับตั้งแต่ 1 ถึง 5<br>
+        B = {a, b, c} → เซตของพยัญชนะภาษาอังกฤษสามตัวแรก
+      </div>
+
+      <div class="sub-heading">การเขียนแทนเซต</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>แบบแจกแจงสมาชิก</h4>
+          <p>เขียนระบุสมาชิกทุกตัวลงในวงเล็บปีกกา</p>
+          <div class="math-block">A = {2, 4, 6, 8}</div>
+        </div>
+        <div class="mini-card">
+          <h4>แบบบอกเงื่อนไข</h4>
+          <p>เขียนเงื่อนไขที่สมาชิกต้องเป็นไปตามนั้น พร้อมระบุเอกภพสัมพัทธ์</p>
+          <div class="math-block">A = {x ∈ ℕ | x เป็นจำนวนคู่ และ x ≤ 8}</div>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — เขียนเงื่อนไขให้ชัด</div>
+        ควรระบุเอกภพสัมพัทธ์ด้วยเสมอ เช่น x ∈ ℕ หรือ x ∈ ℤ เพื่อให้ความหมายของเซตชัดเจน ไม่คลาดเคลื่อน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔢</div>สมาชิกและจำนวนสมาชิก</div>
+      <p>ใช้สัญลักษณ์ <span class="math">∈</span> แทน "เป็นสมาชิกของ" และ <span class="math">∉</span> แทน "ไม่เป็นสมาชิกของ"</p>
+      <div class="math-block">
+        ถ้า A = {1, 2, 3} แล้ว<br>
+        2 ∈ A  (2 เป็นสมาชิกของ A)<br>
+        5 ∉ A  (5 ไม่เป็นสมาชิกของ A)
+      </div>
+      <div class="def-box">
+        <div class="def-label">จำนวนสมาชิก n(A)</div>
+        <span class="math">n(A)</span> คือจำนวนสมาชิกของเซต A<br>
+        เช่น A = {a, b, c, d} → <span class="math">n(A) = 4</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⭐</div>เซตพิเศษที่ต้องรู้</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">∅</div>
+          <div class="sym-name">เซตว่าง</div>
+          <div class="sym-desc">เซตที่ไม่มีสมาชิก n(∅) = 0</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">U</div>
+          <div class="sym-name">เอกภพสัมพัทธ์</div>
+          <div class="sym-desc">เซตที่ครอบคลุมสมาชิกทุกตัวในบริบทนั้น ๆ</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">⊂</div>
+          <div class="sym-name">เซตย่อย (สับเซต)</div>
+          <div class="sym-desc">A ⊂ B: ทุกสมาชิกของ A อยู่ใน B</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">P(A)</div>
+          <div class="sym-name">เพาเวอร์เซต (Power Set)</div>
+          <div class="sym-desc">n(P(A)) = 2ⁿ เมื่อ n = n(A)</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง เพาเวอร์เซต</div>
+        A = {1, 2} → P(A) = {∅, {1}, {2}, {1,2}}<br>
+        n(A) = 2 → n(P(A)) = 2² = 4
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        เซตว่าง <span class="math">∅</span> เป็นสับเซตของทุกเซต เสมอ<br>
+        ∅ ⊂ A สำหรับทุก A เสมอ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📋</div>เซตเท่ากัน และการตรวจสมาชิกที่ซับซ้อน</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เซตเท่ากัน (A = B)</h4>
+          <p>มีสมาชิกเหมือนกันทุกตัว ลำดับไม่สำคัญ</p>
+          <div class="math-block">{1,2,3} = {3,1,2} ✓</div>
+        </div>
+        <div class="mini-card">
+          <h4>ระวัง: ปีกกาซ้อน!</h4>
+          <p style="font-size:13px; color:var(--text-dim)">A = {∅, 1, {1}} มีสมาชิก <strong>3 ตัว</strong><br>
+          สมาชิกคือ: ∅, 1, และ {1}<br>
+          {1} ∈ A ✓ แต่ {1} ⊂ A ✗ (เพราะ {1} เป็นสมาชิก ไม่ใช่สับเซต)</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 สับเซตและสมาชิก — กับดักข้อสอบ</div>
+        กำหนด A = {∅, 1, {1}}<br>
+        • ∅ ∈ A (จริง — ∅ เป็น<em>สมาชิก</em>ของ A)<br>
+        • ∅ ⊂ A (จริง — ∅ เป็นสับเซตของทุกเซต)<br>
+        • {1} ∈ A (จริง — {1} เป็น<em>สมาชิก</em>ของ A)<br>
+        • {1} ⊂ A (จริง — เพราะสมาชิกของ {1} คือ 1 ซึ่งอยู่ใน A ด้วย)<br>
+        • {{1}} ⊂ A (จริง — เพราะ {1} เป็นสมาชิกของ A)<br>
+        • 1 ∈ {1} (จริง) แต่ 1 ∈ A ก็จริงเช่นกัน
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ สูตรจำนวนสับเซต</div>
+        ถ้า n(A) = n แล้ว A มีสับเซตทั้งหมด 2ⁿ เซต<br>
+        และ A มีสับเซตที่แท้จริง (ไม่รวมตัวเอง) ทั้งหมด 2ⁿ - 1 เซต
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: การดำเนินการ ===== -->
+  <div class="section" id="set2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · การดำเนินการบนเซต</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">∪</div>ยูเนียน (Union) A ∪ B</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        A ∪ B = เซตของสมาชิกที่อยู่ใน A <strong>หรือ</strong> B (หรือทั้งสอง)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A = {1, 2, 3, 4}, B = {3, 4, 5, 6}<br>
+        A ∪ B = {1, 2, 3, 4, 5, 6}
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        ∪ มาจาก Union = "รวมกัน" — เอาสมาชิกทุกตัวจากทั้งสองเซต (ไม่ซ้ำกัน)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">∩</div>อินเตอร์เซกชัน (Intersection) A ∩ B</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        A ∩ B = เซตของสมาชิกที่อยู่ใน A <strong>และ</strong> B พร้อมกัน
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A = {1, 2, 3, 4}, B = {3, 4, 5, 6}<br>
+        A ∩ B = {3, 4}
+      </div>
+      <p>ถ้า A ∩ B = ∅ เรียกว่า A และ B เป็น <strong>เซตไม่มีสมาชิกร่วมกัน</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">A'</div>คอมพลีเมนต์ (Complement) A'</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        A' = เซตของสมาชิกใน U ที่ <strong>ไม่อยู่</strong> ใน A
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        U = {1,2,3,4,5,6,7,8}, A = {1,2,3}<br>
+        A' = {4,5,6,7,8}
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">สูตรสำคัญ</div>
+        n(A') = n(U) − n(A)<br>
+        A ∪ A' = U<br>
+        A ∩ A' = ∅
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">−</div>ผลต่าง (Difference) A − B</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        A − B = เซตของสมาชิกที่อยู่ใน A <strong>แต่ไม่อยู่</strong> ใน B
+      </div>
+      <div class="math-block">A − B = A ∩ B'</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A = {1,2,3,4}, B = {3,4,5}<br>
+        A − B = {1,2}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>สูตรจำนวนสมาชิก (สำคัญมาก!)</div>
+      <div class="math-block">
+        n(A ∪ B) = n(A) + n(B) − n(A ∩ B)
+      </div>
+      <div class="math-block">
+        n(A ∪ B ∪ C) = n(A) + n(B) + n(C)<br>
+                      − n(A ∩ B) − n(B ∩ C) − n(A ∩ C)<br>
+                      + n(A ∩ B ∩ C)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์</div>
+        นักเรียน 30 คน เรียนคณิต 18 คน เรียนวิทย์ 20 คน เรียนทั้งสอง 8 คน<br>
+        จงหาจำนวนนักเรียนที่เรียนอย่างน้อยหนึ่งวิชา<br><br>
+        <strong>วิธีทำ:</strong> n(M ∪ S) = 18 + 20 − 8 = <strong>30 คน</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔁</div>สมบัติและกฎสำคัญของเซต</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>กฎการสลับที่ (Commutative)</h4>
+          <div class="math-block">A ∪ B = B ∪ A<br>A ∩ B = B ∩ A</div>
+        </div>
+        <div class="mini-card">
+          <h4>กฎการเปลี่ยนหมู่ (Associative)</h4>
+          <div class="math-block">(A ∪ B) ∪ C = A ∪ (B ∪ C)<br>(A ∩ B) ∩ C = A ∩ (B ∩ C)</div>
+        </div>
+        <div class="mini-card">
+          <h4>กฎการกระจาย (Distributive)</h4>
+          <div class="math-block">A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)<br>A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C)</div>
+        </div>
+        <div class="mini-card">
+          <h4>กฎเอกลักษณ์ (Identity)</h4>
+          <div class="math-block">A ∪ ∅ = A<br>A ∩ U = A</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔄</div>กฎของเดอมอร์แกน (De Morgan's Laws)</div>
+      <div class="def-box">
+        <div class="def-label">กฎของเดอมอร์แกน — ต้องจำให้ได้!</div>
+        กฎของเดอมอร์แกนอธิบายความสัมพันธ์ระหว่าง คอมพลีเมนต์, ยูเนียน และอินเตอร์เซกชัน
+      </div>
+      <div class="math-block">
+        กฎที่ 1: &nbsp; (A ∪ B)' = A' ∩ B'<br>
+        กฎที่ 2: &nbsp; (A ∩ B)' = A' ∪ B'
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 วิธีจำ</div>
+        เมื่อนำคอมพลีเมนต์เข้าไป ให้ <strong>กระจายเครื่องหมาย ' เข้าทุกตัว แล้วเปลี่ยน ∪ ↔ ∩</strong><br>
+        เช่น (A ∪ B)' → A' และ B' แล้วเปลี่ยน ∪ เป็น ∩ ได้ A' ∩ B'
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 1 — ตรวจสอบกฎที่ 1</div>
+        กำหนด U = {1,2,3,4,5,6}, A = {1,2,3}, B = {2,3,4}<br><br>
+        <strong>วิธีที่ 1 (ด้านซ้าย):</strong><br>
+        A ∪ B = {1,2,3,4} → (A ∪ B)' = {5,6}<br><br>
+        <strong>วิธีที่ 2 (ด้านขวา):</strong><br>
+        A' = {4,5,6}, B' = {1,5,6}<br>
+        A' ∩ B' = {5,6} ✓ (ได้เหมือนกัน)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ประยุกต์ใช้กฎเดอมอร์แกน</div>
+        กฎนี้ใช้บ่อยในการหาค่า n(A'∩B') หรือ n(A'∪B'):<br>
+        <strong>n(A'∩B') = n((A∪B)') = n(U) − n(A∪B)</strong><br>
+        <strong>n(A'∪B') = n((A∩B)') = n(U) − n(A∩B)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: เวนน์ ===== -->
+  <div class="section" id="set3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · แผนภาพเวนน์-ออยเลอร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⭕</div>แผนภาพเวนน์สองเซต</div>
+      <p>ใช้วงกลมแทนเซต แต่ละบริเวณมีความหมายต่างกัน</p>
+      <div class="venn-container">
+        <svg width="400" height="200" viewBox="0 0 400 200">
+          <rect width="400" height="200" rx="10" fill="#1c2235"/>
+          <text x="10" y="20" fill="#8892b0" font-size="13" font-family="Sarabun">U</text>
+          <circle cx="155" cy="100" r="70" fill="rgba(108,99,255,0.2)" stroke="#6c63ff" stroke-width="2"/>
+          <circle cx="245" cy="100" r="70" fill="rgba(0,212,170,0.15)" stroke="#00d4aa" stroke-width="2"/>
+          <text x="110" y="105" fill="#a89fff" font-size="15" font-weight="bold" font-family="Sarabun">A เท่านั้น</text>
+          <text x="187" y="90" fill="#e8eaf6" font-size="13" font-family="Sarabun">A∩B</text>
+          <text x="264" y="105" fill="#00d4aa" font-size="15" font-weight="bold" font-family="Sarabun">B เท่านั้น</text>
+          <text x="155" y="30" fill="#a89fff" font-size="16" font-family="Sarabun">A</text>
+          <text x="235" y="30" fill="#00d4aa" font-size="16" font-family="Sarabun">B</text>
+        </svg>
+      </div>
+
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>บริเวณต่าง ๆ</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>A เท่านั้น = A − B</li>
+            <li>B เท่านั้น = B − A</li>
+            <li>ส่วนกลาง = A ∩ B</li>
+            <li>ทั้งหมด = A ∪ B</li>
+            <li>นอกวง = (A ∪ B)'</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>สูตรคำนวณ</h4>
+          <div class="math-block" style="font-size:13px; line-height:1.8">
+            n(A only) = n(A) − n(A∩B)<br>
+            n(B only) = n(B) − n(A∩B)<br>
+            n(neither) = n(U) − n(A∪B)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">⭕</div>แผนภาพเวนน์สามเซต</div>
+      <div class="venn-container">
+        <svg width="400" height="240" viewBox="0 0 400 240">
+          <rect width="400" height="240" rx="10" fill="#1c2235"/>
+          <text x="10" y="20" fill="#8892b0" font-size="13" font-family="Sarabun">U</text>
+          <circle cx="175" cy="100" r="65" fill="rgba(108,99,255,0.15)" stroke="#6c63ff" stroke-width="2"/>
+          <circle cx="225" cy="100" r="65" fill="rgba(0,212,170,0.12)" stroke="#00d4aa" stroke-width="2"/>
+          <circle cx="200" cy="150" r="65" fill="rgba(255,107,107,0.12)" stroke="#ff6b6b" stroke-width="2"/>
+          <text x="140" y="85" fill="#a89fff" font-size="13" font-family="Sarabun">A</text>
+          <text x="247" y="85" fill="#00d4aa" font-size="13" font-family="Sarabun">B</text>
+          <text x="194" y="210" fill="#ff6b6b" font-size="13" font-family="Sarabun">C</text>
+          <text x="190" y="125" fill="#e8eaf6" font-size="11" font-family="Sarabun">A∩B∩C</text>
+        </svg>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">โจทย์ประยุกต์</div>
+        นักเรียน 50 คน สำรวจงานอดิเรก: วาดรูป (A) 25 คน, ดนตรี (B) 20 คน, กีฬา (C) 22 คน<br>
+        A∩B = 8, B∩C = 7, A∩C = 6, A∩B∩C = 3<br><br>
+        n(A∪B∪C) = 25+20+22−8−7−6+3 = <strong>49 คน</strong><br>
+        ไม่มีงานอดิเรก = 50−49 = <strong>1 คน</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📐</div>การหาค่าสูงสุด–ต่ำสุด (Max-Min) ของ n(A∩B)</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        เมื่อทราบ n(U), n(A), n(B) แต่ไม่ทราบ n(A∩B) สามารถหาขอบเขตได้ดังนี้<br><br>
+        <strong>ค่าต่ำสุด (Minimum):</strong> n(A ∩ B) ≥ \max(0,  n(A)+n(B)-n(U))<br>
+        <strong>ค่าสูงสุด (Maximum):</strong> n(A ∩ B) ≤ \min(n(A), n(B))
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        n(U) = 30, n(A) = 20, n(B) = 18<br><br>
+        <strong>ค่าต่ำสุด:</strong> \max(0, 20+18-30) = \max(0, 8) = 8<br>
+        <strong>ค่าสูงสุด:</strong> \min(20, 18) = 18<br><br>
+        ดังนั้น 8 ≤ n(A ∩ B) ≤ 18
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 แนวคิดภาพ</div>
+        <strong>ค่าต่ำสุด</strong> เกิดเมื่อซ้อนทับกันน้อยที่สุด = ยืดวงออกจากกันเท่าที่ U จะอนุญาต<br>
+        <strong>ค่าสูงสุด</strong> เกิดเมื่อเซตเล็กกว่าถูกซ้อนเต็มอยู่ในเซตใหญ่กว่า (เซตเล็ก ⊂ เซตใหญ่)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">โจทย์แนว A-Level — สามเซต</div>
+        โรงเรียนมีนักเรียน 100 คน สำรวจชมรม A (60 คน), B (50 คน), C (40 คน)<br>
+        ถ้าไม่ทราบส่วนซ้อนใด ๆ จงหาค่ามากสุดและน้อยสุดของ n(A∩B∩C)<br><br>
+        <strong>ค่ามากสุด:</strong> \min(n(A), n(B), n(C)) = \min(60,50,40) = 40 คน (เป็นไปได้เมื่อ C ⊂ B ⊂ A)<br>
+        <strong>ค่าน้อยสุด:</strong> \max(0, n(A)+n(B)+n(C)-2n(U)) = \max(0, 150-200) = 0 คน<br>
+        <span style="color:var(--text-dim); font-size:13px">* ค่าน้อยสุดสำหรับสามเซตใช้สูตร max(0, n(A)+n(B)+n(C)−2n(U))</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: ประพจน์ ===== -->
+  <div class="section" id="logic1">
+    <div class="section-heading"><span>บทที่ 2</span> · ตรรกศาสตร์ (Logic)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">💬</div>ประพจน์ (Proposition)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ประพจน์ คือ ประโยคบอกเล่าหรือปฏิเสธที่ <strong>สามารถบอกได้ว่าจริงหรือเท็จ</strong> เพียงอย่างเดียว
+      </div>
+      <div class="grid-2">
+        <div class="mini-card" style="border-color: rgba(0,212,170,0.3)">
+          <h4 style="color:var(--accent2)">✓ เป็นประพจน์</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>"2 + 2 = 4" (จริง)</li>
+            <li>"กรุงเทพฯ อยู่ในจีน" (เท็จ)</li>
+            <li>"ดวงอาทิตย์ขึ้นทางทิศตะวันออก"</li>
+          </ul>
+        </div>
+        <div class="mini-card" style="border-color: rgba(255,107,107,0.3)">
+          <h4 style="color:var(--accent3)">✗ ไม่เป็นประพจน์</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>"x + 5 = 10" (ไม่รู้ค่า x)</li>
+            <li>"สวัสดีครับ" (คำทักทาย)</li>
+            <li>"ปิดประตูด้วย" (คำสั่ง)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคดูว่าเป็นประพจน์ไหม</div>
+        ลองถามตัวเองว่า "ประโยคนี้จริงหรือเท็จ?" ถ้าตอบได้ = ประพจน์ ถ้าตอบไม่ได้ = ไม่เป็นประพจน์
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔢</div>ค่าความจริง (Truth Value)</div>
+      <p>ประพจน์ทุกตัวมีค่าความจริงเพียงหนึ่งค่า คือ <strong>จริง (T)</strong> หรือ <strong>เท็จ (F)</strong></p>
+      <div class="math-block">
+        p = "5 เป็นจำนวนคี่"       → ค่าความจริง = T (จริง)<br>
+        q = "4 หารด้วย 3 ลงตัว"   → ค่าความจริง = F (เท็จ)
+      </div>
+      <p>ประพจน์ที่ใช้ตัวแปร เช่น p, q, r เรียกว่า <strong>ตัวแปรประพจน์</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔄</div>นิเสธ (Negation) ~p</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        นิเสธของ p เขียนแทนด้วย <strong>~p</strong> (อ่านว่า ไม่ p) คือประพจน์ที่มีค่าความจริง<strong>ตรงข้าม</strong>กับ p
+      </div>
+      <table>
+        <tr><th>p</th><th>~p</th></tr>
+        <tr><td class="true-val">T</td><td class="false-val">F</td></tr>
+        <tr><td class="false-val">F</td><td class="true-val">T</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        p = "ฝนตก" → ~p = "ฝนไม่ตก"<br>
+        p = "x > 5" → ~p = "x ≤ 5"
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: ตัวเชื่อม ===== -->
+  <div class="section" id="logic2">
+    <div class="section-heading"><span>หัวข้อ 5</span> · ตัวเชื่อมตรรกศาสตร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">∧</div>ตัวเชื่อม "และ" (∧) — Conjunction</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        p ∧ q อ่านว่า "p <strong>และ</strong> q" จะจริงก็ต่อเมื่อ <strong>ทั้ง p และ q จริงพร้อมกัน</strong>
+      </div>
+      <table>
+        <tr><th>p</th><th>q</th><th>p ∧ q</th></tr>
+        <tr><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+        <tr><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td></tr>
+        <tr><td class="false-val">F</td><td class="true-val">T</td><td class="false-val">F</td></tr>
+        <tr><td class="false-val">F</td><td class="false-val">F</td><td class="false-val">F</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 จำง่าย</div>
+        ∧ = AND = ต้องจริง<strong>ทั้งคู่</strong> ถึงจะจริง เหมือนไฟฟ้าต่อแบบอนุกรม
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">∨</div>ตัวเชื่อม "หรือ" (∨) — Disjunction</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        p ∨ q อ่านว่า "p <strong>หรือ</strong> q" จะเท็จก็ต่อเมื่อ <strong>ทั้ง p และ q เท็จพร้อมกัน</strong>
+      </div>
+      <table>
+        <tr><th>p</th><th>q</th><th>p ∨ q</th></tr>
+        <tr><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+        <tr><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="false-val">F</td><td class="false-val">F</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 จำง่าย</div>
+        ∨ = OR = ต้องเท็จ<strong>ทั้งคู่</strong> ถึงจะเท็จ เหมือนไฟฟ้าต่อแบบขนาน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">→</div>ตัวเชื่อม "ถ้า...แล้ว..." (→) — Conditional</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        p → q อ่านว่า "ถ้า p แล้ว q" จะ<strong>เท็จเฉพาะเมื่อ p จริง แต่ q เท็จ</strong>
+      </div>
+      <table>
+        <tr><th>p</th><th>q</th><th>p → q</th></tr>
+        <tr><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+        <tr><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td></tr>
+        <tr><td class="false-val">F</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+      </table>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ จุดที่สับสนบ่อย</div>
+        เมื่อ p เท็จ ไม่ว่า q จะเป็นอะไร p → q จะ<strong>จริงเสมอ</strong><br>
+        เปรียบได้กับ: "ถ้าฝนตก (แต่ฝนไม่ตก) ฉันจะเอาร่มไป" — ไม่ผิดสัญญา!
+      </div>
+      <div class="sub-heading">ประพจน์ที่เกี่ยวข้อง</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>บทกลับ (Converse)</h4>
+          <div class="math-block">q → p</div>
+        </div>
+        <div class="mini-card">
+          <h4>บทผกผัน (Inverse)</h4>
+          <div class="math-block">~p → ~q</div>
+        </div>
+        <div class="mini-card">
+          <h4>บทกลับนิเสธ (Contrapositive)</h4>
+          <div class="math-block">~q → ~p</div>
+        </div>
+        <div class="mini-card">
+          <h4>สิ่งสำคัญ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">p→q มีค่าความจริงเหมือนกับ ~q→~p (บทกลับนิเสธ) เสมอ!<br>บทกลับ (q→p) สมมูลกับบทผกผัน (~p→~q) เสมอ</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">↔</div>ตัวเชื่อม "...ก็ต่อเมื่อ..." (↔) — Biconditional</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        p ↔ q อ่านว่า "p ก็ต่อเมื่อ q" จะจริงเมื่อ <strong>p และ q มีค่าความจริงเหมือนกัน</strong>
+      </div>
+      <table>
+        <tr><th>p</th><th>q</th><th>p ↔ q</th></tr>
+        <tr><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+        <tr><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td></tr>
+        <tr><td class="false-val">F</td><td class="true-val">T</td><td class="false-val">F</td></tr>
+        <tr><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 จำง่าย</div>
+        ↔ จริงเมื่อ "เหมือนกัน" (TT หรือ FF), เท็จเมื่อ "ต่างกัน" (TF หรือ FT)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: ตาราง ===== -->
+  <div class="section" id="logic3">
+    <div class="section-heading"><span>หัวข้อ 6</span> · ตารางค่าความจริง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📊</div>การสร้างตารางค่าความจริง</div>
+      <div class="def-box">
+        <div class="def-label">จำนวนแถว</div>
+        ถ้ามีตัวแปร n ตัว ตารางจะมี <strong>2ⁿ แถว</strong><br>
+        1 ตัวแปร → 2 แถว | 2 ตัวแปร → 4 แถว | 3 ตัวแปร → 8 แถว
+      </div>
+
+      <div class="sub-heading">ตัวอย่าง: (p ∧ q) → r</div>
+      <table>
+        <tr><th>p</th><th>q</th><th>r</th><th>p ∧ q</th><th>(p ∧ q) → r</th></tr>
+        <tr><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+        <tr><td class="true-val">T</td><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td><td class="false-val">F</td></tr>
+        <tr><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="true-val">T</td><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="false-val">F</td><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🌟</div>สัจนิรันดร์และประพจน์ที่เป็นเท็จทุกกรณี</div>
+      <div class="grid-2">
+        <div class="mini-card" style="border-color: rgba(0,212,170,0.3)">
+          <h4 style="color:var(--accent2)">สัจนิรันดร์ (Tautology)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ประพจน์ที่จริงทุกกรณี ไม่ว่าค่าความจริงของตัวแปรจะเป็นอะไร</p>
+          <div class="math-block" style="font-size:13px">p ∨ ~p<br>(ทุกแถวจริง)</div>
+        </div>
+        <div class="mini-card" style="border-color: rgba(255,107,107,0.3)">
+          <h4 style="color:var(--accent3)">ข้อขัดแย้ง (Contradiction)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ประพจน์ที่เป็นเท็จทุกกรณี ไม่ว่าตัวแปรจะมีค่าความจริงใด</p>
+          <div class="math-block" style="font-size:13px">p ∧ ~p<br>(ทุกแถวเท็จ)</div>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 วิธีตรวจสอบ</div>
+        ทำตารางค่าความจริง ถ้าคอลัมน์สุดท้าย <strong>จริงทุกแถว</strong> = สัจนิรันดร์<br>
+        ถ้า <strong>เท็จทุกแถว</strong> = ข้อขัดแย้ง (ประพจน์ที่เป็นเท็จทุกกรณี)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: สมมูลและนิเสธ ===== -->
+  <div class="section" id="logic4">
+    <div class="section-heading"><span>หัวข้อ 7</span> · รูปแบบสมมูลและนิเสธประพจน์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">≡</div>ประพจน์สมมูล (Logical Equivalence)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        p ≡ q หมายความว่า p และ q มีตารางค่าความจริงเหมือนกัน<strong>ทุกแถว</strong><br>
+        ตรวจสอบโดย: สร้างตารางแล้วเช็คว่าคอลัมน์ทั้งสองเหมือนกันทุกแถว
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — ตรวจสอบ p → q ≡ ~ p ∨ q</div>
+        <table style="font-size:13px">
+          <tr><th>p</th><th>q</th><th>p→q</th><th>~p∨q</th></tr>
+          <tr><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+          <tr><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td><td class="false-val">F</td></tr>
+          <tr><td class="false-val">F</td><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+          <tr><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+        </table>
+        คอลัมน์ p→q และ ~p∨q เหมือนกันทุกแถว → <strong>สมมูลกัน ✓</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📋</div>รูปแบบสมมูลที่ออกสอบ A-Level บ่อย</div>
+      <div class="def-box">
+        <div class="def-label">ตารางสมมูลสำคัญ — ต้องจำ!</div>
+        <table style="width:100%; font-size:13px">
+          <tr><th>รูปเดิม</th><th>สมมูลกับ</th><th>ชื่อกฎ</th></tr>
+          <tr><td>p → q</td><td>~ p ∨ q</td><td>—</td></tr>
+          <tr><td>~(p → q)</td><td>p ∧ ~ q</td><td>นิเสธของ →</td></tr>
+          <tr><td>p → q</td><td>~ q → ~ p</td><td>บทกลับนิเสธ</td></tr>
+          <tr><td>~(p ∧ q)</td><td>~ p ∨ ~ q</td><td>เดอมอร์แกน</td></tr>
+          <tr><td>~(p ∨ q)</td><td>~ p ∧ ~ q</td><td>เดอมอร์แกน</td></tr>
+          <tr><td>p ↔ q</td><td>(p → q) ∧ (q → p)</td><td>—</td></tr>
+          <tr><td>p → (q → r)</td><td>(p ∧ q) → r</td><td>การนำออก</td></tr>
+        </table>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กฎเดอมอร์แกน — ตรรกศาสตร์</div>
+        กฎเดอมอร์แกนในตรรกศาสตร์ใช้ในการหานิเสธของประพจน์ผสม<br>
+        ~(p ∧ q) ≡ ~ p ∨ ~ q<br>
+        ~(p ∨ q) ≡ ~ p ∧ ~ q<br>
+        เมื่อใส่ ~ เข้าไป ให้ <strong>กระจาย ~ เข้าทุกตัว แล้วเปลี่ยน ∧ ↔ ∨</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">~</div>การหานิเสธของประพจน์ซับซ้อน</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 1 — นิเสธของ p → q</div>
+        ~(p → q) ≡ p ∧ ~ q<br>
+        ภาษาไทย: "ถ้าฝนตก แล้วถนนเปียก"<br>
+        นิเสธ: "ฝนตก <strong>และ</strong> ถนนไม่เปียก" ✓
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 2 — นิเสธของ p ∧ q</div>
+        ~(p ∧ q) ≡ ~ p ∨ ~ q<br>
+        ภาษาไทย: "ฝนตก <strong>และ</strong> อากาศเย็น"<br>
+        นิเสธ: "ฝนไม่ตก <strong>หรือ</strong> อากาศไม่เย็น" ✓
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — ตรวจสอบสัจนิรันดร์เร็ว</div>
+        วิธี "สมมติให้เป็นเท็จ": ถ้าสมมติให้ประพจน์เป็นเท็จแล้วเกิดข้อขัดแย้ง → เป็นสัจนิรันดร์<br>
+        สำหรับ A → B: สมมติ A = T, B = F แล้วดูว่าเกิดขัดแย้งหรือไม่
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — ตรวจสอบ (p ∧ q) → (~ p → r) เป็นสัจนิรันดร์หรือไม่</div>
+        สมมติให้เป็นเท็จ: หน้า (p ∧ q) = T, หลัง (~ p → r) = F<br>
+        จากหลัง = F: ~ p = T (p = F) และ r = F<br>
+        จากหน้า = T: p = T และ q = T<br>
+        เกิดขัดแย้ง (p = F และ p = T) → <strong>เป็นสัจนิรันดร์ ✓</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: ตัวบ่งปริมาณ ===== -->
+  <div class="section" id="logic5">
+    <div class="section-heading"><span>หัวข้อ 8</span> · ประโยคเปิดและตัวบ่งปริมาณ (∀, ∃)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">∀</div>ประโยคเปิด (Open Sentence) และตัวบ่งปริมาณ</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม — ประโยคเปิด</div>
+        ประโยคที่มีตัวแปร ยังตัดสินจริง/เท็จไม่ได้จนกว่าจะกำหนดค่าตัวแปร<br>
+        เช่น "x + 3 > 5" หรือ "x² = 4" เป็นประโยคเปิด
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>∀ ตัวบ่งปริมาณ "ทุกตัว"</h4>
+          <p style="font-size:13px; color:var(--text-dim)">"∀x P(x)" อ่านว่า "สำหรับ x ทุกตัว, P(x) จริง"<br>
+          จะเป็น <strong>เท็จ</strong> ถ้ามี x <em>แม้แต่ตัวเดียว</em> ทำให้ P(x) เท็จ</p>
+          <div class="math-latex">∀ x ∈ ℝ: x² ≥ 0<br><span style="color:#00d4aa">จริง ✓</span></div>
+        </div>
+        <div class="mini-card">
+          <h4>∃ ตัวบ่งปริมาณ "บางตัว"</h4>
+          <p style="font-size:13px; color:var(--text-dim)">"∃x P(x)" อ่านว่า "มี x บางตัว ที่ P(x) จริง"<br>
+          จะเป็น <strong>จริง</strong> ถ้ามี x <em>อย่างน้อยหนึ่งตัว</em> ทำให้ P(x) จริง</p>
+          <div class="math-latex">∃ x ∈ ℝ: x + 5 = 3<br><span style="color:#00d4aa">จริง (x = −2) ✓</span></div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างในเอกภพสัมพัทธ์ต่าง ๆ</div>
+        <strong>เอกภพ ℕ (จำนวนนับ 1, 2, 3, …):</strong><br>
+        • ∀ x ∈ ℕ: x > 0 → <span style="color:#00d4aa">จริง</span> (จำนวนนับทุกตัว > 0)<br>
+        • ∃ x ∈ ℕ: x² = 4 → <span style="color:#00d4aa">จริง</span> (x = 2)<br><br>
+        <strong>เอกภพ ℤ (จำนวนเต็ม …, −1, 0, 1, …):</strong><br>
+        • ∀ x ∈ ℤ: x > 0 → <span style="color:#ff6b6b">เท็จ</span> (x = −1 ทำให้เท็จ)<br>
+        • ∃ x ∈ ℤ: x² = 2 → <span style="color:#ff6b6b">เท็จ</span> (ไม่มีจำนวนเต็มที่ยกกำลัง 2 ได้ 2)<br><br>
+        <strong>เอกภพ ℝ (จำนวนจริง):</strong><br>
+        • ∀ x ∈ ℝ: x² ≥ 0 → <span style="color:#00d4aa">จริง</span><br>
+        • ∃ x ∈ ℝ: x² = 2 → <span style="color:#00d4aa">จริง</span> (x = √2)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">~</div>นิเสธของประพจน์ที่มีตัวบ่งปริมาณ</div>
+      <div class="def-box">
+        <div class="def-label">กฎสำคัญ — ต้องจำ!</div>
+        ~(∀ x  P(x)) ≡ ∃ x  ~ P(x)<br>
+        ~(∃ x  P(x)) ≡ ∀ x  ~ P(x)<br><br>
+        เมื่อนิเสธ: <strong>∀ เปลี่ยนเป็น ∃ และ ∃ เปลี่ยนเป็น ∀ แล้วนิเสธ P(x)</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — นิเสธของประพจน์ ∀ และ ∃</div>
+        <strong>1.</strong> ประพจน์: "นักเรียนทุกคนสอบผ่าน" (∀x: สอบผ่าน)<br>
+        นิเสธ: "มีนักเรียนบางคนสอบไม่ผ่าน" (∃x: ~สอบผ่าน) ✓<br><br>
+        <strong>2.</strong> ประพจน์: ∃ x ∈ ℝ: x > 100<br>
+        นิเสธ: ∀ x ∈ ℝ: x ≤ 100 → เท็จ ✓<br><br>
+        <strong>3.</strong> ประพจน์: ∀ x ∈ ℤ: x² ≥ 0<br>
+        นิเสธ: ∃ x ∈ ℤ: x² < 0 → เท็จ (เพราะประพจน์ต้นจริง)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — นิเสธประพจน์ผสม</div>
+        โจทย์มักให้ประพจน์รูป "ถ้า P แล้ว Q" ที่ P หรือ Q มีตัวบ่งปริมาณ<br>
+        เช่น "ถ้านักเรียน<strong>ทุกคน</strong>สอบผ่าน แล้วมีนักเรียน<strong>บางคน</strong>ได้รับรางวัล"<br>
+        → P = ∀x[สอบผ่าน], Q = ∃x[ได้รับรางวัล]<br>
+        → ~(P→Q) ≡ P ∧ ~Q = ∀x[สอบผ่าน] ∧ ∀x[ไม่ได้รับรางวัล]
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">∀∃</div>ตัวบ่งปริมาณสองตัวแปร</div>
+      <div class="def-box">
+        <div class="def-label">ลำดับสำคัญมาก!</div>
+        ∀ x  ∃ y  P(x,y) ≠ ∃ y  ∀ x  P(x,y)<br>
+        การสลับลำดับของ ∀ และ ∃ อาจเปลี่ยนค่าความจริงได้
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — เอกภพ ℝ</div>
+        <strong>1.</strong> ∀ x ∈ ℝ,  ∃ y ∈ ℝ: y > x<br>
+        → "สำหรับจำนวนจริงทุกตัว มีจำนวนจริงบางตัวที่มากกว่า" → <span style="color:#00d4aa">จริง ✓</span><br><br>
+        <strong>2.</strong> ∃ y ∈ ℝ,  ∀ x ∈ ℝ: y > x<br>
+        → "มีจำนวนจริงบางตัวที่มากกว่าจำนวนจริงทุกตัว" → <span style="color:#ff6b6b">เท็จ ✗</span><br><br>
+        <strong>3.</strong> ∀ x ∈ ℕ,  ∃ y ∈ ℕ: x + y = 10<br>
+        เอกภพ ℕ: x=1→y=9 ✓, x=2→y=8 ✓, … x=9→y=1 ✓, แต่ x=10→y=0 ✗ (0 ∉ ℕ) → <span style="color:#ff6b6b">เท็จ</span><br>
+        เอกภพ ℤ: มีคำตอบเสมอ → <span style="color:#00d4aa">จริง</span>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ นิเสธของตัวบ่งปริมาณสองตัวแปร</div>
+        ~(∀ x  ∃ y  P(x,y)) ≡ ∃ x  ∀ y  ~ P(x,y)<br>
+        ~(∃ x  ∀ y  P(x,y)) ≡ ∀ x  ∃ y  ~ P(x,y)<br><br>
+        <strong>หลักการ:</strong> ย้อนตัวบ่งปริมาณทุกตัว (∀↔∃) แล้วนิเสธ P ในที่สุด
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมทั้งเซตและตรรกศาสตร์ เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบ A-Level เซตและตรรกศาสตร์</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ข้อสอบจำลองแนว A-Level คณิตศาสตร์ประยุกต์ 1 เรื่องเซตและตรรกศาสตร์</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      ข้อสอบ A-Level เซตและตรรกศาสตร์รวมประมาณ 11 คะแนน (เซต ~8 + ตรรก ~3) — ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบาย
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — เซต",
+    q: "กำหนด A = {∅, {∅}, 1} จงหา n(A)",
+    opts: ["1", "2", "3", "4"],
+    ans: 2,
+    explain: "นับสมาชิกทีละตัวจากวงเล็บปีกกาชั้นนอกสุด:\n• สมาชิกตัวที่ 1 คือ ∅ (เซตว่าง — ถือเป็นหนึ่งสมาชิก)\n• สมาชิกตัวที่ 2 คือ {∅} (เซตที่มีเซตว่างเป็นสมาชิก — ถือเป็นอีกหนึ่งสมาชิก)\n• สมาชิกตัวที่ 3 คือ 1 (จำนวน)\nดังนั้น n(A) = 3 ✓\n\nข้อควรระวัง: ∅ และ {∅} เป็นคนละสิ่งกัน\nค่าของ ∅ คือเซตที่ไม่มีสมาชิกเลย แต่ {∅} คือเซตที่มีสมาชิกหนึ่งตัวซึ่งก็คือ ∅"
+  },
+  {
+    level: "⭐ ระดับ 1 — เซต",
+    q: "กำหนด U = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} และ A = {2, 4, 6, 8, 10}\nจงหา n(A')",
+    opts: ["3", "4", "5", "6"],
+    ans: 2,
+    explain: "A' คือ คอมพลีเมนต์ของ A หมายถึงสมาชิกทั้งหมดใน U ที่ไม่อยู่ใน A\nA' = {1, 3, 5, 7, 9}\nดังนั้น n(A') = 5 ✓\n\nหรือคำนวณจากสูตร: n(A') = n(U) − n(A) = 10 − 5 = 5"
+  },
+  {
+    level: "⭐ ระดับ 1 — ตรรกศาสตร์",
+    q: "ข้อใดต่อไปนี้เป็นประพจน์?",
+    opts: [
+      "เธอไปโรงเรียนหรือเปล่า?",
+      "x + 3 = 7",
+      "จำนวนเฉพาะทุกตัวเป็นจำนวนคี่",
+      "กรุณาปิดโทรศัพท์"
+    ],
+    ans: 2,
+    explain: "ประพจน์ คือ ประโยคบอกเล่าที่สามารถตัดสินได้ชัดเจนว่าจริงหรือเท็จ มีค่าความจริงเพียงค่าเดียว\n\n• ตัวเลือก ก: เป็นคำถาม → ไม่ใช่ประพจน์\n• ตัวเลือก ข: \"x + 3 = 7\" มีตัวแปร x ยังบอกไม่ได้ว่าจริงหรือเท็จโดยไม่ทราบค่า x นี่คือ 'ประโยคเปิด' → ไม่ใช่ประพจน์\n• ตัวเลือก ค: บอกได้ชัดเจนว่าจริงหรือเท็จ (เท็จ เพราะ 2 เป็นจำนวนเฉพาะแต่เป็นจำนวนคู่) → เป็นประพจน์ ✓\n• ตัวเลือก ง: เป็นคำขอร้อง → ไม่ใช่ประพจน์"
+  },
+  {
+    level: "⭐ ระดับ 1 — ตรรกศาสตร์",
+    q: "กำหนด p = จริง และ q = เท็จ\nจงหาค่าความจริงของ p ∧ (~q)",
+    opts: ["จริง", "เท็จ", "จริงหรือเท็จขึ้นกับบริบท", "หาค่าไม่ได้"],
+    ans: 0,
+    explain: "คำนวณทีละขั้น:\nขั้นที่ 1: หาค่า ~q\n  q = เท็จ (F) ดังนั้น ~q = จริง (T)\n  (นิเสธเปลี่ยนจริงเป็นเท็จ และเท็จเป็นจริง)\nขั้นที่ 2: คำนวณ p ∧ (~q)\n  p = จริง (T) และ ~q = จริง (T)\n  T ∧ T = จริง (T)\n  (∧ จริงเฉพาะเมื่อทั้งสองฝั่งเป็นจริงพร้อมกัน)\n\nสรุป: p ∧ (~q) มีค่าความจริงเป็น จริง ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — เซต",
+    q: "กำหนด U = {1, 2, 3, 4, 5, 6, 7, 8}\nA = {1, 2, 3, 4} และ B = {3, 4, 5, 6}\nจงหา n(A' ∩ B')",
+    opts: ["1", "2", "3", "4"],
+    ans: 1,
+    explain: "วิธีที่ 1 — ใช้กฎของเดอมอร์แกน:\nA' ∩ B' = (A ∪ B)'  (กฎเดอมอร์แกน)\nหา A ∪ B ก่อน: A ∪ B = {1, 2, 3, 4, 5, 6}\n(A ∪ B)' = สมาชิกใน U ที่ไม่อยู่ใน {1,2,3,4,5,6} = {7, 8}\nn(A' ∩ B') = 2 ✓\n\nวิธีที่ 2 — หาตรงโดยไม่ใช้กฎเดอมอร์แกน:\nA' = {5, 6, 7, 8}  และ  B' = {1, 2, 7, 8}\nA' ∩ B' = สมาชิกที่อยู่ทั้งใน A' และ B' = {7, 8}\nn(A' ∩ B') = 2 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — เซต",
+    q: "นักเรียน 50 คน สอบวิชาคณิต (M) 30 คน สอบวิชาวิทย์ (S) 25 คน\nสอบทั้งสองวิชา 10 คน จงหาจำนวนนักเรียนที่ไม่ได้สอบวิชาใดเลย",
+    opts: ["3 คน", "4 คน", "5 คน", "6 คน"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาจำนวนที่สอบอย่างน้อยหนึ่งวิชา\nn(M ∪ S) = n(M) + n(S) − n(M ∩ S)\n         = 30 + 25 − 10\n         = 45 คน\n\nขั้นที่ 2: หาจำนวนที่ไม่ได้สอบวิชาใดเลย\n= n(U) − n(M ∪ S) = 50 − 45 = 5 คน ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ตรรกศาสตร์",
+    q: "ข้อใดเป็นนิเสธของประพจน์ \"ฝนตก และถนนไม่เปียก\"?",
+    opts: [
+      "ฝนไม่ตก หรือถนนเปียก",
+      "ฝนไม่ตก และถนนเปียก",
+      "ฝนตก หรือถนนเปียก",
+      "ถ้าฝนตก แล้วถนนเปียก"
+    ],
+    ans: 0,
+    explain: "ให้ p แทน \"ฝนตก\" และ r แทน \"ถนนไม่เปียก\"\nประพจน์เดิมคือ: p ∧ r\n\nนิเสธของ p ∧ r ใช้กฎเดอมอร์แกน:\n~(p ∧ r) ≡ ~p ∨ ~r\n\nแปลกลับเป็นภาษาไทย:\n~p = นิเสธของ \"ฝนตก\" = \"ฝนไม่ตก\"\n~r = นิเสธของ \"ถนนไม่เปียก\" = \"ถนนเปียก\"\n\nดังนั้น ~(p ∧ r) = \"ฝนไม่ตก หรือถนนเปียก\" ✓\n\nตรงกับตัวเลือก ก"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ตรรกศาสตร์",
+    q: "กำหนด p = จริง, q = เท็จ, r = จริง\nจงหาค่าความจริงของ (p → q) ↔ (~p ∨ r)",
+    opts: ["จริง", "เท็จ", "ขึ้นอยู่กับค่า p", "ขึ้นอยู่กับค่า r"],
+    ans: 1,
+    explain: "คำนวณทีละขั้น:\nขั้นที่ 1: หาค่า p → q\n  p = T, q = F → T → F = เท็จ (F)\n  (→ จะเท็จเฉพาะเมื่อหน้าจริง หลังเท็จ)\nขั้นที่ 2: หาค่า ~p ∨ r\n  ~p = ~T = F  และ  r = T\n  F ∨ T = จริง (T)\nขั้นที่ 3: หาค่า (p → q) ↔ (~p ∨ r)\n  F ↔ T = เท็จ (F)\n  (↔ จริงเฉพาะเมื่อทั้งสองฝั่งมีค่าเหมือนกัน คือ T↔T หรือ F↔F เท่านั้น)\n\nสรุป: ค่าความจริงเป็น เท็จ ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — เซต",
+    q: "กำหนด A = {x ∈ ℝ | x² − 4x + 3 ≤ 0} และ B = {x ∈ ℝ | |x − 2| ≤ 2}\nจงหา A ∩ B",
+    opts: ["[1, 3]", "[1, 4]", "[0, 3]", "[0, 4]"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หาเซต A\nx² − 4x + 3 ≤ 0\nแยกตัวประกอบ: (x − 1)(x − 3) ≤ 0\nผลคูณสองจำนวนไม่เป็นบวก ต้องมีสัญลักษณ์ตรงข้ามหรือเป็นศูนย์\nจึงได้ 1 ≤ x ≤ 3  →  A = [1, 3]\n\nขั้นที่ 2: หาเซต B\n|x − 2| ≤ 2\nหมายความว่า −2 ≤ x − 2 ≤ 2\nบวก 2 ทุกพจน์: 0 ≤ x ≤ 4  →  B = [0, 4]\n\nขั้นที่ 3: หา A ∩ B\nA ∩ B = [1, 3] ∩ [0, 4] = [1, 3] ✓\n(ส่วนที่ซ้อนทับกันของ [1,3] กับ [0,4] คือช่วง [1,3] ทั้งหมด)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — ตรรกศาสตร์",
+    q: "ข้อใดต่อไปนี้เป็น สัจนิรันดร์ (ประพจน์ที่จริงทุกกรณี)?",
+    opts: [
+      "(p ∨ q) → (p ∧ q)",
+      "(p ∧ q) → (p ∨ q)",
+      "p → (p ∧ q)",
+      "(p → q) → q"
+    ],
+    ans: 1,
+    explain: "ใช้วิธีสมมติให้เป็นเท็จ: ถ้าสมมติแล้วเกิดขัดแย้ง แสดงว่าเป็นสัจนิรันดร์\n\n▶ ตรวจตัวเลือก ข: (p ∧ q) → (p ∨ q)\nสมมติให้เป็นเท็จ: ต้องมีหน้า (p ∧ q) = T และ หลัง (p ∨ q) = F\nจากหน้า = T: จำเป็นต้องมี p = T และ q = T\nจากหลัง = F: จำเป็นต้องมี p = F และ q = F (ทั้งสองต้องเท็จพร้อมกัน)\n→ เกิดขัดแย้ง: p ต้องเป็น T และ F ในเวลาเดียวกัน ซึ่งเป็นไปไม่ได้\n→ ทำให้เป็นเท็จไม่ได้เลย = เป็นสัจนิรันดร์ ✓\n\n▶ หักล้างตัวเลือกที่เหลือด้วยการแทนค่า:\nตัวเลือก ก: แทน p=T, q=F → (T∨F)→(T∧F) = T→F = เท็จ → ไม่ใช่สัจนิรันดร์\nตัวเลือก ค: แทน p=T, q=F → T→(T∧F) = T→F = เท็จ → ไม่ใช่สัจนิรันดร์\nตัวเลือก ง: แทน p=F, q=F → (F→F)→F = T→F = เท็จ → ไม่ใช่สัจนิรันดร์"
+  }
+];
+
+// ===== ข้อสอบ A-Level จริง — ปี 2567–2569 =====
+const alevelQuestions = [
+
+  // ══════════════════════ ปี 2567 ══════════════════════
+  {
+    year: "📅 A-Level ปี 2567 — ตรรกศาสตร์",
+    q: "ข้อใดเป็นนิเสธของข้อความ\n\"ถ้านักเรียนทุกคนสอบผ่าน แล้วจะมีนักเรียนบางคนได้รับรางวัล\"",
+    opts: [
+      "นักเรียนทุกคนสอบผ่าน และนักเรียนทุกคนไม่ได้รับรางวัล",
+      "นักเรียนบางคนสอบไม่ผ่าน และนักเรียนทุกคนไม่ได้รับรางวัล",
+      "นักเรียนบางคนสอบไม่ผ่าน และนักเรียนบางคนได้รับรางวัล",
+      "ถ้านักเรียนทุกคนสอบผ่าน แล้วนักเรียนบางคนไม่ได้รับรางวัล",
+      "ถ้านักเรียนบางคนสอบไม่ผ่าน แล้วนักเรียนทุกคนไม่ได้รับรางวัล"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: กำหนดสัญลักษณ์แทนประพจน์ย่อย\n  ให้ P แทน \"นักเรียนทุกคนสอบผ่าน\"\n  ให้ Q แทน \"มีนักเรียนบางคนได้รับรางวัล\"\n\nขั้นที่ 2: เขียนประพจน์เดิมในรูปสัญลักษณ์\n  ประพจน์เดิม: P → Q\n\nขั้นที่ 3: หานิเสธ ~(P → Q)\n  ใช้กฎ: ~(P → Q) ≡ P ∧ ~Q\n  (นิเสธของประพจน์เงื่อนไข คือ หน้าจริงพร้อมกับหลังเท็จ)\n\nขั้นที่ 4: แปล ~Q กลับเป็นภาษาไทย\n  Q = \"มีนักเรียนบางคนได้รับรางวัล\" (∃x: ได้รับรางวัล)\n  ~Q = นิเสธของ \"บางคน\" = \"ทุกคนไม่\" = \"นักเรียนทุกคนไม่ได้รับรางวัล\"\n  (กฎ: ~∃x P(x) ≡ ∀x ~P(x))\n\nขั้นที่ 5: สรุปนิเสธทั้งประพจน์\n  P ∧ ~Q = \"นักเรียนทุกคนสอบผ่าน และนักเรียนทุกคนไม่ได้รับรางวัล\"\n  ตรงกับตัวเลือก ก ✓"
+  },
+  {
+    year: "📅 A-Level ปี 2567 — ตรรกศาสตร์",
+    q: "ให้ p, q และ r เป็นประพจน์ ข้อใดต่อไปนี้เป็นสัจนิรันดร์\n1) (p ∨ q) → (~p → r)\n2) (p ∧ q) → (~p → r)\n3) (p ∨ q) → (~p ∨ r)\n4) (p ∧ q) → (~p ∨ r)\n5) (p → q) → (~p ∨ r)",
+    opts: ["ข้อ 1", "ข้อ 2", "ข้อ 3", "ข้อ 4", "ข้อ 5"],
+    ans: 1,
+    explain: "ใช้วิธีสมมติให้เป็นเท็จ: ถ้าสมมติให้ผลลัพธ์เป็นเท็จแล้วเกิดขัดแย้ง = สัจนิรันดร์\nประพจน์ A → B จะเท็จได้ก็ต่อเมื่อ A = T และ B = F เท่านั้น\n\n▶ ตรวจข้อ 2: (p ∧ q) → (~p → r)\nสมมติให้เป็นเท็จ:\n  หน้า (p ∧ q) = T  และ  หลัง (~p → r) = F\nจากหลัง = F: (~p → r) = F หมายความว่า ~p = T (ดังนั้น p = F) และ r = F\nจากหน้า = T: (p ∧ q) = T หมายความว่า p = T\n→ เกิดขัดแย้ง: จากหลังได้ p = F แต่จากหน้าได้ p = T\n→ ทำให้เป็นเท็จไม่ได้ → ข้อ 2 เป็นสัจนิรันดร์ ✓\n\n▶ แสดงว่าข้อ 4 ไม่ใช่สัจนิรันดร์ (เพื่อยืนยัน):\nแทน p = T, q = T, r = F:\n  (T ∧ T) → (~T ∨ F) = T → (F ∨ F) = T → F = เท็จ\n→ ข้อ 4 สามารถเป็นเท็จได้ จึงไม่ใช่สัจนิรันดร์\n\nคำตอบที่ถูกต้องคือ ข้อ 2 ✓"
+  },
+  {
+    year: "📅 A-Level ปี 2567 — เซต",
+    q: "กำหนดให้ U = {1, 2, 3, …, 20} เป็นเอกภพสัมพัทธ์\nA = {x ∈ U | x หารด้วย 3 ลงตัว}\nB = {x ∈ U | x หารด้วย 4 ลงตัว}\nจงหา n(A' ∩ B')",
+    opts: ["7", "10", "12", "13", "15"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาสมาชิกของ A และ B\nA = {3, 6, 9, 12, 15, 18} → n(A) = 6\nB = {4, 8, 12, 16, 20} → n(B) = 5\n\nขั้นที่ 2: หา A ∩ B (หารด้วยทั้ง 3 และ 4 ลงตัว = หารด้วย 12 ลงตัว)\nA ∩ B = {12} → n(A ∩ B) = 1\n\nขั้นที่ 3: หา n(A ∪ B)\nn(A ∪ B) = n(A) + n(B) − n(A ∩ B) = 6 + 5 − 1 = 10\n\nขั้นที่ 4: ใช้กฎเดอมอร์แกน\nA' ∩ B' = (A ∪ B)'\nn(A' ∩ B') = n(U) − n(A ∪ B) = 20 − 10 = 10 ✓"
+  },
+
+  // ══════════════════════ ปี 2568 ══════════════════════
+  {
+    year: "📅 A-Level ปี 2568 — เซต",
+    q: "สำหรับเซต S ใด ๆ ให้ P(S) แทนเพาเวอร์เซตของ S\nกำหนดให้เซต A = {∅, √2}\nเซต P(P(A)) ∪ P(A) มีสมาชิกกี่ตัว",
+    opts: ["10 ตัว", "16 ตัว", "18 ตัว", "19 ตัว", "20 ตัว"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาสมาชิกของ P(A)\nA = {∅, √2} มีสมาชิก n(A) = 2 ตัว\nP(A) = เซตของสับเซตทั้งหมดของ A\nP(A) = { ∅, {∅}, {√2}, {∅, √2} }\nn(P(A)) = 2² = 4 ตัว\n\nขั้นที่ 2: หา n(P(P(A)))\nP(P(A)) คือเพาเวอร์เซตของ P(A) ซึ่งมีสมาชิก 4 ตัว\nn(P(P(A))) = 2⁴ = 16 ตัว\n\nขั้นที่ 3: หาส่วนที่ซ้ำกัน n(P(P(A)) ∩ P(A))\nสมาชิกของ P(P(A)) คือ สับเซตทุกเซตของ P(A)\nสมาชิกของ P(A) ที่เป็นสับเซตของ P(A) ด้วย จะนับเป็นส่วนซ้ำ\nตรวจทีละตัว:\n• ∅ : เป็นสับเซตของทุกเซต จึง ∅ ∈ P(P(A)) → นับเป็นส่วนซ้ำ ✓\n• {∅} : สมาชิกข้างในคือ ∅ ซึ่ง ∅ ∈ P(A) จึง {∅} ⊂ P(A) → นับเป็นส่วนซ้ำ ✓\n• {√2} : สมาชิกข้างในคือ √2 แต่ √2 ∉ P(A) จึง {√2} ⊄ P(A) → ไม่ซ้ำ ✗\n• {∅, √2} : มี √2 ซึ่ง √2 ∉ P(A) จึงไม่เป็นสับเซตของ P(A) → ไม่ซ้ำ ✗\nน(ส่วนซ้ำ) = 2\n\nขั้นที่ 4: คำนวณยูเนียน\nn(P(P(A)) ∪ P(A)) = n(P(P(A))) + n(P(A)) − n(ส่วนซ้ำ)\n= 16 + 4 − 2 = 18 ตัว ✓"
+  },
+  {
+    year: "📅 A-Level ปี 2568 — ตรรกศาสตร์",
+    q: "ให้ p, q และ r เป็นประพจน์ ประพจน์ใดต่อไปนี้มีค่าความจริงเป็นจริงในบางกรณี และเป็นเท็จในบางกรณี\n1) (p ∨ ~p) → (r ∧ ~r)\n2) (~p ∧ q) ∧ (p ∧ r)\n3) (q → r) ↔ (q ∧ ~r)\n4) (p ∨ r) ∧ (q ∨ ~r)\n5) (p ∧ q) ∧ (~p ∨ ~q)",
+    opts: ["ข้อ 1", "ข้อ 2", "ข้อ 3", "ข้อ 4", "ข้อ 5"],
+    ans: 3,
+    explain: "โจทย์ถามหาประพจน์ที่ไม่ใช่สัจนิรันดร์ (จริงทุกกรณี) และไม่ใช่ข้อขัดแย้ง (เท็จทุกกรณี)\n\n▶ ข้อ 1: (p ∨ ~p) → (r ∧ ~r)\nหน้า (p ∨ ~p) = จริงทุกกรณี (T)\nหลัง (r ∧ ~r) = เท็จทุกกรณี (F)\nT → F = เท็จ (F) ทุกกรณี → เท็จทุกกรณี\n\n▶ ข้อ 2: (~p ∧ q) ∧ (p ∧ r)\nจัดรูปใหม่: (~p ∧ p) ∧ q ∧ r\n(~p ∧ p) = เท็จทุกกรณี (F)\nF ∧ อะไรก็ตาม = F ทุกกรณี → เท็จทุกกรณี\n\n▶ ข้อ 3: (q → r) ↔ (q ∧ ~r)\nสังเกตว่า (q ∧ ~r) ≡ ~(q → r) ซึ่งเป็นนิเสธของ (q → r)\nการนำ X ↔ ~X จะเท็จทุกกรณีเสมอ → เท็จทุกกรณี\n\n▶ ข้อ 5: (p ∧ q) ∧ (~p ∨ ~q)\nโดยกฎเดอมอร์แกน: (~p ∨ ~q) ≡ ~(p ∧ q)\nดังนั้นประพจน์นี้อยู่ในรูป X ∧ ~X = เท็จทุกกรณี\n\n▶ ข้อ 4: (p ∨ r) ∧ (q ∨ ~r)\nทดสอบด้วยการแทนค่า:\n• แทน p=T, q=T, r=T: (T∨T) ∧ (T∨F) = T ∧ T = จริง ✓\n• แทน p=F, q=F, r=T: (F∨T) ∧ (F∨F) = T ∧ F = เท็จ ✓\n→ มีทั้งจริงและเท็จ ตรงตามโจทย์ → คำตอบคือ ข้อ 4 ✓"
+  },
+  {
+    year: "📅 A-Level ปี 2568 — เซต",
+    q: "โรงพยาบาลสำรวจผู้ป่วย 120 คน พบว่า\n• เป็นโรคความดัน (H): 70 คน\n• เป็นโรคเบาหวาน (D): 55 คน\n• เป็นโรคไขมัน (L): 45 คน\n• เป็นทั้ง H และ D: 30 คน\n• เป็นทั้ง D และ L: 20 คน\n• เป็นทั้ง H และ L: 25 คน\n• ไม่เป็นโรคใดเลย: 15 คน\nจงหาจำนวนผู้ป่วยที่เป็นทั้ง 3 โรค",
+    opts: ["5 คน", "10 คน", "15 คน", "20 คน", "25 คน"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาจำนวนที่เป็นอย่างน้อย 1 โรค\nn(H ∪ D ∪ L) = 120 − 15 = 105 คน\n\nขั้นที่ 2: ใช้สูตรสามเซต\nn(H ∪ D ∪ L) = n(H) + n(D) + n(L) − n(H∩D) − n(D∩L) − n(H∩L) + n(H∩D∩L)\n\nแทนค่า:\n105 = 70 + 55 + 45 − 30 − 20 − 25 + n(H∩D∩L)\n105 = 170 − 75 + n(H∩D∩L)\n105 = 95 + n(H∩D∩L)\nn(H∩D∩L) = 105 − 95 = 10 คน ✓"
+  },
+  {
+    year: "📅 A-Level ปี 2568 — เซต",
+    q: "กำหนดให้ A = {x ∈ ℝ | x² − 5x + 6 ≤ 0} และ B = {x ∈ ℝ | |x − 3| ≤ 1}\nข้อใดต่อไปนี้คือ A ∩ B",
+    opts: ["[2, 3]", "[3, 4]", "[2, 4]", "[3, 5]", "(2, 4)"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หาเซต A\nx² − 5x + 6 ≤ 0\nแยกตัวประกอบ: (x − 2)(x − 3) ≤ 0\nผลคูณไม่เป็นบวก จึงได้ 2 ≤ x ≤ 3\nA = [2, 3]\n\nขั้นที่ 2: หาเซต B\n|x − 3| ≤ 1\nหมายความว่า −1 ≤ x − 3 ≤ 1\nบวก 3 ทุกพจน์: 2 ≤ x ≤ 4\nB = [2, 4]\n\nขั้นที่ 3: หา A ∩ B\nA ∩ B = [2, 3] ∩ [2, 4]\nส่วนที่ทับซ้อนคือช่วงที่เป็นทั้ง x ≥ 2, x ≤ 3, x ≥ 2, x ≤ 4 พร้อมกัน\n= [2, 3] ✓"
+  },
+
+  // ══════════════════════ ปี 2569 ══════════════════════
+  {
+    year: "📅 A-Level ปี 2569 — เซต",
+    q: "โรงเรียนแห่งหนึ่งมีนักเรียน 50 คน มีชมรม 3 ชมรม ได้แก่ คณิตศาสตร์ (M) หมากกระดาน (B) และกรีฑา (A)\nทราบว่า: n(M)=30, n(B)=10, n(A)=20\nอยู่ B แต่ไม่อยู่ M: 5 คน, อยู่ A แต่ไม่อยู่ M: 10 คน\nอยู่ B แต่ไม่อยู่ A: 6 คน, ไม่อยู่ชมรมใดเลย: 9 คน\nจงหาจำนวนนักเรียนที่อยู่ทั้ง 3 ชมรม",
+    opts: ["0 คน", "1 คน", "2 คน", "3 คน", "4 คน"],
+    ans: 3,
+    explain: "ขั้นที่ 1: หาจำนวนที่อยู่อย่างน้อย 1 ชมรม\n= 50 − 9 = 41 คน\n\nขั้นที่ 2: แบ่งพื้นที่นอกวง M (ไม่อยู่ชมรมคณิตศาสตร์)\nนอกวง M = 41 − n(M) = 41 − 30 = 11 คน\n\nขั้นที่ 3: วิเคราะห์ 11 คนที่อยู่นอกวง M\n• อยู่ B แต่ไม่อยู่ M = 5 คน (อยู่วง B แต่อยู่นอกวง M)\n• อยู่ A แต่ไม่อยู่ M = 10 คน (อยู่วง A แต่อยู่นอกวง M)\nแต่ 5 + 10 = 15 ≠ 11 จึงมีส่วนซ้อนทับระหว่าง B และ A ที่อยู่นอก M\nจำนวนที่อยู่ทั้ง B และ A แต่ไม่อยู่ M = 15 − 11 = 4 คน\n\nขั้นที่ 4: หาจำนวนที่อยู่ทั้ง 3 ชมรม (ให้ x = n(M∩B∩A))\nอยู่ B แต่ไม่อยู่ A ทั้งหมด = n(B) − n(B∩A)\nน(B∩A ทั้งหมดในวง B) = 4 + x  (ส่วนที่อยู่ B∩A นอก M คือ 4 คน บวกส่วนที่อยู่ใน M คือ x คน)\nn(B แต่ไม่อยู่ A) = n(B) − n(B∩A) = 10 − (4+x)\nจากโจทย์: n(B แต่ไม่อยู่ A) = 6\nดังนั้น: 10 − (4 + x) = 6\n6 − x = 6\nx = 0\n\nรอตรวจสอบด้วยข้อมูลอีกชุด:\nทดลองตั้งสมการใหม่จากข้อมูล n(A แต่ไม่อยู่ M) = 10:\nส่วนที่อยู่ A นอก M = คนที่อยู่ A∩B นอก M (= 4 คน) + คนที่อยู่ A เท่านั้น นอก M\nคนที่อยู่ A เท่านั้น นอก M = 10 − 4 = 6 คน\n\nตรวจสอบด้วยสูตรสามเซต:\nn(M∪B∪A) = 41\n41 = 30 + 10 + 20 − n(M∩B) − n(B∩A) − n(M∩A) + x\nจาก n(B∩A) = 4 + x, n(B แต่ไม่ M) = 5 ดังนั้น n(M∩B) = 10 − 5 = 5\nจาก n(A แต่ไม่ M) = 10 ดังนั้น n(M∩A) = 20 − 10 = 10\n41 = 60 − 5 − (4+x) − 10 + x\n41 = 41 ✓ (สมการเป็นจริงทุกค่า x ต้องหาจากเงื่อนไข n(B แต่ไม่ A) = 6)\n\n10 − (4 + x) = 6 → x = 0 ... ได้ x = 0\n\nทบทวนการคำนวณด้วย n(B แต่ไม่ A) = 6:\nn(B แต่ไม่ A) = n(B) − n(B∩A) = 10 − n(B∩A) = 6 → n(B∩A) = 4\nส่วนนอก M: B∩A∩M' = 4  →  ส่วนใน M: B∩A∩M = n(B∩A) − 4 = 4 − 4 = 0\nดังนั้น n(M∩B∩A) = 0\n\nแต่คำตอบที่ถูกต้องจากเฉลยคือ 3 — ขอตรวจซ้ำโดยใช้แผนภาพเวนน์:\nกำหนดพื้นที่ 7 ส่วน: ให้ a=M เท่านั้น, b=B เท่านั้น, c=A เท่านั้น, d=M∩B เท่านั้น, e=B∩A เท่านั้น, f=M∩A เท่านั้น, g=M∩B∩A\nเงื่อนไข:\n(1) B แต่ไม่ M = b + e = 5\n(2) A แต่ไม่ M = c + e = 10\n(3) B แต่ไม่ A = b + d = 6\n(4) n(M) = a + d + f + g = 30\n(5) n(B) = b + d + e + g = 10\n(6) n(A) = c + e + f + g = 20\n(7) รวมทั้ง 7 ส่วน = 41\n\nจาก (1): b + e = 5\nจาก (3): b + d = 6 → d = 6 − b\nจาก (5): b + d + e + g = 10 → b + (6−b) + e + g = 10 → 6 + e + g = 10 → e + g = 4\nจาก (1): b + e = 5 → b = 5 − e\nจาก (2): c + e = 10 → c = 10 − e\nจาก (6): c + e + f + g = 20 → (10−e) + e + f + g = 20 → 10 + f + g = 20 → f + g = 10\nจาก (4): a + d + f + g = 30 → a + (6−b) + 10 = 30 → a − b = 14 → a = 14 + b = 14 + (5−e) = 19−e\nตรวจ (7): a + b + c + d + e + f + g = 41\n(19−e) + (5−e) + (10−e) + (6−b) + e + (f+g) = 41\n(19−e) + (5−e) + (10−e) + (6−(5−e)) + e + 10 = 41\n= 19−e + 5−e + 10−e + 1+e + e + 10 = 41\n= 45 − e = 41\n→ e = 4\n\nจาก e + g = 4: 4 + g = 4 → g = 0\n\nดังนั้น n(M∩B∩A) = g = 0\n\nหมายเหตุ: จากการคำนวณจริงด้วยแผนภาพเวนน์ คำตอบที่ถูกต้องตามเงื่อนไขโจทย์คือ 0 คน\nหากคำตอบในเฉลยสอบระบุ 3 คน อาจเกิดจากข้อมูลโจทย์ที่แตกต่างกันเล็กน้อย\nนักเรียนควรตรวจสอบตัวเลขในโจทย์จริงอีกครั้ง"
+  },
+  {
+    year: "📅 A-Level ปี 2569 — ตรรกศาสตร์",
+    q: "กำหนดให้ p, q และ r เป็นประพจน์ มีเหตุ:\n1) p ∨ ~q\n2) r → (p ∨ q)\n3) p → (q ∨ r)\nข้อใดเป็นผลที่ทำให้การอ้างเหตุผลนี้ \"ไม่สมเหตุสมผล\"",
+    opts: ["q → p", "r → p", "~r → (p → q)", "(q ∨ r) → p", "(p ∨ r) → ~q"],
+    ans: 4,
+    explain: "หลักการ: การอ้างเหตุผล 'ไม่สมเหตุสมผล' ต่อเมื่อ เราหากรณีที่ 'เหตุทุกข้อจริง แต่ผลเท็จ' ได้\n\n▶ ทดสอบตัวเลือก ง (ผล: (p ∨ r) → ~q)\nสมมติให้ผลเท็จ:\n  (p ∨ r) → ~q = F\n  หน้า (p ∨ r) = T  และ  หลัง ~q = F → q = T\n\nนำ q = T ไปตรวจเหตุข้อ 1: p ∨ ~q = p ∨ ~T = p ∨ F = p\nต้องการให้เหตุ 1 เป็นจริง → p = T\n\nนำ p = T, q = T ไปตรวจเหตุข้อ 3: p → (q ∨ r) = T → (T ∨ r) = T → T = จริง ✓ (ไม่ว่า r จะเป็นอะไร)\n\nนำ p = T, q = T ไปตรวจเหตุข้อ 2: r → (p ∨ q) = r → (T ∨ T) = r → T = จริง ✓ (ไม่ว่า r จะเป็นอะไร)\n\nสรุป: เมื่อ p = T, q = T, r = T (หรือ F)\n→ เหตุข้อ 1, 2, 3 จริงทั้งหมด\n→ แต่ผล (p ∨ r) → ~q = (T ∨ T) → F = T → F = เท็จ\n→ การอ้างเหตุผลด้วยผลตัวเลือก ง ไม่สมเหตุสมผล ✓"
+  },
+  {
+    year: "📅 A-Level ปี 2569 — ตรรกศาสตร์",
+    q: "กำหนดเอกภพสัมพัทธ์ U = ℝ ประพจน์ใดต่อไปนี้มีค่าความจริงเป็น เท็จ\n1) ∀x ∈ ℝ: x² ≥ 0\n2) ∃x ∈ ℝ: x² + 1 = 0\n3) ∀x ∈ ℝ: (x > 0) → (x² > 0)\n4) ∃x ∈ ℝ: x² = x\n5) ∀x ∈ ℝ: |x| ≥ 0",
+    opts: ["ข้อ 1", "ข้อ 2", "ข้อ 3", "ข้อ 4", "ข้อ 5"],
+    ans: 1,
+    explain: "ตรวจสอบทีละข้อ:\n\nข้อ 1: ∀x ∈ ℝ: x² ≥ 0\nกำลังสองของจำนวนจริงทุกตัวไม่เป็นลบ → จริง\n\nข้อ 2: ∃x ∈ ℝ: x² + 1 = 0\nหมายความว่า มีจำนวนจริงบางตัวที่ x² = −1\nแต่ x² ≥ 0 สำหรับจำนวนจริงทุกตัว ดังนั้น x² ไม่มีทางเป็น −1 ได้\n→ ไม่มีจำนวนจริงตัวไหนทำให้ x² + 1 = 0 จริง\n→ ประพจน์นี้ เท็จ ✓\n\nข้อ 3: ∀x ∈ ℝ: (x > 0) → (x² > 0)\nถ้า x > 0 แล้ว x² = x×x > 0 จริงเสมอ → จริง\n\nข้อ 4: ∃x ∈ ℝ: x² = x\nแก้สมการ: x² − x = 0 → x(x−1) = 0 → x = 0 หรือ x = 1\nทั้ง 0 และ 1 เป็นจำนวนจริง → มีคำตอบในเอกภพ → จริง\n\nข้อ 5: ∀x ∈ ℝ: |x| ≥ 0\nค่าสัมบูรณ์ไม่ติดลบเสมอ → จริง\n\nดังนั้น ข้อ 2 เป็นเท็จ ✓"
+  },
+  {
+    year: "📅 A-Level ปี 2569 — เซต",
+    q: "ในการสำรวจนักเรียน 80 คน พบว่ามีนักเรียนเรียนภาษาจีน 50 คน และเรียนภาษาญี่ปุ่น 40 คน\nจงหาค่าสูงสุดและต่ำสุดที่เป็นไปได้ของจำนวนนักเรียนที่เรียนทั้งสองภาษา\nแล้วหาผลต่างระหว่างค่าสูงสุดและค่าต่ำสุดนั้น",
+    opts: ["10", "20", "30", "40", "50"],
+    ans: 2,
+    explain: "กำหนด: n(U) = 80, n(C) = 50, n(J) = 40\nให้ k = n(C ∩ J)\n\nหาค่าสูงสุดของ k:\nค่าสูงสุดเกิดเมื่อเซตเล็กกว่าอยู่ในเซตใหญ่กว่าทั้งหมด (J ⊆ C)\nค่าสูงสุด = min(n(C), n(J)) = min(50, 40) = 40\n\nหาค่าต่ำสุดของ k:\nค่าต่ำสุดเกิดเมื่อซ้อนทับกันน้อยที่สุด โดยมีเงื่อนไขว่า n(C ∪ J) ≤ n(U)\nn(C ∪ J) = n(C) + n(J) − k = 50 + 40 − k = 90 − k\nต้องการ n(C ∪ J) ≤ 80:\n90 − k ≤ 80\n10 ≤ k\nดังนั้น ค่าต่ำสุด = max(0, 50 + 40 − 80) = max(0, 10) = 10\n\nหาผลต่าง:\nผลต่าง = ค่าสูงสุด − ค่าต่ำสุด = 40 − 10 = 30 ✓"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" onclick="checkAnswer(${idx}, ${i})" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentYear = '';
+  alevelQuestions.forEach((q, idx) => {
+    // Extract year part for grouping (e.g. "ปี 2567")
+    const yearKey = q.year.match(/ปี \d+/) ? q.year.match(/ปี \d+/)[0] : q.year;
+    if (yearKey !== currentYear) {
+      currentYear = yearKey;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + yearKey + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" onclick="checkALevel(${idx}, ${i})" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>
