@@ -480,7 +480,7 @@
   <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
   <div class="hero-stats">
     <div class="stat"><div class="stat-num">2</div><div class="stat-label">บท</div></div>
-    <div class="stat"><div class="stat-num">8</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">หัวข้อหลัก</div></div>
     <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
     <div class="stat"><div class="stat-num">25</div><div class="stat-label">ข้อสอบ A-Level</div></div>
   </div>
@@ -495,6 +495,7 @@
   <button class="tab-btn" data-sec="logic3">6. ตารางค่าความจริง</button>
   <button class="tab-btn" data-sec="logic4">7. สมมูล/นิเสธ</button>
   <button class="tab-btn" data-sec="logic5">8. ตัวบ่งปริมาณ (∀, ∃)</button>
+  <button class="tab-btn" data-sec="logic6">9. การอ้างเหตุผล</button>
   <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
   <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
 </div>
@@ -1236,6 +1237,264 @@
         ~(∀ x  ∃ y  P(x,y)) ≡ ∃ x  ∀ y  ~ P(x,y)<br>
         ~(∃ x  ∀ y  P(x,y)) ≡ ∀ x  ∃ y  ~ P(x,y)<br><br>
         <strong>หลักการ:</strong> ย้อนตัวบ่งปริมาณทุกตัว (∀↔∃) แล้วนิเสธ P ในที่สุด
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: การอ้างเหตุผล ===== -->
+  <div class="section" id="logic6">
+    <div class="section-heading"><span>หัวข้อ 9</span> · การอ้างเหตุผล</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧠</div>การอ้างเหตุผลคืออะไร?</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        <strong>การอ้างเหตุผล</strong> คือ กระบวนการนำ <strong>เหตุ (Premises)</strong> หรือสมมติฐานตั้งแต่หนึ่งข้อขึ้นไป มาสรุปเป็น <strong>ผล (Conclusion)</strong>
+        โดยเขียนในรูปแบบ:<br><br>
+        เหตุที่ 1: P₁<br>
+        เหตุที่ 2: P₂<br>
+        ⋮<br>
+        ∴ ผล: C
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการอ้างเหตุผล</div>
+        เหตุที่ 1: ถ้าฝนตก แล้วถนนเปียก (p → q)<br>
+        เหตุที่ 2: ฝนตก (p)<br>
+        ∴ ผล: ถนนเปียก (q)
+      </div>
+      <p>ความสำคัญของการอ้างเหตุผลในหลักสูตร: เป็นหัวข้อที่เพิ่มเข้ามาในการสอบ A-Level ตั้งแต่ปีการศึกษา 2569 โดยต่อยอดจากตรรกศาสตร์และประพจน์</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">✅</div>การอ้างเหตุผลสมเหตุสมผล (Valid Argument)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม — สมเหตุสมผล</div>
+        การอ้างเหตุผลจะ <strong>สมเหตุสมผล (Valid)</strong> ก็ต่อเมื่อ<br>
+        <strong>ทุกกรณีที่เหตุทุกข้อเป็นจริงพร้อมกัน ผลต้องเป็นจริงเสมอ</strong><br><br>
+        กล่าวอีกนัยหนึ่ง: <strong>ไม่มีกรณีใดที่เหตุทุกข้อจริงพร้อมกันแล้วผลเป็นเท็จ</strong>
+      </div>
+      <div class="def-box">
+        <div class="def-label">วิธีตรวจสอบ — ใช้ตารางค่าความจริง</div>
+        สร้างตารางค่าความจริงของ (P₁ ∧ P₂ ∧ … ∧ Pₙ) → C<br>
+        ถ้าประพจน์นี้เป็น <strong>สัจนิรันดร์</strong> (จริงทุกแถว) → การอ้างเหตุผล <strong>สมเหตุสมผล</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 วิธีลัด — ตรวจสอบโดยสมมติให้ผลเท็จ</div>
+        สมมติให้ผล (C) เป็นเท็จ แล้วดูว่าจะสามารถให้เหตุทุกข้อเป็นจริงพร้อมกันได้หรือไม่<br>
+        • ถ้า <strong>ไม่สามารถ</strong> (เกิดข้อขัดแย้ง) → <strong>สมเหตุสมผล</strong><br>
+        • ถ้า <strong>สามารถ</strong> (ไม่เกิดข้อขัดแย้ง) → <strong>ไม่สมเหตุสมผล</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>รูปแบบการอ้างเหตุผลที่สมเหตุสมผล (ต้องจำ!)</div>
+
+      <div class="sub-heading">1. Modus Ponens (การยืนยันเหตุ)</div>
+      <div class="math-block">
+        เหตุ 1: p → q<br>
+        เหตุ 2: p<br>
+        ∴ ผล: q
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง Modus Ponens</div>
+        เหตุ 1: ถ้านักเรียนขยัน แล้วนักเรียนสอบผ่าน<br>
+        เหตุ 2: นักเรียนขยัน<br>
+        ∴ ผล: นักเรียนสอบผ่าน ✓
+      </div>
+
+      <div class="sub-heading">2. Modus Tollens (การปฏิเสธผล)</div>
+      <div class="math-block">
+        เหตุ 1: p → q<br>
+        เหตุ 2: ~q<br>
+        ∴ ผล: ~p
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง Modus Tollens</div>
+        เหตุ 1: ถ้าฝนตก แล้วถนนเปียก<br>
+        เหตุ 2: ถนนไม่เปียก<br>
+        ∴ ผล: ฝนไม่ตก ✓<br><br>
+        (อาศัยหลัก: p → q สมมูลกับ ~q → ~p ซึ่งคือบทกลับนิเสธ)
+      </div>
+
+      <div class="sub-heading">3. Hypothetical Syllogism (การอ้างเหตุผลต่อเนื่อง)</div>
+      <div class="math-block">
+        เหตุ 1: p → q<br>
+        เหตุ 2: q → r<br>
+        ∴ ผล: p → r
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เหตุ 1: ถ้าฝนตก แล้วน้ำท่วม<br>
+        เหตุ 2: ถ้าน้ำท่วม แล้วถนนปิด<br>
+        ∴ ผล: ถ้าฝนตก แล้วถนนปิด ✓
+      </div>
+
+      <div class="sub-heading">4. Disjunctive Syllogism (การแยกทางเลือก)</div>
+      <div class="math-block">
+        เหตุ 1: p ∨ q<br>
+        เหตุ 2: ~p<br>
+        ∴ ผล: q
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เหตุ 1: วันนี้ฝนตก หรือ อากาศร้อน<br>
+        เหตุ 2: วันนี้ฝนไม่ตก<br>
+        ∴ ผล: วันนี้อากาศร้อน ✓
+      </div>
+
+      <div class="sub-heading">5. Conjunctive Simplification (การตัดสรุปจากการเชื่อม "และ")</div>
+      <div class="math-block">
+        เหตุ: p ∧ q<br>
+        ∴ ผล: p  (หรือ ∴ ผล: q)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">❌</div>รูปแบบที่ไม่สมเหตุสมผล (กับดักข้อสอบ!)</div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อผิดพลาดที่พบบ่อย — ต้องระวัง!</div>
+        รูปแบบเหล่านี้ดูเหมือนถูกต้อง แต่ <strong>ไม่สมเหตุสมผล</strong>
+      </div>
+
+      <div class="sub-heading">Fallacy of Affirming the Consequent (การยืนยันผลตาม — ผิด!)</div>
+      <div class="math-block" style="border-color: rgba(255,107,107,0.4); color: #ff9494;">
+        เหตุ 1: p → q<br>
+        เหตุ 2: q  ← (ยืนยันผล q)<br>
+        ∴ ผล: p  ← ผิด!
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ทำไมถึงผิด?</div>
+        กำหนดให้ p = F, q = T<br>
+        p → q = F → T = T (เหตุ 1 จริง)<br>
+        q = T (เหตุ 2 จริง)<br>
+        แต่ p = F (ผลเท็จ)<br>
+        → มีกรณีที่เหตุทุกข้อจริงแต่ผลเท็จ → ไม่สมเหตุสมผล ✗
+      </div>
+
+      <div class="sub-heading">Fallacy of Denying the Antecedent (การปฏิเสธเหตุ — ผิด!)</div>
+      <div class="math-block" style="border-color: rgba(255,107,107,0.4); color: #ff9494;">
+        เหตุ 1: p → q<br>
+        เหตุ 2: ~p  ← (ปฏิเสธเหตุ p)<br>
+        ∴ ผล: ~q  ← ผิด!
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ทำไมถึงผิด?</div>
+        กำหนดให้ p = F, q = T<br>
+        p → q = T (จริง), ~p = T (จริง)<br>
+        แต่ ~q = F (เท็จ)<br>
+        → มีกรณีเหตุจริงทั้งคู่แต่ผลเท็จ → ไม่สมเหตุสมผล ✗
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-label">💡 สรุปรูปแบบที่ถูกและผิด</div>
+        <table style="width:100%; font-size:13px">
+          <tr><th>รูปแบบ</th><th>ชื่อ</th><th>สมเหตุสมผล?</th></tr>
+          <tr><td>p→q, p ∴ q</td><td>Modus Ponens</td><td class="true-val">✓ ใช่</td></tr>
+          <tr><td>p→q, ~q ∴ ~p</td><td>Modus Tollens</td><td class="true-val">✓ ใช่</td></tr>
+          <tr><td>p→q, q→r ∴ p→r</td><td>Hypothetical Syllogism</td><td class="true-val">✓ ใช่</td></tr>
+          <tr><td>p∨q, ~p ∴ q</td><td>Disjunctive Syllogism</td><td class="true-val">✓ ใช่</td></tr>
+          <tr><td>p→q, q ∴ p</td><td>Affirming Consequent</td><td class="false-val">✗ ไม่ใช่</td></tr>
+          <tr><td>p→q, ~p ∴ ~q</td><td>Denying Antecedent</td><td class="false-val">✗ ไม่ใช่</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📊</div>การตรวจสอบด้วยตารางค่าความจริง</div>
+      <div class="def-box">
+        <div class="def-label">ขั้นตอนการตรวจสอบ</div>
+        ขั้นที่ 1: เขียนประพจน์รวม (เหตุ 1) ∧ (เหตุ 2) ∧ … → (ผล)<br>
+        ขั้นที่ 2: สร้างตารางค่าความจริง<br>
+        ขั้นที่ 3: ตรวจว่าคอลัมน์สุดท้ายเป็น T ทุกแถวหรือไม่<br>
+        ถ้า T ทุกแถว → <strong>สัจนิรันดร์ → สมเหตุสมผล</strong>
+      </div>
+
+      <div class="sub-heading">ตัวอย่าง: ตรวจสอบ Modus Ponens ด้วยตาราง</div>
+      <p>ตรวจสอบ: [(p → q) ∧ p] → q</p>
+      <table>
+        <tr><th>p</th><th>q</th><th>p → q</th><th>(p→q) ∧ p</th><th>[(p→q) ∧ p] → q</th></tr>
+        <tr><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+        <tr><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="true-val">T</td><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+      </table>
+      <p>คอลัมน์สุดท้ายจริงทุกแถว → เป็นสัจนิรันดร์ → <strong>สมเหตุสมผล ✓</strong></p>
+
+      <div class="sub-heading">ตัวอย่าง: ตรวจสอบ Modus Tollens ด้วยตาราง</div>
+      <p>ตรวจสอบ: [(p → q) ∧ ~q] → ~p</p>
+      <table>
+        <tr><th>p</th><th>q</th><th>p → q</th><th>~q</th><th>~p</th><th>(p→q) ∧ ~q</th><th>→ ~p</th></tr>
+        <tr><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="true-val">T</td><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td><td class="false-val">F</td><td class="true-val">T</td></tr>
+        <tr><td class="false-val">F</td><td class="false-val">F</td><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td><td class="true-val">T</td></tr>
+      </table>
+      <p>คอลัมน์สุดท้ายจริงทุกแถว → <strong>สมเหตุสมผล ✓</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔗</div>การอ้างเหตุผลหลายขั้น (การต่อยอดเหตุผล)</div>
+      <p>ในโจทย์ A-Level บางข้ออาจมีเหตุมากกว่า 2 ข้อ ต้องใช้รูปแบบต่าง ๆ ต่อกันเป็นทอด ๆ</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์หลายขั้น</div>
+        กำหนดเหตุ:<br>
+        (1) p → q<br>
+        (2) q → r<br>
+        (3) ~r<br>
+        จงสรุปผลที่ตามมาได้<br><br>
+        <strong>แนวคิด:</strong><br>
+        จาก (1) และ (2) ใช้ Hypothetical Syllogism: p → r<br>
+        จาก (p → r) และ (3) ~r ใช้ Modus Tollens: ∴ <strong>~p</strong> ✓
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 2</div>
+        กำหนดเหตุ:<br>
+        (1) p → q<br>
+        (2) ~p → r<br>
+        (3) ~r<br>
+        จงสรุปผล<br><br>
+        <strong>แนวคิด:</strong><br>
+        จาก (2) และ (3) ใช้ Modus Tollens: ~p → r, ~r ∴ p<br>
+        จาก (1) และ p ใช้ Modus Ponens: p → q, p ∴ <strong>q</strong> ✓
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคแก้โจทย์การอ้างเหตุผลหลายข้อ</div>
+        1. มองหาเหตุที่มีรูปแบบประพจน์เดียว (ไม่มีตัวเชื่อม) ก่อน — เหตุเหล่านี้บังคับค่าตัวแปร<br>
+        2. ใช้เหตุที่บังคับค่าแล้วแทนค่าไปหาค่าอื่น ๆ ต่อเนื่อง<br>
+        3. ตรวจสอบว่าไม่มีกรณีที่เหตุทุกข้อจริงพร้อมกันแต่ผลเท็จ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🎯</div>ตัวอย่างโจทย์แนว A-Level 2569</div>
+      <div class="example-box">
+        <div class="ex-label">ข้อที่ 1 — ระบุรูปแบบ</div>
+        <strong>โจทย์:</strong> การอ้างเหตุผลใดต่อไปนี้สมเหตุสมผล?<br>
+        ก) เหตุ: p → q, q → r  ผล: r → p<br>
+        ข) เหตุ: p → q, p → r  ผล: q → r<br>
+        ค) เหตุ: p → q, q → r  ผล: p → r<br>
+        ง) เหตุ: p ∨ q, p → r  ผล: q → r<br><br>
+        <strong>เฉลย: ค)</strong> เพราะใช้รูปแบบ Hypothetical Syllogism: p→q, q→r ∴ p→r ✓<br>
+        ก) ผิด (ไม่สามารถสรุป r→p ได้)<br>
+        ข) ผิด (p→q และ p→r ไม่ได้บอกความสัมพันธ์ระหว่าง q กับ r)<br>
+        ง) ผิด (ไม่สามารถสรุปได้จากเหตุที่มี)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ข้อที่ 2 — ตรวจสอบด้วยการสมมติ</div>
+        <strong>โจทย์:</strong> กำหนดเหตุ: (1) ~p ∨ q  (2) ~q<br>
+        ผลใดทำให้การอ้างเหตุผลสมเหตุสมผล?<br>
+        ก) p    ข) ~p    ค) q    ง) p ∧ q<br><br>
+        <strong>แนวคิด:</strong><br>
+        เหตุ (1): ~p ∨ q สมมูลกับ p → q<br>
+        เหตุ (2): ~q<br>
+        ใช้ Modus Tollens: p → q, ~q ∴ ~p<br>
+        <strong>เฉลย: ข) ~p ✓</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวังในการสอบ</div>
+        ก่อนใช้รูปแบบมาตรฐาน ให้แปลงรูปประพจน์ให้อยู่ในรูปที่รู้จักก่อน<br>
+        เช่น ~p ∨ q ≡ p → q  หรือ  ~(p ∧ q) ≡ ~p ∨ ~q<br>
+        แล้วจึงจับคู่กับรูปแบบ Modus Ponens / Modus Tollens และอื่น ๆ
       </div>
     </div>
   </div>
