@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เวกเตอร์ | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #0f1a30 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '→ · ⃗v  |v|  · ×  ·  θ  ·  cos  ·  proj  ·  î  ĵ  k̂';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent2); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* BOXES */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* VECTOR DIAGRAM */
+  .vec-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent2); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent2);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+
+  /* FORMULA HIGHLIGHT */
+  .formula-highlight {
+    background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(0,212,170,0.08));
+    border: 1px solid rgba(108,99,255,0.3);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-family: var(--mono);
+    font-size: 16px;
+    color: var(--accent4);
+    text-align: center;
+    line-height: 2.2;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1><span>เวกเตอร์</span>ใน 2 และ 3 มิติ</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">ทิศทาง</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="vec1">1. นิยามเวกเตอร์</button>
+  <button class="tab-btn" data-sec="vec2">2. การดำเนินการ</button>
+  <button class="tab-btn" data-sec="vec3">3. ขนาดและทิศทาง</button>
+  <button class="tab-btn" data-sec="vec4">4. ผลคูณจุด (Dot Product)</button>
+  <button class="tab-btn" data-sec="vec5">5. ผลคูณไขว้ (Cross Product)</button>
+  <button class="tab-btn" data-sec="vec6">6. เวกเตอร์ใน 3 มิติ</button>
+  <button class="tab-btn" data-sec="vec7">7. การประยุกต์</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: นิยามเวกเตอร์ ===== -->
+  <div class="section active" id="vec1">
+    <div class="section-heading"><span>บทที่ 1</span> · นิยามและพื้นฐานเวกเตอร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🏹</div>เวกเตอร์คืออะไร?</div>
+      <p>เวกเตอร์ (Vector) คือปริมาณที่มี <strong>ทั้งขนาดและทิศทาง</strong> ต่างจากสเกลาร์ (Scalar) ที่มีแค่ขนาดอย่างเดียว</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สเกลาร์ (Scalar)</h4>
+          <p>มีแค่ขนาด ไม่มีทิศทาง</p>
+          <ul>
+            <li>อุณหภูมิ 30°C</li>
+            <li>มวล 5 กิโลกรัม</li>
+            <li>ระยะทาง 100 เมตร</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>เวกเตอร์ (Vector)</h4>
+          <p>มีทั้งขนาดและทิศทาง</p>
+          <ul>
+            <li>แรง 10 นิวตัน ไปทางเหนือ</li>
+            <li>ความเร็ว 60 กม./ชม. ไปทางตะวันออก</li>
+            <li>การกระจัด 5 เมตร ทำมุม 30°</li>
+          </ul>
+        </div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เวกเตอร์ในระนาบ 2 มิติ เขียนแทนด้วย <span class="math">v⃗ = (a, b)</span> หรือ <span class="math">v⃗ = aî + bĵ</span><br>
+        โดย a คือองค์ประกอบแนวแกน x และ b คือองค์ประกอบแนวแกน y
+      </div>
+
+      <div class="vec-container">
+        <svg width="280" height="200" viewBox="0 0 280 200">
+          <!-- Grid lines -->
+          <line x1="40" y1="10" x2="40" y2="180" stroke="#2a3050" stroke-width="1"/>
+          <line x1="10" y1="160" x2="270" y2="160" stroke="#2a3050" stroke-width="1"/>
+          <!-- Grid ticks -->
+          <line x1="100" y1="155" x2="100" y2="165" stroke="#4a5580" stroke-width="1"/>
+          <line x1="160" y1="155" x2="160" y2="165" stroke="#4a5580" stroke-width="1"/>
+          <line x1="220" y1="155" x2="220" y2="165" stroke="#4a5580" stroke-width="1"/>
+          <line x1="35" y1="100" x2="45" y2="100" stroke="#4a5580" stroke-width="1"/>
+          <line x1="35" y1="40" x2="45" y2="40" stroke="#4a5580" stroke-width="1"/>
+          <!-- Axis labels -->
+          <text x="260" y="175" fill="#4a5580" font-size="13">x</text>
+          <text x="28" y="15" fill="#4a5580" font-size="13">y</text>
+          <text x="93" y="178" fill="#4a5580" font-size="11">1</text>
+          <text x="153" y="178" fill="#4a5580" font-size="11">2</text>
+          <text x="213" y="178" fill="#4a5580" font-size="11">3</text>
+          <text x="28" y="105" fill="#4a5580" font-size="11">1</text>
+          <text x="28" y="45" fill="#4a5580" font-size="11">2</text>
+          <!-- Vector arrow -->
+          <line x1="40" y1="160" x2="218" y2="42" stroke="#00d4aa" stroke-width="2.5"/>
+          <polygon points="218,42 205,55 225,58" fill="#00d4aa"/>
+          <!-- Dashed projection lines -->
+          <line x1="40" y1="160" x2="220" y2="160" stroke="#6c63ff" stroke-width="1" stroke-dasharray="5,4"/>
+          <line x1="220" y1="160" x2="220" y2="40" stroke="#6c63ff" stroke-width="1" stroke-dasharray="5,4"/>
+          <!-- Labels -->
+          <text x="120" y="182" fill="#6c63ff" font-size="12">a = 3</text>
+          <text x="226" y="105" fill="#6c63ff" font-size="12">b = 2</text>
+          <text x="115" y="85" fill="#00d4aa" font-size="14" font-weight="bold">v⃗ = (3,2)</text>
+          <!-- Origin dot -->
+          <circle cx="40" cy="160" r="3" fill="#ffd93d"/>
+          <text x="30" y="178" fill="#ffd93d" font-size="11">O</text>
+        </svg>
+      </div>
+
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เวกเตอร์ <span class="math">v⃗ = (3, 2)</span> หมายถึงเวกเตอร์ที่เริ่มจากจุดกำเนิด<br>
+        ไปในทิศทางที่ขยับ 3 หน่วยในแนวแกน x และ 2 หน่วยในแนวแกน y
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔤</div>สัญลักษณ์และรูปแบบการเขียน</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">v⃗</div>
+          <div class="sym-name">เวกเตอร์ v</div>
+          <div class="sym-desc">เขียนตัวหนังสือพร้อมลูกศรด้านบน หรือตัวหนา <b>v</b></div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">|v⃗|</div>
+          <div class="sym-name">ขนาด (Magnitude)</div>
+          <div class="sym-desc">ค่าสัมบูรณ์ของเวกเตอร์ คือความยาวของลูกศร</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">î, ĵ, k̂</div>
+          <div class="sym-name">เวกเตอร์หน่วย</div>
+          <div class="sym-desc">î=(1,0,0), ĵ=(0,1,0), k̂=(0,0,1)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">−v⃗</div>
+          <div class="sym-name">เวกเตอร์ตรงข้าม</div>
+          <div class="sym-desc">ขนาดเท่ากัน แต่ทิศทางตรงข้าม</div>
+        </div>
+      </div>
+      <div class="math-block">
+        รูปแบบ 2 มิติ:  v⃗ = (a, b)  =  aî + bĵ<br>
+        รูปแบบ 3 มิติ:  v⃗ = (a, b, c)  =  aî + bĵ + ck̂
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level</div>
+        เวกเตอร์ <span class="math">AB⃗</span> (จาก A ไป B) คือ <span class="math">B − A</span><br>
+        เช่น A = (1,2), B = (4,6) → AB⃗ = (4−1, 6−2) = (3, 4)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📌</div>ประเภทของเวกเตอร์</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เวกเตอร์ศูนย์ (Zero Vector)</h4>
+          <p><span class="math">0⃗ = (0, 0)</span></p>
+          <p>ขนาดเป็น 0 ไม่มีทิศทางที่แน่นอน</p>
+        </div>
+        <div class="mini-card">
+          <h4>เวกเตอร์หน่วย (Unit Vector)</h4>
+          <p>เวกเตอร์ที่มีขนาดเท่ากับ 1</p>
+          <p><span class="math">û = v⃗ / |v⃗|</span></p>
+        </div>
+        <div class="mini-card">
+          <h4>เวกเตอร์เท่ากัน</h4>
+          <p>ขนาดเท่ากัน และทิศทางเดียวกัน (ตำแหน่งไม่สำคัญ)</p>
+        </div>
+        <div class="mini-card">
+          <h4>เวกเตอร์ขนาน</h4>
+          <p><span class="math">u⃗ ∥ v⃗</span> เมื่อ <span class="math">u⃗ = kv⃗</span> สำหรับบางสเกลาร์ k ≠ 0</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: การดำเนินการ ===== -->
+  <div class="section" id="vec2">
+    <div class="section-heading"><span>หัวข้อที่ 2</span> · การดำเนินการกับเวกเตอร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">➕</div>การบวกและลบเวกเตอร์</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        ถ้า <span class="math">u⃗ = (a, b)</span> และ <span class="math">v⃗ = (c, d)</span> แล้ว<br>
+        <span class="math">u⃗ + v⃗ = (a+c, b+d)</span><br>
+        <span class="math">u⃗ − v⃗ = (a−c, b−d)</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        u⃗ = (2, 3) และ v⃗ = (−1, 4)<br>
+        u⃗ + v⃗ = (2+(−1), 3+4) = (1, 7)<br>
+        u⃗ − v⃗ = (2−(−1), 3−4) = (3, −1)
+      </div>
+
+      <div class="vec-container">
+        <svg width="300" height="200" viewBox="0 0 300 200">
+          <!-- Grid -->
+          <line x1="30" y1="10" x2="30" y2="185" stroke="#2a3050" stroke-width="1"/>
+          <line x1="10" y1="165" x2="290" y2="165" stroke="#2a3050" stroke-width="1"/>
+          <!-- u vector -->
+          <line x1="30" y1="165" x2="150" y2="105" stroke="#6c63ff" stroke-width="2.5"/>
+          <polygon points="150,105 138,113 144,126" fill="#6c63ff"/>
+          <text x="75" y="125" fill="#6c63ff" font-size="13" font-weight="bold">u⃗</text>
+          <!-- v vector (from tip of u) -->
+          <line x1="150" y1="105" x2="90" y2="65" stroke="#ffd93d" stroke-width="2.5"/>
+          <polygon points="90,65 103,77 112,64" fill="#ffd93d"/>
+          <text x="127" y="75" fill="#ffd93d" font-size="13" font-weight="bold">v⃗</text>
+          <!-- resultant u+v -->
+          <line x1="30" y1="165" x2="90" y2="65" stroke="#00d4aa" stroke-width="2.5" stroke-dasharray="6,3"/>
+          <polygon points="90,65 79,79 94,78" fill="#00d4aa"/>
+          <text x="40" y="105" fill="#00d4aa" font-size="13" font-weight="bold">u⃗+v⃗</text>
+          <!-- labels -->
+          <text x="140" y="192" fill="#8892b0" font-size="12">กฎหัวต่อหาง (Head-to-tail)</text>
+        </svg>
+      </div>
+
+      <p><strong>คุณสมบัติของการบวกเวกเตอร์:</strong></p>
+      <ul>
+        <li>สมบัติสลับที่: <span class="math">u⃗ + v⃗ = v⃗ + u⃗</span></li>
+        <li>สมบัติการเปลี่ยนหมู่: <span class="math">(u⃗ + v⃗) + w⃗ = u⃗ + (v⃗ + w⃗)</span></li>
+        <li>เอกลักษณ์การบวก: <span class="math">v⃗ + 0⃗ = v⃗</span></li>
+        <li>อินเวอร์สการบวก: <span class="math">v⃗ + (−v⃗) = 0⃗</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✖️</div>การคูณด้วยสเกลาร์</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        ถ้า <span class="math">v⃗ = (a, b)</span> และ k เป็นสเกลาร์ แล้ว<br>
+        <span class="math">kv⃗ = (ka, kb)</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        v⃗ = (2, −3)<br>
+        3v⃗ = (6, −9)  → ยาวขึ้น 3 เท่า ทิศทางเดิม<br>
+        −2v⃗ = (−4, 6) → ยาวขึ้น 2 เท่า ทิศทางตรงข้าม<br>
+        ½v⃗ = (1, −1.5) → ยาวลดเหลือครึ่ง
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ถ้า k > 0: ทิศทางเดิม<br>
+        ถ้า k < 0: ทิศทางตรงข้าม<br>
+        ถ้า k = 0: ได้เวกเตอร์ศูนย์ 0⃗
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ขนาดและทิศทาง ===== -->
+  <div class="section" id="vec3">
+    <div class="section-heading"><span>หัวข้อที่ 3</span> · ขนาดและทิศทางของเวกเตอร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>ขนาดของเวกเตอร์ (Magnitude)</div>
+      <div class="formula-highlight">
+        |v⃗| = √(a² + b²)  (2 มิติ)<br>
+        |v⃗| = √(a² + b² + c²)  (3 มิติ)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        v⃗ = (3, 4)<br>
+        |v⃗| = √(3² + 4²) = √(9 + 16) = √25 = 5<br><br>
+        u⃗ = (1, 2, 2)<br>
+        |u⃗| = √(1² + 2² + 2²) = √(1 + 4 + 4) = √9 = 3
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧭</div>เวกเตอร์หน่วย (Unit Vector)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เวกเตอร์หน่วย คือเวกเตอร์ที่มีขนาดเท่ากับ 1 ใช้บอกทิศทางล้วน ๆ<br>
+        หาได้จาก: <span class="math">û = v⃗ / |v⃗|</span>
+      </div>
+      <div class="formula-highlight">
+        û = (a/|v⃗|, b/|v⃗|)  โดยที่ |û| = 1 เสมอ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        v⃗ = (3, 4),  |v⃗| = 5<br>
+        û = (3/5, 4/5) = (0.6, 0.8)<br>
+        ตรวจสอบ: |û| = √(0.36 + 0.64) = √1 = 1 ✓
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>ทิศทางของเวกเตอร์ใน 2 มิติ</div>
+      <div class="def-box">
+        <div class="def-label">มุมของเวกเตอร์</div>
+        เวกเตอร์ <span class="math">v⃗ = (a, b)</span> ทำมุม θ กับแกน x โดย<br>
+        <span class="math">tan θ = b/a</span>  หรือ  <span class="math">θ = arctan(b/a)</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        v⃗ = (1, √3)<br>
+        tan θ = √3/1 = √3<br>
+        θ = arctan(√3) = 60°
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — ระวัง Quadrant!</div>
+        arctan ให้มุมในช่วง (−90°, 90°) เท่านั้น<br>
+        ต้องพิจารณา quadrant ของเวกเตอร์ด้วย เช่น v⃗ = (−1, 1) → θ = 135° ไม่ใช่ −45°
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: ผลคูณจุด ===== -->
+  <div class="section" id="vec4">
+    <div class="section-heading"><span>หัวข้อที่ 4</span> · ผลคูณจุด (Dot Product)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">•</div>นิยามผลคูณจุด</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        <span class="math">u⃗ · v⃗ = a₁a₂ + b₁b₂</span>  (2 มิติ)<br>
+        <span class="math">u⃗ · v⃗ = a₁a₂ + b₁b₂ + c₁c₂</span>  (3 มิติ)
+      </div>
+      <div class="formula-highlight">
+        u⃗ · v⃗ = |u⃗||v⃗|cos θ<br>
+        (ผลคูณจุดเป็นสเกลาร์ ไม่ใช่เวกเตอร์!)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        u⃗ = (2, 3) และ v⃗ = (4, −1)<br>
+        u⃗ · v⃗ = (2)(4) + (3)(−1) = 8 − 3 = 5
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>หามุมระหว่างเวกเตอร์</div>
+      <div class="formula-highlight">
+        cos θ = (u⃗ · v⃗) / (|u⃗| × |v⃗|)<br>
+        θ = arccos[(u⃗ · v⃗) / (|u⃗||v⃗|)]
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — หามุมระหว่าง u⃗ = (1, 0) และ v⃗ = (1, 1)</div>
+        u⃗ · v⃗ = (1)(1) + (0)(1) = 1<br>
+        |u⃗| = 1,  |v⃗| = √2<br>
+        cos θ = 1 / (1 × √2) = 1/√2<br>
+        θ = arccos(1/√2) = 45°
+      </div>
+      <div class="def-box">
+        <div class="def-label">เวกเตอร์ตั้งฉากกัน</div>
+        <span class="math">u⃗ ⊥ v⃗  ⟺  u⃗ · v⃗ = 0</span><br>
+        ถ้าผลคูณจุดเป็น 0 แสดงว่าสองเวกเตอร์ตั้งฉากกัน (θ = 90°)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ผลคูณจุด u⃗ · v⃗ > 0 → มุมแหลม (θ < 90°)<br>
+        ผลคูณจุด u⃗ · v⃗ = 0 → ตั้งฉาก (θ = 90°)<br>
+        ผลคูณจุด u⃗ · v⃗ < 0 → มุมป้าน (θ > 90°)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔽</div>การฉายเวกเตอร์ (Projection)</div>
+      <div class="def-box">
+        <div class="def-label">สูตรการฉาย</div>
+        การฉาย u⃗ ลงบน v⃗:<br>
+        <span class="math">proj_v⃗ u⃗ = (u⃗ · v⃗ / |v⃗|²) × v⃗</span><br>
+        ความยาวของการฉาย (scalar projection):<br>
+        <span class="math">comp_v⃗ u⃗ = u⃗ · v⃗ / |v⃗|</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        u⃗ = (3, 4), v⃗ = (1, 0)<br>
+        u⃗ · v⃗ = 3,  |v⃗|² = 1<br>
+        proj_v⃗ u⃗ = (3/1)(1, 0) = (3, 0)<br>
+        (การฉาย u⃗ ลงบนแกน x ได้ (3, 0) ถูกต้อง)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: ผลคูณไขว้ ===== -->
+  <div class="section" id="vec5">
+    <div class="section-heading"><span>หัวข้อที่ 5</span> · ผลคูณไขว้ (Cross Product)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">✕</div>นิยามผลคูณไขว้</div>
+      <p>ผลคูณไขว้ใช้ได้เฉพาะในระบบ <strong>3 มิติ</strong> และผลลัพธ์เป็น <strong>เวกเตอร์</strong> ที่ตั้งฉากกับทั้ง u⃗ และ v⃗</p>
+      <div class="formula-highlight">
+        u⃗ × v⃗ = |u⃗||v⃗|sin θ  n̂<br>
+        โดย n̂ คือเวกเตอร์หน่วยตั้งฉากกับระนาบของ u⃗ และ v⃗
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตรคำนวณ (Determinant Form)</div>
+        ถ้า u⃗ = (a₁, b₁, c₁) และ v⃗ = (a₂, b₂, c₂) แล้ว<br>
+        <span class="math">u⃗ × v⃗ = (b₁c₂ − c₁b₂, c₁a₂ − a₁c₂, a₁b₂ − b₁a₂)</span>
+      </div>
+      <div class="math-block">
+        u⃗ × v⃗ = | î   ĵ   k̂  |
+                  | a₁  b₁  c₁ |
+                  | a₂  b₂  c₂ |
+
+        = î(b₁c₂ − c₁b₂) − ĵ(a₁c₂ − c₁a₂) + k̂(a₁b₂ − b₁a₂)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        u⃗ = (1, 2, 3) และ v⃗ = (4, 5, 6)<br>
+        u⃗ × v⃗ = î(2×6 − 3×5) − ĵ(1×6 − 3×4) + k̂(1×5 − 2×4)<br>
+        = î(12 − 15) − ĵ(6 − 12) + k̂(5 − 8)<br>
+        = (−3, 6, −3)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>คุณสมบัติผลคูณไขว้</div>
+      <table>
+        <thead><tr><th>คุณสมบัติ</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td style="text-align:left">สลับที่</td><td>u⃗ × v⃗ = −(v⃗ × u⃗)</td></tr>
+          <tr><td style="text-align:left">เวกเตอร์ขนานกัน</td><td>u⃗ × v⃗ = 0⃗</td></tr>
+          <tr><td style="text-align:left">ขนาด = พื้นที่สี่เหลี่ยม</td><td>|u⃗ × v⃗| = |u⃗||v⃗|sin θ</td></tr>
+          <tr><td style="text-align:left">ตั้งฉากกับทั้งคู่</td><td>(u⃗ × v⃗) · u⃗ = 0, (u⃗ × v⃗) · v⃗ = 0</td></tr>
+        </tbody>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — กฎมือขวา</div>
+        ชี้นิ้วชี้ไปทาง u⃗ งอนิ้วไปทาง v⃗ นิ้วหัวแม่มือจะชี้ไปทาง u⃗ × v⃗
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: เวกเตอร์ใน 3 มิติ ===== -->
+  <div class="section" id="vec6">
+    <div class="section-heading"><span>หัวข้อที่ 6</span> · เวกเตอร์ในระบบ 3 มิติ</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧊</div>พิกัดและระยะทางใน 3 มิติ</div>
+      <div class="formula-highlight">
+        ระยะห่างระหว่าง A = (x₁, y₁, z₁) และ B = (x₂, y₂, z₂):<br>
+        d = √[(x₂−x₁)² + (y₂−y₁)² + (z₂−z₁)²]
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A = (1, 2, 3) และ B = (4, 6, 3)<br>
+        d = √[(4−1)² + (6−2)² + (3−3)²]<br>
+        = √[9 + 16 + 0] = √25 = 5
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔄</div>สมการเส้นตรงในรูปเวกเตอร์</div>
+      <div class="def-box">
+        <div class="def-label">สมการเส้นตรง (Vector Form)</div>
+        เส้นตรงผ่านจุด A = (x₀, y₀, z₀) ในทิศทาง d⃗ = (a, b, c):<br>
+        <span class="math">r⃗ = A + t·d⃗</span>  เมื่อ t เป็นพารามิเตอร์จริง
+      </div>
+      <div class="math-block">
+        (x, y, z) = (x₀ + ta,  y₀ + tb,  z₀ + tc)<br><br>
+        รูปสมมาตร (Symmetric form):<br>
+        (x − x₀)/a = (y − y₀)/b = (z − z₀)/c = t
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เส้นตรงผ่าน (1, 2, 3) ในทิศทาง d⃗ = (2, −1, 4):<br>
+        r⃗ = (1, 2, 3) + t(2, −1, 4)<br>
+        r⃗ = (1 + 2t,  2 − t,  3 + 4t)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🟦</div>สมการระนาบ</div>
+      <div class="def-box">
+        <div class="def-label">สมการระนาบ</div>
+        ระนาบที่มีเวกเตอร์ตั้งฉาก (Normal vector) <span class="math">n⃗ = (A, B, C)</span> และผ่านจุด (x₀, y₀, z₀):<br>
+        <span class="math">A(x − x₀) + B(y − y₀) + C(z − z₀) = 0</span><br>
+        หรือเขียนเป็น <span class="math">Ax + By + Cz = D</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ระนาบผ่าน (1, 2, 3) มี n⃗ = (2, −1, 1):<br>
+        2(x − 1) + (−1)(y − 2) + 1(z − 3) = 0<br>
+        2x − 2 − y + 2 + z − 3 = 0<br>
+        2x − y + z = 3
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: การประยุกต์ ===== -->
+  <div class="section" id="vec7">
+    <div class="section-heading"><span>หัวข้อที่ 7</span> · การประยุกต์ใช้เวกเตอร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">⚡</div>ฟิสิกส์และแรง</div>
+      <p>เวกเตอร์ใช้ในการหาแรงลัพธ์ ความเร็ว และการกระจัด</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — แรงลัพธ์</div>
+        แรง F₁⃗ = (3, 4) นิวตัน และ F₂⃗ = (−1, 2) นิวตัน<br>
+        แรงลัพธ์ F⃗ = F₁⃗ + F₂⃗ = (2, 6) นิวตัน<br>
+        ขนาดแรงลัพธ์ |F⃗| = √(4 + 36) = √40 = 2√10 นิวตัน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>พื้นที่สามเหลี่ยมและสี่เหลี่ยมด้านขนาน</div>
+      <div class="formula-highlight">
+        พื้นที่สี่เหลี่ยมด้านขนาน = |u⃗ × v⃗|<br>
+        พื้นที่สามเหลี่ยม = ½|u⃗ × v⃗|
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        สามเหลี่ยมมีจุดยอด A(0,0,0), B(1,2,0), C(0,1,3)<br>
+        u⃗ = AB⃗ = (1,2,0),  v⃗ = AC⃗ = (0,1,3)<br>
+        u⃗ × v⃗ = (2×3 − 0×1, 0×0 − 1×3, 1×1 − 2×0) = (6, −3, 1)<br>
+        |u⃗ × v⃗| = √(36 + 9 + 1) = √46<br>
+        พื้นที่สามเหลี่ยม = ½√46
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔑</div>สรุปสูตรสำคัญ</div>
+      <table>
+        <thead><tr><th>สูตร</th><th>ความหมาย</th></tr></thead>
+        <tbody>
+          <tr><td>|v⃗| = √(a²+b²+c²)</td><td>ขนาดเวกเตอร์</td></tr>
+          <tr><td>û = v⃗/|v⃗|</td><td>เวกเตอร์หน่วย</td></tr>
+          <tr><td>u⃗·v⃗ = a₁a₂+b₁b₂+c₁c₂</td><td>ผลคูณจุด (สเกลาร์)</td></tr>
+          <tr><td>cos θ = u⃗·v⃗/(|u⃗||v⃗|)</td><td>มุมระหว่างเวกเตอร์</td></tr>
+          <tr><td>u⃗·v⃗ = 0 ⟺ u⃗ ⊥ v⃗</td><td>เงื่อนไขตั้งฉาก</td></tr>
+          <tr><td>|u⃗×v⃗| = |u⃗||v⃗|sin θ</td><td>ขนาดผลคูณไขว้</td></tr>
+          <tr><td>พื้นที่ = ½|u⃗×v⃗|</td><td>พื้นที่สามเหลี่ยม</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> ฝึกหัดเตรียม A-Level</div>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== A-LEVEL ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบ A-Level (ประเภทข้อสอบ)</div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById(this.dataset.sec).classList.add('active');
+  });
+});
+
+// Quiz data
+const questions = [
+  {
+    q: "กำหนด u⃗ = (3, 4) จงหา |u⃗|",
+    opts: ["5", "7", "12", "√7", "25"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ใช้สูตร |v⃗| = √(a² + b²)\n|u⃗| = √(3² + 4²) = √(9 + 16) = √25 = 5 ✓"
+  },
+  {
+    q: "กำหนด u⃗ = (1, 2) และ v⃗ = (3, −1) จงหา u⃗ + v⃗",
+    opts: ["(4, 1)", "(2, 3)", "(−2, 3)", "(4, 3)", "(1, 4)"],
+    ans: 0,
+    explain: "u⃗ + v⃗ = (1+3, 2+(−1)) = (4, 1) ✓"
+  },
+  {
+    q: "กำหนด v⃗ = (2, 6) จงหาเวกเตอร์หน่วยในทิศทางของ v⃗",
+    opts: ["(1/√10, 3/√10)", "(1/4, 3/4)", "(1/2, 1/6)", "(2/8, 6/8)", "(1, 3)"],
+    ans: 0,
+    explain: "|v⃗| = √(4 + 36) = √40 = 2√10\nû = (2/(2√10), 6/(2√10)) = (1/√10, 3/√10) ✓"
+  },
+  {
+    q: "กำหนด u⃗ = (2, 3) และ v⃗ = (4, −1) จงหา u⃗ · v⃗",
+    opts: ["5", "11", "−5", "7", "14"],
+    ans: 0,
+    explain: "u⃗ · v⃗ = (2)(4) + (3)(−1) = 8 − 3 = 5 ✓"
+  },
+  {
+    q: "เวกเตอร์ใดต่อไปนี้ตั้งฉากกับ v⃗ = (3, 4)?",
+    opts: ["(4, −3)", "(3, 4)", "(−3, −4)", "(1, 1)", "(6, 8)"],
+    ans: 0,
+    explain: "เวกเตอร์ตั้งฉากกัน ต้องมีผลคูณจุดเป็น 0\n(4, −3) · (3, 4) = 12 + (−12) = 0 ✓\nดังนั้น (4, −3) ตั้งฉากกับ (3, 4)"
+  },
+  {
+    q: "กำหนด u⃗ = (1, 0, 0) และ v⃗ = (0, 1, 0) จงหา u⃗ × v⃗",
+    opts: ["(0, 0, 1)", "(0, 0, −1)", "(1, 1, 0)", "(0, 1, 0)", "(1, 0, 1)"],
+    ans: 0,
+    explain: "u⃗ × v⃗ = î(0×0 − 0×1) − ĵ(1×0 − 0×0) + k̂(1×1 − 0×0)\n= î(0) − ĵ(0) + k̂(1) = (0, 0, 1) ✓\n(î × ĵ = k̂ ตามกฎมือขวา)"
+  },
+  {
+    q: "มุมระหว่าง u⃗ = (1, 0) และ v⃗ = (0, 1) มีค่าเท่าไร",
+    opts: ["90°", "45°", "60°", "30°", "180°"],
+    ans: 0,
+    explain: "u⃗ · v⃗ = (1)(0) + (0)(1) = 0\nเมื่อผลคูณจุดเป็น 0 แสดงว่าเวกเตอร์ตั้งฉากกัน θ = 90° ✓"
+  },
+  {
+    q: "กำหนด A = (1, 2, 3) และ B = (4, 6, 3) จงหาระยะห่าง AB",
+    opts: ["5", "√34", "7", "√50", "√41"],
+    ans: 0,
+    explain: "d = √[(4−1)² + (6−2)² + (3−3)²]\n= √[9 + 16 + 0] = √25 = 5 ✓"
+  },
+  {
+    q: "กำหนด u⃗ = (2, 1) และ v⃗ = (1, 2) จงหา cos θ ระหว่าง u⃗ และ v⃗",
+    opts: ["4/5", "2/5", "3/5", "1/5", "√5/5"],
+    ans: 0,
+    explain: "u⃗ · v⃗ = 2(1) + 1(2) = 4\n|u⃗| = √5, |v⃗| = √5\ncos θ = 4/(√5 × √5) = 4/5 ✓"
+  },
+  {
+    q: "ถ้า u⃗ = (3, 0) และ v⃗ = (k, 4) ตั้งฉากกัน จงหา k",
+    opts: ["0", "3", "4", "−3", "12"],
+    ans: 0,
+    explain: "เงื่อนไขตั้งฉาก: u⃗ · v⃗ = 0\n(3)(k) + (0)(4) = 0\n3k = 0\nk = 0 ✓"
+  },
+  {
+    q: "กำหนด v⃗ = (1, 2, 2) จงหา |v⃗|",
+    opts: ["3", "5", "√9", "√7", "2√2"],
+    ans: 0,
+    explain: "|v⃗| = √(1² + 2² + 2²) = √(1 + 4 + 4) = √9 = 3 ✓"
+  },
+  {
+    q: "พื้นที่ของสามเหลี่ยมที่มีด้านประกอบ u⃗ = (1, 0, 0) และ v⃗ = (0, 2, 0) มีค่าเท่าไร",
+    opts: ["1", "2", "½", "√2", "4"],
+    ans: 0,
+    explain: "u⃗ × v⃗ = (0×0 − 0×2, 0×0 − 1×0, 1×2 − 0×0) = (0, 0, 2)\n|u⃗ × v⃗| = 2\nพื้นที่สามเหลี่ยม = ½ × 2 = 1 ✓"
+  },
+];
+
+// A-Level style questions
+const alevelQuestions = [
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "กำหนด u⃗ = (a, 3) และ v⃗ = (2, 6) โดยที่ u⃗ ∥ v⃗\nจงหาค่า a",
+    opts: ["1", "2", "3", "4", "6"],
+    ans: 0,
+    explain: "เวกเตอร์ขนานกัน: u⃗ = kv⃗ สำหรับบางสเกลาร์ k\n(a, 3) = k(2, 6)\nจาก b-component: 3 = 6k → k = ½\nจาก a-component: a = 2k = 2(½) = 1 ✓"
+  },
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "กำหนด A = (2, 1), B = (5, 5), C = (8, 1)\nรูปสามเหลี่ยม ABC มีพื้นที่เท่าไร",
+    opts: ["6", "12", "9", "√50", "8"],
+    ans: 0,
+    explain: "หา AB⃗ = (3, 4) และ AC⃗ = (6, 0)\nพื้นที่ = ½|AB⃗ × AC⃗|\nในระนาบ 2 มิติ: |AB⃗ × AC⃗| = |a₁b₂ − a₂b₁| = |3(0) − 4(6)| = |−24| = 24\n(หรือสูตร shoelace: ½|2(5−1) + 5(1−1) + 8(1−5)| = ½|8 + 0 − 32| = ½ × 24 = 12)\nพื้นที่ = ½ × 12 = 6 ✓"
+  },
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "เวกเตอร์ u⃗ = (2, −1, 3) และ v⃗ = (1, 2, k)\nถ้า u⃗ ⊥ v⃗ จงหา k",
+    opts: ["0", "1", "−1", "4/3", "−4/3"],
+    ans: 0,
+    explain: "เงื่อนไขตั้งฉาก: u⃗ · v⃗ = 0\n(2)(1) + (−1)(2) + (3)(k) = 0\n2 − 2 + 3k = 0\n3k = 0\nk = 0 ✓"
+  },
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "กำหนด u⃗ = (3, 4) และ v⃗ = (4, 3)\nจงหามุม θ ระหว่าง u⃗ และ v⃗ (เป็นองศา)",
+    opts: ["arccos(24/25)", "45°", "60°", "arccos(7/25)", "90°"],
+    ans: 0,
+    explain: "u⃗ · v⃗ = 12 + 12 = 24\n|u⃗| = 5, |v⃗| = 5\ncos θ = 24/(5×5) = 24/25\nθ = arccos(24/25) ≈ 16.26° ✓"
+  },
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "กำหนด u⃗ = (1, 2, 3) และ v⃗ = (2, 1, −1)\nจงหา u⃗ × v⃗",
+    opts: ["(−5, 7, −3)", "(5, −7, 3)", "(2, 2, −3)", "(3, 6, 3)", "(−2, 1, 3)"],
+    ans: 0,
+    explain: "u⃗ × v⃗ = î(b₁c₂ − c₁b₂) − ĵ(a₁c₂ − c₁a₂) + k̂(a₁b₂ − b₁a₂)\n= î(2×(−1) − 3×1) − ĵ(1×(−1) − 3×2) + k̂(1×1 − 2×2)\n= î(−2 − 3) − ĵ(−1 − 6) + k̂(1 − 4)\n= (−5, 7, −3) ✓"
+  },
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "จุด P อยู่บนเส้นตรงที่ผ่าน A(1, 2, 3) ในทิศทาง d⃗ = (1, 0, −1)\nถ้า t = 2 จงหาพิกัดของ P",
+    opts: ["(3, 2, 1)", "(2, 2, 2)", "(1, 4, 1)", "(3, 4, 1)", "(2, 4, 3)"],
+    ans: 0,
+    explain: "r⃗ = A + t·d⃗ = (1, 2, 3) + 2(1, 0, −1)\n= (1 + 2, 2 + 0, 3 + (−2))\n= (3, 2, 1) ✓"
+  },
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "กำหนด u⃗ = (0, 1, 0) จงหา |3u⃗ − 2v⃗| เมื่อ v⃗ = (1, 0, 0)",
+    opts: ["√13", "5", "√5", "3", "√7"],
+    ans: 0,
+    explain: "3u⃗ = 3(0, 1, 0) = (0, 3, 0)\n2v⃗ = 2(1, 0, 0) = (2, 0, 0)\n3u⃗ − 2v⃗ = (0−2, 3−0, 0−0) = (−2, 3, 0)\n|3u⃗ − 2v⃗| = √(4 + 9 + 0) = √13 ✓"
+  },
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "ระนาบผ่านจุด (2, −1, 3) และมีเวกเตอร์ตั้งฉาก n⃗ = (1, 2, −1)\nสมการของระนาบนี้คืออะไร",
+    opts: ["x + 2y − z = −3", "x + 2y − z = 3", "2x + y − z = 0", "x − 2y + z = 7", "x + 2y − z = 1"],
+    ans: 0,
+    explain: "สมการระนาบ: A(x − x₀) + B(y − y₀) + C(z − z₀) = 0\n1(x − 2) + 2(y + 1) + (−1)(z − 3) = 0\nx − 2 + 2y + 2 − z + 3 = 0\nx + 2y − z + 3 = 0\nx + 2y − z = −3 ✓"
+  },
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "กำหนด u⃗ = (a, b) และ |u⃗| = 5, u⃗ · î = 3 (î = (1,0))\nจงหา |b|",
+    opts: ["4", "3", "5", "√34", "2"],
+    ans: 0,
+    explain: "u⃗ · î = (a)(1) + (b)(0) = a = 3\nเนื่องจาก |u⃗| = 5: a² + b² = 25\n9 + b² = 25\nb² = 16\n|b| = 4 ✓"
+  },
+  {
+    year: "ตัวอย่าง A-Level — เวกเตอร์",
+    q: "กำหนด u⃗ = (2, 1, 0) และ v⃗ = (1, 2, 0)\nจงหา |u⃗ × v⃗|",
+    opts: ["3", "5", "√5", "√10", "6"],
+    ans: 0,
+    explain: "u⃗ × v⃗ = (b₁c₂ − c₁b₂, c₁a₂ − a₁c₂, a₁b₂ − b₁a₂)\n= (1×0 − 0×2, 0×1 − 2×0, 2×2 − 1×1)\n= (0, 0, 3)\n|u⃗ × v⃗| = √(0 + 0 + 9) = 3 ✓\n\n(ตรวจสอบ: |u⃗||v⃗|sin θ = √5 × √5 × sin(arccos(4/5)) = 5 × 3/5 = 3 ✓)"
+  }
+];
+
+let answered = {};
+let answeredAL = {};
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  questions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  alevelQuestions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>
