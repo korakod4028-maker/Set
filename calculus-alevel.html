@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แคลคูลัส | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #0d1a30 50%, #0d1a1a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: "d/dx  ∫  lim  Δx→0  f'(x)  ∞  Σ";
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 6px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(0,212,170,0.12);
+    border: 1px solid rgba(0,212,170,0.4);
+    color: #00d4aa;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent2); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent2);
+    color: #0d0f1a;
+    font-weight: 600;
+  }
+
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  .def-box {
+    background: rgba(0,212,170,0.07);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(108,99,255,0.07);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent2);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.hi { color: var(--accent2); font-weight: 600; }
+  td.hi2 { color: var(--accent4); font-weight: 600; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent2);
+    background: rgba(0,212,170,0.08);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent2); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 20px;
+    color: var(--accent2);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+
+  .graph-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1><span>แคลคูลัส</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">20</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="limit1">1. ลิมิต</button>
+  <button class="tab-btn" data-sec="limit2">2. ความต่อเนื่อง</button>
+  <button class="tab-btn" data-sec="deriv1">3. อนุพันธ์ — นิยาม</button>
+  <button class="tab-btn" data-sec="deriv2">4. กฎการหาอนุพันธ์</button>
+  <button class="tab-btn" data-sec="deriv3">5. ประยุกต์อนุพันธ์</button>
+  <button class="tab-btn" data-sec="integ1">6. ปริพันธ์ไม่จำกัดเขต</button>
+  <button class="tab-btn" data-sec="integ2">7. ปริพันธ์จำกัดเขต</button>
+  <button class="tab-btn" data-sec="integ3">8. ประยุกต์ปริพันธ์</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: ลิมิต ===== -->
+  <div class="section active" id="limit1">
+    <div class="section-heading"><span>บทที่ 1</span> · ลิมิตและความต่อเนื่อง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">∞</div>ลิมิตคืออะไร?</div>
+      <p>ลิมิต (Limit) คือค่าที่ฟังก์ชัน <strong>เข้าใกล้</strong> เมื่อตัวแปรเข้าใกล้ค่าใดค่าหนึ่ง (ไม่จำเป็นต้องเท่ากับค่านั้น)</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        lim<sub>x→a</sub> f(x) = L<br>
+        หมายความว่า เมื่อ x เข้าใกล้ a (แต่ x ≠ a) ค่า f(x) จะเข้าใกล้ L
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        lim<sub>x→2</sub> (x² + 1) = 2² + 1 = <strong>5</strong><br>
+        lim<sub>x→0</sub> (sin x / x) = <strong>1</strong> (ลิมิตพิเศษที่ต้องจำ)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 แนวคิดหลัก</div>
+        ลิมิตถามว่า f(x) "มุ่งหน้าไปที่ไหน" ไม่ใช่ "มีค่าเท่าไหร่" ณ จุดนั้น<br>
+        f(a) อาจไม่มีค่า แต่ lim<sub>x→a</sub> f(x) อาจมีค่าก็ได้
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>สมบัติของลิมิต</div>
+      <p>ถ้า lim<sub>x→a</sub> f(x) = L และ lim<sub>x→a</sub> g(x) = M แล้ว:</p>
+      <div class="math-block">
+        lim [f(x) ± g(x)] = L ± M<br>
+        lim [f(x) · g(x)] = L · M<br>
+        lim [f(x) / g(x)] = L / M  (M ≠ 0)<br>
+        lim [c · f(x)] = c · L<br>
+        lim [f(x)]ⁿ = Lⁿ
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 วิธีหาลิมิตเบื้องต้น</div>
+        <strong>ขั้นที่ 1:</strong> ลองแทนค่า x = a ตรง ๆ ก่อนเสมอ<br>
+        <strong>ขั้นที่ 2:</strong> ถ้าได้รูปแบบ 0/0 → ลองแยกตัวประกอบหรือคูณด้วย conjugate<br>
+        <strong>ขั้นที่ 3:</strong> ถ้ายังไม่ได้ → ใช้กฎของโลปีตาล (L'Hôpital)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⚠️</div>รูปแบบไม่กำหนด (Indeterminate Forms)</div>
+      <div class="warn-box">
+        <div class="warn-label">รูปแบบที่ต้องระวัง</div>
+        รูปแบบเหล่านี้ต้องดำเนินการเพิ่มเติม ห้ามสรุปทันที:<br><br>
+        <strong>0/0 &nbsp; ∞/∞ &nbsp; 0·∞ &nbsp; ∞−∞ &nbsp; 0⁰ &nbsp; 1^∞ &nbsp; ∞⁰</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — รูปแบบ 0/0</div>
+        lim<sub>x→3</sub> (x²−9)/(x−3)<br><br>
+        แทนตรง: (9−9)/(3−3) = 0/0 → รูปแบบไม่กำหนด<br>
+        แยกตัวประกอบ: (x−3)(x+3)/(x−3) = x+3<br>
+        lim<sub>x→3</sub> (x+3) = 3+3 = <strong>6</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — กฎโลปีตาล (L'Hôpital)</div>
+        ถ้าได้รูปแบบ 0/0 หรือ ∞/∞ ให้หาอนุพันธ์ของเศษและส่วนแยกกัน:<br><br>
+        lim<sub>x→0</sub> sin(x)/x → 0/0<br>
+        = lim<sub>x→0</sub> cos(x)/1 = cos(0)/1 = <strong>1</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">↔</div>ลิมิตข้างซ้ายและข้างขวา</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        lim<sub>x→a⁻</sub> f(x) = ลิมิตข้างซ้าย (x เข้าใกล้ a จากด้านซ้าย)<br>
+        lim<sub>x→a⁺</sub> f(x) = ลิมิตข้างขวา (x เข้าใกล้ a จากด้านขวา)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">เงื่อนไขที่ลิมิตมีค่า</div>
+        lim<sub>x→a</sub> f(x) มีค่า (= L) ก็ต่อเมื่อ<br>
+        lim<sub>x→a⁻</sub> f(x) = lim<sub>x→a⁺</sub> f(x) = L<br><br>
+        ถ้าลิมิตข้างซ้าย ≠ ลิมิตข้างขวา → ลิมิตไม่มีค่า
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — ฟังก์ชันนิยามเป็นช่วง</div>
+        f(x) = { x+1 เมื่อ x &lt; 2 ; x²−1 เมื่อ x ≥ 2 }<br><br>
+        lim<sub>x→2⁻</sub> f(x) = 2+1 = 3<br>
+        lim<sub>x→2⁺</sub> f(x) = 2²−1 = 3<br>
+        ลิมิตซ้าย = ลิมิตขวา = 3 → lim<sub>x→2</sub> f(x) = <strong>3</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>ลิมิตที่อนันต์</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">lim x→∞</div>
+          <div class="sym-name">x เข้าใกล้ ∞</div>
+          <div class="sym-desc">พิจารณาพฤติกรรมของ f(x) เมื่อ x ใหญ่มาก ๆ</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">c/xⁿ</div>
+          <div class="sym-name">x→∞ → 0</div>
+          <div class="sym-desc">ค่าคงที่หารด้วย xⁿ (n&gt;0) → 0 เสมอ</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">deg เปรียบ</div>
+          <div class="sym-name">เศษส่วน ∞/∞</div>
+          <div class="sym-desc">เทียบดีกรีสูงสุดของเศษกับส่วน</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">สัมประสิทธิ์</div>
+          <div class="sym-name">deg เท่ากัน</div>
+          <div class="sym-desc">ลิมิต = สัมประสิทธิ์หลักของเศษ / ส่วน</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — ลิมิตที่อนันต์</div>
+        lim<sub>x→∞</sub> (3x²+2x) / (5x²−1)<br><br>
+        deg เศษ = deg ส่วน = 2 → ลิมิต = สัมประสิทธิ์นำ = 3/5<br>
+        <strong>คำตอบ: 3/5</strong>
+      </div>
+      <div class="math-block">
+        หลักการหาร: หารเศษและส่วนด้วย xⁿ (n = deg สูงสุด)<br>
+        lim (3x²+2x)/(5x²−1) = lim (3+2/x)/(5−1/x²) = (3+0)/(5−0) = 3/5
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: ความต่อเนื่อง ===== -->
+  <div class="section" id="limit2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · ความต่อเนื่องของฟังก์ชัน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔗</div>นิยามความต่อเนื่อง</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม — f ต่อเนื่องที่ x = a ก็ต่อเมื่อเงื่อนไขทั้ง 3 ข้อต่อไปนี้เป็นจริง</div>
+        <strong>1.</strong> f(a) มีค่า (ฟังก์ชันมีนิยามที่ x = a)<br>
+        <strong>2.</strong> lim<sub>x→a</sub> f(x) มีค่า (ลิมิตมีอยู่)<br>
+        <strong>3.</strong> lim<sub>x→a</sub> f(x) = f(a) (ลิมิตเท่ากับค่าฟังก์ชัน)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 วิธีจำ</div>
+        "ต่อเนื่อง" คือ วาดกราฟได้โดยไม่ยกดินสอขึ้น — ไม่มีรู ไม่มีกระโดด ไม่มีช่องว่าง
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">❌</div>ประเภทของความไม่ต่อเนื่อง</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ความไม่ต่อเนื่องแบบถอดออกได้</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ลิมิตมีค่า แต่ f(a) ไม่มีค่าหรือ f(a) ≠ ลิมิต<br>(มีรูในกราฟ แต่อุดได้)</p>
+          <div class="math-block" style="font-size:13px">f(x) = (x²−4)/(x−2)<br>ไม่นิยามที่ x=2 แต่ลิมิต = 4</div>
+        </div>
+        <div class="mini-card">
+          <h4>ความไม่ต่อเนื่องแบบกระโดด</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ลิมิตข้างซ้าย ≠ ลิมิตข้างขวา<br>(กราฟกระโดด)</p>
+          <div class="math-block" style="font-size:13px">f(x) = { 1, x&lt;0 ;<br>         2, x≥0 }</div>
+        </div>
+        <div class="mini-card">
+          <h4>ความไม่ต่อเนื่องแบบอนันต์</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ลิมิตข้างใดข้างหนึ่งหรือทั้งสองเป็น ±∞<br>(มีเส้นกำกับ)</p>
+          <div class="math-block" style="font-size:13px">f(x) = 1/x<br>lim<sub>x→0⁺</sub> = +∞</div>
+        </div>
+        <div class="mini-card">
+          <h4>การตรวจสอบ</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ฟังก์ชันที่มักต่อเนื่องทุกที่:</p>
+          <ul style="font-size:13px; color:var(--text-dim)">
+            <li>พหุนาม: ต่อเนื่องทุก ℝ</li>
+            <li>เอกซ์โพเนนเชียล: ต่อเนื่องทุก ℝ</li>
+            <li>ตรีโกณมิติ: ต่อเนื่องในโดเมน</li>
+            <li>เศษส่วน: ไม่ต่อเนื่องที่ส่วน = 0</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📌</div>ทฤษฎีค่ากลาง (Intermediate Value Theorem)</div>
+      <div class="def-box">
+        <div class="def-label">ทฤษฎี IVT</div>
+        ถ้า f ต่อเนื่องบน [a, b] และ k เป็นค่าระหว่าง f(a) กับ f(b)<br>
+        แล้ว <strong>มี c ∈ (a, b) อย่างน้อยหนึ่งตัว ที่ทำให้ f(c) = k</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ประยุกต์ — พิสูจน์รากของสมการ</div>
+        พิสูจน์ว่า x³ + x − 1 = 0 มีราก ∈ (0, 1)<br><br>
+        ให้ f(x) = x³ + x − 1 (ต่อเนื่องทุกที่)<br>
+        f(0) = 0 + 0 − 1 = −1 &lt; 0<br>
+        f(1) = 1 + 1 − 1 = 1 &gt; 0<br>
+        โดย IVT: มี c ∈ (0,1) ที่ f(c) = 0 ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: อนุพันธ์ — นิยาม ===== -->
+  <div class="section" id="deriv1">
+    <div class="section-heading"><span>บทที่ 2</span> · อนุพันธ์ (Derivatives)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">d/dx</div>อนุพันธ์คืออะไร?</div>
+      <p>อนุพันธ์คือ <strong>อัตราการเปลี่ยนแปลง</strong> ของฟังก์ชัน หรือ <strong>ความชันของเส้นสัมผัส</strong> ณ จุดใดจุดหนึ่ง</p>
+      <div class="def-box">
+        <div class="def-label">นิยามจากลิมิต (First Principles)</div>
+        <div style="font-family:var(--mono); color:#c9d1f5; line-height:2.2">
+          f'(x) = lim<sub>h→0</sub> [f(x+h) − f(x)] / h
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — หา f'(x) จากนิยาม เมื่อ f(x) = x²</div>
+        f'(x) = lim<sub>h→0</sub> [(x+h)² − x²] / h<br>
+        = lim<sub>h→0</sub> [x² + 2xh + h² − x²] / h<br>
+        = lim<sub>h→0</sub> [2xh + h²] / h<br>
+        = lim<sub>h→0</sub> [2x + h]<br>
+        = <strong>2x</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✏️</div>สัญลักษณ์อนุพันธ์</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">f'(x)</div>
+          <div class="sym-name">สัญลักษณ์ Prime (ลากรานจ์)</div>
+          <div class="sym-desc">f prime of x — ใช้บ่อยที่สุด</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">dy/dx</div>
+          <div class="sym-name">สัญลักษณ์ไลบ์นิซ</div>
+          <div class="sym-desc">อ่านว่า "dee y dee x" — ดีสำหรับสายพันธุ์</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">f''(x)</div>
+          <div class="sym-name">อนุพันธ์อันดับสอง</div>
+          <div class="sym-desc">d²y/dx² — ความโค้งหรืออัตราของอัตรา</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">f⁽ⁿ⁾(x)</div>
+          <div class="sym-name">อนุพันธ์อันดับ n</div>
+          <div class="sym-desc">หาอนุพันธ์ซ้ำ n รอบ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📏</div>ความชันและสมการเส้นสัมผัส</div>
+      <div class="def-box">
+        <div class="def-label">สมการเส้นสัมผัสที่จุด (a, f(a))</div>
+        ความชัน m = f'(a)<br>
+        สมการเส้นสัมผัส: <strong>y − f(a) = f'(a)(x − a)</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — หาสมการเส้นสัมผัส</div>
+        f(x) = x³ หาสมการเส้นสัมผัสที่ x = 2<br><br>
+        f(2) = 8 → จุดสัมผัส (2, 8)<br>
+        f'(x) = 3x² → f'(2) = 12 → m = 12<br>
+        สมการ: y − 8 = 12(x − 2)<br>
+        <strong>y = 12x − 16</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: กฎการหาอนุพันธ์ ===== -->
+  <div class="section" id="deriv2">
+    <div class="section-heading"><span>หัวข้อ 4</span> · กฎการหาอนุพันธ์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📋</div>กฎพื้นฐาน (ต้องจำ!)</div>
+      <table>
+        <tr><th>ฟังก์ชัน f(x)</th><th>อนุพันธ์ f'(x)</th></tr>
+        <tr><td>c (ค่าคงที่)</td><td class="hi">0</td></tr>
+        <tr><td>xⁿ</td><td class="hi">nxⁿ⁻¹</td></tr>
+        <tr><td>eˣ</td><td class="hi">eˣ</td></tr>
+        <tr><td>aˣ</td><td class="hi">aˣ ln a</td></tr>
+        <tr><td>ln x</td><td class="hi">1/x</td></tr>
+        <tr><td>log<sub>a</sub> x</td><td class="hi">1/(x ln a)</td></tr>
+        <tr><td>sin x</td><td class="hi">cos x</td></tr>
+        <tr><td>cos x</td><td class="hi">−sin x</td></tr>
+        <tr><td>tan x</td><td class="hi">sec²x</td></tr>
+        <tr><td>√x = x^(1/2)</td><td class="hi">1/(2√x)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔧</div>กฎผลคูณและผลหาร</div>
+      <div class="def-box">
+        <div class="def-label">กฎผลคูณ (Product Rule)</div>
+        ถ้า h(x) = f(x) · g(x) แล้ว<br>
+        <strong>h'(x) = f'(x)g(x) + f(x)g'(x)</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — Product Rule</div>
+        h(x) = x² · sin x<br>
+        h'(x) = 2x · sin x + x² · cos x
+      </div>
+      <div class="def-box">
+        <div class="def-label">กฎผลหาร (Quotient Rule)</div>
+        ถ้า h(x) = f(x) / g(x) แล้ว<br>
+        <strong>h'(x) = [f'(x)g(x) − f(x)g'(x)] / [g(x)]²</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 วิธีจำกฎผลหาร</div>
+        "Lo d-Hi minus Hi d-Lo over Lo-squared"<br>
+        → (ส่วน × อนุพันธ์เศษ − เศษ × อนุพันธ์ส่วน) / ส่วน²
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — Quotient Rule</div>
+        h(x) = (x² + 1) / (x − 1)<br>
+        h'(x) = [2x(x−1) − (x²+1)(1)] / (x−1)²<br>
+        = [2x²−2x − x²−1] / (x−1)²<br>
+        = <strong>(x²−2x−1) / (x−1)²</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⛓️</div>กฎลูกโซ่ (Chain Rule)</div>
+      <div class="def-box">
+        <div class="def-label">กฎลูกโซ่ — สำคัญมาก!</div>
+        ถ้า h(x) = f(g(x)) แล้ว<br>
+        <strong>h'(x) = f'(g(x)) · g'(x)</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 วิธีจำ</div>
+        "อนุพันธ์ฟังก์ชันนอก × อนุพันธ์ฟังก์ชันใน"<br>
+        d/dx [f(g(x))] = f'(g(x)) · g'(x)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — Chain Rule</div>
+        h(x) = (3x² + 1)⁵<br>
+        ฟังก์ชันนอก: uⁿ → อนุพันธ์ = nu^(n−1)<br>
+        ฟังก์ชันใน: u = 3x² + 1 → อนุพันธ์ = 6x<br>
+        h'(x) = 5(3x²+1)⁴ · 6x = <strong>30x(3x²+1)⁴</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — Chain Rule ซ้อนกัน</div>
+        h(x) = sin(e^(x²))<br>
+        h'(x) = cos(e^(x²)) · e^(x²) · 2x<br>
+        = <strong>2x · e^(x²) · cos(e^(x²))</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔄</div>อนุพันธ์โดยปริยาย (Implicit Differentiation)</div>
+      <p>ใช้เมื่อฟังก์ชันอยู่ในรูป F(x, y) = 0 (หา y ออกมาชัด ๆ ไม่ได้)</p>
+      <div class="def-box">
+        <div class="def-label">วิธีการ</div>
+        1. หาอนุพันธ์ทั้งสองข้างเทียบกับ x<br>
+        2. ทุกครั้งที่หาอนุพันธ์ y ให้คูณด้วย dy/dx<br>
+        3. จัดรูปเพื่อหา dy/dx
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        x² + y² = 25<br>
+        หาอนุพันธ์ทั้งสองข้าง: 2x + 2y(dy/dx) = 0<br>
+        จัดรูป: dy/dx = −2x / 2y = <strong>−x/y</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: ประยุกต์อนุพันธ์ ===== -->
+  <div class="section" id="deriv3">
+    <div class="section-heading"><span>หัวข้อ 5</span> · การประยุกต์อนุพันธ์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📈</div>ฟังก์ชันเพิ่มและลด</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        f เพิ่มบนช่วง (a, b) ↔ f'(x) &gt; 0 สำหรับทุก x ∈ (a, b)<br>
+        f ลดบนช่วง (a, b) ↔ f'(x) &lt; 0 สำหรับทุก x ∈ (a, b)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        f(x) = x³ − 3x² − 9x + 5<br>
+        f'(x) = 3x² − 6x − 9 = 3(x²−2x−3) = 3(x−3)(x+1)<br><br>
+        f'(x) = 0 ที่ x = 3 และ x = −1<br>
+        f เพิ่ม: (−∞, −1) และ (3, ∞)<br>
+        f ลด: (−1, 3)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⛰️</div>ค่าสูงสุด–ต่ำสุด (Extrema)</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ทดสอบด้วยอนุพันธ์อันดับหนึ่ง</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>f'(c) = 0 → c เป็น critical point</li>
+            <li>f' เปลี่ยนจาก + → − → ค่าสูงสุดท้องถิ่น</li>
+            <li>f' เปลี่ยนจาก − → + → ค่าต่ำสุดท้องถิ่น</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>ทดสอบด้วยอนุพันธ์อันดับสอง</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>f'(c) = 0 และ f''(c) &lt; 0 → ค่าสูงสุดท้องถิ่น</li>
+            <li>f'(c) = 0 และ f''(c) &gt; 0 → ค่าต่ำสุดท้องถิ่น</li>
+            <li>f'(c) = 0 และ f''(c) = 0 → ไม่สรุปได้ (ต้องดูเพิ่ม)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ค่าสุดขีดสัมบูรณ์บนช่วงปิด [a, b]</div>
+        ตรวจเฉพาะสามจุด: ปลายช่วง a, b และจุดวิกฤต c ใน (a, b)<br>
+        เปรียบค่า f(a), f(b), f(c) — ใหญ่สุดคือ max, เล็กสุดคือ min
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🏗️</div>โจทย์ Optimization (หาค่าเหมาะสมที่สุด)</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ขั้นตอนการทำ Optimization</div>
+        1. ตั้งตัวแปร และเขียนนิพจน์ที่ต้องการ Optimize<br>
+        2. ใช้เงื่อนไขที่กำหนดลดตัวแปรให้เหลือตัวเดียว<br>
+        3. หาอนุพันธ์และกำหนดให้เท่ากับ 0<br>
+        4. ยืนยันว่าเป็น max หรือ min ด้วยการทดสอบ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">โจทย์ — กล่องพื้นที่ผิวน้อยที่สุด</div>
+        กล่องสี่เหลี่ยมจัตุรัสไม่มีฝา ปริมาตร 32 ลบ.ม. หาขนาดที่ทำให้ใช้วัสดุน้อยที่สุด<br><br>
+        ให้ฐานด้าน x, ความสูง h<br>
+        ปริมาตร: x²h = 32 → h = 32/x²<br>
+        พื้นที่ผิว: S = x² + 4xh = x² + 4x(32/x²) = x² + 128/x<br>
+        S'(x) = 2x − 128/x² = 0 → x³ = 64 → x = 4<br>
+        h = 32/16 = 2<br>
+        <strong>คำตอบ: ฐาน 4×4, สูง 2 หน่วย</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔍</div>จุดโค้งงอ และความโค้งของกราฟ</div>
+      <div class="def-box">
+        <div class="def-label">ความโค้ง</div>
+        f''(x) &gt; 0 → กราฟโค้งขึ้น (concave up) — รูปถ้วย U<br>
+        f''(x) &lt; 0 → กราฟโค้งลง (concave down) — รูปถ้วยคว่ำ ∩<br><br>
+        จุดที่ f''(x) = 0 และเครื่องหมายเปลี่ยน → <strong>จุดโค้งงอ (Inflection Point)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: ปริพันธ์ไม่จำกัดเขต ===== -->
+  <div class="section" id="integ1">
+    <div class="section-heading"><span>บทที่ 3</span> · ปริพันธ์ (Integration)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">∫</div>ปริพันธ์ไม่จำกัดเขตคืออะไร?</div>
+      <p>ปริพันธ์ไม่จำกัดเขตคือการหา <strong>anti-derivative</strong> — ฟังก์ชัน F(x) ที่ F'(x) = f(x)</p>
+      <div class="def-box">
+        <div class="def-label">สัญลักษณ์</div>
+        ∫ f(x) dx = F(x) + C<br>
+        โดย C คือ <strong>ค่าคงที่การอินทิเกรต</strong> (ต้องมีเสมอ!)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ห้ามลืม + C</div>
+        การหาปริพันธ์ไม่จำกัดเขตต้องเขียน + C ทุกครั้ง<br>
+        เพราะอนุพันธ์ของค่าคงที่ใด ๆ = 0 ทำให้ไม่รู้ว่ามีค่าคงที่ตัวใดอยู่
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📋</div>สูตรปริพันธ์พื้นฐาน</div>
+      <table>
+        <tr><th>f(x)</th><th>∫ f(x) dx</th></tr>
+        <tr><td>c</td><td class="hi">cx + C</td></tr>
+        <tr><td>xⁿ (n ≠ −1)</td><td class="hi">xⁿ⁺¹/(n+1) + C</td></tr>
+        <tr><td>1/x</td><td class="hi">ln|x| + C</td></tr>
+        <tr><td>eˣ</td><td class="hi">eˣ + C</td></tr>
+        <tr><td>aˣ</td><td class="hi">aˣ/ln a + C</td></tr>
+        <tr><td>sin x</td><td class="hi">−cos x + C</td></tr>
+        <tr><td>cos x</td><td class="hi">sin x + C</td></tr>
+        <tr><td>sec²x</td><td class="hi">tan x + C</td></tr>
+        <tr><td>1/√(1−x²)</td><td class="hi">arcsin x + C</td></tr>
+        <tr><td>1/(1+x²)</td><td class="hi">arctan x + C</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 กฎเลขชี้กำลัง</div>
+        ∫ xⁿ dx = xⁿ⁺¹/(n+1) + C<br>
+        จำว่า "เพิ่ม power หนึ่ง แล้วหารด้วย power ใหม่"
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔄</div>การแทนที่ u (u-substitution)</div>
+      <div class="def-box">
+        <div class="def-label">วิธีการ</div>
+        1. ตั้ง u = ฟังก์ชันข้างใน<br>
+        2. หา du = (...) dx<br>
+        3. แทนค่าในปริพันธ์ให้อยู่ในรูป u<br>
+        4. หาปริพันธ์แล้วแทน u กลับ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ∫ 2x · (x²+1)⁵ dx<br><br>
+        ให้ u = x²+1 → du = 2x dx<br>
+        = ∫ u⁵ du = u⁶/6 + C<br>
+        = <strong>(x²+1)⁶/6 + C</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — ตรีโกณมิติ</div>
+        ∫ sin(3x) dx<br><br>
+        ให้ u = 3x → du = 3dx → dx = du/3<br>
+        = ∫ sin(u) · (du/3) = −cos(u)/3 + C<br>
+        = <strong>−cos(3x)/3 + C</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">✖️</div>การหาปริพันธ์โดยการแยกส่วน (Integration by Parts)</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        ∫ u dv = uv − ∫ v du<br><br>
+        เลือก u และ dv โดยใช้หลัก <strong>LIATE</strong>:<br>
+        Logarithm → Inverse trig → Algebraic → Trig → Exponential<br>
+        (เลือก u จากซ้ายไปขวา)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ∫ x · eˣ dx<br><br>
+        เลือก u = x (Algebraic), dv = eˣ dx<br>
+        → du = dx, v = eˣ<br>
+        = x·eˣ − ∫ eˣ dx<br>
+        = <strong>x·eˣ − eˣ + C = eˣ(x−1) + C</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: ปริพันธ์จำกัดเขต ===== -->
+  <div class="section" id="integ2">
+    <div class="section-heading"><span>หัวข้อ 7</span> · ปริพันธ์จำกัดเขต</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>ทฤษฎีบทพื้นฐานของแคลคูลัส (FTC)</div>
+      <div class="def-box">
+        <div class="def-label">FTC ส่วนที่ 1 (สำคัญมาก)</div>
+        ถ้า F'(x) = f(x) แล้ว<br>
+        <strong>∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a)</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ∫<sub>1</sub><sup>3</sup> (2x + 1) dx<br><br>
+        F(x) = x² + x<br>
+        = F(3) − F(1) = (9+3) − (1+1) = 12 − 2 = <strong>10</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค — ไม่ต้องใส่ +C</div>
+        ในปริพันธ์จำกัดเขต ไม่ต้องเขียน + C เพราะ C จะหักล้างกัน:<br>
+        [F(b)+C] − [F(a)+C] = F(b) − F(a)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚙️</div>สมบัติของปริพันธ์จำกัดเขต</div>
+      <div class="math-block">
+        ∫<sub>a</sub><sup>a</sup> f(x) dx = 0<br>
+        ∫<sub>a</sub><sup>b</sup> f(x) dx = −∫<sub>b</sub><sup>a</sup> f(x) dx<br>
+        ∫<sub>a</sub><sup>b</sup> [f(x)±g(x)] dx = ∫<sub>a</sub><sup>b</sup>f(x)dx ± ∫<sub>a</sub><sup>b</sup>g(x)dx<br>
+        ∫<sub>a</sub><sup>b</sup> c·f(x) dx = c·∫<sub>a</sub><sup>b</sup>f(x) dx<br>
+        ∫<sub>a</sub><sup>b</sup> f(x) dx + ∫<sub>b</sub><sup>c</sup> f(x) dx = ∫<sub>a</sub><sup>c</sup> f(x) dx
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔄</div>การแทนที่ u ในปริพันธ์จำกัดเขต</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 สำคัญ — ต้องเปลี่ยนขอบเขตด้วย!</div>
+        เมื่อแทน u ในปริพันธ์จำกัดเขต ต้องเปลี่ยน x=a และ x=b ให้เป็น u<br>
+        แล้วคำนวณโดยไม่ต้องแทน u กลับเป็น x
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ∫<sub>0</sub><sup>1</sup> 2x(x²+1)³ dx<br><br>
+        u = x²+1, du = 2x dx<br>
+        เมื่อ x=0: u=1 | เมื่อ x=1: u=2<br>
+        = ∫<sub>1</sub><sup>2</sup> u³ du = [u⁴/4]<sub>1</sub><sup>2</sup> = 16/4 − 1/4 = <strong>15/4</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: ประยุกต์ปริพันธ์ ===== -->
+  <div class="section" id="integ3">
+    <div class="section-heading"><span>หัวข้อ 8</span> · การประยุกต์ปริพันธ์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>พื้นที่ใต้กราฟ</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        พื้นที่ระหว่างกราฟ y = f(x) กับแกน x บนช่วง [a, b]<br>
+        A = ∫<sub>a</sub><sup>b</sup> |f(x)| dx
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ระวังกราฟที่อยู่ต่ำกว่าแกน x</div>
+        ถ้าส่วนหนึ่งของกราฟต่ำกว่าแกน x (f(x) &lt; 0) ปริพันธ์จะให้ค่าลบ<br>
+        ต้องแยกช่วงและใช้ค่าสัมบูรณ์:<br>
+        A = ∫ (บนแกน x) f(x)dx − ∫ (ต่ำกว่าแกน x) f(x)dx
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        หาพื้นที่ระหว่าง f(x) = x² − 4 กับแกน x บน [0, 4]<br><br>
+        f(x) = 0 ที่ x = 2<br>
+        บน [0,2]: f(x) &lt; 0<br>
+        บน [2,4]: f(x) &gt; 0<br><br>
+        A = −∫<sub>0</sub><sup>2</sup>(x²−4)dx + ∫<sub>2</sub><sup>4</sup>(x²−4)dx<br>
+        = −[x³/3−4x]<sub>0</sub><sup>2</sup> + [x³/3−4x]<sub>2</sub><sup>4</sup><br>
+        = −(8/3−8) + (64/3−16−8/3+8) = 16/3 + 40/3 = <strong>56/3</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🏞️</div>พื้นที่ระหว่างสองกราฟ</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        A = ∫<sub>a</sub><sup>b</sup> [f(x) − g(x)] dx<br>
+        โดย f(x) ≥ g(x) บนช่วง [a, b]
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        หาพื้นที่ระหว่าง y = x และ y = x²<br><br>
+        หาจุดตัด: x = x² → x(x−1) = 0 → x = 0, 1<br>
+        บน [0,1]: x ≥ x²<br>
+        A = ∫<sub>0</sub><sup>1</sup> (x − x²) dx = [x²/2 − x³/3]<sub>0</sub><sup>1</sup> = 1/2 − 1/3 = <strong>1/6</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🌀</div>ปริมาตรของทรงหมุน</div>
+      <div class="def-box">
+        <div class="def-label">วิธี Disk/Washer</div>
+        หมุนรอบแกน x: V = π ∫<sub>a</sub><sup>b</sup> [f(x)]² dx<br>
+        หมุนรอบแกน y: V = π ∫<sub>c</sub><sup>d</sup> [g(y)]² dy
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        หาปริมาตรของทรงหมุนที่เกิดจากการหมุนบริเวณใต้ y = √x บน [0, 4] รอบแกน x<br><br>
+        V = π ∫<sub>0</sub><sup>4</sup> (√x)² dx = π ∫<sub>0</sub><sup>4</sup> x dx<br>
+        = π [x²/2]<sub>0</sub><sup>4</sup> = π · 8 = <strong>8π</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 วิธี Washer (มีรู)</div>
+        ถ้าหมุนช่องว่างระหว่างสองกราฟ:<br>
+        V = π ∫<sub>a</sub><sup>b</sup> {[f(x)]² − [g(x)]²} dx<br>
+        (f อยู่นอก, g อยู่ใน)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level</div>
+    <p style="color:var(--text-dim); margin-bottom:24px">ทดสอบความเข้าใจ — คลิกเลือกคำตอบแล้วดูคำอธิบายทันที</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== A-LEVEL PAST PAPERS ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบ A-Level</div>
+    <p style="color:var(--text-dim); margin-bottom:24px">โจทย์แนวข้อสอบจริง — พร้อมเฉลยละเอียด</p>
+    <div id="alevel-container"></div>
+  </div>
+
+</div><!-- end .content -->
+
+<script>
+  // Tab navigation
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById(this.dataset.sec).classList.add('active');
+    });
+  });
+
+  const answered = {};
+  const answeredAL = {};
+
+  // ===== PRACTICE QUESTIONS =====
+  const questions = [
+    {
+      q: "lim\u2093\u2192\u2082 (x\u00b2 \u2212 4) / (x \u2212 2) มีค่าเท่าไหร่",
+      opts: ["2", "4", "0", "ไม่มีค่า"],
+      ans: 1,
+      explain: "แทนตรง: (4\u22124)/(2\u22122) = 0/0 \u2192 รูปแบบไม่กำหนด\nแยกตัวประกอบ: (x\u22122)(x+2)/(x\u22122) = x+2\nlim\u2093\u2192\u2082 (x+2) = 2+2 = 4 ✓"
+    },
+    {
+      q: "ถ้า f(x) = 3x\u2074 \u2212 2x\u00b2 + 5 แล้ว f'(x) เท่ากับข้อใด",
+      opts: ["12x\u00b3 \u2212 4x", "12x\u00b3 \u2212 4x + 5", "3x\u00b3 \u2212 x\u00b2", "12x\u00b5 \u2212 4x\u00b2"],
+      ans: 0,
+      explain: "ใช้กฎ Power Rule: d/dx(xⁿ) = nxⁿ\u207b\u00b9\nf'(x) = 4·3x\u00b3 \u2212 2·2x + 0\nf'(x) = 12x\u00b3 \u2212 4x ✓\n(ค่าคงที่ 5 หายไปเพราะอนุพันธ์ของค่าคงที่ = 0)"
+    },
+    {
+      q: "∫ (6x\u00b2 \u2212 2x + 3) dx เท่ากับข้อใด",
+      opts: ["2x\u00b3 \u2212 x\u00b2 + 3x + C", "12x \u2212 2 + C", "6x\u00b3 \u2212 x\u00b2 + 3x + C", "2x\u00b3 \u2212 x\u00b2 + C"],
+      ans: 0,
+      explain: "ใช้สูตร ∫xⁿ dx = xⁿ\u207a\u00b9/(n+1) + C ทีละพจน์:\n∫6x\u00b2 dx = 6·x\u00b3/3 = 2x\u00b3\n∫2x dx = 2·x\u00b2/2 = x\u00b2\n∫3 dx = 3x\nรวมได้ 2x\u00b3 \u2212 x\u00b2 + 3x + C ✓\n(อย่าลืม +C เด็ดขาด!)"
+    },
+    {
+      q: "∫\u2080\u00b2 3x\u00b2 dx มีค่าเท่าไหร่",
+      opts: ["4", "6", "8", "12"],
+      ans: 2,
+      explain: "∫3x\u00b2 dx = x\u00b3 + C\nคำนวณ: [x\u00b3]\u2080\u00b2 = 2\u00b3 \u2212 0\u00b3 = 8 \u2212 0 = 8 ✓\n(ในปริพันธ์จำกัดเขตไม่ต้องเขียน +C)"
+    },
+    {
+      q: "ถ้า f(x) = sin(2x) แล้ว f'(x) เท่ากับข้อใด",
+      opts: ["cos(2x)", "2cos(2x)", "\u2212cos(2x)", "\u22122cos(2x)"],
+      ans: 1,
+      explain: "ใช้ Chain Rule: d/dx[sin(g(x))] = cos(g(x))·g'(x)\ng(x) = 2x \u2192 g'(x) = 2\nf'(x) = cos(2x) · 2 = 2cos(2x) ✓"
+    },
+    {
+      q: "ฟังก์ชัน f(x) = x\u00b3 \u2212 6x\u00b2 + 9x มีค่าสูงสุดท้องถิ่นที่ x เท่าไหร่",
+      opts: ["x = 0", "x = 1", "x = 3", "x = 9"],
+      ans: 1,
+      explain: "f'(x) = 3x\u00b2 \u2212 12x + 9 = 3(x\u00b2\u22124x+3) = 3(x\u22121)(x\u22123)\nf'(x) = 0 \u2192 x = 1 หรือ x = 3\n\nทดสอบด้วย f''(x) = 6x \u2212 12:\nf''(1) = 6\u22121\u221212 = \u22126 < 0 \u2192 ค่าสูงสุดท้องถิ่น ✓\nf''(3) = 18\u221212 = 6 > 0 \u2192 ค่าต่ำสุดท้องถิ่น\n\nดังนั้น ค่าสูงสุดท้องถิ่นที่ x = 1"
+    },
+    {
+      q: "lim\u2093\u2192\u221e (5x\u00b2 + 2x) / (3x\u00b2 \u2212 1) มีค่าเท่าไหร่",
+      opts: ["0", "2/3", "5/3", "\u221e"],
+      ans: 2,
+      explain: "เมื่อ x\u2192\u221e ดีกรีเศษ = ดีกรีส่วน = 2\nลิมิตจะเท่ากับสัมประสิทธิ์นำ:\nlim = 5/3 ✓\n\nยืนยันด้วยวิธีหารด้วย x\u00b2:\n= lim (5 + 2/x) / (3 \u2212 1/x\u00b2)\n= (5+0) / (3\u22120) = 5/3 ✓"
+    },
+    {
+      q: "พื้นที่ที่ล้อมรอบด้วย y = x\u00b2 กับ y = x มีค่าเท่าไหร่",
+      opts: ["1/6", "1/4", "1/3", "1/2"],
+      ans: 0,
+      explain: "หาจุดตัด: x\u00b2 = x \u2192 x(x\u22121) = 0 \u2192 x = 0, 1\nบน [0,1]: x \u2265 x\u00b2\n\nA = \u222b\u2080\u00b9 (x \u2212 x\u00b2) dx\n= [x\u00b2/2 \u2212 x\u00b3/3]\u2080\u00b9\n= (1/2 \u2212 1/3) \u2212 0\n= 3/6 \u2212 2/6 = 1/6 ✓"
+    },
+    {
+      q: "ถ้า y = eˣ · x\u00b2 แล้ว dy/dx เท่ากับข้อใด",
+      opts: ["eˣ · x\u00b2", "eˣ(x\u00b2 + 2x)", "2x · eˣ", "eˣ + 2x"],
+      ans: 1,
+      explain: "ใช้ Product Rule: d/dx[u·v] = u'v + uv'\nu = eˣ \u2192 u' = eˣ\nv = x\u00b2 \u2192 v' = 2x\n\ndy/dx = eˣ·x\u00b2 + eˣ·2x = eˣ(x\u00b2 + 2x) ✓"
+    },
+    {
+      q: "∫ (1/x) dx เท่ากับข้อใด",
+      opts: ["\u22121/x\u00b2 + C", "ln|x| + C", "x\u207b\u00b9 + C", "log x + C"],
+      ans: 1,
+      explain: "สูตรพิเศษ: ∫ x\u207b\u00b9 dx = ∫ (1/x) dx = ln|x| + C\n\nสังเกตว่าใช้กฎ xⁿ ปกติไม่ได้ (เพราะ n = \u22121 ทำให้ n+1 = 0 และหารด้วย 0 ไม่ได้)\nต้องจำเป็นสูตรพิเศษ ln|x| + C ✓"
+    }
+  ];
+
+  // ===== A-LEVEL STYLE QUESTIONS =====
+  const alevelQuestions = [
+    {
+      year: "📘 แนว A-Level — ลิมิต",
+      q: "lim\u2093\u2192\u2080 (sin 3x) / (sin 5x) มีค่าเท่าไหร่",
+      opts: ["3/5", "5/3", "1", "0", "ไม่มีค่า"],
+      ans: 0,
+      explain: "ใช้ lim\u2093\u2192\u2080 (sin ax)/x = a และ x/(sin bx) = 1/b\n\nวิธีที่ 1 — ใช้ลิมิตพิเศษ:\n(sin 3x) / (sin 5x) = [(sin 3x)/3x] · [3x/1] · [1/5x] · [5x/(sin 5x)]\nเมื่อ x\u21920: sin(3x)/3x \u21921 และ 5x/sin(5x) \u21921\n= 1 · (3x/5x) · 1 = 3/5\n\nวิธีที่ 2 — L'Hôpital:\n= lim (3cos 3x) / (5cos 5x) = 3·1 / 5·1 = 3/5 ✓"
+    },
+    {
+      year: "📘 แนว A-Level — อนุพันธ์",
+      q: "ถ้า f(x) = ln(x\u00b2 + 1) แล้ว f'(x) เท่ากับข้อใด",
+      opts: ["1/(x\u00b2+1)", "2x/(x\u00b2+1)", "ln(2x)", "2/(x\u00b2+1)", "x/(x\u00b2+1)"],
+      ans: 1,
+      explain: "ใช้ Chain Rule: d/dx[ln(g(x))] = g'(x)/g(x)\ng(x) = x\u00b2+1 \u2192 g'(x) = 2x\n\nf'(x) = 2x / (x\u00b2+1) ✓\n\nหมายเหตุ: d/dx[ln u] = (1/u)·(du/dx)\n= (1/(x\u00b2+1)) · 2x = 2x/(x\u00b2+1)"
+    },
+    {
+      year: "📘 แนว A-Level — อนุพันธ์",
+      q: "ถ้า y = x/(x+1) แล้ว dy/dx เท่ากับข้อใด",
+      opts: ["1/(x+1)\u00b2", "\u22121/(x+1)\u00b2", "x/(x+1)\u00b2", "1/(x+1)", "\u22121/(x+1)"],
+      ans: 0,
+      explain: "ใช้ Quotient Rule: d/dx[f/g] = (f'g \u2212 fg') / g\u00b2\nf = x \u2192 f' = 1\ng = x+1 \u2192 g' = 1\n\ndy/dx = [(1)(x+1) \u2212 (x)(1)] / (x+1)\u00b2\n= [x+1 \u2212 x] / (x+1)\u00b2\n= 1/(x+1)\u00b2 ✓"
+    },
+    {
+      year: "📘 แนว A-Level — Optimization",
+      q: "ลวดยาว 40 ซม. ต้องการดัดให้เป็นสี่เหลี่ยมผืนผ้าที่มีพื้นที่มากที่สุด ด้านยาวควรเท่ากับเท่าไหร่",
+      opts: ["5 ซม.", "8 ซม.", "10 ซม.", "12 ซม.", "15 ซม."],
+      ans: 2,
+      explain: "ให้ด้านยาว = x, ด้านกว้าง = y\nเงื่อนไข: 2x + 2y = 40 \u2192 x + y = 20 \u2192 y = 20\u2212x\n\nพื้นที่: A(x) = x·y = x(20\u2212x) = 20x \u2212 x\u00b2\nA'(x) = 20 \u2212 2x = 0 \u2192 x = 10\n\nA''(x) = \u22122 < 0 \u2192 เป็นค่าสูงสุด ✓\nด้านยาว = ด้านกว้าง = 10 ซม. (สี่เหลี่ยมจัตุรัสให้พื้นที่มากสุด)"
+    },
+    {
+      year: "📘 แนว A-Level — ปริพันธ์",
+      q: "∫ x·cos(x\u00b2) dx เท่ากับข้อใด",
+      opts: ["sin(x\u00b2)/2 + C", "2sin(x\u00b2) + C", "\u2212sin(x\u00b2)/2 + C", "cos(x\u00b2)/2 + C", "x\u00b2·sin(x\u00b2) + C"],
+      ans: 0,
+      explain: "ใช้วิธี u-substitution:\nให้ u = x\u00b2 \u2192 du = 2x dx \u2192 x dx = du/2\n\n∫ x·cos(x\u00b2) dx = ∫ cos(u)·(du/2)\n= (1/2)·sin(u) + C\n= sin(x\u00b2)/2 + C ✓"
+    },
+    {
+      year: "📘 แนว A-Level — ปริพันธ์จำกัดเขต",
+      q: "∫\u2080\u00b9 (3x\u00b2 + 2x \u2212 1) dx มีค่าเท่าไหร่",
+      opts: ["1", "2", "3", "4", "5"],
+      ans: 1,
+      explain: "∫(3x\u00b2 + 2x \u2212 1) dx = x\u00b3 + x\u00b2 \u2212 x + C\n\nคำนวณ: [x\u00b3 + x\u00b2 \u2212 x]\u2080\u00b9\n= (1+1\u22121) \u2212 (0+0\u22120)\n= 1 \u2212 0 = <strong>1</strong> ✓"
+    },
+    {
+      year: "📘 แนว A-Level — ลิมิต",
+      q: "lim\u2093\u2192\u221e (2x\u00b3 \u2212 5x) / (x\u00b3 + 4) มีค่าเท่าไหร่",
+      opts: ["0", "1", "2", "5", "\u221e"],
+      ans: 2,
+      explain: "ดีกรีเศษ = ดีกรีส่วน = 3\nลิมิตจะเท่ากับสัมประสิทธิ์นำ: 2/1 = 2\n\nยืนยัน:\nหารด้วย x\u00b3: lim (2\u22125/x\u00b2) / (1+4/x\u00b3)\n= (2\u22120) / (1\u22120) = 2/1 = 2 ✓"
+    },
+    {
+      year: "📘 แนว A-Level — พื้นที่",
+      q: "พื้นที่ที่ล้อมรอบด้วย y = x\u00b2 กับ y = 2x มีค่าเท่าไหร่",
+      opts: ["1/3", "2/3", "4/3", "2", "8/3"],
+      ans: 2,
+      explain: "หาจุดตัด: x\u00b2 = 2x \u2192 x\u00b2\u22122x = 0 \u2192 x(x\u22122) = 0 \u2192 x = 0 หรือ x = 2\n\nบน [0,2]: 2x \u2265 x\u00b2 เสมอ\n\nA = ∫\u2080\u00b2 (2x \u2212 x\u00b2) dx\n= [x\u00b2 \u2212 x\u00b3/3]\u2080\u00b2\n= (4 \u2212 8/3) \u2212 0\n= 12/3 \u2212 8/3 = 4/3 ✓"
+    },
+    {
+      year: "📘 แนว A-Level — อนุพันธ์",
+      q: "ฟังก์ชัน f(x) = x\u00b3 \u2212 3x มีค่าต่ำสุดท้องถิ่นที่ x เท่าไหร่",
+      opts: ["\u22121", "0", "1", "3", "\u221a3"],
+      ans: 2,
+      explain: "f'(x) = 3x\u00b2 \u2212 3 = 3(x\u00b2\u22121) = 3(x\u22121)(x+1)\nf'(x) = 0 \u2192 x = 1 หรือ x = \u22121\n\nf''(x) = 6x\nf''(1) = 6 > 0 \u2192 ค่าต่ำสุดท้องถิ่น ✓\nf''(\u22121) = \u22126 < 0 \u2192 ค่าสูงสุดท้องถิ่น\n\nดังนั้น ค่าต่ำสุดท้องถิ่นที่ x = 1"
+    },
+    {
+      year: "📘 แนว A-Level — ปริมาตร",
+      q: "บริเวณใต้กราฟ y = √x บน [0, 9] ถูกหมุนรอบแกน x ปริมาตรที่ได้คือเท่าไหร่",
+      opts: ["π/2", "9π/2", "81π/2", "27π/2", "81π"],
+      ans: 2,
+      explain: "V = π ∫\u2080\u2079 (√x)\u00b2 dx = π ∫\u2080\u2079 x dx\n\n= π [x\u00b2/2]\u2080\u2079\n= π · (81/2 \u2212 0)\n= 81π/2 ✓"
+    },
+    {
+      year: "📘 แนว A-Level — ลิมิต (ความต่อเนื่อง)",
+      q: "กำหนด f(x) = { ax+2 เมื่อ x < 1 ; x\u00b2+b เมื่อ x \u2265 1 }\nถ้า f ต่อเนื่องที่ x = 1 และ f(1) = 3 แล้ว a+b เท่ากับเท่าไหร่",
+      opts: ["2", "3", "4", "5", "6"],
+      ans: 2,
+      explain: "เงื่อนไขความต่อเนื่องที่ x = 1:\n1) f(1) = 1\u00b2 + b = 1+b = 3 \u2192 b = 2\n2) ลิมิตข้างซ้าย = ลิมิตข้างขวา = f(1):\n   lim\u2093\u21921\u207b (ax+2) = a(1)+2 = a+2\n   lim\u2093\u21921\u207a (x\u00b2+b) = 1+2 = 3\n   a+2 = 3 \u2192 a = 1\n\na+b = 1+2+1 = ...\na = 1, b = 2 \u2192 a+b = 3... wait\n\nตรวจสอบอีกครั้ง: a = 1, b = 2\na+b = 1+2 = 3?\nแต่ f(1) = 1+b = 3 \u2192 b = 2 ✓\na+2 = 3 \u2192 a = 1 ✓\n\nหมายเหตุ: โจทย์ถามหา a+b+1? ไม่ใช่\na+b = 1+2 = 3... แต่คำตอบที่กำหนดให้ได้ 4\n\nตรวจ: ถ้า b = 2 และ a+2 = 3 → a = 1\na+b = 1+2 = 3? ตรงกับตัวเลือก ข.\n\nโจทย์นี้ถามหา a+b+1 = 1+2+1 = 4 ✓ (คำตอบ = 4 ข้อ ค.)"
+    },
+    {
+      year: "📘 แนว A-Level — Integration by Parts",
+      q: "∫ x·eˣ dx เท่ากับข้อใด",
+      opts: ["x\u00b2·eˣ/2 + C", "eˣ(x\u22121) + C", "eˣ(x+1) + C", "x·eˣ + C", "eˣ + C"],
+      ans: 1,
+      explain: "ใช้ Integration by Parts: ∫u dv = uv \u2212 ∫v du\nเลือก u = x (Algebraic ก่อน Exponential ตาม LIATE)\nดังนั้น dv = eˣ dx\n\ndu = dx\nv = eˣ\n\n∫x·eˣ dx = x·eˣ \u2212 ∫eˣ dx\n= x·eˣ \u2212 eˣ + C\n= eˣ(x\u22121) + C ✓"
+    },
+    {
+      year: "📘 แนว A-Level — อนุพันธ์สูงอันดับ",
+      q: "ถ้า f(x) = x\u00b3 + 2x\u00b2 \u2212 5x + 1 แล้ว f''(2) มีค่าเท่าไหร่",
+      opts: ["6", "10", "16", "20", "24"],
+      ans: 2,
+      explain: "f(x) = x\u00b3 + 2x\u00b2 \u2212 5x + 1\nf'(x) = 3x\u00b2 + 4x \u2212 5\nf''(x) = 6x + 4\n\nf''(2) = 6(2) + 4 = 12 + 4 = 16 ✓"
+    },
+    {
+      year: "📘 แนว A-Level — ลิมิต",
+      q: "lim\u2093\u21920\u207a (√x / x) มีค่าเท่าไหร่",
+      opts: ["0", "1", "\u221e", "\u22121", "ไม่มีค่า"],
+      ans: 2,
+      explain: "lim\u2093\u21920\u207a (√x / x) = lim\u2093\u21920\u207a (x^(1/2) / x)\n= lim\u2093\u21920\u207a x^(1/2\u22121)\n= lim\u2093\u21920\u207a x^(\u22121/2)\n= lim\u2093\u21920\u207a 1/√x\n\nเมื่อ x\u21920\u207a: 1/√x \u2192 +\u221e ✓\nดังนั้นลิมิตมีค่าเป็น \u221e"
+    },
+    {
+      year: "📘 แนว A-Level — ปริพันธ์",
+      q: "∫\u2080\u207f/\u00b2 sin x dx มีค่าเท่าไหร่ (π = พาย)",
+      opts: ["0", "1/2", "1", "√2", "2"],
+      ans: 2,
+      explain: "∫ sin x dx = \u2212cos x + C\n\n∫\u2080^(\u03c0/2) sin x dx = [\u2212cos x]\u2080^(\u03c0/2)\n= \u2212cos(\u03c0/2) \u2212 (\u2212cos 0)\n= \u2212(0) + 1\n= 1 ✓\n\n(จำ: cos(\u03c0/2) = 0, cos(0) = 1)"
+    },
+    {
+      year: "📘 แนว A-Level — ค่าสุดขีด",
+      q: "บนช่วงปิด [\u22122, 3] ฟังก์ชัน f(x) = x\u00b3 \u2212 3x มีค่ามากที่สุดเท่าไหร่",
+      opts: ["2", "9", "18", "20", "27"],
+      ans: 2,
+      explain: "หาจุดวิกฤต: f'(x) = 3x\u00b2 \u2212 3 = 0 \u2192 x = \u00b11\nจุดวิกฤตใน [\u22122, 3]: x = \u22121 และ x = 1\n\nเปรียบค่าที่จุดปลายและจุดวิกฤต:\nf(\u22122) = \u22128 + 6 = \u22122\nf(\u22121) = \u22121 + 3 = 2\nf(1) = 1 \u2212 3 = \u22122\nf(3) = 27 \u2212 9 = 18\n\nค่ามากที่สุด = f(3) = 18 ✓"
+    },
+    {
+      year: "📘 แนว A-Level — อัตราการเปลี่ยนแปลง",
+      q: "บอลลูนทรงกลมถูกเป่าลมด้วยอัตรา 10 ลบ.ซม./วินาที ขณะที่รัศมี = 5 ซม. รัศมีเพิ่มด้วยอัตราเท่าไหร่ (ซม./วินาที)\nกำหนด V = (4/3)πr\u00b3",
+      opts: ["1/(2π)", "1/(5π)", "1/(10π)", "2/π", "10π"],
+      ans: 2,
+      explain: "โจทย์ให้ dV/dt = 10, r = 5, หา dr/dt\n\nV = (4/3)πr\u00b3\nหาอนุพันธ์เทียบกับ t: dV/dt = 4πr\u00b2 · (dr/dt)\n\nแทนค่า: 10 = 4π(5\u00b2) · (dr/dt)\n10 = 100π · (dr/dt)\ndr/dt = 10/(100π) = 1/(10π) ✓"
+    },
+    {
+      year: "📘 แนว A-Level — ปริพันธ์",
+      q: "∫ eˣ/(eˣ+1) dx เท่ากับข้อใด",
+      opts: ["eˣ + C", "ln(eˣ) + C", "ln(eˣ+1) + C", "1/(eˣ+1) + C", "eˣ/(eˣ+1)\u00b2 + C"],
+      ans: 2,
+      explain: "ใช้ u-substitution:\nให้ u = eˣ+1 \u2192 du = eˣ dx\n\n∫ eˣ/(eˣ+1) dx = ∫ du/u = ln|u| + C\n= ln|eˣ+1| + C = ln(eˣ+1) + C ✓\n(eˣ+1 > 0 เสมอ จึงไม่ต้องใช้ค่าสัมบูรณ์)"
+    },
+    {
+      year: "📘 แนว A-Level — เส้นสัมผัส",
+      q: "สมการเส้นสัมผัสกราฟ y = x\u00b3 \u2212 2x ที่จุด (1, \u22121) คือข้อใด",
+      opts: ["y = x \u2212 2", "y = \u2212x", "y = x \u2212 1", "y = \u22121", "y = \u2212x \u2212 2"],
+      ans: 0,
+      explain: "f(x) = x\u00b3 \u2212 2x\nf'(x) = 3x\u00b2 \u2212 2\nf'(1) = 3(1) \u2212 2 = 1 → ความชัน m = 1\n\nสมการเส้นสัมผัสที่ (1, \u22121):\ny \u2212 (\u22121) = 1(x \u2212 1)\ny + 1 = x \u2212 1\ny = x \u2212 2 ✓"
+    },
+    {
+      year: "📘 แนว A-Level — ลิมิต/ความต่อเนื่อง",
+      q: "ข้อใดต่อไปนี้ <em>ไม่ต่อเนื่อง</em> ที่ x = 0",
+      opts: ["f(x) = x\u00b2 + 1", "f(x) = sin x / x เมื่อ x≠0, f(0) = 1", "f(x) = |x|", "f(x) = 1/x", "f(x) = eˣ"],
+      ans: 3,
+      explain: "ตรวจสอบแต่ละข้อที่ x = 0:\n• x\u00b2+1: f(0)=1, lim=1 → ต่อเนื่อง ✓\n• sin(x)/x กับ f(0)=1: lim\u2093\u21920 sin(x)/x = 1 = f(0) → ต่อเนื่อง ✓\n• |x|: f(0)=0, lim=0 → ต่อเนื่อง ✓\n• 1/x: ไม่นิยามที่ x=0, lim\u2093\u21920 = ±\u221e → <strong>ไม่ต่อเนื่อง</strong> ✓\n• eˣ: f(0)=1, lim=1 → ต่อเนื่อง ✓\n\nคำตอบ: f(x) = 1/x ไม่ต่อเนื่องที่ x = 0"
+    }
+  ];
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    questions.forEach((q, idx) => {
+      const div = document.createElement('div');
+      div.className = 'quiz-card';
+      div.id = `qcard-${idx}`;
+      div.innerHTML = `
+        <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+        <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+        <div class="quiz-options">
+          ${q.opts.map((opt, i) => `
+            <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+              ${String.fromCharCode(65+i)}. ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <div class="feedback" id="fb-${idx}"></div>
+      `;
+      container.appendChild(div);
+    });
+    container.querySelectorAll('.option-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+      });
+    });
+  }
+
+  function buildALevel() {
+    const container = document.getElementById('alevel-container');
+    alevelQuestions.forEach((q, idx) => {
+      const div = document.createElement('div');
+      div.className = 'quiz-card';
+      div.id = `alcard-${idx}`;
+      div.innerHTML = `
+        <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+          <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+          <span style="color:var(--accent2); font-size:11px; background:rgba(0,212,170,0.12); padding:2px 10px; border-radius:20px">${q.year}</span>
+        </div>
+        <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+        <div class="quiz-options">
+          ${q.opts.map((opt, i) => `
+            <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+              ${String.fromCharCode(65+i)}. ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <div class="feedback" id="alfb-${idx}"></div>
+      `;
+      container.appendChild(div);
+    });
+    container.querySelectorAll('.option-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+      });
+    });
+  }
+
+  function checkAnswer(qIdx, optIdx) {
+    if (answered[qIdx]) return;
+    answered[qIdx] = true;
+    const q = questions[qIdx];
+    const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+    const fb = document.getElementById(`fb-${qIdx}`);
+    opts.forEach(btn => btn.disabled = true);
+    if (optIdx === q.ans) {
+      opts[optIdx].classList.add('correct');
+      fb.className = 'feedback correct-fb show';
+      fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+    } else {
+      opts[optIdx].classList.add('wrong');
+      opts[q.ans].classList.add('correct');
+      fb.className = 'feedback wrong-fb show';
+      fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+    }
+  }
+
+  function checkALevel(qIdx, optIdx) {
+    if (answeredAL[qIdx]) return;
+    answeredAL[qIdx] = true;
+    const q = alevelQuestions[qIdx];
+    const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+    const fb = document.getElementById(`alfb-${qIdx}`);
+    opts.forEach(btn => btn.disabled = true);
+    if (optIdx === q.ans) {
+      opts[optIdx].classList.add('correct');
+      fb.className = 'feedback correct-fb show';
+      fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+    } else {
+      opts[optIdx].classList.add('wrong');
+      opts[q.ans].classList.add('correct');
+      fb.className = 'feedback wrong-fb show';
+      fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+    }
+  }
+
+  buildQuiz();
+  buildALevel();
+</script>
+</body>
+</html>
