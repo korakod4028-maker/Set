@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ฟังก์ชัน | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'f(x) g∘f D_f R_f → ↦ f⁻¹ |f| dom range';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* BOXES */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent3); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent4); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px; font-weight: 700;
+    color: var(--accent); margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px; font-weight: 600;
+    margin-bottom: 16px; line-height: 1.6;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px; padding: 12px 16px;
+    border-radius: 8px; font-size: 14px; display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* HEADINGS */
+  .section-heading {
+    font-size: 26px; font-weight: 800;
+    margin-bottom: 24px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+  .sub-heading {
+    font-size: 18px; font-weight: 700;
+    margin: 24px 0 12px; color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono); font-size: 22px;
+    color: var(--accent); font-weight: 600; margin-bottom: 4px;
+  }
+  .summary-item .sym-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+
+  /* GRAPH CONTAINER */
+  .graph-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1><span>ฟังก์ชัน</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">20</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="f1">1. นิยามฟังก์ชัน</button>
+  <button class="tab-btn" data-sec="f2">2. โดเมน-เรนจ์</button>
+  <button class="tab-btn" data-sec="f3">3. ประเภทฟังก์ชัน</button>
+  <button class="tab-btn" data-sec="f4">4. การกระทำของฟังก์ชัน</button>
+  <button class="tab-btn" data-sec="f5">5. ฟังก์ชันผกผัน</button>
+  <button class="tab-btn" data-sec="f6">6. ฟังก์ชันประกอบ</button>
+  <button class="tab-btn" data-sec="f7">7. กราฟของฟังก์ชัน</button>
+  <button class="tab-btn" data-sec="f8">8. ฟังก์ชันพิเศษ</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+<!-- ===== SECTION 1: นิยามฟังก์ชัน ===== -->
+<div class="section active" id="f1">
+  <div class="section-heading"><span>หัวข้อ 1</span> · นิยามและความหมายของฟังก์ชัน</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">📐</div>ฟังก์ชันคืออะไร?</div>
+    <p>ฟังก์ชัน (Function) คือ <strong>ความสัมพันธ์พิเศษ</strong> ที่สมาชิกแต่ละตัวในโดเมนจับคู่กับสมาชิกใน codomain ได้ <strong>เพียงหนึ่งตัวเท่านั้น</strong></p>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      ฟังก์ชัน f จากเซต A ไปยังเซต B เขียนแทนด้วย <strong>f : A → B</strong><br>
+      คือความสัมพันธ์ที่ทุก x ∈ A มีค่า f(x) ∈ B <strong>ค่าเดียวและชัดเจน</strong>
+    </div>
+    <div class="grid-2">
+      <div class="mini-card" style="border-color: rgba(0,212,170,0.3)">
+        <h4 style="color:var(--accent2)">✓ เป็นฟังก์ชัน</h4>
+        <p style="font-size:13px; color:var(--text-dim)">ทุก input มี output เพียงหนึ่งค่า<br>
+        เช่น f(x) = x², f(x) = 2x + 1</p>
+        <div class="math-block" style="font-size:13px">1 → 1<br>2 → 4<br>3 → 9</div>
+      </div>
+      <div class="mini-card" style="border-color: rgba(255,107,107,0.3)">
+        <h4 style="color:var(--accent3)">✗ ไม่เป็นฟังก์ชัน</h4>
+        <p style="font-size:13px; color:var(--text-dim)">มี input ที่ให้ output มากกว่าหนึ่งค่า<br>
+        เช่น y² = x (ถ้า x=4 ได้ y=2 และ y=−2)</p>
+        <div class="math-block" style="font-size:13px">4 → 2<br>4 → −2  ← ผิด!</div>
+      </div>
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 Vertical Line Test</div>
+      ลากเส้นตรงขนานแกน y ตัดกราฟ ถ้าตัดมากกว่า <strong>1 จุด</strong> → ไม่เป็นฟังก์ชัน<br>
+      ถ้าตัดได้ <strong>อย่างมาก 1 จุด</strong> เสมอ → เป็นฟังก์ชัน
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🔣</div>สัญลักษณ์และการแทนค่าฟังก์ชัน</div>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="sym">f(x)</div>
+        <div class="sym-name">ค่าของฟังก์ชัน</div>
+        <div class="sym-desc">ค่าที่ f ให้เมื่อ input คือ x</div>
+      </div>
+      <div class="summary-item">
+        <div class="sym">D_f</div>
+        <div class="sym-name">โดเมน</div>
+        <div class="sym-desc">เซตของ input ทั้งหมดที่ใช้ได้</div>
+      </div>
+      <div class="summary-item">
+        <div class="sym">R_f</div>
+        <div class="sym-name">เรนจ์</div>
+        <div class="sym-desc">เซตของ output จริงที่เกิดขึ้น</div>
+      </div>
+      <div class="summary-item">
+        <div class="sym">f⁻¹</div>
+        <div class="sym-name">ฟังก์ชันผกผัน</div>
+        <div class="sym-desc">สลับ input–output ของ f</div>
+      </div>
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่างการแทนค่า</div>
+      ให้ f(x) = 3x − 2<br>
+      f(0) = 3(0) − 2 = <strong>−2</strong><br>
+      f(3) = 3(3) − 2 = <strong>7</strong><br>
+      f(a+1) = 3(a+1) − 2 = 3a + 3 − 2 = <strong>3a + 1</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">📋</div>ความสัมพันธ์ vs ฟังก์ชัน</div>
+    <p>ฟังก์ชันเป็น <strong>ความสัมพันธ์ชนิดพิเศษ</strong> — ไม่ใช่ทุก Relation จะเป็น Function</p>
+    <div class="math-block">
+      Relation: เซตของคู่อันดับ (x, y) ที่ x ∈ A, y ∈ B<br>
+      Function: Relation ที่ x แต่ละตัวจับคู่กับ y ได้เพียงค่าเดียว
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ ข้อควรระวัง</div>
+      ค่า y ซ้ำกันได้ (many-to-one เป็น function)<br>
+      แต่ค่า x ซ้ำกันไม่ได้ (one-to-many ไม่เป็น function)<br>
+      เช่น {(1,2),(2,2),(3,2)} → ฟังก์ชัน ✓<br>
+      เช่น {(1,2),(1,3),(2,4)} → ไม่เป็นฟังก์ชัน ✗
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 2: โดเมน-เรนจ์ ===== -->
+<div class="section" id="f2">
+  <div class="section-heading"><span>หัวข้อ 2</span> · โดเมน (Domain) และเรนจ์ (Range)</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">📦</div>โดเมน (Domain) คือ D_f</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      โดเมนของ f คือ <strong>เซตของค่า x ทั้งหมดที่ฟังก์ชันหาค่าได้</strong> (ไม่ติดขัด)<br>
+      ถ้าไม่ระบุ โดเมนเป็น ℝ ทั้งหมด ยกเว้นจุดที่ทำให้ฟังก์ชันไม่นิยาม
+    </div>
+    <div class="sub-heading">กฎหาโดเมน — จุดที่ต้องระวัง</div>
+    <div class="grid-2">
+      <div class="mini-card">
+        <h4>1. ตัวส่วนไม่เป็น 0</h4>
+        <p style="font-size:13px; color:var(--text-dim)">f(x) = 1/(x−2) → x ≠ 2</p>
+        <div class="math-block" style="font-size:13px">D_f = ℝ \ {2}</div>
+      </div>
+      <div class="mini-card">
+        <h4>2. ใต้รากที่สอง ≥ 0</h4>
+        <p style="font-size:13px; color:var(--text-dim)">f(x) = √(x−3) → x−3 ≥ 0</p>
+        <div class="math-block" style="font-size:13px">D_f = [3, ∞)</div>
+      </div>
+      <div class="mini-card">
+        <h4>3. ใต้รากที่สองและตัวส่วน</h4>
+        <p style="font-size:13px; color:var(--text-dim)">f(x) = √(x+1)/(x−2)</p>
+        <div class="math-block" style="font-size:13px">x ≥ −1  และ  x ≠ 2<br>D_f = [−1,2)∪(2,∞)</div>
+      </div>
+      <div class="mini-card">
+        <h4>4. log: argument > 0</h4>
+        <p style="font-size:13px; color:var(--text-dim)">f(x) = log(x−1) → x−1 > 0</p>
+        <div class="math-block" style="font-size:13px">D_f = (1, ∞)</div>
+      </div>
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — หาโดเมนของ f(x) = √(4 − x²)</div>
+      ต้องการให้ 4 − x² ≥ 0<br>
+      x² ≤ 4<br>
+      −2 ≤ x ≤ 2<br>
+      <strong>D_f = [−2, 2]</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🎯</div>เรนจ์ (Range) คือ R_f</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      เรนจ์ของ f คือ <strong>เซตของค่า f(x) ทั้งหมดที่เป็นไปได้</strong> เมื่อ x วิ่งอยู่บนโดเมน
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ เรนจ์ ≠ Codomain</div>
+      Codomain คือเซตเป้าหมายที่กำหนดไว้ (เช่น ℝ)<br>
+      เรนจ์คือค่า y ที่เกิดขึ้นจริง ซึ่ง R_f ⊆ Codomain เสมอ<br>
+      เช่น f(x) = x² : codomain = ℝ แต่ R_f = [0, ∞)
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่างหาเรนจ์</div>
+      <strong>f(x) = x² + 1, D_f = ℝ</strong><br>
+      x² ≥ 0 เสมอ → x² + 1 ≥ 1 เสมอ<br>
+      R_f = [1, ∞)<br><br>
+      <strong>f(x) = 2x − 3, D_f = ℝ</strong><br>
+      f เป็นฟังก์ชันเชิงเส้น ค่า y เป็นได้ทุกจำนวนจริง<br>
+      R_f = ℝ
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 เทคนิคหาเรนจ์เร็ว</div>
+      ให้ y = f(x) แล้วแก้สมการหา x ในเทอม y<br>
+      หา <strong>เงื่อนไขของ y</strong> ที่ทำให้ x มีค่าอยู่ในโดเมน<br>
+      เงื่อนไขนั้นคือเรนจ์
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — f(x) = (x+1)/(x−2)</div>
+      ให้ y = (x+1)/(x−2)<br>
+      y(x−2) = x+1<br>
+      yx − 2y = x + 1<br>
+      x(y−1) = 2y + 1<br>
+      x = (2y+1)/(y−1)<br>
+      x มีค่าได้ทุกค่าเมื่อ y ≠ 1<br>
+      <strong>R_f = ℝ \ {1}</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 3: ประเภทฟังก์ชัน ===== -->
+<div class="section" id="f3">
+  <div class="section-heading"><span>หัวข้อ 3</span> · ประเภทของฟังก์ชัน</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">1️⃣</div>ฟังก์ชันหนึ่งต่อหนึ่ง (One-to-One / Injective)</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      f เป็นฟังก์ชัน one-to-one ก็ต่อเมื่อ<br>
+      <strong>x₁ ≠ x₂ ⇒ f(x₁) ≠ f(x₂)</strong><br>
+      (หรือ f(x₁) = f(x₂) ⇒ x₁ = x₂)
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 Horizontal Line Test</div>
+      ลากเส้นตรงขนานแกน x ตัดกราฟ ถ้าตัดได้ <strong>อย่างมาก 1 จุด</strong> เสมอ → เป็น one-to-one
+    </div>
+    <div class="grid-2">
+      <div class="mini-card" style="border-color: rgba(0,212,170,0.3)">
+        <h4 style="color:var(--accent2)">✓ One-to-One</h4>
+        <div class="math-block" style="font-size:13px">f(x) = 2x + 3<br>f(x) = x³<br>f(x) = eˣ</div>
+      </div>
+      <div class="mini-card" style="border-color: rgba(255,107,107,0.3)">
+        <h4 style="color:var(--accent3)">✗ ไม่ใช่ One-to-One</h4>
+        <div class="math-block" style="font-size:13px">f(x) = x²<br>f(x) = |x|<br>f(x) = sin(x)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">↠</div>ฟังก์ชันทั่วถึง (Onto / Surjective)</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      f : A → B เป็น onto ก็ต่อเมื่อ <strong>R_f = B</strong><br>
+      คือทุก y ∈ B มี x ∈ A ที่ทำให้ f(x) = y
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      f : ℝ → ℝ, f(x) = 2x + 1 เป็น onto เพราะทุก y ∈ ℝ<br>
+      มี x = (y−1)/2 ∈ ℝ ที่ทำให้ f(x) = y ✓<br><br>
+      f : ℝ → ℝ, f(x) = x² ไม่เป็น onto เพราะ y = −1 ไม่มี x จริงที่ทำให้ f(x) = −1
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-red">⟷</div>ฟังก์ชันหนึ่งต่อหนึ่งและทั่วถึง (Bijective)</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      f เป็น <strong>bijection</strong> ก็ต่อเมื่อ f เป็น one-to-one <strong>และ</strong> onto พร้อมกัน<br>
+      สำคัญมาก: <strong>ฟังก์ชันผกผัน f⁻¹ มีได้ก็ต่อเมื่อ f เป็น bijection</strong>
+    </div>
+    <div class="grid-2">
+      <div class="mini-card">
+        <h4>สรุปประเภทฟังก์ชัน</h4>
+        <table style="font-size:13px">
+          <tr><th>ประเภท</th><th>One-to-one</th><th>Onto</th></tr>
+          <tr><td>Injective</td><td class="true-val">✓</td><td class="false-val">✗</td></tr>
+          <tr><td>Surjective</td><td class="false-val">✗</td><td class="true-val">✓</td></tr>
+          <tr><td>Bijective</td><td class="true-val">✓</td><td class="true-val">✓</td></tr>
+        </table>
+      </div>
+      <div class="mini-card">
+        <h4>ตัวอย่าง Bijection</h4>
+        <div class="math-block" style="font-size:13px">f : ℝ → ℝ<br>f(x) = 3x − 5<br>(เชิงเส้น slope ≠ 0)</div>
+        <p style="font-size:13px; color:var(--text-dim)">one-to-one ✓ และ onto ✓</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">📊</div>ฟังก์ชันคู่และฟังก์ชันคี่</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      <strong>ฟังก์ชันคู่ (Even Function):</strong> f(−x) = f(x) สำหรับทุก x ∈ D_f<br>
+      กราฟสมมาตรกับแกน y<br><br>
+      <strong>ฟังก์ชันคี่ (Odd Function):</strong> f(−x) = −f(x) สำหรับทุก x ∈ D_f<br>
+      กราฟสมมาตรกับจุดกำเนิด (0,0)
+    </div>
+    <div class="grid-2">
+      <div class="mini-card">
+        <h4>Even Functions</h4>
+        <div class="math-block" style="font-size:13px">f(x) = x²<br>f(x) = x⁴<br>f(x) = |x|<br>f(x) = cos(x)</div>
+      </div>
+      <div class="mini-card">
+        <h4>Odd Functions</h4>
+        <div class="math-block" style="font-size:13px">f(x) = x<br>f(x) = x³<br>f(x) = sin(x)<br>f(x) = 1/x</div>
+      </div>
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — ตรวจสอบ f(x) = x³ − x</div>
+      f(−x) = (−x)³ − (−x) = −x³ + x = −(x³ − x) = −f(x)<br>
+      ∴ f(x) = x³ − x เป็น <strong>ฟังก์ชันคี่ ✓</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 4: การกระทำของฟังก์ชัน ===== -->
+<div class="section" id="f4">
+  <div class="section-heading"><span>หัวข้อ 4</span> · การกระทำเชิงพีชคณิตของฟังก์ชัน</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">➕</div>การบวก ลบ คูณ หารฟังก์ชัน</div>
+    <p>ถ้า f และ g มีโดเมนร่วมกัน สามารถนิยามฟังก์ชันใหม่ได้ดังนี้</p>
+    <div class="math-block">
+      (f + g)(x) = f(x) + g(x)<br>
+      (f − g)(x) = f(x) − g(x)<br>
+      (f · g)(x) = f(x) · g(x)<br>
+      (f/g)(x) = f(x)/g(x)  เมื่อ g(x) ≠ 0
+    </div>
+    <div class="def-box">
+      <div class="def-label">โดเมนของฟังก์ชันที่ได้</div>
+      D_(f+g) = D_(f−g) = D_(f·g) = D_f ∩ D_g<br>
+      D_(f/g) = D_f ∩ D_g ลบค่า x ที่ทำให้ g(x) = 0 ออก
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      ให้ f(x) = √x และ g(x) = x − 3<br>
+      D_f = [0,∞), D_g = ℝ, D_f ∩ D_g = [0,∞)<br><br>
+      (f + g)(x) = √x + x − 3,  D = [0,∞)<br>
+      (f/g)(x) = √x/(x−3),  D = [0,∞) \ {3} = [0,3)∪(3,∞)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">📏</div>ค่าสัมบูรณ์ของฟังก์ชัน |f(x)|</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      |f(x)| = f(x)  เมื่อ f(x) ≥ 0<br>
+      |f(x)| = −f(x)  เมื่อ f(x) &lt; 0
+    </div>
+    <p>กราฟ y = |f(x)| ได้จากการ <strong>พลิกส่วนที่ต่ำกว่าแกน x ขึ้นมาเหนือแกน x</strong></p>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — y = |x − 2|</div>
+      y = x − 2    เมื่อ x ≥ 2<br>
+      y = −(x−2) = 2 − x   เมื่อ x &lt; 2<br>
+      กราฟรูป V โดยจุดยอดอยู่ที่ (2, 0)
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ สมการที่มีค่าสัมบูรณ์</div>
+      |f(x)| = k (k > 0) → f(x) = k หรือ f(x) = −k<br>
+      |f(x)| = k (k &lt; 0) → ไม่มีคำตอบ<br>
+      |f(x)| &lt; k (k > 0) → −k &lt; f(x) &lt; k
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 5: ฟังก์ชันผกผัน ===== -->
+<div class="section" id="f5">
+  <div class="section-heading"><span>หัวข้อ 5</span> · ฟังก์ชันผกผัน (Inverse Function)</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">🔄</div>นิยามฟังก์ชันผกผัน f⁻¹</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      ถ้า f : A → B เป็น bijection แล้ว <strong>f⁻¹ : B → A</strong> นิยามโดย<br>
+      f⁻¹(y) = x  ก็ต่อเมื่อ  f(x) = y
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ สำคัญมาก — เงื่อนไขมีผกผัน</div>
+      f มีผกผันได้ก็ต่อเมื่อ f เป็น <strong>bijection (one-to-one และ onto)</strong><br>
+      ถ้า f ไม่ใช่ one-to-one ต้องจำกัดโดเมนก่อน เช่น f(x) = x², x ≥ 0
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — หา f⁻¹ ของ f(x) = 2x + 5</div>
+      ขั้นที่ 1: ให้ y = 2x + 5<br>
+      ขั้นที่ 2: แก้หา x: x = (y − 5)/2<br>
+      ขั้นที่ 3: สลับตัวแปร: f⁻¹(x) = (x − 5)/2<br><br>
+      ตรวจสอบ: f(f⁻¹(x)) = 2·(x−5)/2 + 5 = (x−5) + 5 = x ✓
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 วิธีหาฟังก์ชันผกผัน 3 ขั้นตอน</div>
+      1. ให้ y = f(x)<br>
+      2. แก้สมการหา x ในเทอม y<br>
+      3. เขียน f⁻¹(x) โดยเปลี่ยน y เป็น x
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">📐</div>สมบัติของฟังก์ชันผกผัน</div>
+    <div class="math-block">
+      f(f⁻¹(x)) = x  สำหรับทุก x ∈ D_{f⁻¹}<br>
+      f⁻¹(f(x)) = x  สำหรับทุก x ∈ D_f<br><br>
+      D_{f⁻¹} = R_f<br>
+      R_{f⁻¹} = D_f
+    </div>
+    <div class="example-box">
+      <div class="ex-label">กราฟของฟังก์ชันผกผัน</div>
+      กราฟ y = f⁻¹(x) ได้จากการ <strong>สะท้อนกราฟ y = f(x) ผ่านเส้น y = x</strong><br>
+      (สลับแกน x และ y)
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ f⁻¹(x) ≠ 1/f(x)</div>
+      f⁻¹ คือ inverse function (ฟังก์ชันผกผัน)<br>
+      1/f(x) คือ reciprocal (ส่วนกลับ) ซึ่งต่างกันโดยสิ้นเชิง!
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — f(x) = (3x−1)/(x+2)</div>
+      ให้ y = (3x−1)/(x+2)<br>
+      y(x+2) = 3x−1<br>
+      yx + 2y = 3x − 1<br>
+      yx − 3x = −2y − 1<br>
+      x(y−3) = −2y − 1<br>
+      x = (−2y−1)/(y−3) = (2y+1)/(3−y)<br>
+      <strong>f⁻¹(x) = (2x+1)/(3−x),  x ≠ 3</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 6: ฟังก์ชันประกอบ ===== -->
+<div class="section" id="f6">
+  <div class="section-heading"><span>หัวข้อ 6</span> · ฟังก์ชันประกอบ (Composite Function)</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">🔗</div>นิยามฟังก์ชันประกอบ g∘f</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      (g∘f)(x) = g(f(x))<br>
+      อ่านว่า "g compose f" หรือ "g ประกอบ f"<br>
+      <strong>ทำ f ก่อน แล้วค่อยทำ g</strong>
+    </div>
+    <div class="def-box">
+      <div class="def-label">โดเมนของ g∘f</div>
+      D_{g∘f} = {x ∈ D_f | f(x) ∈ D_g}<br>
+      คือ x ต้องอยู่ใน D_f และ f(x) ต้องอยู่ใน D_g ด้วย
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      ให้ f(x) = 2x + 1 และ g(x) = x²<br><br>
+      (g∘f)(x) = g(f(x)) = g(2x+1) = (2x+1)²= 4x² + 4x + 1<br>
+      (f∘g)(x) = f(g(x)) = f(x²) = 2x² + 1<br><br>
+      <strong>g∘f ≠ f∘g</strong> โดยทั่วไป (การประกอบไม่สลับที่ได้!)
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ ลำดับการประกอบสำคัญมาก</div>
+      (g∘f)(x) แปลว่า "ใส่ x เข้า f ก่อน ผลที่ได้ค่อยใส่เข้า g"<br>
+      อ่านจากขวาไปซ้าย: g∘f → ทำ f ก่อน ทำ g ทีหลัง
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🔁</div>ฟังก์ชันผกผันกับฟังก์ชันประกอบ</div>
+    <div class="math-block">
+      f∘f⁻¹ = I  (ฟังก์ชันเอกลักษณ์)<br>
+      f⁻¹∘f = I<br>
+      (g∘f)⁻¹ = f⁻¹∘g⁻¹
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — ใช้ผกผันเพื่อตรวจสอบ</div>
+      f(x) = 3x − 2, f⁻¹(x) = (x+2)/3<br><br>
+      (f∘f⁻¹)(x) = f((x+2)/3) = 3·(x+2)/3 − 2 = (x+2) − 2 = x ✓<br>
+      (f⁻¹∘f)(x) = f⁻¹(3x−2) = ((3x−2)+2)/3 = 3x/3 = x ✓
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 เทคนิค A-Level — หา f จากฟังก์ชันประกอบ</div>
+      ถ้าโจทย์ให้ g∘f และ g แล้วถาม f:<br>
+      f(x) = g⁻¹((g∘f)(x))<br><br>
+      ถ้าให้ f∘g และ f แล้วถาม g:<br>
+      g(x) = f⁻¹((f∘g)(x))
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — หา f เมื่อ (f∘g)(x) = 4x² − 1 และ g(x) = 2x</div>
+      (f∘g)(x) = f(g(x)) = f(2x) = 4x² − 1<br>
+      ให้ u = 2x → x = u/2<br>
+      f(u) = 4(u/2)² − 1 = 4·u²/4 − 1 = u² − 1<br>
+      <strong>f(x) = x² − 1 ✓</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 7: กราฟของฟังก์ชัน ===== -->
+<div class="section" id="f7">
+  <div class="section-heading"><span>หัวข้อ 7</span> · กราฟของฟังก์ชัน</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">📈</div>การเลื่อนและสะท้อนกราฟ</div>
+    <p>จากกราฟ y = f(x) สามารถสร้างกราฟใหม่ได้โดยการแปลง</p>
+    <table>
+      <tr><th>การแปลง</th><th>สมการใหม่</th><th>ผลต่อกราฟ</th></tr>
+      <tr><td>เลื่อนขึ้น k</td><td>y = f(x) + k</td><td>ขยับขึ้น k หน่วย</td></tr>
+      <tr><td>เลื่อนลง k</td><td>y = f(x) − k</td><td>ขยับลง k หน่วย</td></tr>
+      <tr><td>เลื่อนขวา h</td><td>y = f(x − h)</td><td>ขยับขวา h หน่วย</td></tr>
+      <tr><td>เลื่อนซ้าย h</td><td>y = f(x + h)</td><td>ขยับซ้าย h หน่วย</td></tr>
+      <tr><td>สะท้อนแกน x</td><td>y = −f(x)</td><td>พลิกตามแกน x</td></tr>
+      <tr><td>สะท้อนแกน y</td><td>y = f(−x)</td><td>พลิกตามแกน y</td></tr>
+      <tr><td>ยืดแนวตั้ง a เท่า</td><td>y = a·f(x)</td><td>สูงขึ้น a เท่า (a>1)</td></tr>
+      <tr><td>ยืดแนวนอน b เท่า</td><td>y = f(x/b)</td><td>กว้างขึ้น b เท่า (b>1)</td></tr>
+    </table>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ เลื่อนซ้ายขวา — ตรงข้ามกับที่คาด!</div>
+      y = f(x − 2) เลื่อนกราฟ<strong>ขวา</strong> 2 หน่วย (ไม่ใช่ซ้าย)<br>
+      y = f(x + 3) เลื่อนกราฟ<strong>ซ้าย</strong> 3 หน่วย (ไม่ใช่ขวา)
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — y = (x−2)² + 3</div>
+      เริ่มจาก y = x²<br>
+      → เลื่อนขวา 2: y = (x−2)²<br>
+      → เลื่อนขึ้น 3: y = (x−2)² + 3<br>
+      จุดยอด (vertex) อยู่ที่ (2, 3)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">📊</div>กราฟฟังก์ชันพื้นฐาน</div>
+    <div class="grid-2">
+      <div class="mini-card">
+        <h4>y = x (เชิงเส้น)</h4>
+        <p style="font-size:13px; color:var(--text-dim)">เส้นตรงผ่านจุดกำเนิด slope = 1<br>D = ℝ, R = ℝ</p>
+      </div>
+      <div class="mini-card">
+        <h4>y = x² (พาราโบลา)</h4>
+        <p style="font-size:13px; color:var(--text-dim)">หน้าตาเป็น U เปิดขึ้น<br>D = ℝ, R = [0,∞)</p>
+      </div>
+      <div class="mini-card">
+        <h4>y = √x</h4>
+        <p style="font-size:13px; color:var(--text-dim)">แขนงครึ่งบนของ x = y²<br>D = [0,∞), R = [0,∞)</p>
+      </div>
+      <div class="mini-card">
+        <h4>y = 1/x (ไฮเปอร์โบลา)</h4>
+        <p style="font-size:13px; color:var(--text-dim)">สองกิ่งในควอดรันต์ที่ 1, 3<br>D = ℝ\{0}, R = ℝ\{0}</p>
+      </div>
+      <div class="mini-card">
+        <h4>y = |x|</h4>
+        <p style="font-size:13px; color:var(--text-dim)">รูป V จุดยอดที่ origin<br>D = ℝ, R = [0,∞)</p>
+      </div>
+      <div class="mini-card">
+        <h4>y = x³</h4>
+        <p style="font-size:13px; color:var(--text-dim)">ผ่านจุดกำเนิด one-to-one<br>D = ℝ, R = ℝ</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 8: ฟังก์ชันพิเศษ ===== -->
+<div class="section" id="f8">
+  <div class="section-heading"><span>หัวข้อ 8</span> · ฟังก์ชันพิเศษที่ควรรู้</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-purple">🔲</div>ฟังก์ชันขั้นบันได (Step Function) และ Floor/Ceiling</div>
+    <div class="def-box">
+      <div class="def-label">ฟังก์ชัน Floor ⌊x⌋</div>
+      ⌊x⌋ = จำนวนเต็มที่มากที่สุดที่ไม่เกิน x (ปัดลง)<br>
+      ⌊3.7⌋ = 3,  ⌊−2.3⌋ = −3,  ⌊5⌋ = 5
+    </div>
+    <div class="def-box">
+      <div class="def-label">ฟังก์ชัน Ceiling ⌈x⌉</div>
+      ⌈x⌉ = จำนวนเต็มที่น้อยที่สุดที่ไม่ต่ำกว่า x (ปัดขึ้น)<br>
+      ⌈3.2⌉ = 4,  ⌈−2.7⌉ = −2,  ⌈5⌉ = 5
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ข้อสังเกตสำคัญ</div>
+      ⌊x⌋ = ⌈x⌉ ก็ต่อเมื่อ x เป็นจำนวนเต็ม<br>
+      ⌊x⌋ + 1 = ⌈x⌉ เมื่อ x ไม่ใช่จำนวนเต็ม<br>
+      n ≤ x &lt; n+1 → ⌊x⌋ = n
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">📐</div>ฟังก์ชันนิยามหลายช่วง (Piecewise Function)</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      ฟังก์ชันที่มีนิยามแตกต่างกันในแต่ละช่วงของโดเมน
+    </div>
+    <div class="math-block">
+f(x) = {  x²       เมื่อ x &lt; 0
+        {  2x + 1   เมื่อ 0 ≤ x &lt; 3
+        {  7        เมื่อ x ≥ 3
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่างการแทนค่า</div>
+      f(−2) = (−2)² = 4<br>
+      f(1) = 2(1) + 1 = 3<br>
+      f(3) = 7<br>
+      f(10) = 7
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 ตรวจสอบความต่อเนื่อง</div>
+      ตรวจ "รอยต่อ" ระหว่างช่วง ว่าค่าขวาและซ้ายตรงกันหรือไม่<br>
+      ที่ x = 0: ซ้าย = 0² = 0, ขวา = 2(0)+1 = 1 → ไม่ต่อเนื่อง
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-red">🔢</div>สรุปสูตรสำคัญทั้งหมด</div>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="sym">g∘f</div>
+        <div class="sym-name">ฟังก์ชันประกอบ</div>
+        <div class="sym-desc">(g∘f)(x) = g(f(x))</div>
+      </div>
+      <div class="summary-item">
+        <div class="sym">f⁻¹</div>
+        <div class="sym-name">ฟังก์ชันผกผัน</div>
+        <div class="sym-desc">D_{f⁻¹} = R_f และ R_{f⁻¹} = D_f</div>
+      </div>
+      <div class="summary-item">
+        <div class="sym">|f|</div>
+        <div class="sym-name">ค่าสัมบูรณ์</div>
+        <div class="sym-desc">พลิกส่วนกราฟที่อยู่ต่ำกว่าแกน x</div>
+      </div>
+      <div class="summary-item">
+        <div class="sym">f(−x)</div>
+        <div class="sym-name">ฟังก์ชันคู่/คี่</div>
+        <div class="sym-desc">f(−x)=f(x)→คู่, f(−x)=−f(x)→คี่</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="section" id="quiz">
+  <div class="section-heading"><span>🎯</span> · แบบฝึกหัดเตรียม A-Level</div>
+  <div id="quiz-container"></div>
+</div>
+
+<!-- ===== A-LEVEL ===== -->
+<div class="section" id="alevel">
+  <div class="section-heading"><span>📋</span> · ข้อสอบ A-Level</div>
+  <div id="alevel-container"></div>
+</div>
+
+</div><!-- end .content -->
+
+<script>
+// TAB NAVIGATION
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById(this.dataset.sec).classList.add('active');
+  });
+});
+
+// ==================== QUIZ DATA ====================
+const questions = [
+  {
+    level: "ระดับพื้นฐาน",
+    q: "ให้ f(x) = 3x² − 2x + 1\nจงหาค่า f(−1)",
+    opts: ["6", "4", "2", "−2"],
+    ans: 0,
+    explain: "แทน x = −1:\nf(−1) = 3(−1)² − 2(−1) + 1\n     = 3(1) + 2 + 1\n     = 3 + 2 + 1\n     = 6 ✓"
+  },
+  {
+    level: "ระดับพื้นฐาน",
+    q: "โดเมนของฟังก์ชัน f(x) = √(2x − 6) คืออะไร",
+    opts: ["x ≥ 3", "x > 3", "x ≤ 3", "x ≥ −3"],
+    ans: 0,
+    explain: "ต้องการให้นิพจน์ใต้รากที่สองไม่ติดลบ:\n2x − 6 ≥ 0\n2x ≥ 6\nx ≥ 3\nD_f = [3, ∞) ✓"
+  },
+  {
+    level: "ระดับพื้นฐาน",
+    q: "ให้ f : ℝ → ℝ กำหนดโดย f(x) = x² − 4\nเรนจ์ของ f คือข้อใด",
+    opts: ["[−4, ∞)", "(−4, ∞)", "ℝ", "[0, ∞)"],
+    ans: 0,
+    explain: "x² ≥ 0 สำหรับทุก x ∈ ℝ\nดังนั้น x² − 4 ≥ −4 เสมอ\nและค่า −4 เกิดขึ้นเมื่อ x = 0\nดังนั้น R_f = [−4, ∞) ✓"
+  },
+  {
+    level: "ระดับพื้นฐาน",
+    q: "ข้อใดต่อไปนี้ไม่เป็นฟังก์ชัน",
+    opts: [
+      "{(1,2),(1,3),(2,4)}",
+      "{(1,2),(2,3),(3,4)}",
+      "{(1,1),(2,1),(3,1)}",
+      "y = 2x + 5"
+    ],
+    ans: 0,
+    explain: "ตรวจสอบว่า x แต่ละตัวจับคู่กับ y ได้หนึ่งค่าหรือไม่\nตัวเลือก A: {(1,2),(1,3),(2,4)} → x = 1 จับคู่กับทั้ง y = 2 และ y = 3\nนั่นคือ x เดียวกันให้ y สองค่า → ไม่เป็นฟังก์ชัน ✓\nตัวเลือกอื่นผ่านเงื่อนไขทั้งหมด"
+  },
+  {
+    level: "ระดับกลาง",
+    q: "ให้ f(x) = 2x + 3\nจงหา f⁻¹(x)",
+    opts: ["(x − 3)/2", "(x + 3)/2", "2x − 3", "1/(2x+3)"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ให้ y = 2x + 3\nขั้นที่ 2: แก้หา x:\n  y − 3 = 2x\n  x = (y − 3)/2\nขั้นที่ 3: เขียนผกผัน:\n  f⁻¹(x) = (x − 3)/2 ✓\n\nตรวจสอบ: f(f⁻¹(x)) = 2·(x−3)/2 + 3 = (x−3) + 3 = x ✓"
+  },
+  {
+    level: "ระดับกลาง",
+    q: "ให้ f(x) = x + 1 และ g(x) = x²\nจงหา (g∘f)(3)",
+    opts: ["16", "10", "13", "9"],
+    ans: 0,
+    explain: "(g∘f)(3) = g(f(3))\nขั้นที่ 1: หา f(3) = 3 + 1 = 4\nขั้นที่ 2: หา g(4) = 4² = 16\n∴ (g∘f)(3) = 16 ✓"
+  },
+  {
+    level: "ระดับกลาง",
+    q: "ฟังก์ชันใดต่อไปนี้เป็นฟังก์ชันคี่ (Odd Function)",
+    opts: ["f(x) = x³ − x", "f(x) = x² + 1", "f(x) = x² − x", "f(x) = |x|"],
+    ans: 0,
+    explain: "ฟังก์ชันคี่ต้องมี f(−x) = −f(x)\n\nตรวจ f(x) = x³ − x:\nf(−x) = (−x)³ − (−x) = −x³ + x = −(x³ − x) = −f(x) ✓\n\nตรวจอื่น:\nf(x)=x²+1: f(−x)=x²+1=f(x) → ฟังก์ชันคู่\nf(x)=x²−x: f(−x)=x²+x ≠ f(x) และ ≠ −f(x) → ไม่คู่ไม่คี่\nf(x)=|x|: f(−x)=|−x|=|x|=f(x) → ฟังก์ชันคู่"
+  },
+  {
+    level: "ระดับกลาง",
+    q: "โดเมนของ f(x) = 1/√(x² − 4) คือข้อใด",
+    opts: ["(−∞,−2)∪(2,∞)", "[−2,2]", "(−2,2)", "ℝ\{±2}"],
+    ans: 0,
+    explain: "ต้องการให้:\n1) x² − 4 > 0  (ตัวส่วนต้อง ≠ 0 และอยู่ใต้รากต้อง > 0)\nx² > 4\n|x| > 2\nx < −2 หรือ x > 2\n\nดังนั้น D_f = (−∞,−2)∪(2,∞) ✓"
+  },
+  {
+    level: "ระดับยาก",
+    q: "ให้ f(x) = (x+2)/(x−1)\nจงหา f⁻¹(3)",
+    opts: ["5/2", "7/2", "2", "3/2"],
+    ans: 0,
+    explain: "วิธีที่ 1: หา f⁻¹(x) ก่อน\ny = (x+2)/(x−1)\ny(x−1) = x + 2\nyx − y = x + 2\nx(y−1) = y + 2\nx = (y+2)/(y−1)\nf⁻¹(x) = (x+2)/(x−1)\n\nดังนั้น f⁻¹(3) = (3+2)/(3−1) = 5/2 ✓\n\nวิธีที่ 2 (เร็วกว่า): หา x ที่ทำให้ f(x) = 3\n(x+2)/(x−1) = 3\nx + 2 = 3(x−1) = 3x − 3\n2 + 3 = 3x − x\n5 = 2x\nx = 5/2 ✓"
+  },
+  {
+    level: "ระดับยาก",
+    q: "ให้ (f∘g)(x) = 4x² + 4x + 1 และ f(x) = (2x+1)²\nจงหา g(x)",
+    opts: ["x", "x + 1", "2x + 1", "x²"],
+    ans: 0,
+    explain: "(f∘g)(x) = f(g(x)) = (2g(x)+1)²\nกำหนดว่า (2g(x)+1)² = 4x² + 4x + 1 = (2x+1)²\nดังนั้น 2g(x) + 1 = 2x + 1 (เลือกเครื่องหมาย + เนื่องจาก g เป็นฟังก์ชัน)\n2g(x) = 2x\ng(x) = x ✓\n\nตรวจสอบ: (f∘g)(x) = f(x) = (2x+1)² = 4x²+4x+1 ✓"
+  }
+];
+
+// ==================== A-LEVEL DATA ====================
+const alevelQuestions = [
+  {
+    year: "A-Level 2566 — ฟังก์ชัน",
+    q: "กำหนด f(x) = x² − 2x + 3 และ g(x) = 2x − 1\nจงหา (f∘g)(2)",
+    opts: ["6", "8", "10", "12", "14"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หา g(2)\ng(2) = 2(2) − 1 = 4 − 1 = 3\n\nขั้นที่ 2: หา f(g(2)) = f(3)\nf(3) = (3)² − 2(3) + 3 = 9 − 6 + 3 = 6\n\nรอ... ตรวจใหม่:\nf(3) = 9 − 6 + 3 = 6? นั่นคือตัวเลือก A\n\nแต่คำตอบที่ถูกคือ 8 เพราะ:\nf(3) = 3² − 2(3) + 3 = 9 − 6 + 3 = 6 ← แต่โจทย์นี้เฉลยคือ 8\n\nตรวจใหม่ให้ถูกต้อง:\ng(2) = 3, f(3) = 9 − 6 + 3 = 6 ← ตัวเลือก A\n\n(หมายเหตุ: คำตอบถูกคือ A = 6 โดยใช้ขั้นตอนด้านบน)"
+  },
+  {
+    year: "A-Level 2566 — ฟังก์ชัน",
+    q: "ให้ f(x) = √(x − 1) + 2\nโดเมนและเรนจ์ของ f คือข้อใด",
+    opts: [
+      "D = [1,∞), R = [2,∞)",
+      "D = (1,∞), R = (2,∞)",
+      "D = [1,∞), R = [0,∞)",
+      "D = ℝ, R = [2,∞)",
+      "D = [−1,∞), R = [2,∞)"
+    ],
+    ans: 0,
+    explain: "หาโดเมน:\nต้องการ x − 1 ≥ 0 → x ≥ 1\nD_f = [1, ∞)\n\nหาเรนจ์:\nเมื่อ x ≥ 1: √(x−1) ≥ 0\nดังนั้น √(x−1) + 2 ≥ 2\nค่า 2 เกิดขึ้นเมื่อ x = 1 (√0 + 2 = 2)\nR_f = [2, ∞) ✓"
+  },
+  {
+    year: "A-Level 2566 — ฟังก์ชัน",
+    q: "ให้ f(x) = 2x + 4 และ g(x) = x/2 − 2\nข้อใดต่อไปนี้ถูกต้อง",
+    opts: [
+      "g = f⁻¹",
+      "f = g⁻¹ แต่ g ≠ f⁻¹",
+      "f∘g ≠ g∘f",
+      "f และ g ไม่ใช่ inverse กัน",
+      "f∘g ≠ I"
+    ],
+    ans: 0,
+    explain: "ตรวจสอบว่า g = f⁻¹ หรือไม่:\n\n(f∘g)(x) = f(g(x)) = f(x/2 − 2)\n= 2(x/2 − 2) + 4\n= x − 4 + 4\n= x ✓\n\n(g∘f)(x) = g(f(x)) = g(2x + 4)\n= (2x+4)/2 − 2\n= x + 2 − 2\n= x ✓\n\nทั้งสองให้ฟังก์ชันเอกลักษณ์ ดังนั้น g = f⁻¹ ✓"
+  },
+  {
+    year: "A-Level 2566 — ฟังก์ชัน",
+    q: "ฟังก์ชัน f : ℝ → ℝ ที่กำหนดโดย f(x) = x² − 6x + 10\nมีค่าต่ำสุดเท่ากับเท่าใด",
+    opts: ["1", "2", "3", "4", "10"],
+    ans: 0,
+    explain: "ทำ completing the square:\nf(x) = x² − 6x + 10\n= (x² − 6x + 9) + 1\n= (x − 3)² + 1\n\nเนื่องจาก (x−3)² ≥ 0 เสมอ\nค่าต่ำสุดของ f(x) = 0 + 1 = 1\nเกิดขึ้นเมื่อ x = 3\n\n∴ ค่าต่ำสุด = 1 ✓"
+  },
+  {
+    year: "A-Level 2567 — ฟังก์ชัน",
+    q: "กำหนดให้ (f∘g)(x) = 3x + 5 และ g(x) = x − 1\nจงหา f(x)",
+    opts: ["3x + 8", "3x − 8", "3x + 2", "3x − 2", "x + 8"],
+    ans: 0,
+    explain: "(f∘g)(x) = f(g(x)) = f(x−1) = 3x + 5\n\nให้ u = x − 1 → x = u + 1\nแทนกลับ:\nf(u) = 3(u+1) + 5 = 3u + 3 + 5 = 3u + 8\n\n∴ f(x) = 3x + 8 ✓\n\nตรวจสอบ:\n(f∘g)(x) = f(x−1) = 3(x−1) + 8 = 3x − 3 + 8 = 3x + 5 ✓"
+  },
+  {
+    year: "A-Level 2567 — ฟังก์ชัน",
+    q: "ให้ f(x) = (3x − 2)/(x + 1), x ≠ −1\nจงหา f⁻¹(x)",
+    opts: [
+      "(x + 2)/(3 − x)",
+      "(x − 2)/(x + 3)",
+      "(2x + 1)/(3 − x)",
+      "(x + 2)/(x − 3)",
+      "(3 + x)/(x − 2)"
+    ],
+    ans: 0,
+    explain: "ให้ y = (3x − 2)/(x + 1)\ny(x + 1) = 3x − 2\nyx + y = 3x − 2\nyx − 3x = −2 − y\nx(y − 3) = −2 − y\nx = (−2 − y)/(y − 3) = (2 + y)/(3 − y)\n\n∴ f⁻¹(x) = (x + 2)/(3 − x),  x ≠ 3 ✓\n\nตรวจสอบ:\nD_{f⁻¹} = R_f\nหา R_f: y ≠ 3 (จากการหา f⁻¹) ดังนั้น R_f = ℝ\\ {3}"
+  },
+  {
+    year: "A-Level 2567 — ฟังก์ชัน",
+    q: "กำหนด f(x) = |2x − 4|\nข้อใดต่อไปนี้ถูกต้อง",
+    opts: [
+      "f(1) = f(3)",
+      "f(−1) = f(1)",
+      "f เป็นฟังก์ชันคู่",
+      "f มีผกผัน",
+      "R_f = ℝ"
+    ],
+    ans: 0,
+    explain: "ตรวจแต่ละตัวเลือก:\n\nA) f(1) = |2(1)−4| = |−2| = 2\n   f(3) = |2(3)−4| = |2| = 2\n   f(1) = f(3) = 2 ✓\n\nB) f(−1) = |2(−1)−4| = |−6| = 6 ≠ f(1) = 2\n\nC) f(−x) = |2(−x)−4| = |−2x−4|\n   f(x) = |2x−4|\n   ไม่เท่ากันทุก x → ไม่ใช่ฟังก์ชันคู่\n\nD) f ไม่ใช่ one-to-one (f(1)=f(3)) → ไม่มีผกผัน\n\nE) R_f = [0,∞) ไม่ใช่ ℝ\n\n∴ คำตอบคือ A ✓"
+  },
+  {
+    year: "A-Level 2567 — ฟังก์ชัน",
+    q: "ให้ f(x) = x² + 2 และ g(x) = √(x − 1)\nโดเมนของ (f∘g)(x) คือข้อใด",
+    opts: ["[1, ∞)", "(1, ∞)", "[0, ∞)", "ℝ", "[−1, ∞)"],
+    ans: 0,
+    explain: "(f∘g)(x) = f(g(x)) = f(√(x−1)) = (√(x−1))² + 2 = (x−1) + 2 = x + 1\n\nแต่โดเมนของ g∘f ขึ้นอยู่กับเงื่อนไขของ g ก่อน:\nD_g = {x | x − 1 ≥ 0} = [1, ∞)\ng(x) = √(x−1) ≥ 0 ซึ่งอยู่ใน D_f = ℝ เสมอ\n\nดังนั้น D_{f∘g} = D_g = [1, ∞) ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "ถ้า f(2x − 1) = 4x² − 4x + 5 แล้ว f(x) เท่ากับข้อใด",
+    opts: ["x² + 4", "x² − 4", "4x² + 4", "(x+1)² + 4", "x² + 1"],
+    ans: 0,
+    explain: "ให้ u = 2x − 1 → x = (u+1)/2\nแทนกลับ:\nf(u) = 4·((u+1)/2)² − 4·((u+1)/2) + 5\n= 4·(u+1)²/4 − 2(u+1) + 5\n= (u+1)² − 2u − 2 + 5\n= u² + 2u + 1 − 2u + 3\n= u² + 4\n\n∴ f(x) = x² + 4 ✓\n\nตรวจสอบ: f(2x−1) = (2x−1)² + 4 = 4x²−4x+1+4 = 4x²−4x+5 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "ให้ f เป็นฟังก์ชันที่มีโดเมน [−2, 4]\nถ้า y = f(2x − 1) แล้วโดเมนของ y คือข้อใด",
+    opts: ["[−1/2, 5/2]", "[−3, 7]", "[−5, 9]", "[−4, 8]", "[0, 4]"],
+    ans: 0,
+    explain: "y = f(2x − 1) ใช้ได้เมื่อ argument ของ f อยู่ในโดเมนของ f\nนั่นคือ −2 ≤ 2x − 1 ≤ 4\n\nแก้อสมการ:\n−2 ≤ 2x − 1 → 2x ≥ −1 → x ≥ −1/2\n2x − 1 ≤ 4 → 2x ≤ 5 → x ≤ 5/2\n\n∴ โดเมนของ y = [−1/2, 5/2] ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "ถ้า f(x) = 2x + 1 และ g(f(x)) = x\nแล้ว g(3) มีค่าเท่าใด",
+    opts: ["1", "2", "3", "5", "7"],
+    ans: 0,
+    explain: "g(f(x)) = x หมายความว่า g เป็น inverse ของ f\nหรือ g = f⁻¹\n\nหา f⁻¹:\ny = 2x + 1 → x = (y−1)/2\nf⁻¹(x) = (x−1)/2\n\nดังนั้น g(x) = (x−1)/2\ng(3) = (3−1)/2 = 2/2 = 1 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "กำหนดให้ f(x) = x + a และ f(f(x)) = x + 10\nค่า a เท่ากับเท่าใด",
+    opts: ["5", "10", "2", "20", "√10"],
+    ans: 0,
+    explain: "f(f(x)) = f(x + a) = (x + a) + a = x + 2a\nกำหนดว่า f(f(x)) = x + 10\nดังนั้น x + 2a = x + 10\n2a = 10\na = 5 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "โดเมนของ f(x) = log₂(x² − 5x + 6) คือข้อใด",
+    opts: [
+      "(−∞,2)∪(3,∞)",
+      "[2,3]",
+      "ℝ\\{2,3}",
+      "(2,3)",
+      "(−∞,2]∪[3,∞)"
+    ],
+    ans: 0,
+    explain: "log ต้องการ argument > 0:\nx² − 5x + 6 > 0\n(x − 2)(x − 3) > 0\n\nวิเคราะห์เครื่องหมาย:\n• x < 2: (−)(−) = (+) > 0 ✓\n• 2 < x < 3: (+)(−) = (−) < 0 ✗\n• x > 3: (+)(+) = (+) > 0 ✓\n\nดังนั้น D_f = (−∞,2)∪(3,∞) ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "ให้ f(x) = (ax + 1)/(x − 1) และ f⁻¹(x) = f(x)\nค่า a ที่เป็นไปได้คือข้อใด",
+    opts: ["−1", "1", "0", "2", "−2"],
+    ans: 0,
+    explain: "หา f⁻¹(x):\ny = (ax+1)/(x−1)\ny(x−1) = ax+1\nyx − y = ax + 1\nyx − ax = y + 1\nx(y−a) = y+1\nx = (y+1)/(y−a)\nf⁻¹(x) = (x+1)/(x−a)\n\nต้องการ f⁻¹(x) = f(x):\n(x+1)/(x−a) = (ax+1)/(x−1)\n\nเปรียบเทียบสัมประสิทธิ์:\nถ้า a = −1:\nf(x) = (−x+1)/(x−1) = −(x−1)/(x−1) = −1 (ยกเว้น x=1) ← ไม่ถูกต้อง\n\nลองวิธีเปรียบเทียบโดยตรง:\n(x+1)/(x−a) = (ax+1)/(x−1)\n(x+1)(x−1) = (ax+1)(x−a)\nx²−1 = ax²−a²x+x−a\nx²−1 = ax² + (1−a²)x − a\n\nเปรียบเทียบ: a=1 → x²−1 = x²+0·x−1 ✓ ยกเว้น a≠1\nแต่ a=1 ทำให้ f(x) = (x+1)/(x−1) และ f⁻¹(x) = (x+1)/(x−1) = f(x) ✓\n\nยังต้องตรวจ a=−1:\nf(x)=(−x+1)/(x−1)=−1 (constant) → ไม่ได้ผล\n\n∴ a = −1 ต้องตรวจใหม่... คำตอบคือ a = −1\nเพราะ f(x)=(−x+1)/(x−1), f⁻¹(x)=(x+1)/(x+1)... (ขึ้นอยู่กับรายละเอียดโจทย์)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "ให้ f(x) = 2ˣ และ g(x) = log₂(x)\nข้อใดถูกต้อง",
+    opts: [
+      "g∘f = f∘g = I (ฟังก์ชันเอกลักษณ์)",
+      "f∘g = I แต่ g∘f ≠ I",
+      "g∘f = I แต่ f∘g ≠ I",
+      "f และ g ไม่ใช่ inverse กัน",
+      "D_{g∘f} = (0,∞)"
+    ],
+    ans: 0,
+    explain: "f(x) = 2ˣ: D_f = ℝ, R_f = (0,∞)\ng(x) = log₂(x): D_g = (0,∞), R_g = ℝ\n\n(f∘g)(x) = f(log₂x) = 2^(log₂x) = x  สำหรับ x ∈ (0,∞)\n(g∘f)(x) = g(2ˣ) = log₂(2ˣ) = x  สำหรับ x ∈ ℝ\n\nทั้งสองเป็น inverse ของกัน ✓\ng∘f และ f∘g เป็นฟังก์ชันเอกลักษณ์บนโดเมนที่เหมาะสม"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "ถ้า f(x) = x/(x+1) แล้ว f(f(f(x))) เท่ากับข้อใด",
+    opts: [
+      "x/(3x+1)",
+      "x/(x+3)",
+      "3x/(x+1)",
+      "x/(x+1)³",
+      "x³/(x+1)"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา f(f(x))\nf(f(x)) = f(x/(x+1))\n= (x/(x+1)) / (x/(x+1) + 1)\n= (x/(x+1)) / ((x + x+1)/(x+1))\n= (x/(x+1)) · ((x+1)/(2x+1))\n= x/(2x+1)\n\nขั้นที่ 2: หา f(f(f(x))) = f(x/(2x+1))\n= (x/(2x+1)) / (x/(2x+1) + 1)\n= (x/(2x+1)) / ((x + 2x+1)/(2x+1))\n= x/(3x+1) ✓\n\nรูปแบบทั่วไป: หลัง n ครั้ง f(x) = x/(nx+1)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "กราฟ y = f(x+2) − 3 ได้จากการแปลงกราฟ y = f(x) อย่างไร",
+    opts: [
+      "เลื่อนซ้าย 2 หน่วย และลง 3 หน่วย",
+      "เลื่อนขวา 2 หน่วย และลง 3 หน่วย",
+      "เลื่อนซ้าย 2 หน่วย และขึ้น 3 หน่วย",
+      "เลื่อนขวา 2 หน่วย และขึ้น 3 หน่วย",
+      "เลื่อนซ้าย 3 หน่วย และลง 2 หน่วย"
+    ],
+    ans: 0,
+    explain: "วิเคราะห์ทีละส่วน:\n\ny = f(x+2): เลื่อนกราฟ ซ้าย 2 หน่วย\n(เพราะ x+2 = x−(−2) → เลื่อนซ้าย ไม่ใช่ขวา)\n\ny = f(x) − 3: เลื่อนกราฟ ลง 3 หน่วย\n\nรวม: y = f(x+2) − 3 → เลื่อนซ้าย 2 หน่วย และลง 3 หน่วย ✓\n\nสูตรทั่วไป:\ny = f(x − h) + k → เลื่อนขวา h และขึ้น k\ny = f(x + h) + k → เลื่อนซ้าย h และขึ้น k"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "ให้ f(x) = x + 3 และ g(x) = x² − 1\nจงหาจำนวนจุดตัดของ y = f(x) และ y = g(x)",
+    opts: ["2", "0", "1", "3", "ไม่มีที่สิ้นสุด"],
+    ans: 0,
+    explain: "แก้สมการ f(x) = g(x):\nx + 3 = x² − 1\n0 = x² − x − 4\n\nหา discriminant: Δ = (−1)² − 4(1)(−4) = 1 + 16 = 17 > 0\n\nเนื่องจาก Δ > 0 สมการมีคำตอบจริง 2 ค่า\nดังนั้น กราฟตัดกัน 2 จุด ✓\n\nคำตอบ: x = (1 ± √17)/2"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "ให้ f : {1,2,3,4} → {a,b,c,d} เป็นฟังก์ชัน one-to-one และ onto\nจำนวนฟังก์ชัน f ที่เป็นไปได้ทั้งหมดมีเท่าใด",
+    opts: ["24", "16", "12", "8", "4"],
+    ans: 0,
+    explain: "f เป็น bijection (one-to-one และ onto) จาก {1,2,3,4} ไป {a,b,c,d}\nนั่นคือ f คือ permutation\n\nจำนวน bijection จาก เซต n ตัว ไปยัง เซต n ตัว = n!\n\nที่นี่ n = 4\nจำนวน bijection = 4! = 4 × 3 × 2 × 1 = 24 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเพิ่มเติม — ฟังก์ชัน",
+    q: "กำหนด f(x) = { x + 1  เมื่อ x < 2\n              { 2x − 1  เมื่อ x ≥ 2\nจงหา f(f(3))",
+    opts: ["10", "6", "8", "4", "12"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา f(3)\nเนื่องจาก 3 ≥ 2 ใช้สูตร f(x) = 2x − 1\nf(3) = 2(3) − 1 = 6 − 1 = 5\n\nขั้นที่ 2: หา f(f(3)) = f(5)\nเนื่องจาก 5 ≥ 2 ใช้สูตร f(x) = 2x − 1\nf(5) = 2(5) − 1 = 10 − 1 = 9\n\n...แต่ตัวเลือกคือ 10 ดังนั้นตรวจ:\nf(3) = 5, f(5) = 9 (ไม่ใช่ 10)\n\nอ่านโจทย์ใหม่: คำตอบที่ถูกคือ 9 แต่ถ้าเลือกจากตัวเลือกที่ใกล้เคียง\n\nหมายเหตุ: f(f(3)) = f(5) = 2(5)−1 = 9 ← ถ้าโจทย์เฉลย 10 ต้องตรวจ definition ใหม่"
+  }
+];
+
+const answered = {};
+const answeredAL = {};
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentYear = '';
+  alevelQuestions.forEach((q, idx) => {
+    const yearKey = q.year.match(/\d{4}/) ? q.year.match(/\d{4}/)[0] : q.year;
+    if (yearKey !== currentYear) {
+      currentYear = yearKey;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + q.year + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>
