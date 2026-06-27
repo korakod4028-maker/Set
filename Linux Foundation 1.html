@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation — Module 1: ls Command</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#222636;
+  --surface3:#2a2f44;
+  --border:#2e3349;
+  --border2:#3d4565;
+  --text:#e8eaf6;
+  --text2:#9ea3c0;
+  --text3:#6b7094;
+  --accent:#7c83f5;
+  --accent-bg:rgba(124,131,245,0.12);
+  --accent-border:rgba(124,131,245,0.3);
+  --green:#1db87a;
+  --green-bg:rgba(29,184,122,0.1);
+  --green-border:rgba(29,184,122,0.3);
+  --amber:#f5a623;
+  --amber-bg:rgba(245,166,35,0.1);
+  --amber-border:rgba(245,166,35,0.3);
+  --red:#f56565;
+  --red-bg:rgba(245,101,101,0.1);
+  --red-border:rgba(245,101,101,0.3);
+  --mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:10px;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding:24px 16px}
+.wrap{max-width:780px;margin:0 auto}
+
+/* Hero */
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 28px 24px;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1db87a,#7c83f5,#f56565)}
+.badge{display:inline-block;background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;padding:3px 12px;border-radius:20px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px;border:1px solid var(--accent-border)}
+.hero-title{font-size:26px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
+.hero-title code{background:var(--accent-bg);color:var(--accent);padding:2px 8px;border-radius:6px;font-family:var(--mono);font-size:22px}
+.hero-sub{font-size:14px;color:var(--text2)}
+.meta-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2)}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;background:var(--surface);padding:8px;border-radius:14px;border:1px solid var(--border)}
+.tab{padding:8px 18px;border-radius:10px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;gap:6px}
+.tab.active{background:var(--accent);color:#fff}
+.tab:hover:not(.active){background:var(--surface3);color:var(--text)}
+.section{display:none}
+.section.show{display:block}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.card-title span{font-size:16px}
+
+/* Command rows */
+.cmd-row{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.cmd-row:last-child{border-bottom:none;padding-bottom:0}
+.cmd{font-family:var(--mono);font-size:12.5px;background:var(--accent-bg);color:var(--accent);padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;border:1px solid var(--accent-border);min-width:fit-content}
+.cmd-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.cmd-desc strong{color:var(--text);font-weight:500}
+.cmd-desc code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+/* Info boxes */
+.info-box{background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.info-box p{font-size:13px;color:var(--green);line-height:1.6}
+.info-box p code{background:rgba(29,184,122,.15);color:var(--green);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.warn-box{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.warn-box p{font-size:13px;color:var(--amber);line-height:1.6}
+.warn-box p code{background:rgba(245,166,35,.15);color:var(--amber);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+/* ls -l table */
+.term{background:#0a0c12;border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:12.5px;color:#a8b4d8;margin-bottom:14px;overflow-x:auto;line-height:2}
+.t-perm{color:#f56565}
+.t-link{color:var(--text3)}
+.t-owner{color:#1db87a}
+.t-group{color:#7c83f5}
+.t-size{color:#f5a623}
+.t-date{color:#64b5f6}
+.t-name{color:#e8eaf6}
+.col-table{width:100%;border-collapse:collapse;font-size:13px}
+.col-table th{background:var(--surface3);color:var(--text2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.col-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+.col-table tr:last-child td{border-bottom:none}
+.col-table td:first-child{font-family:var(--mono);font-size:12px;color:var(--accent);background:var(--accent-bg);border-radius:4px;font-weight:600;white-space:nowrap}
+.col-table td:nth-child(2){color:var(--text);font-weight:500}
+
+/* Perm grid */
+.perm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin:12px 0}
+.perm-cell{background:var(--surface2);padding:10px;text-align:center}
+.perm-cell .pl{font-size:11px;color:var(--text3);margin-bottom:5px}
+.perm-cell .pv{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--text)}
+.perm-cell .ps{font-size:11px;color:var(--text2);margin-top:3px}
+
+/* Timestamps */
+.ts-row{display:grid;grid-template-columns:100px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:start}
+.ts-row:last-child{border-bottom:none}
+.ts-badge{font-family:var(--mono);font-size:12px;font-weight:700;padding:6px 10px;border-radius:8px;text-align:center}
+.ts-mtime{background:rgba(124,131,245,.15);color:#7c83f5;border:1px solid rgba(124,131,245,.3)}
+.ts-atime{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.ts-ctime{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.ts-info{font-size:13px;line-height:1.6}
+.ts-info strong{color:var(--text);font-weight:600;display:block;margin-bottom:2px}
+.ts-info span{color:var(--text2)}
+.ts-info small{color:var(--text3);font-size:11.5px;display:block;margin-top:4px;font-family:var(--mono)}
+
+/* Cheat sheet */
+.cmd-row.highlight{background:var(--surface3);border-radius:8px;margin:2px 0;padding:9px 12px}
+
+/* Quiz */
+.q-wrap{margin-bottom:14px}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.q-num{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.6}
+.q-opts{display:flex;flex-direction:column;gap:7px}
+.q-opt{padding:11px 15px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:13px;font-family:var(--sans);cursor:pointer;text-align:left;transition:all .12s;line-height:1.5}
+.q-opt:hover:not(.disabled){background:var(--surface3);border-color:var(--border2);color:var(--text)}
+.q-opt.correct{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.q-opt.wrong{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.q-opt.disabled{cursor:default}
+.q-explain{margin-top:12px;font-size:13px;color:var(--text2);line-height:1.7;background:var(--surface2);padding:12px 14px;border-radius:8px;border-left:3px solid var(--accent);display:none}
+.q-explain.show{display:block}
+.q-explain code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:none}
+.score-label{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.score-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;background:var(--green);transition:width .5s ease}
+.score-sub{font-size:13px;color:var(--text2);margin-top:8px}
+
+.reset-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;margin-top:8px;transition:all .12s}
+.reset-btn:hover{background:var(--surface2);border-color:var(--accent)}
+
+/* Tips */
+.tip-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.tip-row:last-child{border-bottom:none}
+.tip-icon{color:var(--accent);font-size:16px;flex-shrink:0;margin-top:1px;width:20px}
+.tip-text{font-size:13px;color:var(--text2);line-height:1.6}
+.tip-text code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.tip-text strong{color:var(--text)}
+
+.section-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin:18px 0 8px;padding-left:2px}
+.section-label:first-child{margin-top:0}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.cols{grid-template-columns:1fr}.tab{padding:7px 12px;font-size:12px}}
+
+footer{text-align:center;font-size:12px;color:var(--text3);margin-top:28px;padding-top:20px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="badge">Linux Foundation</div>
+  <div class="hero-title">Module 1 — คำสั่ง <code>ls</code></div>
+  <div class="hero-sub">คู่มือทบทวนฉบับสมบูรณ์ พร้อมแบบทดสอบ · Cloud Engineer Edition</div>
+  <div class="meta-chips">
+    <span class="chip">📚 Command Reference</span>
+    <span class="chip">🔍 ls -l Breakdown</span>
+    <span class="chip">⏱ Timestamps</span>
+    <span class="chip">📋 Cheat Sheet</span>
+    <span class="chip">✏️ Quiz 12 ข้อ</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('ref',this)">📂 Reference</button>
+  <button class="tab" onclick="showTab('detail',this)">📑 ls -l</button>
+  <button class="tab" onclick="showTab('time',this)">⏱ Timestamps</button>
+  <button class="tab" onclick="showTab('cheat',this)">📋 Cheat Sheet</button>
+  <button class="tab" onclick="showTab('quiz',this)">✏️ Quiz</button>
+</div>
+
+<!-- ===== TAB: REFERENCE ===== -->
+<div id="ref" class="section show">
+  <div class="section-label">Syntax — วิธีเขียน Arguments</div>
+  <div class="card">
+    <div class="card-title"><span>⌨️</span> รูปแบบ Flag และ Option</div>
+    <div class="cmd-row">
+      <span class="cmd">-x</span>
+      <span class="cmd-desc"><strong>Short flag</strong> — ขีดเดียว + ตัวอักษรตัวเดียว<br>เช่น <code>-l</code>, <code>-a</code>, <code>-h</code>, <code>-S</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">--word</span>
+      <span class="cmd-desc"><strong>Long flag</strong> — สองขีด + คำเต็ม<br>เช่น <code>--color=yes</code>, <code>--help</code>, <code>--version</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">-lah</span>
+      <span class="cmd-desc"><strong>Combined flags</strong> — รวมหลาย short flag ในครั้งเดียว<br><code>-lah</code> = <code>-l -a -h</code> ลำดับไม่มีผลกับผลลัพธ์</span>
+    </div>
+    <div class="warn-box"><p>⚠️ <strong>Case-Sensitive:</strong> <code>-S</code> (เรียงตาม Size) ≠ <code>-s</code> (แสดง block size) และ <code>-R</code> (Recursive) ≠ <code>-r</code> (Reverse) — ต้องระวังพิมพ์ตัวพิมพ์เล็ก-ใหญ่ให้ถูกต้อง</p></div>
+  </div>
+
+  <div class="section-label">System Commands</div>
+  <div class="card">
+    <div class="card-title"><span>🖥️</span> คำสั่งระบบพื้นฐาน</div>
+    <div class="cmd-row">
+      <span class="cmd">clear</span>
+      <span class="cmd-desc"><strong>ล้างหน้าจอเทอร์มินัล</strong> — หรือกด <code>Ctrl + L</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">date</span>
+      <span class="cmd-desc"><strong>แสดงวันและเวลาของระบบ</strong></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">ls --version</span>
+      <span class="cmd-desc">เช็กเวอร์ชันของโปรแกรม ls ที่ติดตั้งอยู่</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">ls --help</span>
+      <span class="cmd-desc">เปิดคู่มือการใช้งาน ls ทั้งหมด (สั้นกว่า <code>man ls</code>)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">man ls</span>
+      <span class="cmd-desc">เปิด manual page ฉบับสมบูรณ์ (กด <code>q</code> เพื่อออก)</span>
+    </div>
+  </div>
+
+  <div class="section-label">Listing Files</div>
+  <div class="card">
+    <div class="card-title"><span>📁</span> การแสดงไฟล์และโฟลเดอร์</div>
+    <div class="cmd-row">
+      <span class="cmd">ls</span>
+      <span class="cmd-desc">แสดงไฟล์ในไดเรกทอรีปัจจุบัน</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">ls /path</span>
+      <span class="cmd-desc">แสดงไฟล์ใน path ที่กำหนด เช่น <code>ls /home/user</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">ls -a</span>
+      <span class="cmd-desc"><strong>All</strong> — แสดง<u>ทุกอย่าง</u> รวมไฟล์ซ่อน, <code>.</code> และ <code>..</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">ls -A</span>
+      <span class="cmd-desc"><strong>Almost All</strong> — แสดงไฟล์ซ่อน แต่ <u>ซ่อน</u> <code>.</code> และ <code>..</code> ไว้ (สะอาดกว่า)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">ls .</span>
+      <span class="cmd-desc"><code>.</code> (จุดเดียว) = ไดเรกทอรีปัจจุบัน</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">ls ..</span>
+      <span class="cmd-desc"><code>..</code> (สองจุด) = ไดเรกทอรีแม่ (parent directory)</span>
+    </div>
+    <div class="info-box"><p>ไฟล์ที่ขึ้นต้นด้วย <code>.</code> เช่น <code>.bashrc</code>, <code>.gitignore</code> จะถูกซ่อนโดยอัตโนมัติ — ต้องใช้ <code>ls -a</code> หรือ <code>ls -A</code> เพื่อดู</p></div>
+  </div>
+
+  <div class="section-label">Color Options</div>
+  <div class="card">
+    <div class="card-title"><span>🎨</span> การจัดการสีผลลัพธ์</div>
+    <div class="cmd-row">
+      <span class="cmd">ls --color=auto</span>
+      <span class="cmd-desc">เปิดสีอัตโนมัติ — ค่า default บนระบบส่วนใหญ่</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">ls --color=yes</span>
+      <span class="cmd-desc">บังคับเปิดสีเสมอ แม้จะ redirect output ไปยังไฟล์</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">ls --color=no</span>
+      <span class="cmd-desc">ปิดสี — แสดงผลเป็นข้อความธรรมดาทั้งหมด</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: ls -l ===== -->
+<div id="detail" class="section">
+  <div class="card">
+    <div class="card-title"><span>📟</span> ผลลัพธ์ ls -l (ตัวอย่าง)</div>
+    <div class="term">
+<span class="t-perm">-rw-r--r--</span> <span class="t-link">1</span> <span class="t-owner">alice</span> <span class="t-group">devs</span> <span class="t-size"> 4096</span> <span class="t-date">Jun 15 09:30</span> <span class="t-name">report.txt</span><br>
+<span class="t-perm">drwxr-xr-x</span> <span class="t-link">2</span> <span class="t-owner">alice</span> <span class="t-group">devs</span> <span class="t-size"> 4096</span> <span class="t-date">Jun 14 18:00</span> <span class="t-name">projects/</span><br>
+<span class="t-perm">lrwxrwxrwx</span> <span class="t-link">1</span> <span class="t-owner">root</span>  <span class="t-group">root</span>  <span class="t-size">   11</span> <span class="t-date">Jun 01 12:00</span> <span class="t-name">link -> /etc/hosts</span>
+    </div>
+    <table class="col-table">
+      <thead><tr><th>#</th><th>คอลัมน์</th><th>ตัวอย่าง</th><th>ความหมาย</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Permissions</td><td style="color:#f56565;font-family:var(--mono)">-rw-r--r--</td><td>สิทธิ์การเข้าถึง: ประเภท + Owner + Group + Others</td></tr>
+        <tr><td>2</td><td>Hard Links</td><td style="font-family:var(--mono)">1</td><td>จำนวน hard link ที่ชี้มายังไฟล์นี้ (ไฟล์ทั่วไป = 1)</td></tr>
+        <tr><td>3</td><td>Owner</td><td style="color:#1db87a;font-family:var(--mono)">alice</td><td>ชื่อผู้ใช้ที่เป็นเจ้าของไฟล์</td></tr>
+        <tr><td>4</td><td>Group</td><td style="color:#7c83f5;font-family:var(--mono)">devs</td><td>กลุ่มผู้ใช้ที่มีสิทธิ์จัดการไฟล์</td></tr>
+        <tr><td>5</td><td>Size</td><td style="color:#f5a623;font-family:var(--mono)">4096</td><td>ขนาดไฟล์ หน่วย Bytes (ใช้ -h เพื่ออ่านง่ายขึ้น)</td></tr>
+        <tr><td>6</td><td>Timestamp</td><td style="color:#64b5f6;font-family:var(--mono)">Jun 15 09:30</td><td>วันเวลาที่แก้ไข<strong>เนื้อหา</strong>ล่าสุด (mtime)</td></tr>
+        <tr><td>7</td><td>File Name</td><td style="font-family:var(--mono)">report.txt</td><td>ชื่อไฟล์, โฟลเดอร์ หรือ symlink → target</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🔒</span> Permission String: drwxrwxrwx</div>
+    <div class="perm-grid">
+      <div class="perm-cell"><div class="pl">ตัวที่ 1</div><div class="pv">d / - / l</div><div class="ps">ประเภท</div></div>
+      <div class="perm-cell"><div class="pl">ตัวที่ 2–4</div><div class="pv">rwx</div><div class="ps">Owner</div></div>
+      <div class="perm-cell"><div class="pl">ตัวที่ 5–7 / 8–10</div><div class="pv">rwx rwx</div><div class="ps">Group / Others</div></div>
+    </div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8">
+      <code style="background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono)">d</code> = directory &nbsp;·&nbsp; 
+      <code style="background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono)">-</code> = regular file &nbsp;·&nbsp;
+      <code style="background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono)">l</code> = symbolic link<br>
+      <code style="background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono)">r</code> = read &nbsp;·&nbsp; 
+      <code style="background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono)">w</code> = write &nbsp;·&nbsp; 
+      <code style="background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono)">x</code> = execute &nbsp;·&nbsp;
+      <code style="background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono)">-</code> = ไม่มีสิทธิ์
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <div class="card-title"><span>🔢</span> UID และ GID</div>
+      <div class="cmd-row">
+        <span class="cmd">ls -n</span>
+        <span class="cmd-desc">เหมือน <code>ls -l</code> แต่แสดง Owner/Group เป็นตัวเลข UID/GID</span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-top:10px;line-height:1.6">
+        <strong style="color:var(--text)">UID</strong> = User Identifier<br>
+        <strong style="color:var(--text)">GID</strong> = Group Identifier<br>
+        <span style="font-size:12px">มีประโยชน์ในการเขียนสคริปต์ parse</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>🔗</span> Inode</div>
+      <div class="cmd-row">
+        <span class="cmd">ls -li</span>
+        <span class="cmd-desc">แสดงเลข Inode ที่คอลัมน์แรก</span>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-top:10px;line-height:1.6">
+        <strong style="color:var(--text)">Inode</strong> = รหัสประจำตัวไฟล์ในระบบ filesystem ไฟล์ที่มี inode เดียวกัน = hard link เดียวกัน
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>⚙️</span> Flags เสริมที่ใช้บ่อยร่วมกับ -l</div>
+    <div class="cmd-row"><span class="cmd">ls -lh</span><span class="cmd-desc"><strong>Human-readable</strong> size: K, M, G โดยใช้ฐาน 1024</span></div>
+    <div class="cmd-row"><span class="cmd">ls -l --si</span><span class="cmd-desc">Human-readable size ฐาน 1000 (มาตรฐาน SI — ตัวเลขจะน้อยกว่า -h)</span></div>
+    <div class="cmd-row"><span class="cmd">ls -lQ</span><span class="cmd-desc">ครอบชื่อไฟล์ด้วย <strong>"เครื่องหมายคำพูด"</strong></span></div>
+    <div class="cmd-row"><span class="cmd">ls -ld .</span><span class="cmd-desc">แสดงข้อมูล<strong>ตัวโฟลเดอร์</strong> ไม่เปิดดูไฟล์ข้างใน — ใช้ debug permission</span></div>
+    <div class="cmd-row"><span class="cmd">ls -l --time-style=iso</span><span class="cmd-desc">แสดงวันเวลาฟอร์แมต ISO: <code>2025-06-15 09:30</code></span></div>
+    <div class="cmd-row"><span class="cmd">ls -lR</span><span class="cmd-desc"><strong>Recursive</strong> — แสดงทุกไฟล์ในโฟลเดอร์ย่อยทุกชั้น</span></div>
+  </div>
+</div>
+
+<!-- ===== TAB: TIMESTAMPS ===== -->
+<div id="time" class="section">
+  <div class="card">
+    <div class="card-title"><span>⏱</span> 3 ประเภท Timestamp ใน Linux</div>
+    <div class="ts-row">
+      <span class="ts-badge ts-mtime">mtime</span>
+      <div class="ts-info">
+        <strong>Modification Time</strong>
+        <span>เวลาที่ <u>เนื้อหาข้างในไฟล์</u> ถูกแก้ไขล่าสุด (เขียนข้อมูลใหม่)</span>
+        <small>→ ls -lt เรียงตามนี้ (default) | ls -lt --time=mtime</small>
+      </div>
+    </div>
+    <div class="ts-row">
+      <span class="ts-badge ts-atime">atime</span>
+      <div class="ts-info">
+        <strong>Access Time</strong>
+        <span>เวลาที่ไฟล์ถูกเปิดอ่านหรือเข้าถึงล่าสุด (cat, less, cp)</span>
+        <small>→ ls -ltu เรียงตามนี้ | u = use access time</small>
+      </div>
+    </div>
+    <div class="ts-row">
+      <span class="ts-badge ts-ctime">ctime</span>
+      <div class="ts-info">
+        <strong>Change Time</strong>
+        <span>เวลาที่ Metadata เปลี่ยนล่าสุด: chmod, chown, rename, mv</span>
+        <small>→ ls -ltc เรียงตามนี้ | c = use change time</small>
+      </div>
+    </div>
+    <div class="info-box">
+      <p><strong>Unix Epoch:</strong> ทุก timestamp คือจำนวนวินาทีที่นับตั้งแต่ <strong>1 มกราคม 1970 00:00:00 UTC</strong> เรียกว่า "Unix Time" หรือ "POSIX Time" — ลองทดสอบด้วย <code>date +%s</code></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🔃</span> การเรียงลำดับตาม Timestamp</div>
+    <div class="cmd-row"><span class="cmd">ls -lt</span><span class="cmd-desc">เรียงตาม <strong>mtime</strong> — ไฟล์แก้ไขล่าสุดขึ้นก่อน (ใช้บ่อยมาก)</span></div>
+    <div class="cmd-row"><span class="cmd">ls -ltu</span><span class="cmd-desc">เรียงตาม <strong>atime</strong> — ไฟล์เข้าถึงล่าสุดขึ้นก่อน</span></div>
+    <div class="cmd-row"><span class="cmd">ls -ltc</span><span class="cmd-desc">เรียงตาม <strong>ctime</strong> — ไฟล์เปลี่ยน metadata ล่าสุดขึ้นก่อน</span></div>
+    <div class="cmd-row"><span class="cmd">ls -ltr</span><span class="cmd-desc">เรียงตาม mtime แบบ <strong>Reverse</strong> — ไฟล์เก่าสุดขึ้นก่อน (ดู log เก่าๆ)</span></div>
+    <div class="cmd-row"><span class="cmd">ls -altr</span><span class="cmd-desc">รวมไฟล์ซ่อน + ยาว + reverse mtime — <strong>debug pattern มาตรฐาน</strong></span></div>
+    <div class="warn-box">
+      <p>⚠️ <strong>กับดักข้อสอบ:</strong> <code>ls -lt</code> ใช้ <strong>mtime</strong> เป็นค่า default อยู่แล้ว — ถ้าถามว่า "เรียงตามการแก้ไขเนื้อหาไฟล์" ไม่ต้องเพิ่ม flag อื่น! <code>-u</code> เปลี่ยนไปใช้ atime ไม่ใช่ mtime</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: CHEAT SHEET ===== -->
+<div id="cheat" class="section">
+  <div class="card">
+    <div class="card-title"><span>📋</span> Cheat Sheet ฉบับสมบูรณ์</div>
+    <div class="cmd-row"><span class="cmd">ls -l</span><span class="cmd-desc">Long format — แสดง 7 คอลัมน์: perm, links, owner, group, size, time, name</span></div>
+    <div class="cmd-row"><span class="cmd">ls -lh</span><span class="cmd-desc">Long + <strong>human-readable</strong> size (K/M/G ฐาน 1024)</span></div>
+    <div class="cmd-row"><span class="cmd">ls -l --si</span><span class="cmd-desc">Long + human-readable size ฐาน 1000 (SI)</span></div>
+    <div class="cmd-row"><span class="cmd">ls -a</span><span class="cmd-desc">All — รวมไฟล์ซ่อน, <code>.</code>, <code>..</code></span></div>
+    <div class="cmd-row"><span class="cmd">ls -A</span><span class="cmd-desc">Almost All — ไฟล์ซ่อน แต่ไม่แสดง <code>.</code> <code>..</code></span></div>
+    <div class="cmd-row"><span class="cmd">ls -lt</span><span class="cmd-desc">เรียงตาม <strong>mtime</strong> ล่าสุดก่อน</span></div>
+    <div class="cmd-row"><span class="cmd">ls -ltu</span><span class="cmd-desc">เรียงตาม <strong>atime</strong> ล่าสุดก่อน</span></div>
+    <div class="cmd-row"><span class="cmd">ls -ltc</span><span class="cmd-desc">เรียงตาม <strong>ctime</strong> ล่าสุดก่อน</span></div>
+    <div class="cmd-row"><span class="cmd">ls -lS</span><span class="cmd-desc">เรียงตาม <strong>Size</strong> ใหญ่สุดก่อน</span></div>
+    <div class="cmd-row"><span class="cmd">ls -r</span><span class="cmd-desc"><strong>Reverse</strong> — กลับด้านการเรียงลำดับ</span></div>
+    <div class="cmd-row"><span class="cmd">ls -alSr</span><span class="cmd-desc">ไฟล์ซ่อน + ยาว + เรียง size + reverse — <strong>ไฟล์เล็กสุดขึ้นก่อน</strong></span></div>
+    <div class="cmd-row"><span class="cmd">ls -altr</span><span class="cmd-desc">ไฟล์ซ่อน + ยาว + reverse mtime — <strong>Debug pattern มาตรฐาน</strong></span></div>
+    <div class="cmd-row"><span class="cmd">ls -1</span><span class="cmd-desc">บรรทัดละ 1 ไฟล์ (ตัวเลข หนึ่ง ไม่ใช่ L)</span></div>
+    <div class="cmd-row"><span class="cmd">ls -m</span><span class="cmd-desc">แสดงเรียงแนวนอน คั่นด้วย <strong>comma</strong></span></div>
+    <div class="cmd-row"><span class="cmd">ls --format=commas</span><span class="cmd-desc">เทียบเท่า <code>-m</code> แบบ long form</span></div>
+    <div class="cmd-row"><span class="cmd">ls -Q</span><span class="cmd-desc">ครอบชื่อไฟล์ด้วย <strong>"เครื่องหมายคำพูด"</strong></span></div>
+    <div class="cmd-row"><span class="cmd">ls -1Q</span><span class="cmd-desc">บรรทัดละ 1 ไฟล์ + มี quotes ครอบชื่อ</span></div>
+    <div class="cmd-row"><span class="cmd">ls -R</span><span class="cmd-desc"><strong>Recursive</strong> — เปิดดูทุกโฟลเดอร์ย่อยทุกชั้น</span></div>
+    <div class="cmd-row"><span class="cmd">ls -i</span><span class="cmd-desc">แสดงเลข <strong>Inode</strong> ที่คอลัมน์แรก</span></div>
+    <div class="cmd-row"><span class="cmd">ls -ld .</span><span class="cmd-desc">ดูข้อมูลโฟลเดอร์ตัวเอง ไม่เปิดข้างใน</span></div>
+    <div class="cmd-row"><span class="cmd">ls -n</span><span class="cmd-desc">เหมือน <code>-l</code> แต่ Owner/Group เป็น UID/GID ตัวเลข</span></div>
+    <div class="cmd-row"><span class="cmd">ls -l --time-style=iso</span><span class="cmd-desc">แสดงวันเวลาฟอร์แมต <code>YYYY-MM-DD HH:MM</code></span></div>
+    <div class="cmd-row"><span class="cmd">ls --color=no</span><span class="cmd-desc">ปิดสีทั้งหมด (plain text output)</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>💡</span> Engineer Tips — ใช้งานจริง</div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">เพิ่ม alias <code>alias ll='ls -alh'</code> ใน <code>~/.bashrc</code> หรือ <code>~/.zshrc</code> เพื่อใช้งานสะดวก</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ใช้ <code>ls -altr</code> ดูไฟล์ที่ถูกแก้ไขล่าสุด — <strong>debug pattern มาตรฐาน</strong> เมื่อต้องหาว่าไฟล์ไหนถูกเปลี่ยนล่าสุด</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ใช้ <code>ls -n</code> แทน <code>ls -l</code> ในสคริปต์ เพราะ UID/GID ตัวเลข parse ได้ง่ายกว่า username</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ใช้ <code>ls -ald /path/to/dir</code> เพื่อตรวจ permission ของโฟลเดอร์โดยตรง — ใช้บ่อยมากเมื่อเจอ "Permission denied"</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">Combine flags เสมอ: <code>ls -lahS</code> แทน <code>ls -l -a -h -S</code> — ประหยัดเวลา</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ใช้ <code>ls -lh --time-style=iso</code> เมื่อ copy ผลลัพธ์ไปใส่ report — อ่านง่ายและ format ชัดเจน</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: QUIZ ===== -->
+<div id="quiz" class="section">
+  <div class="score-card" id="score-card">
+    <div class="score-label" id="score-label">คะแนน: 0 / 0</div>
+    <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+    <div class="score-sub" id="score-sub"></div>
+  </div>
+  <div id="quiz-container"></div>
+  <button class="reset-btn" onclick="resetQuiz()">↺ เริ่มใหม่ทั้งหมด</button>
+</div>
+
+</div><!-- end wrap -->
+
+<footer>Linux Foundation · Module 1: The ls Command · Cloud Engineer Study Card</footer>
+
+<script>
+const questions=[
+  {q:"คำสั่งใดแสดงรายละเอียดไฟล์แบบยาว (long format)?",opts:["ls -a","ls -l","ls -h","ls -r"],ans:1,exp:"ls -l = long listing format แสดงข้อมูล 7 คอลัมน์: permission, hard links, owner, group, size, timestamp, filename"},
+  {q:"Flag สำหรับเรียงไฟล์ตามขนาด (ใหญ่ก่อน) คือตัวใด?",opts:["-s (ตัวเล็ก)","-S (ตัวใหญ่)","-z","-r"],ans:1,exp:"-S ตัวใหญ่ = Sort by Size (ใหญ่ก่อน) ส่วน -s ตัวเล็ก = แสดง block size ของไฟล์ Linux case-sensitive!"},
+  {q:"ต้องใช้ขีดกี่ขีดนำหน้าคำว่า color (เช่น color=yes)?",opts:["ขีดเดียว (-)","สองขีด (--)","ไม่ต้องมีขีด","จุด (.)"],ans:1,exp:"Long option (คำเต็ม) ใช้ -- เช่น --color=yes, --help, --version ส่วน - ใช้กับ short option อักษรตัวเดียวเท่านั้น"},
+  {q:"ls -a แตกต่างจาก ls -A อย่างไร?",opts:["ความเร็วต่างกัน","-A แสดงไฟล์ซ่อน แต่ไม่แสดง . และ ..","ไม่ต่างกันเลย","-A ใช้ได้เฉพาะ root user"],ans:1,exp:"-a แสดงทุกอย่างรวม . (current dir) และ .. (parent dir) ส่วน -A แสดงไฟล์ซ่อนแต่ซ่อน . และ .. ไว้ สะอาดกว่าสำหรับใช้งานปกติ"},
+  {q:"UID ย่อมาจากอะไร?",opts:["Unix Identifier","User Identifier","Unique ID","Universal Index"],ans:1,exp:"UID = User Identifier (รหัสผู้ใช้) และ GID = Group Identifier (รหัสกลุ่ม) ใช้ ls -n เพื่อแสดง owner/group เป็นตัวเลข UID/GID"},
+  {q:"ls -lt ใช้ timestamp ประเภทใดในการเรียงลำดับเป็นค่า default?",opts:["atime (access time)","ctime (change time)","mtime (modification time)","btime (birth time)"],ans:2,exp:"ls -lt ใช้ mtime (Modification Time) เป็น default — เรียงตามเวลาที่แก้ไขเนื้อหาไฟล์ล่าสุด ไฟล์ใหม่ขึ้นก่อน"},
+  {q:"อยากดูไฟล์ที่ถูกเข้าถึง (accessed/read) ล่าสุดก่อน ควรใช้คำสั่งใด?",opts:["ls -lt","ls -ltc","ls -ltu","ls -lta"],ans:2,exp:"ls -ltu: -t = sort by time, -u = use Access Time (atime) แทน mtime — u ย่อมาจาก 'use access time'"},
+  {q:"ls -lh แสดงขนาดไฟล์โดยใช้ฐานอะไร?",opts:["ฐาน 10 (1K=1000B)","ฐาน 1024 (1K=1024B)","ฐาน 8 (octal)","ฐาน 16 (hex)"],ans:1,exp:"ls -lh ใช้ฐาน 1024: 1K=1024B, 1M=1024K, 1G=1024M ส่วน ls -l --si ใช้ฐาน 1000 ตามมาตรฐาน SI (ตัวเลขจะดูใหญ่กว่า)"},
+  {q:"คำสั่งใดแสดงชื่อไฟล์ทีละบรรทัด พร้อมเครื่องหมายคำพูดครอบชื่อ?",opts:["ls -lQ","ls -1Q","ls -mQ","ls -aQ"],ans:1,exp:"ls -1Q: -1 (ตัวเลข one ไม่ใช่ L) = บรรทัดละ 1 ไฟล์, -Q = ครอบชื่อด้วย quotes เหมาะสำหรับชื่อไฟล์ที่มี space"},
+  {q:".. (สองจุด) ใน Linux หมายถึงอะไร?",opts:["ไฟล์ที่ซ่อน","ไดเรกทอรีปัจจุบัน","ไดเรกทอรีแม่ (parent directory)","Root directory (/)"],ans:2,exp:". (จุดเดียว) = current directory ปัจจุบัน, .. (สองจุด) = parent directory ชั้นนอก เช่น ls .. จะดูโฟลเดอร์ที่ครอบอยู่"},
+  {q:"Flag ใดทำให้ ls แสดงผลแบบ Recursive (ทะลุทุกโฟลเดอร์ย่อย)?",opts:["-r (ตัวเล็ก)","-R (ตัวใหญ่)","-alr","-d"],ans:1,exp:"-R (ตัวใหญ่) = Recursive แสดงทุกไฟล์ในโฟลเดอร์ย่อยทุกชั้น ส่วน -r (ตัวเล็ก) = reverse sort เท่านั้น"},
+  {q:"ctime (Change Time) จะอัปเดตเมื่อเหตุการณ์ใดเกิดขึ้น?",opts:["เมื่อแก้ไขเนื้อหาในไฟล์","เมื่อเปิดอ่านไฟล์ (cat/less)","เมื่อ Metadata เปลี่ยน เช่น chmod, chown, mv","เมื่อสร้างไฟล์ใหม่ (create)"],ans:2,exp:"ctime = Change Time คือเวลาที่ metadata เปลี่ยน เช่น การ chmod, chown, rename, move — ไม่ใช่เวลาที่สร้างไฟล์! Linux ไม่มี 'birth time' ในทุก filesystem"}
+];
+
+let answered={},correct=0;
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML='';
+  questions.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='q-wrap';
+    div.innerHTML=`<div class="q-card">
+      <div class="q-num">ข้อที่ ${i+1} จาก ${questions.length} ข้อ</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">${q.opts.map((o,j)=>`<button class="q-opt" onclick="answer(${i},${j})" id="opt-${i}-${j}">${o}</button>`).join('')}</div>
+      <div class="q-explain" id="exp-${i}">💡 ${q.exp}</div>
+    </div>`;
+    c.appendChild(div);
+  });
+}
+
+function answer(qi,oi){
+  if(answered[qi]!==undefined)return;
+  answered[qi]=oi;
+  const q=questions[qi];
+  for(let j=0;j<q.opts.length;j++){
+    const btn=document.getElementById(`opt-${qi}-${j}`);
+    btn.classList.add('disabled');
+    if(j===q.ans)btn.classList.add('correct');
+    else if(j===oi&&oi!==q.ans)btn.classList.add('wrong');
+  }
+  document.getElementById(`exp-${qi}`).classList.add('show');
+  if(oi===q.ans)correct++;
+  updateScore();
+}
+
+function updateScore(){
+  const total=Object.keys(answered).length;
+  const card=document.getElementById('score-card');
+  card.style.display='block';
+  document.getElementById('score-label').textContent=`คะแนน: ${correct} / ${total} ข้อ`;
+  const pct=total>0?Math.round(correct/total*100):0;
+  document.getElementById('score-fill').style.width=pct+'%';
+  let msg='';
+  if(total===questions.length){
+    if(pct>=90)msg='ยอดเยี่ยม! พร้อมสำหรับงาน Cloud Engineer แล้ว 🎯';
+    else if(pct>=70)msg='ดีมาก! ทบทวนข้อที่ผิดแล้วลุยต่อได้เลย 👍';
+    else msg='ทบทวนเนื้อหาในแท็บอื่นแล้วลองใหม่อีกครั้งนะครับ 💪';
+  }else{
+    msg=`ตอบไปแล้ว ${total} จาก ${questions.length} ข้อ`;
+  }
+  document.getElementById('score-sub').textContent=msg;
+}
+
+function resetQuiz(){
+  answered={};correct=0;
+  document.getElementById('score-card').style.display='none';
+  buildQuiz();
+}
+
+function showTab(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('show');
+  el.classList.add('active');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

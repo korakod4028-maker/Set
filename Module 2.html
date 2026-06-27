@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 2 – Network Components, Types & Connections | Cisco CCST/CCNA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0d14;
+    --surface: #111622;
+    --surface2: #19202f;
+    --border: #1e2a40;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+    --display: 'Space Grotesk', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* GLOW ORBS */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.12;
+  }
+  .orb-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; }
+  .orb-2 { width: 500px; height: 500px; background: var(--accent2); bottom: 0; right: -100px; }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,13,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex: 1;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+
+  .nav-link {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
+    font-family: var(--sans);
+  }
+  .nav-link:hover { color: var(--text); background: var(--surface2); }
+  .nav-link.active { color: var(--accent); background: rgba(0,212,255,0.08); }
+
+  /* MAIN */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 72px 0 56px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,255,0.07);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    color: var(--text-dim);
+    font-size: 16px;
+    max-width: 560px;
+    margin: 0 auto 40px;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* SECTION HEADER */
+  .section {
+    margin-bottom: 64px;
+    scroll-margin-top: 70px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 4px;
+    padding: 2px 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-color, var(--accent)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover {
+    border-color: rgba(0,212,255,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .card-tag {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+
+  .tag-cyan { color: var(--accent); border-color: rgba(0,212,255,0.25); background: rgba(0,212,255,0.06); }
+  .tag-purple { color: #a78bfa; border-color: rgba(124,58,237,0.3); background: rgba(124,58,237,0.08); }
+  .tag-green { color: var(--accent3); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.08); }
+  .tag-yellow { color: var(--warn); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.08); }
+  .tag-red { color: var(--danger); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.08); }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 13px;
+    margin: 16px 0;
+  }
+
+  .flow-title {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0;
+    flex-wrap: wrap;
+  }
+
+  .flow-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .flow-box.highlight {
+    border-color: rgba(0,212,255,0.4);
+    color: var(--accent);
+    background: rgba(0,212,255,0.06);
+  }
+
+  .flow-arrow {
+    color: var(--text-muted);
+    font-size: 16px;
+  }
+
+  /* COMPARISON TABLE */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: var(--surface2);
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  td {
+    padding: 11px 16px;
+    font-size: 13px;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+  }
+
+  tr:hover td { background: var(--surface2); }
+
+  td:first-child { color: var(--text); font-weight: 500; }
+
+  .check { color: var(--accent3); }
+  .cross { color: var(--danger); }
+
+  /* PRO/CON */
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  @media (max-width: 600px) {
+    .pros-cons { grid-template-columns: 1fr; }
+  }
+
+  .pros, .cons {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .pros { border-top: 2px solid var(--accent3); }
+  .cons { border-top: 2px solid var(--danger); }
+
+  .pros-title, .cons-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .pros-title { color: var(--accent3); }
+  .cons-title { color: var(--danger); }
+
+  .pro-item, .con-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .pro-item::before { content: '✓'; color: var(--accent3); font-weight: 700; flex-shrink: 0; }
+  .con-item::before { content: '✗'; color: var(--danger); font-weight: 700; flex-shrink: 0; }
+
+  /* VOCAB GRID */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .vocab-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    transition: all 0.2s;
+  }
+
+  .vocab-item:hover {
+    border-color: rgba(0,212,255,0.2);
+  }
+
+  .vocab-term {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .vocab-def {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  /* KEY POINTS */
+  .key-points {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+
+  .key-points-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 700;
+  }
+
+  .key-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .key-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 4px;
+    padding: 1px 6px;
+    flex-shrink: 0;
+    height: fit-content;
+    margin-top: 2px;
+  }
+
+  /* QUIZ SECTION */
+  .quiz-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-top: 32px;
+  }
+
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    flex-wrap: gap;
+  }
+
+  .quiz-title {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .quiz-score-display {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 8px;
+    padding: 8px 16px;
+  }
+
+  .question-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+  }
+
+  .question-block.answered-correct {
+    border-color: rgba(16,185,129,0.4);
+    background: rgba(16,185,129,0.04);
+  }
+
+  .question-block.answered-wrong {
+    border-color: rgba(239,68,68,0.4);
+    background: rgba(239,68,68,0.04);
+  }
+
+  .question-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .question-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .options { grid-template-columns: 1fr; }
+  }
+
+  .option-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--text-dim);
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: rgba(0,212,255,0.3);
+    color: var(--text);
+    background: var(--surface2);
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .option-btn.correct {
+    border-color: rgba(16,185,129,0.5);
+    background: rgba(16,185,129,0.08);
+    color: var(--accent3);
+  }
+
+  .option-btn.wrong {
+    border-color: rgba(239,68,68,0.5);
+    background: rgba(239,68,68,0.08);
+    color: var(--danger);
+  }
+
+  .option-letter {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .option-btn.correct .option-letter {
+    background: rgba(16,185,129,0.15);
+    border-color: rgba(16,185,129,0.4);
+    color: var(--accent3);
+  }
+
+  .option-btn.wrong .option-letter {
+    background: rgba(239,68,68,0.15);
+    border-color: rgba(239,68,68,0.4);
+    color: var(--danger);
+  }
+
+  .question-feedback {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+  }
+
+  .question-feedback.show { display: block; }
+
+  .feedback-correct {
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.2);
+    color: var(--accent3);
+  }
+
+  .feedback-wrong {
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.2);
+    color: #fca5a5;
+  }
+
+  /* QUIZ CONTROLS */
+  .quiz-controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 600;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-ghost {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text-dim);
+  }
+
+  .btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+
+  /* RESULTS PANEL */
+  .results-panel {
+    display: none;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  .results-panel.show { display: block; }
+
+  .results-score {
+    font-family: var(--mono);
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin: 12px 0;
+  }
+
+  .results-msg {
+    font-size: 15px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  /* QUICK REFERENCE */
+  .ref-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+
+  .ref-device {
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .ref-role {
+    font-size: 13px;
+    color: var(--accent);
+    font-family: var(--mono);
+    margin-bottom: 8px;
+  }
+
+  .ref-detail {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  /* PROGRESS INDICATOR */
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 999px;
+    margin: 8px 0 24px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 999px;
+    transition: width 0.5s ease;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: rgba(0,212,255,0.04);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .highlight-box strong {
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  /* TOPOLOGY VISUAL */
+  .topology {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 2;
+    white-space: pre;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  .topology .node { color: var(--accent); }
+  .topology .arrow { color: var(--text-muted); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+
+  .tab-btn {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ANIMATION */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in { animation: fadeInUp 0.5s ease both; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; }
+    main { padding: 0 16px 80px; }
+    .hero { padding: 48px 0 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">⬡ MOD.02</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="scrollTo('overview')">Overview</button>
+    <button class="nav-link" onclick="scrollTo('host-client-server')">Host / Client / Server</button>
+    <button class="nav-link" onclick="scrollTo('devices')">Network Devices</button>
+    <button class="nav-link" onclick="scrollTo('p2p')">P2P</button>
+    <button class="nav-link" onclick="scrollTo('isp')">ISP & Connectivity</button>
+    <button class="nav-link" onclick="scrollTo('vocab')">Vocabulary</button>
+    <button class="nav-link" onclick="scrollTo('quiz')">Quiz</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero fade-in">
+    <div class="hero-badge">
+      <span class="pulse-dot"></span>
+      Cisco CCST / CCNA · Module 2
+    </div>
+    <h1>Network Components,<br><span>Types & Connections</span></h1>
+    <p class="hero-sub">สรุปฉบับมืออาชีพสำหรับเตรียมสอบ Cisco CCST/CCNA — ครอบคลุมทุก Module 2.0–2.4</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Sub-Modules</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">ISP Connection Types</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">Device Categories</div></div>
+      <div class="stat"><div class="stat-num">20</div><div class="stat-label">Quiz Questions</div></div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="section" id="overview">
+    <div class="section-header">
+      <span class="section-num">2.0</span>
+      <h2 class="section-title">Module Overview — What You'll Learn</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">🖥️</div>
+        <div class="card-title">Host & End Devices</div>
+        <div class="card-desc">อุปกรณ์ปลายทางที่ผู้ใช้ใช้งานโดยตรง เป็นต้นทางและปลายทางของข้อมูล</div>
+        <span class="card-tag tag-cyan">End Device</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔀</div>
+        <div class="card-title">Intermediate Devices</div>
+        <div class="card-desc">อุปกรณ์ตัวกลางที่ควบคุมการไหลของข้อมูล — Router, Switch, AP, Firewall</div>
+        <span class="card-tag tag-purple">Infrastructure</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📡</div>
+        <div class="card-title">Network Media</div>
+        <div class="card-desc">สื่อกลางในการส่งข้อมูล ทั้งแบบมีสาย (UTP, Fiber) และไร้สาย (Wi-Fi, 5G)</div>
+        <span class="card-tag tag-green">Media</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">ISP Connectivity</div>
+        <div class="card-desc">วิธีเชื่อมต่ออินเทอร์เน็ตกับผู้ให้บริการ — Fiber, DSL, Cable, Cellular, Satellite</div>
+        <span class="card-tag tag-yellow">Connectivity</span>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>🎯 EXAM TIP</strong> — Network Infrastructure แบ่งเป็น 3 ส่วนหลัก: <strong>End Devices</strong> (PC, Phone, Printer), <strong>Intermediate Devices</strong> (Router, Switch, Firewall, AP), และ <strong>Network Media</strong> (Cable, Fiber, Wi-Fi)
+    </div>
+  </div>
+
+  <!-- HOST / CLIENT / SERVER -->
+  <div class="section" id="host-client-server">
+    <div class="section-header">
+      <span class="section-num">2.1</span>
+      <h2 class="section-title">Host, Client & Server</h2>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'host-tab')">Host</button>
+      <button class="tab-btn" onclick="switchTab(this,'client-tab')">Client</button>
+      <button class="tab-btn" onclick="switchTab(this,'server-tab')">Server</button>
+      <button class="tab-btn" onclick="switchTab(this,'flow-tab')">Communication Flow</button>
+    </div>
+
+    <div class="tab-content active" id="host-tab">
+      <div class="card-grid">
+        <div class="card" style="--accent-color:#00d4ff">
+          <div class="card-icon">💻</div>
+          <div class="card-title">Host คืออะไร?</div>
+          <div class="card-desc">อุปกรณ์ทุกชนิดที่เชื่อมต่อกับเครือข่ายและสามารถ <strong>ส่ง (Send)</strong> หรือ <strong>รับข้อมูล (Receive)</strong> ได้ มี IP Address เพื่อระบุตัวตน</div>
+          <span class="card-tag tag-cyan">= End Device = Node</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <div class="card-title">ตัวอย่าง Host</div>
+          <div class="card-desc">Computer · Laptop · Smartphone · Tablet · Printer · Server · IP Camera · Smart TV · IP Phone</div>
+          <span class="card-tag tag-green">ทุกอย่างที่ต่อ Network ได้</span>
+        </div>
+      </div>
+      <div class="key-points">
+        <div class="key-points-title">🔑 Cisco Exam Key Points — Host</div>
+        <div class="key-item"><span class="key-num">01</span>Host = อุปกรณ์ที่เชื่อมต่อเครือข่ายและส่ง–รับข้อมูลได้</div>
+        <div class="key-item"><span class="key-num">02</span>หน้าที่หลักของ End Device: <strong>Originate Data</strong> และ <strong>Interface Between Humans & Network</strong></div>
+        <div class="key-item"><span class="key-num">03</span>ทุก Host มี IP Address ใช้ระบุตัวตนในเครือข่าย</div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="client-tab">
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🙋</div>
+          <div class="card-title">Client คืออะไร?</div>
+          <div class="card-desc">อุปกรณ์หรือโปรแกรมที่ <strong>ร้องขอ (Request)</strong> บริการหรือข้อมูลจาก Server — จำง่าย: <em>Client = ขอข้อมูล</em></div>
+          <span class="card-tag tag-cyan">Request Side</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <div class="card-title">Client Software</div>
+          <div class="card-desc">Chrome · Edge · Firefox · Safari · Outlook · Windows File Explorer · Discord · Spotify</div>
+          <span class="card-tag tag-purple">Software-Defined Role</span>
+        </div>
+      </div>
+      <div class="highlight-box">
+        <strong>⚠️ สำคัญ</strong> — บทบาท Client/Server กำหนดโดย <strong>Software ที่ติดตั้ง</strong> ไม่ใช่ Hardware เครื่องเดียวกันสามารถเป็นได้ทั้งสอง
+      </div>
+    </div>
+
+    <div class="tab-content" id="server-tab">
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🗄️</div>
+          <div class="card-title">Web Server</div>
+          <div class="card-desc">ให้บริการเว็บไซต์ผ่าน HTTP/HTTPS — Client ใช้ Browser เข้าถึง</div>
+          <span class="card-tag tag-cyan">HTTP/HTTPS</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">📧</div>
+          <div class="card-title">Email Server</div>
+          <div class="card-desc">เก็บ รับ และส่งอีเมล — Client ใช้ Outlook หรือ Mail App</div>
+          <span class="card-tag tag-purple">SMTP/IMAP/POP3</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">📁</div>
+          <div class="card-title">File Server</div>
+          <div class="card-desc">เก็บไฟล์ส่วนกลาง — Client ใช้ File Explorer เข้าถึง</div>
+          <span class="card-tag tag-green">SMB/NFS</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔍</div>
+          <div class="card-title">DNS Server</div>
+          <div class="card-desc">แปลงชื่อโดเมน (google.com) เป็น IP Address — สำคัญมากใน CCNA</div>
+          <span class="card-tag tag-yellow">Domain Name System</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗃️</div>
+          <div class="card-title">Database Server</div>
+          <div class="card-desc">เก็บและจัดการฐานข้อมูล — ใช้ใน Application Server ขนาดใหญ่</div>
+          <span class="card-tag tag-purple">SQL/NoSQL</span>
+        </div>
+        <div class="card">
+          <div class="card-icon">📦</div>
+          <div class="card-title">DHCP Server</div>
+          <div class="card-desc">แจก IP Address ให้ Client อัตโนมัติ — มักอยู่ใน Router ตามบ้าน</div>
+          <span class="card-tag tag-cyan">Auto IP Assignment</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="flow-tab">
+      <div class="flow">
+        <div class="flow-title">CLIENT–SERVER COMMUNICATION FLOW</div>
+        <div class="flow-row">
+          <div class="flow-box highlight">Chrome (Client)</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">HTTP Request</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box highlight">Web Server</div>
+        </div>
+        <div class="flow-row" style="margin-left: 40px;">
+          <div class="flow-box highlight">Web Server</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">HTML Response</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box highlight">Chrome (Display)</div>
+        </div>
+      </div>
+
+      <div class="flow" style="margin-top:16px">
+        <div class="flow-title">INTERNET PATH — HOME TO GOOGLE</div>
+        <div class="flow-row">
+          <div class="flow-box highlight">Laptop</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Wi-Fi</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Access Point</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Switch</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Router</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">ISP</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box">Internet</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box highlight">Google Server</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NETWORK DEVICES -->
+  <div class="section" id="devices">
+    <div class="section-header">
+      <span class="section-num">2.0–2.4</span>
+      <h2 class="section-title">Network Devices & Their Roles</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card" style="--accent-color:#00d4ff">
+        <div class="card-icon">🔀</div>
+        <div class="card-title">Router</div>
+        <div class="card-desc">เชื่อมต่อ <strong>เครือข่ายต่างวง</strong> เข้าหากัน (LAN ↔ Internet) เลือกเส้นทางที่ดีที่สุดสำหรับข้อมูล (Best Path)</div>
+        <span class="card-tag tag-cyan">Layer 3 — Routes Between Networks</span>
+      </div>
+      <div class="card" style="--accent-color:#7c3aed">
+        <div class="card-icon">🔌</div>
+        <div class="card-title">Switch</div>
+        <div class="card-desc">เชื่อมอุปกรณ์ <strong>ภายใน LAN เดียวกัน</strong> ส่งข้อมูลตาม MAC Address ไม่ broadcast ทุก port</div>
+        <span class="card-tag tag-purple">Layer 2 — LAN Central Hub</span>
+      </div>
+      <div class="card" style="--accent-color:#10b981">
+        <div class="card-icon">📶</div>
+        <div class="card-title">Wireless Access Point (AP)</div>
+        <div class="card-desc">สร้างและกระจาย <strong>Wi-Fi Signal</strong> ให้อุปกรณ์ไร้สายเชื่อมต่อเครือข่าย — เชื่อมต่อกับ Switch เพื่อเข้า LAN</div>
+        <span class="card-tag tag-green">Wireless Bridge</span>
+      </div>
+      <div class="card" style="--accent-color:#f59e0b">
+        <div class="card-icon">🛡️</div>
+        <div class="card-title">Firewall</div>
+        <div class="card-desc">กรองและ<strong>ควบคุมการเข้าถึง</strong>เครือข่าย — อนุญาต/ปฏิเสธ Traffic ตาม Rule ป้องกัน Hacker</div>
+        <span class="card-tag tag-yellow">Security — Permit / Deny</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏠</div>
+        <div class="card-title">Integrated Router</div>
+        <div class="card-desc">Router ตามบ้านที่รวม <strong>Router + Switch + Wireless AP + DHCP + NAT + Firewall</strong> ไว้เครื่องเดียว</div>
+        <span class="card-tag tag-cyan">All-in-One Home Device</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📠</div>
+        <div class="card-title">Modem</div>
+        <div class="card-desc">แปลงสัญญาณดิจิทัลเป็นสัญญาณที่ ISP ใช้ (และกลับกัน) — Cable Modem, DSL Modem, Fiber ONT</div>
+        <span class="card-tag tag-purple">Signal Conversion</span>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Device</th>
+            <th>Layer</th>
+            <th>Primary Role</th>
+            <th>Connects</th>
+            <th>Key Feature</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Router</td>
+            <td>Layer 3</td>
+            <td>Route between networks</td>
+            <td>LAN ↔ WAN/Internet</td>
+            <td>IP Routing, NAT</td>
+          </tr>
+          <tr>
+            <td>Switch</td>
+            <td>Layer 2</td>
+            <td>Forward frames in LAN</td>
+            <td>Devices in same LAN</td>
+            <td>MAC Address Table</td>
+          </tr>
+          <tr>
+            <td>Access Point</td>
+            <td>Layer 2</td>
+            <td>Wireless connectivity</td>
+            <td>Wi-Fi devices ↔ LAN</td>
+            <td>SSID, WPA3</td>
+          </tr>
+          <tr>
+            <td>Firewall</td>
+            <td>Layer 3–7</td>
+            <td>Security filtering</td>
+            <td>Inside ↔ Outside</td>
+            <td>ACL, Stateful Inspection</td>
+          </tr>
+          <tr>
+            <td>Modem</td>
+            <td>Layer 1</td>
+            <td>Signal conversion</td>
+            <td>Home Network ↔ ISP</td>
+            <td>Modulation/Demodulation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- P2P -->
+  <div class="section" id="p2p">
+    <div class="section-header">
+      <span class="section-num">2.1.3–2.1.5</span>
+      <h2 class="section-title">Peer-to-Peer (P2P) Networks</h2>
+    </div>
+
+    <div class="flow">
+      <div class="flow-title">P2P TOPOLOGY</div>
+      <div class="flow-row">
+        <div class="flow-box highlight">PC-A (Client+Server)</div>
+        <div class="flow-arrow">⇄</div>
+        <div class="flow-box highlight">PC-B (Client+Server)</div>
+      </div>
+      <br>
+      <div class="flow-title">P2P WITH SWITCH (หลายเครื่อง)</div>
+      <div class="flow-row">
+        <div class="flow-box highlight">PC-1</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Switch</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box highlight">PC-2</div>
+      </div>
+      <div class="flow-row" style="justify-content:center;">
+        <span style="color:var(--text-muted)">↑ PC-3, PC-4 ต่อ Switch เช่นกัน</span>
+      </div>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <div class="pros-title">✅ ข้อดี P2P</div>
+        <div class="pro-item">ติดตั้งง่าย ไม่ซับซ้อน</div>
+        <div class="pro-item">ค่าใช้จ่ายต่ำ ไม่ต้องมี Dedicated Server</div>
+        <div class="pro-item">แชร์ไฟล์และ Printer ได้ทันที</div>
+        <div class="pro-item">เหมาะกับบ้านและสำนักงานเล็ก</div>
+      </div>
+      <div class="cons">
+        <div class="cons-title">❌ ข้อเสีย P2P</div>
+        <div class="con-item">ไม่มี Centralized Administration</div>
+        <div class="con-item">Security ต่ำ ยากต่อการควบคุม</div>
+        <div class="con-item">ขยายระบบยาก (Scalability ต่ำ)</div>
+        <div class="con-item">เครื่องทำงานหนัก (เป็นทั้ง Client+Server)</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>หัวข้อ</th><th>Peer-to-Peer</th><th>Client–Server</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Server กลาง</td><td class="cross">ไม่มี</td><td class="check">มี</td></tr>
+          <tr><td>การจัดการ</td><td>ยาก</td><td>ง่ายกว่า</td></tr>
+          <tr><td>ความปลอดภัย</td><td>ต่ำ</td><td>สูง</td></tr>
+          <tr><td>การขยายระบบ</td><td>ยาก</td><td>ง่าย</td></tr>
+          <tr><td>ราคา</td><td>ต่ำ</td><td>สูงกว่า</td></tr>
+          <tr><td>เหมาะกับ</td><td>บ้าน / SMB</td><td>องค์กรขนาดใหญ่</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="highlight-box">
+      <strong>📌 Hybrid P2P</strong> — บางระบบใช้ <strong>Index Server</strong> เพื่อบอกว่าไฟล์อยู่ที่ไหน แต่ไฟล์จริงอยู่บนเครื่องผู้ใช้ (Peer) — Index Server ไม่เก็บไฟล์ แค่บอกตำแหน่ง
+    </div>
+  </div>
+
+  <!-- ISP & CONNECTIVITY -->
+  <div class="section" id="isp">
+    <div class="section-header">
+      <span class="section-num">2.3</span>
+      <h2 class="section-title">ISP & Internet Connectivity</h2>
+    </div>
+
+    <div class="card-grid" style="margin-bottom:24px">
+      <div class="card">
+        <div class="card-icon">🌍</div>
+        <div class="card-title">ISP คืออะไร?</div>
+        <div class="card-desc">Internet Service Provider — ผู้ให้บริการอินเทอร์เน็ต เชื่อมบ้าน/บริษัทเข้าสู่ Internet ตัวอย่างไทย: AIS Fibre, True Online, 3BB, NT</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🦴</div>
+        <div class="card-title">Internet Backbone</div>
+        <div class="card-desc">โครงข่ายหลักที่เชื่อม ISP ทั่วโลกเข้าด้วยกัน ใช้ <strong>Fiber Optic</strong> เป็นหลัก ทั้งใต้ดินและใต้ทะเล</div>
+      </div>
+    </div>
+
+    <!-- ISP Connection Types -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>วิธีเชื่อมต่อ</th>
+            <th>สื่อกลาง</th>
+            <th>ความเร็ว</th>
+            <th>Always-On</th>
+            <th>จุดเด่น</th>
+            <th>ข้อจำกัด</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🔵 Fiber Optic</td>
+            <td>Fiber Optic Cable</td>
+            <td>สูงสุด (Gbps)</td>
+            <td class="check">✓</td>
+            <td>เร็ว เสถียร Latency ต่ำ</td>
+            <td>ให้บริการเฉพาะพื้นที่มีโครงข่าย</td>
+          </tr>
+          <tr>
+            <td>📺 Cable</td>
+            <td>Coaxial Cable</td>
+            <td>สูง (100M–1G)</td>
+            <td class="check">✓</td>
+            <td>ใช้สายเคเบิลทีวีเดิม</td>
+            <td>ความเร็วลดเมื่อ User แน่น</td>
+          </tr>
+          <tr>
+            <td>📞 DSL</td>
+            <td>Telephone Line</td>
+            <td>ปานกลาง</td>
+            <td class="check">✓</td>
+            <td>ใช้โทรศัพท์พร้อมเน็ตได้</td>
+            <td>ไกล Central Office = ช้า</td>
+          </tr>
+          <tr>
+            <td>📱 Cellular</td>
+            <td>4G / 5G Tower</td>
+            <td>สูง (5G)</td>
+            <td class="check">✓</td>
+            <td>ใช้งานได้ทุกที่มีสัญญาณ</td>
+            <td>จำกัด Data ตามแพ็กเกจ</td>
+          </tr>
+          <tr>
+            <td>🛰️ Satellite</td>
+            <td>ดาวเทียม + Dish</td>
+            <td>ปานกลาง</td>
+            <td class="check">✓</td>
+            <td>ใช้พื้นที่ห่างไกลได้</td>
+            <td>ค่าติดตั้งสูง ต้องมี LOS</td>
+          </tr>
+          <tr>
+            <td>☎️ Dial-up</td>
+            <td>Telephone Line</td>
+            <td>ต่ำมาก (56Kbps)</td>
+            <td class="cross">✗</td>
+            <td>ราคาถูก</td>
+            <td>ช้ามาก ต้องหมุนโทรก่อน</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DSL Detail -->
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">📞 DSL — การแบ่งช่องสัญญาณ</div>
+      <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:12px; margin-top:12px;">
+        <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px; border:1px solid var(--border);">
+          <div style="font-size:20px">🔊</div>
+          <div style="font-family:var(--mono); font-size:11px; color:var(--accent); margin:4px 0">VOICE</div>
+          <div style="font-size:12px; color:var(--text-dim)">โทรศัพท์<br>พร้อมกัน</div>
+        </div>
+        <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px; border:1px solid rgba(16,185,129,0.3);">
+          <div style="font-size:20px">⬇️</div>
+          <div style="font-family:var(--mono); font-size:11px; color:var(--accent3); margin:4px 0">DOWNLOAD</div>
+          <div style="font-size:12px; color:var(--text-dim)">รับข้อมูล<br>ช่องกว้างสุด</div>
+        </div>
+        <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px; border:1px solid rgba(124,58,237,0.3);">
+          <div style="font-size:20px">⬆️</div>
+          <div style="font-family:var(--mono); font-size:11px; color:#a78bfa; margin:4px 0">UPLOAD</div>
+          <div style="font-size:12px; color:var(--text-dim)">ส่งข้อมูล<br>ช้ากว่า Download</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Home Connection -->
+    <div class="flow" style="margin-top:24px">
+      <div class="flow-title">RECOMMENDED HOME NETWORK SETUP (Cisco Standard)</div>
+      <div class="flow-row">
+        <div class="flow-box highlight">PC / Phone / Tablet</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Integrated Router<br><span style="font-size:10px;color:var(--text-muted)">(Router+Switch+AP+DHCP+NAT+FW)</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Modem</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box highlight">ISP → Internet</div>
+      </div>
+      <br>
+      <div style="color:var(--danger); font-size:11px">⚠️ ไม่แนะนำ: PC → Modem → ISP (ไม่มี Router = ไม่ปลอดภัย ไม่มี Firewall/NAT)</div>
+    </div>
+  </div>
+
+  <!-- VOCABULARY -->
+  <div class="section" id="vocab">
+    <div class="section-header">
+      <span class="section-num">KEY TERMS</span>
+      <h2 class="section-title">Vocabulary — คำศัพท์สำคัญทั้งหมด</h2>
+    </div>
+    <div class="vocab-grid">
+      <div class="vocab-item"><div class="vocab-term">Network</div><div class="vocab-def">เครือข่ายคอมพิวเตอร์</div></div>
+      <div class="vocab-item"><div class="vocab-term">Host / End Device</div><div class="vocab-def">อุปกรณ์ปลายทาง (PC, Phone, Printer)</div></div>
+      <div class="vocab-item"><div class="vocab-term">Intermediate Device</div><div class="vocab-def">อุปกรณ์ตัวกลาง (Router, Switch, AP)</div></div>
+      <div class="vocab-item"><div class="vocab-term">Network Media</div><div class="vocab-def">สื่อกลางรับส่งข้อมูล (Cable, Wi-Fi)</div></div>
+      <div class="vocab-item"><div class="vocab-term">Client</div><div class="vocab-def">ผู้ร้องขอข้อมูล (Request)</div></div>
+      <div class="vocab-item"><div class="vocab-term">Server</div><div class="vocab-def">ผู้ให้บริการ (Provide)</div></div>
+      <div class="vocab-item"><div class="vocab-term">Request / Response</div><div class="vocab-def">คำขอ / คำตอบ</div></div>
+      <div class="vocab-item"><div class="vocab-term">P2P</div><div class="vocab-def">Peer-to-Peer ทุกเครื่องเท่าเทียม</div></div>
+      <div class="vocab-item"><div class="vocab-term">Dedicated Server</div><div class="vocab-def">Server ที่ทำหน้าที่เฉพาะ</div></div>
+      <div class="vocab-item"><div class="vocab-term">Router</div><div class="vocab-def">เลือกเส้นทางข้อมูลระหว่าง Network</div></div>
+      <div class="vocab-item"><div class="vocab-term">Switch</div><div class="vocab-def">เชื่อมอุปกรณ์ใน LAN เดียวกัน</div></div>
+      <div class="vocab-item"><div class="vocab-term">Access Point (AP)</div><div class="vocab-def">กระจายสัญญาณ Wi-Fi</div></div>
+      <div class="vocab-item"><div class="vocab-term">Firewall</div><div class="vocab-def">กรองและป้องกันการเข้าถึงเครือข่าย</div></div>
+      <div class="vocab-item"><div class="vocab-term">ISP</div><div class="vocab-def">Internet Service Provider</div></div>
+      <div class="vocab-item"><div class="vocab-term">Internet Backbone</div><div class="vocab-def">โครงข่ายหลักของอินเทอร์เน็ต</div></div>
+      <div class="vocab-item"><div class="vocab-term">Fiber Optic</div><div class="vocab-def">สายใยแก้วนำแสง เร็วที่สุด</div></div>
+      <div class="vocab-item"><div class="vocab-term">DSL</div><div class="vocab-def">อินเทอร์เน็ตผ่านสายโทรศัพท์</div></div>
+      <div class="vocab-item"><div class="vocab-term">Coaxial Cable</div><div class="vocab-def">สายสำหรับ Cable Internet/TV</div></div>
+      <div class="vocab-item"><div class="vocab-term">Cellular</div><div class="vocab-def">อินเทอร์เน็ตผ่านเครือข่าย 4G/5G</div></div>
+      <div class="vocab-item"><div class="vocab-term">Satellite</div><div class="vocab-def">อินเทอร์เน็ตผ่านดาวเทียม</div></div>
+      <div class="vocab-item"><div class="vocab-term">Dial-up</div><div class="vocab-def">อินเทอร์เน็ตผ่านการหมุนหมายเลขโทรศัพท์</div></div>
+      <div class="vocab-item"><div class="vocab-term">DHCP</div><div class="vocab-def">บริการแจก IP อัตโนมัติ</div></div>
+      <div class="vocab-item"><div class="vocab-term">NAT</div><div class="vocab-def">แปลง Private IP ↔ Public IP</div></div>
+      <div class="vocab-item"><div class="vocab-term">Integrated Router</div><div class="vocab-def">อุปกรณ์รวม Router+Switch+AP</div></div>
+      <div class="vocab-item"><div class="vocab-term">Bandwidth</div><div class="vocab-def">ปริมาณข้อมูลสูงสุดที่ส่งได้</div></div>
+      <div class="vocab-item"><div class="vocab-term">Always-On</div><div class="vocab-def">เชื่อมต่ออินเทอร์เน็ตตลอดเวลา</div></div>
+      <div class="vocab-item"><div class="vocab-term">Line of Sight (LOS)</div><div class="vocab-def">แนวไม่มีสิ่งกีดขวาง (Satellite ต้องการ)</div></div>
+      <div class="vocab-item"><div class="vocab-term">Central Office (CO)</div><div class="vocab-def">ศูนย์กลาง DSL ของผู้ให้บริการ</div></div>
+      <div class="vocab-item"><div class="vocab-term">Index Server</div><div class="vocab-def">Server บอกตำแหน่งไฟล์ใน Hybrid P2P</div></div>
+      <div class="vocab-item"><div class="vocab-term">Infrastructure</div><div class="vocab-def">โครงสร้างพื้นฐานของเครือข่าย</div></div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section" id="quiz">
+    <div class="section-header">
+      <span class="section-num">PRACTICE</span>
+      <h2 class="section-title">Quiz — ทดสอบความเข้าใจ</h2>
+    </div>
+
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <div>
+          <div class="quiz-title">Module 2 Practice Quiz</div>
+          <div style="font-size:13px; color:var(--text-muted); margin-top:4px">20 ข้อ · ครอบคลุมทุกหัวข้อสำหรับ Cisco CCST/CCNA</div>
+        </div>
+        <div class="quiz-score-display" id="score-display">Score: 0 / 0</div>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+
+      <div id="quiz-questions"></div>
+
+      <div class="quiz-controls">
+        <button class="btn btn-primary" onclick="showResults()">ดูผลคะแนน</button>
+        <button class="btn btn-ghost" onclick="resetQuiz()">เริ่มใหม่</button>
+      </div>
+
+      <div class="results-panel" id="results-panel">
+        <div style="font-family:var(--mono); font-size:12px; color:var(--text-muted); letter-spacing:0.1em; text-transform:uppercase;">YOUR SCORE</div>
+        <div class="results-score" id="results-score">--</div>
+        <div class="results-msg" id="results-msg"></div>
+        <button class="btn btn-primary" onclick="resetQuiz()">ทำอีกครั้ง</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// NAV ACTIVE
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+}
+
+// TABS
+function switchTab(btn, tabId) {
+  btn.closest('.section').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.closest('.section').querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId)?.classList.add('active');
+}
+
+// QUIZ DATA
+const questions = [
+  {
+    q: "อุปกรณ์ใดต่อไปนี้คือ Intermediate Device?",
+    opts: ["Laptop", "Smartphone", "Router", "Printer"],
+    ans: 2,
+    explain: "Router คือ Intermediate Device ทำหน้าที่ส่งต่อและเลือกเส้นทางข้อมูล ส่วน Laptop, Smartphone, Printer เป็น End Devices"
+  },
+  {
+    q: "Client หมายถึงอะไร?",
+    opts: ["อุปกรณ์ที่ให้บริการข้อมูล", "อุปกรณ์ที่ร้องขอข้อมูล", "อุปกรณ์กลางของเครือข่าย", "ผู้ให้บริการอินเทอร์เน็ต"],
+    ans: 1,
+    explain: "Client = ผู้ร้องขอข้อมูล (Request) เช่น Browser ที่ขอหน้าเว็บจาก Web Server"
+  },
+  {
+    q: "Switch ทำหน้าที่อะไร?",
+    opts: ["เชื่อมต่อ LAN กับ Internet", "กระจาย Wi-Fi", "เชื่อมอุปกรณ์ภายใน LAN เดียวกัน", "ป้องกันเครือข่าย"],
+    ans: 2,
+    explain: "Switch ทำงานใน Layer 2 เชื่อมอุปกรณ์ภายใน LAN เดียวกัน ส่งข้อมูลตาม MAC Address"
+  },
+  {
+    q: "ISP ย่อมาจากอะไร?",
+    opts: ["Internet Security Protocol", "Internet Service Provider", "Internal System Protocol", "Integrated Switch Port"],
+    ans: 1,
+    explain: "ISP = Internet Service Provider คือผู้ให้บริการอินเทอร์เน็ต เช่น AIS, True, NT"
+  },
+  {
+    q: "P2P Network มีลักษณะอย่างไร?",
+    opts: ["มี Dedicated Server ควบคุม", "ทุกเครื่องมีสถานะเท่าเทียม เป็นได้ทั้ง Client และ Server", "ต้องมี Router กลาง", "เหมาะกับองค์กรขนาดใหญ่เท่านั้น"],
+    ans: 1,
+    explain: "P2P = Peer-to-Peer ทุกเครื่องมีสถานะเท่าเทียม สามารถเป็นทั้ง Client และ Server ได้พร้อมกัน"
+  },
+  {
+    q: "Internet Backbone ใช้สื่อกลางอะไรเป็นหลัก?",
+    opts: ["Coaxial Cable", "DSL", "Fiber Optic", "Wi-Fi"],
+    ans: 2,
+    explain: "Internet Backbone ใช้ Fiber Optic Cable เป็นหลัก ทั้งใต้ดินและใต้ทะเล เพราะเร็ว เสถียร และส่งได้ระยะไกล"
+  },
+  {
+    q: "DSL เชื่อมต่ออินเทอร์เน็ตผ่านอะไร?",
+    opts: ["Fiber Optic", "Coaxial Cable", "Telephone Line", "Satellite Dish"],
+    ans: 2,
+    explain: "DSL (Digital Subscriber Line) ใช้สายโทรศัพท์บ้านในการเชื่อมต่ออินเทอร์เน็ต โดยแบ่งเป็นช่อง Voice, Download และ Upload"
+  },
+  {
+    q: "Integrated Router ที่บ้านรวมอุปกรณ์ใดบ้าง?",
+    opts: ["Router + Modem + Printer", "Router + Switch + Wireless AP + DHCP + NAT + Firewall", "Switch + Firewall + Server", "Router + Satellite Modem"],
+    ans: 1,
+    explain: "Integrated Router รวม Router, Switch, Wireless Access Point, DHCP Server, NAT และ Firewall ไว้ในเครื่องเดียว"
+  },
+  {
+    q: "บทบาท Client หรือ Server ของคอมพิวเตอร์ขึ้นกับอะไร?",
+    opts: ["Hardware ที่ใช้", "Software ที่ติดตั้ง", "ขนาดของ RAM", "ยี่ห้อของเครื่อง"],
+    ans: 1,
+    explain: "บทบาท Client/Server กำหนดโดย Software ที่ติดตั้ง ไม่ใช่ Hardware เครื่องเดียวกันสามารถเป็นทั้งสองได้"
+  },
+  {
+    q: "Satellite Internet มีข้อจำกัดสำคัญอะไร?",
+    opts: ["ใช้สายโทรศัพท์", "ต้องการ Line of Sight และไม่มีสิ่งกีดขวาง", "ไม่สามารถใช้ Always-On ได้", "ความเร็วสูงเกินไป"],
+    ans: 1,
+    explain: "Satellite Internet ต้องการ Line of Sight (LOS) คือต้องไม่มีสิ่งกีดขวางระหว่างจานรับสัญญาณกับดาวเทียม"
+  },
+  {
+    q: "ข้อใดคือข้อเสียของ P2P Network?",
+    opts: ["ราคาแพงเกินไป", "ต้องการ Server กลาง", "ไม่มี Centralized Administration ทำให้จัดการยาก", "ไม่สามารถแชร์ไฟล์ได้"],
+    ans: 2,
+    explain: "P2P ไม่มีการจัดการจากศูนย์กลาง (Centralized Administration) ทำให้จัดการยาก Security ต่ำ และขยายระบบยาก"
+  },
+  {
+    q: "Firewall ทำหน้าที่อะไร?",
+    opts: ["กระจาย Wi-Fi Signal", "แจก IP Address", "กรองและควบคุมการเข้าถึงเครือข่าย", "เชื่อมต่อ LAN กับ Internet"],
+    ans: 2,
+    explain: "Firewall กรอง Traffic และควบคุมการเข้าถึงเครือข่าย โดยอนุญาต (Permit) หรือปฏิเสธ (Deny) ตาม Rule ที่กำหนด"
+  },
+  {
+    q: "ทำไม DSL ที่อยู่ไกล Central Office จึงช้ากว่า?",
+    opts: ["สายโทรศัพท์มีขนาดใหญ่กว่า", "สัญญาณอ่อนตัวลงตามระยะทางในสายทองแดง", "ISP จงใจลดความเร็ว", "Central Office ทำงานช้าลง"],
+    ans: 1,
+    explain: "DSL ใช้สายทองแดง (Copper) ซึ่งสัญญาณจะลดความแรงตามระยะทาง ยิ่งไกล Central Office ยิ่งช้า"
+  },
+  {
+    q: "Hybrid P2P ใช้ Index Server เพื่ออะไร?",
+    opts: ["เก็บไฟล์ทั้งหมดของผู้ใช้", "บอกตำแหน่งว่าไฟล์อยู่ที่ Peer เครื่องไหน", "ควบคุม Security ของ Network", "แจก IP Address"],
+    ans: 1,
+    explain: "Index Server ใน Hybrid P2P ไม่เก็บไฟล์ แค่บอกตำแหน่งว่าไฟล์อยู่ที่ Peer เครื่องไหน ไฟล์จริงอยู่บนเครื่องผู้ใช้"
+  },
+  {
+    q: "Cable Internet ใช้สื่อกลางอะไร?",
+    opts: ["Telephone Line", "Fiber Optic", "Coaxial Cable", "Radio Wave"],
+    ans: 2,
+    explain: "Cable Internet ใช้ Coaxial Cable เส้นเดียวกับสาย Cable TV และต้องใช้ Cable Modem"
+  },
+  {
+    q: "ข้อใดคือ End Device?",
+    opts: ["Router", "Switch", "Firewall", "IP Phone"],
+    ans: 3,
+    explain: "IP Phone คือ End Device (อุปกรณ์ปลายทาง) ที่ผู้ใช้ใช้งานโดยตรง ส่วน Router, Switch, Firewall เป็น Intermediate Devices"
+  },
+  {
+    q: "การเชื่อมต่อแบบใดที่ Cisco แนะนำให้ใช้ที่บ้าน?",
+    opts: ["PC → Modem → ISP", "PC → Router → Modem → ISP", "PC → Switch → ISP", "PC → Firewall → ISP"],
+    ans: 1,
+    explain: "Cisco แนะนำ PC → Router → Modem → ISP เพราะ Router มี NAT, Firewall และ DHCP ทำให้ปลอดภัยกว่า"
+  },
+  {
+    q: "Cellular Internet ใช้เทคโนโลยีอะไร?",
+    opts: ["DSL และ Fiber", "4G และ 5G", "Coaxial และ Satellite", "Wi-Fi และ Bluetooth"],
+    ans: 1,
+    explain: "Cellular Internet ใช้เครือข่ายมือถือ 4G และ 5G ผ่าน Cell Tower เหมาะสำหรับการใช้งานเคลื่อนที่"
+  },
+  {
+    q: "Server หนึ่งเครื่องสามารถให้บริการกี่ประเภทพร้อมกัน?",
+    opts: ["ได้แค่ 1 บริการ", "ได้แค่ 2 บริการ", "ได้หลายบริการพร้อมกัน เช่น Web + Email + File", "ต้องแยกเครื่องสำหรับแต่ละบริการ"],
+    ans: 2,
+    explain: "Server เครื่องเดียวสามารถให้บริการได้หลายประเภทพร้อมกัน เช่น ทำทั้ง Web Server, Email Server และ File Server"
+  },
+  {
+    q: "Network Media คืออะไร?",
+    opts: ["โปรแกรมที่ใช้ดูหนัง", "สื่อกลางในการรับส่งข้อมูล เช่น Cable, Fiber, Wi-Fi", "อุปกรณ์กลางของเครือข่าย", "ระบบ OS ของ Server"],
+    ans: 1,
+    explain: "Network Media คือสื่อกลางในการรับส่งข้อมูล มีทั้งแบบมีสาย (UTP, Fiber Optic) และไร้สาย (Wi-Fi, Cellular)"
+  }
+];
+
+let answered = {};
+let correct = 0;
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-questions');
+  container.innerHTML = '';
+  answered = {};
+  correct = 0;
+  updateScore();
+
+  questions.forEach((q, i) => {
+    const block = document.createElement('div');
+    block.className = 'question-block';
+    block.id = `q-${i}`;
+
+    const letters = ['A','B','C','D'];
+    const optsHtml = q.opts.map((o, j) =>
+      `<button class="option-btn" onclick="selectAnswer(${i},${j})" id="opt-${i}-${j}">
+        <span class="option-letter">${letters[j]}</span>
+        <span>${o}</span>
+      </button>`
+    ).join('');
+
+    block.innerHTML = `
+      <div class="question-num">Q${String(i+1).padStart(2,'0')} / ${questions.length}</div>
+      <div class="question-text">${q.q}</div>
+      <div class="options">${optsHtml}</div>
+      <div class="question-feedback" id="feedback-${i}"></div>
+    `;
+    container.appendChild(block);
+  });
+}
+
+function selectAnswer(qi, oi) {
+  if (answered[qi] !== undefined) return;
+  answered[qi] = oi;
+
+  const q = questions[qi];
+  const block = document.getElementById(`q-${qi}`);
+  const feedback = document.getElementById(`feedback-${qi}`);
+
+  // Disable all options
+  block.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+
+  // Mark correct/wrong
+  const correctBtn = document.getElementById(`opt-${qi}-${q.ans}`);
+  correctBtn.classList.add('correct');
+
+  if (oi !== q.ans) {
+    document.getElementById(`opt-${qi}-${oi}`).classList.add('wrong');
+    block.classList.add('answered-wrong');
+    feedback.className = 'question-feedback show feedback-wrong';
+    feedback.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> — ${q.explain}`;
+  } else {
+    correct++;
+    block.classList.add('answered-correct');
+    feedback.className = 'question-feedback show feedback-correct';
+    feedback.innerHTML = `✅ <strong>ถูกต้อง!</strong> — ${q.explain}`;
+  }
+
+  updateScore();
+}
+
+function updateScore() {
+  const total = Object.keys(answered).length;
+  document.getElementById('score-display').textContent = `Score: ${correct} / ${total}`;
+  const pct = (total / questions.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function showResults() {
+  const total = Object.keys(answered).length;
+  const panel = document.getElementById('results-panel');
+  const scoreEl = document.getElementById('results-score');
+  const msgEl = document.getElementById('results-msg');
+
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const allPct = Math.round((correct / questions.length) * 100);
+
+  scoreEl.textContent = `${correct} / ${questions.length}`;
+
+  let msg = '';
+  if (allPct === 100) msg = '🏆 Perfect Score! พร้อมสอบ Cisco แล้ว!';
+  else if (allPct >= 80) msg = '🎯 ดีมาก! ใกล้พร้อมแล้ว ทบทวนข้อที่พลาดด้วย';
+  else if (allPct >= 60) msg = '📚 ผ่าน แต่ยังต้องทบทวนเพิ่มเติม';
+  else msg = '💪 ยังต้องฝึกอีกหน่อย ทบทวนสรุปด้านบนแล้วลองใหม่!';
+
+  msgEl.textContent = msg;
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  document.getElementById('results-panel').classList.remove('show');
+  buildQuiz();
+  window.scrollTo({ top: document.getElementById('quiz').offsetTop - 80, behavior: 'smooth' });
+}
+
+// NAV highlight on scroll
+const sections = ['overview','host-client-server','devices','p2p','isp','vocab','quiz'];
+const navLinks = document.querySelectorAll('.nav-link');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 100) current = id;
+  });
+  navLinks.forEach((l, i) => {
+    l.classList.toggle('active', sections[i] === current);
+  });
+});
+
+buildQuiz();
+</script>
+</body>
+</html>

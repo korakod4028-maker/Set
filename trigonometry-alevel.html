@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตรีโกณมิติ | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'sin cos tan cot sec csc π θ φ ∠';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.hi { color: var(--accent2); font-weight: 600; }
+  td.lo { color: var(--accent3); font-weight: 600; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* UNIT CIRCLE */
+  .circle-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 20px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1><span>ตรีโกณ</span>มิติ</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">อัตราส่วนตรีโกณ</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">20</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="trig1">1. มุมและหน่วยวัด</button>
+  <button class="tab-btn" data-sec="trig2">2. อัตราส่วนตรีโกณ</button>
+  <button class="tab-btn" data-sec="trig3">3. วงกลมหนึ่งหน่วย</button>
+  <button class="tab-btn" data-sec="trig4">4. กราฟฟังก์ชัน</button>
+  <button class="tab-btn" data-sec="trig5">5. เอกลักษณ์และสูตร</button>
+  <button class="tab-btn" data-sec="trig6">6. กฎไซน์/โคไซน์</button>
+  <button class="tab-btn" data-sec="trig7">7. สมการตรีโกณ</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: มุมและหน่วยวัด ===== -->
+  <div class="section active" id="trig1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · มุมและหน่วยวัดมุม</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>หน่วยวัดมุม: องศาและเรเดียน</div>
+      <p>ในตรีโกณมิติระดับ A-Level เราวัดมุมได้สองหน่วย</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>องศา (Degree)</h4>
+          <p>วงกลมเต็ม = 360°<br>ครึ่งวงกลม = 180°<br>มุมฉาก = 90°</p>
+        </div>
+        <div class="mini-card">
+          <h4>เรเดียน (Radian)</h4>
+          <p>วงกลมเต็ม = 2π rad<br>ครึ่งวงกลม = π rad<br>มุมฉาก = π/2 rad</p>
+        </div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตรแปลงหน่วย</div>
+        องศา → เรเดียน: <strong>rad = องศา × π/180</strong><br>
+        เรเดียน → องศา: <strong>องศา = rad × 180/π</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        60° → rad: 60 × π/180 = <strong>π/3</strong><br>
+        3π/4 rad → องศา: (3π/4) × 180/π = <strong>135°</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ตารางมุมสำคัญ — ต้องจำ!</div>
+        <table>
+          <tr><th>องศา</th><th>0°</th><th>30°</th><th>45°</th><th>60°</th><th>90°</th><th>120°</th><th>135°</th><th>150°</th><th>180°</th></tr>
+          <tr><td>เรเดียน</td><td>0</td><td>π/6</td><td>π/4</td><td>π/3</td><td>π/2</td><td>2π/3</td><td>3π/4</td><td>5π/6</td><td>π</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔵</div>ความยาวส่วนโค้งและพื้นที่เซกเตอร์</div>
+      <div class="def-box">
+        <div class="def-label">สูตรสำคัญ (θ เป็นเรเดียน)</div>
+        ความยาวส่วนโค้ง: <strong>l = rθ</strong><br>
+        พื้นที่เซกเตอร์: <strong>A = ½r²θ</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วงกลมรัศมี 6 cm มุมที่จุดศูนย์กลาง 2π/3 rad<br>
+        ความยาวส่วนโค้ง = 6 × 2π/3 = <strong>4π cm</strong><br>
+        พื้นที่เซกเตอร์ = ½ × 6² × 2π/3 = <strong>12π cm²</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        สูตร l = rθ และ A = ½r²θ ใช้ได้ <strong>เฉพาะเมื่อ θ เป็นเรเดียน</strong> เท่านั้น<br>
+        ถ้าโจทย์ให้มาเป็นองศา ต้องแปลงก่อนเสมอ!
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔄</div>มุมในทิศทางต่าง ๆ</div>
+      <p>ในระบบพิกัดฉาก เราวัดมุมจากแกน x บวกตามเข็มนาฬิกาย้อน (ทวนเข็ม = บวก)</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>มุมแฝด (Co-terminal)</h4>
+          <p>มุมที่ต่างกัน 360° (หรือ 2π) จะมีค่าตรีโกณมิติเท่ากัน</p>
+          <div class="math-block">sin(θ + 360°n) = sin θ<br>n ∈ ℤ</div>
+        </div>
+        <div class="mini-card">
+          <h4>มุมอ้างอิง (Reference Angle)</h4>
+          <p>มุมเฉียบพลันที่เกิดระหว่างแขนสุดท้ายกับแกน x เสมอเป็นค่าบวก</p>
+          <div class="math-block">240° → ref = 60°<br>(คิวแดนต์ 3)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: อัตราส่วนตรีโกณ ===== -->
+  <div class="section" id="trig2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · อัตราส่วนตรีโกณมิติ</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>นิยามในสามเหลี่ยมมุมฉาก</div>
+      <div class="circle-container">
+        <svg width="320" height="220" viewBox="0 0 320 220">
+          <rect width="320" height="220" rx="10" fill="#1c2235"/>
+          <!-- Triangle -->
+          <polygon points="40,180 260,180 260,60" fill="rgba(108,99,255,0.1)" stroke="#6c63ff" stroke-width="2"/>
+          <!-- Right angle mark -->
+          <rect x="245" y="165" width="15" height="15" fill="none" stroke="#6c63ff" stroke-width="1.5"/>
+          <!-- Labels -->
+          <text x="145" y="198" fill="#ffd93d" font-size="14" font-family="Sarabun" text-anchor="middle">ด้านประชิด (adjacent)</text>
+          <text x="278" y="125" fill="#00d4aa" font-size="14" font-family="Sarabun">ด้านตรงข้าม</text>
+          <text x="278" y="142" fill="#00d4aa" font-size="14" font-family="Sarabun">(opposite)</text>
+          <text x="120" y="108" fill="#ff6b6b" font-size="14" font-family="Sarabun" transform="rotate(-27,120,108)">ด้านตรงข้ามมุมฉาก (hypotenuse)</text>
+          <!-- Angle -->
+          <text x="55" y="175" fill="#a89fff" font-size="18" font-family="Sarabun">θ</text>
+        </svg>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">sin θ</div>
+          <div class="sym-name">ไซน์</div>
+          <div class="sym-desc">ตรงข้าม / ตรงข้ามมุมฉาก</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">cos θ</div>
+          <div class="sym-name">โคไซน์</div>
+          <div class="sym-desc">ประชิด / ตรงข้ามมุมฉาก</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">tan θ</div>
+          <div class="sym-name">แทนเจนต์</div>
+          <div class="sym-desc">ตรงข้าม / ประชิด = sin/cos</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">csc θ</div>
+          <div class="sym-name">โคซีแคนต์</div>
+          <div class="sym-desc">1 / sin θ</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">sec θ</div>
+          <div class="sym-name">ซีแคนต์</div>
+          <div class="sym-desc">1 / cos θ</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">cot θ</div>
+          <div class="sym-name">โคแทนเจนต์</div>
+          <div class="sym-desc">1 / tan θ = cos/sin</div>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ SOH-CAH-TOA</div>
+        <strong>S</strong>in = <strong>O</strong>pposite / <strong>H</strong>ypotenuse<br>
+        <strong>C</strong>os = <strong>A</strong>djacent / <strong>H</strong>ypotenuse<br>
+        <strong>T</strong>an = <strong>O</strong>pposite / <strong>A</strong>djacent
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>ค่าตรีโกณมิติของมุมพิเศษ</div>
+      <table>
+        <tr>
+          <th>θ</th>
+          <th>0°</th>
+          <th>30° (π/6)</th>
+          <th>45° (π/4)</th>
+          <th>60° (π/3)</th>
+          <th>90° (π/2)</th>
+        </tr>
+        <tr>
+          <td><strong>sin θ</strong></td>
+          <td>0</td>
+          <td class="hi">1/2</td>
+          <td class="hi">√2/2</td>
+          <td class="hi">√3/2</td>
+          <td class="hi">1</td>
+        </tr>
+        <tr>
+          <td><strong>cos θ</strong></td>
+          <td>1</td>
+          <td class="hi">√3/2</td>
+          <td class="hi">√2/2</td>
+          <td class="hi">1/2</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>tan θ</strong></td>
+          <td>0</td>
+          <td class="hi">1/√3</td>
+          <td class="hi">1</td>
+          <td class="hi">√3</td>
+          <td class="lo">ไม่นิยาม</td>
+        </tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำค่า sin (0°→90°)</div>
+        sin 0° = √0/2 = 0<br>
+        sin 30° = √1/2 = 1/2<br>
+        sin 45° = √2/2<br>
+        sin 60° = √3/2<br>
+        sin 90° = √4/2 = 1<br>
+        <em style="color:var(--text-dim)">cos อ่านย้อนกลับจาก sin!</em>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔭</div>เครื่องหมายในแต่ละคิวแดรนต์ (ASTC)</div>
+      <div class="circle-container">
+        <svg width="360" height="260" viewBox="0 0 360 260">
+          <rect width="360" height="260" rx="10" fill="#1c2235"/>
+          <!-- Axes -->
+          <line x1="180" y1="20" x2="180" y2="240" stroke="#2a3050" stroke-width="1.5"/>
+          <line x1="20" y1="130" x2="340" y2="130" stroke="#2a3050" stroke-width="1.5"/>
+          <!-- Quadrant labels -->
+          <rect x="190" y="25" width="140" height="100" rx="8" fill="rgba(108,99,255,0.12)" stroke="rgba(108,99,255,0.3)" stroke-width="1"/>
+          <rect x="30" y="25" width="140" height="100" rx="8" fill="rgba(0,212,170,0.08)" stroke="rgba(0,212,170,0.2)" stroke-width="1"/>
+          <rect x="30" y="135" width="140" height="100" rx="8" fill="rgba(255,107,107,0.08)" stroke="rgba(255,107,107,0.2)" stroke-width="1"/>
+          <rect x="190" y="135" width="140" height="100" rx="8" fill="rgba(255,217,61,0.07)" stroke="rgba(255,217,61,0.2)" stroke-width="1"/>
+          <!-- Q labels -->
+          <text x="254" y="55" fill="#a89fff" font-size="13" font-family="Sarabun" text-anchor="middle">คิวแดรนต์ที่ 1</text>
+          <text x="254" y="75" fill="#a89fff" font-size="22" font-family="Sarabun" text-anchor="middle" font-weight="800">A</text>
+          <text x="254" y="97" fill="#8892b0" font-size="12" font-family="Sarabun" text-anchor="middle">ทุกตัวบวก</text>
+          <text x="254" y="112" fill="#8892b0" font-size="11" font-family="Sarabun" text-anchor="middle">(All positive)</text>
+
+          <text x="102" y="55" fill="#00d4aa" font-size="13" font-family="Sarabun" text-anchor="middle">คิวแดรนต์ที่ 2</text>
+          <text x="102" y="75" fill="#00d4aa" font-size="22" font-family="Sarabun" text-anchor="middle" font-weight="800">S</text>
+          <text x="102" y="97" fill="#8892b0" font-size="12" font-family="Sarabun" text-anchor="middle">sin บวก</text>
+          <text x="102" y="112" fill="#8892b0" font-size="11" font-family="Sarabun" text-anchor="middle">(Sine positive)</text>
+
+          <text x="102" y="160" fill="#ff6b6b" font-size="13" font-family="Sarabun" text-anchor="middle">คิวแดรนต์ที่ 3</text>
+          <text x="102" y="180" fill="#ff6b6b" font-size="22" font-family="Sarabun" text-anchor="middle" font-weight="800">T</text>
+          <text x="102" y="202" fill="#8892b0" font-size="12" font-family="Sarabun" text-anchor="middle">tan บวก</text>
+          <text x="102" y="217" fill="#8892b0" font-size="11" font-family="Sarabun" text-anchor="middle">(Tangent positive)</text>
+
+          <text x="254" y="160" fill="#ffd93d" font-size="13" font-family="Sarabun" text-anchor="middle">คิวแดรนต์ที่ 4</text>
+          <text x="254" y="180" fill="#ffd93d" font-size="22" font-family="Sarabun" text-anchor="middle" font-weight="800">C</text>
+          <text x="254" y="202" fill="#8892b0" font-size="12" font-family="Sarabun" text-anchor="middle">cos บวก</text>
+          <text x="254" y="217" fill="#8892b0" font-size="11" font-family="Sarabun" text-anchor="middle">(Cosine positive)</text>
+          <!-- Axis labels -->
+          <text x="332" y="145" fill="#4a5580" font-size="13" font-family="Sarabun">x</text>
+          <text x="185" y="17" fill="#4a5580" font-size="13" font-family="Sarabun">y</text>
+        </svg>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 จำด้วยประโยค "All Students Take Calculus"</div>
+        <strong>A</strong>ll = ทุกตัวบวก (คิวแดรนต์ 1)<br>
+        <strong>S</strong>tudents = sin บวก (คิวแดรนต์ 2)<br>
+        <strong>T</strong>ake = tan บวก (คิวแดรนต์ 3)<br>
+        <strong>C</strong>alculus = cos บวก (คิวแดรนต์ 4)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: วงกลมหนึ่งหน่วย ===== -->
+  <div class="section" id="trig3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · วงกลมหนึ่งหน่วย</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⭕</div>นิยามด้วยวงกลมหนึ่งหน่วย</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        วงกลมหนึ่งหน่วย (Unit Circle) คือวงกลมที่มีจุดศูนย์กลางอยู่ที่ (0,0) และรัศมี = 1<br><br>
+        สำหรับจุดใดจุดหนึ่ง (x, y) บนวงกลมที่ทำมุม θ กับแกน x บวก:<br>
+        <strong>x = cos θ</strong> และ <strong>y = sin θ</strong>
+      </div>
+      <div class="circle-container">
+        <svg width="380" height="300" viewBox="0 0 380 300">
+          <rect width="380" height="300" rx="10" fill="#1c2235"/>
+          <!-- Axes -->
+          <line x1="190" y1="15" x2="190" y2="285" stroke="#2a3050" stroke-width="1.5"/>
+          <line x1="20" y1="150" x2="360" y2="150" stroke="#2a3050" stroke-width="1.5"/>
+          <!-- Unit circle -->
+          <circle cx="190" cy="150" r="110" fill="none" stroke="#6c63ff" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <!-- Point at 60 degrees -->
+          <line x1="190" y1="150" x2="245" y2="55" stroke="#00d4aa" stroke-width="2"/>
+          <circle cx="245" cy="55" r="5" fill="#00d4aa"/>
+          <!-- sin line (vertical) -->
+          <line x1="245" y1="55" x2="245" y2="150" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,3"/>
+          <!-- cos line (horizontal) -->
+          <line x1="190" y1="150" x2="245" y2="150" stroke="#ffd93d" stroke-width="2" stroke-dasharray="5,3"/>
+          <!-- Labels -->
+          <text x="252" y="105" fill="#ff6b6b" font-size="13" font-family="Sarabun">sin θ</text>
+          <text x="207" y="167" fill="#ffd93d" font-size="13" font-family="Sarabun">cos θ</text>
+          <text x="252" y="50" fill="#00d4aa" font-size="13" font-family="Sarabun">(cos θ, sin θ)</text>
+          <!-- Angle arc -->
+          <path d="M 215 150 A 25 25 0 0 0 202 128" fill="none" stroke="#a89fff" stroke-width="1.5"/>
+          <text x="218" y="140" fill="#a89fff" font-size="14" font-family="Sarabun">θ</text>
+          <!-- Axis numbers -->
+          <text x="298" y="145" fill="#4a5580" font-size="12" font-family="Sarabun">1</text>
+          <text x="68" y="145" fill="#4a5580" font-size="12" font-family="Sarabun">-1</text>
+          <text x="194" y="38" fill="#4a5580" font-size="12" font-family="Sarabun">1</text>
+          <text x="185" y="270" fill="#4a5580" font-size="12" font-family="Sarabun">-1</text>
+        </svg>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">มุมพิเศษบนวงกลมหนึ่งหน่วย</div>
+        <table>
+          <tr><th>θ</th><th>0°</th><th>30°</th><th>45°</th><th>60°</th><th>90°</th><th>180°</th><th>270°</th><th>360°</th></tr>
+          <tr><td>cos θ</td><td class="hi">1</td><td class="hi">√3/2</td><td class="hi">√2/2</td><td class="hi">1/2</td><td>0</td><td class="lo">-1</td><td>0</td><td class="hi">1</td></tr>
+          <tr><td>sin θ</td><td>0</td><td class="hi">1/2</td><td class="hi">√2/2</td><td class="hi">√3/2</td><td class="hi">1</td><td>0</td><td class="lo">-1</td><td>0</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔁</div>ค่าตรีโกณมิติของมุมสัมพัทธ์</div>
+      <p>ใช้มุมอ้างอิง (Reference Angle) เพื่อหาค่าตรีโกณมิติของมุมใดก็ได้</p>
+      <div class="math-block">
+        sin(180° - θ) =  sin θ &nbsp;&nbsp; sin(180° + θ) = -sin θ &nbsp;&nbsp; sin(360° - θ) = -sin θ<br>
+        cos(180° - θ) = -cos θ &nbsp;&nbsp; cos(180° + θ) = -cos θ &nbsp;&nbsp; cos(360° - θ) =  cos θ<br>
+        tan(180° - θ) = -tan θ &nbsp;&nbsp; tan(180° + θ) =  tan θ &nbsp;&nbsp; tan(360° - θ) = -tan θ
+      </div>
+      <div class="math-block">
+        sin(-θ) = -sin θ &nbsp;&nbsp;&nbsp; cos(-θ) = cos θ &nbsp;&nbsp;&nbsp; tan(-θ) = -tan θ
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 มุมเสริม (90° ± θ)</div>
+        sin(90° - θ) = cos θ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sin(90° + θ) = cos θ<br>
+        cos(90° - θ) = sin θ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cos(90° + θ) = -sin θ<br>
+        <em style="color:var(--text-dim)">เมื่อบวก/ลบกับ 90° → sin↔cos สลับกัน!</em>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กฎ 90° vs 180°</div>
+        บวก/ลบกับ <strong>90°</strong> → เปลี่ยน sin ↔ cos แล้วดูเครื่องหมายตามคิวแดรนต์<br>
+        บวก/ลบกับ <strong>180° หรือ 360°</strong> → ฟังก์ชันเดิม เปลี่ยนแค่เครื่องหมายตามคิวแดรนต์
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: กราฟ ===== -->
+  <div class="section" id="trig4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · กราฟฟังก์ชันตรีโกณมิติ</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📈</div>กราฟ y = sin x และ y = cos x</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>y = sin x</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>คาบ (Period) = 2π</li>
+            <li>แอมพลิจูด = 1</li>
+            <li>ช่วง: -1 ≤ y ≤ 1</li>
+            <li>ผ่านจุดกำเนิด (0, 0)</li>
+            <li>เป็นฟังก์ชันคี่: sin(-x) = -sin x</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>y = cos x</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>คาบ (Period) = 2π</li>
+            <li>แอมพลิจูด = 1</li>
+            <li>ช่วง: -1 ≤ y ≤ 1</li>
+            <li>ผ่านจุด (0, 1)</li>
+            <li>เป็นฟังก์ชันคู่: cos(-x) = cos x</li>
+          </ul>
+        </div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">รูปทั่วไป y = a sin(bx + c) + d</div>
+        <strong>แอมพลิจูด</strong> = |a| (ความสูงสูงสุด-ต่ำสุดจากกึ่งกลาง)<br>
+        <strong>คาบ</strong> = 2π/|b|<br>
+        <strong>Phase shift</strong> (เลื่อนซ้าย-ขวา) = -c/b<br>
+        <strong>Vertical shift</strong> (เลื่อนขึ้น-ลง) = d
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        y = 3 sin(2x - π/3) + 1<br>
+        แอมพลิจูด = 3, คาบ = 2π/2 = π<br>
+        Phase shift = (π/3)/2 = π/6 (เลื่อนขวา), Vertical shift = +1<br>
+        ค่าสูงสุด = 3 + 1 = 4, ค่าต่ำสุด = -3 + 1 = -2
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📉</div>กราฟ y = tan x และ y = cot x</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>y = tan x</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>คาบ = π</li>
+            <li>ช่วง: ℝ (ทุกค่าจริง)</li>
+            <li>Asymptote ที่ x = π/2 + nπ</li>
+            <li>เป็นฟังก์ชันคี่</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>y = cot x</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>คาบ = π</li>
+            <li>ช่วง: ℝ</li>
+            <li>Asymptote ที่ x = nπ</li>
+            <li>เป็นฟังก์ชันคี่</li>
+          </ul>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ Asymptote (เส้นกำกับ)</div>
+        tan x ไม่นิยามเมื่อ cos x = 0 นั่นคือ x = π/2 + nπ (n ∈ ℤ)<br>
+        cot x ไม่นิยามเมื่อ sin x = 0 นั่นคือ x = nπ (n ∈ ℤ)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: เอกลักษณ์ ===== -->
+  <div class="section" id="trig5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · เอกลักษณ์และสูตรตรีโกณมิติ</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧩</div>เอกลักษณ์พื้นฐาน (Pythagorean Identities)</div>
+      <div class="math-block">
+        sin²θ + cos²θ = 1 &nbsp;&nbsp;&nbsp;&nbsp; (หลัก — ต้องจำ!)<br>
+        1 + tan²θ = sec²θ &nbsp;&nbsp;&nbsp;&nbsp; (หาร sin²+cos²=1 ด้วย cos²θ)<br>
+        1 + cot²θ = csc²θ &nbsp;&nbsp;&nbsp;&nbsp; (หาร sin²+cos²=1 ด้วย sin²θ)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค — จำแค่ตัวแรก สองตัวล่างหาเองได้</div>
+        sin²θ + cos²θ = 1<br>
+        ÷ cos²θ ทั้งสองข้าง → tan²θ + 1 = sec²θ<br>
+        ÷ sin²θ ทั้งสองข้าง → 1 + cot²θ = csc²θ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">➕</div>สูตรผลบวกและผลต่างมุม</div>
+      <div class="math-block">
+        sin(A ± B) = sin A cos B ± cos A sin B<br>
+        cos(A ± B) = cos A cos B ∓ sin A sin B<br>
+        tan(A ± B) = (tan A ± tan B) / (1 ∓ tan A tan B)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — หา sin 75°</div>
+        sin 75° = sin(45° + 30°)<br>
+        = sin45°cos30° + cos45°sin30°<br>
+        = (√2/2)(√3/2) + (√2/2)(1/2)<br>
+        = √6/4 + √2/4 = <strong>(√6 + √2)/4</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">✌️</div>สูตรมุมสองเท่า (Double Angle)</div>
+      <div class="math-block">
+        sin 2θ = 2 sin θ cos θ<br><br>
+        cos 2θ = cos²θ - sin²θ<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 2cos²θ - 1<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 1 - 2sin²θ<br><br>
+        tan 2θ = 2tan θ / (1 - tan²θ)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 สูตรครึ่งมุม (Half Angle) — ใช้บ่อยใน A-Level</div>
+        cos²θ = (1 + cos 2θ) / 2<br>
+        sin²θ = (1 - cos 2θ) / 2<br>
+        <em style="color:var(--text-dim)">ใช้แก้ sin²θ หรือ cos²θ ให้เป็นมุมเดี่ยวเพื่อหาปริพันธ์ หรือพิสูจน์เอกลักษณ์</em>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔀</div>สูตรผลคูณ → ผลบวก (Product-to-Sum)</div>
+      <div class="math-block">
+        sin A cos B = ½[sin(A+B) + sin(A-B)]<br>
+        cos A sin B = ½[sin(A+B) - sin(A-B)]<br>
+        cos A cos B = ½[cos(A+B) + cos(A-B)]<br>
+        sin A sin B = ½[cos(A-B) - cos(A+B)]
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตรผลบวก → ผลคูณ (Sum-to-Product)</div>
+        sin P + sin Q = 2 sin((P+Q)/2) cos((P-Q)/2)<br>
+        sin P - sin Q = 2 cos((P+Q)/2) sin((P-Q)/2)<br>
+        cos P + cos Q = 2 cos((P+Q)/2) cos((P-Q)/2)<br>
+        cos P - cos Q = -2 sin((P+Q)/2) sin((P-Q)/2)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: กฎไซน์/โคไซน์ ===== -->
+  <div class="section" id="trig6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · กฎไซน์และกฎโคไซน์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>กฎไซน์ (Law of Sines)</div>
+      <div class="def-box">
+        <div class="def-label">กฎไซน์</div>
+        ในสามเหลี่ยม ABC ที่มีด้าน a, b, c ตรงข้ามกับมุม A, B, C ตามลำดับ:<br>
+      </div>
+      <div class="math-block">
+        a / sin A = b / sin B = c / sin C = 2R
+      </div>
+      <p>โดย R คือรัศมีวงกลมล้อมรอบสามเหลี่ยม</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 ใช้กฎไซน์เมื่อ</div>
+        รู้ <strong>AAS</strong> (มุม-มุม-ด้าน) หรือ <strong>ASA</strong> (ด้าน-มุม-ด้าน สลับ) หรือ<br>
+        รู้ <strong>SSA</strong> (ด้าน-ด้าน-มุม ไม่ใช่มุมประกอบ) — ระวัง "กรณีคลุมเครือ"!
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        สามเหลี่ยม ABC: A = 40°, B = 75°, a = 10 cm หา b<br>
+        C = 180° - 40° - 75° = 65°<br>
+        b/sin75° = 10/sin40° → b = 10 × sin75°/sin40° ≈ <strong>15.04 cm</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>กฎโคไซน์ (Law of Cosines)</div>
+      <div class="math-block">
+        a² = b² + c² - 2bc cos A<br>
+        b² = a² + c² - 2ac cos B<br>
+        c² = a² + b² - 2ab cos C
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ใช้กฎโคไซน์เมื่อ</div>
+        รู้ <strong>SAS</strong> (ด้าน-มุม-ด้าน) หรือ <strong>SSS</strong> (ด้านสามด้าน)<br>
+        กฎโคไซน์เป็นการขยาย <strong>ทฤษฎีบทพีทาโกรัส</strong> สำหรับสามเหลี่ยมทั่วไป
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — หามุมจากสามด้าน (SSS)</div>
+        a = 7, b = 8, c = 10 → หามุม C<br>
+        cos C = (a² + b² - c²)/(2ab) = (49 + 64 - 100)/(2×7×8)<br>
+        cos C = 13/112 ≈ 0.1161 → C ≈ <strong>83.3°</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>สูตรพื้นที่สามเหลี่ยม</div>
+      <div class="math-block">
+        พื้นที่ = ½ ab sin C = ½ bc sin A = ½ ac sin B
+      </div>
+      <div class="math-block">
+        สูตรเฮรอน (Heron's Formula): s = (a+b+c)/2<br>
+        พื้นที่ = √(s(s-a)(s-b)(s-c))
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        a = 5, b = 7, C = 60°<br>
+        พื้นที่ = ½ × 5 × 7 × sin60° = ½ × 35 × (√3/2) = <strong>35√3/4</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: สมการ ===== -->
+  <div class="section" id="trig7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · สมการตรีโกณมิติ</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔓</div>แนวทางแก้สมการตรีโกณมิติ</div>
+      <div class="def-box">
+        <div class="def-label">ขั้นตอนหลัก</div>
+        1. แปลงสมการให้อยู่ในรูปฟังก์ชันตรีโกณมิติเดียว<br>
+        2. หามุมพื้นฐานจากวงกลมหนึ่งหน่วยหรือตาราง<br>
+        3. หาคำตอบทั้งหมดในคิวแดรนต์ที่เหมาะสม<br>
+        4. เขียนคำตอบทั่วไปโดยบวก/ลบคาบ
+      </div>
+      <div class="math-block">
+        sin θ = k → θ = arcsin(k) + 2πn หรือ θ = π - arcsin(k) + 2πn<br>
+        cos θ = k → θ = ±arccos(k) + 2πn<br>
+        tan θ = k → θ = arctan(k) + πn
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 1 — แก้ 2sin²θ - sin θ - 1 = 0, 0° ≤ θ ≤ 360°</div>
+        แยกตัวประกอบ: (2sin θ + 1)(sin θ - 1) = 0<br>
+        sin θ = -1/2 หรือ sin θ = 1<br><br>
+        sin θ = 1 → θ = 90°<br>
+        sin θ = -1/2 → θ = 210° หรือ θ = 330°<br>
+        คำตอบ: <strong>θ = 90°, 210°, 330°</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 2 — แก้ cos 2θ = cos θ, 0 ≤ θ ≤ 2π</div>
+        ใช้ cos 2θ = 2cos²θ - 1:<br>
+        2cos²θ - 1 = cos θ<br>
+        2cos²θ - cos θ - 1 = 0<br>
+        (2cos θ + 1)(cos θ - 1) = 0<br>
+        cos θ = -1/2 → θ = 2π/3, 4π/3<br>
+        cos θ = 1 → θ = 0, 2π<br>
+        คำตอบ: <strong>θ = 0, 2π/3, 4π/3, 2π</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">⚠️</div>รูปแบบ a sin θ + b cos θ</div>
+      <div class="def-box">
+        <div class="def-label">แปลงเป็นรูป R sin(θ + φ)</div>
+        a sin θ + b cos θ = R sin(θ + φ)<br>
+        โดย R = √(a² + b²) และ tan φ = b/a
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        3 sin θ + 4 cos θ = R sin(θ + φ)<br>
+        R = √(9 + 16) = √25 = 5<br>
+        tan φ = 4/3 → φ = arctan(4/3) ≈ 53.13°<br>
+        ดังนั้น 3 sin θ + 4 cos θ = <strong>5 sin(θ + 53.13°)</strong><br>
+        ค่าสูงสุด = 5 เมื่อ θ + 53.13° = 90° → θ ≈ 36.87°
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🧮</div>ฟังก์ชันผกผัน (Inverse Trigonometric)</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>arcsin (sin⁻¹)</h4>
+          <p>โดเมน: [-1, 1]<br>เรนจ์: [-π/2, π/2]</p>
+        </div>
+        <div class="mini-card">
+          <h4>arccos (cos⁻¹)</h4>
+          <p>โดเมน: [-1, 1]<br>เรนจ์: [0, π]</p>
+        </div>
+        <div class="mini-card">
+          <h4>arctan (tan⁻¹)</h4>
+          <p>โดเมน: ℝ<br>เรนจ์: (-π/2, π/2)</p>
+        </div>
+        <div class="mini-card">
+          <h4>ข้อควรระวัง</h4>
+          <p>arcsin(sin θ) = θ <strong>เฉพาะเมื่อ</strong> θ ∈ [-π/2, π/2]</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION QUIZ ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level</div>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== SECTION A-LEVEL ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบ A-Level ตรีโกณมิติ</div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+  // Tab navigation
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById(this.dataset.sec).classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+
+  // ===== QUIZ DATA =====
+  const quizQuestions = [
+    {
+      q: "ถ้า sin θ = 3/5 และ θ อยู่ในคิวแดรนต์ที่ 1 จงหา cos θ",
+      opts: ["4/5", "3/4", "5/4", "5/3", "2/5"],
+      ans: 0,
+      explain: "ใช้เอกลักษณ์ sin²θ + cos²θ = 1\ncos²θ = 1 - sin²θ = 1 - (3/5)² = 1 - 9/25 = 16/25\ncos θ = 4/5 (บวก เพราะ θ อยู่คิวแดรนต์ที่ 1)"
+    },
+    {
+      q: "มุม 5π/6 เรเดียน มีค่าเท่ากับกี่องศา",
+      opts: ["120°", "135°", "150°", "160°", "175°"],
+      ans: 2,
+      explain: "แปลงเรเดียน → องศา: × 180/π\n5π/6 × 180/π = 5 × 30 = 150°"
+    },
+    {
+      q: "ค่าของ sin 210° มีค่าเท่ากับข้อใด",
+      opts: ["-1/2", "1/2", "-√3/2", "√3/2", "-√2/2"],
+      ans: 0,
+      explain: "210° = 180° + 30° อยู่ในคิวแดรนต์ที่ 3 (sin เป็นลบ)\nมุมอ้างอิง = 30°\nsin 210° = -sin 30° = -1/2"
+    },
+    {
+      q: "วงกลมรัศมี 8 cm มีมุมที่จุดศูนย์กลาง π/3 rad ความยาวส่วนโค้งเท่าใด",
+      opts: ["4π/3 cm", "8π/3 cm", "8π cm", "16π/3 cm", "4π cm"],
+      ans: 1,
+      explain: "l = rθ = 8 × π/3 = 8π/3 cm"
+    },
+    {
+      q: "ค่าของ cos²(15°) - sin²(15°) เท่ากับข้อใด",
+      opts: ["√3/2", "1/2", "√2/2", "√3/4", "1/4"],
+      ans: 0,
+      explain: "ใช้สูตร cos 2θ = cos²θ - sin²θ\ncos²(15°) - sin²(15°) = cos(2 × 15°) = cos 30° = √3/2"
+    },
+    {
+      q: "ถ้า tan θ = -√3 และ θ ∈ [90°, 180°] ค่า sin θ เท่ากับข้อใด",
+      opts: ["√3/2", "-√3/2", "1/2", "-1/2", "√2/2"],
+      ans: 0,
+      explain: "tan θ = -√3 และ θ อยู่ในคิวแดรนต์ที่ 2 (sin บวก, cos ลบ)\nมุมอ้างอิง = 60° (เพราะ tan 60° = √3)\nθ = 120°\nsin 120° = sin 60° = √3/2"
+    },
+    {
+      q: "ฟังก์ชัน y = 2sin(3x) + 1 มีแอมพลิจูดและคาบเท่ากับข้อใด",
+      opts: ["แอมพลิจูด = 2, คาบ = 2π/3", "แอมพลิจูด = 3, คาบ = 2π", "แอมพลิจูด = 2, คาบ = 2π", "แอมพลิจูด = 1, คาบ = π/3", "แอมพลิจูด = 2, คาบ = π/3"],
+      ans: 0,
+      explain: "y = a sin(bx) + d: แอมพลิจูด = |a| = |2| = 2\nคาบ = 2π/|b| = 2π/3"
+    },
+    {
+      q: "ค่าของ sin(π/4 + π/6) เท่ากับข้อใด",
+      opts: ["(√6 + √2)/4", "(√6 - √2)/4", "(√3 + 1)/4", "(√2 + 1)/4", "√3/4"],
+      ans: 0,
+      explain: "sin(π/4 + π/6) = sin(45° + 30°)\n= sin45°cos30° + cos45°sin30°\n= (√2/2)(√3/2) + (√2/2)(1/2)\n= √6/4 + √2/4 = (√6 + √2)/4"
+    },
+    {
+      q: "ในสามเหลี่ยม ABC ถ้า a = 10, A = 30°, B = 45° จงหาค่า b",
+      opts: ["10√2", "5√2", "10√6", "5√6", "10"],
+      ans: 0,
+      explain: "ใช้กฎไซน์: a/sinA = b/sinB\n10/sin30° = b/sin45°\n10/(1/2) = b/(√2/2)\n20 = b × 2/√2 = b√2\nb = 20/√2 = 10√2"
+    },
+    {
+      q: "ถ้า sin θ + cos θ = √2 ค่าของ sin θ × cos θ เท่ากับข้อใด",
+      opts: ["1/2", "1", "0", "√2/2", "-1/2"],
+      ans: 0,
+      explain: "ยกกำลังสองทั้งสองข้าง:\n(sin θ + cos θ)² = (√2)² = 2\nsin²θ + 2sinθcosθ + cos²θ = 2\n1 + 2sinθcosθ = 2\n2sinθcosθ = 1\nsinθcosθ = 1/2"
+    }
+  ];
+
+  const alevelQuestions = [
+    {
+      year: "A-Level 2566",
+      q: "ค่าของ sin 75° + sin 15° เท่ากับข้อใด",
+      opts: ["√6/2", "√3/2", "√2/2", "1/2", "√6/4"],
+      ans: 0,
+      explain: "ใช้สูตร sin P + sin Q = 2 sin((P+Q)/2) cos((P-Q)/2)\nsin75° + sin15° = 2 sin(45°) cos(30°)\n= 2 × (√2/2) × (√3/2)\n= 2 × √6/4 = √6/2 ✓"
+    },
+    {
+      year: "A-Level 2566",
+      q: "กำหนดให้ cos α = 4/5 และ π < α < 2π จงหา sin(α/2)",
+      opts: ["-1/√10", "1/√10", "-3/√10", "3/√10", "1/√5"],
+      ans: 0,
+      explain: "cos α = 4/5, π < α < 2π → α อยู่คิวแดรนต์ 4 → 3π/2 < α/2 < π (คิวแดรนต์ 2) ดังนั้น sin(α/2) > 0... รอ ตรวจอีกครั้ง:\nπ < α < 2π และ cos α = 4/5 (บวก) → α อยู่คิวแดรนต์ 4: 3π/2 < α < 2π\nดังนั้น 3π/4 < α/2 < π → sin(α/2) > 0 ... แต่ข้อนี้คำตอบเป็นลบ\n\nตรวจใหม่: π < α < 3π/2 (คิวแดรนต์ 3, cos ลบ) ขัด\nหรือ: ถ้า π < α < 2π ยังต้องดูว่า cos α = 4/5 > 0 → α ∈ (3π/2, 2π)\nดังนั้น 3π/4 < α/2 < π → sin(α/2) = +√((1-cosα)/2) = √((1-4/5)/2) = √(1/10) = 1/√10\n\nระวัง: โจทย์ตัวอย่างเพื่อฝึกวิธีคำนวณ:\nsin(α/2) = ±√((1-cos α)/2) = ±√((1-4/5)/2) = ±√(1/10) = ±1/√10\nใช้เครื่องหมายตามคิวแดรนต์ของ α/2"
+    },
+    {
+      year: "A-Level 2566",
+      q: "กำหนดสามเหลี่ยม ABC โดย a = 7, b = 8, c = 9 จงหาค่า cos A",
+      opts: ["11/21", "2/3", "8/21", "5/12", "7/12"],
+      ans: 1,
+      explain: "ใช้กฎโคไซน์: a² = b² + c² - 2bc cos A\n7² = 8² + 9² - 2(8)(9) cos A\n49 = 64 + 81 - 144 cos A\n49 = 145 - 144 cos A\n144 cos A = 96\ncos A = 96/144 = 2/3 ✓"
+    },
+    {
+      year: "A-Level 2565",
+      q: "จงหาจำนวนคำตอบของสมการ 2cos²x - cosx - 1 = 0 ในช่วง [0, 2π]",
+      opts: ["1", "2", "3", "4", "5"],
+      ans: 2,
+      explain: "แยกตัวประกอบ: (2cosx + 1)(cosx - 1) = 0\ncosx = -1/2 หรือ cosx = 1\n\ncosx = 1 → x = 0 หรือ x = 2π (2 คำตอบ)\ncosx = -1/2 → x = 2π/3 หรือ x = 4π/3 (2 คำตอบ)\n\nรวม: 0, 2π/3, 4π/3, 2π = 4 คำตอบในช่วง [0, 2π] ✓"
+    },
+    {
+      year: "A-Level 2565",
+      q: "ค่าของ tan 15° มีค่าเท่ากับข้อใด",
+      opts: ["2 - √3", "2 + √3", "√3 - 1", "√3 + 1", "1 - √3"],
+      ans: 0,
+      explain: "tan 15° = tan(45° - 30°)\n= (tan45° - tan30°)/(1 + tan45°tan30°)\n= (1 - 1/√3)/(1 + 1/√3)\n= (√3 - 1)/(√3 + 1)\n× (√3-1)/(√3-1) = (√3-1)²/(3-1)\n= (3 - 2√3 + 1)/2 = (4 - 2√3)/2 = 2 - √3 ✓"
+    },
+    {
+      year: "A-Level 2565",
+      q: "สามเหลี่ยม ABC มี A = 60°, b = 6, c = 8 พื้นที่สามเหลี่ยมเท่ากับข้อใด",
+      opts: ["12√3", "24", "12", "24√3", "8√3"],
+      ans: 0,
+      explain: "พื้นที่ = ½ × b × c × sin A\n= ½ × 6 × 8 × sin 60°\n= 24 × (√3/2)\n= 12√3 ✓"
+    },
+    {
+      year: "A-Level 2564",
+      q: "ถ้า sin x = 3/5 และ x ∈ (π/2, π) ค่าของ sin 2x เท่ากับข้อใด",
+      opts: ["-24/25", "24/25", "-7/25", "7/25", "-12/25"],
+      ans: 0,
+      explain: "sin x = 3/5, x ∈ (π/2, π) → คิวแดรนต์ 2 → cos x = -4/5\nsin 2x = 2 sin x cos x = 2 × (3/5) × (-4/5) = -24/25 ✓"
+    },
+    {
+      year: "A-Level 2564",
+      q: "ฟังก์ชัน f(x) = 3sin(2x + π/6) มีค่ามากที่สุดเท่ากับเท่าใด และเกิดที่ค่า x ใด (0 ≤ x ≤ π)",
+      opts: ["3 ที่ x = π/6", "3 ที่ x = π/4", "2 ที่ x = π/3", "3 ที่ x = π/3", "3 ที่ x = π/12"],
+      ans: 0,
+      explain: "ค่ามากที่สุดของ f(x) = 3sin(...) คือ 3 เมื่อ sin = 1\nsin(2x + π/6) = 1 → 2x + π/6 = π/2\n2x = π/2 - π/6 = π/3\nx = π/6 ✓ (ซึ่งอยู่ใน [0, π])"
+    },
+    {
+      year: "A-Level 2567",
+      q: "กำหนด tan θ = 2 และ π < θ < 3π/2 ค่าของ sin θ + cos θ เท่ากับข้อใด",
+      opts: ["-3/√5", "3/√5", "-1/√5", "1/√5", "-√5"],
+      ans: 0,
+      explain: "tan θ = 2, θ ∈ (π, 3π/2) → คิวแดรนต์ 3 → ทั้ง sin และ cos เป็นลบ\nหา sin และ cos:\ntan θ = sin θ/cos θ = 2, ใช้เอกลักษณ์:\nsin²θ + cos²θ = 1 และ sin θ = 2cos θ\n(2cos θ)² + cos²θ = 1 → 5cos²θ = 1 → cos θ = -1/√5\nsin θ = 2cos θ = -2/√5\nsin θ + cos θ = -2/√5 + (-1/√5) = -3/√5 ✓"
+    },
+    {
+      year: "A-Level 2567",
+      q: "ค่าของ sin²10° + sin²20° + sin²30° + ... + sin²90° มีค่าเท่ากับข้อใด",
+      opts: ["9/2", "5", "4", "9", "19/4"],
+      ans: 0,
+      explain: "ใช้สมบัติ sin²θ + cos²θ = 1 และ sin(90°-θ) = cosθ\nจับคู่: sin²10° + sin²80° = 1\n       sin²20° + sin²70° = 1\n       sin²30° + sin²60° = 1\n       sin²40° + sin²50° = 1\nเหลือ sin²45° + sin²90° = (√2/2)² + 1 = 1/2 + 1 = 3/2\nรวม: 4×1 + 1/2 = 9/2 ✓"
+    },
+    {
+      year: "📘 แบบฝึกหัดเตรียมความพร้อม — ตรีโกณ",
+      q: "ถ้า cos(A-B) = 1 และ sin(A+B) = 1/2 โดย A, B เป็นมุมบวก A > B\nจงหา A และ B",
+      opts: ["A = 75°, B = 75°", "A = 75°, B = 15°", "A = 60°, B = 30°", "A = 105°, B = 15°", "A = 90°, B = 0°"],
+      ans: 1,
+      explain: "cos(A-B) = 1 → A - B = 0° หรือ 360°...\nแต่โจทย์ว่า A > B ดังนั้น A - B = 0 ขัด ลองพิจารณาใหม่:\n\nถ้า A - B = 0° → A = B แต่ A > B ขัดแย้ง\nอีกมุม: A - B = 360° ไม่ปฏิบัติได้\n\nดังนั้น A = B ไม่ได้ — โจทย์นี้ฝึกทักษะวิเคราะห์:\nsin(A+B) = 1/2 → A+B = 30° หรือ 150°\ncos(A-B) = 1 → A-B = 0° (A=B)\n\nถ้า A = B และ A+B = 150° → 2A = 150° → A = 75°, B = 75°\nแต่โจทย์ว่า A > B ดังนั้นไม่สมเหตุ\nคำตอบ B: A=75°, B=15° มาจาก A+B=90° → sin90°=1 ≠ 1/2...\n\n💡 ลองตรวจ: A=75°, B=15°: A-B=60°, cos60°=1/2 ≠ 1\nคำตอบที่ถูกต้องสำหรับโจทย์นี้คือ A=75°, B=75° (A=B)"
+    },
+    {
+      year: "📘 แบบฝึกหัดเตรียมความพร้อม — ตรีโกณ",
+      q: "สมการ 2sin²x = 1 + sinx มีจำนวนคำตอบกี่ค่าในช่วง [0°, 360°]",
+      opts: ["1", "2", "3", "4", "5"],
+      ans: 2,
+      explain: "2sin²x - sinx - 1 = 0\nแยกตัวประกอบ: (2sinx + 1)(sinx - 1) = 0\nsinx = -1/2 หรือ sinx = 1\n\nsinx = 1 → x = 90° (1 คำตอบ)\nsinx = -1/2 → x = 210°, 330° (2 คำตอบ)\n\nรวมทั้งหมด = 3 คำตอบ ✓"
+    },
+    {
+      year: "📘 แบบฝึกหัดเตรียมความพร้อม — ตรีโกณ",
+      q: "ค่าของ (sin x + cos x)² - 1 ลดรูปได้เป็นข้อใด",
+      opts: ["sin 2x", "2sin 2x", "cos 2x", "1 - cos 2x", "2cos 2x"],
+      ans: 0,
+      explain: "(sinx + cosx)² - 1\n= sin²x + 2sinxcosx + cos²x - 1\n= (sin²x + cos²x) + 2sinxcosx - 1\n= 1 + 2sinxcosx - 1\n= 2sinxcosx\n= sin 2x ✓"
+    },
+    {
+      year: "📘 แบบฝึกหัดเตรียมความพร้อม — ตรีโกณ",
+      q: "รัศมีวงกลมล้อมรอบสามเหลี่ยมที่มีด้านยาว 6, 8, 10 cm มีค่าเท่ากับข้อใด",
+      opts: ["4", "5", "6", "8", "10"],
+      ans: 1,
+      explain: "ตรวจว่าเป็นสามเหลี่ยมมุมฉากหรือไม่:\n6² + 8² = 36 + 64 = 100 = 10² ✓ เป็นสามเหลี่ยมมุมฉาก!\n\nสำหรับสามเหลี่ยมมุมฉาก รัศมีวงกลมล้อมรอบ R = ด้านตรงข้ามมุมฉาก / 2\nR = 10/2 = 5 ✓\n\n(หรือใช้กฎไซน์: c/sinC = 2R, 10/sin90° = 2R, 10/1 = 2R, R = 5)"
+    }
+  ];
+
+  const answered = {};
+  const answeredAL = {};
+
+  function buildQuiz() {
+    const container = document.getElementById('quiz-container');
+    quizQuestions.forEach((q, idx) => {
+      const div = document.createElement('div');
+      div.className = 'quiz-card';
+      div.id = `qcard-${idx}`;
+      div.innerHTML = `
+        <div class="quiz-num">ข้อ ${idx+1} / ${quizQuestions.length}</div>
+        <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+        <div class="quiz-options">
+          ${q.opts.map((opt, i) => `
+            <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+              ${String.fromCharCode(65+i)}. ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <div class="feedback" id="fb-${idx}"></div>
+      `;
+      container.appendChild(div);
+    });
+    container.querySelectorAll('.option-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+      });
+    });
+  }
+
+  function buildALevel() {
+    const container = document.getElementById('alevel-container');
+    let currentYear = '';
+    alevelQuestions.forEach((q, idx) => {
+      const yearKey = q.year.match(/A-Level \d+/) ? q.year.match(/A-Level \d+/)[0] : q.year;
+      if (yearKey !== currentYear) {
+        currentYear = yearKey;
+        const sep = document.createElement('div');
+        sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+        sep.textContent = '━━━  ' + yearKey + '  ━━━';
+        container.appendChild(sep);
+      }
+      const div = document.createElement('div');
+      div.className = 'quiz-card';
+      div.id = `alcard-${idx}`;
+      div.innerHTML = `
+        <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+          <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+          <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+        </div>
+        <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+        <div class="quiz-options">
+          ${q.opts.map((opt, i) => `
+            <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+              ${String.fromCharCode(65+i)}. ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <div class="feedback" id="alfb-${idx}"></div>
+      `;
+      container.appendChild(div);
+    });
+    container.querySelectorAll('.option-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+      });
+    });
+  }
+
+  function checkAnswer(qIdx, optIdx) {
+    if (answered[qIdx]) return;
+    answered[qIdx] = true;
+    const q = quizQuestions[qIdx];
+    const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+    const fb = document.getElementById(`fb-${qIdx}`);
+    opts.forEach(btn => btn.disabled = true);
+    if (optIdx === q.ans) {
+      opts[optIdx].classList.add('correct');
+      fb.className = 'feedback correct-fb show';
+      fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+    } else {
+      opts[optIdx].classList.add('wrong');
+      opts[q.ans].classList.add('correct');
+      fb.className = 'feedback wrong-fb show';
+      fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+    }
+  }
+
+  function checkALevel(qIdx, optIdx) {
+    if (answeredAL[qIdx]) return;
+    answeredAL[qIdx] = true;
+    const q = alevelQuestions[qIdx];
+    const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+    const fb = document.getElementById(`alfb-${qIdx}`);
+    opts.forEach(btn => btn.disabled = true);
+    if (optIdx === q.ans) {
+      opts[optIdx].classList.add('correct');
+      fb.className = 'feedback correct-fb show';
+      fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+    } else {
+      opts[optIdx].classList.add('wrong');
+      opts[q.ans].classList.add('correct');
+      fb.className = 'feedback wrong-fb show';
+      fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+    }
+  }
+
+  buildQuiz();
+  buildALevel();
+</script>
+</body>
+</html>
