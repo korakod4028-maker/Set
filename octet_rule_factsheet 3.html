@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>กฎอ็อกเตต — Fact Sheet</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sarabun', 'Segoe UI', sans-serif;
+    background: #f5f4f0;
+    color: #1a1a18;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600&display=swap');
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2.5rem 2.5rem;
+    border: 0.5px solid #e0ddd5;
+  }
+
+  /* Header */
+  .header { margin-bottom: 1.5rem; }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #888680;
+    margin-bottom: 6px;
+  }
+  .title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #1a1a18;
+    margin-bottom: 4px;
+  }
+  .title-en {
+    font-size: 14px;
+    color: #888680;
+  }
+
+  /* Definition box */
+  .def-box {
+    background: #f0efe9;
+    border-radius: 10px;
+    border-left: 3px solid #3b5bdb;
+    padding: 1rem 1.25rem;
+    font-size: 14px;
+    line-height: 1.75;
+    margin-bottom: 2rem;
+    color: #2c2c2a;
+  }
+  .def-box strong { font-weight: 600; color: #1a1a18; }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888680;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 0.5px solid #e0ddd5;
+  }
+
+  /* 3 strategy cards */
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+  .s-card {
+    border-radius: 10px;
+    border: 0.5px solid #e0ddd5;
+    padding: 1rem 1rem 1.1rem;
+  }
+  .s-card-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+  .s-card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .s-card-subtitle { font-size: 12px; color: #888680; margin-bottom: 8px; }
+  .s-card-body { font-size: 12.5px; color: #4a4a48; line-height: 1.6; }
+  .s-charge { font-size: 12px; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid #e8e7e2; color: #3a3a38; }
+
+  .blue-card { background: #eef3fd; border-color: #c5d3f5; }
+  .blue-card .s-card-badge { background: #dce6fb; color: #2f4bb5; }
+  .blue-card .s-card-title { color: #1e3497; }
+
+  .red-card { background: #fdeeed; border-color: #f5c5c2; }
+  .red-card .s-card-badge { background: #fce0de; color: #b52b24; }
+  .red-card .s-card-title { color: #8c1f1a; }
+
+  .green-card { background: #edf7ee; border-color: #c0e3c2; }
+  .green-card .s-card-badge { background: #d8f0da; color: #2a7a2e; }
+  .green-card .s-card-title { color: #1a5c1e; }
+
+  /* Ion table */
+  .ion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 2rem;
+  }
+  .ion-cell {
+    background: #f8f7f3;
+    border-radius: 8px;
+    border: 0.5px solid #e0ddd5;
+    padding: 10px 12px;
+  }
+  .ion-group { font-size: 11px; color: #888680; margin-bottom: 2px; }
+  .ion-names { font-size: 13px; font-weight: 600; margin-bottom: 2px; color: #1a1a18; }
+  .ion-desc { font-size: 11px; color: #666663; }
+
+  /* Exceptions */
+  .exc-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2rem; }
+  .exc-item {
+    border-radius: 8px;
+    border: 0.5px solid #f5d67a;
+    background: #fdf8e8;
+    padding: 0.85rem 1rem;
+  }
+  .exc-title { font-size: 13px; font-weight: 600; color: #7a5a00; margin-bottom: 4px; }
+  .exc-body { font-size: 12.5px; color: #5a4a2a; line-height: 1.6; }
+  .exc-body code {
+    background: #f5edd4;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 12px;
+    color: #7a5500;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* Key rule summary */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .sum-box {
+    text-align: center;
+    background: #f8f7f3;
+    border-radius: 8px;
+    border: 0.5px solid #e0ddd5;
+    padding: 12px 8px;
+  }
+  .sum-num { font-size: 26px; font-weight: 600; color: #3b5bdb; }
+  .sum-label { font-size: 11px; color: #888680; margin-top: 2px; }
+
+  /* Leg table */
+  .leg-intro {
+    font-size: 13.5px;
+    color: #2c2c2a;
+    line-height: 1.75;
+    margin-bottom: 14px;
+    background: #f0efe9;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+  }
+  .leg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 2rem;
+  }
+  .leg-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #888680;
+    padding: 6px 10px;
+    border-bottom: 0.5px solid #e0ddd5;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .leg-table td {
+    padding: 8px 10px;
+    border-bottom: 0.5px solid #f0efe9;
+    vertical-align: middle;
+  }
+  .leg-table tr:last-child td { border-bottom: none; }
+  .leg-atom { font-size: 17px; font-weight: 600; color: #1a1a18; }
+  .leg-legs { font-size: 22px; font-weight: 600; color: #3b5bdb; }
+  .leg-vis { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+  .leg-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #3b5bdb;
+    display: inline-block;
+  }
+  .leg-dot.used { background: #3b5bdb; }
+  .leg-dot.lone { background: #d0cec8; }
+  .leg-tag {
+    display: inline-block;
+    font-size: 10px;
+    background: #eef3fd;
+    color: #2f4bb5;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 2rem;
+    font-size: 11px;
+    color: #aaa89e;
+    border-top: 0.5px solid #e0ddd5;
+    padding-top: 1rem;
+    text-align: center;
+  }
+
+  @media (max-width: 560px) {
+    .page { padding: 1.5rem 1.25rem; }
+    .strategy-grid, .ion-grid, .summary-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="eyebrow">เคมี · สสวท ม.ปลาย · Fact Sheet</div>
+    <div class="title">กฎอ็อกเตต</div>
+    <div class="title-en">Octet Rule</div>
+  </div>
+
+  <div class="def-box">
+    อะตอมของธาตุต่าง ๆ มีแนวโน้มทำปฏิกิริยาเคมีเพื่อให้ <strong>เวเลนซ์อิเล็กตรอนครบ 8 ตัว</strong>
+    ซึ่งเสถียรเทียบเท่าแก๊สเฉื่อย (หมู่ 8) โดยจะเลือกวิธีใดวิธีหนึ่งจากสามแนวทาง:
+    <strong>ทิ้ง · รับ · แชร์</strong>
+  </div>
+
+  <div class="section-label">สามกลยุทธ์ของอะตอม</div>
+  <div class="strategy-grid">
+    <div class="s-card blue-card">
+      <div class="s-card-badge">กลุ่ม 1 — โลหะ</div>
+      <div class="s-card-title">ยอมทิ้ง</div>
+      <div class="s-card-subtitle">หมู่ 1, 2, 3</div>
+      <div class="s-card-body">มีเวเลนซ์อิเล็กตรอนน้อย จ่ายทิ้งให้วงถัดในกลายเป็นวงนอกสุดแทน → <strong>ไอออนบวก (Cation)</strong></div>
+      <div class="s-charge">หมู่ 1 → +1 &nbsp;|&nbsp; หมู่ 2 → +2 &nbsp;|&nbsp; หมู่ 3 → +3</div>
+    </div>
+    <div class="s-card red-card">
+      <div class="s-card-badge">กลุ่ม 2 — อโลหะ</div>
+      <div class="s-card-title">ดึงเข้า</div>
+      <div class="s-card-subtitle">หมู่ 5, 6, 7</div>
+      <div class="s-card-body">มีเวเลนซ์อิเล็กตรอนเกือบครบ รับเพิ่มให้ครบ 8 → <strong>ไอออนลบ (Anion)</strong></div>
+      <div class="s-charge">หมู่ 5 → −3 &nbsp;|&nbsp; หมู่ 6 → −2 &nbsp;|&nbsp; หมู่ 7 → −1</div>
+    </div>
+    <div class="s-card green-card">
+      <div class="s-card-badge">กลุ่ม 3 — สายกลาง</div>
+      <div class="s-card-title">สายแชร์</div>
+      <div class="s-card-subtitle">หมู่ 4</div>
+      <div class="s-card-body">อยู่กึ่งกลาง ทิ้งหรือรับ 4 ตัวต้องใช้พลังงานสูง จึงแชร์ร่วมกับอะตอมอื่น → <strong>พันธะโคเวเลนต์</strong></div>
+      <div class="s-charge">ตัวอย่าง: C (4 พันธะ), Si</div>
+    </div>
+  </div>
+
+  <div class="section-label">ตัวอย่างไอออนที่พบบ่อย</div>
+  <div class="ion-grid">
+    <div class="ion-cell">
+      <div class="ion-group">หมู่ 1 → +1</div>
+      <div class="ion-names">Na⁺ · K⁺ · Li⁺</div>
+      <div class="ion-desc">จ่าย e⁻ ออก 1 ตัว</div>
+    </div>
+    <div class="ion-cell">
+      <div class="ion-group">หมู่ 2 → +2</div>
+      <div class="ion-names">Mg²⁺ · Ca²⁺ · Ba²⁺</div>
+      <div class="ion-desc">จ่าย e⁻ ออก 2 ตัว</div>
+    </div>
+    <div class="ion-cell">
+      <div class="ion-group">หมู่ 3 → +3</div>
+      <div class="ion-names">Al³⁺</div>
+      <div class="ion-desc">จ่าย e⁻ ออก 3 ตัว</div>
+    </div>
+    <div class="ion-cell">
+      <div class="ion-group">หมู่ 5 → −3</div>
+      <div class="ion-names">N³⁻ · P³⁻</div>
+      <div class="ion-desc">รับ e⁻ เข้า 3 ตัว</div>
+    </div>
+    <div class="ion-cell">
+      <div class="ion-group">หมู่ 6 → −2</div>
+      <div class="ion-names">O²⁻ · S²⁻</div>
+      <div class="ion-desc">รับ e⁻ เข้า 2 ตัว</div>
+    </div>
+    <div class="ion-cell">
+      <div class="ion-group">หมู่ 7 → −1</div>
+      <div class="ion-names">F⁻ · Cl⁻ · Br⁻ · I⁻</div>
+      <div class="ion-desc">รับ e⁻ เข้า 1 ตัว</div>
+    </div>
+  </div>
+
+  <div class="section-label">ข้อยกเว้นสำคัญ</div>
+  <div class="exc-list">
+    <div class="exc-item">
+      <div class="exc-title">Octet ไม่สมบูรณ์ — มีอิเล็กตรอนน้อยกว่า 8</div>
+      <div class="exc-body">ธาตุคาบ 2 บางชนิดมีเพียง 6 อิเล็กตรอนรอบอะตอมกลาง (sextet) แต่ก็เสถียรพอ เช่น <code>BF₃</code>, <code>BCl₃</code>, <code>AlCl₃</code></div>
+    </div>
+    <div class="exc-item">
+      <div class="exc-title">Octet ขยาย — มีอิเล็กตรอนมากกว่า 8</div>
+      <div class="exc-body">ธาตุคาบ 3 ขึ้นไปสามารถใช้ออร์บิทัล d รองรับ e⁻ เพิ่มได้ เช่น <code>PCl₅</code> (P มี 10 e⁻), <code>SF₆</code> (S มี 12 e⁻), <code>XeF₄</code></div>
+    </div>
+    <div class="exc-item">
+      <div class="exc-title">อนุมูลอิสระ (Free radical) — จำนวน e⁻ คี่</div>
+      <div class="exc-body">โมเลกุลที่มีอิเล็กตรอนจำนวนคี่ไม่สามารถครบ octet ได้ทุกอะตอม มีอิเล็กตรอนเดี่ยวหลงเหลือ ทำให้ว่องไวสูง เช่น <code>NO</code>, <code>NO₂</code>, <code>ClO₂</code></div>
+    </div>
+    <div class="exc-item">
+      <div class="exc-title">H และ He — กฎไดเอต (Duet Rule)</div>
+      <div class="exc-body">H และ He มีระดับพลังงานเพียง n = 1 จึงต้องการเพียง <strong>2 อิเล็กตรอน</strong> ไม่ใช่ 8 เพื่อให้เสถียร</div>
+    </div>
+  </div>
+
+  <div class="section-label">สรุปตัวเลขที่ต้องจำ</div>
+  <div class="summary-row">
+    <div class="sum-box">
+      <div class="sum-num">8</div>
+      <div class="sum-label">เวเลนซ์ e⁻ ที่ต้องการ (octet)</div>
+    </div>
+    <div class="sum-box">
+      <div class="sum-num" style="color:#c0392b;">2</div>
+      <div class="sum-label">e⁻ ที่ H/He ต้องการ (duet)</div>
+    </div>
+    <div class="sum-box">
+      <div class="sum-num" style="color:#27ae60;">4</div>
+      <div class="sum-label">พันธะของ C (หมู่ 4)</div>
+    </div>
+  </div>
+
+  <div class="section-label">ทำไมอะตอมถึงมี "ขา" จำนวนนั้น — สำหรับแบบจำลองโมเลกุล</div>
+
+  <div class="leg-intro">
+    <strong>ขา = พันธะโคเวเลนต์</strong> แต่ละขาคือการแชร์อิเล็กตรอน 1 คู่กับอะตอมข้างเคียง<br>
+    สูตรง่าย ๆ: <strong>จำนวนขา = 8 − เวเลนซ์อิเล็กตรอน</strong> (ยกเว้น H ใช้ 2 − 1 = 1)
+  </div>
+
+  <table class="leg-table">
+    <thead>
+      <tr>
+        <th>อะตอม</th>
+        <th>หมู่</th>
+        <th>e⁻ วงนอก</th>
+        <th>ต้องการอีก</th>
+        <th>ขา (พันธะ)</th>
+        <th>ตัวอย่างโมเลกุล</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="leg-atom">C</span></td>
+        <td>14</td>
+        <td>4</td>
+        <td>4</td>
+        <td><span class="leg-legs">4</span> <span class="leg-tag">4 ขา</span></td>
+        <td>CH₄ (มีเทน), CO₂</td>
+      </tr>
+      <tr>
+        <td><span class="leg-atom">N</span></td>
+        <td>15</td>
+        <td>5</td>
+        <td>3</td>
+        <td><span class="leg-legs">3</span> <span class="leg-tag">3 ขา</span></td>
+        <td>NH₃ (แอมโมเนีย)</td>
+      </tr>
+      <tr>
+        <td><span class="leg-atom">O</span></td>
+        <td>16</td>
+        <td>6</td>
+        <td>2</td>
+        <td><span class="leg-legs">2</span> <span class="leg-tag">2 ขา</span></td>
+        <td>H₂O (น้ำ)</td>
+      </tr>
+      <tr>
+        <td><span class="leg-atom">H</span></td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td><span class="leg-legs">1</span> <span class="leg-tag">1 ขา</span></td>
+        <td>H₂, HCl — ปลายเสมอ ไม่เคยอยู่กลาง</td>
+      </tr>
+      <tr>
+        <td><span class="leg-atom">Cl</span></td>
+        <td>17</td>
+        <td>7</td>
+        <td>1</td>
+        <td><span class="leg-legs">1</span> <span class="leg-tag">1 ขา</span></td>
+        <td>HCl, CCl₄</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">เนื้อหาตาม สสวท ม.ปลาย · กฎอ็อกเตตและข้อยกเว้น</div>
+
+</div>
+</body>
+</html>
