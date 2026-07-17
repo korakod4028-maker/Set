@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thailand → Remote Australia · Mix's Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #f0f7f4;
+  --surface: #ffffff;
+  --border:  #c8e6d8;
+  --border2: #a8d5be;
+  --green1:  #00a86b;
+  --green2:  #00c27a;
+  --green3:  #e6f7f0;
+  --blue1:   #0077b6;
+  --blue2:   #00b4d8;
+  --teal:    #00897b;
+  --text:    #1a2e25;
+  --text2:   #3d5a4a;
+  --muted:   #7a9e8a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans Thai', sans-serif;
+  line-height: 1.65;
+}
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #003d2b 0%, #005a42 45%, #004d6b 100%);
+  padding: 56px 24px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(0,180,216,.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 80% 30%, rgba(0,194,122,.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: #7dffc8;
+  border: 1px solid rgba(125,255,200,.35);
+  padding: 5px 14px; border-radius: 100px; margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px,7vw,58px); font-weight: 800;
+  color: #fff; line-height: 1.1; margin-bottom: 8px; letter-spacing: -1px;
+}
+.hero h1 .g { color: #7dffc8; }
+.hero h1 .b { color: #7dd8ff; }
+.hero-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: rgba(255,255,255,.45); letter-spacing: 1px;
+}
+
+/* SALARY BAR */
+.salary-bar {
+  display: flex; flex-wrap: wrap;
+  background: #fff; border-bottom: 2px solid var(--border);
+}
+.sal-item {
+  flex: 1; min-width: 80px; text-align: center;
+  padding: 16px 8px; border-right: 1px solid var(--border);
+}
+.sal-item:last-child { border-right: none; }
+.sal-amount {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px; font-weight: 800; color: var(--green1);
+}
+.sal-item.blue .sal-amount { color: var(--blue1); }
+.sal-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); margin-top: 2px; }
+
+/* MAIN */
+.main {
+  max-width: 820px; margin: 0 auto;
+  padding: 32px 16px 0;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+/* PHASE — details/summary, zero JS */
+details.phase {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+details.phase[open] {
+  border-color: var(--pc, var(--green2));
+  box-shadow: 0 4px 20px rgba(0,168,107,.07);
+}
+details.phase summary {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 20px; cursor: pointer;
+  list-style: none; user-select: none;
+  transition: background .15s;
+}
+details.phase summary::-webkit-details-marker { display: none; }
+details.phase summary:hover { background: #f8fffe; }
+details.phase[open] summary {
+  border-bottom: 1.5px solid var(--border);
+  background: var(--pbg, #f0faf5);
+}
+.ph-num {
+  font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800;
+  color: var(--pc, var(--green1)); opacity: .2; min-width: 34px; line-height: 1;
+}
+.ph-icon { font-size: 22px; flex-shrink: 0; }
+.ph-info { flex: 1; }
+.ph-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.ph-years { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px; }
+.ph-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  padding: 4px 10px; border-radius: 100px;
+  background: var(--pbg2, #e6f7f0);
+  color: var(--pc, var(--green1));
+  border: 1px solid var(--pbd, #b2e4cc);
+  white-space: nowrap;
+}
+.ph-arrow { font-size: 12px; color: var(--muted); transition: transform .25s; flex-shrink: 0; }
+details.phase[open] .ph-arrow { transform: rotate(180deg); }
+
+/* BODY */
+.phase-body { padding: 20px 20px 24px; }
+.section { margin-bottom: 20px; }
+.section:last-child { margin-bottom: 0; }
+.sec-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 9.5px;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--pc, var(--green1));
+  margin-bottom: 12px; padding-bottom: 6px;
+  border-bottom: 1px dashed var(--border);
+}
+.tasks { list-style: none; }
+.tasks li { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13.5px; color: var(--text2); }
+.tasks li::before { content: '›'; color: var(--pc, var(--green1)); font-size: 18px; line-height: 1.3; flex-shrink: 0; }
+.tasks li strong { color: var(--text); }
+.tasks li .note { display: block; font-size: 11.5px; color: var(--muted); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  padding: 4px 10px; border-radius: 100px;
+  background: var(--bg); border: 1px solid var(--border2); color: var(--text2);
+}
+.chip.key { background: var(--pbg2, #e6f7f0); border-color: var(--pbd, #b2e4cc); color: var(--pc, var(--green1)); font-weight: 500; }
+.sal-box {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 16px; padding: 14px 16px;
+  background: var(--pbg, #f0faf5);
+  border: 1.5px solid var(--pbd, #b2e4cc); border-radius: 10px;
+}
+.sal-box .icon { font-size: 24px; }
+.sal-box .amount { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--pc, var(--green1)); }
+.sal-box .desc { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.warn {
+  margin-top: 14px; padding: 12px 14px;
+  background: #fff8f0; border: 1px solid #ffd199;
+  border-radius: 8px; font-size: 12.5px; color: #7a4f00;
+}
+.warn strong { color: #c07000; }
+
+/* CERT TABLE */
+.cert-section { max-width: 820px; margin: 24px auto 0; padding: 0 16px 80px; }
+.cert-header {
+  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); text-align: center; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.cert-header::before, .cert-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.cert-table { background: #fff; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+.cert-row {
+  display: grid; grid-template-columns: 24px 10px 1fr auto;
+  align-items: center; gap: 12px;
+  padding: 13px 18px; border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.cert-row:last-child { border-bottom: none; }
+.cert-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-align: right; }
+.cert-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.cert-name { font-weight: 600; color: var(--text); }
+.cert-why { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.cert-meta { text-align: right; white-space: nowrap; }
+.cert-cost { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; }
+.cert-when { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+footer {
+  text-align: center; padding: 28px 24px;
+  border-top: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);
+}
+footer span { color: var(--green1); font-weight: 500; }
+
+@media(max-width:480px) {
+  .ph-num { display: none; }
+  .ph-badge { display: none; }
+  .cert-row { grid-template-columns: 18px 10px 1fr auto; gap: 8px; padding: 11px 12px; }
+  .sal-item { min-width: 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Mix's Master Roadmap · 2026 – 2034</div>
+  <h1><span class="g">Thailand</span> → <span class="b">Remote Australia</span></h1>
+  <p class="hero-sub">EE Comms · Naresuan University · Cloud Security · Work From Anywhere · AUD $145k+</p>
+</div>
+
+<!-- SALARY BAR -->
+<div class="salary-bar">
+  <div class="sal-item"><div class="sal-amount">35K</div><div class="sal-label">เริ่มงาน THB</div></div>
+  <div class="sal-item"><div class="sal-amount">80K</div><div class="sal-label">Cloud ไทย THB</div></div>
+  <div class="sal-item"><div class="sal-amount">200K</div><div class="sal-label">Remote SG THB</div></div>
+  <div class="sal-item blue"><div class="sal-amount">350K+</div><div class="sal-label">Remote AUS THB</div></div>
+  <div class="sal-item blue"><div class="sal-amount">800K+</div><div class="sal-label">Contractor THB</div></div>
+</div>
+
+<!-- PHASES -->
+<div class="main">
+
+  <!-- PHASE 1 -->
+  <details class="phase" style="--pc:#00a86b;--pbd:#90dbb8;--pbg:#f0faf5;--pbg2:#e2f5ec" open>
+    <summary>
+      <span class="ph-num">01</span>
+      <span class="ph-icon">🎓</span>
+      <div class="ph-info">
+        <div class="ph-title">มหา'ลัย ปี 1–4 · สร้างฐานทัพ</div>
+        <div class="ph-years">2026 – 2030 · Naresuan University · EE Comms</div>
+      </div>
+      <span class="ph-badge">ปูพื้นฐาน</span>
+      <span class="ph-arrow">▾</span>
+    </summary>
+    <div class="phase-body">
+      <!-- ปี 1 เทอม 1 -->
+      <div class="section">
+        <div class="sec-title">📗 ปี 1 เทอม 1 — วิชาหิน + เริ่มปูพื้นฐาน</div>
+        <ul class="tasks">
+          <li><div><strong>วิชาหิน:</strong> Circuit 1, Calculus 1, Physics 1<span class="note">→ เป้าหมายเกรด 3.0+ ทุกวิชา ห้ามหลุด · เป็นรากฐานของทุกวิชาต่อจากนี้</span></div></li>
+          <li><div><strong>Cisco NetAcad:</strong> เรียนต่อให้จบ 17 modules ที่เริ่มไว้แล้ว<span class="note">→ Network จาก Cisco = พื้นฐาน Cloud Networking โดยตรง · เรียนตาม pace ของ Cisco ได้เลย</span></div></li>
+          <li><div><strong>Killercoda — Linux Foundations:</strong> 21 scenarios<span class="note">→ วันละ 1-2 scenario ช่วงเย็น ใช้เวลาแค่ 2-3 สัปดาห์จบ · เปิดบน iPad ผ่านเบราว์เซอร์ได้เลย</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip">Cisco NetAcad ครบ</span>
+          <span class="chip key">✓ Linux Foundations (21)</span>
+        </div>
+      </div>
+
+      <!-- ปี 1 เทอม 2 -->
+      <div class="section">
+        <div class="sec-title">📗 ปี 1 เทอม 2 — Debug + Git + เตรียม AWS</div>
+        <ul class="tasks">
+          <li><div><strong>วิชาหิน:</strong> Calculus 2, Physics 2<span class="note">→ รักษา GPA ให้ได้ 3.0+ ต่อเนื่อง</span></div></li>
+          <li><div><strong>Linux Command Line:</strong> ฝึกวันละ 15 นาที บน Acer Aspire หรือ iPad<span class="note">→ Linux ใช้ทุกวันในงาน Cloud จริงๆ ยิ่งฝึกเร็วยิ่งได้เปรียบ</span></div></li>
+          <li><div><strong>Killercoda — Linux Troubleshooting:</strong> 4 scenarios<span class="note">→ แค่ 4 scenarios ทำได้เร็วมาก · ฝึก debug และแก้ปัญหา Linux จริงๆ ที่จะเจอในงาน Cloud</span></div></li>
+          <li><div><strong>Killercoda — Git Foundations:</strong> 14 scenarios (ช่วงเย็น ทำเบาๆ)<span class="note">→ Git ใช้ทุกวันในทุกงาน Tech · ทำก่อนปิดเทอมจะได้ไม่ต้องรีบทำพร้อม Linux Advanced</span></div></li>
+          <li><div><strong>เตรียม AWS CLF ล่วงหน้า:</strong> สมัคร AWS Free Tier + ดูโครงสร้างข้อสอบ<span class="note">→ ไม่ต้องอ่านหนัก แค่รู้ว่าข้อสอบถามเรื่องอะไร · ปิดเทอมจะได้ติวได้เร็วขึ้นมาก</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip key">✓ Linux Troubleshooting (4)</span>
+          <span class="chip key">✓ Git Foundations (14)</span>
+          <span class="chip">AWS Free Tier พร้อม</span>
+        </div>
+      </div>
+
+      <!-- ปี 1 ปิดเทอม -->
+      <div class="section">
+        <div class="sec-title">🏖️ ปิดเทอมใหญ่ ปี 1 — Linux Advanced + AWS CLF</div>
+        <ul class="tasks">
+          <li><div><strong>Killercoda — Linux Advanced:</strong> 14 scenarios (2-3 สัปดาห์แรก)<span class="note">→ ต่อจาก Foundations โดยตรง · เสริม skills ที่ใช้จริงในงาน Cloud Server ให้ครบก่อนสอบ AWS</span></div></li>
+          <li><div><strong>AWS Cloud Practitioner:</strong> ติว 2-3 สัปดาห์ แล้วสอบก่อนเปิดเทอม<span class="note">→ ใช้ AWS Skill Builder (ฟรี) · Linux + Networking + Git แน่นแล้ว AWS จะเข้าใจง่ายมาก · ค่าสอบ ~$100 USD</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip key">✓ Linux Advanced (14)</span>
+          <span class="chip key">✓ AWS Cloud Practitioner</span>
+        </div>
+      </div>
+
+      <!-- ปี 2 เทอม 1 -->
+      <div class="section">
+        <div class="sec-title">📘 ปี 2 เทอม 1 — ระวัง! วิชาหนักที่สุด</div>
+        <ul class="tasks">
+          <li><div><strong>วิชาหิน:</strong> Circuit 2, Electromagnetic หนักมาก<span class="note">→ ลด Cloud ลงในเทอมนี้ก่อน เน้นเกรดให้รอด · ผ่านเทอมนี้ได้ ที่เหลือง่ายขึ้นเยอะ</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip">GPA รักษา 3.0+</span>
+        </div>
+      </div>
+
+      <!-- ปี 2 เทอม 2 -->
+      <div class="section">
+        <div class="sec-title">📘 ปี 2 เทอม 2 — จุดเปลี่ยน โค้ดแรก</div>
+        <ul class="tasks">
+          <li><div><strong>วิชา 303203:</strong> เขียนโปรแกรม + IoT<span class="note">→ ตั้งใจวิชานี้ให้สุด · Python ที่ได้จากที่นี่คือ Boto3 (Python สั่งงาน AWS) ใช้ทุกวันในงาน Cloud</span></div></li>
+          <li><div><strong>Side Project:</strong> Sensor → AWS IoT Core → Dashboard<span class="note">→ เก็บลง GitHub · โปรเจกต์เล็กๆ แต่ใส่ Resume ได้จริง · เริ่มเร็วดีกว่า</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip">Python + Boto3</span>
+          <span class="chip key">✓ GitHub Portfolio เริ่มแล้ว</span>
+        </div>
+      </div>
+
+      <!-- ปี 2 ปิดเทอม -->
+      <div class="section">
+        <div class="sec-title">🏖️ ปิดเทอมใหญ่ ปี 2 — AWS SAA ใบสำคัญ</div>
+        <ul class="tasks">
+          <li><div><strong>AWS Solutions Architect Associate (SAA):</strong> อ่านเต็มปิดเทอม<span class="note">→ ใบนี้ทำให้สมัครงาน Cloud ได้จริง · ใช้คอร์ส Stephane Maarek บน Udemy + ทำ practice exam ก่อนสอบ 2 สัปดาห์ · ค่าสอบ ~$150 USD</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip key">✓ AWS SAA</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="sec-title">📙 ปี 3 — ปีทองของ Network</div>
+        <ul class="tasks">
+          <li><div><strong>วิชา 303370 Data Comm & Network:</strong> คือหัวใจของแผนทั้งหมด<span class="note">→ Cisco ที่เรียนมาจะทำให้วิชานี้ง่าย เอาเวลาที่เหลือฝึก Docker</span></div></li>
+          <li><div><strong>ฝึก Docker:</strong> Deploy app ง่ายๆ ด้วย Container เก็บลง GitHub<span class="note">→ รู้แค่ run container ได้ก็พอสำหรับตอนนี้</span></div></li>
+          <li><div><strong>ภาคฤดูร้อน — ฝึกงาน 303399:</strong> ต้องหาที่สาย Cloud/DevOps<span class="note">→ เป้าหมาย: AIS, DTAC Tech, SCB TechX, ไทยคม, True IDC หรือ Startup ที่ใช้ AWS</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip">Docker Basic</span>
+          <span class="chip key">✓ ได้ฝึกงาน Cloud/DevOps</span>
+          <span class="chip">Resume EN พร้อม</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sec-title">📚 ปี 3 เทอม 2 — วิชาเสรี + Portfolio + เริ่ม CDR</div>
+        <ul class="tasks">
+          <li><div><strong>Database Systems (305xxx):</strong> วิชาเสรีที่แนะนำที่สุดในปี 3<span class="note">→ Cloud แทบทุกอย่างต้องต่อกับ Database รู้เรื่องนี้ = ออกแบบระบบได้ดีขึ้นมาก</span></div></li>
+          <li><div><strong>Resume EN:</strong> เขียน Resume ภาษาอังกฤษให้พร้อมก่อนสมัครฝึกงาน<span class="note">→ ใส่ AWS CLF + AWS SAA + GitHub Portfolio + Cisco + Linux · Recruiter ดู Resume แค่ 10 วินาที ต้องชัดตั้งแต่บรรทัดแรก</span></div></li>
+          <li><div><strong>สมัครฝึกงานล่วงหน้า:</strong> ยิงใบสมัครก่อนปิดเทอม อย่ารอ<span class="note">→ บริษัทเป้าหมาย: AIS, SCB TechX, KBTG, True IDC, Startup ที่ใช้ AWS · บางที่รับสมัครก่อนปิดเทอมหลายเดือน</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip key">✓ Database Systems</span>
+          <span class="chip key">✓ Resume EN พร้อม</span>
+          <span class="chip">สมัครฝึกงานแล้ว</span>
+        </div>
+        <div class="warn"><strong>⚠️ เช็ค Prerequisite ก่อน!</strong> วิชาคอมฯ รหัส 305xxx บางวิชาต้องผ่านวิชา Programming ก่อน และไม่ได้เปิดทุกเทอม ให้คุยกับรุ่นพี่ EE สื่อสาร มน. ก่อนลง</div>
+      </div>
+      <div class="section">
+        <div class="sec-title">☀️ ภาคฤดูร้อน ปี 3 — ฝึกงาน + ต่อยอดทันที</div>
+        <ul class="tasks">
+          <li><div><strong>ฝึกงาน 303399:</strong> สาย Cloud / DevOps / Network<span class="note">→ เป้าหมาย: AIS, DTAC Tech, SCB TechX, ไทยคม, True IDC หรือ Startup ที่ใช้ AWS · ได้ประสบการณ์จริงที่ Resume ต้องการ</span></div></li>
+          <li><div><strong>ระหว่างฝึกงาน — บันทึก CDR ทันที:</strong> จดรายละเอียดทุกงานที่ทำเป็นภาษาอังกฤษ<span class="note">→ ยิ่งจดเร็วยิ่งจำละเอียดได้ · ต้องใช้ตอนยื่น Engineers Australia ปีที่ 2 หลังจบ</span></div></li>
+          <li><div><strong>หลังฝึกงาน — อัปเดต GitHub:</strong> นำ Project จาก intern ขึ้น GitHub ทันที<span class="note">→ เขียน README ภาษาอังกฤษ · โปรเจกต์จากบริษัทจริงหนักกว่า side project มาก ใน Resume</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip key">✓ ได้ฝึกงาน Cloud/DevOps</span>
+          <span class="chip key">✓ CDR Draft เริ่มแล้ว</span>
+          <span class="chip">GitHub Portfolio อัปเดต</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="sec-title">📕 ปี 4 — ปิดเกม + เตรียมหางาน</div>
+        <ul class="tasks">
+          <li><div><strong>โครงงาน 303496-7:</strong> ต้องเกี่ยวกับ Cloud Security หรือ Automation<span class="note">→ เช่น ระบบ Monitoring Network ผ่าน AWS CloudWatch หรือ Automated Security Alert</span></div></li>
+          <li><div><strong>เก็บ CDR Document:</strong> บันทึกทุกขั้นตอนโครงงานเป็นภาษาอังกฤษ<span class="note">→ CDR ใช้ยื่น Engineers Australia ในอนาคต เตรียมตั้งแต่ตอนนี้เพราะต้องจำรายละเอียดได้ชัด</span></div></li>
+          <li><div><strong>PTE Academic:</strong> สอบให้ได้ 6.5+ ช่วงปลายปี 4<span class="note">→ PTE ตรวจด้วย AI ผลออก 5 วัน ออสเตรเลียยอมรับ</span></div></li>
+          <li><div><strong>สมัครงาน:</strong> เริ่มยิงใบสมัคร 3 เดือนก่อนจบ<span class="note">→ Target: Junior Cloud Engineer / Network Cloud Engineer บริษัทข้ามชาติในไทย</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip key">✓ Senior Project Cloud</span>
+          <span class="chip key">✓ PTE/IELTS 6.5+</span>
+          <span class="chip">CDR Draft พร้อม</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sec-title">📚 ปี 4 — วิชาเลือกที่ต้องเก็บ (Best Combo)</div>
+        <ul class="tasks">
+          <li><div><strong>เทอม 1 — เสรี 2:</strong> Operating Systems (305xxx)<span class="note">→ เข้าใจ Linux/Windows Server ลึกขึ้น ทำงาน Cloud ได้เทพกว่าคนอื่น</span></div></li>
+          <li><div><strong>เทอม 1 — เอกเลือก 1:</strong> Cloud Networks (303xxx)<span class="note">→ ตรงสายที่สุดในหลักสูตร ถ้าเปิดเทอมไหนต้องลงให้ได้เลย</span></div></li>
+          <li><div><strong>เทอม 2 — เอกเลือก 2:</strong> Network Security (303xxx)<span class="note">→ Cloud Engineer สาย Security เงินเดือนสูงกว่าคนอื่นชัดเจน ต้องเก็บ</span></div></li>
+          <li><div><strong>Bonus ถ้าเปิด:</strong> Broadband Communications หรือ Software Engineering<span class="note">→ Broadband → เข้าใจท่อข้อมูลขนาดใหญ่ / SW Eng → ทำงานกับ Dev ได้ราบรื่น</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip key">✓ Cloud Networks</span>
+          <span class="chip key">✓ Network Security</span>
+          <span class="chip key">✓ OS</span>
+          <span class="chip key">✓ Database</span>
+        </div>
+        <div class="warn"><strong>⚠️ สำคัญมาก!</strong> วิชา 303203 (เขียนโปรแกรม + IoT) ปี 2 เทอม 2 คือตัวตัดสินว่าจะเรียนวิชาคอมฯ รู้เรื่องไหม ตั้งใจวิชานี้ให้สุดตั้งแต่แรก</div>
+      </div>
+      <div class="sal-box">
+        <span class="icon">🎓</span>
+        <div>
+          <div class="amount">วศ.บ. ไฟฟ้าสื่อสาร · นเรศวร</div>
+          <div class="desc">พร้อม AWS SAA + PTE 6.5+ + GitHub Portfolio + CDR Draft</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- PHASE 2 -->
+  <details class="phase" style="--pc:#0077b6;--pbd:#7ec8e3;--pbg:#e8f4fb;--pbg2:#d8edf8">
+    <summary>
+      <span class="ph-num">02</span>
+      <span class="ph-icon">💼</span>
+      <div class="ph-info">
+        <div class="ph-title">ทำงานในไทย · ฝึกวิชาจริง</div>
+        <div class="ph-years">2030 – 2032 · ปีที่ 1-2 หลังจบ</div>
+      </div>
+      <span class="ph-badge">อัปสกิล</span>
+      <span class="ph-arrow">▾</span>
+    </summary>
+    <div class="phase-body">
+      <div class="section">
+        <div class="sec-title">🎯 หางานแรก — เลือกให้ถูก</div>
+        <ul class="tasks">
+          <li><div><strong>บริษัทเป้าหมาย:</strong> บริษัทข้ามชาติในไทย หรือ HQ ที่สิงคโปร์<span class="note">→ เช่น Agoda, SCB TechX, KBTG, Gulf Energy Tech, ไทยคม, CAT Telecom, True IDC</span></div></li>
+          <li><div><strong>ตำแหน่งที่สมัคร:</strong> Junior Cloud Engineer / Cloud Network Engineer / NOC Engineer<span class="note">→ NOC ที่ดูแล Network จริงๆ ก็โอเค ได้ประสบการณ์ Security ติดมาด้วย</span></div></li>
+          <li><div><strong>เงินเดือนแรก:</strong> 35,000 – 50,000 THB<span class="note">→ อย่าเกาะเงิน focus ที่ประสบการณ์และ brand name ใน Resume ก่อน</span></div></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="sec-title">📜 ใบเซอร์ที่ต้องสอบช่วงนี้</div>
+        <ul class="tasks">
+          <li><div><strong>AWS Certified Security – Specialty:</strong> ใบที่สำคัญที่สุดในเฟสนี้<span class="note">→ พิสูจน์ว่าดูแลระบบ Cloud ไม่ให้โดนแฮก ค่าตัวโดดทันที ค่าสอบ $300</span></div></li>
+          <li><div><strong>HashiCorp Terraform Associate:</strong> Infrastructure as Code ที่ทุกบริษัทต้องการ<span class="note">→ มีตัวนี้ + AWS Security เงินเดือนกระโดดเป็น 60,000-80,000 THB ในไทยได้เลย</span></div></li>
+          <li><div><strong>เริ่มเตรียม CISSP:</strong> อ่านหนังสือ + ทำ practice test<span class="note">→ ยังสอบไม่ได้ ต้องรอ 5 ปีประสบการณ์ แต่เตรียมความรู้ได้เลย</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip key">✓ AWS Security Specialty</span>
+          <span class="chip key">✓ Terraform Associate</span>
+          <span class="chip">CISSP (กำลังเตรียม)</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="sec-title">🏛️ Engineers Australia — เริ่มยื่น CDR</div>
+        <ul class="tasks">
+          <li><div><strong>ยื่น CDR Assessment:</strong> ใช้วุฒิ วศ.บ. + โครงงานที่เตรียมไว้ตั้งแต่ปี 4<span class="note">→ เขียนภาษาอังกฤษ 3 Career Episodes + Summary Statement</span></div></li>
+          <li><div><strong>สาขาที่ยื่น:</strong> ICT Engineer หรือ Electronics Engineer<span class="note">→ ค่าธรรมเนียม ~AUD $800-1,000 รอผล 3-6 เดือน</span></div></li>
+          <li><div><strong>ผ่าน EA = ประตูออสเตรเลียเปิด:</strong> ใช้ยื่น Skilled Visa ในอนาคตได้<span class="note">→ EA = proof ว่าเป็นวิศวกรมาตรฐานสากลในสายตาออสเตรเลีย</span></div></li>
+        </ul>
+        <div class="warn"><strong>⚠️ อย่ารอ!</strong> ยื่น CDR ตอนนี้เลย เพราะต้องใช้รายละเอียดโครงงานที่จำได้ชัด และเอกสาร transcript ทุกใบต้องรวบรวมให้ครบ</div>
+      </div>
+      <div class="sal-box">
+        <span class="icon">💼</span>
+        <div>
+          <div class="amount">50,000 – 80,000 THB / เดือน</div>
+          <div class="desc">หลังได้ AWS Security + Terraform · พร้อม EA Accreditation</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- PHASE 3 -->
+  <details class="phase" style="--pc:#00897b;--pbd:#80cbc4;--pbg:#e8f5f3;--pbg2:#d5eeeb">
+    <summary>
+      <span class="ph-num">03</span>
+      <span class="ph-icon">🇸🇬</span>
+      <div class="ph-info">
+        <div class="ph-title">Remote สิงคโปร์ · อัปเงินแสน</div>
+        <div class="ph-years">2032 – 2034 · ปีที่ 3-5 หลังจบ</div>
+      </div>
+      <span class="ph-badge">สะพาน SG</span>
+      <span class="ph-arrow">▾</span>
+    </summary>
+    <div class="phase-body">
+      <div class="section">
+        <div class="sec-title">🔍 วิธีหางาน Remote สิงคโปร์</div>
+        <ul class="tasks">
+          <li><div><strong>Platform ที่ต้องใช้:</strong> LinkedIn (ตั้ง Open to Remote), NodeFlair, Tech in Asia<span class="note">→ ตำแหน่ง: Cloud Security Engineer, DevSecOps Engineer, Cloud Infrastructure Engineer</span></div></li>
+          <li><div><strong>บริษัทเป้าหมาย SG:</strong> Grab, Sea Group, Shopee, Razer, Circles.Life, DBS Bank Tech<span class="note">→ บริษัทเหล่านี้มี Remote Policy และรับวิศวกรไทยจริง</span></div></li>
+          <li><div><strong>LinkedIn Headline:</strong> ต้องมี "Cloud Security" + "AWS" + "Terraform"<span class="note">→ Recruiter SG ค้นหา keyword พวกนี้ทุกวัน</span></div></li>
+          <li><div><strong>สัมภาษณ์:</strong> Technical Interview 2-3 รอบ + System Design<span class="note">→ ฝึก LeetCode Medium (Python), Cloud Architecture whiteboard, Security Q&A</span></div></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="sec-title">📜 CISSP — ใบเซอร์ตัวจบ</div>
+        <ul class="tasks">
+          <li><div><strong>เงื่อนไข:</strong> ต้องมีประสบการณ์ 5 ปีในด้าน Security จริงก่อน<span class="note">→ นับจากปีที่ 1 ทำงาน = สอบได้ช่วงปลายเฟส 3 พอดี</span></div></li>
+          <li><div><strong>เตรียมสอบ:</strong> Official ISC2 CISSP Study Guide + ทำ practice test<span class="note">→ เตรียม 3-6 เดือน ค่าสอบ $699 USD</span></div></li>
+          <li><div><strong>หลังผ่าน CISSP:</strong> Resume ระดับ Global ทันที<span class="note">→ ออสเตรเลีย UK Singapore US ทุกที่รู้จักใบนี้</span></div></li>
+        </ul>
+        <div class="chips">
+          <span class="chip key">✓ CISSP</span>
+          <span class="chip">5 ปี Security Experience</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="sec-title">💰 เงินเดือนและการรับเงิน</div>
+        <ul class="tasks">
+          <li><div><strong>เริ่มต้น Remote SG:</strong> SGD 4,000-6,000 (~120K-180K THB)<span class="note">→ อย่ารับ SGD 3,000 ลงมา ตลาด SG จ่ายได้มากกว่า</span></div></li>
+          <li><div><strong>หลังมี CISSP:</strong> SGD 6,000-8,000 (~180K-250K THB)<span class="note">→ CISSP ดันเงินเดือนโดดทันที หาคนได้ยากมากในตลาด ASEAN</span></div></li>
+          <li><div><strong>รับเงิน:</strong> เปิดบัญชี Wise รับ SGD โดยตรง ค่าธรรมเนียมแค่ 0.5%<span class="note">→ ไม่เสียภาษี SG เพราะทำงานอยู่ไทย เสียภาษีไทยอัตราปกติ</span></div></li>
+        </ul>
+      </div>
+      <div class="sal-box">
+        <span class="icon">🇸🇬</span>
+        <div>
+          <div class="amount">150,000 – 250,000 THB / เดือน</div>
+          <div class="desc">Remote Singapore · Cloud Security Engineer · พร้อม CISSP · อยู่ไทย</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- PHASE 4 -->
+  <details class="phase" style="--pc:#0077b6;--pbd:#4eb3d3;--pbg:#e0f4fb;--pbg2:#cceaf6">
+    <summary>
+      <span class="ph-num">04</span>
+      <span class="ph-icon">🇦🇺</span>
+      <div class="ph-info">
+        <div class="ph-title">Remote ออสเตรเลีย · The Final Boss</div>
+        <div class="ph-years">2034+ · Senior Level · 350K – 800K THB</div>
+      </div>
+      <span class="ph-badge">🏆 GOAL</span>
+      <span class="ph-arrow">▾</span>
+    </summary>
+    <div class="phase-body">
+      <div class="section">
+        <div class="sec-title">🔍 วิธีหางาน Remote ออสเตรเลีย</div>
+        <ul class="tasks">
+          <li><div><strong>Platform หลัก:</strong> LinkedIn, Seek.com.au, Adzuna AU<span class="note">→ กรองด้วย "Remote OK" + "Cloud Security" หรือ "DevSecOps"</span></div></li>
+          <li><div><strong>ตำแหน่งเป้าหมาย:</strong> Senior Cloud Security Engineer / Principal DevSecOps / Cloud Architect<span class="note">→ Senior = 6+ ปีประสบการณ์ + CISSP + Strong Portfolio</span></div></li>
+          <li><div><strong>บริษัทเป้าหมาย AUS:</strong> Atlassian, Canva, Telstra, ANZ Bank, NAB, Afterpay<span class="note">→ Atlassian และ Canva มีนโยบาย Remote-first ชัดเจน เป็นเป้าหมายที่ดีที่สุด</span></div></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="sec-title">📋 Resume ที่ต้องมีก่อนสมัคร AUS</div>
+        <ul class="tasks">
+          <li><div><strong>Cert Stack ครบ:</strong> AWS SAA + AWS Security Specialty + Terraform + CISSP<span class="note">→ 4 ใบนี้คือ minimum สำหรับ Senior level ออสเตรเลีย</span></div></li>
+          <li><div><strong>ประสบการณ์:</strong> 4-5 ปีจริงในตำแหน่ง Cloud / Security<span class="note">→ ประสบการณ์ SG ใน Resume = credibility สูงมากในสายตา Recruiter AUS</span></div></li>
+          <li><div><strong>EA Accreditation:</strong> ยื่นแล้วตั้งแต่เฟส 2 ใช้ได้เลย<span class="note">→ ถ้าต้องการ PR ในอนาคต ใช้ยื่น Skilled Visa 189/190/491 ได้</span></div></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="sec-title">⏰ Timezone — ข้อได้เปรียบที่ไม่มีใครพูดถึง</div>
+        <ul class="tasks">
+          <li><div><strong>ออสเตรเลีย AEST:</strong> ห่างไทยแค่ +3 ชั่วโมง<span class="note">→ ตื่น 6 โมงเช้า = AUS 9 โมง เริ่ม Stand-up call ได้เลย</span></div></li>
+          <li><div><strong>เวลาทำงาน:</strong> 06:00–15:00 ไทย = 09:00–18:00 AEST<span class="note">→ เสร็จงานบ่าย 3 เหลือเวลาชีวิตอีกเยอะ</span></div></li>
+          <li><div><strong>รับเงิน AUD:</strong> Wise Business Account รับ AUD โดยตรง ค่าธรรมเนียม 0.4-0.7%<span class="note">→ ดีกว่าโอน SWIFT ผ่านธนาคารไทยมาก</span></div></li>
+        </ul>
+      </div>
+      <div class="section">
+        <div class="sec-title">🚀 Contractor Mode — สูงสุดของแผน</div>
+        <ul class="tasks">
+          <li><div><strong>Freelance Contractor Rate:</strong> AUD $100–150 / ชั่วโมง<span class="note">→ 160 ชั่วโมง/เดือน = AUD $16,000–24,000 (~550K–820K THB)</span></div></li>
+          <li><div><strong>เงื่อนไข:</strong> ต้องมี Portfolio แข็ง + CISSP + ชื่อเสียงในวงการ<span class="note">→ ไม่มี benefits แต่เงินสุทธิมากกว่าพนักงานปกติมาก</span></div></li>
+        </ul>
+      </div>
+      <div class="sal-box">
+        <span class="icon">🏆</span>
+        <div>
+          <div class="amount">350,000 – 800,000+ THB / เดือน</div>
+          <div class="desc">Remote Australia · Senior / Contractor · อยู่ไทย ไม่ต้องย้ายไปไหน</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+</div>
+
+<!-- CERT CHECKLIST -->
+<div class="cert-section">
+  <div class="cert-header">Certification Checklist ทั้งหมด</div>
+  <div class="cert-table">
+    <div class="cert-row">
+      <span class="cert-num">1</span>
+      <div class="cert-dot" style="background:#00a86b"></div>
+      <div><div class="cert-name">AWS Cloud Practitioner</div><div class="cert-why">จุดเริ่มต้น ปูพื้นฐาน Cloud</div></div>
+      <div class="cert-meta"><div class="cert-cost" style="color:#00a86b">$100 <span style="color:#7a9e8a;font-size:9px">(~3,500 บาท)</span></div><div class="cert-when">ปิดเทอม ปี 1</div></div>
+    </div>
+    <div class="cert-row">
+      <span class="cert-num">2</span>
+      <div class="cert-dot" style="background:#00a86b"></div>
+      <div><div class="cert-name">AWS Solutions Architect Associate (SAA)</div><div class="cert-why">ต้องมีเพื่อสมัครงาน Cloud ได้จริง</div></div>
+      <div class="cert-meta"><div class="cert-cost" style="color:#00a86b">$150 <span style="color:#7a9e8a;font-size:9px">(~5,200 บาท)</span></div><div class="cert-when">ปิดเทอม ปี 2</div></div>
+    </div>
+    <div class="cert-row">
+      <span class="cert-num">3</span>
+      <div class="cert-dot" style="background:#0077b6"></div>
+      <div><div class="cert-name">IELTS / PTE Academic 6.5+</div><div class="cert-why">ต้องมีเพื่อสื่อสาร + EA + วีซ่า</div></div>
+      <div class="cert-meta"><div class="cert-cost" style="color:#0077b6">~5,000 บาท <span style="color:#7a9e8a;font-size:9px">(PTE ถูกกว่า IELTS)</span></div><div class="cert-when">ปลายปี 4</div></div>
+    </div>
+    <div class="cert-row">
+      <span class="cert-num">4</span>
+      <div class="cert-dot" style="background:#0077b6"></div>
+      <div><div class="cert-name">AWS Certified Security – Specialty</div><div class="cert-why">ดันเงินเดือนให้ข้ามแสน</div></div>
+      <div class="cert-meta"><div class="cert-cost" style="color:#0077b6">$300 <span style="color:#7a9e8a;font-size:9px">(~10,500 บาท)</span></div><div class="cert-when">ปีที่ 1 หลังจบ</div></div>
+    </div>
+    <div class="cert-row">
+      <span class="cert-num">5</span>
+      <div class="cert-dot" style="background:#0077b6"></div>
+      <div><div class="cert-name">HashiCorp Terraform Associate</div><div class="cert-why">Infrastructure as Code ที่ทุกบริษัทต้องการ</div></div>
+      <div class="cert-meta"><div class="cert-cost" style="color:#0077b6">$70 <span style="color:#7a9e8a;font-size:9px">(~2,500 บาท)</span></div><div class="cert-when">ปีที่ 1-2 หลังจบ</div></div>
+    </div>
+    <div class="cert-row">
+      <span class="cert-num">6</span>
+      <div class="cert-dot" style="background:#00897b"></div>
+      <div><div class="cert-name">Engineers Australia (CDR Assessment)</div><div class="cert-why">ประตูสู่ Skilled Visa ออสเตรเลีย</div></div>
+      <div class="cert-meta"><div class="cert-cost" style="color:#00897b">AUD 900 <span style="color:#7a9e8a;font-size:9px">(~20,000 บาท)</span></div><div class="cert-when">ปีที่ 2 หลังจบ</div></div>
+    </div>
+    <div class="cert-row">
+      <span class="cert-num">7</span>
+      <div class="cert-dot" style="background:#0077b6"></div>
+      <div><div class="cert-name">CISSP</div><div class="cert-why">ใบเซอร์ระดับโลก ดันเงินเดือนสูงสุด · ต้องมี 5 ปีประสบการณ์ก่อน</div></div>
+      <div class="cert-meta"><div class="cert-cost" style="color:#0077b6">$699 <span style="color:#7a9e8a;font-size:9px">(~24,500 บาท)</span></div><div class="cert-when">ปีที่ 4-5 หลังจบ</div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>Mix's Roadmap · Naresuan University → Remote Australia · 2026 – 2034</div>
+  <div style="margin-top:6px;"><span>ลุยเลยครับ</span> — ก้าวแรกคือ Cisco NetAcad Module ที่กำลังเรียนอยู่ตอนนี้</div>
+</footer>
+
+</body>
+</html>
