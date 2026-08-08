@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ฟิสิกส์อะตอม | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'e⁻ p⁺ n⁰ γ α β λ h ν ℏ';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+  .math-latex {
+    font-family: var(--sans);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* DIAGRAM */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+  .reset-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    display: none;
+  }
+  .reset-btn.show { display: inline-block; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>ฟิสิกส์<span>อะตอม</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level เรื่องแบบจำลองอะตอม สเปกตรัม โฟโตอิเล็กทริก และฟิสิกส์นิวเคลียร์</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">15</div><div class="stat-label">โจทย์แนว A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="a1">1. แบบจำลองอะตอม</button>
+  <button class="tab-btn" data-sec="a2">2. ทฤษฎีบอร์ & สเปกตรัม</button>
+  <button class="tab-btn" data-sec="a3">3. โฟโตอิเล็กทริก</button>
+  <button class="tab-btn" data-sec="a4">4. ทวิภาวะคลื่น-อนุภาค</button>
+  <button class="tab-btn" data-sec="a5">5. รังสีเอกซ์</button>
+  <button class="tab-btn" data-sec="n1">6. โครงสร้างนิวเคลียส</button>
+  <button class="tab-btn" data-sec="n2">7. กัมมันตภาพรังสี</button>
+  <button class="tab-btn" data-sec="n3">8. ครึ่งชีวิต</button>
+  <button class="tab-btn" data-sec="n4">9. พลังงานนิวเคลียร์</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 โจทย์แนว A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: แบบจำลองอะตอม ===== -->
+  <div class="section active" id="a1">
+    <div class="section-heading"><span>บทที่ 1</span> · แบบจำลองอะตอม</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚛️</div>วิวัฒนาการของแบบจำลองอะตอม</div>
+      <p>ความเข้าใจเรื่องโครงสร้างอะตอมพัฒนาขึ้นทีละขั้นจากหลักฐานการทดลอง แต่ละแบบจำลองแก้ข้อบกพร่องของแบบจำลองก่อนหน้า</p>
+      <div class="def-box">
+        <div class="def-label">แบบจำลองของดอลตัน (Dalton)</div>
+        อะตอมเป็น <strong>ทรงกลมตันที่เล็กที่สุด</strong> แบ่งแยกไม่ได้ และไม่มีโครงสร้างภายใน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🍇</div>แบบจำลองของทอมสัน (Thomson)</div>
+      <p>จากการทดลองหลอดรังสีแคโทด (Cathode Ray Tube) ทอมสันค้นพบ <strong>อิเล็กตรอน</strong> ซึ่งมีประจุลบ และเสนอแบบจำลอง "พุดดิงลูกเกด"</p>
+      <div class="def-box">
+        <div class="def-label">แบบจำลอง</div>
+        อะตอมเป็นทรงกลมของประจุบวกกระจายสม่ำเสมอ โดยมีอิเล็กตรอน (ประจุลบ) ฝังกระจายอยู่ทั่วไป คล้ายลูกเกดในขนมพุดดิง
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 สิ่งที่ค้นพบสำคัญ</div>
+        ทอมสันวัดอัตราส่วนประจุต่อมวล (e/m) ของอิเล็กตรอนได้ ทำให้ทราบว่าเป็นอนุภาคที่เล็กกว่าอะตอมมาก และมีอยู่ในสสารทุกชนิด
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">☢️</div>แบบจำลองของรัทเทอร์ฟอร์ด (Rutherford)</div>
+      <p>การทดลองยิงอนุภาคแอลฟาผ่านแผ่นทองคำบาง (Gold Foil Experiment) พบว่าอนุภาคส่วนใหญ่ทะลุผ่านตรง แต่บางส่วนเบี่ยงเบนมุมกว้างหรือสะท้อนกลับ</p>
+      <div class="venn-container">
+        <svg width="420" height="200" viewBox="0 0 420 200">
+          <rect width="420" height="200" rx="10" fill="#1c2235"/>
+          <text x="14" y="24" fill="#8892b0" font-size="12" font-family="Sarabun">การทดลองยิงอนุภาคแอลฟาผ่านแผ่นทองคำ</text>
+          <rect x="180" y="30" width="10" height="140" fill="#4a5580"/>
+          <text x="160" y="185" fill="#8892b0" font-size="11" font-family="Sarabun">แผ่นทองคำบาง</text>
+          <circle cx="185" cy="100" r="4" fill="#ffd93d"/>
+          <text x="195" y="103" fill="#ffd93d" font-size="10" font-family="Sarabun">นิวเคลียส</text>
+          <line x1="20" y1="100" x2="178" y2="100" stroke="#00d4aa" stroke-width="2" marker-end="url(#arrow1)"/>
+          <line x1="20" y1="70" x2="400" y2="70" stroke="#00d4aa" stroke-width="2" marker-end="url(#arrow1)"/>
+          <line x1="20" y1="130" x2="400" y2="130" stroke="#00d4aa" stroke-width="2" marker-end="url(#arrow1)"/>
+          <line x1="185" y1="100" x2="90" y2="40" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrow2)"/>
+          <line x1="185" y1="100" x2="260" y2="20" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrow2)"/>
+          <defs>
+            <marker id="arrow1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#00d4aa"/></marker>
+            <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#ff6b6b"/></marker>
+          </defs>
+        </svg>
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ผลการทดลอง</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>อนุภาคส่วนใหญ่ทะลุตรงไป</li>
+            <li>บางส่วนเบี่ยงเบนมุมเล็กน้อย</li>
+            <li>ส่วนน้อยมากสะท้อนกลับมุมกว้าง</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>ข้อสรุป</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>อะตอมส่วนใหญ่เป็นที่ว่างเปล่า</li>
+            <li>มวลและประจุบวกรวมอยู่ที่ <strong>นิวเคลียส</strong> ขนาดเล็กมากตรงกลาง</li>
+            <li>อิเล็กตรอนโคจรอยู่รอบนิวเคลียส</li>
+          </ul>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อบกพร่องของแบบจำลองรัทเทอร์ฟอร์ด</div>
+        ตามทฤษฎีแม่เหล็กไฟฟ้าคลาสสิก อิเล็กตรอนที่เคลื่อนที่เป็นวงกลม (มีความเร่ง) ต้องแผ่คลื่นแม่เหล็กไฟฟ้าออกมาตลอดเวลา สูญเสียพลังงานและ<strong>หมุนวนเข้าชนนิวเคลียส</strong> ซึ่งขัดกับความจริงที่อะตอมเสถียร
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🪐</div>แบบจำลองของบอร์ (Bohr)</div>
+      <div class="def-box">
+        <div class="def-label">แนวคิดหลัก</div>
+        นีลส์ บอร์ แก้ปัญหาแบบจำลองรัทเทอร์ฟอร์ดโดยเสนอว่า อิเล็กตรอนโคจรได้เฉพาะ<strong>วงโคจรที่มีค่าพลังงานเจาะจง (Quantized)</strong> เท่านั้น และจะไม่แผ่รังสีขณะอยู่ในวงโคจรเสถียร
+      </div>
+      <p>รายละเอียดของทฤษฎีบอร์และสูตรคำนวณจะกล่าวถึงในหัวข้อถัดไป</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 ลำดับที่ควรจำสำหรับข้อสอบ</div>
+        ดอลตัน (ทรงกลมตัน) → ทอมสัน (พุดดิงลูกเกด) → รัทเทอร์ฟอร์ด (นิวเคลียส+ที่ว่าง) → บอร์ (วงโคจรพลังงานเจาะจง) → แบบจำลองกลศาสตร์ควอนตัม (กลุ่มหมอกอิเล็กตรอน)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: ทฤษฎีบอร์ & สเปกตรัม ===== -->
+  <div class="section" id="a2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · ทฤษฎีอะตอมของบอร์และสเปกตรัมไฮโดรเจน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>สมมติฐานของบอร์</div>
+      <div class="def-box">
+        <div class="def-label">สมมติฐาน 2 ข้อหลัก</div>
+        1) อิเล็กตรอนโคจรรอบนิวเคลียสได้เฉพาะวงโคจรที่ <strong>โมเมนตัมเชิงมุมเป็นจำนวนเต็มเท่าของ h/2π</strong> เท่านั้น โดยไม่แผ่รังสีออกมา<br>
+        2) อะตอมจะแผ่หรือดูดกลืนพลังงานเมื่ออิเล็กตรอน<strong>เปลี่ยนวงโคจร (transition)</strong> เท่านั้น โดยพลังงานของโฟตอนเท่ากับผลต่างพลังงานระหว่างสองวงโคจร
+      </div>
+      <div class="math-block">
+        เงื่อนไขควอนตัม:  L = mvr = nh/(2π),  n = 1, 2, 3, ...
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">⭕</div>รัศมีและพลังงานของวงโคจร</div>
+      <div class="math-block">
+        รัศมีวงโคจรที่ n:  rₙ = n² r₁ ,  r₁ = 0.529 Å (5.29×10⁻¹¹ m)
+      </div>
+      <div class="math-block">
+        พลังงานของวงโคจรที่ n (อะตอมไฮโดรเจน):<br>
+        Eₙ = −13.6/n²  eV
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        E₁ = −13.6 eV  (สถานะพื้น, ground state)<br>
+        E₂ = −13.6/4 = −3.4 eV<br>
+        E₃ = −13.6/9 ≈ −1.51 eV
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความหมายของเครื่องหมายลบ</div>
+        พลังงานติดลบหมายถึงอิเล็กตรอนถูกยึดเหนี่ยวอยู่กับนิวเคลียส (สถานะยึดเหนี่ยว) ยิ่ง n มาก พลังงานยิ่งเข้าใกล้ 0 (อิเล็กตรอนหลุดเป็นอิสระเมื่อ n → ∞ หรือ E = 0)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔀</div>การเปลี่ยนระดับพลังงานและสเปกตรัม</div>
+      <div class="def-box">
+        <div class="def-label">การแผ่/ดูดกลืนโฟตอน</div>
+        เมื่ออิเล็กตรอนเปลี่ยนจากวงโคจร nᵢ ไป n_f พลังงานโฟตอนที่แผ่หรือดูดกลืนคือ<br>
+        <strong>ΔE = |E_f − Eᵢ| = hf = hc/λ</strong>
+      </div>
+      <p>ถ้าอิเล็กตรอนตกจากระดับพลังงานสูงไปต่ำ → <strong>แผ่โฟตอน (emission)</strong><br>
+      ถ้าอิเล็กตรอนถูกกระตุ้นจากระดับต่ำไปสูง → <strong>ดูดกลืนโฟตอน (absorption)</strong></p>
+      <div class="sub-heading">อนุกรมสเปกตรัมของไฮโดรเจน</div>
+      <table>
+        <tr><th>อนุกรม</th><th>ตกสู่ระดับ n_f</th><th>ย่านคลื่น</th></tr>
+        <tr><td>ไลมัน (Lyman)</td><td>1</td><td>อัลตราไวโอเลต</td></tr>
+        <tr><td>บาลเมอร์ (Balmer)</td><td>2</td><td>แสงที่ตามองเห็น</td></tr>
+        <tr><td>พาสเชน (Paschen)</td><td>3</td><td>อินฟราเรด</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการคำนวณ</div>
+        อิเล็กตรอนเปลี่ยนจาก n=3 ไป n=2<br>
+        E₃ = −1.51 eV, E₂ = −3.4 eV<br>
+        ΔE = E₃ − E₂ = −1.51 − (−3.4) = 1.89 eV (แผ่โฟตอนพลังงานนี้ออกมา — อยู่ในอนุกรมบาลเมอร์)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ พลังงานไอออไนเซชัน (Ionization Energy)</div>
+        พลังงานขั้นต่ำที่ทำให้อิเล็กตรอนหลุดจากอะตอม (n → ∞, E = 0)<br>
+        จากสถานะพื้น: E_ion = 0 − E₁ = 13.6 eV
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: โฟโตอิเล็กทริก ===== -->
+  <div class="section" id="a3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · ปรากฏการณ์โฟโตอิเล็กทริก</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">💡</div>ปรากฏการณ์โฟโตอิเล็กทริกคืออะไร</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การที่<strong>อิเล็กตรอนหลุดออกจากผิวโลหะ</strong>ทันทีที่มีแสงตกกระทบ โดยมีเงื่อนไขว่าความถี่ของแสงต้องมากกว่าค่าความถี่ขีดเริ่ม (threshold frequency) ของโลหะนั้น
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สิ่งที่ทฤษฎีคลื่นคลาสสิกอธิบายไม่ได้</h4>
+          <ul style="font-size:13px; color:var(--text-dim)">
+            <li>แสงความถี่ต่ำกว่าค่าขีดเริ่ม ไม่ทำให้เกิดอิเล็กตรอนหลุดเลย ไม่ว่าจะเข้มแค่ไหน</li>
+            <li>อิเล็กตรอนหลุดออกมา<strong>ทันที</strong> ไม่มีเวลาหน่วง</li>
+            <li>พลังงานจลน์สูงสุดของอิเล็กตรอนขึ้นกับความถี่ ไม่ขึ้นกับความเข้มแสง</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>คำอธิบายของไอน์สไตน์</h4>
+          <p style="font-size:13px; color:var(--text-dim)">แสงประกอบด้วย<strong>อนุภาคพลังงาน (โฟตอน)</strong> แต่ละโฟตอนมีพลังงาน E = hf และถ่ายพลังงานให้อิเล็กตรอนทีละก้อน ไม่ใช่แบบต่อเนื่อง</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧮</div>สมการโฟโตอิเล็กทริกของไอน์สไตน์</div>
+      <div class="math-block">
+        E_photon = W₀ + KE_max<br>
+        hf = W₀ + KE_max<br>
+        KE_max = hf − W₀
+      </div>
+      <div class="def-box">
+        <div class="def-label">ตัวแปรในสมการ</div>
+        <span class="math">h</span> = ค่าคงตัวของพลังค์ = 6.63×10⁻³⁴ J·s<br>
+        <span class="math">f</span> = ความถี่ของแสงตกกระทบ<br>
+        <span class="math">W₀</span> = ฟังก์ชันงาน (work function) — พลังงานขั้นต่ำที่ใช้ดึงอิเล็กตรอนหลุดจากผิวโลหะ<br>
+        <span class="math">KE_max</span> = พลังงานจลน์สูงสุดของอิเล็กตรอนที่หลุดออกมา
+      </div>
+      <div class="math-block">
+        ความถี่ขีดเริ่ม (threshold frequency):  f₀ = W₀/h<br>
+        ความยาวคลื่นขีดเริ่ม:  λ₀ = hc/W₀
+      </div>
+      <div class="math-block">
+        ศักย์หยุดยั้ง (stopping potential):  eVₛ = KE_max = hf − W₀
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์</div>
+        โลหะมีฟังก์ชันงาน W₀ = 2.0 eV ฉายแสงความถี่ f = 8×10¹⁴ Hz (h = 6.63×10⁻³⁴ J·s = 4.14×10⁻¹⁵ eV·s)<br><br>
+        E_photon = hf = 4.14×10⁻¹⁵ × 8×10¹⁴ ≈ 3.31 eV<br>
+        KE_max = 3.31 − 2.0 = <strong>1.31 eV</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กราฟ KE_max กับ f</div>
+        เมื่อพล็อตกราฟ KE_max (แกน y) กับ f (แกน x) จะได้เส้นตรงความชัน = h และตัดแกน x ที่ f₀ (ความถี่ขีดเริ่ม) — ใช้หาค่าคงตัวพลังค์จากการทดลองได้
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: ทวิภาวะคลื่น-อนุภาค ===== -->
+  <div class="section" id="a4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · ทวิภาวะของคลื่นและอนุภาค</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🌊</div>สมมติฐานของเดอบรอยล์ (de Broglie)</div>
+      <div class="def-box">
+        <div class="def-label">แนวคิด</div>
+        ถ้าแสงซึ่งเป็นคลื่นสามารถแสดงสมบัติอนุภาคได้ (โฟตอน) แล้ว<strong>อนุภาคที่มีมวล เช่น อิเล็กตรอน ก็ควรแสดงสมบัติความเป็นคลื่นได้เช่นกัน</strong>
+      </div>
+      <div class="math-block">
+        ความยาวคลื่นเดอบรอยล์:  λ = h/p = h/(mv)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการคำนวณ</div>
+        อิเล็กตรอนมวล m = 9.11×10⁻³¹ kg เคลื่อนที่ด้วยอัตราเร็ว v = 2×10⁶ m/s<br>
+        λ = h/(mv) = 6.63×10⁻³⁴ / (9.11×10⁻³¹ × 2×10⁶) ≈ 3.64×10⁻¹⁰ m
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ทำไมเราไม่เห็นสมบัติคลื่นของวัตถุขนาดใหญ่</div>
+        เนื่องจากมวลของวัตถุขนาดใหญ่ (เช่น ลูกบอล) มีค่ามากเทียบกับ h ทำให้ λ มีค่าเล็กมากจนไม่สามารถสังเกตปรากฏการณ์คลื่นได้ ต่างจากอิเล็กตรอนที่มวลน้อยมาก
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔬</div>การทดลองยืนยัน — เดวิสสัน-เจอร์เมอร์</div>
+      <p>การทดลองยิงลำอิเล็กตรอนเข้าชนผลึกนิกเกิล พบว่าอิเล็กตรอนเกิด<strong>การเลี้ยวเบน (diffraction)</strong> คล้ายคลื่น ยืนยันสมมติฐานของเดอบรอยล์ว่าอนุภาคมีสมบัติความเป็นคลื่นจริง</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">❓</div>หลักความไม่แน่นอนของไฮเซนเบิร์ก</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        เป็นไปไม่ได้ที่จะทราบ<strong>ตำแหน่งและโมเมนตัมของอนุภาคได้แม่นยำพร้อมกันทั้งคู่</strong> ยิ่งวัดตำแหน่งแม่นยำเท่าใด ความไม่แน่นอนของโมเมนตัมยิ่งมากขึ้นเท่านั้น
+      </div>
+      <div class="math-block">
+        Δx · Δp ≥ h/(4π)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรเข้าใจ</div>
+        นี่ไม่ใช่ข้อจำกัดของเครื่องมือวัด แต่เป็น<strong>ธรรมชาติเชิงควอนตัม</strong>ของสสารเอง — เป็นเหตุผลหนึ่งที่แบบจำลองอะตอมสมัยใหม่ใช้ "ความน่าจะเป็น" (กลุ่มหมอกอิเล็กตรอน) แทนวงโคจรที่แน่นอนแบบบอร์
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: รังสีเอกซ์ ===== -->
+  <div class="section" id="a5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · รังสีเอกซ์ (X-rays)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📡</div>การผลิตรังสีเอกซ์</div>
+      <p>เกิดจากการเร่งอิเล็กตรอนด้วยความต่างศักย์สูงในหลอดสุญญากาศ ให้พุ่งชนเป้าโลหะ (เช่น ทังสเตน) พลังงานจลน์ของอิเล็กตรอนส่วนหนึ่งเปลี่ยนเป็นรังสีเอกซ์</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สเปกตรัมต่อเนื่อง (Bremsstrahlung)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เกิดจากอิเล็กตรอนถูกหน่วงความเร็วอย่างฉับพลันเมื่อผ่านใกล้นิวเคลียสของอะตอมเป้า พลังงานที่สูญเสียแผ่ออกมาเป็นรังสีเอกซ์ความยาวคลื่นต่อเนื่อง</p>
+        </div>
+        <div class="mini-card">
+          <h4>สเปกตรัมเฉพาะตัว (Characteristic)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เกิดจากอิเล็กตรอนพลังงานสูงชนอิเล็กตรอนวงในของอะตอมเป้าจนหลุด แล้วอิเล็กตรอนวงนอกตกลงมาแทนที่ แผ่โฟตอนพลังงานเฉพาะค่า (เป็นเส้นสเปกตรัม)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>ความยาวคลื่นต่ำสุดของรังสีเอกซ์</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        พลังงานจลน์สูงสุดของอิเล็กตรอนที่ถูกเร่งด้วยความต่างศักย์ V จะเปลี่ยนเป็นพลังงานโฟตอนรังสีเอกซ์ทั้งหมดได้มากที่สุด ทำให้ได้ความยาวคลื่น<strong>สั้นที่สุด (พลังงานสูงสุด)</strong>
+      </div>
+      <div class="math-block">
+        eV = hf_max = hc/λ_min<br>
+        λ_min = hc/(eV)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เร่งอิเล็กตรอนด้วยความต่างศักย์ V = 20 kV<br>
+        λ_min = hc/(eV) = (6.63×10⁻³⁴ × 3×10⁸)/(1.6×10⁻¹⁹ × 2×10⁴) ≈ 6.22×10⁻¹¹ m
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🏥</div>การประยุกต์ใช้รังสีเอกซ์</div>
+      <ul>
+        <li>ทางการแพทย์ — ถ่ายภาพกระดูก วินิจฉัยโรค</li>
+        <li>อุตสาหกรรม — ตรวจสอบรอยร้าวในชิ้นงานโลหะ</li>
+        <li>วิทยาศาสตร์วัสดุ — ศึกษาโครงสร้างผลึกด้วยการเลี้ยวเบนรังสีเอกซ์ (X-ray diffraction)</li>
+      </ul>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        รังสีเอกซ์เป็นรังสีพลังงานสูงที่สามารถทำอันตรายต่อเซลล์สิ่งมีชีวิตได้ ต้องใช้อย่างระมัดระวังและป้องกันตามหลักความปลอดภัย
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: โครงสร้างนิวเคลียส ===== -->
+  <div class="section" id="n1">
+    <div class="section-heading"><span>บทที่ 2</span> · ฟิสิกส์นิวเคลียร์: โครงสร้างนิวเคลียส</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔵</div>องค์ประกอบของนิวเคลียส</div>
+      <div class="def-box">
+        <div class="def-label">นิวคลีออน (Nucleon)</div>
+        อนุภาคภายในนิวเคลียส ประกอบด้วย <strong>โปรตอน (p⁺)</strong> ประจุ +e และ <strong>นิวตรอน (n⁰)</strong> ไม่มีประจุ มวลใกล้เคียงกัน
+      </div>
+      <div class="math-block">
+        สัญลักษณ์นิวเคลียส:   ᴬZX<br>
+        Z = เลขอะตอม (จำนวนโปรตอน)<br>
+        A = เลขมวล (จำนวนนิวคลีออน = p + n)<br>
+        N = A − Z = จำนวนนิวตรอน
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ¹⁴₆C (คาร์บอน-14): Z = 6 (โปรตอน 6 ตัว), A = 14, N = 14−6 = 8 (นิวตรอน 8 ตัว)
+      </div>
+      <div class="def-box">
+        <div class="def-label">ไอโซโทป (Isotope)</div>
+        อะตอมของธาตุเดียวกัน (Z เท่ากัน) แต่มีจำนวนนิวตรอนต่างกัน (A ต่างกัน) เช่น ¹H, ²H (ดิวเทอเรียม), ³H (ทริเทียม)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>ขนาดของนิวเคลียส</div>
+      <div class="math-block">
+        R = R₀ A^(1/3) ,  R₀ ≈ 1.2×10⁻¹⁵ m (1.2 fm)
+      </div>
+      <p>นิวเคลียสมีขนาดเล็กกว่าอะตอมมาก (ประมาณ 1 ใน 10,000 ถึง 100,000 เท่าของขนาดอะตอม) แต่รวมมวลเกือบทั้งหมดของอะตอมไว้</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⚡</div>มวลพร่องและพลังงานยึดเหนี่ยว</div>
+      <div class="def-box">
+        <div class="def-label">มวลพร่อง (Mass Defect, Δm)</div>
+        มวลของนิวเคลียสที่แท้จริง<strong>น้อยกว่า</strong>ผลรวมมวลของนิวคลีออนที่แยกกันอยู่อิสระ ส่วนต่างนี้เปลี่ยนไปเป็นพลังงานยึดเหนี่ยว
+      </div>
+      <div class="math-block">
+        Δm = [Zmₚ + Nmₙ] − M_นิวเคลียส<br>
+        E_ยึดเหนี่ยว = Δm·c²  (จากสมการของไอน์สไตน์)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 พลังงานยึดเหนี่ยวต่อนิวคลีออน</div>
+        ใช้เปรียบเทียบความเสถียรของนิวเคลียสต่าง ๆ ยิ่งค่านี้สูง นิวเคลียสยิ่งเสถียร ธาตุแถบเลข A กลาง ๆ (เช่น เหล็ก Fe) มีค่าพลังงานยึดเหนี่ยวต่อนิวคลีออนสูงที่สุด ซึ่งอธิบายได้ว่าทำไมทั้งฟิชชัน (ธาตุหนัก) และฟิวชัน (ธาตุเบา) จึงปลดปล่อยพลังงานได้
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: กัมมันตภาพรังสี ===== -->
+  <div class="section" id="n2">
+    <div class="section-heading"><span>หัวข้อ 7</span> · กัมมันตภาพรังสี</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">☢️</div>การสลายตัวของนิวเคลียสกัมมันตรังสี</div>
+      <p>นิวเคลียสที่ไม่เสถียร (มีอัตราส่วน p:n ไม่เหมาะสม หรือมีเลขมวลสูงมาก) จะสลายตัวปลดปล่อยรังสีออกมาเพื่อเข้าสู่สภาวะเสถียรกว่า มี 3 แบบหลัก</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">α</div>การสลายให้อนุภาคแอลฟา</div>
+      <div class="def-box">
+        <div class="def-label">อนุภาคแอลฟา</div>
+        คือนิวเคลียสของฮีเลียม ⁴₂He ประกอบด้วยโปรตอน 2 + นิวตรอน 2 ประจุ +2e ทะลุทะลวงต่ำ (กั้นได้ด้วยกระดาษ)
+      </div>
+      <div class="math-block">
+        ᴬZX → ᴬ⁻⁴Z₋₂Y + ⁴₂He<br>
+        (เลขมวล A ลดลง 4, เลขอะตอม Z ลดลง 2)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ²³⁸₉₂U → ²³⁴₉₀Th + ⁴₂He
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">β</div>การสลายให้อนุภาคบีตา</div>
+      <div class="def-box">
+        <div class="def-label">บีตาลบ (β⁻)</div>
+        นิวตรอนในนิวเคลียสเปลี่ยนเป็นโปรตอน พร้อมปล่อยอิเล็กตรอน (β⁻) และปฏิยานีวทริโน ทะลุทะลวงปานกลาง (กั้นได้ด้วยแผ่นอะลูมิเนียมบาง)
+      </div>
+      <div class="math-block">
+        ᴬZX → ᴬZ₊₁Y + ⁰₋₁e + ν̄<br>
+        (เลขมวล A คงเดิม, เลขอะตอม Z เพิ่มขึ้น 1)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ¹⁴₆C → ¹⁴₇N + ⁰₋₁e + ν̄
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">γ</div>การสลายให้รังสีแกมมา</div>
+      <div class="def-box">
+        <div class="def-label">รังสีแกมมา</div>
+        เป็น<strong>คลื่นแม่เหล็กไฟฟ้าพลังงานสูง (โฟตอน)</strong> ไม่มีมวลและไม่มีประจุ เกิดเมื่อนิวเคลียสที่อยู่ในสถานะกระตุ้น (หลังสลาย α หรือ β) คายพลังงานส่วนเกินออกมาเพื่อกลับสู่สถานะพื้น ทะลุทะลวงสูงมาก (ต้องใช้ตะกั่วหนาหรือคอนกรีตกั้น)
+      </div>
+      <p>การแผ่รังสีแกมมา<strong>ไม่ทำให้ A หรือ Z เปลี่ยนแปลง</strong> เพราะไม่มีการเปลี่ยนชนิดอนุภาคในนิวเคลียส เพียงแต่นิวเคลียสสูญเสียพลังงาน</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📊</div>เปรียบเทียบรังสีทั้งสามชนิด</div>
+      <table>
+        <tr><th>สมบัติ</th><th>แอลฟา (α)</th><th>บีตา (β)</th><th>แกมมา (γ)</th></tr>
+        <tr><td>ประจุ</td><td>+2e</td><td>−e</td><td>0</td></tr>
+        <tr><td>มวล</td><td>มาก</td><td>น้อยมาก</td><td>ไม่มี</td></tr>
+        <tr><td>อำนาจทะลุทะลวง</td><td>ต่ำสุด</td><td>ปานกลาง</td><td>สูงสุด</td></tr>
+        <tr><td>วัสดุกั้น</td><td>กระดาษ</td><td>อะลูมิเนียมบาง</td><td>ตะกั่ว/คอนกรีตหนา</td></tr>
+        <tr><td>อำนาจไอออไนซ์</td><td>สูงสุด</td><td>ปานกลาง</td><td>ต่ำสุด</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความสัมพันธ์ผกผัน</div>
+        รังสีที่มีอำนาจ<strong>ไอออไนซ์สูง</strong>มักมีอำนาจ<strong>ทะลุทะลวงต่ำ</strong> เพราะถ่ายเทพลังงานให้อะตอมที่ชนกันอย่างรวดเร็ว จึงสูญเสียพลังงานเร็วและเดินทางได้ระยะสั้น
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: ครึ่งชีวิต ===== -->
+  <div class="section" id="n3">
+    <div class="section-heading"><span>หัวข้อ 8</span> · ครึ่งชีวิตและอัตราการสลาย</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⏱️</div>ครึ่งชีวิต (Half-life)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เวลาที่นิวเคลียสกัมมันตรังสีสลายตัวไปจน<strong>เหลือครึ่งหนึ่ง</strong>ของปริมาณเดิม สัญลักษณ์ T หรือ T₁/₂ เป็นค่าคงที่เฉพาะของแต่ละไอโซโทป ไม่ขึ้นกับปริมาณเริ่มต้นหรือสภาวะแวดล้อม
+      </div>
+      <div class="math-block">
+        N = N₀ (1/2)^(t/T)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการคำนวณ</div>
+        สาร A มีครึ่งชีวิต 5 วัน เริ่มต้นมี N₀ = 800 g ผ่านไป 15 วัน จะเหลือเท่าใด?<br><br>
+        t/T = 15/5 = 3 ครึ่งชีวิต<br>
+        N = 800 × (1/2)³ = 800 × 1/8 = <strong>100 g</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📉</div>ค่าคงตัวการสลายและกัมมันตภาพ</div>
+      <div class="math-block">
+        ค่าคงตัวการสลาย:  λ = ln2 / T ≈ 0.693/T<br>
+        กัมมันตภาพ (Activity):  A = λN  (หน่วย: การสลาย/วินาที หรือ เบ็กเคอเรล Bq)
+      </div>
+      <p>กัมมันตภาพจะลดลงตามสัดส่วนเดียวกับจำนวนนิวเคลียสที่เหลือ กล่าวคือ A = A₀(1/2)^(t/T) เช่นเดียวกับ N</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวังในการคำนวณ</div>
+        ต้องแปลงหน่วยเวลาของ t และ T ให้<strong>ตรงกัน</strong>ก่อนคำนวณเสมอ และ t/T ไม่จำเป็นต้องเป็นจำนวนเต็ม สามารถใช้ลอการิทึมแก้สมการได้เมื่อ t/T ไม่ใช่จำนวนเต็มพอดี
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🕰️</div>การประยุกต์ — การหาอายุด้วยคาร์บอน-14</div>
+      <p>สิ่งมีชีวิตรับ ¹⁴C เข้าสู่ร่างกายตลอดเวลาที่ยังมีชีวิต เมื่อตายแล้ว ¹⁴C จะสลายตัวลดลงตามครึ่งชีวิต (T ≈ 5730 ปี) โดยไม่มีการรับเพิ่ม นักวิทยาศาสตร์จึงใช้อัตราส่วน ¹⁴C ที่เหลืออยู่เทียบกับตอนมีชีวิตในการคำนวณอายุของซากโบราณ</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        พบซากพืชมี ¹⁴C เหลืออยู่ 25% ของปริมาณเดิม (T = 5730 ปี)<br>
+        25% = (1/2)² → ผ่านไป 2 ครึ่งชีวิต = 2 × 5730 = <strong>11,460 ปี</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: พลังงานนิวเคลียร์ ===== -->
+  <div class="section" id="n4">
+    <div class="section-heading"><span>หัวข้อ 9</span> · ปฏิกิริยานิวเคลียร์และพลังงานนิวเคลียร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">💥</div>ปฏิกิริยานิวเคลียร์ฟิชชัน (Fission)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การที่นิวเคลียสหนัก (เช่น ยูเรเนียม-235) <strong>แตกตัว</strong>ออกเป็นนิวเคลียสที่เบากว่าสองก้อน พร้อมปลดปล่อยนิวตรอนและพลังงานจำนวนมาก
+      </div>
+      <div class="math-block">
+        ¹n + ²³⁵₉₂U → ²³⁶₉₂U → ผลผลิตฟิชชัน + นิวตรอนหลายตัว + พลังงาน
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ปฏิกิริยาลูกโซ่ (Chain Reaction)</div>
+        นิวตรอนที่เกิดจากฟิชชันแต่ละครั้งสามารถไปกระตุ้นให้นิวเคลียสยูเรเนียมอื่นแตกตัวต่อได้อีก หากควบคุมอัตราการเกิดปฏิกิริยาได้ (เช่น ในเตาปฏิกรณ์นิวเคลียร์) จะให้พลังงานอย่างต่อเนื่องและปลอดภัย แต่หากควบคุมไม่ได้จะเกิดการระเบิดรุนแรง
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">☀️</div>ปฏิกิริยานิวเคลียร์ฟิวชัน (Fusion)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การที่นิวเคลียสเบาสอง<strong>รวมตัวกัน</strong>เป็นนิวเคลียสที่หนักกว่า พร้อมปลดปล่อยพลังงานมหาศาล เป็นแหล่งพลังงานของดวงอาทิตย์และดาวฤกษ์
+      </div>
+      <div class="math-block">
+        ²₁H + ³₁H → ⁴₂He + ¹₀n + พลังงาน
+      </div>
+      <p>ฟิวชันให้พลังงานต่อมวลสูงกว่าฟิชชัน แต่ต้องใช้อุณหภูมิและความดันสูงมากในการเริ่มปฏิกิริยา ปัจจุบันยังอยู่ระหว่างการพัฒนาเพื่อใช้เป็นแหล่งพลังงานบนโลกอย่างยั่งยืน</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">E=mc²</div>ความสัมพันธ์มวล-พลังงาน</div>
+      <div class="math-block">
+        E = Δm·c² ,  c = 3×10⁸ m/s
+      </div>
+      <p>ทั้งฟิชชันและฟิวชัน มวลรวมของผลผลิต<strong>น้อยกว่า</strong>มวลรวมของสารตั้งต้นเล็กน้อย ส่วนต่างของมวลนี้ (Δm) เปลี่ยนไปเป็นพลังงานจำนวนมหาศาลตามสมการของไอน์สไตน์ เนื่องจาก c² มีค่ามากมาย มวลเพียงเล็กน้อยจึงให้พลังงานมหาศาล</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการคำนวณ</div>
+        ปฏิกิริยาหนึ่งมีมวลพร่อง Δm = 3.3×10⁻²⁸ kg<br>
+        E = Δm·c² = 3.3×10⁻²⁸ × (3×10⁸)² ≈ 2.97×10⁻¹¹ J
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🏭</div>การประยุกต์ใช้และผลกระทบ</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ประโยชน์</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>ผลิตไฟฟ้าจากโรงไฟฟ้านิวเคลียร์</li>
+            <li>รังสีรักษาโรคมะเร็ง</li>
+            <li>การหาอายุวัตถุโบราณ</li>
+            <li>เครื่องมือทางการแพทย์และอุตสาหกรรม</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>ข้อควรระวัง</h4>
+          <ul style="font-size:14px; color:var(--text-dim)">
+            <li>กากกัมมันตรังสีต้องจัดการอย่างปลอดภัย</li>
+            <li>อันตรายต่อสิ่งมีชีวิตหากได้รับรังสีปริมาณสูง</li>
+            <li>ความเสี่ยงจากอุบัติเหตุโรงไฟฟ้านิวเคลียร์</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมทั้งฟิสิกส์อะตอมและฟิสิกส์นิวเคลียร์ เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> โจทย์แนว A-Level ฟิสิกส์อะตอม</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">โจทย์แนวข้อสอบ A-Level ฟิสิกส์ เรื่องอะตอมและนิวเคลียร์ ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบาย</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      เตรียมสูตร h = 6.63×10⁻³⁴ J·s, c = 3×10⁸ m/s, 1 eV = 1.6×10⁻¹⁹ J ให้พร้อมก่อนลงมือทำโจทย์
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — แบบจำลองอะตอม",
+    q: "แบบจำลองอะตอมของรัทเทอร์ฟอร์ดเกิดจากผลการทดลองใด",
+    opts: [
+      "หลอดรังสีแคโทด",
+      "การยิงอนุภาคแอลฟาผ่านแผ่นทองคำบาง",
+      "ปรากฏการณ์โฟโตอิเล็กทริก",
+      "การเลี้ยวเบนของอิเล็กตรอน"
+    ],
+    ans: 1,
+    explain: "รัทเทอร์ฟอร์ดและทีมงานทำการทดลองยิงอนุภาคแอลฟาผ่านแผ่นทองคำบางมาก ๆ\nพบว่าอนุภาคส่วนใหญ่ทะลุผ่านตรงไป แต่บางส่วนเบี่ยงเบนมุมกว้างหรือสะท้อนกลับ\nทำให้สรุปได้ว่าอะตอมส่วนใหญ่เป็นที่ว่างเปล่า และมีมวล+ประจุบวกกระจุกตัวอยู่ที่นิวเคลียสขนาดเล็กตรงกลาง\n\n• หลอดรังสีแคโทด → นำไปสู่แบบจำลองของทอมสัน (การค้นพบอิเล็กตรอน)\n• ปรากฏการณ์โฟโตอิเล็กทริก → เกี่ยวข้องกับทฤษฎีโฟตอนของไอน์สไตน์\n• การเลี้ยวเบนของอิเล็กตรอน → ยืนยันทฤษฎีคลื่นของเดอบรอยล์\n\nดังนั้นคำตอบคือ การยิงอนุภาคแอลฟาผ่านแผ่นทองคำบาง ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — ทฤษฎีบอร์",
+    q: "อะตอมไฮโดรเจนมีพลังงานที่สถานะพื้น (n=1) เท่ากับ −13.6 eV จงหาพลังงานที่ n=2",
+    opts: ["−13.6 eV", "−6.8 eV", "−3.4 eV", "−1.7 eV"],
+    ans: 2,
+    explain: "ใช้สูตร Eₙ = −13.6/n² eV\n\nที่ n = 2:\nE₂ = −13.6/(2²) = −13.6/4 = −3.4 eV ✓\n\nสังเกตว่ายิ่ง n มากขึ้น พลังงานยิ่งเข้าใกล้ 0 (ค่าลบน้อยลง) เพราะอิเล็กตรอนถูกยึดเหนี่ยวหลวมลง"
+  },
+  {
+    level: "⭐ ระดับ 1 — โฟโตอิเล็กทริก",
+    q: "ข้อใดอธิบายปรากฏการณ์โฟโตอิเล็กทริกได้ถูกต้อง",
+    opts: [
+      "อิเล็กตรอนหลุดจากผิวโลหะเมื่อความเข้มแสงมากพอ ไม่ว่าความถี่เท่าใด",
+      "อิเล็กตรอนหลุดจากผิวโลหะทันทีเมื่อความถี่แสงมากกว่าค่าขีดเริ่มของโลหะนั้น",
+      "พลังงานจลน์สูงสุดของอิเล็กตรอนที่หลุดออกมาขึ้นกับความเข้มแสง",
+      "ปรากฏการณ์นี้อธิบายได้ดีด้วยทฤษฎีคลื่นแสงแบบคลาสสิก"
+    ],
+    ans: 1,
+    explain: "ปรากฏการณ์โฟโตอิเล็กทริกอธิบายด้วยทฤษฎีโฟตอนของไอน์สไตน์:\nแสงแต่ละโฟตอนมีพลังงาน E = hf และถ่ายพลังงานให้อิเล็กตรอนทีละก้อน (ไม่ใช่สะสมทีละน้อยแบบคลื่น)\n\n• ตัวเลือกที่ 1 ผิด: ถ้าความถี่ต่ำกว่าค่าขีดเริ่ม ไม่ว่าความเข้มมากแค่ไหนก็ไม่มีอิเล็กตรอนหลุดออกมาเลย\n• ตัวเลือกที่ 2 ถูก: เมื่อ f > f₀ อิเล็กตรอนหลุดออกมาทันที ไม่มีเวลาหน่วง\n• ตัวเลือกที่ 3 ผิด: KE_max = hf − W₀ ขึ้นกับความถี่ ไม่ใช่ความเข้ม (ความเข้มมีผลต่อจำนวนอิเล็กตรอนที่หลุด ไม่ใช่พลังงาน)\n• ตัวเลือกที่ 4 ผิด: ทฤษฎีคลื่นคลาสสิกอธิบายปรากฏการณ์นี้ไม่ได้เลย ต้องใช้ทฤษฎีควอนตัม\n\nดังนั้นคำตอบคือตัวเลือกที่ 2 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — นิวเคลียร์",
+    q: "ธาตุ ²³⁵₉₂U มีจำนวนนิวตรอนเท่าใด",
+    opts: ["92", "143", "235", "327"],
+    ans: 1,
+    explain: "จากสัญลักษณ์นิวเคลียส ᴬZX:\nA = เลขมวล = 235 (จำนวนนิวคลีออนทั้งหมด)\nZ = เลขอะตอม = 92 (จำนวนโปรตอน)\n\nจำนวนนิวตรอน N = A − Z = 235 − 92 = 143 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ทฤษฎีบอร์",
+    q: "อิเล็กตรอนในอะตอมไฮโดรเจนเปลี่ยนจากระดับ n=2 (E₂ = −3.4 eV) ไปยัง n=1 (E₁ = −13.6 eV)\nจงหาพลังงานโฟตอนที่แผ่ออกมา",
+    opts: ["3.4 eV", "10.2 eV", "13.6 eV", "17.0 eV"],
+    ans: 1,
+    explain: "เมื่ออิเล็กตรอนตกจากระดับพลังงานสูง (n=2) ไปต่ำ (n=1) จะแผ่โฟตอนออกมา\nพลังงานโฟตอน = ผลต่างพลังงานระหว่างสองระดับ\n\nΔE = E₂ − E₁ = (−3.4) − (−13.6) = −3.4 + 13.6 = 10.2 eV\n\nเนื่องจากถามขนาดพลังงานที่แผ่ออกมา คำตอบคือ 10.2 eV ✓\n(นี่คือเส้นสเปกตรัมเส้นแรกของอนุกรมไลมัน)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — โฟโตอิเล็กทริก",
+    q: "โลหะชนิดหนึ่งมีฟังก์ชันงาน W₀ = 3.0 eV ฉายแสงพลังงานโฟตอน 5.0 eV เข้าไป\nจงหาพลังงานจลน์สูงสุดของอิเล็กตรอนที่หลุดออกมา",
+    opts: ["2.0 eV", "3.0 eV", "5.0 eV", "8.0 eV"],
+    ans: 0,
+    explain: "ใช้สมการโฟโตอิเล็กทริกของไอน์สไตน์:\nKE_max = E_photon − W₀\nKE_max = 5.0 − 3.0 = 2.0 eV ✓\n\n(พลังงานโฟตอนส่วนหนึ่งใช้เอาชนะแรงยึดเหนี่ยวของโลหะ W₀ ส่วนที่เหลือกลายเป็นพลังงานจลน์ของอิเล็กตรอนที่หลุดออกมา)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — เดอบรอยล์",
+    q: "อนุภาคหนึ่งมีความยาวคลื่นเดอบรอยล์ λ = h/p ถ้าอัตราเร็วของอนุภาคเพิ่มขึ้นเป็น 2 เท่า (มวลคงที่)\nความยาวคลื่นเดอบรอยล์จะเปลี่ยนแปลงอย่างไร",
+    opts: ["เพิ่มขึ้น 2 เท่า", "ลดลงครึ่งหนึ่ง", "ไม่เปลี่ยนแปลง", "เพิ่มขึ้น 4 เท่า"],
+    ans: 1,
+    explain: "λ = h/(mv)\n\nเนื่องจาก h และ m คงที่ λ แปรผกผันกับ v\n\nถ้า v เพิ่มขึ้น 2 เท่า:\nλ_ใหม่ = h/(m × 2v) = (1/2) × h/(mv) = (1/2)λ_เดิม\n\nดังนั้น λ ลดลงครึ่งหนึ่ง ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — กัมมันตภาพรังสี",
+    q: "ธาตุ ²²⁶₈₈Ra สลายตัวให้อนุภาคแอลฟา จะได้ธาตุลูกใดต่อไปนี้",
+    opts: ["²²²₈₆Rn", "²²⁶₈₉Ac", "²²²₈₈Ra", "²³⁰₉₀Th"],
+    ans: 0,
+    explain: "การสลายให้อนุภาคแอลฟา (⁴₂He): เลขมวล A ลดลง 4, เลขอะตอม Z ลดลง 2\n\nสารตั้งต้น: ²²⁶₈₈Ra\nA ใหม่ = 226 − 4 = 222\nZ ใหม่ = 88 − 2 = 86\n\nธาตุที่มี Z = 86 คือ เรดอน (Rn)\n\nดังนั้นผลลัพธ์คือ ²²²₈₆Rn ✓\n\nสมการเต็ม: ²²⁶₈₈Ra → ²²²₈₆Rn + ⁴₂He"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — ครึ่งชีวิต",
+    q: "สารกัมมันตรังสีชนิดหนึ่งมีครึ่งชีวิต 8 วัน เริ่มต้นมีมวล 640 g\nจะเหลือสารนี้กี่กรัม เมื่อเวลาผ่านไป 32 วัน",
+    opts: ["20 g", "40 g", "80 g", "160 g"],
+    ans: 1,
+    explain: "ใช้สูตร N = N₀(1/2)^(t/T)\n\nจำนวนครึ่งชีวิตที่ผ่านไป: t/T = 32/8 = 4 ครึ่งชีวิต\n\nN = 640 × (1/2)⁴ = 640 × 1/16 = 40 g ✓\n\nตรวจสอบทีละขั้น: 640 → 320 (8 วัน) → 160 (16 วัน) → 80 (24 วัน) → 40 (32 วัน) ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — พลังงานนิวเคลียร์",
+    q: "ปฏิกิริยานิวเคลียร์หนึ่งมีมวลพร่อง Δm = 2×10⁻²⁸ kg จงหาพลังงานที่ปลดปล่อยออกมา\n(กำหนด c = 3×10⁸ m/s)",
+    opts: ["6×10⁻²⁰ J", "1.8×10⁻¹¹ J", "9×10⁻¹² J", "6×10⁻¹² J"],
+    ans: 1,
+    explain: "ใช้สมการของไอน์สไตน์: E = Δm·c²\n\nE = 2×10⁻²⁸ × (3×10⁸)²\n  = 2×10⁻²⁸ × 9×10¹⁶\n  = 18×10⁻¹²\n  = 1.8×10⁻¹¹ J ✓\n\nข้อควรระวัง: ต้องยกกำลังสองค่า c ก่อนคูณกับ Δm ไม่ใช่คูณ c เข้าไปตรง ๆ เพียงครั้งเดียว"
+  }
+];
+
+// ===== โจทย์แนว A-Level ฟิสิกส์อะตอม =====
+const alevelQuestions = [
+
+  // ══════════════════════ แบบจำลองอะตอมและทฤษฎีบอร์ ══════════════════════
+  {
+    year: "📘 แนว A-Level — แบบจำลองอะตอม",
+    q: "เรียงลำดับแบบจำลองอะตอมต่อไปนี้ตามลำดับเวลาการเสนอ\n1) แบบจำลองของบอร์\n2) แบบจำลองของทอมสัน\n3) แบบจำลองของดอลตัน\n4) แบบจำลองของรัทเทอร์ฟอร์ด",
+    opts: [
+      "3, 2, 4, 1",
+      "3, 4, 2, 1",
+      "2, 3, 4, 1",
+      "3, 2, 1, 4",
+      "2, 3, 1, 4"
+    ],
+    ans: 0,
+    explain: "ลำดับพัฒนาการของแบบจำลองอะตอม:\n1. ดอลตัน (Dalton) — อะตอมเป็นทรงกลมตัน แบ่งแยกไม่ได้\n2. ทอมสัน (Thomson) — ค้นพบอิเล็กตรอนจากหลอดรังสีแคโทด เสนอแบบจำลองพุดดิงลูกเกด\n3. รัทเทอร์ฟอร์ด (Rutherford) — จากการทดลองยิงอนุภาคแอลฟาผ่านแผ่นทองคำ ค้นพบนิวเคลียส\n4. บอร์ (Bohr) — เสนอวงโคจรพลังงานเจาะจง แก้ปัญหาความไม่เสถียรของแบบจำลองรัทเทอร์ฟอร์ด\n\nดังนั้นลำดับที่ถูกต้องคือ ดอลตัน → ทอมสัน → รัทเทอร์ฟอร์ด → บอร์ = 3, 2, 4, 1 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — ทฤษฎีบอร์",
+    q: "อะตอมไฮโดรเจนที่สถานะพื้นถูกกระตุ้นด้วยโฟตอนพลังงาน 12.09 eV\nอิเล็กตรอนจะกระโดดไปยังระดับพลังงาน n ใด (E₁ = −13.6 eV)",
+    opts: ["n = 2", "n = 3", "n = 4", "n = 5", "หลุดออกจากอะตอม"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาพลังงานของสถานะที่ถูกกระตุ้นไป\nE_n = E₁ + ΔE = −13.6 + 12.09 = −1.51 eV\n\nขั้นที่ 2: หาค่า n จาก Eₙ = −13.6/n²\n−1.51 = −13.6/n²\nn² = 13.6/1.51 ≈ 9\nn = 3 ✓\n\nตรวจสอบ: E₃ = −13.6/9 ≈ −1.51 eV ตรงกับที่คำนวณได้ ✓\n\n(สังเกตว่าพลังงานยังคงเป็นลบ แสดงว่าอิเล็กตรอนยังคงถูกยึดเหนี่ยวอยู่ ไม่หลุดออกจากอะตอม)"
+  },
+  {
+    year: "📘 แนว A-Level — สเปกตรัม",
+    q: "เส้นสเปกตรัมที่มีพลังงานสูงสุดในอนุกรมบาลเมอร์ (ตกสู่ n=2) เกิดจากอิเล็กตรอนที่มาจากระดับใด",
+    opts: ["n = 3", "n = 4", "n = ∞", "n = 1", "n = 2"],
+    ans: 2,
+    explain: "อนุกรมบาลเมอร์คือชุดเส้นสเปกตรัมที่อิเล็กตรอนตกลงมาสู่ระดับ n_f = 2\n\nพลังงานโฟตอนที่แผ่ออกมา: ΔE = |Eₙᵢ − E₂|\n\nยิ่งอิเล็กตรอนเริ่มจากระดับ nᵢ สูงเท่าใด (Eᵢ เข้าใกล้ 0 มากขึ้น) ผลต่างพลังงาน ΔE ก็ยิ่งมากขึ้น\n\nพลังงานสูงสุดที่เป็นไปได้เกิดเมื่อ nᵢ → ∞ (Eᵢ = 0 พอดี ซึ่งคือขีดจำกัดของอนุกรม)\n\nΔE_max = 0 − E₂ = 0 − (−3.4) = 3.4 eV\n\nดังนั้นคำตอบคือ n = ∞ ✓ (นี่คือขอบเขตการลู่เข้าของอนุกรมบาลเมอร์)"
+  },
+
+  // ══════════════════════ โฟโตอิเล็กทริกและทวิภาวะ ══════════════════════
+  {
+    year: "📘 แนว A-Level — โฟโตอิเล็กทริก",
+    q: "โลหะชนิดหนึ่งมีความถี่ขีดเริ่ม f₀ = 5×10¹⁴ Hz เมื่อฉายแสงความถี่ f = 9×10¹⁴ Hz\nจงหาศักย์หยุดยั้ง Vₛ (กำหนด h = 6.63×10⁻³⁴ J·s, e = 1.6×10⁻¹⁹ C)",
+    opts: ["1.66 V", "2.07 V", "0.83 V", "1.24 V", "2.65 V"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หาฟังก์ชันงาน W₀ จากความถี่ขีดเริ่ม\nW₀ = hf₀ = 6.63×10⁻³⁴ × 5×10¹⁴ = 3.315×10⁻¹⁹ J\n\nขั้นที่ 2: หาพลังงานโฟตอนที่ฉายเข้าไป\nE_photon = hf = 6.63×10⁻³⁴ × 9×10¹⁴ = 5.967×10⁻¹⁹ J\n\nขั้นที่ 3: หา KE_max\nKE_max = E_photon − W₀ = 5.967×10⁻¹⁹ − 3.315×10⁻¹⁹ = 2.652×10⁻¹⁹ J\n\nขั้นที่ 4: หาศักย์หยุดยั้งจาก eVₛ = KE_max\nVₛ = KE_max/e = 2.652×10⁻¹⁹ / 1.6×10⁻¹⁹ ≈ 1.66 V ✓"
+  },
+  {
+    year: "📘 แนว A-Level — เดอบรอยล์",
+    q: "อิเล็กตรอนถูกเร่งจากหยุดนิ่งด้วยความต่างศักย์ V จนมีความยาวคลื่นเดอบรอยล์ค่าหนึ่ง\nถ้าเพิ่มความต่างศักย์เป็น 4 เท่า ความยาวคลื่นเดอบรอยล์จะเปลี่ยนเป็นอย่างไร\n(กำหนด KE = eV = p²/2m)",
+    opts: [
+      "เพิ่มขึ้น 2 เท่า",
+      "ลดลงเหลือครึ่งหนึ่ง",
+      "ลดลงเหลือ 1/4 เท่า",
+      "เพิ่มขึ้น 4 เท่า",
+      "ไม่เปลี่ยนแปลง"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาความสัมพันธ์ระหว่างโมเมนตัม p กับความต่างศักย์ V\nพลังงานจลน์ที่ได้จากการเร่ง: eV = p²/(2m)\nดังนั้น p = √(2meV)  →  p ∝ √V\n\nขั้นที่ 2: หาความสัมพันธ์ของ λ กับ V\nλ = h/p = h/√(2meV)  →  λ ∝ 1/√V\n\nขั้นที่ 3: พิจารณาเมื่อ V เพิ่มเป็น 4 เท่า\nλ_ใหม่/λ_เดิม = √(V_เดิม/V_ใหม่) = √(V/4V) = √(1/4) = 1/2\n\nดังนั้น λ ลดลงเหลือครึ่งหนึ่งของค่าเดิม ✓"
+  },
+
+  // ══════════════════════ นิวเคลียร์ ══════════════════════
+  {
+    year: "📘 แนว A-Level — โครงสร้างนิวเคลียส",
+    q: "นิวเคลียสหนึ่งมีรัศมี R = 7.2×10⁻¹⁵ m ใช้ R₀ = 1.2×10⁻¹⁵ m ในสูตร R = R₀A^(1/3)\nจงหาเลขมวล A ของนิวเคลียสนี้โดยประมาณ",
+    opts: ["27", "64", "125", "216", "8"],
+    ans: 2,
+    explain: "ขั้นที่ 1: จัดสูตรใหม่เพื่อหา A\nR = R₀A^(1/3)\nA^(1/3) = R/R₀ = 7.2×10⁻¹⁵ / 1.2×10⁻¹⁵ = 6\n\nขั้นที่ 2: ยกกำลังสามทั้งสองข้าง\nA = 6³ = 216\n\nดังนั้น A ≈ 216 (ใกล้เคียงกับธาตุหนัก เช่น พอโลเนียม-216) ✓"
+  },
+  {
+    year: "📘 แนว A-Level — กัมมันตภาพรังสี",
+    q: "ธาตุ X สลายตัวให้อนุภาคบีตาลบ (β⁻) หนึ่งครั้ง ตามด้วยอนุภาคแอลฟา (α) หนึ่งครั้ง\nถ้า X มี A = 234 และ Z = 90 ธาตุสุดท้ายที่ได้มี A และ Z เท่าใด",
+    opts: [
+      "A = 230, Z = 89",
+      "A = 230, Z = 90",
+      "A = 230, Z = 91",
+      "A = 234, Z = 92",
+      "A = 238, Z = 92"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: การสลายบีตาลบ (β⁻)\nA คงเดิม, Z เพิ่มขึ้น 1 (นิวตรอนเปลี่ยนเป็นโปรตอน)\nจาก A=234, Z=90 → A=234, Z=91\n\nขั้นที่ 2: การสลายแอลฟา (α)\nA ลดลง 4, Z ลดลง 2\nจาก A=234, Z=91 → A=234−4=230, Z=91−2=89\n\nดังนั้นผลลัพธ์สุดท้ายคือ A=230, Z=89 ✓\n(สอดคล้องกับกระบวนการสลายตัวจริงของทอเรียม-234 ซึ่งเป็นส่วนหนึ่งของอนุกรมการสลายตัวของยูเรเนียม-238)"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  alevelQuestions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

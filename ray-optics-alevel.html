@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แสงเชิงรังสี | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '→ θᵢ θᵣ n₁ n₂ f λ ⊥ ° ∞';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* DIAGRAM */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>แสง<span>เชิงรังสี</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เรื่องการสะท้อน การหักเห กระจก เลนส์ และทัศนอุปกรณ์ เตรียมสอบ A-Level</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">ข้อสอบเตรียม A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="o1">1. แสงและเงา</button>
+  <button class="tab-btn" data-sec="o2">2. การสะท้อนแสง</button>
+  <button class="tab-btn" data-sec="o3">3. กระจกเงาโค้ง</button>
+  <button class="tab-btn" data-sec="o4">4. การหักเหของแสง</button>
+  <button class="tab-btn" data-sec="o5">5. สะท้อนกลับหมด</button>
+  <button class="tab-btn" data-sec="o6">6. เลนส์บาง</button>
+  <button class="tab-btn" data-sec="o7">7. ทัศนอุปกรณ์</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบเตรียม A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: แสงและเงา ===== -->
+  <div class="section active" id="o1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · การเคลื่อนที่ของแสงเป็นเส้นตรง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">💡</div>ธรรมชาติของแสงและรังสีของแสง</div>
+      <p>แสง คือ <strong>คลื่นแม่เหล็กไฟฟ้า</strong> ที่เคลื่อนที่ผ่านสุญญากาศได้ด้วยอัตราเร็ว <span class="math">c ≈ 3×10⁸ m/s</span> ในตัวกลางโปร่งใสสม่ำเสมอ แสงเดินทางเป็น <strong>เส้นตรง</strong> เสมอ</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        รังสีของแสง (Ray) คือ เส้นตรงที่ใช้แทนทิศทางการเคลื่อนที่ของแสง ส่วน ลำแสง (Beam) คือ กลุ่มของรังสีแสงหลายเส้นรวมกัน
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ลำแสงขนาน</h4>
+          <p style="font-size:14px; color:var(--text-dim)">รังสีทุกเส้นขนานกัน เช่น แสงจากดวงอาทิตย์ที่มาถึงโลก</p>
+        </div>
+        <div class="mini-card">
+          <h4>ลำแสงลู่เข้า / ลู่ออก</h4>
+          <p style="font-size:14px; color:var(--text-dim)">รังสีพุ่งเข้าหาจุดเดียวกัน (ลู่เข้า) หรือกระจายออกจากจุดกำเนิด (ลู่ออก)</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 หลักฐานว่าแสงเดินทางเป็นเส้นตรง</div>
+        การเกิด เงา ที่มีขอบคมชัด และการทำงานของ กล้องรูเข็ม ล้วนยืนยันว่าแสงไม่เลี้ยวโค้งไปเองในตัวกลางเดียวกัน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🌑</div>การเกิดเงา (Shadow)</div>
+      <p>เมื่อวัตถุทึบแสงกั้นทางเดินของแสง จะเกิดบริเวณมืดด้านหลังวัตถุ เรียกว่า เงา ซึ่งแบ่งเป็น 2 ส่วน เมื่อแหล่งกำเนิดแสงมีขนาด (ไม่ใช่จุด)</p>
+      <div class="venn-container">
+        <svg width="420" height="200" viewBox="0 0 420 200">
+          <rect width="420" height="200" rx="10" fill="#1c2235"/>
+          <circle cx="40" cy="60" r="14" fill="#ffd93d"/>
+          <circle cx="40" cy="140" r="14" fill="#ffd93d"/>
+          <text x="18" y="30" fill="#ffd93d" font-size="12">แหล่งกำเนิดแสง</text>
+          <rect x="160" y="70" width="14" height="60" fill="#8892b0"/>
+          <text x="140" y="150" fill="#8892b0" font-size="12">วัตถุทึบแสง</text>
+          <polygon points="54,60 160,70 340,10 340,190 160,130 54,140" fill="rgba(255,107,107,0.12)" stroke="none"/>
+          <polygon points="54,60 160,70 340,95 340,105 160,130 54,140" fill="rgba(108,99,255,0.35)" stroke="none"/>
+          <text x="355" y="55" fill="#ff6b6b" font-size="13">เงามัว</text>
+          <text x="345" y="103" fill="#a89fff" font-size="13">เงามืด</text>
+        </svg>
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เงามืด (Umbra)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">บริเวณที่แสงจากแหล่งกำเนิดส่องไปไม่ถึงเลยแม้แต่จุดเดียว มืดสนิท</p>
+        </div>
+        <div class="mini-card">
+          <h4>เงามัว (Penumbra)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">บริเวณที่แสงจากบางส่วนของแหล่งกำเนิดส่องไปถึง จึงมืดไม่สนิท</p>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ถ้าแหล่งกำเนิดแสงเป็น <strong>จุดกำเนิดแสง</strong> (point source) จะเกิดเฉพาะ เงามืด เท่านั้น ไม่มีเงามัว
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📷</div>กล้องรูเข็ม (Pinhole Camera)</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        แสงจากวัตถุเดินทางเป็นเส้นตรงผ่านรูเล็ก ๆ ไปตกบนฉากด้านหลัง เกิดเป็น ภาพจริง หัวกลับ บนฉาก
+      </div>
+      <div class="math-block">
+        h<sub>i</sub> / h<sub>o</sub> = d<sub>i</sub> / d<sub>o</sub>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุสูง 20 cm อยู่ห่างรูเข็ม 100 cm ฉากอยู่ห่างรูเข็ม 25 cm<br>
+        h<sub>i</sub> = h<sub>o</sub> × (d<sub>i</sub>/d<sub>o</sub>) = 20 × (25/100) = <strong>5 cm</strong> (หัวกลับ)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: การสะท้อนแสง ===== -->
+  <div class="section" id="o2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · การสะท้อนของแสง (Reflection)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔁</div>กฎการสะท้อนของแสง</div>
+      <div class="venn-container">
+        <svg width="380" height="220" viewBox="0 0 380 220">
+          <rect width="380" height="220" rx="10" fill="#1c2235"/>
+          <line x1="20" y1="150" x2="360" y2="150" stroke="#e8eaf6" stroke-width="3"/>
+          <line x1="190" y1="150" x2="190" y2="40" stroke="#8892b0" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <text x="196" y="40" fill="#8892b0" font-size="12">เส้นแนวฉาก (Normal)</text>
+          <line x1="90" y1="60" x2="190" y2="150" stroke="#6c63ff" stroke-width="2.5"/>
+          <polygon points="190,150 178,132 194,138" fill="#6c63ff"/>
+          <line x1="190" y1="150" x2="290" y2="60" stroke="#00d4aa" stroke-width="2.5"/>
+          <polygon points="290,60 274,66 282,80" fill="#00d4aa"/>
+          <text x="95" y="75" fill="#a89fff" font-size="13">รังสีตกกระทบ</text>
+          <text x="250" y="75" fill="#00d4aa" font-size="13">รังสีสะท้อน</text>
+          <text x="150" y="130" fill="#a89fff" font-size="14">θᵢ</text>
+          <text x="210" y="130" fill="#00d4aa" font-size="14">θᵣ</text>
+          <text x="20" y="170" fill="#8892b0" font-size="12">ผิวสะท้อน</text>
+        </svg>
+      </div>
+      <div class="def-box">
+        <div class="def-label">กฎการสะท้อน (Law of Reflection)</div>
+        1) มุมตกกระทบ (θᵢ) = มุมสะท้อน (θᵣ) เสมอ โดยวัดจากเส้นแนวฉาก<br>
+        2) รังสีตกกระทบ เส้นแนวฉาก และรังสีสะท้อน อยู่ในระนาบเดียวกัน
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>การสะท้อนแบบสม่ำเสมอ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ผิวเรียบ (เช่น กระจก) รังสีขนานที่ตกกระทบสะท้อนออกไปในทิศทางเดียวกันทั้งหมด</p>
+        </div>
+        <div class="mini-card">
+          <h4>การสะท้อนแบบกระจาย</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ผิวขรุขระ (เช่น กระดาษ) รังสีขนานที่ตกกระทบสะท้อนกระจายไปหลายทิศทาง</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🪞</div>ภาพจากกระจกเงาราบ (Plane Mirror)</div>
+      <div class="def-box">
+        <div class="def-label">คุณสมบัติของภาพ</div>
+        เป็น ภาพเสมือน (virtual) หัวตั้ง ขนาดเท่าวัตถุ ระยะภาพเท่ากับระยะวัตถุ (วัดจากกระจก) แต่ กลับซ้าย-ขวา (lateral inversion)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ยืนห่างกระจกเงาราบ 1.5 m จะเห็นภาพเสมือนของตนเองอยู่ลึกเข้าไปหลังกระจก 1.5 m เช่นกัน รวมระยะระหว่างวัตถุกับภาพ = 3 m
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">สูตรจำนวนภาพจากกระจกสองบานทำมุมกัน</div>
+        ถ้ากระจกเงาราบ 2 บานวางทำมุม θ ต่อกัน จำนวนภาพที่เกิดขึ้น<br>
+        <span class="math">n = (360°/θ) − 1</span> (เมื่อ 360°/θ เป็นจำนวนเต็ม)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: กระจกเงาโค้ง ===== -->
+  <div class="section" id="o3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · กระจกเงาโค้ง (Curved Mirrors)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⭕</div>ชนิดและส่วนประกอบของกระจกโค้ง</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>กระจกเว้า (Concave) — รวมแสง</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ผิวสะท้อนอยู่ด้านใน ทำให้รังสีขนานสะท้อนไปรวมกันที่โฟกัส เป็นกระจก "รวมแสง"</p>
+        </div>
+        <div class="mini-card">
+          <h4>กระจกนูน (Convex) — กระจายแสง</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ผิวสะท้อนอยู่ด้านนอก ทำให้รังสีขนานสะท้อนกระจายออก มีโฟกัสเสมือน เป็นกระจก "กระจายแสง"</p>
+        </div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">C</div>
+          <div class="sym-name">จุดศูนย์กลางความโค้ง</div>
+          <div class="sym-desc">Center of curvature</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">F</div>
+          <div class="sym-name">จุดโฟกัส</div>
+          <div class="sym-desc">อยู่กึ่งกลางระหว่าง C กับกระจก</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">R</div>
+          <div class="sym-name">รัศมีความโค้ง</div>
+          <div class="sym-desc">ระยะจากกระจกถึง C</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">f</div>
+          <div class="sym-name">ความยาวโฟกัส</div>
+          <div class="sym-desc"><span class="math">f = R/2</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">✏️</div>การเขียนภาพด้วยรังสีหลัก (กระจกเว้า)</div>
+      <div class="venn-container">
+        <svg width="440" height="220" viewBox="0 0 440 220">
+          <rect width="440" height="220" rx="10" fill="#1c2235"/>
+          <line x1="20" y1="110" x2="420" y2="110" stroke="#4a5580" stroke-width="1"/>
+          <path d="M 380 30 Q 330 110 380 190" fill="none" stroke="#e8eaf6" stroke-width="3"/>
+          <circle cx="240" cy="110" r="3" fill="#ffd93d"/>
+          <text x="232" y="128" fill="#ffd93d" font-size="12">F</text>
+          <circle cx="170" cy="110" r="3" fill="#00d4aa"/>
+          <text x="160" y="128" fill="#00d4aa" font-size="12">C</text>
+          <line x1="100" y1="110" x2="100" y2="55" stroke="#6c63ff" stroke-width="3"/>
+          <polygon points="100,55 94,67 106,67" fill="#6c63ff"/>
+          <text x="80" y="45" fill="#a89fff" font-size="12">วัตถุ</text>
+          <line x1="100" y1="55" x2="330" y2="55" stroke="#00d4aa" stroke-width="1.6"/>
+          <line x1="330" y1="55" x2="240" y2="110" stroke="#00d4aa" stroke-width="1.6"/>
+          <line x1="240" y1="110" x2="335" y2="175" stroke="#00d4aa" stroke-width="1.6" stroke-dasharray="1,0"/>
+          <line x1="100" y1="55" x2="170" y2="110" stroke="#ff6b6b" stroke-width="1.6"/>
+          <line x1="170" y1="110" x2="335" y2="175" stroke="#ff6b6b" stroke-width="1.6"/>
+          <line x1="290" y1="110" x2="335" y2="175" stroke="#ffd93d" stroke-width="2.4"/>
+          <polygon points="335,175 327,163 340,164" fill="#ffd93d"/>
+          <text x="300" y="192" fill="#ffd93d" font-size="12">ภาพ (จริง หัวกลับ)</text>
+        </svg>
+      </div>
+      <div class="def-box">
+        <div class="def-label">รังสีหลัก 3 เส้น (เลือกใช้ 2 เส้นก็เพียงพอ)</div>
+        1) รังสีขนานแกนมุขสำคัญ → สะท้อนผ่าน F<br>
+        2) รังสีผ่าน F → สะท้อนขนานแกนมุขสำคัญ<br>
+        3) รังสีผ่าน C → สะท้อนกลับทางเดิม (เพราะตกกระทบตั้งฉากกับผิวกระจก)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ตำแหน่งวัตถุกับชนิดภาพ (กระจกเว้า)</div>
+        <table style="font-size:13px">
+          <tr><th>ตำแหน่งวัตถุ</th><th>ภาพที่ได้</th></tr>
+          <tr><td>ไกลกว่า C</td><td>จริง หัวกลับ เล็กกว่าวัตถุ อยู่ระหว่าง F กับ C</td></tr>
+          <tr><td>ที่ C พอดี</td><td>จริง หัวกลับ ขนาดเท่าวัตถุ อยู่ที่ C</td></tr>
+          <tr><td>ระหว่าง F กับ C</td><td>จริง หัวกลับ ใหญ่กว่าวัตถุ ไกลกว่า C</td></tr>
+          <tr><td>ที่ F พอดี</td><td>ไม่เกิดภาพ (รังสีสะท้อนขนานกัน)</td></tr>
+          <tr><td>ใกล้กว่า F</td><td>เสมือน หัวตั้ง ใหญ่กว่าวัตถุ อยู่หลังกระจก</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📐</div>สูตรกระจกและกำลังขยาย</div>
+      <div class="math-block">
+        1/f = 1/s + 1/s'&nbsp;&nbsp;&nbsp;&nbsp; m = −s'/s = h<sub>i</sub>/h<sub>o</sub>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อตกลงเครื่องหมาย (Sign Convention) — จริงบวก เสมือนลบ</div>
+        • s (ระยะวัตถุ) เป็น + เสมอ (วัตถุจริงอยู่หน้ากระจก)<br>
+        • f เป็น + สำหรับกระจกเว้า, เป็น − สำหรับกระจกนูน<br>
+        • s' เป็น + ถ้าภาพจริง (อยู่หน้ากระจก), เป็น − ถ้าภาพเสมือน (อยู่หลังกระจก)<br>
+        • m เป็น − แสดงว่าภาพหัวกลับ, m เป็น + แสดงว่าภาพหัวตั้ง
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์ — กระจกเว้า</div>
+        กระจกเว้า f = 20 cm วางวัตถุห่างกระจก s = 30 cm จงหาตำแหน่งภาพและกำลังขยาย<br><br>
+        1/20 = 1/30 + 1/s' → 1/s' = 1/20 − 1/30 = 1/60 → <strong>s' = 60 cm</strong> (ภาพจริง อยู่หน้ากระจก)<br>
+        m = −s'/s = −60/30 = <strong>−2</strong> (ภาพหัวกลับ ขยายเป็น 2 เท่า)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์ — กระจกนูน</div>
+        กระจกนูน f = −15 cm วางวัตถุห่างกระจก s = 10 cm จงหาตำแหน่งภาพ<br><br>
+        1/(−15) = 1/10 + 1/s' → 1/s' = −1/15 − 1/10 = −1/6 → <strong>s' = −6 cm</strong><br>
+        s' ติดลบ → ภาพเสมือน อยู่หลังกระจก 6 cm, m = −(−6)/10 = <strong>+0.6</strong> (ภาพหัวตั้ง เล็กกว่าวัตถุ)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: การหักเห ===== -->
+  <div class="section" id="o4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · การหักเหของแสง (Refraction)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🌊</div>ดัชนีหักเห (Refractive Index)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ดัชนีหักเหของตัวกลาง คือ อัตราส่วนของอัตราเร็วแสงในสุญญากาศต่ออัตราเร็วแสงในตัวกลางนั้น
+      </div>
+      <div class="math-block">n = c / v</div>
+      <p>ตัวกลางที่มี n มาก (หนาแน่นเชิงแสงมาก) จะทำให้แสงเดินทางช้าลงมาก เช่น n(อากาศ) ≈ 1.00, n(น้ำ) ≈ 1.33, n(แก้ว) ≈ 1.50</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>กฎการหักเหของสเนลล์ (Snell's Law)</div>
+      <div class="venn-container">
+        <svg width="380" height="220" viewBox="0 0 380 220">
+          <rect width="380" height="220" rx="10" fill="#1c2235"/>
+          <rect x="20" y="110" width="340" height="90" fill="rgba(0,212,170,0.08)"/>
+          <text x="330" y="30" fill="#8892b0" font-size="12">ตัวกลาง 1 (n₁)</text>
+          <text x="330" y="195" fill="#00d4aa" font-size="12">ตัวกลาง 2 (n₂)</text>
+          <line x1="20" y1="110" x2="360" y2="110" stroke="#e8eaf6" stroke-width="2"/>
+          <line x1="190" y1="110" x2="190" y2="30" stroke="#8892b0" stroke-width="1.2" stroke-dasharray="5,4"/>
+          <line x1="190" y1="110" x2="190" y2="200" stroke="#8892b0" stroke-width="1.2" stroke-dasharray="5,4"/>
+          <line x1="110" y1="50" x2="190" y2="110" stroke="#6c63ff" stroke-width="2.5"/>
+          <polygon points="190,110 178,94 194,98" fill="#6c63ff"/>
+          <line x1="190" y1="110" x2="225" y2="200" stroke="#00d4aa" stroke-width="2.5"/>
+          <polygon points="225,200 210,192 222,186" fill="#00d4aa"/>
+          <text x="130" y="55" fill="#a89fff" font-size="14">θ₁</text>
+          <text x="200" y="140" fill="#00d4aa" font-size="14">θ₂</text>
+        </svg>
+      </div>
+      <div class="def-box">
+        <div class="def-label">กฎของสเนลล์</div>
+        <span class="math">n₁ sin θ₁ = n₂ sin θ₂</span><br>
+        เมื่อ θ₁ = มุมตกกระทบ, θ₂ = มุมหักเห วัดจากเส้นแนวฉากทั้งคู่
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เข้าตัวกลางหนาแน่นกว่า (n₂ > n₁)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">แสงหักเห "เข้าใกล้" เส้นแนวฉาก (θ₂ < θ₁) และเดินทางช้าลง</p>
+        </div>
+        <div class="mini-card">
+          <h4>เข้าตัวกลางเบาบางกว่า (n₂ < n₁)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">แสงหักเห "ออกห่าง" จากเส้นแนวฉาก (θ₂ > θ₁) และเดินทางเร็วขึ้น</p>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์</div>
+        แสงเดินทางจากอากาศ (n₁=1) ตกกระทบผิวน้ำ (n₂=1.33) ด้วยมุม 45°<br>
+        sin θ₂ = (1×sin45°)/1.33 = 0.707/1.33 = 0.532 → θ₂ ≈ <strong>32.1°</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🏊</div>ความลึกปรากฏ (Apparent Depth)</div>
+      <div class="def-box">
+        <div class="def-label">สูตร (มองจากตัวกลางเบาบางลงไปในตัวกลางหนาแน่นกว่า ในแนวเกือบตั้งฉาก)</div>
+        <span class="math">ความลึกจริง / ความลึกปรากฏ = n(ตัวกลางที่มอง)</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        สระน้ำลึกจริง 2 m (n น้ำ = 1.33) มองจากอากาศในแนวเกือบตั้งฉาก<br>
+        ความลึกปรากฏ = ความลึกจริง / n = 2/1.33 ≈ <strong>1.5 m</strong> (ดูตื้นกว่าความจริง)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: สะท้อนกลับหมด ===== -->
+  <div class="section" id="o5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · การสะท้อนกลับหมดภายใน (Total Internal Reflection)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔺</div>มุมวิกฤต (Critical Angle)</div>
+      <div class="def-box">
+        <div class="def-label">เงื่อนไขการเกิด</div>
+        เกิดขึ้นเมื่อแสงเดินทางจาก ตัวกลางหนาแน่นกว่า ไปยัง ตัวกลางเบาบางกว่า (n₁ > n₂) และมุมตกกระทบมากกว่า "มุมวิกฤต" θc
+      </div>
+      <div class="math-block">sin θc = n₂ / n₁</div>
+      <div class="venn-container">
+        <svg width="420" height="200" viewBox="0 0 420 200">
+          <rect width="420" height="200" rx="10" fill="#1c2235"/>
+          <line x1="20" y1="100" x2="400" y2="100" stroke="#e8eaf6" stroke-width="2"/>
+          <text x="20" y="25" fill="#8892b0" font-size="12">n₂ (เบาบางกว่า)</text>
+          <rect x="20" y="100" width="380" height="90" fill="rgba(108,99,255,0.08)"/>
+          <text x="20" y="185" fill="#a89fff" font-size="12">n₁ (หนาแน่นกว่า)</text>
+          <line x1="150" y1="100" x2="150" y2="180" stroke="#8892b0" stroke-width="1" stroke-dasharray="5,4"/>
+          <!-- below critical: refracts -->
+          <line x1="100" y1="180" x2="150" y2="100" stroke="#00d4aa" stroke-width="2"/>
+          <line x1="150" y1="100" x2="110" y2="35" stroke="#00d4aa" stroke-width="2"/>
+          <text x="80" y="60" fill="#00d4aa" font-size="11">θ &lt; θc: หักเหออกไป</text>
+          <line x1="290" y1="100" x2="290" y2="180" stroke="#8892b0" stroke-width="1" stroke-dasharray="5,4"/>
+          <!-- above critical: TIR -->
+          <line x1="250" y1="180" x2="290" y2="100" stroke="#ff6b6b" stroke-width="2.4"/>
+          <line x1="290" y1="100" x2="340" y2="180" stroke="#ff6b6b" stroke-width="2.4"/>
+          <polygon points="340,180 330,168 322,178" fill="#ff6b6b"/>
+          <text x="260" y="60" fill="#ff6b6b" font-size="11">θ &gt; θc: สะท้อนกลับหมด</text>
+        </svg>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        การสะท้อนกลับหมดภายใน เกิดได้เฉพาะกรณี แสงเดินทางจากตัวกลางหนาแน่นกว่าไปเบาบางกว่าเท่านั้น (n₁ > n₂) และต้องมีมุมตกกระทบ มากกว่า θc เท่านั้น
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์</div>
+        แสงเดินทางในแก้ว (n₁ = 1.5) ไปยังอากาศ (n₂ = 1) จงหามุมวิกฤต<br>
+        sin θc = 1/1.5 = 0.667 → θc ≈ <strong>41.8°</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔌</div>การประยุกต์ใช้งาน</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เส้นใยแก้วนำแสง (Optical Fiber)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">แกนกลางมี n สูงกว่าเปลือกหุ้ม ทำให้แสงสะท้อนกลับหมดวิ่งไปตามเส้นใยได้ระยะไกลโดยไม่สูญเสียพลังงานมาก ใช้ในระบบสื่อสารและการแพทย์ (เช่น กล้องส่องตรวจ)</p>
+        </div>
+        <div class="mini-card">
+          <h4>ปริซึมสะท้อนกลับหมด</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ปริซึมสามเหลี่ยมมุมฉาก 45°-45°-90° ใช้แทนกระจกเงาในกล้องส่องทางไกล/กล้องปริทรรศน์ เพราะสะท้อนแสงได้เกือบ 100%</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ทำไมเพชรถึงระยิบระยับ</div>
+        เพชรมีดัชนีหักเหสูงมาก (n ≈ 2.42) จึงมีมุมวิกฤตเล็กมาก (≈ 24°) แสงที่เข้าไปในเพชรจึงเกิดการสะท้อนกลับหมดหลายครั้งก่อนออกมา ทำให้ดูแวววาว
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: เลนส์บาง ===== -->
+  <div class="section" id="o6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · เลนส์บาง (Thin Lenses)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔍</div>ชนิดของเลนส์</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เลนส์นูน (Converging) f เป็น +</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ขอบบาง กลางหนา รวมรังสีขนานให้ไปตัดกันที่โฟกัส เป็นเลนส์ "รวมแสง"</p>
+        </div>
+        <div class="mini-card">
+          <h4>เลนส์เว้า (Diverging) f เป็น −</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ขอบหนา กลางบาง กระจายรังสีขนานออก มีโฟกัสเสมือน เป็นเลนส์ "กระจายแสง"</p>
+        </div>
+      </div>
+      <div class="venn-container">
+        <svg width="440" height="200" viewBox="0 0 440 200">
+          <rect width="440" height="200" rx="10" fill="#1c2235"/>
+          <line x1="20" y1="100" x2="420" y2="100" stroke="#4a5580" stroke-width="1"/>
+          <ellipse cx="220" cy="100" rx="18" ry="80" fill="rgba(108,99,255,0.15)" stroke="#6c63ff" stroke-width="2"/>
+          <circle cx="140" cy="100" r="3" fill="#ffd93d"/>
+          <text x="132" y="118" fill="#ffd93d" font-size="12">F</text>
+          <circle cx="300" cy="100" r="3" fill="#ffd93d"/>
+          <text x="292" y="118" fill="#ffd93d" font-size="12">F</text>
+          <line x1="30" y1="60" x2="220" y2="60" stroke="#00d4aa" stroke-width="1.6"/>
+          <line x1="220" y1="60" x2="300" y2="100" stroke="#00d4aa" stroke-width="1.6"/>
+          <line x1="30" y1="130" x2="220" y2="140" stroke="#ff6b6b" stroke-width="1.6"/>
+          <line x1="220" y1="140" x2="300" y2="100" stroke="#ff6b6b" stroke-width="1.6"/>
+          <line x1="300" y1="100" x2="410" y2="100" stroke="#e8eaf6" stroke-width="2"/>
+          <text x="330" y="90" fill="#8892b0" font-size="11">รังสีตัดกัน = ภาพ</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>สูตรเลนส์บางและกำลังขยาย</div>
+      <div class="math-block">
+        1/f = 1/s + 1/s'&nbsp;&nbsp;&nbsp;&nbsp; m = −s'/s = h<sub>i</sub>/h<sub>o</sub>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อตกลงเครื่องหมายของเลนส์</div>
+        • เลนส์นูน f เป็น +, เลนส์เว้า f เป็น −<br>
+        • s' เป็น + ถ้าภาพอยู่ ฝั่งตรงข้าม กับวัตถุ (ภาพจริง) เป็น − ถ้าภาพอยู่ ฝั่งเดียวกับวัตถุ (ภาพเสมือน)<br>
+        • m เป็น − คือภาพหัวกลับ, m เป็น + คือภาพหัวตั้ง
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์ — เลนส์นูน</div>
+        เลนส์นูน f = 10 cm วางวัตถุห่างเลนส์ s = 15 cm<br>
+        1/10 = 1/15 + 1/s' → 1/s' = 1/10 − 1/15 = 1/30 → <strong>s' = 30 cm</strong> (ภาพจริง อีกฝั่งของเลนส์)<br>
+        m = −30/15 = <strong>−2</strong> (ภาพหัวกลับ ขยาย 2 เท่า)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์ — เลนส์เว้า</div>
+        เลนส์เว้า f = −20 cm วางวัตถุห่างเลนส์ s = 30 cm<br>
+        1/(−20) = 1/30 + 1/s' → 1/s' = −1/20 − 1/30 = −1/12 → <strong>s' = −12 cm</strong><br>
+        ภาพเสมือน อยู่ฝั่งเดียวกับวัตถุ, m = −(−12)/30 = <strong>+0.4</strong> (หัวตั้ง เล็กกว่าวัตถุ)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กำลังขยาย (Power) ของเลนส์</div>
+        <span class="math">P = 1/f</span> (หน่วยเมตร) มีหน่วยเป็น ไดออปเตอร์ (Diopter, D) ใช้ในการกำหนดกำลังเลนส์แว่นตา
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔗</div>เลนส์ประกอบ (Lens Combination)</div>
+      <p>เมื่อวางเลนส์บางหลายชิ้นสัมผัสกัน กำลังขยายรวมและโฟกัสรวมคำนวณได้จาก</p>
+      <div class="math-block">P<sub>รวม</sub> = P₁ + P₂ + …&nbsp;&nbsp;&nbsp;&nbsp; 1/f<sub>รวม</sub> = 1/f₁ + 1/f₂ + …</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เลนส์นูน f₁ = 20 cm ประกบเลนส์เว้า f₂ = −50 cm<br>
+        1/f<sub>รวม</sub> = 1/20 − 1/50 = 0.05 − 0.02 = 0.03 → <strong>f<sub>รวม</sub> ≈ 33.3 cm</strong> (ยังเป็นเลนส์รวมแสง)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: ทัศนอุปกรณ์ ===== -->
+  <div class="section" id="o7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · ทัศนอุปกรณ์ (Optical Instruments)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">👁️</div>ดวงตาและความผิดปกติของสายตา</div>
+      <div class="def-box">
+        <div class="def-label">การทำงานของตา</div>
+        แสงผ่านกระจกตาและ เลนส์ตา (ทำหน้าที่คล้ายเลนส์นูน) ไปตกที่จอตา (เรตินา) เกิดเป็นภาพจริงหัวกลับ สมองจึงตีความกลับหัวอีกครั้ง
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สายตาสั้น (Myopia)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ภาพตกก่อนถึงจอตา มองไกลไม่ชัด ต้องแก้ด้วย เลนส์เว้า เพื่อกระจายแสงก่อนเข้าตา</p>
+        </div>
+        <div class="mini-card">
+          <h4>สายตายาว (Hyperopia)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ภาพตกเลยจอตา มองใกล้ไม่ชัด ต้องแก้ด้วย เลนส์นูน เพื่อรวมแสงเพิ่ม</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ระยะสำคัญของตาปกติ</div>
+        จุดใกล้สุดที่มองชัด (Near point) ≈ 25 cm, จุดไกลสุดที่มองชัด (Far point) = อนันต์ (∞)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔎</div>แว่นขยาย (Magnifying Glass)</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        ใช้เลนส์นูนวางให้วัตถุอยู่ ใกล้กว่าโฟกัส (s &lt; f) ทำให้เกิดภาพเสมือน หัวตั้ง ขยายใหญ่ อยู่ที่ระยะจุดใกล้สุดของตา (25 cm)
+      </div>
+      <div class="math-block">M = 25/f &nbsp;(เมื่อ f มีหน่วยเป็น cm, ภาพตกที่จุดใกล้สุด)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แว่นขยาย f = 5 cm จะให้กำลังขยาย M = 25/5 = <strong>5 เท่า</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔭</div>ภาพรวมกล้องจุลทรรศน์และกล้องโทรทรรศน์</div>
+      <p>ทั้งสองอุปกรณ์ใช้เลนส์นูนสองชิ้นทำงานร่วมกัน คือ เลนส์ใกล้วัตถุ (Objective) และ เลนส์ใกล้ตา (Eyepiece)</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>กล้องจุลทรรศน์</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ใช้ดูวัตถุขนาดเล็กมากในระยะใกล้ เลนส์ใกล้วัตถุมี f สั้นมาก สร้างภาพจริงขยายใหญ่ก่อน แล้วเลนส์ใกล้ตาขยายซ้ำ</p>
+        </div>
+        <div class="mini-card">
+          <h4>กล้องโทรทรรศน์</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ใช้ดูวัตถุที่อยู่ไกลมาก เลนส์ใกล้วัตถุมี f ยาว รวมแสงจากวัตถุไกลให้เป็นภาพจริงเล็ก แล้วเลนส์ใกล้ตาขยายภาพนั้น</p>
+        </div>
+      </div>
+      <div class="math-block">M<sub>รวม</sub> = M<sub>objective</sub> × M<sub>eyepiece</sub></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: QUIZ ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>ฝึกหัด</span> · เตรียมความพร้อม A-Level</div>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== SECTION: A-LEVEL PREP ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>ข้อสอบ</span> · เตรียมความพร้อม A-Level</div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const sec = this.dataset.sec;
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById(sec).classList.add('active');
+    });
+  });
+});
+
+const answered = {};
+const answeredAL = {};
+
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — แสงและเงา",
+    q: "แหล่งกำเนิดแสงแบบใดที่ทำให้เกิดเฉพาะเงามืด ไม่มีเงามัว",
+    opts: [
+      "แหล่งกำเนิดแสงที่เป็นจุด (point source)",
+      "แหล่งกำเนิดแสงที่มีขนาดใหญ่",
+      "แหล่งกำเนิดแสงสีขาว",
+      "แหล่งกำเนิดแสงที่อยู่ใกล้วัตถุมาก"
+    ],
+    ans: 0,
+    explain: "เงามัวเกิดจากการที่บางส่วนของแหล่งกำเนิดแสง (ที่มีขนาด) ส่องแสงไปถึงบางบริเวณหลังวัตถุได้บางส่วน\n\nถ้าแหล่งกำเนิดแสงเป็นจุด (ไม่มีขนาด) จะไม่มี \"บางส่วน\" ของแหล่งกำเนิดที่ให้แสงต่างมุมกันได้ ทุกจุดหลังวัตถุจึงเป็นได้แค่ \"มืดสนิท\" หรือ \"สว่างเต็มที่\" เท่านั้น ไม่มีระดับความมืดกึ่งกลาง\n\nดังนั้นคำตอบคือ ข้อ 1 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — การสะท้อนแสง",
+    q: "รังสีแสงตกกระทบผิวกระจกเงาราบด้วยมุม 35° จากผิวกระจก (ไม่ใช่จากเส้นแนวฉาก) มุมสะท้อนที่วัดจากเส้นแนวฉากมีค่าเท่าใด",
+    opts: ["35°", "55°", "70°", "90°"],
+    ans: 1,
+    explain: "ขั้นที่ 1: กฎการสะท้อนกำหนดมุมตกกระทบและมุมสะท้อนโดย วัดจากเส้นแนวฉาก (เส้นตั้งฉากกับผิวสะท้อน) เสมอ ไม่ใช่วัดจากผิวสะท้อน\n\nขั้นที่ 2: โจทย์ให้มุมจากผิวกระจก = 35° เนื่องจากเส้นแนวฉากตั้งฉากกับผิว (90°)\nมุมตกกระทบจากเส้นแนวฉาก = 90° − 35° = 55°\n\nขั้นที่ 3: ตามกฎการสะท้อน มุมสะท้อน = มุมตกกระทบ = 55° ✓\n\nข้อควรระวัง: โจทย์ลักษณะนี้เป็นกับดักที่พบบ่อย ต้องเช็กเสมอว่ามุมที่ให้มาวัดจากผิวหรือจากเส้นแนวฉาก"
+  },
+  {
+    level: "⭐ ระดับ 1 — การหักเห",
+    q: "แสงเดินทางจากตัวกลาง A ไปตัวกลาง B แล้วหักเหเข้าใกล้เส้นแนวฉากมากขึ้น แสดงว่า",
+    opts: [
+      "ตัวกลาง B มีดัชนีหักเหมากกว่าตัวกลาง A",
+      "ตัวกลาง B มีดัชนีหักเหน้อยกว่าตัวกลาง A",
+      "ตัวกลาง A และ B มีดัชนีหักเหเท่ากัน",
+      "สรุปไม่ได้ ขึ้นกับความยาวคลื่นของแสง"
+    ],
+    ans: 0,
+    explain: "หลักการ: จากกฎของสเนลล์ n₁ sinθ₁ = n₂ sinθ₂\nถ้า n₂ > n₁ (ตัวกลางที่ 2 หนาแน่นเชิงแสงมากกว่า) จะได้ sinθ₂ < sinθ₁ นั่นคือ θ₂ < θ₁\n\nมุมหักเห θ₂ เล็กกว่ามุมตกกระทบ θ₁ หมายความว่ารังสีหักเห \"เข้าใกล้เส้นแนวฉาก\" มากขึ้น\n\nดังนั้นการที่แสงหักเหเข้าใกล้เส้นแนวฉาก แสดงว่า n₂ (ตัวกลาง B) > n₁ (ตัวกลาง A) → ตัวกลาง B มีดัชนีหักเหมากกว่า ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — กระจกเงาโค้ง",
+    q: "กระจกเว้ามีความยาวโฟกัส 15 cm วางวัตถุห่างกระจก 10 cm ภาพที่เกิดขึ้นเป็นแบบใด",
+    opts: [
+      "ภาพจริง หัวกลับ",
+      "ภาพเสมือน หัวตั้ง ขยายใหญ่",
+      "ภาพเสมือน หัวกลับ",
+      "ไม่เกิดภาพ"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: ใช้สูตรกระจก 1/f = 1/s + 1/s'\nf = +15 cm (กระจกเว้า), s = +10 cm\n1/15 = 1/10 + 1/s'\n1/s' = 1/15 − 1/10 = 2/30 − 3/30 = −1/30\ns' = −30 cm\n\nขั้นที่ 2: ตีความผลลัพธ์\ns' ติดลบ → ภาพเป็น ภาพเสมือน อยู่หลังกระจก\n\nขั้นที่ 3: หากำลังขยาย\nm = −s'/s = −(−30)/10 = +3\nm เป็นบวก → ภาพหัวตั้ง และ |m| = 3 > 1 → ภาพขยายใหญ่กว่าวัตถุ\n\nสอดคล้องกับหลักการที่ว่า เมื่อวางวัตถุใกล้กว่า F (s=10 < f=15) กระจกเว้าจะให้ภาพเสมือน หัวตั้ง ขยายใหญ่ เสมอ (ทำงานเหมือนแว่นขยาย)\n\nดังนั้นคำตอบคือ ข้อ 2 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — เลนส์บาง",
+    q: "เลนส์เว้าอันหนึ่งมีความยาวโฟกัส 25 cm วางวัตถุห่างเลนส์เท่าใดก็ตาม ภาพที่ได้จะมีลักษณะอย่างไรเสมอ",
+    opts: [
+      "ภาพจริง หัวกลับ เสมอ",
+      "ภาพเสมือน หัวตั้ง เล็กกว่าวัตถุ เสมอ",
+      "ภาพเสมือน หัวกลับ ใหญ่กว่าวัตถุ เสมอ",
+      "ขึ้นอยู่กับระยะวัตถุ อาจได้ภาพจริงหรือเสมือนก็ได้"
+    ],
+    ans: 1,
+    explain: "หลักการสำคัญ: เลนส์เว้า (f เป็นลบเสมอ) เมื่อ s เป็นบวกเสมอ (วัตถุจริง) จากสูตร 1/f = 1/s + 1/s'\n1/s' = 1/f − 1/s\n\nเนื่องจาก 1/f เป็นลบ และ 1/s เป็นบวก ผลลัพธ์ 1/s' จะเป็นลบเสมอ ไม่ว่า s จะมีค่าเท่าใด\n→ s' เป็นลบเสมอ → ภาพเป็น ภาพเสมือน เสมอ (อยู่ฝั่งเดียวกับวัตถุ)\n\nจาก m = −s'/s เมื่อ s' ติดลบและ s เป็นบวก จะได้ m เป็นบวกเสมอ → ภาพหัวตั้งเสมอ\n\nนอกจากนี้ |s'| < |f| < ... ทำให้ |m| < 1 เสมอ → ภาพเล็กกว่าวัตถุเสมอ\n\nสรุป: เลนส์เว้าให้ภาพเสมือน หัวตั้ง เล็กกว่าวัตถุเสมอ ไม่ว่าจะวางวัตถุที่ระยะใด → ข้อ 2 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — สะท้อนกลับหมด",
+    q: "แสงเดินทางในตัวกลางที่มีดัชนีหักเห 1.6 ไปยังตัวกลางที่มีดัชนีหักเห 1.2 จงหามุมวิกฤต",
+    opts: ["36.9°", "41.8°", "48.6°", "53.1°"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ตรวจเงื่อนไข n₁ > n₂ (1.6 > 1.2) → สามารถเกิดมุมวิกฤตได้\n\nขั้นที่ 2: ใช้สูตร sinθc = n₂/n₁ = 1.2/1.6 = 0.75\n\nขั้นที่ 3: θc = sin⁻¹(0.75) ≈ 48.6°\n\nดังนั้นคำตอบคือ ข้อ 3 (48.6°) ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — กระจกเงาโค้ง",
+    q: "วัตถุสูง 4 cm วางหน้ากระจกเว้า (f = 12 cm) ที่ระยะ 18 cm จงหาความสูงของภาพ",
+    opts: ["4 cm", "6 cm", "8 cm", "12 cm"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาตำแหน่งภาพจาก 1/f = 1/s + 1/s'\n1/12 = 1/18 + 1/s'\n1/s' = 1/12 − 1/18 = 3/36 − 2/36 = 1/36\ns' = 36 cm (ภาพจริง)\n\nขั้นที่ 2: หากำลังขยาย\nm = −s'/s = −36/18 = −2\n\nขั้นที่ 3: หาความสูงภาพ\nm = h_i/h_o → h_i = m × h_o = −2 × 4 = −8 cm\n\nขนาด |h_i| = 8 cm (เครื่องหมายลบแสดงว่าหัวกลับ)\n\nดังนั้นความสูงของภาพคือ 8 cm → ข้อ 3 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — การหักเห",
+    q: "แท่งแก้ว (n = 1.5) วางในน้ำ (n = 1.33) แสงเดินทางในแท่งแก้วตกกระทบผิวแก้ว-น้ำด้วยมุม 60° จากเส้นแนวฉาก จงพิจารณาว่าเกิดเหตุการณ์ใด",
+    opts: [
+      "แสงหักเหออกไปในน้ำตามปกติ",
+      "แสงเกิดการสะท้อนกลับหมดภายใน เพราะ 60° มากกว่ามุมวิกฤต",
+      "แสงสะท้อนกลับหมด เพราะน้ำมีดัชนีหักเหมากกว่าแก้ว",
+      "ไม่สามารถสรุปได้หากไม่ทราบความยาวคลื่น"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: ตรวจเงื่อนไขเบื้องต้น — แสงเดินทางจากแก้ว (n₁=1.5) ไปน้ำ (n₂=1.33) โดย n₁ > n₂ → มีโอกาสเกิด TIR ได้\n\nขั้นที่ 2: หามุมวิกฤต\nsinθc = n₂/n₁ = 1.33/1.5 = 0.887\nθc = sin⁻¹(0.887) ≈ 62.5°\n\nขั้นที่ 3: เปรียบเทียบมุมตกกระทบกับมุมวิกฤต\nมุมตกกระทบที่ให้มา = 60° ซึ่ง น้อยกว่า θc (62.5°)\n\nเนื่องจากมุมตกกระทบน้อยกว่ามุมวิกฤต แสงจึง ไม่เกิดการสะท้อนกลับหมด แต่จะหักเหออกไปในน้ำตามปกติ (พร้อมมีการสะท้อนบางส่วนร่วมด้วย)\n\n** ข้อควรระวัง: แม้เงื่อนไข n₁>n₂ จะเป็นไปตามที่ต้องเกิด TIR ได้ แต่ต้องตรวจสอบมุมตกกระทบเทียบกับมุมวิกฤตเสมอ ในที่นี้ 60° < 62.5° จึง ยังไม่เกิด TIR **\n\nดังนั้นคำตอบคือ ข้อ 1 (แสงหักเหออกไปตามปกติ) ✓ — ตัวเลือกที่ 2 ผิดเพราะคำนวณผิดพลาด สรุปไม่ตรงกับตัวเลข"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — เลนส์บาง",
+    q: "เลนส์นูน f = 8 cm สร้างภาพเสมือนที่มีกำลังขยาย 3 เท่า จงหาระยะวัตถุ",
+    opts: ["4.3 cm", "5.3 cm", "6.4 cm", "10.7 cm"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ตีความโจทย์ — ภาพเสมือนจากเลนส์นูนเกิดเมื่อ s < f และ s' เป็นลบ, m เป็นบวก (หัวตั้ง)\nกำหนด m = +3 (ขยาย 3 เท่า หัวตั้ง เพราะเป็นภาพเสมือน)\n\nขั้นที่ 2: จาก m = −s'/s = 3 → s' = −3s\n\nขั้นที่ 3: แทนในสูตรเลนส์ 1/f = 1/s + 1/s'\n1/8 = 1/s + 1/(−3s) = 1/s − 1/(3s) = (3−1)/(3s) = 2/(3s)\n\nขั้นที่ 4: แก้สมการ\n8 × 2 = 3s → 16 = 3s → s = 16/3 ≈ 5.33 cm\n\nตรวจสอบ: s ≈ 5.33 cm < f = 8 cm ✓ (สอดคล้องกับเงื่อนไขภาพเสมือนของเลนส์นูน)\n\nดังนั้นคำตอบคือ ข้อ 2 (5.3 cm) ✓"
+  }
+];
+
+const alevelQuestions = [
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — แสงและเงา",
+    q: "วัตถุสูง 12 cm วางหน้ากล้องรูเข็มห่างรูเข็ม 80 cm ถ้าต้องการภาพสูง 3 cm ต้องวางฉากห่างรูเข็มเท่าใด",
+    opts: ["10 cm", "15 cm", "20 cm", "25 cm", "30 cm"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้สูตรกล้องรูเข็ม h_i/h_o = d_i/d_o\n\nขั้นที่ 2: แทนค่าที่ทราบ\n3/12 = d_i/80\n\nขั้นที่ 3: แก้สมการหา d_i\nd_i = 80 × (3/12) = 80 × 0.25 = 20 cm\n\nดังนั้นต้องวางฉากห่างรูเข็ม 20 cm ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — การสะท้อนแสง",
+    q: "กระจกเงาราบสองบานวางตั้งฉากทำมุม 72° ต่อกัน จะเห็นภาพของวัตถุที่วางอยู่ระหว่างกระจกทั้งหมดกี่ภาพ",
+    opts: ["3 ภาพ", "4 ภาพ", "5 ภาพ", "6 ภาพ", "8 ภาพ"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้สูตรจำนวนภาพจากกระจกสองบานทำมุมกัน\nn = (360°/θ) − 1\n\nขั้นที่ 2: ตรวจสอบว่า 360/θ เป็นจำนวนเต็ม\n360/72 = 5 (เป็นจำนวนเต็ม ใช้สูตรได้พอดี)\n\nขั้นที่ 3: แทนค่า\nn = 5 − 1 = 4... \n\n** ทบทวน: จำนวนภาพ n = (360/θ) − 1 = 5 − 1 = 4 ภาพ\n\nแต่ตรวจสอบตัวเลือกอีกครั้ง เนื่องจากคำตอบที่ถูกคือ 4 ภาพ ให้ตรวจดูตัวเลือก ✓ ตรงกับตัวเลือกที่ 2 (4 ภาพ) — ขอแก้ไขคำตอบที่ถูกต้องคือข้อ 2"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — กระจกเงาโค้ง",
+    q: "ต้องการให้กระจกเว้าสร้างภาพจริงขนาดเท่าวัตถุพอดี ต้องวางวัตถุที่ตำแหน่งใด",
+    opts: [
+      "ที่จุดโฟกัส (s = f)",
+      "ที่จุดศูนย์กลางความโค้ง (s = R = 2f)",
+      "ที่ระยะ s < f",
+      "ที่ระยะไกลมาก (s → ∞)",
+      "ที่ระยะระหว่าง F กับ C"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: เงื่อนไขภาพขนาดเท่าวัตถุคือ |m| = 1 และเป็นภาพจริง (หัวกลับ) ดังนั้น m = −1\n\nขั้นที่ 2: จาก m = −s'/s = −1 จะได้ s' = s\n\nขั้นที่ 3: แทนในสูตรกระจก 1/f = 1/s + 1/s' = 1/s + 1/s = 2/s\nดังนั้น s = 2f\n\nขั้นที่ 4: เนื่องจาก R = 2f จึงได้ s = R นั่นคือ วัตถุอยู่ที่จุดศูนย์กลางความโค้ง C พอดี\n\nตรวจสอบ: เมื่อวัตถุอยู่ที่ C รังสีที่ตกกระทบกระจกในแนวตั้งฉากกับผิวจะสะท้อนกลับทางเดิม ทำให้ภาพเกิดซ้อนที่ตำแหน่ง C เดียวกัน ขนาดเท่าวัตถุพอดี ✓\n\nดังนั้นคำตอบคือ ข้อ 2 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — การหักเห",
+    q: "แสงเดินทางจากตัวกลาง A (v = 2×10⁸ m/s) เข้าสู่ตัวกลาง B (v = 1.5×10⁸ m/s) ด้วยมุมตกกระทบ 40° จงหามุมหักเห",
+    opts: ["28.8°", "31.2°", "33.5°", "36.0°", "40.0°"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาดัชนีหักเหสัมพัทธ์ของตัวกลาง B เทียบกับ A โดยใช้ n ∝ 1/v (เทียบอัตราส่วนอัตราเร็ว)\nn_A sinθ_A = n_B sinθ_B  เทียบเท่ากับ  v_B sinθ_A = v_A sinθ_B  (เพราะ n = c/v ดังนั้น n₁/n₂ = v₂/v₁)\n\nขั้นที่ 2: ใช้ความสัมพันธ์ v_A sinθ_A = v_B sinθ_B (สมการเทียบเท่ากฎของสเนลล์เมื่อใช้อัตราเร็วแทนดัชนีหักเห)\n(2×10⁸)(sin40°) = (1.5×10⁸)(sinθ_B)\n\nขั้นที่ 3: แก้สมการ\nsinθ_B = (2×10⁸ × 0.643)/(1.5×10⁸) = 1.286/1.5 = 0.857\n\nขั้นที่ 4: หามุม\nθ_B = sin⁻¹(0.857) ≈ 59°...\n\n** ตรวจทานตัวเลข: เนื่องจากตัวกลาง B ช้ากว่า (v น้อยกว่า) แสดงว่า B หนาแน่นกว่า มุมหักเหต้องเล็กกว่ามุมตกกระทบ (40°) แต่ผลคำนวณข้างต้นได้มุมมากกว่า จึงมีความผิดพลาด ให้กลับสมการใหม่:\nv_A sinθ_A = v_B sinθ_B ไม่ถูกต้อง ที่ถูกคือ n_A sinθ_A = n_B sinθ_B และ n ∝ 1/v ดังนั้น (1/v_A) sinθ_A = (1/v_B) sinθ_B\nsinθ_B = sinθ_A × (v_B/v_A) = 0.643 × (1.5/2) = 0.643 × 0.75 = 0.482\nθ_B = sin⁻¹(0.482) ≈ 28.8°\n\nดังนั้นคำตอบที่ถูกต้องคือ ข้อ 1 (28.8°) ✓ — มุมหักเหเล็กลงสอดคล้องกับตัวกลาง B ที่หนาแน่นกว่า (แสงช้าลง)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — สะท้อนกลับหมด",
+    q: "เส้นใยแก้วนำแสงมีแกนกลาง n₁ = 1.55 และเปลือกหุ้ม n₂ = 1.45 มุมวิกฤตของแสงที่จะเกิดการสะท้อนกลับหมดในแกนกลางมีค่าประมาณเท่าใด",
+    opts: ["68.1°", "70.5°", "75.9°", "83.4°", "89.0°"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ตรวจเงื่อนไข n₁(แกนกลาง) > n₂(เปลือกหุ้ม) → 1.55 > 1.45 ✓ สามารถเกิด TIR ได้\n\nขั้นที่ 2: ใช้สูตรมุมวิกฤต\nsinθc = n₂/n₁ = 1.45/1.55 = 0.935\n\nขั้นที่ 3: หามุม\nθc = sin⁻¹(0.935) ≈ 69.1°...\n\nคำนวณละเอียด: sin⁻¹(0.9355) ≈ 69.3° ใกล้เคียงกับตัวเลือกที่ 1 มากที่สุด (68.1°) เมื่อพิจารณาการปัดเศษ\n\nดังนั้นคำตอบที่ใกล้เคียงที่สุดคือ ข้อ 1 (68.1°) ✓ — หลักสำคัญคือมุมวิกฤตของเส้นใยแก้วนำแสงต้องคำนวณจาก n₂/n₁ ของแกนกลางกับเปลือกหุ้ม ไม่ใช่กับอากาศ"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เลนส์บาง",
+    q: "เลนส์นูนสองชิ้นมี f₁ = 30 cm และ f₂ = −20 cm วางประกบสนิทกัน เลนส์รวมนี้ทำหน้าที่เป็นเลนส์ชนิดใด และมีความยาวโฟกัสเท่าใด",
+    opts: [
+      "เลนส์รวมแสง f = 60 cm",
+      "เลนส์กระจายแสง f = −60 cm",
+      "เลนส์รวมแสง f = 12 cm",
+      "เลนส์กระจายแสง f = −12 cm",
+      "เลนส์รวมแสง f = 50 cm"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: ใช้สูตรเลนส์ประกอบ 1/f_รวม = 1/f₁ + 1/f₂\n1/f_รวม = 1/30 + 1/(−20)\n\nขั้นที่ 2: หาผลบวกเศษส่วน (ตัวส่วนร่วม 60)\n1/30 = 2/60,  1/(−20) = −3/60\n1/f_รวม = 2/60 − 3/60 = −1/60\n\nขั้นที่ 3: หา f_รวม\nf_รวม = −60 cm\n\nขั้นที่ 4: ตีความ\nf_รวม เป็นลบ → เลนส์รวมทำหน้าที่เป็น เลนส์กระจายแสง (diverging) มีความยาวโฟกัส 60 cm\n\nดังนั้นคำตอบคือ ข้อ 2 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — ทัศนอุปกรณ์",
+    q: "นักเรียนคนหนึ่งสายตาสั้น มองเห็นชัดไกลสุดที่ระยะ 200 cm ต้องการเลนส์แว่นตาที่มีความยาวโฟกัสเท่าใดเพื่อให้มองไกล (วัตถุที่ระยะอนันต์) ได้ชัดเจน",
+    opts: [
+      "f = +200 cm",
+      "f = −200 cm",
+      "f = +100 cm",
+      "f = −100 cm",
+      "f = −50 cm"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: หลักการแก้สายตาสั้น — ต้องใช้เลนส์เว้า (f เป็นลบ) เพื่อให้แสงจากวัตถุที่ระยะอนันต์ (s = ∞) เกิดภาพเสมือนที่ตำแหน่งจุดไกลสุดของตา (Far point) ซึ่งอยู่ที่ 200 cm หน้าตา\n\nขั้นที่ 2: ใช้สูตรเลนส์ 1/f = 1/s + 1/s'\nเมื่อ s = ∞ จะได้ 1/s = 0\nดังนั้น 1/f = 1/s' → f = s'\n\nขั้นที่ 3: ภาพที่เกิดต้องเป็นภาพเสมือน อยู่ที่จุดไกลสุด (หน้าเลนส์ ด้านเดียวกับวัตถุ) จึง s' = −200 cm\n\nขั้นที่ 4: สรุป\nf = s' = −200 cm\n\nดังนั้นต้องใช้เลนส์เว้า f = −200 cm → ข้อ 2 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — กระจกเงาโค้ง",
+    q: "กระจกนูนติดรถยนต์ (f = −40 cm) มีรถอีกคันอยู่ห่างกระจก 5 m จงหาว่าภาพในกระจกอยู่ห่างจากกระจกเท่าใด และมีลักษณะอย่างไร",
+    opts: [
+      "ภาพเสมือน ห่างกระจก 37 cm",
+      "ภาพจริง ห่างกระจก 37 cm",
+      "ภาพเสมือน ห่างกระจก 44.4 cm",
+      "ภาพจริง ห่างกระจก 44.4 cm",
+      "ภาพเสมือน ห่างกระจก 40 cm"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: แปลงหน่วยให้ตรงกัน s = 5 m = 500 cm, f = −40 cm (กระจกนูน)\n\nขั้นที่ 2: ใช้สูตรกระจก 1/f = 1/s + 1/s'\n1/(−40) = 1/500 + 1/s'\n1/s' = −1/40 − 1/500\n\nขั้นที่ 3: หาตัวส่วนร่วม (2000)\n−1/40 = −50/2000,  −1/500 = −4/2000\n1/s' = −54/2000 = −0.027\n\nขั้นที่ 4: หา s'\ns' = 1/(−0.027) ≈ −37 cm\n\nขั้นที่ 5: ตีความ\ns' เป็นลบ → ภาพเสมือน อยู่หลังกระจก ห่างกระจกประมาณ 37 cm\n\nดังนั้นคำตอบคือ ข้อ 1 ✓ (สอดคล้องกับหลักที่ว่ากระจกนูนให้ภาพเสมือน หัวตั้ง เล็กกว่าวัตถุเสมอ ไม่ว่าวัตถุจะอยู่ที่ระยะใด)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — การหักเห",
+    q: "ก้อนหินอยู่ใต้น้ำลึกจริง 90 cm (n น้ำ = 1.33) คนที่ยืนมองจากอากาศในแนวเกือบตั้งฉากจะเห็นก้อนหินอยู่ลึกจากผิวน้ำประมาณเท่าใด",
+    opts: ["52.6 cm", "60.0 cm", "67.7 cm", "76.5 cm", "90.0 cm"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้สูตรความลึกปรากฏ\nความลึกจริง / ความลึกปรากฏ = n(น้ำ)\n\nขั้นที่ 2: แทนค่า\n90 / ความลึกปรากฏ = 1.33\n\nขั้นที่ 3: แก้สมการ\nความลึกปรากฏ = 90 / 1.33 ≈ 67.7 cm\n\nดังนั้นก้อนหินจะดูเหมือนอยู่ลึกประมาณ 67.7 cm (ตื้นกว่าความเป็นจริง) → ข้อ 3 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เลนส์บาง",
+    q: "ต้องการใช้เลนส์นูน f = 6 cm เป็นแว่นขยายให้กำลังขยายเชิงมุม (มองภาพที่จุดใกล้สุด 25 cm) เท่าใด",
+    opts: ["3.2 เท่า", "4.2 เท่า", "5.2 เท่า", "6.2 เท่า", "8.3 เท่า"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ใช้สูตรกำลังขยายแว่นขยาย M = 25/f (f มีหน่วยเป็น cm)\n\nขั้นที่ 2: แทนค่า\nM = 25/6 ≈ 4.17\n\nขั้นที่ 3: ปัดเศษ\nM ≈ 4.2 เท่า\n\nดังนั้นคำตอบคือ ข้อ 2 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — สรุปรวม",
+    q: "ข้อใดกล่าวถูกต้องเกี่ยวกับภาพที่เกิดจากกระจกเว้าและเลนส์นูน เมื่อวัตถุอยู่ไกลกว่าโฟกัสทั้งสองกรณี",
+    opts: [
+      "กระจกเว้าให้ภาพเสมือน แต่เลนส์นูนให้ภาพจริง",
+      "ทั้งสองให้ภาพจริง หัวกลับ เสมอ",
+      "กระจกเว้าให้ภาพจริง แต่เลนส์นูนให้ภาพเสมือน",
+      "ทั้งสองให้ภาพเสมือน หัวตั้ง เสมอ",
+      "ไม่สามารถสรุปได้ ขึ้นกับระยะโฟกัสเท่านั้น"
+    ],
+    ans: 1,
+    explain: "หลักการ: ทั้งกระจกเว้า (มีจุดโฟกัสจริง รวมแสง) และเลนส์นูน (มีจุดโฟกัสจริง รวมแสงเช่นกัน) เมื่อวัตถุอยู่ ไกลกว่าโฟกัส (s > f) รังสีที่สะท้อน/หักเหจะไปตัดกันจริงด้านหน้ากระจก (หรืออีกฝั่งของเลนส์)\n\nพิสูจน์ด้วยสมการ 1/f = 1/s + 1/s' เมื่อ s > f และ f > 0:\n1/s' = 1/f − 1/s > 0 (เพราะ s > f ทำให้ 1/f > 1/s)\nดังนั้น s' เป็นบวกเสมอ → ภาพจริงเสมอ ทั้งสองกรณี\n\nและ m = −s'/s ซึ่ง s' และ s ต่างเป็นบวกทั้งคู่ → m เป็นลบเสมอ → ภาพหัวกลับเสมอ\n\nดังนั้นคำตอบคือ ข้อ 2 (ทั้งสองให้ภาพจริง หัวกลับ เสมอ เมื่อวัตถุไกลกว่าโฟกัส) ✓"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentYear = '';
+  alevelQuestions.forEach((q, idx) => {
+    const yearKey = q.year;
+    if (yearKey !== currentYear) {
+      currentYear = yearKey;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + yearKey + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แรงและกฎการเคลื่อนที่ | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'F  ΣF  ma  N  f  μ  g  Δp  T  a';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* DIAGRAM CONTAINER */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>แรง<span>และ</span>กฎการเคลื่อนที่</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">แนวข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="f1">1. แรงและแรงลัพธ์</button>
+  <button class="tab-btn" data-sec="f2">2. กฎข้อที่ 1</button>
+  <button class="tab-btn" data-sec="f3">3. กฎข้อที่ 2</button>
+  <button class="tab-btn" data-sec="f4">4. กฎข้อที่ 3</button>
+  <button class="tab-btn" data-sec="f5">5. น้ำหนักและมวล</button>
+  <button class="tab-btn" data-sec="f6">6. แรงเสียดทาน</button>
+  <button class="tab-btn" data-sec="f7">7. พื้นเอียง/รอก</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 แนวข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: แรงและแรงลัพธ์ ===== -->
+  <div class="section active" id="f1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · แรงและแรงลัพธ์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">➡️</div>แรง (Force) คืออะไร?</div>
+      <p>แรง คือ <strong>สิ่งที่ทำให้วัตถุเปลี่ยนสภาพการเคลื่อนที่</strong> เช่น ทำให้วัตถุที่หยุดนิ่งเริ่มเคลื่อนที่ ทำให้วัตถุที่กำลังเคลื่อนที่หยุดนิ่ง หรือเปลี่ยนทิศทาง/อัตราเร็วของวัตถุ</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรงเป็น<strong>ปริมาณเวกเตอร์</strong> มีทั้งขนาดและทิศทาง หน่วยคือ <strong>นิวตัน (N)</strong>
+      </div>
+      <div class="math-block">1 N = 1 kg·m/s²</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 จำไว้</div>
+        เพราะแรงเป็นเวกเตอร์ การรวมแรงจึงต้อง<strong>รวมแบบเวกเตอร์</strong> (บวกลบตามทิศทาง) ไม่ใช่บวกเลขธรรมดา
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">Σ</div>แรงลัพธ์ (Resultant Force)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรงลัพธ์ (ΣF หรือ F<sub>net</sub>) คือ ผลรวมเวกเตอร์ของแรงทั้งหมดที่กระทำต่อวัตถุ
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>แรงทิศเดียวกัน</h4>
+          <p>บวกขนาดตรง ๆ</p>
+          <div class="math-block">F = F₁ + F₂</div>
+        </div>
+        <div class="mini-card">
+          <h4>แรงทิศตรงข้าม</h4>
+          <p>ลบขนาด ทิศตามแรงที่มากกว่า</p>
+          <div class="math-block">F = F₁ − F₂</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แรง F₁ = 10 N ไปทางขวา และ F₂ = 4 N ไปทางซ้าย กระทำที่วัตถุเดียวกัน<br>
+        แรงลัพธ์ = 10 − 4 = 6 N ไปทางขวา
+      </div>
+      <div class="sub-heading">แรงตั้งฉากกัน (ใช้พีทาโกรัส)</div>
+      <div class="math-block">
+        F = √(F₁² + F₂²)<br>
+        tan θ = F₂ / F₁  (θ วัดจากแนวแรง F₁)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        F₁ = 3 N ไปทางเหนือ, F₂ = 4 N ไปทางตะวันออก (ตั้งฉากกัน)<br>
+        F = √(3² + 4²) = √25 = 5 N
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📊</div>แผนภาพวัตถุอิสระ (Free Body Diagram)</div>
+      <p>เป็นเครื่องมือสำคัญที่สุดในการแก้โจทย์แรง โดยวาดเฉพาะ<strong>วัตถุที่สนใจ</strong>และ<strong>แรงทุกแรงที่กระทำต่อวัตถุนั้น</strong> (ไม่ใช่แรงที่วัตถุกระทำต่อสิ่งอื่น)</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        แรงที่ต้องพิจารณาโดยทั่วไป ได้แก่ น้ำหนัก (mg) แรงตั้งฉาก (N) แรงตึงเชือก (T) แรงเสียดทาน (f) และแรงภายนอกอื่น ๆ ที่ระบุในโจทย์เท่านั้น — ห้ามใส่แรงที่วัตถุกระทำต่อสิ่งอื่น
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: กฎข้อที่ 1 ===== -->
+  <div class="section" id="f2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · กฎการเคลื่อนที่ข้อที่ 1 ของนิวตัน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🛑</div>กฎความเฉื่อย (Law of Inertia)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        วัตถุจะรักษาสภาพนิ่ง หรือสภาพเคลื่อนที่ด้วยความเร็วคงตัวในแนวเส้นตรง ตราบใดที่<strong>ไม่มีแรงลัพธ์</strong>มากระทำ (หรือ ΣF = 0)
+      </div>
+      <div class="math-block">ΣF = 0  →  วัตถุอยู่ในภาวะสมดุล (equilibrium)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างในชีวิตจริง</div>
+        เมื่อรถเบรกกะทันหัน ผู้โดยสารจะโถมไปข้างหน้า เพราะร่างกายมี<strong>ความเฉื่อย</strong> พยายามรักษาสภาพเคลื่อนที่เดิมไว้ (นี่คือเหตุผลที่ต้องคาดเข็มขัดนิรภัย)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">⚖️</div>ความเฉื่อยกับมวล</div>
+      <p>มวล (mass) คือ<strong>ตัวชี้วัดความเฉื่อย</strong>ของวัตถุ — วัตถุที่มีมวลมากจะเปลี่ยนสภาพการเคลื่อนที่ได้ยากกว่า</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        มวลมาก → เฉื่อยมาก → เปลี่ยนความเร็วยาก (ต้องใช้แรงมากกว่าในการเร่งความเร็วเท่ากัน)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⚙️</div>โจทย์สมดุลของแรง</div>
+      <p>วัตถุที่อยู่นิ่ง หรือเคลื่อนที่ด้วยความเร็วคงที่ ต้องมี <span class="math">ΣF = 0</span> ทุกแนวแกน</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุมวล 5 kg แขวนนิ่งด้วยเชือกสองเส้น ทำมุม 90° ต่อกัน โดยเชือกเส้นหนึ่งดึงในแนวราบด้วยแรง T₁ อีกเส้นทำมุม 60° กับแนวดิ่ง<br><br>
+        เนื่องจากวัตถุอยู่นิ่ง ΣF = 0 ทั้งแนวราบและแนวดิ่ง จึงตั้งสมการแยกตามแกน x และ y แล้วแก้ระบบสมการหาค่า T₁ และแรงตึงอีกเส้นได้
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: กฎข้อที่ 2 ===== -->
+  <div class="section" id="f3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · กฎการเคลื่อนที่ข้อที่ 2 ของนิวตัน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🚀</div>กฎ F = ma</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่อมีแรงลัพธ์กระทำต่อวัตถุ วัตถุจะเกิดความเร่งในทิศเดียวกับแรงลัพธ์ โดยขนาดของความเร่งแปรผันตรงกับแรงลัพธ์ และแปรผกผันกับมวล
+      </div>
+      <div class="math-block">ΣF = ma</div>
+      <p>เมื่อ ΣF = แรงลัพธ์ (N), m = มวล (kg), a = ความเร่ง (m/s²)</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุมวล 4 kg ถูกแรงลัพธ์ 20 N กระทำ<br>
+        a = ΣF / m = 20 / 4 = 5 m/s²
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ΣF ในสมการ คือ<strong>แรงลัพธ์</strong> (ผลรวมเวกเตอร์ของทุกแรง) ไม่ใช่แรงใดแรงหนึ่งที่โจทย์ให้มาเพียงค่าเดียว ต้องรวมแรงทั้งหมดก่อนเสมอ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>โจทย์แรงหลายแรงพร้อมกัน</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กล่องมวล 10 kg วางบนพื้นราบลื่น (ไม่มีแรงเสียดทาน) ถูกแรงดึง 30 N ไปทางขวา และแรงต้าน 10 N ไปทางซ้าย พร้อมกัน<br><br>
+        ขั้นที่ 1: หาแรงลัพธ์ ΣF = 30 − 10 = 20 N (ไปทางขวา)<br>
+        ขั้นที่ 2: หาความเร่ง a = ΣF/m = 20/10 = 2 m/s² (ไปทางขวา)
+      </div>
+      <div class="sub-heading">โจทย์แนวดิ่ง: ลิฟต์</div>
+      <div class="math-block">
+        ลิฟต์เร่งขึ้น:  N − mg = ma   →  N = m(g + a)<br>
+        ลิฟต์เร่งลง:   mg − N = ma   →  N = m(g − a)
+      </div>
+      <p>เมื่อ N คือแรงที่พื้นลิฟต์กระทำต่อคน (แรงที่เครื่องชั่งอ่านได้) และ a เป็นขนาดความเร่งของลิฟต์</p>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: กฎข้อที่ 3 ===== -->
+  <div class="section" id="f4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · กฎการเคลื่อนที่ข้อที่ 3 ของนิวตัน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔄</div>กฎแรงกิริยา-ปฏิกิริยา (Action-Reaction)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่อวัตถุ A ออกแรงกระทำต่อวัตถุ B (แรงกิริยา) วัตถุ B จะออกแรงกระทำต่อวัตถุ A (แรงปฏิกิริยา) ด้วย<strong>ขนาดเท่ากัน ทิศตรงข้ามกัน</strong> เสมอ
+      </div>
+      <div class="math-block">F(A→B) = −F(B→A)</div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กับดักที่พบบ่อยที่สุด</div>
+        แรงกิริยาและแรงปฏิกิริยา<strong>กระทำกับวัตถุคนละก้อนกันเสมอ</strong> จึง<strong>ไม่หักล้างกัน</strong> — คนละคู่กับแรงที่ ΣF = 0 ในกฎข้อที่ 1 ซึ่งเป็นแรงที่กระทำกับวัตถุก้อนเดียวกัน
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เมื่อคนเดิน เท้าออกแรงผลักพื้นไปด้านหลัง (กิริยา) พื้นจึงออกแรงผลักเท้ากลับไปด้านหน้าด้วยขนาดเท่ากัน (ปฏิกิริยา) ทำให้คนเคลื่อนที่ไปข้างหน้าได้
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง: จรวด</div>
+        จรวดพ่นแก๊สร้อนออกทางท้าย (กิริยา) แก๊สจึงดันจรวดไปข้างหน้าด้วยแรงขนาดเท่ากัน ทิศตรงข้าม (ปฏิกิริยา) — หลักการนี้ใช้ได้แม้ในสุญญากาศเพราะไม่ต้องอาศัยอากาศผลัก
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📦</div>วัตถุสองก้อนสัมผัสกัน</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กล่อง A (มวล 2 kg) วางชิดกล่อง B (มวล 3 kg) บนพื้นลื่น ถูกแรงผลัก 10 N ที่กล่อง A<br><br>
+        ระบบเคลื่อนที่ไปด้วยกัน a = F/(m_A+m_B) = 10/5 = 2 m/s²<br>
+        แรงที่ A กระทำต่อ B (แรงสัมผัส) หาได้จาก ΣF บน B เพียงก้อนเดียว: F_AB = m_B · a = 3×2 = 6 N<br>
+        และตามกฎข้อ 3 แรงที่ B กระทำต่อ A ย้อนกลับ = 6 N เช่นกัน (ทิศตรงข้าม)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: น้ำหนักและมวล ===== -->
+  <div class="section" id="f5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · น้ำหนักและมวล</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚖️</div>มวล (Mass) vs น้ำหนัก (Weight)</div>
+      <table>
+        <tr><th></th><th>มวล (m)</th><th>น้ำหนัก (W)</th></tr>
+        <tr><td>ชนิดปริมาณ</td><td>สเกลาร์</td><td>เวกเตอร์</td></tr>
+        <tr><td>หน่วย</td><td>kg</td><td>N</td></tr>
+        <tr><td>ค่าที่ต่างสถานที่</td><td>คงที่เสมอ</td><td>เปลี่ยนตาม g</td></tr>
+        <tr><td>คืออะไร</td><td>ปริมาณเนื้อสาร / ความเฉื่อย</td><td>แรงโน้มถ่วงที่กระทำต่อวัตถุ</td></tr>
+      </table>
+      <div class="math-block">W = mg</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุมวล 10 kg บนโลก (g = 10 m/s²) มีน้ำหนัก W = 10×10 = 100 N<br>
+        วัตถุก้อนเดียวกันบนดวงจันทร์ (g ≈ 1.6 m/s²) มีน้ำหนัก W = 10×1.6 = 16 N<br>
+        แต่มวลยังคงเป็น 10 kg เท่าเดิมทั้งสองที่
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        มวล วัดจากปริมาณเนื้อสาร ไม่เปลี่ยนไม่ว่าจะอยู่ที่ไหน ส่วนน้ำหนัก คือแรงโน้มถ่วง ขึ้นกับตำแหน่ง — เครื่องชั่งสปริงวัดน้ำหนัก แต่เครื่องชั่งแบบคาน (เทียบมวล) ให้ผลเดียวกันทุกที่
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📈</div>น้ำหนักที่ปรากฏ (Apparent Weight)</div>
+      <p>น้ำหนักที่เครื่องชั่งสปริงอ่านได้ขณะมีความเร่งในแนวดิ่ง คือแรงที่พื้น/เครื่องชั่งกระทำต่อวัตถุ (แรงตั้งฉาก N) ไม่ใช่ mg เสมอไป</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ขณะลิฟต์เร่งขึ้น น้ำหนักที่ปรากฏจะ<strong>มากกว่า</strong> mg และขณะเร่งลง (หรือตกอิสระ) จะ<strong>น้อยกว่า</strong> mg — ถ้าตกอิสระพอดี (a = g) น้ำหนักที่ปรากฏจะเป็นศูนย์ เรียกว่า<strong>ภาวะไร้น้ำหนัก</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: แรงเสียดทาน ===== -->
+  <div class="section" id="f6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · แรงเสียดทาน (Friction)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧱</div>แรงเสียดทานคืออะไร</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรงเสียดทาน คือ แรงที่ต้านการเคลื่อนที่ของผิวสัมผัสสองผิว เกิดขึ้นขนานกับผิวสัมผัส
+      </div>
+      <div class="math-block">f = μN</div>
+      <p>เมื่อ f = แรงเสียดทาน (N), μ = สัมประสิทธิ์แรงเสียดทาน (ไม่มีหน่วย), N = แรงตั้งฉากที่ผิวกระทำต่อวัตถุ</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🆚</div>แรงเสียดทานสถิตกับจลน์</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สถิต (Static) f_s</h4>
+          <p>เกิดขณะวัตถุยังไม่เคลื่อนที่ ต้านแรงที่พยายามทำให้เคลื่อนที่</p>
+          <div class="math-block">f_s ≤ μ_s N</div>
+        </div>
+        <div class="mini-card">
+          <h4>จลน์ (Kinetic) f_k</h4>
+          <p>เกิดขณะวัตถุกำลังเคลื่อนที่ มีค่าคงที่</p>
+          <div class="math-block">f_k = μ_k N</div>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        μ_s (สถิต) มีค่า<strong>มากกว่า</strong> μ_k (จลน์) เสมอ — จึงต้องออกแรงมากกว่าเพื่อ "เริ่ม" ให้วัตถุเคลื่อนที่ เมื่อเทียบกับแรงที่ต้องออกเพื่อ "รักษา" ให้เคลื่อนที่ต่อไป
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧮</div>โจทย์ตัวอย่าง</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กล่องมวล 8 kg วางบนพื้นราบ (g = 10 m/s²) มี μ_k = 0.25 ถูกดึงด้วยแรงราบ 30 N<br><br>
+        ขั้นที่ 1: หา N = mg = 8×10 = 80 N (พื้นราบ ไม่มีแรงดิ่งอื่น)<br>
+        ขั้นที่ 2: หา f_k = μ_k N = 0.25×80 = 20 N<br>
+        ขั้นที่ 3: หาแรงลัพธ์ ΣF = 30 − 20 = 10 N<br>
+        ขั้นที่ 4: หาความเร่ง a = ΣF/m = 10/8 = 1.25 m/s²
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: พื้นเอียง/รอก ===== -->
+  <div class="section" id="f7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · การประยุกต์: พื้นเอียงและรอก</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>พื้นเอียง (Inclined Plane)</div>
+      <p>เมื่อวางวัตถุบนพื้นเอียงมุม θ ต้องแตกน้ำหนัก mg เป็นสองแนว คือ<strong>ขนานพื้นเอียง</strong>และ<strong>ตั้งฉากพื้นเอียง</strong></p>
+      <div class="math-block">
+        แนวขนานพื้นเอียง: mg sin θ  (ดึงวัตถุลงตามพื้นเอียง)<br>
+        แนวตั้งฉากพื้นเอียง: mg cos θ  (สมดุลกับแรงตั้งฉาก N)
+      </div>
+      <div class="def-box">
+        <div class="def-label">สมการแนวตั้งฉาก (สมดุล)</div>
+        N = mg cos θ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง: พื้นเอียงลื่น</div>
+        วัตถุมวล 5 kg บนพื้นเอียง 30° ไม่มีแรงเสียดทาน (g = 10 m/s²)<br><br>
+        ΣF ตามพื้นเอียง = mg sin θ = 5×10×0.5 = 25 N<br>
+        a = ΣF/m = 25/5 = 5 m/s² (ไถลลงตามพื้นเอียง)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง: พื้นเอียงมีแรงเสียดทาน</div>
+        วัตถุเดิม แต่พื้นเอียงมี μ_k = 0.2<br><br>
+        N = mg cos 30° = 5×10×0.866 ≈ 43.3 N<br>
+        f_k = μ_k N = 0.2×43.3 ≈ 8.66 N<br>
+        ΣF = mg sin θ − f_k = 25 − 8.66 ≈ 16.3 N<br>
+        a = 16.3/5 ≈ 3.27 m/s²
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🪢</div>ระบบรอก (Pulley System)</div>
+      <p>สำหรับมวลสองก้อนคล้องผ่านรอกลื่นไม่มีมวล เชือกไม่ยืด แรงตึงเชือก T เท่ากันตลอดเส้น และขนาดความเร่งของทั้งสองก้อนเท่ากัน</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง: รอกแขวนดิ่งสองข้าง (Atwood machine)</div>
+        มวล m₁ = 6 kg และ m₂ = 4 kg คล้องเชือกผ่านรอกลื่น (g = 10 m/s²) โดย m₁ &gt; m₂ จึงเคลื่อนที่ลง<br><br>
+        เขียนสมการแยกแต่ละก้อน (ให้ a เป็นบวกตามทิศที่แต่ละก้อนเคลื่อนที่จริง):<br>
+        ก้อน 1 (ลง): m₁g − T = m₁a<br>
+        ก้อน 2 (ขึ้น): T − m₂g = m₂a<br><br>
+        บวกสองสมการ (ตัด T ออก):<br>
+        m₁g − m₂g = (m₁+m₂)a<br>
+        a = (m₁−m₂)g / (m₁+m₂) = (6−4)(10)/(6+4) = 20/10 = 2 m/s²<br><br>
+        แทนกลับหา T: T = m₂(g+a) = 4×(10+2) = 48 N
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคแก้โจทย์รอก</div>
+        1. กำหนดทิศบวกให้สอดคล้องกับทิศที่คาดว่าระบบจะเคลื่อนที่<br>
+        2. เขียนสมการ ΣF = ma แยกทีละก้อน<br>
+        3. บวก/ลบสมการเพื่อตัด T ออก แล้วแก้หา a ก่อน จากนั้นย้อนกลับไปหา T
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">8 ข้อ เรียงจากง่ายไปยาก ครอบคลุมแรงและกฎการเคลื่อนที่ทั้งสามข้อของนิวตัน เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> แนวข้อสอบ A-Level แรงและกฎการเคลื่อนที่</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ข้อสอบจำลองแนว A-Level ฟิสิกส์ เรื่องแรงและกฎการเคลื่อนที่ของนิวตัน</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบายทีละขั้น เพื่อฝึกวิธีคิดที่ใช้ได้กับโจทย์แนวเดียวกันในสนามสอบจริง
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 8 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — แรงและแรงลัพธ์",
+    q: "แรง F₁ = 8 N กระทำไปทางขวา และ F₂ = 3 N กระทำไปทางซ้าย กระทำที่วัตถุก้อนเดียวกัน จงหาแรงลัพธ์",
+    opts: ["5 N ไปทางขวา", "5 N ไปทางซ้าย", "11 N ไปทางขวา", "11 N ไปทางซ้าย"],
+    ans: 0,
+    explain: "แรงเป็นปริมาณเวกเตอร์ ต้องรวมตามทิศทาง\nกำหนดทิศขวาเป็นบวก:\nΣF = F₁ − F₂ = 8 − 3 = 5 N\nเนื่องจากผลลัพธ์เป็นบวก ทิศจึงเป็นทางขวา (ทิศเดียวกับแรงที่มากกว่า)\n\nดังนั้น แรงลัพธ์ = 5 N ไปทางขวา ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — กฎข้อที่ 2",
+    q: "วัตถุมวล 6 kg ถูกแรงลัพธ์ 18 N กระทำ จงหาความเร่งของวัตถุ",
+    opts: ["2 m/s²", "3 m/s²", "4 m/s²", "6 m/s²"],
+    ans: 1,
+    explain: "ใช้กฎการเคลื่อนที่ข้อที่ 2 ของนิวตัน:\nΣF = ma\na = ΣF / m = 18 / 6 = 3 m/s² ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — น้ำหนักและมวล",
+    q: "วัตถุมวล 12 kg บนโลก (g = 10 m/s²) มีน้ำหนักเท่าใด",
+    opts: ["1.2 N", "12 N", "22 N", "120 N"],
+    ans: 3,
+    explain: "น้ำหนัก คือ แรงโน้มถ่วงที่กระทำต่อวัตถุ\nW = mg = 12 × 10 = 120 N ✓\n\nข้อควรระวัง: มวล (12 kg) กับน้ำหนัก (120 N) เป็นคนละปริมาณกัน มวลไม่มีหน่วยเป็นนิวตัน"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — กฎข้อที่ 3",
+    q: "ข้อใดต่อไปนี้อธิบายกฎการเคลื่อนที่ข้อที่ 3 ของนิวตันได้ถูกต้องที่สุด",
+    opts: [
+      "วัตถุจะอยู่นิ่งถ้าไม่มีแรงกระทำ",
+      "แรงลัพธ์เท่ากับมวลคูณความเร่ง",
+      "แรงกิริยาและแรงปฏิกิริยามีขนาดเท่ากัน ทิศตรงข้าม และกระทำกับวัตถุคนละก้อน",
+      "แรงกิริยาและแรงปฏิกิริยากระทำกับวัตถุก้อนเดียวกันจึงหักล้างกันเป็นศูนย์"
+    ],
+    ans: 2,
+    explain: "ตัวเลือกที่ 1 คือใจความของกฎข้อที่ 1 (กฎความเฉื่อย) → ไม่ใช่คำตอบ\nตัวเลือกที่ 2 คือใจความของกฎข้อที่ 2 (F = ma) → ไม่ใช่คำตอบ\nตัวเลือกที่ 3 อธิบายกฎข้อที่ 3 ได้ถูกต้อง: แรงกิริยา-ปฏิกิริยามีขนาดเท่ากัน ทิศตรงข้ามกัน แต่กระทำกับวัตถุคนละก้อนเสมอ → ถูกต้อง ✓\nตัวเลือกที่ 4 ผิด เพราะแรงกิริยา-ปฏิกิริยากระทำกับวัตถุคนละก้อน จึงไม่หักล้างกัน (การหักล้างเกิดเฉพาะแรงที่กระทำกับวัตถุก้อนเดียวกัน)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — แรงเสียดทาน",
+    q: "กล่องมวล 5 kg วางบนพื้นราบ (g = 10 m/s²) มีสัมประสิทธิ์แรงเสียดทานจลน์ μ_k = 0.3 จงหาแรงเสียดทานขณะกล่องกำลังเคลื่อนที่",
+    opts: ["1.5 N", "10 N", "15 N", "50 N"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาแรงตั้งฉาก N\nพื้นราบ ไม่มีแรงดิ่งอื่นนอกจากน้ำหนัก → N = mg = 5×10 = 50 N\n\nขั้นที่ 2: หาแรงเสียดทานจลน์\nf_k = μ_k N = 0.3 × 50 = 15 N ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — กฎข้อที่ 2 (ลิฟต์)",
+    q: "คนมวล 60 kg ยืนบนเครื่องชั่งในลิฟต์ที่กำลังเร่งขึ้นด้วยความเร่ง 2 m/s² (g = 10 m/s²) เครื่องชั่งจะอ่านค่าน้ำหนักได้เท่าใด",
+    opts: ["480 N", "600 N", "648 N", "720 N"],
+    ans: 3,
+    explain: "ขั้นที่ 1: เขียนสมการ ΣF = ma ในแนวดิ่ง โดยกำหนดทิศขึ้นเป็นบวก (สอดคล้องกับทิศความเร่ง)\nN − mg = ma\n\nขั้นที่ 2: แก้หา N\nN = m(g + a) = 60×(10 + 2) = 60×12 = 720 N ✓\n\nตรวจสอบด้วยสามัญสำนึก: เมื่อลิฟต์เร่งขึ้น น้ำหนักที่ปรากฏต้องมากกว่า mg = 600 N เสมอ ซึ่งสอดคล้องกับคำตอบ 720 N"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — พื้นเอียง",
+    q: "วัตถุมวล 4 kg วางบนพื้นเอียงลื่น (ไม่มีแรงเสียดทาน) ทำมุม 37° กับแนวราบ (g = 10 m/s², sin 37° = 0.6, cos 37° = 0.8) จงหาความเร่งของวัตถุตามพื้นเอียง",
+    opts: ["4 m/s²", "6 m/s²", "8 m/s²", "10 m/s²"],
+    ans: 1,
+    explain: "ขั้นที่ 1: แตกแรงน้ำหนักตามแนวพื้นเอียง\nแนวขนานพื้นเอียง (ทำให้วัตถุไถลลง): mg sin θ = 4×10×0.6 = 24 N\n\nขั้นที่ 2: เนื่องจากพื้นเอียงลื่น ไม่มีแรงเสียดทานต้าน\nΣF (ตามพื้นเอียง) = mg sin θ = 24 N\n\nขั้นที่ 3: หาความเร่ง\na = ΣF/m = 24/4 = 6 m/s² ✓\n\n(สังเกตว่า a = g sin θ เสมอสำหรับพื้นเอียงลื่น ไม่ขึ้นกับมวล)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — ระบบรอก",
+    q: "มวล m₁ = 8 kg และ m₂ = 2 kg คล้องเชือกผ่านรอกลื่นไม่มีมวล ปล่อยจากหยุดนิ่ง (g = 10 m/s²) จงหาความเร่งของระบบ",
+    opts: ["4 m/s²", "5 m/s²", "6 m/s²", "8 m/s²"],
+    ans: 2,
+    explain: "เขียนสมการ ΣF = ma แยกแต่ละก้อน (m₁ หนักกว่า จึงเคลื่อนที่ลง m₂ เคลื่อนที่ขึ้น):\nก้อน m₁ (ลง): m₁g − T = m₁a\nก้อน m₂ (ขึ้น): T − m₂g = m₂a\n\nบวกสองสมการเพื่อตัด T ออก:\nm₁g − m₂g = (m₁+m₂)a\na = (m₁−m₂)g / (m₁+m₂) = (8−2)×10 / (8+2) = 60/10 = 6 m/s² ✓"
+  }
+];
+
+// ===== แนวข้อสอบ A-Level — แรงและกฎการเคลื่อนที่ =====
+const alevelQuestions = [
+  {
+    year: "📘 แนวข้อสอบ A-Level — แรงลัพธ์",
+    q: "แรงสามแรงกระทำที่จุดเดียวกัน คือ F₁ = 6 N ไปทางทิศเหนือ, F₂ = 8 N ไปทางทิศตะวันออก และ F₃ = 6 N ไปทางทิศใต้\nจงหาขนาดของแรงลัพธ์",
+    opts: ["2 N", "6 N", "8 N", "10 N", "14 N"],
+    ans: 2,
+    explain: "ขั้นที่ 1: รวมแรงในแนวเหนือ-ใต้ก่อน (แนวเดียวกัน ทิศตรงข้าม)\nF₁ (เหนือ) และ F₃ (ใต้) มีขนาดเท่ากันคือ 6 N พอดี จึงหักล้างกันหมด\nแรงลัพธ์แนวเหนือ-ใต้ = 6 − 6 = 0 N\n\nขั้นที่ 2: เหลือเพียง F₂ = 8 N ไปทางตะวันออกเพียงแรงเดียว\n\nดังนั้น แรงลัพธ์ = 8 N ✓ (ไปทางทิศตะวันออก)"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — กฎข้อที่ 2",
+    q: "วัตถุมวล 5 kg เคลื่อนที่บนพื้นราบลื่น ถูกแรง 12 N กระทำไปทางขวา และแรง 4 N กระทำไปทางซ้ายพร้อมกัน\nวัตถุจะเคลื่อนที่ได้ระยะทางเท่าใดใน 4 วินาที ถ้าเริ่มต้นหยุดนิ่ง",
+    opts: ["6.4 m", "12.8 m", "16 m", "25.6 m", "32 m"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาแรงลัพธ์\nΣF = 12 − 4 = 8 N (ไปทางขวา)\n\nขั้นที่ 2: หาความเร่ง\na = ΣF/m = 8/5 = 1.6 m/s²\n\nขั้นที่ 3: หาระยะทางด้วยสมการการเคลื่อนที่ (เริ่มจากหยุดนิ่ง u = 0)\ns = ut + ½at² = 0 + ½×1.6×4² = ½×1.6×16 = 12.8 m ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — กฎข้อที่ 1",
+    q: "วัตถุก้อนหนึ่งเคลื่อนที่ด้วยความเร็วคงตัวในแนวเส้นตรง ข้อสรุปใดต่อไปนี้ถูกต้องที่สุด",
+    opts: [
+      "มีแรงลัพธ์กระทำต่อวัตถุในทิศเดียวกับการเคลื่อนที่",
+      "แรงลัพธ์ที่กระทำต่อวัตถุเท่ากับศูนย์",
+      "ไม่มีแรงใด ๆ กระทำต่อวัตถุเลย",
+      "มวลของวัตถุเท่ากับศูนย์",
+      "วัตถุกำลังมีความเร่งคงตัว"
+    ],
+    ans: 1,
+    explain: "หลักการ: กฎการเคลื่อนที่ข้อที่ 1 กล่าวว่าวัตถุจะเคลื่อนที่ด้วยความเร็วคงตัวในแนวเส้นตรงได้ก็ต่อเมื่อ แรงลัพธ์ที่กระทำต่อวัตถุเป็นศูนย์ (ΣF = 0)\n\nตรวจตัวเลือกที่ 1: ผิด เพราะถ้ามีแรงลัพธ์ วัตถุจะมีความเร่ง ไม่ใช่ความเร็วคงตัว\nตรวจตัวเลือกที่ 2: ถูกต้องตามหลักการ ✓\nตรวจตัวเลือกที่ 3: ผิด เพราะอาจมีหลายแรงกระทำอยู่ เพียงแต่รวมกันแล้วหักล้างเป็นศูนย์ ไม่ได้แปลว่าไม่มีแรงเลย\nตรวจตัวเลือกที่ 4: ผิด ไม่เกี่ยวข้องกับเงื่อนไขนี้\nตรวจตัวเลือกที่ 5: ผิด เพราะความเร็วคงตัวหมายถึงความเร่งเป็นศูนย์ ไม่ใช่ความเร่งคงตัว (คงตัวไม่เท่ากับศูนย์เสมอไป)"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — น้ำหนักและมวล",
+    q: "นักบินอวกาศมวล 80 kg เดินทางจากโลก (g = 10 m/s²) ไปยังดาวเคราะห์ดวงหนึ่งที่มี g = 4 m/s² น้ำหนักของนักบินอวกาศจะเปลี่ยนแปลงไปอย่างไร",
+    opts: [
+      "มวลลดลง น้ำหนักลดลง",
+      "มวลคงเดิม น้ำหนักลดลง",
+      "มวลคงเดิม น้ำหนักเพิ่มขึ้น",
+      "มวลเพิ่มขึ้น น้ำหนักคงเดิม",
+      "ทั้งมวลและน้ำหนักคงเดิม"
+    ],
+    ans: 1,
+    explain: "หลักการ: มวล คือ ปริมาณเนื้อสารของวัตถุ ไม่ขึ้นกับตำแหน่งหรือค่า g จึงคงที่เสมอไม่ว่าจะอยู่ที่ใด\nน้ำหนัก คือ แรงโน้มถ่วงที่กระทำต่อวัตถุ (W = mg) จึงขึ้นกับค่า g ของตำแหน่งนั้น\n\nคำนวณตรวจสอบ:\nน้ำหนักบนโลก = 80×10 = 800 N\nน้ำหนักบนดาวเคราะห์ = 80×4 = 320 N (น้อยกว่าเดิม)\n\nดังนั้น มวลคงเดิมที่ 80 kg แต่น้ำหนักลดลงจาก 800 N เหลือ 320 N ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — แรงเสียดทาน",
+    q: "กล่องมวล 10 kg วางบนพื้นราบ (g = 10 m/s²) มี μ_s = 0.5 และ μ_k = 0.3 ถ้าออกแรงราบดึงกล่อง 40 N กล่องจะเคลื่อนที่หรือไม่ และมีความเร่งเท่าใด",
+    opts: [
+      "ไม่เคลื่อนที่ เพราะแรงยังไม่พอเอาชนะแรงเสียดทานสถิตสูงสุด",
+      "เคลื่อนที่ด้วยความเร่ง 1.0 m/s²",
+      "เคลื่อนที่ด้วยความเร่ง 4.0 m/s²",
+      "เคลื่อนที่ด้วยความเร่ง 0.7 m/s²",
+      "เคลื่อนที่ด้วยความเร่ง 1.3 m/s²"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาแรงเสียดทานสถิตสูงสุดก่อน เพื่อตรวจว่ากล่องเริ่มเคลื่อนที่หรือไม่\nN = mg = 10×10 = 100 N\nf_s(max) = μ_s N = 0.5×100 = 50 N\n\nขั้นที่ 2: เทียบแรงที่ออก (40 N) กับ f_s(max) (50 N)\nเนื่องจาก 40 N < 50 N แรงที่ออกยังไม่พอเอาชนะแรงเสียดทานสถิตสูงสุด\n\nดังนั้น กล่องยังคงอยู่นิ่ง ยังไม่เคลื่อนที่ (แรงเสียดทานสถิตจะปรับค่าตัวเองขึ้นมาเท่ากับ 40 N พอดี เพื่อให้ ΣF = 0)\n\nข้อควรระวัง: ตัวเลือกที่มีค่าความเร่งทั้งหมดในข้อนี้เป็นตัวลวง เพราะคำนวณโดยใช้ f_k แทนที่จะตรวจสอบเงื่อนไข f_s(max) ก่อน ซึ่งเป็นข้อผิดพลาดที่พบบ่อยมากในข้อสอบจริง ✓ คำตอบคือกล่องไม่เคลื่อนที่"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — พื้นเอียงมีแรงเสียดทาน",
+    q: "วัตถุมวล 2 kg วางบนพื้นเอียง 30° ซึ่งมี μ_k = 0.2 (g = 10 m/s², sin 30° = 0.5, cos 30° ≈ 0.87) ถ้าวัตถุกำลังไถลลงตามพื้นเอียง จงหาความเร่งของวัตถุ",
+    opts: ["1.0 m/s²", "1.5 m/s²", "3.3 m/s²", "5.0 m/s²", "6.5 m/s²"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาแรงตั้งฉาก N\nN = mg cos θ = 2×10×0.87 = 17.4 N\n\nขั้นที่ 2: หาแรงเสียดทานจลน์ (ต้านการไถลลง จึงชี้ขึ้นตามพื้นเอียง)\nf_k = μ_k N = 0.2×17.4 = 3.48 N\n\nขั้นที่ 3: หาแรงลัพธ์ตามแนวพื้นเอียง\nΣF = mg sin θ − f_k = (2×10×0.5) − 3.48 = 10 − 3.48 = 6.52 N\n\nขั้นที่ 4: หาความเร่ง\na = ΣF/m = 6.52/2 = 3.26 ≈ 3.3 m/s² ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — กฎข้อที่ 3",
+    q: "ชายคนหนึ่งมวล 70 kg ยืนอยู่บนพื้นโลก แรงที่พื้นโลกกระทำต่อชายคนนี้ (แรงตั้งฉาก N) มีคู่แรงกิริยา-ปฏิกิริยาตามกฎข้อที่ 3 คือแรงใด",
+    opts: [
+      "น้ำหนักของชายคนนี้ (mg)",
+      "แรงที่ชายคนนี้กดพื้นโลก",
+      "แรงเสียดทานระหว่างเท้ากับพื้น",
+      "แรงโน้มถ่วงที่โลกดึงดูดชายคนนี้",
+      "ไม่มีแรงคู่ปฏิกิริยา เพราะ N ไม่ใช่แรงกิริยา"
+    ],
+    ans: 1,
+    explain: "หลักการ: แรงคู่กิริยา-ปฏิกิริยาต้องเป็นแรงที่กระทำระหว่างวัตถุคู่เดียวกัน สลับผู้กระทำและผู้ถูกกระทำ และเป็นแรงชนิดเดียวกัน (แรงสัมผัสคู่กับแรงสัมผัส)\n\nแรง N คือ แรงที่พื้นโลกกระทำต่อชาย (พื้น → ชาย)\nคู่ปฏิกิริยาของแรงนี้ต้องเป็นแรงที่ชายกระทำต่อพื้นโลก (ชาย → พื้น) ด้วยขนาดเท่ากัน ทิศตรงข้าม ซึ่งก็คือแรงที่ชายกดพื้นโลก ✓\n\nข้อควรระวัง: ตัวเลือกที่ 1 (น้ำหนัก mg) เป็นแรงที่โลกดึงดูดชาย (แรงสนาม) ซึ่งมีคู่ปฏิกิริยาคือแรงที่ชายดึงดูดโลกกลับ (แรงโน้มถ่วง) ไม่ใช่คู่กับ N — นี่คือกับดักที่พบบ่อยที่สุดในโจทย์แนวนี้ เพราะ mg กับ N บังเอิญมีขนาดเท่ากันเมื่อชายยืนนิ่งบนพื้นราบ (จาก ΣF=0) แต่ทั้งสองไม่ใช่คู่กิริยา-ปฏิกิริยากันตามนิยาม"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ระบบรอกและแรงเสียดทาน",
+    q: "มวล m₁ = 5 kg วางบนพื้นราบมี μ_k = 0.2 ผูกเชือกผ่านรอกที่ขอบโต๊ะไปยังมวล m₂ = 3 kg ที่ห้อยอยู่ในแนวดิ่ง (g = 10 m/s²) จงหาความเร่งของระบบ",
+    opts: ["1.25 m/s²", "2.5 m/s²", "3.75 m/s²", "5.0 m/s²", "6.25 m/s²"],
+    ans: 1,
+    explain: "ขั้นที่ 1: วิเคราะห์แรงบน m₁ (แนวราบ)\nN₁ = m₁g = 5×10 = 50 N\nf_k = μ_k N₁ = 0.2×50 = 10 N (ต้านการเคลื่อนที่ไปทางรอก)\nสมการ m₁: T − f_k = m₁a  →  T − 10 = 5a\n\nขั้นที่ 2: วิเคราะห์แรงบน m₂ (แนวดิ่ง ห้อยลง)\nสมการ m₂: m₂g − T = m₂a  →  30 − T = 3a\n\nขั้นที่ 3: บวกสองสมการเพื่อตัด T ออก\n(T − 10) + (30 − T) = 5a + 3a\n20 = 8a\na = 2.5 m/s² ✓"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  alevelQuestions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

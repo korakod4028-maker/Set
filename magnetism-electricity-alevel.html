@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แม่เหล็กและไฟฟ้า | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'E  B  F  q  v  I  R  Φ  ε  μ₀';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+
+  /* FIELD DIAGRAM (simple css based) */
+  .field-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  .field-box svg text { font-family: var(--sans); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>แม่เหล็ก<span>และ</span>ไฟฟ้า</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="e1">1. ไฟฟ้าสถิต</button>
+  <button class="tab-btn" data-sec="e2">2. สนามไฟฟ้า/ศักย์ไฟฟ้า</button>
+  <button class="tab-btn" data-sec="e3">3. ตัวเก็บประจุ</button>
+  <button class="tab-btn" data-sec="c1">4. วงจรไฟฟ้ากระแส</button>
+  <button class="tab-btn" data-sec="m1">5. สนามแม่เหล็ก</button>
+  <button class="tab-btn" data-sec="m2">6. แรงแม่เหล็ก (F=qvB, F=BIL)</button>
+  <button class="tab-btn" data-sec="m3">7. การเหนี่ยวนำแม่เหล็กไฟฟ้า</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: ไฟฟ้าสถิต ===== -->
+  <div class="section active" id="e1">
+    <div class="section-heading"><span>บทที่ 1</span> · ไฟฟ้าสถิต (Electrostatics)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚡</div>ประจุไฟฟ้า</div>
+      <p>สสารทุกชนิดประกอบด้วยอะตอม ซึ่งมี <strong>โปรตอน (ประจุบวก)</strong> และ <strong>อิเล็กตรอน (ประจุลบ)</strong> วัตถุจะมีประจุสุทธิเมื่อจำนวนโปรตอนและอิเล็กตรอนไม่เท่ากัน</p>
+      <div class="def-box">
+        <div class="def-label">กฎการอนุรักษ์ประจุ</div>
+        ประจุไฟฟ้ารวมของระบบปิดมีค่าคงที่เสมอ ประจุไม่ถูกสร้างขึ้นใหม่หรือถูกทำลาย เพียงแต่ถ่ายเทจากวัตถุหนึ่งไปอีกวัตถุหนึ่ง
+      </div>
+      <div class="def-box">
+        <div class="def-label">ประจุมูลฐาน (e)</div>
+        <span class="math">e = 1.6 × 10⁻¹⁹ C</span> — ประจุของอิเล็กตรอน 1 ตัว หรือโปรตอน 1 ตัว (ขนาดเท่ากัน เครื่องหมายตรงข้าม)<br>
+        ประจุของวัตถุใด ๆ จะเป็นจำนวนเท่าของ e เสมอ: <span class="math">Q = ne</span>
+      </div>
+      <div class="sub-heading">วิธีทำให้วัตถุมีประจุ</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>การขัดสี (Friction)</h4>
+          <p>ถูวัตถุสองชนิดเข้าด้วยกัน อิเล็กตรอนหลุดจากวัตถุหนึ่งไปอีกวัตถุหนึ่ง</p>
+        </div>
+        <div class="mini-card">
+          <h4>การเหนี่ยวนำ (Induction)</h4>
+          <p>นำวัตถุมีประจุเข้าใกล้ (ไม่สัมผัส) ทำให้ประจุในวัตถุกลางเคลื่อนที่แยกขั้ว</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กฎแรงระหว่างประจุ</div>
+        ประจุชนิดเดียวกัน (บวก-บวก หรือ ลบ-ลบ) <strong>ผลักกัน</strong> ประจุต่างชนิด (บวก-ลบ) <strong>ดูดกัน</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>กฎของคูลอมบ์ (Coulomb's Law)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรงระหว่างประจุจุดสองจุดแปรผันตรงกับผลคูณของขนาดประจุ และแปรผกผันกับกำลังสองของระยะห่าง
+      </div>
+      <div class="math-block">F = kQ₁Q₂ / r²</div>
+      <p>เมื่อ <span class="math">F</span> = แรงระหว่างประจุ (N), <span class="math">Q₁, Q₂</span> = ขนาดประจุ (C), <span class="math">r</span> = ระยะห่างระหว่างประจุ (m)<br>
+      <span class="math">k</span> = ค่าคงตัวคูลอมบ์ = <span class="math">9 × 10⁹ N·m²/C²</span></p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ประจุ +2 μC และ +8 μC วางห่างกัน 3 m จงหาแรงระหว่างประจุ<br>
+        F = kQ₁Q₂/r² = (9×10⁹)(2×10⁻⁶)(8×10⁻⁶)/3²<br>
+        F = (9×10⁹)(16×10⁻¹²)/9 = 16×10⁻³ N = 0.016 N (แรงผลัก เพราะประจุชนิดเดียวกัน)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        แรงเป็นปริมาณเวกเตอร์ เมื่อมีประจุมากกว่า 2 ตัว ต้องรวมแรงแบบเวกเตอร์ (บวกตามทิศทาง ไม่ใช่บวกขนาดตรง ๆ)<br>
+        หน่วยระยะทางต้องเป็นเมตร และประจุต้องเป็นคูลอมบ์ก่อนแทนค่าในสูตรเสมอ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔀</div>ตัวนำและฉนวน</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ตัวนำ (Conductor)</h4>
+          <p>อิเล็กตรอนเคลื่อนที่ได้อิสระ เช่น โลหะ (ทองแดง, เงิน, อะลูมิเนียม)</p>
+        </div>
+        <div class="mini-card">
+          <h4>ฉนวน (Insulator)</h4>
+          <p>อิเล็กตรอนเคลื่อนที่ไม่ได้อิสระ เช่น ยาง แก้ว พลาสติก</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        ในตัวนำที่อยู่ในสมดุลไฟฟ้าสถิต ประจุส่วนเกินทั้งหมดจะอยู่ที่ผิวนอกเท่านั้น และสนามไฟฟ้าภายในตัวนำมีค่าเป็นศูนย์
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: สนามไฟฟ้าและศักย์ไฟฟ้า ===== -->
+  <div class="section" id="e2">
+    <div class="section-heading"><span>บทที่ 1</span> · สนามไฟฟ้าและศักย์ไฟฟ้า</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">E</div>สนามไฟฟ้า (Electric Field)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        สนามไฟฟ้า คือ บริเวณรอบประจุที่มีแรงกระทำต่อประจุทดสอบอื่น มีทิศพุ่งออกจากประจุบวก และพุ่งเข้าหาประจุลบ
+      </div>
+      <div class="math-block">
+        E = F / q₀   (นิยามจากแรงต่อประจุทดสอบ)<br>
+        E = kQ / r²   (สนามไฟฟ้าจากประจุจุด)
+      </div>
+      <p>หน่วยของสนามไฟฟ้า คือ <span class="math">N/C</span> หรือเทียบเท่ากับ <span class="math">V/m</span></p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ประจุ +5 μC ทำให้เกิดสนามไฟฟ้าที่จุดห่างออกไป 2 m เท่าใด<br>
+        E = kQ/r² = (9×10⁹)(5×10⁻⁶)/2² = 45×10³/4 = 1.125×10⁴ N/C
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เส้นสนามไฟฟ้า (Field Lines)</div>
+        • เริ่มจากประจุบวก สิ้นสุดที่ประจุลบ<br>
+        • ไม่มีวันตัดกัน<br>
+        • ยิ่งเส้นถี่ ยิ่งแสดงว่าสนามไฟฟ้าแรงบริเวณนั้น
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">V</div>ศักย์ไฟฟ้า (Electric Potential)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ศักย์ไฟฟ้าที่จุดหนึ่ง คือ พลังงานศักย์ไฟฟ้าต่อหน่วยประจุที่จุดนั้น เป็นปริมาณสเกลาร์ (มีเครื่องหมายบวก/ลบ แต่ไม่มีทิศทาง)
+      </div>
+      <div class="math-block">
+        V = kQ / r   (ศักย์ไฟฟ้าจากประจุจุด)<br>
+        V = W / q    (นิยามจากงานต่อหน่วยประจุ)
+      </div>
+      <p>หน่วยของศักย์ไฟฟ้า คือ <span class="math">โวลต์ (V) = J/C</span></p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ประจุ +4 μC จงหาศักย์ไฟฟ้าที่จุดห่างออกไป 3 m<br>
+        V = kQ/r = (9×10⁹)(4×10⁻⁶)/3 = 36×10³/3 = 1.2×10⁴ V
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อแตกต่างสำคัญ</div>
+        สนามไฟฟ้า (E) เป็น <strong>เวกเตอร์</strong> แปรผกผันกับ r² ในขณะที่ ศักย์ไฟฟ้า (V) เป็น <strong>สเกลาร์</strong> แปรผกผันกับ r เพียงยกกำลังหนึ่ง — เวลารวมค่าจากหลายประจุ ศักย์ไฟฟ้ารวมกันแบบพีชคณิตธรรมดา (บวกลบตรง ๆ) ในขณะที่สนามไฟฟ้าต้องรวมแบบเวกเตอร์
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">W</div>งานและพลังงานศักย์ไฟฟ้า</div>
+      <div class="math-block">
+        W = qΔV = q(V₁ − V₂)<br>
+        Eₚ = qV
+      </div>
+      <p>เมื่อประจุเคลื่อนที่จากจุดที่ศักย์สูงไปจุดที่ศักย์ต่ำ สนามไฟฟ้าจะทำงานบวกให้กับประจุบวก (คล้ายลูกบอลกลิ้งจากที่สูงลงที่ต่ำ)</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความเชื่อมโยงระหว่าง E และ V</div>
+        ในสนามไฟฟ้าสม่ำเสมอ (เช่น ระหว่างแผ่นตัวนำคู่ขนาน): <span class="math">E = ΔV / d</span> เมื่อ d คือระยะห่างระหว่างแผ่น
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ตัวเก็บประจุ ===== -->
+  <div class="section" id="e3">
+    <div class="section-heading"><span>บทที่ 1</span> · ตัวเก็บประจุ (Capacitor)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">C</div>ความจุไฟฟ้า</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ตัวเก็บประจุ คือ อุปกรณ์สะสมประจุไฟฟ้า มักประกอบด้วยแผ่นตัวนำคู่ขนานสองแผ่นคั่นด้วยฉนวน (ไดอิเล็กทริก)
+      </div>
+      <div class="math-block">C = Q / V</div>
+      <p>เมื่อ <span class="math">C</span> = ความจุไฟฟ้า หน่วยฟารัด (F), <span class="math">Q</span> = ประจุสะสม (C), <span class="math">V</span> = ความต่างศักย์ระหว่างแผ่น (V)</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ตัวเก็บประจุ 4 μF ต่อกับความต่างศักย์ 12 V จงหาประจุที่สะสม<br>
+        Q = CV = (4×10⁻⁶)(12) = 48×10⁻⁶ C = 48 μC
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">⚡</div>พลังงานสะสมในตัวเก็บประจุ</div>
+      <div class="math-block">
+        U = ½QV = ½CV² = Q²/(2C)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ตัวเก็บประจุ 2 μF มีความต่างศักย์ 100 V จงหาพลังงานสะสม<br>
+        U = ½CV² = ½(2×10⁻⁶)(100)² = ½(2×10⁻⁶)(10⁴) = 0.01 J
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔗</div>การต่อตัวเก็บประจุ</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ต่ออนุกรม (Series)</h4>
+          <p>ประจุ Q เท่ากันทุกตัว ความต่างศักย์รวมเป็นผลบวก</p>
+          <div class="math-block">1/C = 1/C₁ + 1/C₂ + …</div>
+        </div>
+        <div class="mini-card">
+          <h4>ต่อขนาน (Parallel)</h4>
+          <p>ความต่างศักย์ V เท่ากันทุกตัว ประจุรวมเป็นผลบวก</p>
+          <div class="math-block">C = C₁ + C₂ + …</div>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        กฎการรวมความจุ "สลับ" กับกฎการรวมความต้านทานไฟฟ้า — ตัวเก็บประจุต่ออนุกรมใช้สูตรเหมือนตัวต้านทานต่อขนาน และตัวเก็บประจุต่อขนานใช้สูตรเหมือนตัวต้านทานต่ออนุกรม
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: กระแสไฟฟ้าและวงจร ===== -->
+  <div class="section" id="c1">
+    <div class="section-heading"><span>บทที่ 2</span> · กระแสไฟฟ้าและวงจรไฟฟ้า</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">I</div>กระแสไฟฟ้า</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        กระแสไฟฟ้า คือ อัตราการไหลของประจุไฟฟ้าผ่านพื้นที่หน้าตัดของตัวนำ ทิศของกระแสไฟฟ้าตามธรรมเนียมกำหนดให้เป็นทิศการไหลของประจุบวก (สวนทางกับทิศการไหลจริงของอิเล็กตรอน)
+      </div>
+      <div class="math-block">I = Q / t</div>
+      <p>หน่วยของกระแสไฟฟ้า คือ <span class="math">แอมแปร์ (A) = C/s</span></p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ประจุ 6 C ไหลผ่านหน้าตัดลวดตัวนำในเวลา 3 s จงหากระแสไฟฟ้า<br>
+        I = Q/t = 6/3 = 2 A
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">R</div>กฎของโอห์ม (Ohm's Law)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        กระแสไฟฟ้าที่ไหลผ่านตัวนำ แปรผันตรงกับความต่างศักย์ที่ตกคร่อมตัวนำนั้น เมื่ออุณหภูมิคงที่
+      </div>
+      <div class="math-block">V = IR</div>
+      <p>เมื่อ <span class="math">V</span> = ความต่างศักย์ (V), <span class="math">I</span> = กระแสไฟฟ้า (A), <span class="math">R</span> = ความต้านทาน หน่วยโอห์ม (Ω)</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ตัวต้านทาน 10 Ω ต่อกับแบตเตอรี่ 20 V จงหากระแสไฟฟ้าที่ไหลผ่าน<br>
+        I = V/R = 20/10 = 2 A
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กำลังไฟฟ้า</div>
+        P = IV = I²R = V²/R  — หน่วยเป็นวัตต์ (W)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔗</div>การต่อตัวต้านทาน</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ต่ออนุกรม (Series)</h4>
+          <p>กระแส I เท่ากันทุกตัว ความต่างศักย์รวมเป็นผลบวก</p>
+          <div class="math-block">R = R₁ + R₂ + …</div>
+        </div>
+        <div class="mini-card">
+          <h4>ต่อขนาน (Parallel)</h4>
+          <p>ความต่างศักย์ V เท่ากันทุกตัว กระแสรวมเป็นผลบวก</p>
+          <div class="math-block">1/R = 1/R₁ + 1/R₂ + …</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ตัวต้านทาน 6 Ω และ 3 Ω ต่อขนานกัน จงหาความต้านทานรวม<br>
+        1/R = 1/6 + 1/3 = 1/6 + 2/6 = 3/6 = 1/2<br>
+        R = 2 Ω (ความต้านทานรวมของการต่อขนานเสมอน้อยกว่าตัวต้านทานตัวที่น้อยที่สุดในวงจร)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔋</div>แรงเคลื่อนไฟฟ้าและความต้านทานภายใน</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรงเคลื่อนไฟฟ้า (EMF, ε) คือ พลังงานที่แหล่งกำเนิดไฟฟ้าให้แก่ประจุต่อหน่วยประจุ แบตเตอรี่จริงมีความต้านทานภายใน (r) เสมอ ทำให้ความต่างศักย์ที่ขั้ว (Terminal Voltage) น้อยกว่า EMF เมื่อมีกระแสไหล
+      </div>
+      <div class="math-block">ε = I(R + r)  หรือ  V = ε − Ir</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แบตเตอรี่ EMF 12 V ความต้านทานภายใน 1 Ω ต่อกับตัวต้านทานภายนอก 5 Ω จงหากระแสไฟฟ้าในวงจร<br>
+        I = ε/(R+r) = 12/(5+1) = 2 A
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: สนามแม่เหล็ก ===== -->
+  <div class="section" id="m1">
+    <div class="section-heading"><span>บทที่ 3</span> · สนามแม่เหล็ก (Magnetic Field)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">B</div>แม่เหล็กและสนามแม่เหล็ก</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        สนามแม่เหล็ก (B) คือ บริเวณรอบแท่งแม่เหล็กหรือลวดตัวนำที่มีกระแสไฟฟ้าไหลผ่าน ซึ่งมีแรงกระทำต่อประจุที่เคลื่อนที่หรือต่อวัตถุแม่เหล็กอื่น หน่วยเป็น <span class="math">เทสลา (T)</span>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 คุณสมบัติของขั้วแม่เหล็ก</div>
+        ขั้วเดียวกัน (N-N หรือ S-S) ผลักกัน ขั้วต่างกัน (N-S) ดูดกัน — แม่เหล็กทุกแท่งมีสองขั้วเสมอ ไม่สามารถแยกขั้วเดี่ยว (monopole) ได้
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧲</div>สนามแม่เหล็กจากลวดตัวนำที่มีกระแสไฟฟ้า</div>
+      <div class="sub-heading">1) ลวดตรงยาว</div>
+      <div class="math-block">B = μ₀I / (2πr)</div>
+      <p>เมื่อ <span class="math">μ₀</span> = สภาพยอมให้ซึมผ่านได้ของสุญญากาศ = <span class="math">4π×10⁻⁷ T·m/A</span>, <span class="math">r</span> = ระยะห่างจากลวด</p>
+      <div class="sub-heading">2) ขดลวดวงกลม (ที่จุดศูนย์กลาง)</div>
+      <div class="math-block">B = μ₀NI / (2R)</div>
+      <div class="sub-heading">3) โซเลนอยด์ (ขดลวดยาว)</div>
+      <div class="math-block">B = μ₀nI  (n = จำนวนรอบต่อความยาว)</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กฎมือขวา (Right-Hand Rule) สำหรับทิศสนามแม่เหล็ก</div>
+        กำมือขวารอบลวด ให้นิ้วหัวแม่มือชี้ตามทิศกระแสไฟฟ้า นิ้วที่กำจะชี้ตามทิศของเส้นสนามแม่เหล็กที่โอบรอบลวด
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ลวดตรงมีกระแส 5 A จงหาสนามแม่เหล็กที่ระยะ 0.1 m จากลวด<br>
+        B = μ₀I/(2πr) = (4π×10⁻⁷)(5)/(2π×0.1) = (4×10⁻⁷×5)/(2×0.1) = 10⁻⁵ T
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: แรงแม่เหล็ก ===== -->
+  <div class="section" id="m2">
+    <div class="section-heading"><span>บทที่ 3</span> · แรงแม่เหล็กกับประจุเคลื่อนที่และกระแสไฟฟ้า</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">F</div>แรงกระทำต่อประจุเคลื่อนที่ในสนามแม่เหล็ก</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ประจุที่เคลื่อนที่ในสนามแม่เหล็กจะถูกแรงกระทำ เรียกว่า แรงลอเรนซ์ (Lorentz Force)
+      </div>
+      <div class="math-block">F = qvB sinθ</div>
+      <p>เมื่อ <span class="math">θ</span> = มุมระหว่างทิศความเร็ว v กับทิศสนามแม่เหล็ก B</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ถ้าประจุเคลื่อนที่<strong>ขนาน</strong>กับสนามแม่เหล็ก (θ = 0° หรือ 180°) จะ<strong>ไม่มีแรง</strong>กระทำเลย (sin 0° = 0) แรงจะมีค่ามากที่สุดเมื่อ v ตั้งฉากกับ B (θ = 90°)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กฎมือขวา สำหรับทิศแรง (ประจุบวก)</div>
+        กางนิ้วชี้ตามทิศความเร็ว v นิ้วกลางตามทิศสนามแม่เหล็ก B นิ้วหัวแม่มือจะชี้ทิศแรง F (ถ้าประจุเป็นลบ ทิศแรงจะกลับด้าน)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        อิเล็กตรอนเคลื่อนที่ด้วยความเร็ว 2×10⁶ m/s ตั้งฉากกับสนามแม่เหล็ก 0.5 T จงหาแรงที่กระทำ<br>
+        F = qvB sin90° = (1.6×10⁻¹⁹)(2×10⁶)(0.5)(1) = 1.6×10⁻¹³ N
+      </div>
+      <div class="sub-heading">การเคลื่อนที่เป็นวงกลมในสนามแม่เหล็ก</div>
+      <p>เมื่อแรงแม่เหล็กทำหน้าที่เป็นแรงสู่ศูนย์กลาง อนุภาคจะเคลื่อนที่เป็นวงกลม:</p>
+      <div class="math-block">qvB = mv²/r  →  r = mv / (qB)</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔌</div>แรงกระทำต่อลวดตัวนำที่มีกระแสไฟฟ้า</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ลวดตัวนำที่มีกระแสไฟฟ้าไหลผ่าน วางอยู่ในสนามแม่เหล็ก จะถูกแรงกระทำ เนื่องจากกระแสไฟฟ้าคือประจุที่เคลื่อนที่จำนวนมาก
+      </div>
+      <div class="math-block">F = BIL sinθ</div>
+      <p>เมื่อ <span class="math">L</span> = ความยาวของลวดที่อยู่ในสนามแม่เหล็ก, <span class="math">θ</span> = มุมระหว่างทิศกระแสไฟฟ้ากับทิศสนามแม่เหล็ก</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ลวดยาว 0.5 m มีกระแส 4 A วางตั้งฉากกับสนามแม่เหล็ก 0.2 T จงหาแรงที่กระทำ<br>
+        F = BIL sin90° = (0.2)(4)(0.5)(1) = 0.4 N
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 หลักการของมอเตอร์ไฟฟ้า</div>
+        เมื่อขดลวดสี่เหลี่ยมมีกระแสไฟฟ้าไหลอยู่ในสนามแม่เหล็ก แรงที่กระทำต่อด้านตรงข้ามของขดลวดจะมีทิศตรงข้ามกัน เกิดเป็นทอร์กหมุนขดลวด — นี่คือหลักการทำงานพื้นฐานของมอเตอร์ไฟฟ้า
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">↔️</div>แรงระหว่างลวดตัวนำขนานสองเส้น</div>
+      <p>ลวดตัวนำสองเส้นที่มีกระแสไฟฟ้าไหลผ่าน จะมีแรงกระทำต่อกัน (เพราะแต่ละเส้นสร้างสนามแม่เหล็กไปกระทำกับอีกเส้น)</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กฎการดูด-ผลัก</div>
+        กระแสไหล<strong>ทิศเดียวกัน</strong> → ลวดทั้งสอง<strong>ดูดกัน</strong><br>
+        กระแสไหล<strong>ทิศตรงข้ามกัน</strong> → ลวดทั้งสอง<strong>ผลักกัน</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: การเหนี่ยวนำแม่เหล็กไฟฟ้า ===== -->
+  <div class="section" id="m3">
+    <div class="section-heading"><span>บทที่ 3</span> · การเหนี่ยวนำแม่เหล็กไฟฟ้า</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">Φ</div>ฟลักซ์แม่เหล็ก (Magnetic Flux)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ฟลักซ์แม่เหล็ก คือ ปริมาณเส้นสนามแม่เหล็กที่ผ่านพื้นที่หนึ่ง ๆ
+      </div>
+      <div class="math-block">Φ = BA cosθ</div>
+      <p>เมื่อ <span class="math">A</span> = พื้นที่ (m²), <span class="math">θ</span> = มุมระหว่างสนามแม่เหล็ก B กับเส้นตั้งฉากพื้นที่ (normal) หน่วยของฟลักซ์คือ <span class="math">เวเบอร์ (Wb)</span></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">ε</div>กฎการเหนี่ยวนำของฟาราเดย์ (Faraday's Law)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่อฟลักซ์แม่เหล็กที่ผ่านขดลวดเปลี่ยนแปลง จะเกิดแรงเคลื่อนไฟฟ้าเหนี่ยวนำ (EMF) ขึ้นในขดลวดนั้น
+      </div>
+      <div class="math-block">ε = −N (ΔΦ / Δt)</div>
+      <p>เมื่อ <span class="math">N</span> = จำนวนรอบขดลวด, <span class="math">ΔΦ/Δt</span> = อัตราการเปลี่ยนแปลงฟลักซ์แม่เหล็ก เครื่องหมายลบแสดงถึงกฎของเลนซ์</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ขดลวด 100 รอบ มีฟลักซ์แม่เหล็กเปลี่ยนจาก 0.02 Wb เป็น 0.05 Wb ในเวลา 0.1 s จงหา EMF ที่เหนี่ยวนำ<br>
+        ε = N(ΔΦ/Δt) = 100 × (0.05−0.02)/0.1 = 100 × 0.3 = 30 V
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔄</div>กฎของเลนซ์ (Lenz's Law)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        กระแสไฟฟ้าเหนี่ยวนำจะมีทิศทางที่ทำให้เกิดสนามแม่เหล็กต้านการเปลี่ยนแปลงของฟลักซ์แม่เหล็กเดิม
+      </div>
+      <p>กฎของเลนซ์เป็นผลจากกฎการอนุรักษ์พลังงาน — ถ้ากระแสเหนี่ยวนำช่วยเสริมการเปลี่ยนแปลงแทนที่จะต้าน จะทำให้พลังงานเพิ่มขึ้นเองโดยไม่มีแหล่งกำเนิด ซึ่งขัดกับกฎอนุรักษ์พลังงาน</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 ตัวอย่างการประยุกต์ใช้</div>
+        เมื่อเคลื่อนแท่งแม่เหล็กเข้าใกล้ขดลวด ฟลักซ์แม่เหล็กเพิ่มขึ้น กระแสเหนี่ยวนำจะไหลในทิศที่สร้างสนามแม่เหล็กต้าน (ผลักแท่งแม่เหล็กออก) ทำให้ต้องออกแรงดันแท่งแม่เหล็กเข้าไป นี่คือที่มาของพลังงานไฟฟ้าที่เกิดขึ้น
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔌</div>หม้อแปลงไฟฟ้า (Transformer)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        หม้อแปลงไฟฟ้าใช้หลักการเหนี่ยวนำแม่เหล็กไฟฟ้าเพื่อเปลี่ยนขนาดแรงดันไฟฟ้ากระแสสลับ โดยอาศัยขดลวดปฐมภูมิ (primary) และทุติยภูมิ (secondary) พันรอบแกนเหล็กร่วมกัน
+      </div>
+      <div class="math-block">
+        Vₛ/Vₚ = Nₛ/Nₚ<br>
+        (สำหรับหม้อแปลงอุดมคติ) IₚVₚ = IₛVₛ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        หม้อแปลงมีขดปฐมภูมิ 100 รอบ ทุติยภูมิ 500 รอบ ถ้าจ่ายแรงดัน 220 V เข้าขดปฐมภูมิ จะได้แรงดันออกเท่าใด<br>
+        Vₛ = Vₚ(Nₛ/Nₚ) = 220 × (500/100) = 1100 V (หม้อแปลงชนิดเพิ่มแรงดัน หรือ step-up)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        หม้อแปลงไฟฟ้าใช้ได้กับไฟฟ้ากระแสสลับ (AC) เท่านั้น เพราะต้องอาศัยฟลักซ์แม่เหล็กที่เปลี่ยนแปลงตลอดเวลาจึงจะเกิดการเหนี่ยวนำ ไฟฟ้ากระแสตรง (DC) คงที่จะไม่ทำให้เกิด EMF เหนี่ยวนำ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมทั้งไฟฟ้าสถิต วงจรไฟฟ้า และแม่เหล็กไฟฟ้า เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบ A-Level แม่เหล็กและไฟฟ้า</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ข้อสอบจำลองแนว A-Level ฟิสิกส์ เรื่องไฟฟ้าและแม่เหล็ก</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      เรื่องไฟฟ้าและแม่เหล็กเป็นหนึ่งในบทที่ออกข้อสอบสม่ำเสมอทุกปี — ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบายทีละขั้นตอน
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — ไฟฟ้าสถิต",
+    q: "ประจุ +3 μC และ +6 μC วางห่างกัน 3 m จงหาแรงระหว่างประจุ (k = 9×10⁹ N·m²/C²)",
+    opts: ["0.006 N", "0.018 N", "0.06 N", "0.18 N"],
+    ans: 1,
+    explain: "ใช้กฎของคูลอมบ์:\nF = kQ₁Q₂/r²\nF = (9×10⁹)(3×10⁻⁶)(6×10⁻⁶)/3²\nF = (9×10⁹)(18×10⁻¹²)/9\nF = 18×10⁻³ N = 0.018 N ✓\n\n(เป็นแรงผลัก เพราะประจุทั้งสองเป็นบวกเหมือนกัน)"
+  },
+  {
+    level: "⭐ ระดับ 1 — วงจรไฟฟ้า",
+    q: "ตัวต้านทาน 5 Ω ต่อกับแบตเตอรี่ 10 V จงหากระแสไฟฟ้าที่ไหลผ่าน",
+    opts: ["0.5 A", "1 A", "2 A", "50 A"],
+    ans: 2,
+    explain: "ใช้กฎของโอห์ม:\nV = IR\nI = V/R = 10/5 = 2 A ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — แม่เหล็ก",
+    q: "สนามแม่เหล็กมีทิศทางจากขั้วใดไปขั้วใด (ภายนอกแท่งแม่เหล็ก)",
+    opts: ["จากขั้ว S ไปขั้ว N", "จากขั้ว N ไปขั้ว S", "ไม่มีทิศทางแน่นอน", "ขึ้นกับชนิดของแม่เหล็ก"],
+    ans: 1,
+    explain: "เส้นสนามแม่เหล็กภายนอกแท่งแม่เหล็ก มีทิศออกจากขั้วเหนือ (N) และวนกลับเข้าสู่ขั้วใต้ (S) เสมอ (ภายในแท่งแม่เหล็กเอง เส้นสนามจะมีทิศจาก S ไป N เพื่อให้เป็นเส้นวงปิด) ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ไฟฟ้าสถิต",
+    q: "จุดหนึ่งอยู่ห่างจากประจุ +8 μC เป็นระยะ 2 m จงหาศักย์ไฟฟ้าที่จุดนั้น",
+    opts: ["1.8×10⁴ V", "3.6×10⁴ V", "7.2×10⁴ V", "1.8×10³ V"],
+    ans: 1,
+    explain: "ใช้สูตรศักย์ไฟฟ้าจากประจุจุด:\nV = kQ/r = (9×10⁹)(8×10⁻⁶)/2\nV = (72×10³)/2 = 36×10³ V = 3.6×10⁴ V ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — วงจรไฟฟ้า",
+    q: "ตัวต้านทาน 4 Ω และ 12 Ω ต่อขนานกัน จงหาความต้านทานรวม",
+    opts: ["2 Ω", "3 Ω", "8 Ω", "16 Ω"],
+    ans: 1,
+    explain: "ใช้สูตรการต่อขนาน:\n1/R = 1/R₁ + 1/R₂ = 1/4 + 1/12\n     = 3/12 + 1/12 = 4/12 = 1/3\nR = 3 Ω ✓\n\n(สังเกตว่า R รวมของการต่อขนานย่อมน้อยกว่าตัวต้านทานตัวน้อยที่สุดเสมอ ในที่นี้คือน้อยกว่า 4 Ω)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — แม่เหล็ก",
+    q: "อนุภาคประจุ +2×10⁻¹⁹ C เคลื่อนที่ด้วยความเร็ว 4×10⁵ m/s ตั้งฉากกับสนามแม่เหล็ก 0.5 T จงหาแรงที่กระทำต่ออนุภาค",
+    opts: ["2×10⁻¹⁴ N", "4×10⁻¹⁴ N", "2×10⁻¹³ N", "4×10⁻¹³ N"],
+    ans: 1,
+    explain: "ใช้สูตรแรงลอเรนซ์:\nF = qvB sinθ  โดย θ = 90° (ตั้งฉาก) → sin90° = 1\nF = (2×10⁻¹⁹)(4×10⁵)(0.5)(1)\nF = (2×10⁻¹⁹)(2×10⁵)\nF = 4×10⁻¹⁴ N ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ตัวเก็บประจุ",
+    q: "ตัวเก็บประจุ 3 μF มีความต่างศักย์ 20 V จงหาพลังงานที่สะสมอยู่",
+    opts: ["0.3 mJ", "0.6 mJ", "3 mJ", "6 mJ"],
+    ans: 1,
+    explain: "ใช้สูตรพลังงานสะสมในตัวเก็บประจุ:\nU = ½CV²\nU = ½(3×10⁻⁶)(20)²\nU = ½(3×10⁻⁶)(400)\nU = 600×10⁻⁶ J = 0.6×10⁻³ J = 0.6 mJ ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — การเหนี่ยวนำแม่เหล็กไฟฟ้า",
+    q: "ขดลวด 200 รอบ มีฟลักซ์แม่เหล็กผ่านเปลี่ยนจาก 0.01 Wb เป็น 0.04 Wb ในเวลา 0.2 s จงหาขนาดของ EMF เหนี่ยวนำ",
+    opts: ["3 V", "15 V", "30 V", "60 V"],
+    ans: 2,
+    explain: "ใช้กฎการเหนี่ยวนำของฟาราเดย์:\nε = N(ΔΦ/Δt)\nΔΦ = 0.04 − 0.01 = 0.03 Wb\nε = 200 × (0.03/0.2)\nε = 200 × 0.15 = 30 V ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — วงจรไฟฟ้า",
+    q: "แบตเตอรี่มี EMF 20 V ความต้านทานภายใน 2 Ω ต่อกับตัวต้านทานภายนอก 8 Ω จงหาความต่างศักย์ที่ขั้วแบตเตอรี่ (Terminal Voltage)",
+    opts: ["14 V", "16 V", "18 V", "20 V"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หากระแสไฟฟ้าในวงจร\nI = ε/(R+r) = 20/(8+2) = 20/10 = 2 A\n\nขั้นที่ 2: หาความต่างศักย์ที่ขั้ว (แรงดันที่ตกคร่อมตัวต้านทานภายนอก)\nV = ε − Ir = 20 − (2)(2) = 20 − 4 = 16 V ✓\n\nตรวจสอบ: V ควรเท่ากับ IR ด้วย = (2)(8) = 16 V ✓ สอดคล้องกัน"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — แม่เหล็ก",
+    q: "อนุภาคประจุ q มวล m เคลื่อนที่เป็นวงกลมรัศมี r ในสนามแม่เหล็ก B ด้วยความเร็ว v ข้อใดแสดงความสัมพันธ์ระหว่างปริมาณเหล่านี้ได้ถูกต้อง",
+    opts: ["r = qvB/m", "r = mv/(qB)", "r = mB/(qv)", "r = qB/(mv)"],
+    ans: 1,
+    explain: "หลักการ: แรงแม่เหล็กทำหน้าที่เป็นแรงสู่ศูนย์กลางในการเคลื่อนที่แบบวงกลม\nqvB = mv²/r  (แรงลอเรนซ์ = แรงสู่ศูนย์กลาง)\n\nจัดรูปสมการเพื่อหา r:\nqvB = mv²/r\nr × qvB = mv²\nr = mv²/(qvB) = mv/(qB) ✓\n\n(สังเกตว่า v ตัดกันหนึ่งตัวจากทั้งสองข้าง)"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+// ===== ข้อสอบ A-Level จำลอง =====
+const alevelQuestions = [
+  {
+    year: "📅 A-Level แนวข้อสอบ — ไฟฟ้าสถิต",
+    q: "ประจุ +Q วางอยู่ที่จุดกำเนิด ประจุ −2Q วางที่ตำแหน่ง x = 4 m จงหาตำแหน่งบนแกน x (นอกเหนือจากที่ระยะอนันต์) ที่สนามไฟฟ้ารวมมีค่าเป็นศูนย์",
+    opts: [
+      "ระหว่างประจุทั้งสอง",
+      "ทางซ้ายของ +Q (x < 0)",
+      "ทางขวาของ −2Q (x > 4)",
+      "ไม่มีตำแหน่งที่เป็นไปได้",
+      "ที่กึ่งกลางระหว่างประจุพอดี"
+    ],
+    ans: 1,
+    explain: "หลักการ: จุดที่สนามไฟฟ้ารวมเป็นศูนย์ ต้องเป็นจุดที่สนามไฟฟ้าจากประจุทั้งสองมีขนาดเท่ากันแต่ทิศตรงข้ามกัน\n\nระหว่างประจุทั้งสอง (0 < x < 4): สนามจาก +Q ชี้ออกจาก +Q (ไปทางขวา ผ่านช่วงนี้) และสนามจาก −2Q ชี้เข้าหา −2Q (ก็ชี้ไปทางขวาเช่นกันในช่วงนี้) → สนามทั้งสองมีทิศเดียวกัน ไม่มีทางหักล้างกันเป็นศูนย์ได้ในช่วงนี้\n\nทางขวาของ −2Q (x > 4): สนามจาก +Q ชี้ไปทางขวา (ออกจากประจุบวก) สนามจาก −2Q ก็ชี้ไปทางขวาเช่นกัน (เข้าหาประจุลบซึ่งอยู่ทางซ้ายของจุดนี้) → ทิศเดียวกัน ไม่หักล้างกัน\n\nทางซ้ายของ +Q (x < 0): สนามจาก +Q ชี้ไปทางซ้าย (ออกจากประจุบวก ในทิศตรงข้ามกับตำแหน่งประจุลบ) สนามจาก −2Q ชี้ไปทางขวา (เข้าหาประจุลบซึ่งอยู่ทางขวา) → ทิศตรงข้ามกัน จึงมีโอกาสหักล้างกันเป็นศูนย์ได้ในช่วงนี้ ✓\n\nนอกจากนี้ เนื่องจาก |−2Q| > |+Q| จุดสมดุลต้องอยู่ใกล้ประจุที่มีขนาดเล็กกว่า (+Q) มากกว่า จึงต้องอยู่ทางซ้ายของ +Q สอดคล้องกับคำตอบ"
+  },
+  {
+    year: "📅 A-Level แนวข้อสอบ — วงจรไฟฟ้า",
+    q: "วงจรไฟฟ้าประกอบด้วยตัวต้านทาน 3 ตัว: R₁ = 2 Ω ต่ออนุกรมกับชุดขนานของ R₂ = 4 Ω และ R₃ = 4 Ω ทั้งหมดต่อกับแบตเตอรี่ 12 V (ไม่มีความต้านทานภายใน) จงหากระแสไฟฟ้ารวมในวงจร",
+    opts: ["1 A", "2 A", "3 A", "4 A", "6 A"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาความต้านทานรวมของ R₂ และ R₃ ที่ต่อขนานกัน\n1/R₂₃ = 1/4 + 1/4 = 2/4 = 1/2\nR₂₃ = 2 Ω\n\nขั้นที่ 2: หาความต้านทานรวมทั้งวงจร (R₁ ต่ออนุกรมกับ R₂₃)\nR รวม = R₁ + R₂₃ = 2 + 2 = 4 Ω\n\nขั้นที่ 3: หากระแสไฟฟ้ารวมด้วยกฎของโอห์ม\nI = V/R = 12/4 = 3 A ✓"
+  },
+  {
+    year: "📅 A-Level แนวข้อสอบ — แม่เหล็ก",
+    q: "ลวดตัวนำตรงสองเส้นขนานกัน ห่างกัน 0.1 m มีกระแสไฟฟ้าไหลทิศเดียวกัน 3 A และ 6 A จงพิจารณาว่าลวดทั้งสองมีอันตรกิริยาอย่างไร",
+    opts: [
+      "ผลักกัน เพราะกระแสทิศเดียวกัน",
+      "ดูดกัน เพราะกระแสทิศเดียวกัน",
+      "ไม่มีแรงกระทำต่อกัน",
+      "ดูดกัน เพราะกระแสต่างขนาดกัน",
+      "ผลักกัน เพราะกระแสต่างขนาดกัน"
+    ],
+    ans: 1,
+    explain: "หลักการ: ลวดตัวนำที่มีกระแสไฟฟ้าไหลจะสร้างสนามแม่เหล็กรอบตัว และสนามแม่เหล็กนั้นจะส่งแรงกระทำต่อลวดอีกเส้นที่อยู่ในสนามนั้น\n\nกฎการดูด-ผลักของลวดขนาน:\n• กระแสไหลทิศเดียวกัน → เกิดแรงดูดระหว่างลวดทั้งสอง\n• กระแสไหลทิศตรงข้ามกัน → เกิดแรงผลักระหว่างลวดทั้งสอง\n\nโจทย์กำหนดว่ากระแสไหลทิศเดียวกัน (แม้ขนาดกระแสจะต่างกัน คือ 3 A และ 6 A) ขนาดของกระแสที่ต่างกันมีผลต่อ<strong>ขนาด</strong>ของแรงที่กระทำ แต่ไม่มีผลต่อทิศทางของแรง (ดูดหรือผลัก) ซึ่งขึ้นกับทิศทางกระแสเท่านั้น\n\nดังนั้น ลวดทั้งสองจะ ดูดกัน ✓"
+  },
+  {
+    year: "📅 A-Level แนวข้อสอบ — ตัวเก็บประจุ",
+    q: "ตัวเก็บประจุ 2 μF และ 6 μF ต่ออนุกรมกัน แล้วต่อกับความต่างศักย์ 24 V จงหาประจุที่สะสมในตัวเก็บประจุแต่ละตัว",
+    opts: ["24 μC", "36 μC", "48 μC", "72 μC", "144 μC"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาความจุรวมของการต่ออนุกรม\n1/C = 1/2 + 1/6 = 3/6 + 1/6 = 4/6 = 2/3\nC = 3/2 = 1.5 μF\n\nขั้นที่ 2: หาประจุรวม (ซึ่งเท่ากันทุกตัวในการต่ออนุกรม)\nQ = CV = 1.5×10⁻⁶ × 24 = 36×10⁻⁶ C = 36 μC ✓\n\nหลักสำคัญ: การต่อตัวเก็บประจุแบบอนุกรม ประจุ Q ที่สะสมในตัวเก็บประจุทุกตัวจะมีค่าเท่ากันเสมอ (แม้ความจุจะต่างกัน) เนื่องจากเป็นวงจรเดียวที่ประจุไหลผ่านต่อเนื่องกัน"
+  },
+  {
+    year: "📅 A-Level แนวข้อสอบ — การเหนี่ยวนำแม่เหล็กไฟฟ้า",
+    q: "แท่งแม่เหล็กเคลื่อนที่เข้าใกล้ขดลวดตัวนำโดยให้ขั้ว N หันเข้าหาขดลวดก่อน ทิศทางของกระแสเหนี่ยวนำในขดลวด (มองจากด้านที่แม่เหล็กเข้าใกล้) จะเป็นอย่างไร ตามกฎของเลนซ์",
+    opts: [
+      "ไหลในทิศที่ทำให้ปลายขดลวดด้านที่ใกล้แม่เหล็กเป็นขั้ว N (เพื่อผลักแม่เหล็ก)",
+      "ไหลในทิศที่ทำให้ปลายขดลวดด้านที่ใกล้แม่เหล็กเป็นขั้ว S (เพื่อดูดแม่เหล็ก)",
+      "ไม่มีกระแสเหนี่ยวนำเกิดขึ้น",
+      "กระแสไหลแบบสุ่ม ไม่มีทิศทางแน่นอน",
+      "ขึ้นอยู่กับความเร็วของแม่เหล็กเท่านั้น ไม่เกี่ยวกับขั้ว"
+    ],
+    ans: 0,
+    explain: "หลักการ: กฎของเลนซ์ระบุว่า กระแสเหนี่ยวนำจะมีทิศทางที่ต้าน (คัดค้าน) การเปลี่ยนแปลงของฟลักซ์แม่เหล็กเดิมเสมอ ซึ่งเป็นผลจากกฎการอนุรักษ์พลังงาน\n\nขั้นที่ 1: วิเคราะห์การเปลี่ยนแปลงฟลักซ์\nเมื่อแม่เหล็กขั้ว N เคลื่อนที่เข้าใกล้ขดลวด ฟลักซ์แม่เหล็กที่ผ่านขดลวด (ในทิศจากขั้ว N ของแม่เหล็ก ทะลุเข้าไปในขดลวด) มีค่า<strong>เพิ่มขึ้น</strong>\n\nขั้นที่ 2: หาทิศทางที่ต้านการเพิ่มขึ้นนี้\nเพื่อต้านการเพิ่มขึ้นของฟลักซ์ กระแสเหนี่ยวนำต้องสร้างสนามแม่เหล็กของตัวเองในทิศ<strong>ตรงข้าม</strong>กับฟลักซ์เดิม (คือทิศออกจากขดลวดด้านที่แม่เหล็กเข้าใกล้)\n\nขั้นที่ 3: แปลผลเป็นขั้วแม่เหล็กของขดลวด\nถ้าด้านที่ใกล้แม่เหล็กมีสนามแม่เหล็กชี้ออก แสดงว่าด้านนั้นทำหน้าที่เหมือนขั้ว N\nขั้ว N ของขดลวด (เหนี่ยวนำ) หันเข้าหาขั้ว N ของแม่เหล็กจริง → เกิดแรง<strong>ผลัก</strong>\n\nนี่สอดคล้องกับกฎอนุรักษ์พลังงาน เพราะต้องออกแรงต้านการผลักเพื่อดันแม่เหล็กเข้าไป ซึ่งเป็นแหล่งพลังงานที่เปลี่ยนเป็นไฟฟ้า ✓"
+  },
+  {
+    year: "📅 A-Level แนวข้อสอบ — วงจรไฟฟ้า",
+    q: "หลอดไฟดวงหนึ่งมีความต้านทาน 220 Ω ต่อกับความต่างศักย์ 220 V เป็นเวลา 2 ชั่วโมง จงหาพลังงานไฟฟ้าที่ใช้ไป (หน่วยกิโลวัตต์-ชั่วโมง)",
+    opts: ["0.22 kWh", "0.44 kWh", "0.88 kWh", "1.76 kWh", "2.2 kWh"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หากำลังไฟฟ้าของหลอดไฟ\nP = V²/R = (220)²/220 = 48400/220 = 220 W = 0.22 kW\n\nขั้นที่ 2: หาพลังงานไฟฟ้าที่ใช้ไป\nพลังงาน = กำลัง × เวลา\n= 0.22 kW × 2 h = 0.44 kWh ✓"
+  },
+  {
+    year: "📅 A-Level แนวข้อสอบ — แม่เหล็ก",
+    q: "โปรตอนเคลื่อนที่เข้าสู่บริเวณที่มีสนามแม่เหล็กสม่ำเสมอในทิศตั้งฉากกับสนาม แล้วเคลื่อนที่เป็นวงกลมรัศมี r₁ ถ้าอิเล็กตรอนเคลื่อนที่เข้าสู่บริเวณเดียวกันด้วยอัตราเร็วเท่ากัน จะได้รัศมีวงกลม r₂ เป็นเท่าใดเมื่อเทียบกับ r₁ (กำหนดมวลโปรตอน ≈ 1836 เท่าของมวลอิเล็กตรอน)",
+    opts: [
+      "r₂ = r₁",
+      "r₂ = 1836 r₁",
+      "r₂ = r₁/1836",
+      "r₂ = 1836² r₁",
+      "ไม่สามารถหาได้เพราะประจุต่างเครื่องหมาย"
+    ],
+    ans: 2,
+    explain: "ใช้สูตรรัศมีวงกลมของอนุภาคในสนามแม่เหล็ก:\nr = mv/(qB)\n\nเนื่องจากโปรตอนและอิเล็กตรอนมีขนาดประจุเท่ากัน (|q| เท่ากัน) เคลื่อนที่ด้วยอัตราเร็วเท่ากัน (v เท่ากัน) และอยู่ในสนามแม่เหล็กเดียวกัน (B เท่ากัน)\n\nดังนั้น r แปรผันตรงกับมวล m เพียงอย่างเดียว:\nr₁/r₂ = m_โปรตอน/m_อิเล็กตรอน = 1836\n\nจัดรูปสมการ:\nr₂ = r₁/1836 ✓\n\n(อิเล็กตรอนมีมวลน้อยกว่ามาก จึงเคลื่อนที่เป็นวงกลมรัศมีเล็กกว่ามาก แม้จะมีอัตราเร็วเท่ากัน; ทิศทางการโค้งจะตรงข้ามกันเนื่องจากประจุต่างเครื่องหมาย แต่ขนาดของรัศมีคำนวณได้ตามข้างต้น)"
+  },
+  {
+    year: "📅 A-Level แนวข้อสอบ — ไฟฟ้าสถิต/ศักย์ไฟฟ้า",
+    q: "อิเล็กตรอนถูกเร่งจากหยุดนิ่งผ่านความต่างศักย์ 1000 V จงหาอัตราเร็วสุดท้ายของอิเล็กตรอน (m = 9.1×10⁻³¹ kg, e = 1.6×10⁻¹⁹ C)",
+    opts: [
+      "1.87×10⁷ m/s",
+      "3.75×10⁷ m/s",
+      "1.87×10⁶ m/s",
+      "5.93×10⁷ m/s",
+      "9.35×10⁶ m/s"
+    ],
+    ans: 0,
+    explain: "หลักการ: ใช้ทฤษฎีบทงาน-พลังงานจลน์ พลังงานที่สนามไฟฟ้าให้แก่ประจุ = พลังงานจลน์ที่ได้รับ\n\nขั้นที่ 1: หางานที่กระทำโดยสนามไฟฟ้า\nW = qV = (1.6×10⁻¹⁹)(1000) = 1.6×10⁻¹⁶ J\n\nขั้นที่ 2: ใช้ทฤษฎีงาน-พลังงานจลน์\nW = ½mv² − 0  (เริ่มจากหยุดนิ่ง)\n1.6×10⁻¹⁶ = ½(9.1×10⁻³¹)v²\n\nขั้นที่ 3: แก้หา v²\nv² = 2(1.6×10⁻¹⁶)/(9.1×10⁻³¹)\nv² = (3.2×10⁻¹⁶)/(9.1×10⁻³¹)\nv² ≈ 3.516×10¹⁴\n\nขั้นที่ 4: หา v\nv = √(3.516×10¹⁴) ≈ 1.876×10⁷ m/s ✓"
+  },
+  {
+    year: "📅 A-Level แนวข้อสอบ — วงจรไฟฟ้า",
+    q: "วงจรไฟฟ้าประกอบด้วยแบตเตอรี่ EMF ε ความต้านทานภายใน r ต่อกับตัวต้านทานภายนอก R เมื่อ R มีค่ามากขึ้นเรื่อย ๆ (r คงที่) กำลังไฟฟ้าที่สูญเสียในตัวต้านทานภายใน r จะเปลี่ยนแปลงอย่างไร",
+    opts: [
+      "เพิ่มขึ้นเสมอ",
+      "ลดลงเสมอ",
+      "คงที่ไม่เปลี่ยนแปลง",
+      "เพิ่มขึ้นก่อนแล้วจึงลดลง",
+      "ไม่สามารถระบุได้หากไม่ทราบค่า ε"
+    ],
+    ans: 1,
+    explain: "หลักการ: กำลังไฟฟ้าที่สูญเสียในความต้านทานภายใน คือ P_r = I²r\n\nขั้นที่ 1: พิจารณากระแสไฟฟ้าในวงจร\nI = ε/(R+r)\n\nขั้นที่ 2: พิจารณาว่าเมื่อ R เพิ่มขึ้น (r และ ε คงที่) จะเกิดอะไรขึ้นกับ I\nเมื่อ R เพิ่มขึ้น ตัวส่วน (R+r) เพิ่มขึ้น → I ลดลง (I แปรผกผันกับ R+r)\n\nขั้นที่ 3: พิจารณา P_r = I²r\nเนื่องจาก r คงที่ และ I ลดลงเมื่อ R เพิ่มขึ้น\nดังนั้น I² ก็ลดลงตามไปด้วย (I² เป็นฟังก์ชันเพิ่มของ I เมื่อ I > 0)\nP_r = I²r จึงลดลงเสมอเมื่อ R เพิ่มขึ้น ✓\n\n(สอดคล้องกับสามัญสำนึก: ยิ่งความต้านทานภายนอกมาก กระแสในวงจรยิ่งน้อย พลังงานที่สูญเสียในความต้านทานภายในจึงยิ่งน้อยลงด้วย)"
+  },
+  {
+    year: "📅 A-Level แนวข้อสอบ — การเหนี่ยวนำแม่เหล็กไฟฟ้า",
+    q: "หม้อแปลงไฟฟ้าอุดมคติมีขดปฐมภูมิ 400 รอบ ขดทุติยภูมิ 50 รอบ ถ้าจ่ายกระแสไฟฟ้า 2 A เข้าขดปฐมภูมิ จงหากระแสไฟฟ้าที่ได้จากขดทุติยภูมิ",
+    opts: ["0.25 A", "1 A", "4 A", "8 A", "16 A"],
+    ans: 4,
+    explain: "หลักการ: สำหรับหม้อแปลงอุดมคติ กำลังไฟฟ้าด้านเข้า = กำลังไฟฟ้าด้านออก (ไม่มีการสูญเสียพลังงาน)\nIₚVₚ = IₛVₛ\n\nขั้นที่ 1: หาอัตราส่วนแรงดันจากอัตราส่วนรอบขดลวด\nVₛ/Vₚ = Nₛ/Nₚ = 50/400 = 1/8\n(ขดทุติยภูมิมีรอบน้อยกว่า จึงเป็นหม้อแปลงลดแรงดัน step-down)\n\nขั้นที่ 2: ใช้ความสัมพันธ์กำลังไฟฟ้าคงที่หาอัตราส่วนกระแส\nIₚVₚ = IₛVₛ\nIₛ/Iₚ = Vₚ/Vₛ = Nₚ/Nₛ = 400/50 = 8\n(เมื่อแรงดันลดลง กระแสจะเพิ่มขึ้นในอัตราส่วนกลับกัน)\n\nขั้นที่ 3: คำนวณกระแสทุติยภูมิ\nIₛ = 8 × Iₚ = 8 × 2 = 16 A ✓"
+  }
+];
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  alevelQuestions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

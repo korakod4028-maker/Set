@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ฟิสิกส์นิวเคลียร์และอนุภาค | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '∀ ∃ ∩ ∪ ~ → ↔ ∈ ⊂ ∅';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+  .math-latex {
+    font-family: var(--sans);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* VENN DIAGRAM */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+  .reset-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    display: none;
+  }
+  .reset-btn.show { display: inline-block; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* PROGRESS */
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .prog-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .prog-dot.done { background: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>ฟิสิกส์นิวเคลียร์<span>และอนุภาค</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">ข้อสอบแนว A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="s1">1. โครงสร้างอะตอม-นิวเคลียส</button>
+  <button class="tab-btn" data-sec="s2">2. กัมมันตภาพรังสี</button>
+  <button class="tab-btn" data-sec="s3">3. ครึ่งชีวิต</button>
+  <button class="tab-btn" data-sec="s4">4. เสียมวล-พลังงานยึดเหนี่ยว</button>
+  <button class="tab-btn" data-sec="s5">5. ปฏิกิริยานิวเคลียร์</button>
+  <button class="tab-btn" data-sec="s6">6. ฟิสิกส์อนุภาคมูลฐาน</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 แนวข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: โครงสร้างอะตอมและนิวเคลียส ===== -->
+  <div class="section active" id="s1">
+    <div class="section-heading"><span>บทที่ 1</span> · โครงสร้างอะตอมและนิวเคลียส</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚛️</div>องค์ประกอบของอะตอม</div>
+      <p>อะตอมประกอบด้วย <strong>นิวเคลียส</strong> อยู่ตรงกลาง (มีโปรตอนและนิวตรอนรวมกันเรียกว่า <strong>นิวคลีออน</strong>) ล้อมรอบด้วยอิเล็กตรอนที่เคลื่อนที่อยู่ในระดับพลังงานต่าง ๆ</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม สัญลักษณ์นิวเคลียร์</div>
+        เขียนแทนธาตุ X ด้วย <span class="math">₍Z₎ᴬX</span> โดย A = เลขมวล (จำนวนนิวคลีออน), Z = เลขอะตอม (จำนวนโปรตอน)<br>
+        จำนวนนิวตรอน N = A − Z
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ¹²₆C มี Z = 6 (โปรตอน 6 ตัว), A = 12 (นิวคลีออนรวม 12 ตัว)<br>
+        ดังนั้น จำนวนนิวตรอน N = 12 − 6 = 6
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — จำหลักการนับ</div>
+        เลขอะตอม (Z) บอกชนิดธาตุ (เปลี่ยนไม่ได้ ถ้าเปลี่ยนคือธาตุใหม่) ส่วนเลขมวล (A) เปลี่ยนได้ตามไอโซโทป
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧬</div>ไอโซโทป (Isotope)</div>
+      <p>ไอโซโทป คือ อะตอมของธาตุชนิดเดียวกัน (Z เท่ากัน) แต่มีจำนวนนิวตรอนต่างกัน (A ต่างกัน)</p>
+      <div class="math-block">
+        ¹H, ²H (ดิวเทอเรียม), ³H (ทริเทียม) → ทุกตัวมี Z = 1 (เป็นไฮโดรเจนเหมือนกัน)<br>
+        แต่มีนิวตรอน 0, 1, 2 ตามลำดับ
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ไอโซโทปมีสมบัติทางเคมีเหมือนกัน (เพราะจำนวนอิเล็กตรอนเท่ากัน) แต่มีมวลและความเสถียรทางนิวเคลียร์ต่างกัน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔗</div>แรงนิวเคลียร์และความเสถียรของนิวเคลียส</div>
+      <p><strong>แรงนิวเคลียร์อย่างเข้ม (Strong Nuclear Force)</strong> เป็นแรงยึดเหนี่ยวนิวคลีออนไว้ด้วยกัน มีระยะทำการสั้นมาก (~10⁻¹⁵ m) แต่แรงมากกว่าแรงไฟฟ้าสถิตที่ผลักโปรตอนออกจากกัน</p>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">N/Z</div>
+          <div class="sym-name">อัตราส่วนความเสถียร</div>
+          <div class="sym-desc">ธาตุเบา N ≈ Z, ธาตุหนัก N &gt; Z (ต้องการนิวตรอนมากขึ้นเพื่อคานแรงผลัก)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">R</div>
+          <div class="sym-name">รัศมีนิวเคลียส</div>
+          <div class="sym-desc">R = R₀A^(1/3) เมื่อ R₀ ≈ 1.2×10⁻¹⁵ m</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง คำนวณรัศมีนิวเคลียส</div>
+        หา R ของ ²⁷₁₃Al (A = 27)<br>
+        R = 1.2×10⁻¹⁵ × 27^(1/3) = 1.2×10⁻¹⁵ × 3 = 3.6×10⁻¹⁵ m
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: กัมมันตภาพรังสี ===== -->
+  <div class="section" id="s2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · กัมมันตภาพรังสี (Radioactivity)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">☢️</div>การสลายตัวแบบต่าง ๆ</div>
+      <p>นิวเคลียสที่ไม่เสถียรจะปลดปล่อยพลังงานออกมาในรูปของรังสี เพื่อเปลี่ยนไปเป็นนิวเคลียสที่เสถียรกว่า เรียกว่า <strong>การสลายตัวของสารกัมมันตรังสี</strong></p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>การสลายให้อนุภาคแอลฟา (α)</h4>
+          <p>ปล่อยนิวเคลียสฮีเลียม (²He⁴) ออกมา Z ลด 2, A ลด 4</p>
+          <div class="math-block">₍Z₎ᴬX → ₍Z₋₂₎ᴬ⁻⁴Y + ₂⁴He</div>
+        </div>
+        <div class="mini-card">
+          <h4>การสลายให้อนุภาคบีตา (β⁻)</h4>
+          <p>นิวตรอนกลายเป็นโปรตอน + อิเล็กตรอน Z เพิ่ม 1, A คงเดิม</p>
+          <div class="math-block">₍Z₎ᴬX → ₍Z₊₁₎ᴬY + ₋₁⁰e + ν̄</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง การสลายแอลฟา</div>
+        ²³⁸₉₂U → ²³⁴₉₀Th + ⁴₂He<br>
+        ตรวจสอบ: A: 238 = 234+4 ✓  Z: 92 = 90+2 ✓
+      </div>
+      <div class="def-box">
+        <div class="def-label">การสลายให้รังสีแกมมา (γ)</div>
+        เป็นการปลดปล่อยพลังงานส่วนเกินในรูปคลื่นแม่เหล็กไฟฟ้าพลังงานสูง ไม่มีมวล ไม่มีประจุ ไม่เปลี่ยน Z และ A ของนิวเคลียส (มักเกิดตามหลังการสลาย α หรือ β เพื่อลดระดับพลังงาน)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>สมบัติของรังสีทั้งสามชนิด</div>
+      <table>
+        <tr><th>ชนิดรังสี</th><th>ประจุ</th><th>มวล</th><th>อำนาจทะลุทะลวง</th><th>วัสดุที่กั้นได้</th></tr>
+        <tr><td>แอลฟา (α)</td><td>+2</td><td>มาก (4u)</td><td>ต่ำสุด</td><td>กระดาษ</td></tr>
+        <tr><td>บีตา (β)</td><td>−1 หรือ +1</td><td>เบามาก</td><td>ปานกลาง</td><td>แผ่นอะลูมิเนียมบาง</td></tr>
+        <tr><td>แกมมา (γ)</td><td>0</td><td>ไม่มีมวล</td><td>สูงสุด</td><td>ตะกั่วหนา / คอนกรีต</td></tr>
+      </table>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        อำนาจทะลุทะลวงกับความสามารถทำให้เกิดไอออน (ionization) แปรผกผันกัน: α ทำให้เกิดไอออนได้มากที่สุดแต่ทะลุทะลวงได้น้อยที่สุด
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📏</div>กฎการอนุรักษ์ในการสลายตัว</div>
+      <p>ทุกสมการการสลายตัวต้องรักษาสมดุลของ 2 สิ่งเสมอ:</p>
+      <ul>
+        <li><strong>เลขมวล (A)</strong> ผลรวมด้านซ้าย = ผลรวมด้านขวา</li>
+        <li><strong>เลขอะตอม (Z)</strong> ผลรวมด้านซ้าย = ผลรวมด้านขวา</li>
+      </ul>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — หาธาตุใหม่จากสมการ</div>
+        เขียนสมการ ตั้งสมการ A และ Z แยกกัน แล้วแก้หาเลข A, Z ของธาตุลูก จากนั้นเปิดตารางธาตุเพื่อหาชื่อธาตุจาก Z ที่ได้
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ครึ่งชีวิต ===== -->
+  <div class="section" id="s3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · ครึ่งชีวิตและกฎการสลายตัว</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⏳</div>ครึ่งชีวิต (Half-life)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ครึ่งชีวิต (T หรือ T₁/₂) คือ ระยะเวลาที่นิวเคลียสกัมมันตรังสีสลายตัวไปจนเหลือครึ่งหนึ่งของปริมาณเดิม
+      </div>
+      <div class="math-block">
+        N = N₀(1/2)^(t/T)&nbsp;&nbsp;&nbsp;&nbsp;หรือ&nbsp;&nbsp;&nbsp;&nbsp;N = N₀e^(−λt)<br>
+        เมื่อ N₀ = ปริมาณเริ่มต้น, N = ปริมาณที่เหลือ ณ เวลา t, T = ครึ่งชีวิต<br>
+        λ = ค่าคงตัวการสลายตัว, ความสัมพันธ์: λ = ln2 / T ≈ 0.693/T
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        สาร X มี T = 10 วัน เริ่มต้นมี N₀ = 800 g ผ่านไป 30 วัน จะเหลือเท่าไร?<br>
+        t/T = 30/10 = 3 ครึ่งชีวิต<br>
+        N = 800×(1/2)³ = 800×(1/8) = 100 g
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📉</div>อัตราการสลายตัว (Activity)</div>
+      <p>กัมมันตภาพ (Activity, A) คือ จำนวนการสลายตัวต่อวินาที หน่วยคือ <strong>เบเคอเรล (Bq)</strong> หรือ <strong>คูรี (Ci)</strong></p>
+      <div class="math-block">
+        A = λN = A₀(1/2)^(t/T)<br>
+        1 Ci = 3.7×10¹⁰ Bq
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>หาจำนวนครึ่งชีวิตที่ผ่านไป</h4>
+          <p>ถ้าทราบอัตราส่วน N/N₀ ให้ตั้งสมการ (1/2)ⁿ = N/N₀ แล้วแก้หา n</p>
+        </div>
+        <div class="mini-card">
+          <h4>หาครึ่งชีวิตจากค่าคงตัว λ</h4>
+          <p>ใช้สูตร T = ln2/λ ≈ 0.693/λ</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — โจทย์เวลาไม่ลงตัวกับครึ่งชีวิต</div>
+        ถ้า t/T ไม่ใช่จำนวนเต็ม ให้ใช้ log ช่วยแก้สมการ N = N₀(1/2)^(t/T) โดย log ทั้งสองข้าง: log(N/N₀) = (t/T)log(1/2)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🕰️</div>การหาอายุด้วยคาร์บอน-14</div>
+      <p>คาร์บอน-14 (¹⁴C) มีครึ่งชีวิตประมาณ 5,730 ปี ใช้หาอายุซากสิ่งมีชีวิตโบราณ โดยเปรียบเทียบสัดส่วน ¹⁴C ที่เหลืออยู่กับปริมาณเริ่มต้นตอนสิ่งมีชีวิตยังมีชีวิตอยู่</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        วิธีนี้ใช้ได้กับซากสิ่งมีชีวิต (มีคาร์บอนจากบรรยากาศ) เท่านั้น ไม่เหมาะกับการหาอายุหินหรือแร่ธาตุ ซึ่งต้องใช้ไอโซโทปอื่น เช่น ยูเรเนียม-ตะกั่ว
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: เสียมวลและพลังงานยึดเหนี่ยว ===== -->
+  <div class="section" id="s4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · เสียมวลและพลังงานยึดเหนี่ยว</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚡</div>สมการมวล-พลังงานของไอน์สไตน์</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        มวลและพลังงานสามารถเปลี่ยนรูปไปมาระหว่างกันได้ ตามสมการ <span class="math">E = mc²</span> เมื่อ c คือ อัตราเร็วแสง ≈ 3×10⁸ m/s
+      </div>
+      <div class="math-block">
+        1 u (มวลอะตอม) = 1.66×10⁻²⁷ kg ≈ 931.5 MeV/c²<br>
+        E(MeV) = Δm(u) × 931.5
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — หน่วยที่ใช้บ่อย</div>
+        โจทย์มักให้มวลเป็นหน่วย u แล้วให้แปลงเป็นพลังงาน MeV โดยตรงด้วย 931.5 MeV/u แทนที่จะแปลงผ่าน kg และ E=mc² ซึ่งยุ่งยากกว่า
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📦</div>เสียมวล (Mass Defect)</div>
+      <p>เมื่อนิวคลีออนรวมตัวกันเป็นนิวเคลียส มวลของนิวเคลียสที่ได้จะ<strong>น้อยกว่า</strong>ผลรวมมวลของนิวคลีออนอิสระ ส่วนต่างนี้เรียกว่า เสียมวล และมวลที่หายไปนี้เปลี่ยนเป็นพลังงานยึดเหนี่ยว</p>
+      <div class="math-block">
+        Δm = [Zm_p + (A−Z)m_n] − M_นิวเคลียส<br>
+        E_ยึดเหนี่ยว = Δm × c² = Δm(u) × 931.5 MeV
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง คำนวณพลังงานยึดเหนี่ยว</div>
+        นิวเคลียสฮีเลียม ⁴₂He มี Δm = 0.0304 u<br>
+        E = 0.0304 × 931.5 ≈ 28.3 MeV
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📈</div>พลังงานยึดเหนี่ยวต่อนิวคลีออน</div>
+      <p>ยิ่งค่า <strong>พลังงานยึดเหนี่ยวต่อนิวคลีออน (E/A)</strong> สูง นิวเคลียสยิ่งเสถียรมาก กราฟความสัมพันธ์ระหว่าง E/A กับเลขมวล A จะมีจุดสูงสุดที่บริเวณธาตุเหล็ก (Fe, A≈56)</p>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">Fe</div>
+          <div class="sym-name">เหล็ก (A≈56)</div>
+          <div class="sym-desc">นิวเคลียสเสถียรที่สุด มี E/A สูงสุด</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">←→</div>
+          <div class="sym-name">หลักการปลดปล่อยพลังงาน</div>
+          <div class="sym-desc">ปฏิกิริยาที่ทำให้ E/A เพิ่มขึ้นจะปลดปล่อยพลังงานออกมา</div>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ธาตุเบา (A น้อยกว่า Fe) จะปลดปล่อยพลังงานเมื่อ<strong>ฟิวชัน</strong> (รวมตัว) ส่วนธาตุหนัก (A มากกว่า Fe) จะปลดปล่อยพลังงานเมื่อ<strong>ฟิชชัน</strong> (แตกตัว) เพราะทั้งสองกรณีทำให้ E/A เพิ่มขึ้นเข้าใกล้ Fe
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: ปฏิกิริยานิวเคลียร์ ===== -->
+  <div class="section" id="s5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · ปฏิกิริยานิวเคลียร์ (ฟิชชันและฟิวชัน)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">💥</div>ปฏิกิริยาฟิชชัน (Fission)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ฟิชชัน คือ การแตกตัวของนิวเคลียสหนัก (เช่น U-235) เมื่อถูกยิงด้วยนิวตรอน ให้กลายเป็นนิวเคลียสเบา 2 ตัวพร้อมปลดปล่อยนิวตรอนและพลังงานจำนวนมาก
+      </div>
+      <div class="math-block">
+        ¹n + ²³⁵₉₂U → ²³⁶₉₂U* → ¹⁴¹₅₆Ba + ⁹²₃₆Kr + 3¹n + พลังงาน
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ปฏิกิริยาลูกโซ่ (Chain Reaction)</div>
+        นิวตรอนที่เกิดจากฟิชชันครั้งแรกไปกระตุ้นให้เกิดฟิชชันต่อในนิวเคลียส U-235 ตัวอื่น ๆ ต่อเนื่องกันไป — เป็นหลักการที่ใช้ในเครื่องปฏิกรณ์นิวเคลียร์และระเบิดปรมาณู
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — แท่งควบคุม</div>
+        เครื่องปฏิกรณ์นิวเคลียร์ใช้แท่งควบคุม (เช่น แคดเมียม โบรอน) ดูดกลืนนิวตรอนส่วนเกินเพื่อควบคุมอัตราการเกิดปฏิกิริยาลูกโซ่ให้คงที่ (ไม่ให้ระเบิด)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">☀️</div>ปฏิกิริยาฟิวชัน (Fusion)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ฟิวชัน คือ การรวมตัวของนิวเคลียสเบา 2 ตัวเข้าด้วยกันกลายเป็นนิวเคลียสที่หนักขึ้น พร้อมปลดปล่อยพลังงานมหาศาล เป็นปฏิกิริยาที่เกิดขึ้นภายในดวงอาทิตย์และดาวฤกษ์
+      </div>
+      <div class="math-block">
+        ²₁H + ³₁H → ⁴₂He + ¹n + พลังงาน 17.6 MeV
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ฟิวชันต้องการอุณหภูมิและความดันสูงมาก (หลายล้านองศา) เพื่อเอาชนะแรงผลักไฟฟ้าสถิตระหว่างนิวเคลียสที่มีประจุบวกทั้งคู่ — ทำให้ควบคุมยากกว่าฟิชชันบนโลก
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⚖️</div>เปรียบเทียบฟิชชันกับฟิวชัน</div>
+      <table>
+        <tr><th>ลักษณะ</th><th>ฟิชชัน</th><th>ฟิวชัน</th></tr>
+        <tr><td>นิวเคลียสตั้งต้น</td><td>หนัก (เช่น U-235)</td><td>เบา (เช่น H isotope)</td></tr>
+        <tr><td>กระบวนการ</td><td>แตกตัว</td><td>รวมตัว</td></tr>
+        <tr><td>พลังงานต่อปฏิกิริยา</td><td>สูง</td><td>สูงกว่ามาก (ต่อมวลเชื้อเพลิง)</td></tr>
+        <tr><td>เงื่อนไข</td><td>นิวตรอนช้าชนนิวเคลียส</td><td>อุณหภูมิ/ความดันสูงมาก</td></tr>
+        <tr><td>การใช้งาน</td><td>โรงไฟฟ้านิวเคลียร์</td><td>ดวงอาทิตย์, วิจัยพลังงานสะอาด</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: ฟิสิกส์อนุภาคมูลฐาน ===== -->
+  <div class="section" id="s6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · ฟิสิกส์อนุภาคมูลฐาน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔬</div>อนุภาคมูลฐาน (Elementary Particles)</div>
+      <p>อนุภาคมูลฐาน คือ อนุภาคที่ไม่สามารถแบ่งย่อยลงไปได้อีก แบ่งเป็น 2 กลุ่มหลักตามแบบจำลองมาตรฐาน (Standard Model)</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เควิร์ก (Quarks)</h4>
+          <p>อนุภาคที่รวมตัวกันเป็นโปรตอนและนิวตรอน มี 6 ชนิด (flavor): up, down, charm, strange, top, bottom</p>
+        </div>
+        <div class="mini-card">
+          <h4>เลปตอน (Leptons)</h4>
+          <p>อนุภาคที่ไม่ถูกยึดด้วยแรงนิวเคลียร์อย่างเข้ม มี 6 ชนิด เช่น อิเล็กตรอน มิวออน เทาและนิวทริโนของแต่ละตัว</p>
+        </div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">โครงสร้างของโปรตอนและนิวตรอน</div>
+        โปรตอน = up + up + down (uud)  ประจุรวม = +2/3+2/3−1/3 = +1<br>
+        นิวตรอน = up + down + down (udd)  ประจุรวม = +2/3−1/3−1/3 = 0
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🌐</div>แรงพื้นฐาน 4 ชนิดในธรรมชาติ</div>
+      <table>
+        <tr><th>แรง</th><th>ความแรงสัมพัทธ์</th><th>อนุภาคสื่อแรง</th><th>ตัวอย่าง</th></tr>
+        <tr><td>แรงนิวเคลียร์อย่างเข้ม</td><td>1 (แรงที่สุด)</td><td>กลูออน (Gluon)</td><td>ยึดเควิร์กในนิวคลีออน</td></tr>
+        <tr><td>แรงแม่เหล็กไฟฟ้า</td><td>10⁻²</td><td>โฟตอน (Photon)</td><td>แรงระหว่างประจุไฟฟ้า</td></tr>
+        <tr><td>แรงนิวเคลียร์อย่างอ่อน</td><td>10⁻⁶</td><td>W, Z boson</td><td>การสลายตัวแบบบีตา</td></tr>
+        <tr><td>แรงโน้มถ่วง</td><td>10⁻³⁸ (อ่อนที่สุด)</td><td>กราวิตอน (ทฤษฎี)</td><td>แรงดึงดูดระหว่างมวล</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — จำลำดับความแรง</div>
+        เรียงจากแรงสุดไปอ่อนสุด: นิวเคลียร์เข้ม &gt; แม่เหล็กไฟฟ้า &gt; นิวเคลียร์อ่อน &gt; โน้มถ่วง (จำจากคำ "เข้ม-ไฟฟ้า-อ่อน-โน้มถ่วง")
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🌀</div>ปฏิยานุภาค (Antiparticle)</div>
+      <p>ทุกอนุภาคมีปฏิยานุภาคที่มีมวลเท่ากันแต่ประจุตรงข้ามกัน เช่น อิเล็กตรอน (e⁻) มีปฏิยานุภาคคือ <strong>โพซิตรอน (e⁺)</strong></p>
+      <div class="math-block">
+        การประลัย (Annihilation): e⁻ + e⁺ → 2γ (พลังงานทั้งหมดเปลี่ยนเป็นรังสีแกมมา 2 โฟตอน)<br>
+        การสร้างคู่ (Pair Production): γ → e⁻ + e⁺ (เมื่อโฟตอนพลังงานสูงพอ)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ทั้งการประลัยและการสร้างคู่ ต้องรักษากฎการอนุรักษ์พลังงาน โมเมนตัม และประจุไฟฟ้าเสมอ — โฟตอนตัวเดียวจึงสร้างคู่ไม่ได้ ต้องมีนิวเคลียสอื่นช่วยรับโมเมนตัมส่วนเกิน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมทั้งฟิสิกส์นิวเคลียร์และฟิสิกส์อนุภาค เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> แนวข้อสอบ A-Level ฟิสิกส์นิวเคลียร์และอนุภาค</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">โจทย์แนว A-Level จำลอง ครอบคลุมทุกหัวข้อในบทนี้ พร้อมเฉลยและวิธีคิดละเอียดทุกขั้นตอน</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      ฝึกทำให้ครบทุกข้อ เน้นความแม่นยำในการตั้งสมการอนุรักษ์เลขมวล-เลขอะตอม และการแปลงหน่วยพลังงาน (u ↔ MeV ↔ J)
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — โครงสร้างอะตอม",
+    q: "กำหนดนิวไคลด์ ²³⁵₉₂U จงหาจำนวนนิวตรอนในนิวเคลียส",
+    opts: ["141", "142", "143", "144"],
+    ans: 2,
+    explain: "เลขอะตอม Z = 92 (จำนวนโปรตอน)\nเลขมวล A = 235 (จำนวนนิวคลีออนทั้งหมด)\n\nใช้ความสัมพันธ์: N = A − Z\nN = 235 − 92 = 143 ✓\n\nดังนั้น ²³⁵₉₂U มีนิวตรอน 143 ตัว"
+  },
+  {
+    level: "⭐ ระดับ 1 — กัมมันตภาพรังสี",
+    q: "รังสีชนิดใดมีอำนาจการก่อไอออน (ionization) มากที่สุด แต่มีอำนาจทะลุทะลวงต่ำที่สุด?",
+    opts: ["รังสีแอลฟา (α)", "รังสีบีตา (β)", "รังสีแกมมา (γ)", "รังสีเอกซ์ (X-ray)"],
+    ans: 0,
+    explain: "รังสีแอลฟา (α) เป็นนิวเคลียสฮีเลียม มีมวลมากและประจุ +2 จึงชนกับอะตอมของตัวกลางบ่อยครั้ง ทำให้เกิดการแตกตัวเป็นไอออน (ionization) ได้มากที่สุดในระยะทางสั้น ๆ\n\nแต่เพราะเสียพลังงานเร็วจากการชนบ่อย จึงมีอำนาจทะลุทะลวงต่ำที่สุด (กระดาษแผ่นเดียวก็กั้นได้)\n\nหลักการทั่วไป: อำนาจก่อไอออน และอำนาจทะลุทะลวง แปรผกผันกันเสมอ (α ไอออนมาก-ทะลุน้อย, γ ไอออนน้อย-ทะลุมาก) ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — ครึ่งชีวิต",
+    q: "สารกัมมันตรังสีชนิดหนึ่งมีครึ่งชีวิต 5 ปี เริ่มต้นมีมวล 400 g เมื่อเวลาผ่านไป 15 ปี จะเหลือสารเท่าใด?",
+    opts: ["25 g", "50 g", "100 g", "200 g"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาจำนวนครึ่งชีวิตที่ผ่านไป\nn = t/T = 15/5 = 3 ครึ่งชีวิต\n\nขั้นที่ 2: ใช้สูตร N = N₀(1/2)ⁿ\nN = 400 × (1/2)³ = 400 × (1/8) = 50 g ✓\n\nตรวจทีละครึ่งชีวิต: 400 → 200 → 100 → 50 (ผ่านไป 3 ครั้ง = 15 ปี) ตรงกัน"
+  },
+  {
+    level: "⭐ ระดับ 1 — เสียมวล-พลังงาน",
+    q: "ถ้าเสียมวล (mass defect) ของปฏิกิริยานิวเคลียร์หนึ่งมีค่า 0.01 u จงหาพลังงานที่ปลดปล่อยออกมา (1 u = 931.5 MeV/c²)",
+    opts: ["0.93 MeV", "9.3 MeV", "93 MeV", "931.5 MeV"],
+    ans: 1,
+    explain: "ใช้ความสัมพันธ์การแปลงหน่วยมวลเป็นพลังงานโดยตรง:\nE (MeV) = Δm (u) × 931.5\n\nแทนค่า: E = 0.01 × 931.5 = 9.315 MeV ≈ 9.3 MeV ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — กัมมันตภาพรังสี",
+    q: "¹⁴₆C สลายตัวให้อนุภาคบีตาลบ (β⁻) จงหาธาตุลูกที่ได้",
+    opts: ["¹⁴₇N", "¹⁴₅B", "¹⁰₄Be", "¹⁴₈O"],
+    ans: 0,
+    explain: "การสลายบีตาลบ: นิวตรอนในนิวเคลียสเปลี่ยนเป็นโปรตอน + อิเล็กตรอน (β⁻) + ปฏินิวทริโน\nกฎการเปลี่ยนแปลง: Z เพิ่มขึ้น 1, A คงเดิม\n\n¹⁴₆C: Z=6, A=14\nหลังสลาย: Z' = 6+1 = 7, A' = 14 (คงเดิม)\n\nธาตุที่มี Z=7 คือ ไนโตรเจน (N)\nดังนั้นธาตุลูกคือ ¹⁴₇N ✓\n\nสมการเต็ม: ¹⁴₆C → ¹⁴₇N + ⁰₋₁e + ν̄"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ครึ่งชีวิต",
+    q: "สารกัมมันตรังสีตัวหนึ่งสลายตัวจนเหลือ 1/8 ของปริมาณเดิม เมื่อเวลาผ่านไป 24 วัน จงหาครึ่งชีวิตของสาร",
+    opts: ["6 วัน", "8 วัน", "12 วัน", "24 วัน"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาจำนวนครึ่งชีวิตที่ผ่านไปจากอัตราส่วนที่เหลือ\n(1/2)ⁿ = 1/8 = (1/2)³\nดังนั้น n = 3 ครึ่งชีวิต\n\nขั้นที่ 2: หาครึ่งชีวิต T จากเวลาที่ผ่านไปจริง\nn = t/T\n3 = 24/T\nT = 24/3 = 8 วัน ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — เสียมวล-พลังงาน",
+    q: "นิวเคลียสหนึ่งมีเลขมวล A = 20 และมีพลังงานยึดเหนี่ยวรวม 120 MeV จงหาพลังงานยึดเหนี่ยวต่อนิวคลีออน",
+    opts: ["4 MeV/นิวคลีออน", "5 MeV/นิวคลีออน", "6 MeV/นิวคลีออน", "8 MeV/นิวคลีออน"],
+    ans: 2,
+    explain: "พลังงานยึดเหนี่ยวต่อนิวคลีออน = พลังงานยึดเหนี่ยวรวม ÷ จำนวนนิวคลีออนทั้งหมด (A)\n\n= 120 MeV ÷ 20\n= 6 MeV/นิวคลีออน ✓\n\nค่านี้บ่งบอกความเสถียรของนิวเคลียส ยิ่งค่าสูงยิ่งเสถียรมาก"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ปฏิกิริยานิวเคลียร์",
+    q: "ปฏิกิริยาฟิชชัน: ¹n + ²³⁵₉₂U → ¹⁴⁰₅₄Xe + ⁹⁴₃₈Sr + x¹n จงหาจำนวนนิวตรอน (x) ที่เกิดขึ้น",
+    opts: ["1", "2", "3", "4"],
+    ans: 1,
+    explain: "ใช้กฎการอนุรักษ์เลขมวล (A) ทั้งสองข้างสมการต้องเท่ากัน:\n\nด้านซ้าย: A = 1 + 235 = 236\nด้านขวา: A = 140 + 94 + x(1) = 234 + x\n\nตั้งสมการ: 236 = 234 + x\nx = 2 ✓\n\nตรวจสอบด้วยเลขอะตอม (Z): ซ้าย 0+92=92, ขวา 54+38+0=92 ✓ สมดุลกันพอดี"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — ฟิสิกส์อนุภาค",
+    q: "อนุภาคหนึ่งประกอบด้วยควาร์ก d, d, d (ประจุควาร์ก d = −1/3) จงหาประจุไฟฟ้ารวมของอนุภาคนี้",
+    opts: ["−1", "−2/3", "0", "+1"],
+    ans: 0,
+    explain: "ควาร์กแต่ละตัวมีประจุ d = −1/3\nอนุภาคประกอบด้วย d + d + d\n\nประจุรวม = (−1/3) + (−1/3) + (−1/3) = −3/3 = −1 ✓\n\nอนุภาคนี้คือแบริออนชนิดหนึ่ง (Δ⁻) ซึ่งมีประจุ −1 สอดคล้องกับผลการคำนวณ"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — เสียมวล-ปฏิกิริยา",
+    q: "จากกราฟพลังงานยึดเหนี่ยวต่อนิวคลีออนเทียบกับเลขมวล A เพราะเหตุใดปฏิกิริยาฟิวชันของธาตุเบาจึงปลดปล่อยพลังงานออกมา?",
+    opts: [
+      "เพราะพลังงานยึดเหนี่ยวต่อนิวคลีออนของนิวเคลียสใหม่สูงกว่าเดิม (เข้าใกล้ Fe มากขึ้น)",
+      "เพราะมวลของนิวเคลียสใหม่มากกว่านิวเคลียสตั้งต้นเสมอ",
+      "เพราะจำนวนนิวคลีออนรวมเพิ่มขึ้นหลังปฏิกิริยา",
+      "เพราะแรงนิวเคลียร์อย่างอ่อนทำงานในกระบวนการนี้"
+    ],
+    ans: 0,
+    explain: "จากกราฟพลังงานยึดเหนี่ยวต่อนิวคลีออน (E/A) เทียบกับเลขมวล A พบว่ากราฟมีจุดสูงสุดที่บริเวณธาตุเหล็ก (Fe, A≈56) ซึ่งเป็นนิวเคลียสที่เสถียรที่สุด\n\nสำหรับธาตุเบา (A น้อยกว่า Fe มาก) เมื่อรวมตัวกัน (ฟิวชัน) เป็นนิวเคลียสที่หนักขึ้น ค่า E/A ของนิวเคลียสใหม่จะสูงขึ้น (เข้าใกล้จุดสูงสุดที่ Fe มากขึ้น)\n\nเมื่อ E/A เพิ่มขึ้น หมายความว่านิวเคลียสใหม่เสถียรกว่าเดิม และมวลรวมลดลงเล็กน้อย (เสียมวล) ซึ่งมวลที่หายไปนี้เปลี่ยนเป็นพลังงานตามสมการ E=mc² → ปลดปล่อยพลังงานออกมา ✓\n\nข้ออื่นผิด: มวลรวมหลังฟิวชันจะน้อยกว่าก่อนฟิวชันเสมอ (ไม่ใช่มากกว่า) และฟิวชันเกิดจากแรงนิวเคลียร์อย่างเข้ม ไม่ใช่อย่างอ่อน"
+  }
+];
+
+// ===== แนวข้อสอบ A-Level ฟิสิกส์นิวเคลียร์และอนุภาค =====
+const alevelQuestions = [
+  {
+    year: "📘 แนวข้อสอบ A-Level — โครงสร้างอะตอม",
+    q: "ธาตุ ²³²₉₀Th สลายตัวให้อนุภาคแอลฟา 6 ครั้ง และอนุภาคบีตาลบ 4 ครั้ง จนได้ธาตุที่เสถียร จงหาเลขอะตอมและเลขมวลของธาตุสุดท้าย",
+    opts: ["Z=82, A=208", "Z=84, A=212", "Z=80, A=204", "Z=82, A=204", "Z=86, A=208"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ผลของการสลายแอลฟาต่อ A และ Z\n  แต่ละครั้ง: A ลด 4, Z ลด 2\n  6 ครั้ง: ΔA = −24, ΔZ = −12\n\nขั้นที่ 2: ผลของการสลายบีตาลบต่อ A และ Z\n  แต่ละครั้ง: A คงเดิม, Z เพิ่ม 1\n  4 ครั้ง: ΔA = 0, ΔZ = +4\n\nขั้นที่ 3: รวมผลทั้งหมดจากค่าตั้งต้น Th-232 (Z=90, A=232)\n  A สุดท้าย = 232 − 24 + 0 = 208\n  Z สุดท้าย = 90 − 12 + 4 = 82\n\nดังนั้น ธาตุสุดท้ายคือ Z=82, A=208 (ตะกั่ว-208, ²⁰⁸₈₂Pb) ✓\nนี่คืออนุกรมการสลายตัวทอเรียม (Thorium series) ที่พบในธรรมชาติ"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — กัมมันตภาพรังสี",
+    q: "จากสมการการสลายตัว ²¹⁴₈₂Pb → X + ⁰₋₁e จงหานิวไคลด์ X",
+    opts: ["²¹⁴₈₃Bi", "²¹⁰₈₀Hg", "²¹⁴₈₁Tl", "²¹⁸₈₄Po", "²¹⁰₈₃Bi"],
+    ans: 0,
+    explain: "การสลายให้อนุภาคบีตาลบ (⁰₋₁e) ทำให้:\n  A คงเดิม\n  Z เพิ่มขึ้น 1\n\nจาก ²¹⁴₈₂Pb: A=214, Z=82\nหลังสลาย: A'=214, Z'=82+1=83\n\nธาตุที่มี Z=83 คือ บิสมัท (Bismuth, Bi)\nดังนั้น X = ²¹⁴₈₃Bi ✓\n\nตรวจสอบสมดุล A: 214 = 214+0 ✓  Z: 82 = 83+(−1) ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ครึ่งชีวิต",
+    q: "สารกัมมันตรังสีชนิดหนึ่งมีค่ากัมมันตภาพเริ่มต้น 800 Bq และมีครึ่งชีวิต 2 ชั่วโมง จงหาเวลาที่ทำให้กัมมันตภาพลดลงเหลือ 25 Bq",
+    opts: ["6 ชั่วโมง", "8 ชั่วโมง", "10 ชั่วโมง", "12 ชั่วโมง", "15 ชั่วโมง"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาจำนวนครึ่งชีวิตที่ผ่านไปจากการลดลงของกัมมันตภาพ\n  800 → 400 → 200 → 100 → 50 → 25\n  (ลดลงครึ่งหนึ่ง 5 ครั้ง)\n  ตรวจด้วยสูตร: (1/2)ⁿ = 25/800 = 1/32 = (1/2)⁵ → n = 5\n\nขั้นที่ 2: หาเวลาที่ผ่านไปจริง\n  t = n × T = 5 × 2 = 10 ชั่วโมง ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — เสียมวลและพลังงานยึดเหนี่ยว",
+    q: "กำหนดมวลโปรตอน = 1.00728 u, มวลนิวตรอน = 1.00867 u และมวลนิวเคลียส ⁴₂He = 4.00260 u จงหาพลังงานยึดเหนี่ยวของ ⁴₂He (1 u = 931.5 MeV/c²)",
+    opts: ["20.1 MeV", "24.5 MeV", "27.3 MeV", "30.8 MeV", "35.2 MeV"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาผลรวมมวลของนิวคลีออนอิสระ (2 โปรตอน + 2 นิวตรอน)\n  = 2(1.00728) + 2(1.00867)\n  = 2.01456 + 2.01734\n  = 4.03190 u\n\nขั้นที่ 2: หาเสียมวล (mass defect)\n  Δm = 4.03190 − 4.00260 = 0.02930 u\n\nขั้นที่ 3: แปลงเป็นพลังงานยึดเหนี่ยว\n  E = Δm × 931.5 = 0.02930 × 931.5 ≈ 27.29 MeV ≈ 27.3 MeV ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ปฏิกิริยานิวเคลียร์",
+    q: "ปฏิกิริยาฟิวชันระหว่างดิวเทอเรียมกับทริเทียม (D-T) ปลดปล่อยพลังงาน 17.6 MeV ต่อหนึ่งปฏิกิริยา ถ้าเกิดปฏิกิริยาจำนวน 1 โมล (6.02×10²³ ปฏิกิริยา) จะปลดปล่อยพลังงานรวมประมาณเท่าใด (1 MeV = 1.6×10⁻¹³ J)",
+    opts: ["1.7×10¹⁰ J", "1.7×10¹¹ J", "1.7×10¹² J", "1.7×10¹³ J", "1.7×10¹⁴ J"],
+    ans: 2,
+    explain: "ขั้นที่ 1: แปลงพลังงานต่อปฏิกิริยาเป็นจูล\n  E = 17.6 MeV × 1.6×10⁻¹³ J/MeV = 2.816×10⁻¹² J\n\nขั้นที่ 2: หาพลังงานรวมจากปฏิกิริยา 1 โมล\n  E_รวม = 2.816×10⁻¹² × 6.02×10²³\n        = 1.695×10¹² J\n        ≈ 1.7×10¹² J ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ฟิสิกส์อนุภาค",
+    q: "มีซอน π⁺ ประกอบด้วยควาร์ก u (ประจุ +2/3) และปฏิเควาร์ก d̄ (ประจุ +1/3) จงหาประจุไฟฟ้ารวมของมีซอนนี้",
+    opts: ["−1", "0", "+1", "+2", "+2/3"],
+    ans: 2,
+    explain: "ประจุของปฏิเควาร์กจะตรงข้ามกับควาร์กชนิดเดียวกันเสมอ:\n  ควาร์ก d มีประจุ −1/3 → ปฏิเควาร์ก d̄ มีประจุ +1/3\n\nประจุรวมของมีซอน π⁺ = ประจุ u + ประจุ d̄\n  = (+2/3) + (+1/3)\n  = +1 ✓\n\nมีซอนเป็นอนุภาคที่ประกอบด้วยควาร์ก 1 ตัว + ปฏิเควาร์ก 1 ตัวเสมอ (ต่างจากแบริออนที่มีควาร์ก 3 ตัว)"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — แรงพื้นฐาน",
+    q: "การสลายตัวให้อนุภาคบีตา (β decay) เกิดจากแรงพื้นฐานชนิดใดในธรรมชาติ",
+    opts: ["แรงนิวเคลียร์อย่างเข้ม", "แรงแม่เหล็กไฟฟ้า", "แรงนิวเคลียร์อย่างอ่อน", "แรงโน้มถ่วง", "แรงเสียดทาน"],
+    ans: 2,
+    explain: "การสลายตัวแบบบีตา เกิดจากการเปลี่ยนชนิดของควาร์กภายในนิวคลีออน เช่น นิวตรอน (udd) เปลี่ยนเป็นโปรตอน (uud) โดยควาร์ก d เปลี่ยนเป็นควาร์ก u พร้อมปลดปล่อยอิเล็กตรอนและปฏินิวทริโนออกมา\n\nกระบวนการเปลี่ยนชนิด (flavor) ของควาร์กเช่นนี้ เกิดขึ้นผ่าน อนุภาคสื่อแรง W boson ซึ่งเป็นอนุภาคสื่อแรงของ แรงนิวเคลียร์อย่างอ่อน (Weak Nuclear Force) เท่านั้น\n\nดังนั้นคำตอบคือ แรงนิวเคลียร์อย่างอ่อน ✓ (ต่างจากแรงเข้มที่ยึดควาร์กไว้ในนิวคลีออนแต่ไม่เปลี่ยนชนิดควาร์ก)"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ครึ่งชีวิต",
+    q: "สารกัมมันตรังสีสลายตัวเป็นเวลา 3 เท่าของครึ่งชีวิต จงหาร้อยละของสารที่สลายตัวไปแล้ว",
+    opts: ["50%", "75%", "87.5%", "93.75%", "96.875%"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาสัดส่วนที่เหลืออยู่หลังผ่านไป 3 ครึ่งชีวิต\n  N/N₀ = (1/2)³ = 1/8 = 12.5%\n\nขั้นที่ 2: หาสัดส่วนที่สลายตัวไปแล้ว\n  = 100% − 12.5% = 87.5% ✓\n\n(ตรวจทีละขั้น: 100% → 50% → 25% → 12.5% เหลือหลัง 3 ครึ่งชีวิต ดังนั้นสลายไปแล้ว 87.5%)"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ปฏิกิริยานิวเคลียร์",
+    q: "การแตกตัวของ U-235 หนึ่งครั้งปลดปล่อยพลังงานประมาณ 200 MeV จงประมาณพลังงานที่ได้จากการแตกตัวของ U-235 มวล 1 กรัมทั้งหมด (เลขอาโวกาโดร = 6.02×10²³, มวลอะตอม U-235 ≈ 235 g/mol, 1 MeV = 1.6×10⁻¹³ J)",
+    opts: ["8.2×10⁸ J", "8.2×10⁹ J", "8.2×10¹⁰ J", "8.2×10¹¹ J", "8.2×10¹² J"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาจำนวนอะตอมของ U-235 ใน 1 กรัม\n  n = (1 g / 235 g/mol) × 6.02×10²³\n    ≈ 2.56×10²¹ อะตอม\n\nขั้นที่ 2: หาพลังงานต่ออะตอมเป็นจูล\n  E₁ = 200 MeV × 1.6×10⁻¹³ J/MeV = 3.2×10⁻¹¹ J\n\nขั้นที่ 3: หาพลังงานรวม\n  E_รวม = 2.56×10²¹ × 3.2×10⁻¹¹\n        ≈ 8.19×10¹⁰ J\n        ≈ 8.2×10¹⁰ J ✓\n\n(นี่คือเหตุผลว่าทำไมเชื้อเพลิงนิวเคลียร์จึงให้พลังงานต่อมวลสูงกว่าเชื้อเพลิงเคมีมาก)"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — โครงสร้างอะตอม",
+    q: "ธาตุคลอรีนมีไอโซโทป 2 ชนิด คือ ³⁵Cl (มีสัดส่วน 75.77%) และ ³⁷Cl (มีสัดส่วน 24.23%) จงหามวลอะตอมเฉลี่ยของคลอรีน",
+    opts: ["35.00", "35.45", "36.00", "36.50", "37.00"],
+    ans: 1,
+    explain: "มวลอะตอมเฉลี่ย = ผลรวมของ (มวลไอโซโทป × สัดส่วน) ของทุกไอโซโทป\n\n= (35 × 0.7577) + (37 × 0.2423)\n= 26.5195 + 8.9651\n= 35.4846\n≈ 35.45 ✓\n\nนี่คือค่ามวลอะตอมของคลอรีนที่ปรากฏในตารางธาตุจริง (35.45) ซึ่งไม่ใช่จำนวนเต็ม เพราะเป็นค่าเฉลี่ยถ่วงน้ำหนักของไอโซโทปที่พบในธรรมชาติ"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ปฏิกิริยานิวเคลียร์",
+    q: "ในการทดลองค้นพบนิวตรอนของแชดวิก ใช้อนุภาคแอลฟายิงเข้าไปในนิวเคลียสเบริลเลียม: ⁴₂He + ⁹₄Be → ¹²₆C + X จงหาว่า X คืออนุภาคใด",
+    opts: ["นิวตรอน (¹₀n)", "โปรตอน (¹₁H)", "อนุภาคแอลฟา (⁴₂He)", "รังสีแกมมา (γ)", "โพซิตรอน (⁰₊₁e)"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ใช้กฎการอนุรักษ์เลขมวล (A)\n  ซ้าย: 4 + 9 = 13\n  ขวา: 12 + A_x = 13\n  A_x = 1\n\nขั้นที่ 2: ใช้กฎการอนุรักษ์เลขอะตอม (Z)\n  ซ้าย: 2 + 4 = 6\n  ขวา: 6 + Z_x = 6\n  Z_x = 0\n\nขั้นที่ 3: หาอนุภาคที่มี A=1, Z=0\n  อนุภาคที่มีมวล 1 หน่วยแต่ไม่มีประจุไฟฟ้า คือ นิวตรอน (¹₀n) ✓\n\nนี่คือปฏิกิริยาที่แชดวิกใช้ค้นพบนิวตรอนในปี ค.ศ. 1932"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ฟิสิกส์อนุภาค",
+    q: "ตามแบบจำลองมาตรฐาน (Standard Model) เควิร์ก (quark) มีทั้งหมดกี่ชนิด (flavor)?",
+    opts: ["3", "4", "6", "8", "12"],
+    ans: 2,
+    explain: "แบบจำลองมาตรฐานจัดเควิร์กออกเป็น 6 ชนิด (flavor) แบ่งเป็น 3 รุ่น (generation) รุ่นละ 2 ชนิด:\n\n  รุ่นที่ 1: up (u), down (d)\n  รุ่นที่ 2: charm (c), strange (s)\n  รุ่นที่ 3: top (t), bottom (b)\n\nดังนั้นเควิร์กมีทั้งหมด 6 ชนิด ✓ (เช่นเดียวกับเลปตอนที่มี 6 ชนิดเช่นกัน ทำให้อนุภาคมูลฐานแบบเฟอร์มิออนรวมมี 12 ชนิด)"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentTopic = '';
+  alevelQuestions.forEach((q, idx) => {
+    if (q.year !== currentTopic) {
+      currentTopic = q.year;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + currentTopic + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

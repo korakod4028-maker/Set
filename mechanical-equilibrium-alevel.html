@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สมดุลกล | ฟิสิกส์ A-Level ม.4-5</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'ΣF=0  Στ=0  τ=Fd  W=mg  N  T  f  CG';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 6px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>สมดุล<span>กล</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.4-5 เรื่องสมดุลกล เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">แนวข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="eq1">1. แรงและเวกเตอร์</button>
+  <button class="tab-btn" data-sec="eq2">2. การรวมแรง</button>
+  <button class="tab-btn" data-sec="eq3">3. สมดุลต่อการเลื่อนที่</button>
+  <button class="tab-btn" data-sec="eq4">4. โมเมนต์ของแรง</button>
+  <button class="tab-btn" data-sec="eq5">5. สมดุลต่อการหมุน</button>
+  <button class="tab-btn" data-sec="eq6">6. จุดศูนย์ถ่วง</button>
+  <button class="tab-btn" data-sec="eq7">7. สภาพสมดุล 3 แบบ</button>
+  <button class="tab-btn" data-sec="eq8">8. คาน/เครื่องกลอย่างง่าย</button>
+  <button class="tab-btn" data-sec="eq9">9. โจทย์ประยุกต์</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 แนวข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: แรงและเวกเตอร์ ===== -->
+  <div class="section active" id="eq1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · แรงและเวกเตอร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">➜</div>แรง (Force) คืออะไร</div>
+      <p>แรง คือ <strong>สิ่งที่ทำให้วัตถุเปลี่ยนสภาพการเคลื่อนที่</strong> เช่น ทำให้วัตถุเริ่มเคลื่อนที่ หยุดนิ่ง เปลี่ยนความเร็ว หรือเปลี่ยนรูปร่าง แรงเป็น<strong>ปริมาณเวกเตอร์</strong> คือมีทั้งขนาดและทิศทาง</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรง มีหน่วยเป็น <strong>นิวตัน (N)</strong> โดย 1 นิวตัน คือแรงที่ทำให้มวล 1 กิโลกรัม มีความเร่ง 1 m/s²
+      </div>
+      <div class="math-block">F = ma   (กฎข้อที่สองของนิวตัน)</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — เวกเตอร์เสมอ</div>
+        เวลาเขียนแรง ต้องระบุทั้ง <strong>ขนาด</strong> และ <strong>ทิศทาง</strong> เสมอ เช่น "20 N ไปทางขวา" ไม่ใช่แค่ "20 N"
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔧</div>ชนิดของแรงที่พบบ่อยในโจทย์สมดุล</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">W</div>
+          <div class="sym-name">น้ำหนัก (Weight)</div>
+          <div class="sym-desc">W = mg ทิศพุ่งลงเสมอ (สู่ศูนย์กลางโลก)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">N</div>
+          <div class="sym-name">แรงปฏิกิริยาตั้งฉาก</div>
+          <div class="sym-desc">ทิศตั้งฉากกับผิวสัมผัส พุ่งออกจากผิว</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">T</div>
+          <div class="sym-name">แรงตึงเชือก (Tension)</div>
+          <div class="sym-desc">ทิศพุ่งออกจากวัตถุตามแนวเชือก</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">f</div>
+          <div class="sym-name">แรงเสียดทาน (Friction)</div>
+          <div class="sym-desc">ขนานผิวสัมผัส ทิศต้านการเคลื่อนที่/แนวโน้มการเคลื่อนที่</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        มวล 5 kg แขวนนิ่งด้วยเชือก มีแรง 2 แรงกระทำ คือ น้ำหนัก W = mg = 50 N (ลง) และแรงตึงเชือก T (ขึ้น)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>องค์ประกอบของแรง (Force Components)</div>
+      <p>แรงใด ๆ ที่ทำมุม θ กับแนวราบ สามารถแตกเป็นองค์ประกอบในแนวแกน x และ y ได้</p>
+      <div class="math-block">
+        Fx = F cos θ   (องค์ประกอบแนวราบ)<br>
+        Fy = F sin θ   (องค์ประกอบแนวดิ่ง)
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ทำไมต้องแตกแรง?</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เพราะสมดุลต้องพิจารณาแยกแนวราบและแนวดิ่งอิสระต่อกัน การแตกแรงทำให้บวก/ลบแรงในแนวเดียวกันได้ง่าย</p>
+        </div>
+        <div class="mini-card">
+          <h4>มุมพิเศษที่ควรจำ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">sin30°=0.5, cos30°=0.87<br>sin37°=0.6, cos37°=0.8<br>sin45°=cos45°=0.71<br>sin53°=0.8, cos53°=0.6<br>sin60°=0.87, cos60°=0.5</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: การรวมแรง ===== -->
+  <div class="section" id="eq2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · การรวมแรง (Force Composition)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔺</div>การรวมแรงแบบเวกเตอร์</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรงลัพธ์ (Resultant Force, R) คือ ผลรวมเวกเตอร์ของแรงทั้งหมดที่กระทำต่อวัตถุ ณ จุดเดียวกัน
+      </div>
+      <p>ใช้ได้ทั้งวิธี <strong>รูปสามเหลี่ยม/สี่เหลี่ยมด้านขนาน</strong> (วาดภาพ) และ <strong>วิธีองค์ประกอบ</strong> (คำนวณ) — วิธีองค์ประกอบแม่นยำกว่าและเหมาะกับข้อสอบ A-Level</p>
+      <div class="example-box">
+        <div class="ex-label">กรณีพิเศษ — สองแรงตั้งฉากกัน</div>
+        ถ้า F1 ⊥ F2 ขนาดของแรงลัพธ์หาได้จากพีทาโกรัส<br>
+        R = √(F1² + F2²)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">➕</div>วิธีองค์ประกอบ (Analytical Method)</div>
+      <div class="def-box">
+        <div class="def-label">ขั้นตอน</div>
+        1) แตกทุกแรงเป็นองค์ประกอบ x และ y<br>
+        2) รวมองค์ประกอบ x ทั้งหมด → ΣFx<br>
+        3) รวมองค์ประกอบ y ทั้งหมด → ΣFy<br>
+        4) หาขนาดแรงลัพธ์ R = √[(ΣFx)² + (ΣFy)²]<br>
+        5) หาทิศทาง tan θ = ΣFy / ΣFx
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        F1 = 30 N ทิศ 0° (แกน x), F2 = 40 N ทิศ 90° (แกน y)<br>
+        ΣFx = 30, ΣFy = 40<br>
+        R = √(30² + 40²) = √(900+1600) = √2500 = 50 N
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ต้องกำหนดทิศบวก-ลบให้สอดคล้องกันตลอดทั้งข้อ (เช่น ขวา/ขึ้น = บวก, ซ้าย/ลง = ลบ) มิฉะนั้นจะรวมแรงผิด
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: สมดุลต่อการเลื่อนที่ ===== -->
+  <div class="section" id="eq3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · สมดุลต่อการเลื่อนที่ (First Condition)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚖️</div>นิยามสมดุลต่อการเลื่อนที่</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        วัตถุอยู่ในสภาวะสมดุลต่อการเลื่อนที่ เมื่อ <strong>แรงลัพธ์ที่กระทำต่อวัตถุมีค่าเป็นศูนย์</strong> (วัตถุอยู่นิ่งหรือเคลื่อนที่ด้วยความเร็วคงตัวในแนวเส้นตรง — กฎข้อที่ 1 ของนิวตัน)
+      </div>
+      <div class="math-block">
+        ΣF = 0<br>
+        หรือแยกเป็นแนวแกน: ΣFx = 0  และ  ΣFy = 0
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุนิ่งบนพื้นราบ มีแรง 3 แรงในแนวระดับ: 10 N ไปขวา, 15 N ไปซ้าย, และแรง F<br>
+        จากสมดุล: 10 − 15 + F = 0 → F = 5 N (ไปทางขวา)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔺</div>สมดุลของระบบ 3 แรง</div>
+      <p>โจทย์ยอดฮิต A-Level: วัตถุแขวนด้วยเชือก 2 เส้นทำมุมต่างกัน ใช้หลักการแตกแรงตามแกน x, y แล้วตั้งสมการสมดุลทั้งสองแนว</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — เชือก 2 เส้นแขวนน้ำหนัก</div>
+        มวล 10 kg แขวนด้วยเชือกทำมุม 30° และ 60° กับแนวราบ (มุมระหว่างเชือก = 90°)<br>
+        W = mg = 100 N<br>
+        ΣFx: T1 cos30° = T2 cos60°<br>
+        ΣFy: T1 sin30° + T2 sin60° = 100<br>
+        แก้สมการได้ T1 = 50 N, T2 = 50√3 ≈ 86.6 N
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค — สามเหลี่ยมแรง</div>
+        ถ้าวัตถุสมดุลด้วย 3 แรงที่ไม่ขนานกัน แรงทั้งสามสามารถวาดต่อกันเป็น<strong>รูปสามเหลี่ยมปิด</strong> (หัวจรดหาง) ได้พอดี ใช้กฎไซน์ (Lami's theorem) ช่วยคำนวณได้เร็วขึ้น
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📈</div>สมดุลบนพื้นเอียง</div>
+      <div class="math-block">
+        แนวขนานพื้นเอียง:  T หรือ F = mg sin θ<br>
+        แนวตั้งฉากพื้นเอียง:  N = mg cos θ
+      </div>
+      <p>เมื่อวัตถุอยู่นิ่งบนพื้นเอียงลื่น (ไม่มีความฝืด) โดยมีแรงยึด (เชือก) ขนานพื้นเอียง จะได้สมการสมดุลสองแนวดังข้างต้น</p>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: โมเมนต์ของแรง ===== -->
+  <div class="section" id="eq4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · โมเมนต์ของแรง (Torque)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔄</div>โมเมนต์คืออะไร</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        โมเมนต์ของแรง (τ) คือ ผลของแรงที่ทำให้วัตถุ<strong>หมุน</strong>รอบจุดหมุน (pivot) หาได้จากแรงคูณระยะตั้งฉากจากจุดหมุนถึงแนวแรง
+      </div>
+      <div class="math-block">τ = F × d   (หน่วย: นิวตัน·เมตร, N·m)</div>
+      <p>โดย <span class="math">d</span> คือ <strong>ระยะตั้งฉาก (moment arm)</strong> จากจุดหมุนถึงแนวแรง ไม่ใช่ระยะจากจุดหมุนถึงจุดที่แรงกระทำเสมอไป</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แรง 20 N กระทำตั้งฉากกับคานที่ปลาย ห่างจากจุดหมุน 0.5 m<br>
+        τ = F × d = 20 × 0.5 = 10 N·m
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">↩️</div>ทิศทางของโมเมนต์</div>
+      <p>โมเมนต์มีทิศทางเป็น <strong>ตามเข็มนาฬิกา (CW)</strong> หรือ <strong>ทวนเข็มนาฬิกา (CCW)</strong> โดยพิจารณาจากทิศที่แรงพยายามหมุนวัตถุรอบจุดหมุนที่กำหนด</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กรณีแรงไม่ตั้งฉากกับคาน</div>
+        ถ้าแรง F ทำมุม θ กับคาน ให้ใช้เฉพาะองค์ประกอบที่ตั้งฉากกับคานในการคิดโมเมนต์<br>
+        τ = F sin θ × d  (เมื่อ d คือระยะตามแนวคานจากจุดหมุนถึงจุดที่แรงกระทำ)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔗</div>โมเมนต์คู่ควบ (Couple)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรงคู่ควบ คือ แรงสองแรงที่มี<strong>ขนาดเท่ากัน ทิศตรงข้าม และไม่อยู่ในแนวเดียวกัน</strong> ทำให้เกิดโมเมนต์หมุนล้วน ๆ โดยไม่ทำให้วัตถุเลื่อนที่ (เพราะ ΣF = 0 อยู่แล้ว)
+      </div>
+      <div class="math-block">τ_คู่ควบ = F × d   (d = ระยะตั้งฉากระหว่างแนวแรงทั้งสอง)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        มือหมุนพวงมาลัยด้วยแรงคู่ควบ 15 N สองข้าง ห่างกัน 0.4 m<br>
+        τ = 15 × 0.4 = 6 N·m
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: สมดุลต่อการหมุน ===== -->
+  <div class="section" id="eq5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · สมดุลต่อการหมุน (Second Condition)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚖️</div>นิยามสมดุลต่อการหมุน</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        วัตถุอยู่ในสภาวะสมดุลต่อการหมุน เมื่อ<strong>ผลรวมโมเมนต์รอบจุดหมุนใด ๆ มีค่าเป็นศูนย์</strong> คือ ผลรวมโมเมนต์ตามเข็ม = ผลรวมโมเมนต์ทวนเข็ม
+      </div>
+      <div class="math-block">Στ = 0   หรือ   Στ(ตามเข็ม) = Στ(ทวนเข็ม)</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค — เลือกจุดหมุนให้ฉลาด</div>
+        เลือกจุดหมุนตรงตำแหน่งที่มีแรงไม่ทราบค่าหลายแรงกระทำอยู่ จะช่วยตัดตัวแปรที่ไม่ต้องการออกจากสมการโมเมนต์ได้ทันที (โมเมนต์ของแรงที่ผ่านจุดหมุนพอดีมีค่า = 0)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🌟</div>สมดุลสมบูรณ์ (Total Equilibrium)</div>
+      <p>วัตถุแข็งเกร็ง (rigid body) จะอยู่ในสภาวะสมดุลสมบูรณ์ ก็ต่อเมื่อสอดคล้อง<strong>ทั้งสองเงื่อนไข</strong>พร้อมกัน:</p>
+      <div class="math-block">
+        เงื่อนไขที่ 1 (เลื่อนที่):  ΣFx = 0,  ΣFy = 0<br>
+        เงื่อนไขที่ 2 (หมุน):     Στ = 0
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        แค่ ΣF = 0 ไม่ได้แปลว่าวัตถุสมดุลสมบูรณ์เสมอไป — แรงคู่ควบทำให้ ΣF = 0 ได้ แต่ยังทำให้วัตถุหมุนได้ ต้องตรวจ Στ = 0 ด้วยเสมอ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🪜</div>ตัวอย่างโจทย์คาน</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — ไม้กระดกหรือคานงัด</div>
+        คานยาว 4 m วางบนจุดรองรับกึ่งกลาง มีน้ำหนัก 30 N วางห่างจุดรองรับ 1 m ทางซ้าย<br>
+        ต้องแขวนน้ำหนัก W ห่างจุดรองรับ 1.5 m ทางขวา เพื่อให้สมดุล<br><br>
+        Στ(ทวนเข็ม) = Στ(ตามเข็ม)<br>
+        30 × 1 = W × 1.5<br>
+        W = 20 N
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: จุดศูนย์ถ่วง ===== -->
+  <div class="section" id="eq6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · จุดศูนย์ถ่วง (Center of Gravity)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🎯</div>จุดศูนย์ถ่วงคืออะไร</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        จุดศูนย์ถ่วง (Center of Gravity, CG) คือ <strong>จุดรวมของน้ำหนักทั้งหมด</strong>ของวัตถุ ราวกับว่าน้ำหนักทั้งก้อนกระทำที่จุดนี้จุดเดียว ในสนามโน้มถ่วงสม่ำเสมอ จุดศูนย์ถ่วงจะตรงกับ<strong>จุดศูนย์กลางมวล (Center of Mass)</strong> พอดี
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความสำคัญ</div>
+        ในโจทย์สมดุล น้ำหนักของวัตถุแต่ละชิ้นถือว่ากระทำที่จุดศูนย์ถ่วงของมันเสมอ — สำหรับแท่งวัตถุที่เนื้อสม่ำเสมอ (uniform) จุดศูนย์ถ่วงจะอยู่ที่<strong>จุดกึ่งกลาง</strong>พอดี
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">➗</div>การหาจุดศูนย์ถ่วงของระบบวัตถุ</div>
+      <div class="math-block">
+        x_cg = (m1x1 + m2x2 + m3x3 + …) / (m1 + m2 + m3 + …)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุมวล 2 kg, 3 kg, 5 kg วางบนแท่งเบา ที่ตำแหน่ง 0 m, 1 m, 3 m ตามลำดับ<br>
+        x_cg = (2×0 + 3×1 + 5×3) / (2+3+5) = (0+3+15)/10 = 1.8 m
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ถ้าแท่ง/แผ่นวัตถุมีมวลของตัวเองด้วย (ไม่ใช่แท่งเบา) ต้องใส่มวลของแท่ง/แผ่นนั้นที่ตำแหน่งจุดศูนย์ถ่วงของมันเองลงในสูตรด้วย
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>จุดศูนย์ถ่วงของรูปทรงเรขาคณิตพื้นฐาน</div>
+      <table>
+        <tr><th>รูปทรง</th><th>ตำแหน่งจุดศูนย์ถ่วง</th></tr>
+        <tr><td>แท่ง/แผ่นสี่เหลี่ยมสม่ำเสมอ</td><td>จุดกึ่งกลางรูป</td></tr>
+        <tr><td>วงกลม/ทรงกลมสม่ำเสมอ</td><td>จุดศูนย์กลาง</td></tr>
+        <tr><td>สามเหลี่ยม</td><td>จุดตัดของเส้นมัธยฐาน (centroid)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: สภาพสมดุล 3 แบบ ===== -->
+  <div class="section" id="eq7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · สภาพสมดุล 3 แบบ (Types of Equilibrium)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔺</div>สมดุลเสถียร ไม่เสถียร และสะเทิน</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สมดุลเสถียร (Stable)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เมื่อถูกรบกวนเล็กน้อยแล้วปล่อย วัตถุจะ<strong>กลับสู่ตำแหน่งเดิม</strong> จุดศูนย์ถ่วงจะสูงขึ้นเมื่อถูกเขย่า</p>
+        </div>
+        <div class="mini-card">
+          <h4>สมดุลไม่เสถียร (Unstable)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เมื่อถูกรบกวนเล็กน้อย วัตถุจะ<strong>ล้ม/เคลื่อนออกไปเรื่อย ๆ ไม่กลับที่เดิม</strong> จุดศูนย์ถ่วงจะต่ำลงเมื่อถูกเขย่า</p>
+        </div>
+      </div>
+      <div class="mini-card" style="margin-top:16px">
+        <h4>สมดุลสะเทิน (Neutral)</h4>
+        <p style="font-size:13px; color:var(--text-dim)">เมื่อถูกรบกวน วัตถุจะอยู่ในสภาวะสมดุลใหม่ได้ทันที ณ ตำแหน่งใหม่นั้น โดยจุดศูนย์ถ่วงไม่สูงขึ้นและไม่ต่ำลง เช่น ลูกบอลกลมสม่ำเสมอวางบนพื้นราบ</p>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        ดูการเปลี่ยนแปลงระดับของจุดศูนย์ถ่วงเมื่อถูกรบกวน: <strong>สูงขึ้น = เสถียร, ต่ำลง = ไม่เสถียร, คงที่ = สะเทิน</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🏗️</div>ปัจจัยที่มีผลต่อเสถียรภาพของวัตถุ</div>
+      <ul>
+        <li><strong>ฐานรองรับกว้าง</strong> → มั่นคงกว่าฐานแคบ</li>
+        <li><strong>จุดศูนย์ถ่วงอยู่ต่ำ</strong> → มั่นคงกว่าจุดศูนย์ถ่วงอยู่สูง</li>
+        <li>วัตถุจะเริ่มล้มเมื่อ<strong>เส้นดิ่งจากจุดศูนย์ถ่วงเคลื่อนพ้นออกนอกฐานรองรับ</strong></li>
+      </ul>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างในชีวิตประจำวัน</div>
+        รถแข่งออกแบบให้ตัวถังเตี้ยและฐานล้อกว้าง เพื่อลดความสูงจุดศูนย์ถ่วงและเพิ่มเสถียรภาพขณะเข้าโค้ง
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: คาน/เครื่องกลอย่างง่าย ===== -->
+  <div class="section" id="eq8">
+    <div class="section-heading"><span>หัวข้อ 8</span> · คานและเครื่องกลอย่างง่าย</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🏋️</div>คาน (Lever) 3 ประเภท</div>
+      <table>
+        <tr><th>ชนิด</th><th>ตำแหน่งจุดหมุน</th><th>ตัวอย่าง</th></tr>
+        <tr><td>ชนิดที่ 1</td><td>จุดหมุนอยู่ระหว่างแรงพยายามกับแรงต้าน</td><td>กรรไกร ไม้กระดก คีมถอนตะปู</td></tr>
+        <tr><td>ชนิดที่ 2</td><td>แรงต้านอยู่ระหว่างจุดหมุนกับแรงพยายาม</td><td>รถเข็นล้อเดียว ที่เปิดขวด</td></tr>
+        <tr><td>ชนิดที่ 3</td><td>แรงพยายามอยู่ระหว่างจุดหมุนกับแรงต้าน</td><td>แหนบ ตะเกียบ คันเบ็ด</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>การได้เปรียบเชิงกล (Mechanical Advantage)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การได้เปรียบเชิงกล (MA) คือ อัตราส่วนที่บอกว่าเครื่องกลช่วยผ่อนแรงได้กี่เท่า
+      </div>
+      <div class="math-block">
+        MA = แรงต้าน / แรงพยายาม = ระยะจากจุดหมุนถึงแรงพยายาม / ระยะจากจุดหมุนถึงแรงต้าน
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        คานงัด จุดหมุนห่างจากแรงต้าน 0.3 m และห่างจากแรงพยายาม 1.2 m<br>
+        MA = 1.2 / 0.3 = 4 เท่า
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 หลักการผ่อนแรง</div>
+        ยิ่งแขนข้างแรงพยายามยาวกว่าแขนข้างแรงต้านมากเท่าไร ยิ่งผ่อนแรงได้มากเท่านั้น แต่ต้องออกแรงในระยะทางที่มากขึ้นเพื่อชดเชย (งานที่ทำเท่าเดิม)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: โจทย์ประยุกต์ ===== -->
+  <div class="section" id="eq9">
+    <div class="section-heading"><span>หัวข้อ 9</span> · โจทย์ประยุกต์สมดุลกล</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🪜</div>บันไดพิงกำแพง</div>
+      <p>โจทย์คลาสสิกที่รวมทั้งสมดุลเลื่อนที่และสมดุลหมุน — บันไดพิงกำแพงเรียบ (ลื่น ไม่มีความฝืด) วางอยู่บนพื้นที่มีความฝืด</p>
+      <div class="def-box">
+        <div class="def-label">แรงที่กระทำต่อบันได</div>
+        • น้ำหนักบันได W ที่จุดศูนย์ถ่วง (กึ่งกลางบันได หากเนื้อสม่ำเสมอ)<br>
+        • แรงปฏิกิริยาจากพื้น N (ตั้งฉากพื้น, ขึ้น) และแรงเสียดทาน f (ขนานพื้น)<br>
+        • แรงปฏิกิริยาจากกำแพง N_wall (ตั้งฉากกำแพง แนวราบ เพราะกำแพงลื่น)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        บันไดยาว 5 m หนัก 100 N ทำมุม 60° กับพื้น<br>
+        ใช้ Στ = 0 รอบจุดฐานบันได: N_wall × (5 sin60°) = 100 × (2.5 cos60°)<br>
+        N_wall = 100 cos60° / (2 sin60°) = 100/(2√3) ≈ 28.9 N<br>
+        แนวราบ (ΣFx=0): f = N_wall ≈ 28.9 N
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>คานยื่น (Cantilever)</div>
+      <p>คานที่ปลายด้านหนึ่งยึดติดแน่นกับผนัง อีกด้านลอยอิสระ — ที่จุดยึดจะเกิด<strong>โมเมนต์ดัด</strong> รวมจากน้ำหนักของคานเองและน้ำหนักที่แขวนเพิ่ม</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        คานยาว 3 m มวล 6 kg (น้ำหนัก 60 N ที่กึ่งกลาง 1.5 m) มีวัตถุมวล 4 kg (40 N) แขวนที่ปลายอิสระ (3 m)<br>
+        โมเมนต์รวมที่จุดยึด = 60×1.5 + 40×3 = 90 + 120 = 210 N·m
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧭</div>เทคนิคแก้โจทย์สมดุลกล 4 ขั้นตอน</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ขั้นตอนมาตรฐาน</div>
+        1) วาดแผนภาพวัตถุอิสระ (Free Body Diagram) ระบุแรงทั้งหมด<br>
+        2) เลือกแกน x, y และทิศบวกให้ชัดเจน<br>
+        3) ตั้งสมการสมดุลเลื่อนที่ ΣFx = 0, ΣFy = 0<br>
+        4) เลือกจุดหมุนที่เหมาะสม แล้วตั้งสมการสมดุลหมุน Στ = 0 — แก้ระบบสมการพร้อมกัน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">8 ข้อ เรียงจากง่ายไปยาก ครอบคลุมแรง โมเมนต์ สมดุล และจุดศูนย์ถ่วง เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> แนวข้อสอบ A-Level สมดุลกล</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ชุดข้อสอบจำลองแนว A-Level ฟิสิกส์ เรื่องสมดุลกล ครอบคลุมทุกหัวข้อ พร้อมเฉลยละเอียดทีละขั้นตอน</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      ข้อสอบชุดนี้เป็น<strong>แนวข้อสอบจำลอง</strong>ที่สร้างขึ้นเพื่อฝึกฝน ไม่ใช่ข้อสอบจริงจากปีใดปีหนึ่ง — ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบาย
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 8 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — แรงและเวกเตอร์",
+    q: "มวล 5 kg แขวนนิ่งด้วยเชือกเส้นเดียวในแนวดิ่ง จงหาแรงตึงเชือก (g = 10 m/s²)",
+    opts: ["5 N", "25 N", "50 N", "500 N"],
+    ans: 2,
+    explain: "วัตถุแขวนนิ่ง → สมดุล → แรงตึงเชือก T ต้องเท่ากับน้ำหนัก W พอดี (ΣF = 0)\n\nT = W = mg = 5 × 10 = 50 N ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — สมดุลต่อการเลื่อนที่",
+    q: "วัตถุอยู่นิ่งบนพื้นราบ มีแรง 3 แรงกระทำในแนวระดับ: 10 N ไปทางขวา, 15 N ไปทางซ้าย และแรง F\nจงหาขนาดและทิศทางของแรง F ที่ทำให้วัตถุสมดุล",
+    opts: ["5 N ไปทางขวา", "5 N ไปทางซ้าย", "25 N ไปทางขวา", "25 N ไปทางซ้าย"],
+    ans: 0,
+    explain: "กำหนดทิศขวาเป็นบวก\nจากสมดุลเลื่อนที่: ΣFx = 0\n10 − 15 + F = 0\nF = 5 N\n\nเนื่องจากค่าเป็นบวก แสดงว่า F มีทิศไปทางขวา (ทิศบวกที่กำหนดไว้) ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — โมเมนต์ของแรง",
+    q: "แรง 20 N กระทำตั้งฉากกับคานที่ปลาย ห่างจากจุดหมุน 0.5 m จงหาขนาดของโมเมนต์",
+    opts: ["4 N·m", "10 N·m", "20.5 N·m", "40 N·m"],
+    ans: 1,
+    explain: "โมเมนต์ของแรง τ = F × d (เมื่อแรงตั้งฉากกับคานพอดี d คือระยะจากจุดหมุนถึงจุดที่แรงกระทำได้เลย)\n\nτ = 20 × 0.5 = 10 N·m ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — สมดุลต่อการหมุน",
+    q: "คานยาว 4 m วางบนจุดรองรับที่กึ่งกลาง มีน้ำหนัก 30 N วางห่างจากจุดรองรับ 1 m ทางซ้าย\nต้องแขวนน้ำหนัก W ห่างจากจุดรองรับ 1.5 m ทางขวา เท่าใดจึงจะสมดุล",
+    opts: ["15 N", "20 N", "30 N", "45 N"],
+    ans: 1,
+    explain: "สมดุลต่อการหมุน: Στ(ทวนเข็ม) = Στ(ตามเข็ม) รอบจุดรองรับ\n\nโมเมนต์ทวนเข็ม (จาก 30 N ทางซ้าย) = 30 × 1 = 30 N·m\nโมเมนต์ตามเข็ม (จาก W ทางขวา) = W × 1.5\n\nตั้งสมการ: 30 = W × 1.5\nW = 30/1.5 = 20 N ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — จุดศูนย์ถ่วง",
+    q: "แท่งไม้เนื้อสม่ำเสมอยาว 2 m มวล 4 kg วางนอนบนโต๊ะ มีวัตถุมวล 2 kg วางที่ปลายด้านหนึ่ง\nจงหาตำแหน่งจุดศูนย์ถ่วงของระบบ วัดจากปลายที่มีวัตถุวางอยู่",
+    opts: ["0.5 m", "0.67 m", "1.0 m", "1.33 m"],
+    ans: 1,
+    explain: "แท่งไม้สม่ำเสมอยาว 2 m → จุดศูนย์ถ่วงของแท่งอยู่ที่กึ่งกลาง คือ 1 m จากปลายที่มีวัตถุวาง\nวัตถุ 2 kg อยู่ที่ตำแหน่ง 0 m (ปลายที่วางวัตถุ)\n\nใช้สูตร x_cg = (m1x1 + m2x2)/(m1+m2)\nx_cg = (4×1 + 2×0)/(4+2) = 4/6 ≈ 0.67 m ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — สภาพสมดุล",
+    q: "วัตถุในข้อใดต่อไปนี้อยู่ในสภาวะสมดุลสะเทิน (neutral equilibrium)",
+    opts: ["ลูกบอลกลมสม่ำเสมอวางบนพื้นราบ", "กรวยตั้งบนฐานกว้าง", "กรวยตั้งบนยอดแหลม", "ลูกบาศก์วางตะแคงบนขอบ"],
+    ans: 0,
+    explain: "สมดุลสะเทิน คือ เมื่อวัตถุถูกรบกวนแล้วจะอยู่ในสมดุลใหม่ได้ทันที โดยจุดศูนย์ถ่วงไม่สูงขึ้นหรือต่ำลง\n\n• ลูกบอลกลมสม่ำเสมอบนพื้นราบ: กลิ้งไปตำแหน่งใดก็สมดุลได้ทันที ความสูงจุดศูนย์ถ่วงไม่เปลี่ยน → สมดุลสะเทิน ✓\n• กรวยตั้งบนฐานกว้าง: เอียงแล้วจุดศูนย์ถ่วงสูงขึ้น กลับที่เดิม → สมดุลเสถียร\n• กรวยตั้งบนยอดแหลม: เอียงเล็กน้อยจุดศูนย์ถ่วงต่ำลง ล้มไปเรื่อย ๆ → สมดุลไม่เสถียร\n• ลูกบาศก์วางตะแคงบนขอบ: มีแนวโน้มล้มไปด้านใดด้านหนึ่ง (จุดศูนย์ถ่วงต่ำลงเมื่อเอียง) → สมดุลไม่เสถียร"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — โจทย์ประยุกต์",
+    q: "บันไดพิงกำแพงเรียบ (ไม่มีความฝืดที่กำแพง) วางอยู่บนพื้นที่มีความฝืด แรงปฏิกิริยาจากกำแพงมีค่า 40 N\nจงหาขนาดแรงเสียดทานที่พื้นกระทำต่อบันได (แนวราบ)",
+    opts: ["0 N", "20 N", "40 N", "80 N"],
+    ans: 2,
+    explain: "เนื่องจากกำแพงเรียบ (ไม่มีความฝืด) แรงจากกำแพง N_wall จึงมีแนวราบเพียงทิศเดียว (ตั้งฉากกำแพง)\n\nพิจารณาสมดุลเลื่อนที่ในแนวราบของบันไดทั้งอัน: ΣFx = 0\nแรงในแนวราบที่กระทำมีเพียง N_wall (ผลักบันไดออกจากกำแพง) และ f (แรงเสียดทานจากพื้น ต้านการไถล)\n\nf = N_wall = 40 N ✓\n\n(แรงเสียดทานที่พื้นต้องมีขนาดเท่ากับแรงปฏิกิริยาจากกำแพงพอดี เพื่อให้แนวราบสมดุล)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — เครื่องกลอย่างง่าย",
+    q: "คานงัดชนิดที่ 1 จุดหมุนอยู่ห่างจากแรงต้าน 0.4 m และห่างจากแรงพยายาม 1.6 m\nจงหาการได้เปรียบเชิงกล (mechanical advantage) ของคานงัดนี้",
+    opts: ["0.25 เท่า", "2 เท่า", "4 เท่า", "6.4 เท่า"],
+    ans: 2,
+    explain: "การได้เปรียบเชิงกล MA = ระยะจากจุดหมุนถึงแรงพยายาม / ระยะจากจุดหมุนถึงแรงต้าน\n\nMA = 1.6 / 0.4 = 4 เท่า ✓\n\n(หมายความว่าออกแรงพยายามเพียง 1 ส่วน ยกน้ำหนักได้ถึง 4 ส่วน)"
+  }
+];
+
+// ===== แนวข้อสอบ A-Level 12 ข้อ (จำลอง) =====
+const alevelQuestions = [
+  {
+    year: "📘 แนวข้อสอบจำลอง — การรวมแรง",
+    q: "แรงสองแรงขนาด 30 N และ 40 N ทำมุมฉากกัน (90°) กระทำที่จุดเดียวกัน จงหาขนาดของแรงลัพธ์",
+    opts: ["10 N", "50 N", "70 N", "1200 N", "2500 N"],
+    ans: 1,
+    explain: "เมื่อสองแรงตั้งฉากกัน หาแรงลัพธ์ได้ด้วยพีทาโกรัส\n\nR = √(F1² + F2²) = √(30² + 40²) = √(900 + 1600) = √2500 = 50 N ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — สมดุลต่อการเลื่อนที่",
+    q: "มวล 10 kg แขวนด้วยเชือก 2 เส้น เส้นหนึ่งทำมุม 30° กับแนวราบ อีกเส้นทำมุม 60° กับแนวราบ (มุมระหว่างเชือกทั้งสอง = 90°)\nจงหาแรงตึงเชือกเส้นที่ทำมุม 30° กับแนวราบ (g = 10 m/s²)",
+    opts: ["50 N", "70.7 N", "86.6 N", "100 N", "43.3 N"],
+    ans: 0,
+    explain: "ให้ T1 คือแรงตึงเชือกที่ทำมุม 30° และ T2 คือแรงตึงเชือกที่ทำมุม 60° กับแนวราบ\nW = mg = 10×10 = 100 N\n\nΣFx = 0: T1 cos30° = T2 cos60°  →  T1(0.866) = T2(0.5)  →  T1 = 0.577 T2\n\nΣFy = 0: T1 sin30° + T2 sin60° = 100\n(0.577 T2)(0.5) + T2(0.866) = 100\n0.289 T2 + 0.866 T2 = 100\n1.155 T2 = 100\nT2 ≈ 86.6 N\n\nแทนกลับ: T1 = 0.577 × 86.6 ≈ 50 N ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — โมเมนต์ของแรง",
+    q: "แรง 50 N กระทำทำมุม 37° กับคาน ที่ตำแหน่งห่างจากจุดหมุน 2 m ตามแนวคาน (sin37° = 0.6, cos37° = 0.8)\nจงหาขนาดของโมเมนต์รอบจุดหมุน",
+    opts: ["40 N·m", "60 N·m", "80 N·m", "100 N·m", "120 N·m"],
+    ans: 1,
+    explain: "เมื่อแรงทำมุมกับคาน ต้องใช้เฉพาะองค์ประกอบที่ตั้งฉากกับคานในการคิดโมเมนต์\n\nองค์ประกอบตั้งฉากคาน = F sin37° = 50 × 0.6 = 30 N\n\nτ = (F sin37°) × d = 30 × 2 = 60 N·m ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — สมดุลต่อการหมุน",
+    q: "คานสม่ำเสมอยาว 4 m หนัก 40 N วางพาดอยู่บนจุดรองรับ A (ปลายซ้าย) และ B (ปลายขวา)\nมีน้ำหนัก 20 N วางห่างจาก A เป็นระยะ 1 m จงหาแรงปฏิกิริยาที่จุด B",
+    opts: ["15 N", "20 N", "25 N", "35 N", "60 N"],
+    ans: 1,
+    explain: "คานสม่ำเสมอยาว 4 m น้ำหนักคาน 40 N กระทำที่กึ่งกลาง คือห่างจาก A 2 m\nน้ำหนักเพิ่ม 20 N อยู่ห่างจาก A 1 m\n\nใช้ Στ = 0 รอบจุด A:\nR_B × 4 = 40 × 2 + 20 × 1\nR_B × 4 = 80 + 20 = 100\nR_B = 100/4 = 25 N ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — จุดศูนย์ถ่วง",
+    q: "แท่งเบา (ไม่มีมวล) ยาว 3 m มีวัตถุมวล 2 kg, 3 kg และ 5 kg วางอยู่ที่ตำแหน่ง 0 m, 1 m และ 3 m ตามลำดับ\nจงหาตำแหน่งจุดศูนย์ถ่วงของระบบ วัดจากตำแหน่ง 0 m",
+    opts: ["1.0 m", "1.5 m", "1.8 m", "2.0 m", "2.4 m"],
+    ans: 2,
+    explain: "ใช้สูตรจุดศูนย์ถ่วงของระบบมวลหลายก้อน\n\nx_cg = (m1x1 + m2x2 + m3x3) / (m1+m2+m3)\nx_cg = (2×0 + 3×1 + 5×3) / (2+3+5)\nx_cg = (0 + 3 + 15) / 10\nx_cg = 18/10 = 1.8 m ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — สภาพสมดุล",
+    q: "ข้อใดกล่าวถึงปัจจัยที่ทำให้วัตถุมีเสถียรภาพ (สมดุลเสถียร) มากขึ้นได้ถูกต้อง",
+    opts: [
+      "ฐานรองรับกว้างขึ้น และจุดศูนย์ถ่วงอยู่ต่ำลง",
+      "ฐานรองรับแคบลง และจุดศูนย์ถ่วงอยู่สูงขึ้น",
+      "ฐานรองรับกว้างขึ้น และจุดศูนย์ถ่วงอยู่สูงขึ้น",
+      "มวลของวัตถุเพิ่มขึ้นโดยไม่เปลี่ยนรูปทรง",
+      "น้ำหนักของวัตถุลดลงโดยไม่เปลี่ยนรูปทรง"
+    ],
+    ans: 0,
+    explain: "เสถียรภาพของวัตถุขึ้นอยู่กับสองปัจจัยหลัก:\n1) ฐานรองรับยิ่งกว้าง เส้นดิ่งจากจุดศูนย์ถ่วงยิ่งยากที่จะเคลื่อนพ้นฐานเมื่อถูกเอียง\n2) จุดศูนย์ถ่วงยิ่งอยู่ต่ำ วัตถุยิ่งต้องเอียงมากขึ้นก่อนที่เส้นดิ่งจากจุดศูนย์ถ่วงจะพ้นฐาน\n\nดังนั้น ฐานกว้างขึ้น + จุดศูนย์ถ่วงต่ำลง = เสถียรภาพเพิ่มขึ้น ✓\nมวลหรือน้ำหนักที่เปลี่ยนไปโดยไม่เปลี่ยนตำแหน่งจุดศูนย์ถ่วงหรือฐานรองรับ ไม่ส่งผลต่อเสถียรภาพโดยตรง"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — เครื่องกลอย่างง่าย",
+    q: "คานงัดชนิดที่ 1 จุดหมุนอยู่ระหว่างแรงพยายามกับแรงต้าน ระยะจากจุดหมุนถึงแรงต้าน = 0.3 m และระยะจากจุดหมุนถึงแรงพยายาม = 1.2 m\nถ้าแรงต้าน (น้ำหนักวัตถุ) = 240 N จงหาแรงพยายามน้อยที่สุดที่ใช้ยกวัตถุ",
+    opts: ["40 N", "60 N", "80 N", "120 N", "960 N"],
+    ans: 1,
+    explain: "ที่จุดสมดุลพอดี (แรงพยายามน้อยที่สุดที่ยังยกได้) ใช้หลักสมดุลโมเมนต์รอบจุดหมุน\n\nΣτ = 0: F_effort × 1.2 = 240 × 0.3\nF_effort × 1.2 = 72\nF_effort = 72/1.2 = 60 N ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — โจทย์ประยุกต์ (บันได)",
+    q: "บันไดสม่ำเสมอยาว 5 m หนัก 100 N พิงกำแพงเรียบ (ไม่มีความฝืด) ทำมุม 60° กับพื้นราบซึ่งมีความฝืด\nจงหาขนาดแรงเสียดทานที่พื้นกระทำต่อบันได",
+    opts: ["25.0 N", "28.9 N", "50.0 N", "57.7 N", "86.6 N"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาแรงปฏิกิริยาจากกำแพง N_wall ด้วยสมดุลโมเมนต์รอบจุดฐานบันได\nน้ำหนักบันได W = 100 N กระทำที่กึ่งกลาง ห่างจากฐานตามแนวราบ = (L/2)cos60°\nN_wall กระทำที่ปลายบนของบันได ห่างจากฐานตามแนวดิ่ง = L sin60°\n\nΣτ(ฐานบันได) = 0:\nN_wall × (L sin60°) = W × (L/2)cos60°\nN_wall = W cos60° / (2 sin60°) = 100 × 0.5 / (2 × 0.866)\nN_wall = 50 / 1.732 ≈ 28.9 N\n\nขั้นที่ 2: หาแรงเสียดทานที่พื้น จากสมดุลเลื่อนที่แนวราบ ΣFx = 0\nf = N_wall ≈ 28.9 N ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — โมเมนต์คู่ควบ",
+    q: "แรงคู่ควบขนาด 15 N สองแรง ทิศตรงข้ามกัน กระทำห่างกัน 0.4 m จงหาขนาดของโมเมนต์คู่ควบ",
+    opts: ["3.75 N·m", "6 N·m", "15.4 N·m", "37.5 N·m", "60 N·m"],
+    ans: 1,
+    explain: "โมเมนต์คู่ควบหาได้จาก τ = F × d เมื่อ d คือระยะตั้งฉากระหว่างแนวแรงทั้งสอง\n\nτ = 15 × 0.4 = 6 N·m ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — สมดุลรวม (ไม้กระดก)",
+    q: "คนคนหนึ่งหนัก 600 N นั่งบนไม้กระดกห่างจากจุดหมุน 1 m อีกด้านหนึ่งต้องมีน้ำหนักเท่าใดวางห่างจากจุดหมุน 1.5 m เพื่อให้ไม้กระดกสมดุลพอดี",
+    opts: ["300 N", "400 N", "600 N", "900 N", "1200 N"],
+    ans: 1,
+    explain: "ใช้สมดุลต่อการหมุน รอบจุดหมุนของไม้กระดก\n\nΣτ = 0:\n600 × 1 = W × 1.5\nW = 600/1.5 = 400 N ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — การรวมแรงหลายแรง",
+    q: "แรง 3 แรงกระทำที่จุดเดียวกัน: F1 = 10 N ทิศ 0° (แนวแกน x), F2 = 10 N ทิศ 90° (แนวแกน y), F3 = 10√2 N ทิศ 225°\nจงหาขนาดของแรงลัพธ์",
+    opts: ["0 N", "10 N", "10√2 N", "20 N", "30 N"],
+    ans: 0,
+    explain: "แตกแรงแต่ละแรงเป็นองค์ประกอบ x, y (มุมวัดจากแกน x ทวนเข็มนาฬิกา)\n\nF1: Fx = 10, Fy = 0\nF2: Fx = 0, Fy = 10\nF3: Fx = 10√2 × cos225° = 10√2 × (−√2/2) = −10,  Fy = 10√2 × sin225° = 10√2 × (−√2/2) = −10\n\nΣFx = 10 + 0 − 10 = 0\nΣFy = 0 + 10 − 10 = 0\n\nR = √(ΣFx² + ΣFy²) = √0 = 0 N ✓\n\n(แรงทั้งสามอยู่ในสภาวะสมดุลกันเองพอดีอยู่แล้ว จึงไม่มีแรงลัพธ์)"
+  },
+  {
+    year: "📘 แนวข้อสอบจำลอง — คานยื่น",
+    q: "คานสม่ำเสมอยาว 3 m มวล 6 kg ปลายด้านหนึ่งยึดติดกับผนัง (คานยื่น) อีกด้านลอยอิสระ มีวัตถุมวล 4 kg แขวนที่ปลายอิสระ (g = 10 m/s²)\nจงหาขนาดของโมเมนต์รวมที่จุดยึดกับผนัง",
+    opts: ["90 N·m", "120 N·m", "180 N·m", "210 N·m", "300 N·m"],
+    ans: 3,
+    explain: "น้ำหนักคาน W_beam = mg = 6×10 = 60 N กระทำที่จุดกึ่งกลางคาน ห่างจากผนัง 1.5 m\nน้ำหนักวัตถุที่แขวน W_load = 4×10 = 40 N กระทำที่ปลายอิสระ ห่างจากผนัง 3 m\n\nโมเมนต์รวมที่จุดยึด = (W_beam × 1.5) + (W_load × 3)\n= (60 × 1.5) + (40 × 3)\n= 90 + 120\n= 210 N·m ✓"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentCat = '';
+  alevelQuestions.forEach((q, idx) => {
+    if (q.year !== currentCat) {
+      currentCat = q.year;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + currentCat + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

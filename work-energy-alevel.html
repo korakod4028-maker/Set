@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>งานและพลังงาน | ฟิสิกส์ A-Level ม.4-5</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'W=Fs KE=½mv² PE=mgh P=W/t ΔE=0';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 6px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+  .math-latex {
+    font-family: var(--sans);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* DIAGRAM */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+  .reset-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    display: none;
+  }
+  .reset-btn.show { display: inline-block; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* PROGRESS */
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .prog-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .prog-dot.done { background: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>งาน<span>และ</span>พลังงาน</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.4-5 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">15</div><div class="stat-label">ข้อสอบแนว A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="w1">1. งานและแรง</button>
+  <button class="tab-btn" data-sec="w2">2. งานจากแรงแปรผัน</button>
+  <button class="tab-btn" data-sec="ke">3. พลังงานจลน์</button>
+  <button class="tab-btn" data-sec="pe1">4. พลังงานศักย์โน้มถ่วง</button>
+  <button class="tab-btn" data-sec="pe2">5. พลังงานศักย์สปริง</button>
+  <button class="tab-btn" data-sec="cons">6. การอนุรักษ์พลังงานกล</button>
+  <button class="tab-btn" data-sec="fric">7. แรงเสียดทาน/พลังงานสูญเสีย</button>
+  <button class="tab-btn" data-sec="pow">8. กำลัง (Power)</button>
+  <button class="tab-btn" data-sec="mix">9. โจทย์ผสม/สรุปสูตร</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบแนว A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: งานและแรง ===== -->
+  <div class="section active" id="w1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · งาน (Work) จากแรงคงที่</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🏋️</div>งานคืออะไร?</div>
+      <p>ในฟิสิกส์ <strong>งาน (Work)</strong> เกิดขึ้นเมื่อมีแรงกระทำต่อวัตถุ แล้ววัตถุมีการ<strong>เคลื่อนที่ไปในแนวเดียวกับแรง</strong> (หรือมีองค์ประกอบในแนวแรงนั้น)</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        งาน (W) ที่แรงคงที่ F กระทำต่อวัตถุ ขณะวัตถุเคลื่อนที่เป็นระยะทาง s โดยแรงทำมุม θ กับแนวการเคลื่อนที่<br><br>
+        <strong>W = F s cos θ</strong>
+      </div>
+      <div class="math-block">หน่วยของงาน: จูล (J) = นิวตัน × เมตร (N·m)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ออกแรง 20 N ลากกล่องไปตามพื้นราบเป็นระยะ 5 m ในแนวเดียวกับแรง (θ = 0°)<br>
+        W = F s cos 0° = 20 × 5 × 1 = <strong>100 J</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        งานเป็น<strong>ปริมาณสเกลาร์</strong> (ไม่มีทิศทาง) แม้จะคำนวณมาจากแรงและการกระจัดซึ่งเป็นเวกเตอร์ก็ตาม
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">±</div>เครื่องหมายของงาน</div>
+      <p>ค่าของ cos θ เป็นตัวกำหนดเครื่องหมายของงาน แบ่งได้ 3 กรณี</p>
+      <table>
+        <tr><th>มุม θ</th><th>ค่า cos θ</th><th>งาน W</th><th>ความหมาย</th></tr>
+        <tr><td>0° ≤ θ &lt; 90°</td><td class="true-val">บวก</td><td class="true-val">W &gt; 0</td><td>งานบวก (แรงช่วยให้เคลื่อนที่)</td></tr>
+        <tr><td>θ = 90°</td><td>0</td><td>W = 0</td><td>ไม่มีงาน (แรงตั้งฉากกับการเคลื่อนที่)</td></tr>
+        <tr><td>90° &lt; θ ≤ 180°</td><td class="false-val">ลบ</td><td class="false-val">W &lt; 0</td><td>งานลบ (แรงต้านการเคลื่อนที่)</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างงานเป็นศูนย์</div>
+        คนเดินถือกระเป๋าในแนวราบด้วยความเร็วคงที่: แรงยกกระเป๋ามีทิศขึ้น (ตั้งฉากกับการกระจัดแนวราบ) → <strong>งานของแรงยก = 0</strong><br>
+        แรงสู่ศูนย์กลาง (centripetal force) ในการเคลื่อนที่เป็นวงกลมด้วยอัตราเร็วคงที่ → ตั้งฉากกับความเร็วเสมอ → <strong>งาน = 0</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        แรงปฏิกิริยาตั้งฉาก (Normal force) และแรงโน้มถ่วง <strong>ไม่ทำงาน</strong> เมื่อวัตถุเคลื่อนที่ในแนวราบ เพราะตั้งฉากกับการกระจัด
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">Σ</div>งานสุทธิ (Net Work)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่อมีหลายแรงกระทำต่อวัตถุพร้อมกัน งานสุทธิคือ<strong>ผลรวมของงานจากทุกแรง</strong><br><br>
+        W<sub>net</sub> = W₁ + W₂ + W₃ + …
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กล่องถูกลากด้วยแรง 40 N (W = +400 J เมื่อเคลื่อนที่ 10 m) ขณะมีแรงเสียดทาน 15 N ต้านการเคลื่อนที่ (W = −150 J)<br><br>
+        W<sub>net</sub> = 400 + (−150) = <strong>250 J</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค</div>
+        สามารถหางานสุทธิได้ 2 วิธี: (1) รวมงานจากแต่ละแรงก่อน หรือ (2) หาแรงลัพธ์ก่อนแล้วค่อยคูณระยะทาง — ได้คำตอบเท่ากัน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: งานจากแรงแปรผัน ===== -->
+  <div class="section" id="w2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · งานจากแรงแปรผันและกราฟ F-x</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📈</div>งานจากพื้นที่ใต้กราฟ F-x</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        เมื่อแรงไม่คงที่ (เปลี่ยนค่าไปตามตำแหน่ง x) งานที่ทำได้เท่ากับ<strong>พื้นที่ใต้กราฟระหว่างแรง (F) กับระยะทาง (x)</strong>
+      </div>
+      <div class="venn-container">
+        <svg width="360" height="200" viewBox="0 0 360 200">
+          <rect width="360" height="200" rx="10" fill="#1c2235"/>
+          <line x1="40" y1="170" x2="330" y2="170" stroke="#8892b0" stroke-width="1.5"/>
+          <line x1="40" y1="170" x2="40" y2="20" stroke="#8892b0" stroke-width="1.5"/>
+          <text x="335" y="175" fill="#8892b0" font-size="13">x</text>
+          <text x="20" y="25" fill="#8892b0" font-size="13">F</text>
+          <polygon points="40,170 260,170 260,60 40,170" fill="rgba(108,99,255,0.25)" stroke="#6c63ff" stroke-width="2"/>
+          <text x="120" y="140" fill="#a89fff" font-size="14" font-weight="bold">พื้นที่ = งาน</text>
+          <line x1="260" y1="170" x2="260" y2="60" stroke="#00d4aa" stroke-width="1" stroke-dasharray="3,3"/>
+        </svg>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — แรงแปรผันเป็นเส้นตรงจาก 0 ถึง F₀</div>
+        ถ้าแรงเพิ่มขึ้นเป็นเส้นตรงจาก 0 นิวตัน จนถึง F₀ ขณะวัตถุเคลื่อนที่ระยะ x₀ กราฟจะเป็นรูปสามเหลี่ยม<br>
+        W = พื้นที่สามเหลี่ยม = <strong>½ F₀ x₀</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🌀</div>งานของสปริง (Hooke's Law)</div>
+      <div class="def-box">
+        <div class="def-label">กฎของฮุก</div>
+        แรงที่สปริงต้าน (หรือแรงที่ต้องออกแรงดึง/อัดสปริง) แปรผันตรงกับระยะยืด/หด x<br><br>
+        <strong>F = kx</strong> &nbsp; (k = ค่านิจสปริง หน่วย N/m)
+      </div>
+      <p>เมื่อ F แปรผันตรงกับ x กราฟ F-x จึงเป็นเส้นตรงผ่านจุดกำเนิด พื้นที่ใต้กราฟจึงเป็นรูปสามเหลี่ยม</p>
+      <div class="math-block">
+        งานที่ใช้ยืด/อัดสปริงจากธรรมชาติไปเป็นระยะ x<br>
+        W = ½ (F)(x) = ½ (kx)(x) = <strong>½kx²</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        สปริง k = 200 N/m ถูกอัดเป็นระยะ 0.1 m จงหางานที่ใช้อัดสปริง<br>
+        W = ½ × 200 × (0.1)² = ½ × 200 × 0.01 = <strong>1 J</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ข้อสังเกต</div>
+        งานของสปริงแปรผันตรงกับ<strong>กำลังสอง</strong>ของระยะยืด/หด ถ้ายืดเป็น 2 เท่า งานจะเพิ่มเป็น 4 เท่า
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: พลังงานจลน์ ===== -->
+  <div class="section" id="ke">
+    <div class="section-heading"><span>หัวข้อ 3</span> · พลังงานจลน์และทฤษฎีบทงาน-พลังงาน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🚀</div>พลังงานจลน์ (Kinetic Energy)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        พลังงานจลน์ คือ พลังงานที่วัตถุมีเนื่องจากการเคลื่อนที่<br><br>
+        <strong>KE = ½ m v²</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุมวล 4 kg เคลื่อนที่ด้วยอัตราเร็ว 3 m/s<br>
+        KE = ½ × 4 × 3² = ½ × 4 × 9 = <strong>18 J</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        พลังงานจลน์แปรผันตรงกับ<strong>กำลังสอง</strong>ของอัตราเร็ว ถ้าอัตราเร็วเพิ่มเป็น 2 เท่า พลังงานจลน์จะเพิ่มเป็น 4 เท่า ไม่ใช่ 2 เท่า
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔗</div>ทฤษฎีบทงาน-พลังงาน (Work-Energy Theorem)</div>
+      <div class="def-box">
+        <div class="def-label">ใจความสำคัญ</div>
+        งานสุทธิที่กระทำต่อวัตถุ เท่ากับ <strong>พลังงานจลน์ที่เปลี่ยนแปลงไป</strong><br><br>
+        <strong>W<sub>net</sub> = ΔKE = ½mv² − ½mv₀²</strong>
+      </div>
+      <p style="font-size:14px; color:var(--text-dim)">ที่มา: มาจากสมการการเคลื่อนที่ v² = v₀² + 2as และ F = ma รวมกันได้เป็น Fs = ½mv² − ½mv₀²</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุมวล 2 kg เริ่มต้นนิ่ง ถูกแรงสุทธิกระทำจนได้งาน 25 J จงหาอัตราเร็วสุดท้าย<br><br>
+        W<sub>net</sub> = ½mv² − 0<br>
+        25 = ½ × 2 × v² = v² &nbsp;→&nbsp; v = <strong>5 m/s</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ประโยชน์ของทฤษฎีบทนี้</div>
+        ใช้หาอัตราเร็วหรืองานได้โดย<strong>ไม่ต้องรู้เวลา</strong> หรือความเร่งเป็นรายละเอียด เหมาะกับโจทย์ที่แรงไม่คงที่หรือซับซ้อน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: พลังงานศักย์โน้มถ่วง ===== -->
+  <div class="section" id="pe1">
+    <div class="section-heading"><span>หัวข้อ 4</span> · พลังงานศักย์โน้มถ่วง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⛰️</div>พลังงานศักย์โน้มถ่วง (Gravitational PE)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        พลังงานศักย์โน้มถ่วง คือ พลังงานที่วัตถุมีเนื่องจากตำแหน่งความสูงเทียบกับระดับอ้างอิง<br><br>
+        <strong>PE = mgh</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุมวล 5 kg อยู่สูงจากพื้น 4 m (g = 10 m/s²)<br>
+        PE = 5 × 10 × 4 = <strong>200 J</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 การเลือกระดับอ้างอิง</div>
+        h วัดจากระดับอ้างอิงใดก็ได้ตามที่โจทย์กำหนด (มักเลือกจุดต่ำสุดของการเคลื่อนที่) เพราะสิ่งที่มีความหมายทางฟิสิกส์คือ<strong>ผลต่างของ PE</strong> ไม่ใช่ค่า PE ที่จุดใดจุดหนึ่งเดี่ยว ๆ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔄</div>ความสัมพันธ์กับงานของแรงโน้มถ่วง</div>
+      <div class="def-box">
+        <div class="def-label">ความสัมพันธ์สำคัญ</div>
+        งานที่แรงโน้มถ่วงกระทำ เท่ากับ<strong>ค่าลบของพลังงานศักย์ที่เปลี่ยนไป</strong><br><br>
+        <strong>W<sub>gravity</sub> = −ΔPE = −(PE<sub>สุดท้าย</sub> − PE<sub>เริ่มต้น</sub>)</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุตกลงจากความสูง 10 m ลงมาที่พื้น (h ลดลง 10 m)<br>
+        ΔPE = 0 − mg(10) = −10mg &nbsp;→&nbsp; W<sub>gravity</sub> = −ΔPE = <strong>+10mg</strong> (งานบวก เพราะแรงโน้มถ่วงช่วยให้ตกลง)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ จุดที่สับสนบ่อย</div>
+        เมื่อวัตถุ<strong>ขึ้น</strong> (h เพิ่ม) แรงโน้มถ่วงทำงาน<strong>ลบ</strong> (ต้านการเคลื่อนที่)<br>
+        เมื่อวัตถุ<strong>ลง</strong> (h ลด) แรงโน้มถ่วงทำงาน<strong>บวก</strong> (ช่วยการเคลื่อนที่)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: พลังงานศักย์สปริง ===== -->
+  <div class="section" id="pe2">
+    <div class="section-heading"><span>หัวข้อ 5</span> · พลังงานศักย์สปริง (Elastic PE)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🌀</div>พลังงานศักย์ยืดหยุ่น</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        พลังงานศักย์ที่สะสมอยู่ในสปริงเมื่อถูกยืดหรืออัดจากตำแหน่งธรรมชาติเป็นระยะ x<br><br>
+        <strong>PE<sub>spring</sub> = ½kx²</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        สปริง k = 400 N/m ถูกอัดเป็นระยะ 0.1 m<br>
+        PE<sub>spring</sub> = ½ × 400 × (0.1)² = ½ × 400 × 0.01 = <strong>2 J</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ข้อสังเกต</div>
+        PE<sub>spring</sub> มีค่าเป็น<strong>บวกเสมอ</strong> ไม่ว่าจะยืดหรืออัด เพราะ x² ไม่ติดลบ — สปริงสะสมพลังงานได้ทั้งสองทิศทาง
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🎯</div>การประยุกต์ใช้ — เครื่องยิงสปริง</div>
+      <p>เมื่อปล่อยสปริงที่ถูกอัดไว้ พลังงานศักย์สปริงจะถูกเปลี่ยนเป็นพลังงานจลน์ของวัตถุที่ถูกยิงออกไป (บนพื้นราบไร้แรงเสียดทาน)</p>
+      <div class="math-block">
+        ½kx² = ½mv²
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        สปริง k = 400 N/m อัด 0.1 m ยิงลูกบอลมวล 1 kg บนพื้นราบลื่น จงหาอัตราเร็วของลูกบอลเมื่อหลุดจากสปริง<br><br>
+        ½(400)(0.1)² = ½(1)v²<br>
+        2 = 0.5v² &nbsp;→&nbsp; v² = 4 &nbsp;→&nbsp; v = <strong>2 m/s</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: การอนุรักษ์พลังงานกล ===== -->
+  <div class="section" id="cons">
+    <div class="section-heading"><span>หัวข้อ 6</span> · กฎการอนุรักษ์พลังงานกล</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚖️</div>พลังงานกล และเงื่อนไขการอนุรักษ์</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        พลังงานกล (Mechanical Energy) = พลังงานจลน์ + พลังงานศักย์<br><br>
+        <strong>E = KE + PE</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ เงื่อนไขสำคัญ</div>
+        พลังงานกลจะ<strong>คงที่</strong> ก็ต่อเมื่อไม่มีแรงเสียดทาน แรงต้านอากาศ หรือแรงภายนอกอื่นที่ไม่ใช่แรงโน้มถ่วง/แรงสปริงมากระทำ (เรียกว่าระบบมีแต่<strong>แรงอนุรักษ์</strong>)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔁</div>กฎการอนุรักษ์พลังงานกล</div>
+      <div class="def-box">
+        <div class="def-label">สมการหลัก</div>
+        เมื่อไม่มีแรงเสียดทาน พลังงานกลรวมที่จุดใด ๆ จะเท่ากันเสมอ<br><br>
+        <strong>KE₁ + PE₁ = KE₂ + PE₂</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — วัตถุตกอย่างเสรี</div>
+        วัตถุมวล 0.5 kg ตกจากที่สูง 20 m (ไร้แรงต้าน, g = 10 m/s²) จงหาอัตราเร็วก่อนถึงพื้น<br><br>
+        mgh = ½mv² &nbsp;(มวลตัดกันได้)<br>
+        v = √(2gh) = √(2×10×20) = √400 = <strong>20 m/s</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level</div>
+        เมื่อไร้แรงเสียดทาน อัตราเร็วที่จุดต่ำสุดของการเคลื่อนที่<strong>ไม่ขึ้นกับมวล</strong> และ<strong>ไม่ขึ้นกับรูปร่างเส้นทาง</strong> ขึ้นกับความสูงที่ตกลงมาเท่านั้น (v = √(2gh))
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🎢</div>การแปลงพลังงานในระบบต่าง ๆ</div>
+      <div class="venn-container">
+        <svg width="380" height="180" viewBox="0 0 380 180">
+          <rect width="380" height="180" rx="10" fill="#1c2235"/>
+          <path d="M 30 150 Q 110 20 190 150 Q 270 20 350 150" fill="none" stroke="#6c63ff" stroke-width="3"/>
+          <circle cx="30" cy="150" r="6" fill="#ffd93d"/>
+          <circle cx="190" cy="150" r="6" fill="#00d4aa"/>
+          <circle cx="350" cy="150" r="6" fill="#ffd93d"/>
+          <text x="12" y="170" fill="#ffd93d" font-size="12">PE สูงสุด</text>
+          <text x="165" y="170" fill="#00d4aa" font-size="12">KE สูงสุด</text>
+          <text x="310" y="170" fill="#ffd93d" font-size="12">PE สูงสุด</text>
+        </svg>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — ลูกตุ้มไร้แรงต้าน</div>
+        ลูกตุ้มถูกปล่อยจากตำแหน่งที่สูงกว่าจุดต่ำสุด 0.8 m (g = 10 m/s²) จงหาอัตราเร็วที่จุดต่ำสุด<br><br>
+        mgh = ½mv² &nbsp;→&nbsp; v = √(2×10×0.8) = √16 = <strong>4 m/s</strong>
+      </div>
+      <p style="font-size:14px; color:var(--text-dim)">ที่จุดสูงสุดของการแกว่ง v = 0 (PE สูงสุด, KE = 0) ที่จุดต่ำสุด h = 0 (KE สูงสุด, PE = 0) — พลังงานกลรวมเท่ากันทุกจุด</p>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: แรงเสียดทานและพลังงานสูญเสีย ===== -->
+  <div class="section" id="fric">
+    <div class="section-heading"><span>หัวข้อ 7</span> · แรงเสียดทานและพลังงานที่สูญเสีย</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔥</div>งานของแรงเสียดทาน</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรงเสียดทานมีทิศต้านการเคลื่อนที่เสมอ จึงทำ<strong>งานลบ</strong>ต่อวัตถุ พลังงานกลที่หายไปจะเปลี่ยนเป็นความร้อน<br><br>
+        <strong>W<sub>friction</sub> = −f d</strong> &nbsp; โดย f = μN
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กล่องมวล 2 kg เลื่อนบนพื้นราบด้วย μ = 0.3 (g = 10 m/s²) เป็นระยะ 6 m<br>
+        f = μmg = 0.3 × 2 × 10 = 6 N<br>
+        W<sub>friction</sub> = −6 × 6 = <strong>−36 J</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📉</div>สมการพลังงานเมื่อมีแรงเสียดทาน</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        เมื่อมีแรงเสียดทาน พลังงานกลไม่คงที่ แต่<strong>พลังงานทั้งหมดยังคงอนุรักษ์</strong>เสมอ โดยส่วนที่หายไปจากพลังงานกล เท่ากับพลังงานที่สูญเสียเป็นความร้อน (Q)<br><br>
+        <strong>KE₁ + PE₁ = KE₂ + PE₂ + Q</strong> &nbsp; โดย Q = f × d
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุมวล 1 kg ไถลลงเนินสูง 5 m (g = 10 m/s²) มีแรงเสียดทานบางส่วน ทำให้ถึงพื้นด้วยอัตราเร็ว 8 m/s จงหาพลังงานที่สูญเสียไปกับแรงเสียดทาน<br><br>
+        Q = mgh − ½mv² = (1×10×5) − (½×1×8²) = 50 − 32 = <strong>18 J</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคแก้โจทย์</div>
+        ถ้าโจทย์ให้อัตราเร็วจริงที่จุดปลายทาง (ซึ่งน้อยกว่ากรณีไร้แรงเสียดทาน) ให้ใช้สมการพลังงานรวม แล้วแก้หา Q หรือ f ที่ไม่ทราบค่าได้โดยตรง ไม่จำเป็นต้องใช้กฎของนิวตันเสมอไป
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🛑</div>การหาระยะทางจนหยุดนิ่ง</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กล่องมวล 2 kg ไถลด้วยอัตราเร็วต้น 6 m/s บนพื้นราบซึ่งมี μ = 0.3 (g = 10 m/s²) จงหาระยะทางก่อนหยุด<br><br>
+        f = μmg = 0.3 × 2 × 10 = 6 N<br>
+        KE เริ่มต้น = ½ × 2 × 6² = 36 J<br>
+        พลังงานจลน์ทั้งหมดถูกแรงเสียดทานดูดซับจนหมด: KE = f × d<br>
+        d = 36 / 6 = <strong>6 m</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        วิธีพลังงานสะดวกกว่าวิธีจลนศาสตร์มากในโจทย์แบบนี้ เพราะไม่ต้องหาความเร่งหรือเวลาเลย
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: กำลัง ===== -->
+  <div class="section" id="pow">
+    <div class="section-heading"><span>หัวข้อ 8</span> · กำลัง (Power)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚡</div>กำลังคืออะไร?</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        กำลัง คือ อัตราการทำงานต่อหน่วยเวลา (อัตราการถ่ายเทพลังงาน)<br><br>
+        <strong>P = W / t</strong>
+      </div>
+      <div class="math-block">หน่วยของกำลัง: วัตต์ (W) = จูล/วินาที (J/s)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        มอเตอร์ยกวัตถุมวล 50 kg ขึ้นสูง 10 m ในเวลา 5 s (g = 10 m/s²) ด้วยความเร็วคงที่ จงหากำลังของมอเตอร์<br><br>
+        W = mgh = 50 × 10 × 10 = 5000 J<br>
+        P = W/t = 5000/5 = <strong>1000 W = 1 kW</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🏎️</div>กำลังขณะหนึ่ง (Instantaneous Power)</div>
+      <div class="def-box">
+        <div class="def-label">สูตรทางเลือก</div>
+        เมื่อวัตถุเคลื่อนที่ด้วยความเร็ว v ขณะแรง F กระทำในแนวเดียวกับความเร็ว<br><br>
+        <strong>P = F v</strong> &nbsp; (หรือ P = Fv cos θ ถ้าแรงทำมุม θ กับความเร็ว)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เครื่องยนต์รถออกแรงขับ 2000 N ขณะรถวิ่งด้วยความเร็วคงที่ 20 m/s จงหากำลังของเครื่องยนต์<br><br>
+        P = F v = 2000 × 20 = 40000 W = <strong>40 kW</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคเลือกสูตร</div>
+        ใช้ <strong>P = W/t</strong> เมื่อโจทย์ให้งานรวมและเวลารวม (กำลังเฉลี่ย)<br>
+        ใช้ <strong>P = Fv</strong> เมื่อโจทย์ให้แรงและความเร็ว ณ ขณะใดขณะหนึ่ง (กำลังขณะหนึ่ง)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: โจทย์ผสม/สรุปสูตร ===== -->
+  <div class="section" id="mix">
+    <div class="section-heading"><span>หัวข้อ 9</span> · โจทย์ผสมและสรุปสูตรสำคัญ</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>สรุปสูตรทั้งหมด — ต้องจำให้ได้!</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">W = Fs cos θ</div>
+          <div class="sym-name">งานจากแรงคงที่</div>
+          <div class="sym-desc">หน่วย: จูล (J)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">KE = ½mv²</div>
+          <div class="sym-name">พลังงานจลน์</div>
+          <div class="sym-desc">พลังงานจากการเคลื่อนที่</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">PE = mgh</div>
+          <div class="sym-name">พลังงานศักย์โน้มถ่วง</div>
+          <div class="sym-desc">พลังงานจากความสูง</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">PE = ½kx²</div>
+          <div class="sym-name">พลังงานศักย์สปริง</div>
+          <div class="sym-desc">พลังงานจากการยืด/อัด</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">W<sub>net</sub> = ΔKE</div>
+          <div class="sym-name">ทฤษฎีบทงาน-พลังงาน</div>
+          <div class="sym-desc">งานสุทธิ = พลังงานจลน์ที่เปลี่ยน</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">KE₁+PE₁=KE₂+PE₂</div>
+          <div class="sym-name">การอนุรักษ์พลังงานกล</div>
+          <div class="sym-desc">ใช้เมื่อไม่มีแรงเสียดทาน</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">…=…+Q</div>
+          <div class="sym-name">มีแรงเสียดทาน</div>
+          <div class="sym-desc">Q = f × d (พลังงานที่สูญเสีย)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">P = W/t = Fv</div>
+          <div class="sym-name">กำลัง</div>
+          <div class="sym-desc">หน่วย: วัตต์ (W)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🎢</div>โจทย์ประยุกต์ — รถไฟเหาะ (ไร้แรงเสียดทาน)</div>
+      <div class="example-box">
+        <div class="ex-label">โจทย์</div>
+        รถไฟเหาะมวล 500 kg เริ่มต้นนิ่งที่จุดสูงสุด 20 m แล้วเคลื่อนที่ลงมาตามรางไร้แรงเสียดทาน จงหาอัตราเร็วที่จุดซึ่งสูงจากพื้น 15 m (g = 10 m/s²)<br><br>
+        <strong>วิธีทำ:</strong> ใช้การอนุรักษ์พลังงานกล<br>
+        mgh₁ = mgh₂ + ½mv² &nbsp;(มวลตัดกันได้)<br>
+        v = √(2g(h₁−h₂)) = √(2×10×5) = √100 = <strong>10 m/s</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔫</div>โจทย์ประยุกต์ — เครื่องยิงสปริงขึ้นทางลาด</div>
+      <div class="example-box">
+        <div class="ex-label">โจทย์</div>
+        สปริง k = 150 N/m ถูกอัด 0.4 m ยิงวัตถุมวล 3 kg ขึ้นไปตามรางลื่นไร้แรงเสียดทาน จงหาความสูงสูงสุดที่วัตถุขึ้นไปได้ (g = 10 m/s²)<br><br>
+        <strong>วิธีทำ:</strong> พลังงานศักย์สปริงทั้งหมดเปลี่ยนเป็นพลังงานศักย์โน้มถ่วงที่จุดสูงสุด (v = 0 ที่จุดสูงสุด)<br>
+        ½kx² = mgh<br>
+        ½ × 150 × (0.4)² = 3 × 10 × h<br>
+        12 = 30h &nbsp;→&nbsp; h = <strong>0.4 m</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคโจทย์ผสมหลายขั้น</div>
+        1. ระบุพลังงานที่มีอยู่ในระบบทุกรูปแบบที่จุดเริ่มต้นและจุดสิ้นสุด (KE, PE โน้มถ่วง, PE สปริง)<br>
+        2. เขียนสมการอนุรักษ์พลังงาน (บวก Q หากมีแรงเสียดทาน)<br>
+        3. แทนค่าและแก้สมการหาสิ่งที่โจทย์ถาม — มักไม่ต้องใช้กฎนิวตันหรือจลนศาสตร์เลย
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมงาน พลังงาน และกำลัง เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบแนว A-Level งานและพลังงาน</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ชุดข้อสอบจำลองแนว A-Level ฟิสิกส์ เรื่องงานและพลังงาน แบ่งตามหัวข้อ</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบายทีละขั้นตอน — สังเกตว่าโจทย์ส่วนใหญ่แก้ได้ด้วยสมการอนุรักษ์พลังงานหรือทฤษฎีบทงาน-พลังงานเป็นหลัก
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — งาน",
+    q: "ออกแรง 10 N ลากกล่องไปในแนวเดียวกับแรง เป็นระยะ 4 m จงหางานที่ทำ",
+    opts: ["20 J", "40 J", "30 J", "50 J"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ระบุสูตร\n  W = F s cos θ\n  เนื่องจากแรงกระทำในแนวเดียวกับการเคลื่อนที่ θ = 0° → cos 0° = 1\n\nขั้นที่ 2: แทนค่า\n  W = 10 × 4 × 1 = 40 J ✓\n\nสรุป: งานที่ทำคือ 40 J"
+  },
+  {
+    level: "⭐ ระดับ 1 — งาน",
+    q: "สถานการณ์ใดต่อไปนี้ที่แรงกระทำต่อวัตถุ 'ไม่ทำงาน' (W = 0)",
+    opts: [
+      "คนเดินถือกระเป๋าในแนวราบด้วยความเร็วคงที่",
+      "รถยนต์เร่งความเร็วบนถนนตรง",
+      "ลูกบอลตกอย่างเสรีในแนวดิ่ง",
+      "แรงดึงเชือกลากกล่องไปข้างหน้าบนพื้นราบ"
+    ],
+    ans: 0,
+    explain: "หลักการ: งาน W = F s cos θ จะเป็นศูนย์เมื่อ θ = 90° คือแรงตั้งฉากกับทิศการเคลื่อนที่\n\nตรวจตัวเลือกที่ 1: คนถือกระเป๋าเดินในแนวราบ\n  แรงที่มือออกแรงพยุงกระเป๋ามีทิศขึ้น (แนวดิ่ง) แต่การกระจัดของคนอยู่ในแนวราบ\n  แรงตั้งฉากกับการกระจัด → งาน = 0 ✓\n\nตรวจตัวเลือกอื่น:\n  • รถเร่งความเร็ว: แรงขับเคลื่อนอยู่ในแนวเดียวกับการเคลื่อนที่ → งาน ≠ 0\n  • ลูกบอลตกอย่างเสรี: แรงโน้มถ่วงอยู่ในแนวเดียวกับการเคลื่อนที่ (ลงทั้งคู่) → งาน ≠ 0\n  • แรงดึงลากกล่องไปข้างหน้า: แรงอยู่ในแนวการเคลื่อนที่ → งาน ≠ 0\n\nดังนั้นคำตอบคือตัวเลือกที่ 1 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — พลังงานจลน์",
+    q: "วัตถุมวล 2 kg เคลื่อนที่ด้วยอัตราเร็ว 3 m/s จงหาพลังงานจลน์",
+    opts: ["6 J", "7 J", "8 J", "9 J"],
+    ans: 3,
+    explain: "ขั้นที่ 1: ระบุสูตร\n  KE = ½mv²\n\nขั้นที่ 2: แทนค่า\n  KE = ½ × 2 × 3² = ½ × 2 × 9 = 9 J ✓\n\nสรุป: พลังงานจลน์ของวัตถุคือ 9 J"
+  },
+  {
+    level: "⭐ ระดับ 1 — พลังงานศักย์",
+    q: "วัตถุมวล 5 kg อยู่สูงจากพื้น 4 m (g = 10 m/s²) จงหาพลังงานศักย์โน้มถ่วง",
+    opts: ["200 J", "150 J", "225 J", "175 J"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ระบุสูตร\n  PE = mgh\n\nขั้นที่ 2: แทนค่า\n  PE = 5 × 10 × 4 = 200 J ✓\n\nสรุป: พลังงานศักย์โน้มถ่วงคือ 200 J"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ทฤษฎีบทงาน-พลังงาน",
+    q: "วัตถุมวล 3 kg เริ่มต้นนิ่ง ถูกแรงสุทธิกระทำจนได้งาน 24 J จงหาอัตราเร็วสุดท้าย",
+    opts: ["2 m/s", "3 m/s", "4 m/s", "5 m/s"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้ทฤษฎีบทงาน-พลังงาน\n  W_net = ΔKE = ½mv² − ½mv₀²\n  เนื่องจากวัตถุเริ่มต้นนิ่ง v₀ = 0\n\nขั้นที่ 2: แทนค่า\n  24 = ½ × 3 × v² = 1.5v²\n  v² = 16 → v = 4 m/s ✓\n\nสรุป: อัตราเร็วสุดท้ายคือ 4 m/s"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การอนุรักษ์พลังงาน",
+    q: "วัตถุตกอย่างเสรีจากที่สูง h (ไร้แรงต้าน, g = 10 m/s²) แล้วถึงพื้นด้วยอัตราเร็ว 10 m/s จงหาความสูง h",
+    opts: ["3 m", "5 m", "4 m", "6 m"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ใช้การอนุรักษ์พลังงานกล\n  mgh = ½mv² (มวลตัดกันได้)\n\nขั้นที่ 2: แทนค่า\n  10 × h = ½ × 10²\n  10h = 50 → h = 5 m ✓\n\nสรุป: วัตถุตกจากความสูง 5 m"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — พลังงานศักย์สปริง",
+    q: "สปริง k = 50 N/m ถูกอัดเป็นระยะ 0.2 m จงหาพลังงานศักย์ที่สะสมในสปริง",
+    opts: ["0.5 J", "0.75 J", "1.25 J", "1 J"],
+    ans: 3,
+    explain: "ขั้นที่ 1: ระบุสูตร\n  PE_spring = ½kx²\n\nขั้นที่ 2: แทนค่า\n  PE_spring = ½ × 50 × (0.2)² = ½ × 50 × 0.04 = 1 J ✓\n\nสรุป: พลังงานศักย์สปริงคือ 1 J"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — กำลัง",
+    q: "เครื่องจักรทำงาน 500 J ในเวลา 2 s จงหากำลังของเครื่องจักร",
+    opts: ["250 W", "150 W", "300 W", "200 W"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ระบุสูตร\n  P = W/t\n\nขั้นที่ 2: แทนค่า\n  P = 500/2 = 250 W ✓\n\nสรุป: กำลังของเครื่องจักรคือ 250 W"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — โจทย์ผสม (พลังงาน+แรงเสียดทาน)",
+    q: "วัตถุมวล 1 kg ไถลลงรางลื่น (ไร้แรงเสียดทาน) จากความสูง 2 m แล้วเคลื่อนที่ต่อบนพื้นราบซึ่งมีแรงเสียดทาน μ = 0.2 (g = 10 m/s²) จงหาระยะทางบนพื้นราบก่อนวัตถุหยุดนิ่ง",
+    opts: ["5 m", "8 m", "10 m", "12 m"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาอัตราเร็วที่ปลายราง (ก่อนถึงพื้นราบ) ด้วยการอนุรักษ์พลังงาน\n  mgh = ½mv² → v² = 2gh = 2×10×2 = 40\n\nขั้นที่ 2: บนพื้นราบมีแรงเสียดทาน ใช้ทฤษฎีบทงาน-พลังงาน\n  พลังงานจลน์ทั้งหมดถูกแรงเสียดทานดูดซับจนวัตถุหยุด:\n  ½mv² = f × d = μmg × d\n\nขั้นที่ 3: แทนค่า (มวลตัดกันได้)\n  ½ × 40 = 0.2 × 10 × d\n  20 = 2d → d = 10 m ✓\n\nสรุป: วัตถุเคลื่อนที่บนพื้นราบเป็นระยะ 10 m ก่อนหยุด"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — โจทย์ผสม (ลูกตุ้ม)",
+    q: "ลูกตุ้มยาว 0.8 m ถูกปล่อยจากตำแหน่งแนวราบ (มุม 90° จากแนวดิ่ง) ไร้แรงต้าน จงหาอัตราเร็วของลูกตุ้มที่จุดต่ำสุด (g = 10 m/s²)",
+    opts: ["2 m/s", "4 m/s", "3 m/s", "5 m/s"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาความสูงที่ลดลง\n  เมื่อปล่อยจากแนวราบ (มุม 90° จากแนวดิ่ง) ความสูงที่ลดลงจนถึงจุดต่ำสุดเท่ากับความยาวเชือก L\n  h = L = 0.8 m\n\nขั้นที่ 2: ใช้การอนุรักษ์พลังงานกล\n  mgh = ½mv² → v = √(2gh)\n\nขั้นที่ 3: แทนค่า\n  v = √(2×10×0.8) = √16 = 4 m/s ✓\n\nสรุป: อัตราเร็วที่จุดต่ำสุดคือ 4 m/s"
+  }
+];
+
+// ===== ข้อสอบแนว A-Level — งานและพลังงาน =====
+const alevelQuestions = [
+
+  // ══════════════════════ ชุดที่ 1 ══════════════════════
+  {
+    year: "🔹 ชุดที่ 1 — งานและทฤษฎีบทงาน-พลังงาน",
+    q: "ออกแรง 20 N ลากกล่องบนพื้นราบเป็นระยะ 5 m โดยแรงทำมุม 37° กับแนวราบ (cos 37° = 0.8) จงหางานที่แรงนี้ทำ",
+    opts: ["80 J", "60 J", "100 J", "120 J", "40 J"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ระบุสูตรงานจากแรงคงที่\n  W = F s cos θ\n\nขั้นที่ 2: แทนค่า\n  W = 20 × 5 × 0.8 = 80 J ✓\n\nข้อควรระวัง: ตัวเลือกที่ 100 J เกิดจากลืมคูณ cos θ (ใช้ F×s ตรง ๆ) และ 60 J เกิดจากใช้ sin 37° = 0.6 แทนที่จะเป็น cos 37° = 0.8 ซึ่งเป็นความผิดพลาดที่พบบ่อย\n\nสรุป: งานที่ทำคือ 80 J"
+  },
+  {
+    year: "🔹 ชุดที่ 1 — งานและทฤษฎีบทงาน-พลังงาน",
+    q: "งานสุทธิ 50 J กระทำต่อวัตถุมวล 4 kg ซึ่งเริ่มต้นนิ่ง จงหาอัตราเร็วสุดท้ายของวัตถุ",
+    opts: ["3 m/s", "5 m/s", "7 m/s", "4 m/s", "6 m/s"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ใช้ทฤษฎีบทงาน-พลังงาน\n  W_net = ΔKE = ½mv² − ½mv₀²\n  เนื่องจากวัตถุเริ่มต้นนิ่ง v₀ = 0\n\nขั้นที่ 2: แทนค่า\n  50 = ½ × 4 × v² = 2v²\n  v² = 25 → v = 5 m/s ✓\n\nสรุป: อัตราเร็วสุดท้ายคือ 5 m/s"
+  },
+  {
+    year: "🔹 ชุดที่ 1 — งานและทฤษฎีบทงาน-พลังงาน",
+    q: "รถยนต์มวล 1000 kg เพิ่มอัตราเร็วจาก 10 m/s เป็น 20 m/s จงหางานสุทธิที่กระทำต่อรถยนต์",
+    opts: ["100 kJ", "125 kJ", "150 kJ", "175 kJ", "200 kJ"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้ทฤษฎีบทงาน-พลังงาน\n  W_net = ΔKE = ½mv² − ½mv₀²\n\nขั้นที่ 2: แทนค่า\n  W_net = ½ × 1000 × (20² − 10²)\n         = 500 × (400 − 100)\n         = 500 × 300 = 150,000 J = 150 kJ ✓\n\nข้อควรระวัง: ห้ามคำนวณจาก Δv = 10 m/s แล้วใช้ ½m(Δv)² เพราะพลังงานจลน์ไม่ได้แปรผันตรงกับความเร็วโดยตรง ต้องคำนวณ v² − v₀² แยกกันเสมอ\n\nสรุป: งานสุทธิที่กระทำต่อรถยนต์คือ 150 kJ"
+  },
+
+  // ══════════════════════ ชุดที่ 2 ══════════════════════
+  {
+    year: "🔹 ชุดที่ 2 — พลังงานศักย์และการอนุรักษ์พลังงานกล",
+    q: "ลูกบอลมวล 0.5 kg ตกอย่างเสรีจากที่สูง 20 m (ไร้แรงต้านอากาศ, g = 10 m/s²) จงหาอัตราเร็วก่อนถึงพื้น",
+    opts: ["10 m/s", "15 m/s", "25 m/s", "20 m/s", "30 m/s"],
+    ans: 3,
+    explain: "ขั้นที่ 1: ใช้การอนุรักษ์พลังงานกล\n  mgh = ½mv² (มวลตัดกันได้ทั้งสองข้าง)\n\nขั้นที่ 2: แก้หา v\n  v = √(2gh) = √(2 × 10 × 20) = √400 = 20 m/s ✓\n\nข้อสังเกต: มวล 0.5 kg ไม่มีผลต่อคำตอบ เพราะอัตราเร็วจากการตกอย่างเสรีไม่ขึ้นกับมวล\n\nสรุป: อัตราเร็วก่อนถึงพื้นคือ 20 m/s"
+  },
+  {
+    year: "🔹 ชุดที่ 2 — พลังงานศักย์และการอนุรักษ์พลังงานกล",
+    q: "ลูกตุ้มถูกปล่อยจากตำแหน่งสูงกว่าจุดต่ำสุด 0.8 m (ไร้แรงต้าน, g = 10 m/s²) จงหาอัตราเร็วที่จุดต่ำสุด",
+    opts: ["2 m/s", "3 m/s", "5 m/s", "6 m/s", "4 m/s"],
+    ans: 4,
+    explain: "ขั้นที่ 1: ใช้การอนุรักษ์พลังงานกล\n  ที่จุดสูงสุด: KE = 0, PE = mgh\n  ที่จุดต่ำสุด: KE = ½mv², PE = 0\n  mgh = ½mv²\n\nขั้นที่ 2: แก้หา v\n  v = √(2gh) = √(2 × 10 × 0.8) = √16 = 4 m/s ✓\n\nสรุป: อัตราเร็วที่จุดต่ำสุดคือ 4 m/s"
+  },
+  {
+    year: "🔹 ชุดที่ 2 — พลังงานศักย์และการอนุรักษ์พลังงานกล",
+    q: "สปริง k = 400 N/m ถูกอัดเป็นระยะ 0.1 m แล้วปล่อยยิงวัตถุมวล 1 kg บนพื้นราบลื่น จงหาอัตราเร็วของวัตถุเมื่อหลุดจากสปริง",
+    opts: ["2 m/s", "1 m/s", "1.5 m/s", "2.5 m/s", "3 m/s"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ใช้การอนุรักษ์พลังงาน — พลังงานศักย์สปริงเปลี่ยนเป็นพลังงานจลน์ทั้งหมด (พื้นลื่น ไร้แรงเสียดทาน)\n  ½kx² = ½mv²\n\nขั้นที่ 2: แทนค่า\n  ½ × 400 × (0.1)² = ½ × 1 × v²\n  2 = 0.5v² → v² = 4 → v = 2 m/s ✓\n\nสรุป: อัตราเร็วของวัตถุเมื่อหลุดจากสปริงคือ 2 m/s"
+  },
+  {
+    year: "🔹 ชุดที่ 2 — พลังงานศักย์และการอนุรักษ์พลังงานกล",
+    q: "นักสกีไถลลงเนินไร้แรงเสียดทานจากความสูง 5 m โดยเริ่มต้นนิ่ง จงหาอัตราเร็วที่จุดต่ำสุดของเนิน (g = 10 m/s²) โดยไม่ต้องทราบมวลของนักสกี",
+    opts: ["8 m/s", "10 m/s", "9 m/s", "11 m/s", "12 m/s"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ใช้การอนุรักษ์พลังงานกล — มวลตัดกันได้ทั้งสองข้างของสมการ\n  mgh = ½mv² → gh = ½v²\n\nขั้นที่ 2: แก้หา v\n  v = √(2gh) = √(2 × 10 × 5) = √100 = 10 m/s ✓\n\nข้อสังเกตสำคัญ: อัตราเร็วที่จุดต่ำสุดไม่ขึ้นกับมวลของผู้เล่น และไม่ขึ้นกับรูปทรงของเนิน (โค้งหรือตรง) ขึ้นกับความสูงที่ลดลงเท่านั้น (เมื่อไร้แรงเสียดทาน)\n\nสรุป: อัตราเร็วที่จุดต่ำสุดคือ 10 m/s"
+  },
+
+  // ══════════════════════ ชุดที่ 3 ══════════════════════
+  {
+    year: "🔹 ชุดที่ 3 — แรงเสียดทานและพลังงานที่สูญเสีย",
+    q: "กล่องมวล 2 kg ไถลด้วยอัตราเร็วต้น 6 m/s บนพื้นราบซึ่งมีสัมประสิทธิ์แรงเสียดทาน μ = 0.3 (g = 10 m/s²) จงหาระยะทางที่กล่องเคลื่อนที่ได้ก่อนหยุดนิ่ง",
+    opts: ["4 m", "5 m", "6 m", "7 m", "8 m"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาแรงเสียดทาน\n  f = μmg = 0.3 × 2 × 10 = 6 N\n\nขั้นที่ 2: หาพลังงานจลน์เริ่มต้น\n  KE = ½mv² = ½ × 2 × 6² = 36 J\n\nขั้นที่ 3: ใช้ทฤษฎีบทงาน-พลังงาน — พลังงานจลน์ทั้งหมดถูกแรงเสียดทานดูดซับจนกล่องหยุด (KE สุดท้าย = 0)\n  KE = f × d\n  d = 36 / 6 = 6 m ✓\n\nสรุป: กล่องเคลื่อนที่ได้ระยะ 6 m ก่อนหยุดนิ่ง"
+  },
+  {
+    year: "🔹 ชุดที่ 3 — แรงเสียดทานและพลังงานที่สูญเสีย",
+    q: "วัตถุมวล 1 kg ไถลลงเนินสูง 5 m ซึ่งมีแรงเสียดทานบางส่วน จนถึงพื้นด้วยอัตราเร็ว 8 m/s (g = 10 m/s²) จงหาพลังงานที่สูญเสียไปกับแรงเสียดทาน",
+    opts: ["10 J", "14 J", "22 J", "18 J", "26 J"],
+    ans: 3,
+    explain: "ขั้นที่ 1: หาพลังงานศักย์เริ่มต้น (อ้างอิงจากพื้น)\n  PE = mgh = 1 × 10 × 5 = 50 J\n\nขั้นที่ 2: หาพลังงานจลน์สุดท้าย\n  KE = ½mv² = ½ × 1 × 8² = 32 J\n\nขั้นที่ 3: ใช้สมการอนุรักษ์พลังงานรวม\n  PE เริ่มต้น = KE สุดท้าย + Q\n  Q = PE − KE = 50 − 32 = 18 J ✓\n\nสรุป: พลังงานที่สูญเสียไปกับแรงเสียดทานคือ 18 J"
+  },
+  {
+    year: "🔹 ชุดที่ 3 — แรงเสียดทานและพลังงานที่สูญเสีย",
+    q: "กล่องถูกดันด้วยแรง 40 N ไปข้างหน้าเป็นระยะ 10 m บนพื้นราบ ขณะมีแรงเสียดทาน 15 N ต้านการเคลื่อนที่ จงหางานสุทธิที่กระทำต่อกล่อง",
+    opts: ["200 J", "225 J", "275 J", "300 J", "250 J"],
+    ans: 4,
+    explain: "ขั้นที่ 1: หางานจากแรงที่ดัน\n  W₁ = F d = 40 × 10 = 400 J\n\nขั้นที่ 2: หางานจากแรงเสียดทาน (มีทิศต้านการเคลื่อนที่ → งานเป็นลบ)\n  W₂ = −f d = −15 × 10 = −150 J\n\nขั้นที่ 3: หางานสุทธิ\n  W_net = W₁ + W₂ = 400 + (−150) = 250 J ✓\n\nวิธีลัด: หาแรงลัพธ์ก่อน = 40 − 15 = 25 N แล้วคูณระยะทาง: 25 × 10 = 250 J (ได้คำตอบเดียวกัน)\n\nสรุป: งานสุทธิที่กระทำต่อกล่องคือ 250 J"
+  },
+
+  // ══════════════════════ ชุดที่ 4 ══════════════════════
+  {
+    year: "🔹 ชุดที่ 4 — กำลัง (Power)",
+    q: "มอเตอร์ยกวัตถุมวล 50 kg ขึ้นสูง 10 m ด้วยความเร็วคงที่ ในเวลา 5 s (g = 10 m/s²) จงหากำลังของมอเตอร์",
+    opts: ["1000 W", "750 W", "500 W", "1250 W", "1500 W"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หางานที่มอเตอร์ทำ (ยกด้วยความเร็วคงที่ จึงต้องออกแรงเท่ากับน้ำหนักวัตถุ)\n  W = mgh = 50 × 10 × 10 = 5000 J\n\nขั้นที่ 2: หากำลัง\n  P = W/t = 5000/5 = 1000 W ✓\n\nสรุป: กำลังของมอเตอร์คือ 1000 W (= 1 kW)"
+  },
+  {
+    year: "🔹 ชุดที่ 4 — กำลัง (Power)",
+    q: "เครื่องยนต์รถยนต์ออกแรงขับเคลื่อน 2000 N ขณะรถวิ่งด้วยความเร็วคงที่ 20 m/s จงหากำลังของเครื่องยนต์",
+    opts: ["20 kW", "40 kW", "30 kW", "50 kW", "60 kW"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ระบุสูตรกำลังขณะหนึ่ง (แรงในแนวเดียวกับความเร็ว)\n  P = F v\n\nขั้นที่ 2: แทนค่า\n  P = 2000 × 20 = 40,000 W = 40 kW ✓\n\nสรุป: กำลังของเครื่องยนต์คือ 40 kW"
+  },
+
+  // ══════════════════════ ชุดที่ 5 ══════════════════════
+  {
+    year: "🔹 ชุดที่ 5 — โจทย์ผสมและประยุกต์",
+    q: "รถไฟเหาะมวล 500 kg เริ่มต้นนิ่งที่จุดสูงสุด 20 m แล้วเคลื่อนที่ลงมาตามรางไร้แรงเสียดทาน จงหาอัตราเร็วที่จุดซึ่งสูงจากพื้น 15 m (g = 10 m/s²)",
+    opts: ["8 m/s", "9 m/s", "10 m/s", "11 m/s", "12 m/s"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้การอนุรักษ์พลังงานกลระหว่างจุดสูงสุดกับจุดที่สูง 15 m\n  mgh₁ = mgh₂ + ½mv² (มวลตัดกันได้)\n\nขั้นที่ 2: แก้หา v\n  v = √(2g(h₁ − h₂)) = √(2 × 10 × (20−15)) = √(2×10×5) = √100 = 10 m/s ✓\n\nข้อสังเกต: ใช้ผลต่างความสูง (h₁−h₂) แทนความสูงเต็ม เพราะเปรียบเทียบระหว่างสองจุดบนราง ไม่ใช่จากพื้น\n\nสรุป: อัตราเร็วที่จุดสูง 15 m คือ 10 m/s"
+  },
+  {
+    year: "🔹 ชุดที่ 5 — โจทย์ผสมและประยุกต์",
+    q: "สปริง k = 150 N/m ถูกอัด 0.4 m ยิงวัตถุมวล 3 kg ขึ้นไปตามรางลื่นไร้แรงเสียดทาน จงหาความสูงสูงสุดที่วัตถุขึ้นไปได้ (g = 10 m/s²)",
+    opts: ["0.2 m", "0.3 m", "0.5 m", "0.4 m", "0.6 m"],
+    ans: 3,
+    explain: "ขั้นที่ 1: ใช้การอนุรักษ์พลังงาน — พลังงานศักย์สปริงทั้งหมดเปลี่ยนเป็นพลังงานศักย์โน้มถ่วงที่จุดสูงสุด (v = 0 ที่จุดสูงสุด)\n  ½kx² = mgh\n\nขั้นที่ 2: แทนค่า\n  ½ × 150 × (0.4)² = 3 × 10 × h\n  12 = 30h\n  h = 12/30 = 0.4 m ✓\n\nสรุป: ความสูงสูงสุดที่วัตถุขึ้นไปได้คือ 0.4 m"
+  },
+  {
+    year: "🔹 ชุดที่ 5 — โจทย์ผสมและประยุกต์",
+    q: "ลูกตุ้มมวล 1 kg แกว่งจากความสูง 0.5 m เหนือจุดต่ำสุด ระหว่างทางมีแรงต้านอากาศทำงานลบ 3 J ก่อนถึงจุดต่ำสุด (g = 10 m/s²) จงหาอัตราเร็วที่จุดต่ำสุด",
+    opts: ["1 m/s", "1.5 m/s", "2.5 m/s", "3 m/s", "2 m/s"],
+    ans: 4,
+    explain: "ขั้นที่ 1: หาพลังงานศักย์เริ่มต้น\n  PE = mgh = 1 × 10 × 0.5 = 5 J\n\nขั้นที่ 2: ใช้สมการอนุรักษ์พลังงานรวม (มีพลังงานสูญเสียจากแรงต้านอากาศ)\n  PE = KE + Q\n  5 = ½mv² + 3\n\nขั้นที่ 3: แก้หา v\n  ½ × 1 × v² = 5 − 3 = 2\n  v² = 4 → v = 2 m/s ✓\n\nสรุป: อัตราเร็วที่จุดต่ำสุดคือ 2 m/s"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentYear = '';
+  alevelQuestions.forEach((q, idx) => {
+    const yearKey = q.year;
+    if (yearKey !== currentYear) {
+      currentYear = yearKey;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + yearKey + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

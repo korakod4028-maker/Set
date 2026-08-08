@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การเคลื่อนที่แนวโค้ง | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'θ v₀ g R H T ω ac Fc r →';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>การเคลื่อนที่<span>แนวโค้ง</span></h1>
+  <p>สื่อการสอนครบจบ โพรเจกไทล์และการเคลื่อนที่แบบวงกลม สำหรับนักเรียน ม.6 เตรียมสอบ A-Level</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">14</div><div class="stat-label">แนวข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="vec">1. เวกเตอร์ 2 มิติ</button>
+  <button class="tab-btn" data-sec="proj1">2. หลักการโพรเจกไทล์</button>
+  <button class="tab-btn" data-sec="proj2">3. สูตรโพรเจกไทล์ระดับ</button>
+  <button class="tab-btn" data-sec="proj3">4. โพรเจกไทล์จากที่สูง</button>
+  <button class="tab-btn" data-sec="circ1">5. อัตราเร็วเชิงมุม/คาบ</button>
+  <button class="tab-btn" data-sec="circ2">6. แรงสู่ศูนย์กลาง</button>
+  <button class="tab-btn" data-sec="circ3">7. โค้งถนน/ลูกตุ้มกรวย</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 แนวข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: เวกเตอร์ 2 มิติ ===== -->
+  <div class="section active" id="vec">
+    <div class="section-heading"><span>บทที่ 1</span> · เวกเตอร์และการเคลื่อนที่ใน 2 มิติ</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🌀</div>การเคลื่อนที่แนวโค้งคืออะไร?</div>
+      <p>การเคลื่อนที่แนวโค้ง คือ การเคลื่อนที่ที่<strong>เส้นทางการเคลื่อนที่ไม่ใช่เส้นตรง</strong> ทำให้ทิศทางของความเร็วเปลี่ยนแปลงตลอดเวลา แม้อัตราเร็วอาจคงที่หรือไม่คงที่ก็ได้</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การเคลื่อนที่ใน 2 มิติต้องอาศัย<strong>ปริมาณเวกเตอร์</strong>ในการอธิบาย ได้แก่ ตำแหน่ง (r), การกระจัด (Δr), ความเร็ว (v) และความเร่ง (a) ซึ่งแต่ละปริมาณมีทั้งขนาดและทิศทาง
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการเคลื่อนที่แนวโค้ง</div>
+        ลูกบอลที่ถูกขว้างออกไปในอากาศ (โพรเจกไทล์) · รถที่วิ่งเลี้ยวโค้ง · ดาวเทียมที่โคจรรอบโลก (วงกลม)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">➗</div>การแยกองค์ประกอบเวกเตอร์</div>
+      <p>เทคนิคหลักในการวิเคราะห์การเคลื่อนที่แนวโค้ง คือ การแยกเวกเตอร์ออกเป็น<strong>องค์ประกอบแนวราบ (x)</strong> และ<strong>องค์ประกอบแนวดิ่ง (y)</strong> ที่ตั้งฉากกัน แล้ววิเคราะห์แต่ละแกนแยกจากกัน</p>
+      <div class="math-block">
+        กำหนดเวกเตอร์ v มีขนาด v และทำมุม θ กับแนวราบ<br>
+        v<sub>x</sub> = v cos θ  (องค์ประกอบแนวราบ)<br>
+        v<sub>y</sub> = v sin θ  (องค์ประกอบแนวดิ่ง)<br>
+        v = √(v<sub>x</sub>² + v<sub>y</sub>²)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — จำสามเหลี่ยมมุมฉาก</div>
+        มุม θ อยู่ติดกับแกน x เสมอในโจทย์ส่วนใหญ่ ⟹ ด้านประชิดมุม (cos) คือแกน x และด้านตรงข้ามมุม (sin) คือแกน y
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔗</div>หลักการอิสระของการเคลื่อนที่ใน 2 แกน</div>
+      <div class="def-box">
+        <div class="def-label">หลักการสำคัญ (Independence Principle)</div>
+        การเคลื่อนที่ในแนวราบและแนวดิ่ง<strong>เป็นอิสระต่อกัน</strong> ไม่มีผลกระทบซึ่งกันและกัน แต่ทั้งสองแกนใช้ <span class="math">เวลา (t)</span> เดียวกันเสมอ — นี่คือ "ตัวเชื่อม" ที่ใช้แก้โจทย์แนวโค้งแทบทุกข้อ
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        แรงโน้มถ่วง g ส่งผลต่อ<strong>แนวดิ่งเท่านั้น</strong> ไม่ทำให้ความเร็วแนวราบเปลี่ยนแปลง (ตราบใดที่ไม่มีแรงต้านอากาศ)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: หลักการโพรเจกไทล์ ===== -->
+  <div class="section" id="proj1">
+    <div class="section-heading"><span>บทที่ 2</span> · การเคลื่อนที่แบบโพรเจกไทล์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🎯</div>นิยามโพรเจกไทล์</div>
+      <p>โพรเจกไทล์ (Projectile) คือ วัตถุที่เคลื่อนที่ในอากาศภายใต้แรงโน้มถ่วงเพียงอย่างเดียว (ไม่คิดแรงต้านอากาศ) เส้นทางการเคลื่อนที่มีลักษณะเป็น<strong>เส้นโค้งพาราโบลา</strong></p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การเคลื่อนที่แบบโพรเจกไทล์ ประกอบด้วยการเคลื่อนที่ 2 แนวพร้อมกัน:<br>
+        • แนวราบ: ความเร็วคงที่ (ไม่มีความเร่ง)<br>
+        • แนวดิ่ง: ความเร่งคงที่เท่ากับ g (ตกอย่างอิสระ)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>การแยกความเร็วต้น</div>
+      <p>เมื่อยิงวัตถุด้วยความเร็วต้น v₀ ทำมุม θ กับแนวราบ ต้องแยกเป็นองค์ประกอบก่อนคำนวณเสมอ</p>
+      <div class="math-block">
+        v<sub>0x</sub> = v₀ cos θ  (คงที่ตลอดการเคลื่อนที่)<br>
+        v<sub>0y</sub> = v₀ sin θ  (เปลี่ยนแปลงตามเวลาเนื่องจาก g)
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สมการแนวราบ</h4>
+          <p>ความเร็วคงที่ ไม่มีความเร่ง</p>
+          <div class="math-block">x = v<sub>0x</sub> t</div>
+        </div>
+        <div class="mini-card">
+          <h4>สมการแนวดิ่ง</h4>
+          <p>ความเร่งคงที่เท่ากับ −g (ทิศลง)</p>
+          <div class="math-block">v<sub>y</sub> = v<sub>0y</sub> − gt<br>y = v<sub>0y</sub>t − ½gt²</div>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวังเรื่องเครื่องหมาย</div>
+        นิยมกำหนดทิศขึ้นเป็นบวก ทำให้ g มีเครื่องหมายลบในสมการ (g ≈ 9.8 m/s² หรือ 10 m/s² ในการประมาณ) ต้องกำหนดทิศให้สอดคล้องกันตลอดทั้งข้อ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⏱️</div>จุดสำคัญที่ต้องรู้</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">v<sub>y</sub> = 0</div>
+          <div class="sym-name">ที่จุดสูงสุด</div>
+          <div class="sym-desc">ความเร็วแนวดิ่งเป็นศูนย์ชั่วขณะ แต่ v<sub>x</sub> ยังคงเดิม</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">v<sub>x</sub> คงที่</div>
+          <div class="sym-name">ตลอดเส้นทาง</div>
+          <div class="sym-desc">ไม่เปลี่ยนแปลงเว้นแต่มีแรงภายนอกมากระทำ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: สูตรโพรเจกไทล์ระดับ ===== -->
+  <div class="section" id="proj2">
+    <div class="section-heading"><span>หัวข้อ 3</span> · สูตรโพรเจกไทล์ระดับ (ยิงจากพื้นราบ)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⏳</div>เวลาที่วัตถุอยู่ในอากาศ</div>
+      <p>กรณียิงจากพื้นและตกลงที่ระดับเดียวกัน (จุดเริ่มต้นและจุดตกอยู่ที่ความสูงเท่ากัน) ใช้ความสมมาตรของพาราโบลา</p>
+      <div class="math-block">T = 2v₀ sin θ / g</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ยิง v₀ = 20 m/s มุม θ = 30° (g = 10 m/s²)<br>
+        T = 2(20)(sin 30°)/10 = 2(20)(0.5)/10 = 2 วินาที
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>ระยะไกลสุดตามแนวราบ (Range)</div>
+      <div class="math-block">R = v₀² sin 2θ / g</div>
+      <div class="def-box">
+        <div class="def-label">สมบัติสำคัญ</div>
+        R มีค่ามากที่สุดเมื่อ <span class="math">θ = 45°</span> (เพราะ sin 2θ มีค่าสูงสุด = 1 เมื่อ 2θ = 90°)<br>
+        มุมยิงที่ให้ระยะเท่ากัน 2 มุม คือมุมที่บวกกันได้ 90° เช่น 30° กับ 60° ให้ระยะเท่ากัน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔝</div>ความสูงสูงสุด</div>
+      <div class="math-block">H = v₀² sin² θ / 2g</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างครบสูตร</div>
+        v₀ = 20 m/s, θ = 30°, g = 10 m/s²<br>
+        H = (20)²(sin 30°)²/(2×10) = 400×0.25/20 = 5 เมตร<br>
+        R = (20)² sin 60°/10 = 400×0.866/10 ≈ 34.6 เมตร
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level — ความสัมพันธ์ H กับ T</div>
+        เวลาที่ขึ้นถึงจุดสูงสุด = T/2 เสมอ (เพราะเส้นทางขาขึ้นและขาลงใช้เวลาเท่ากัน) ใช้ตรวจคำตอบไขว้กันได้
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: โพรเจกไทล์จากที่สูง ===== -->
+  <div class="section" id="proj3">
+    <div class="section-heading"><span>หัวข้อ 4</span> · โพรเจกไทล์จากที่สูง และโจทย์ผสม</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🏢</div>ขว้างวัตถุแนวราบจากที่สูง h</div>
+      <p>กรณีวัตถุถูกขว้างออกไปในแนวราบ (θ = 0°) จากตำแหน่งสูง h เหนือพื้น ความเร็วต้นมีเฉพาะองค์ประกอบแนวราบเท่านั้น (v<sub>0y</sub> = 0)</p>
+      <div class="math-block">
+        แนวดิ่ง: h = ½gt²  ⟹  t = √(2h/g)<br>
+        แนวราบ: x = v₀t
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ขว้างวัตถุแนวราบจากหอสูง 20 m ด้วยความเร็ว 15 m/s (g = 10 m/s²)<br>
+        t = √(2×20/10) = √4 = 2 วินาที<br>
+        x = 15 × 2 = 30 เมตร
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧩</div>โจทย์ยิงจากที่สูงเป็นมุม (ผสม)</div>
+      <p>เมื่อยิงเป็นมุม θ จากตำแหน่งสูง h แนวดิ่งจะไม่สมมาตรอีกต่อไป ต้องแก้สมการกำลังสองเพื่อหาเวลา t ที่วัตถุตกถึงพื้น</p>
+      <div class="math-block">
+        y(t) = v₀ sin θ · t − ½gt² = −h  (เมื่อพื้นอยู่ต่ำกว่าจุดยิง h หน่วย)<br>
+        แก้สมการกำลังสองหา t แล้วแทนใน x = v₀ cos θ · t
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กับดักข้อสอบ</div>
+        สมการกำลังสองจะได้ค่า t สองค่า ให้เลือกเฉพาะ<strong>ค่าที่เป็นบวก</strong>เท่านั้น เพราะเวลาติดลบไม่มีความหมายทางฟิสิกส์
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧠</div>กลยุทธ์การแก้โจทย์โพรเจกไทล์</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ขั้นตอนมาตรฐาน 4 ขั้น</div>
+        1. แยก v₀ เป็น v<sub>0x</sub>, v<sub>0y</sub><br>
+        2. เขียนสมการแนวราบและแนวดิ่งแยกกัน<br>
+        3. หาตัวแปรที่เชื่อมสองสมการ (มักเป็นเวลา t)<br>
+        4. แทนค่ากลับเพื่อหาคำตอบที่โจทย์ต้องการ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: อัตราเร็วเชิงมุม/คาบ ===== -->
+  <div class="section" id="circ1">
+    <div class="section-heading"><span>บทที่ 3</span> · การเคลื่อนที่แบบวงกลม</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⭕</div>การเคลื่อนที่แบบวงกลมสม่ำเสมอ</div>
+      <p>การเคลื่อนที่แบบวงกลมสม่ำเสมอ (Uniform Circular Motion) คือ การเคลื่อนที่เป็นวงกลมด้วย<strong>อัตราเร็วคงที่</strong> แต่ทิศทางของความเร็วเปลี่ยนแปลงตลอดเวลา</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แม้อัตราเร็ว (ขนาดของความเร็ว) จะคงที่ แต่เนื่องจากทิศทางเปลี่ยนตลอดเวลา วัตถุจึงมี<strong>ความเร่ง</strong>เสมอ เรียกว่า ความเร่งสู่ศูนย์กลาง (centripetal acceleration)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔄</div>อัตราเร็วเชิงมุม คาบ และความถี่</div>
+      <div class="math-block">
+        ω = θ/t = 2π/T = 2πf<br>
+        v = ωr
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">T</div>
+          <div class="sym-name">คาบ (Period)</div>
+          <div class="sym-desc">เวลาที่ใช้เคลื่อนที่ครบ 1 รอบ หน่วยเป็นวินาที</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">f</div>
+          <div class="sym-name">ความถี่ (Frequency)</div>
+          <div class="sym-desc">จำนวนรอบต่อวินาที f = 1/T หน่วยเป็นเฮิรตซ์ (Hz)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">ω</div>
+          <div class="sym-name">อัตราเร็วเชิงมุม</div>
+          <div class="sym-desc">มุมที่กวาดได้ต่อวินาที หน่วยเป็น เรเดียน/วินาที</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">v</div>
+          <div class="sym-name">อัตราเร็วเชิงเส้น</div>
+          <div class="sym-desc">อัตราเร็วตามแนวเส้นรอบวง v = ωr</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุเคลื่อนที่วงกลมรัศมี 2 m ครบ 1 รอบใน 4 วินาที<br>
+        T = 4 s ⟹ ω = 2π/4 = π/2 rad/s<br>
+        v = ωr = (π/2)(2) = π ≈ 3.14 m/s
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>ความสัมพันธ์มุมเรเดียนกับองศา</div>
+      <div class="math-block">2π เรเดียน = 360°  ⟹  1 เรเดียน ≈ 57.3°</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level</div>
+        โจทย์ที่ให้ "รอบต่อนาที" (rpm) ต้องแปลงเป็นคาบ (วินาทีต่อรอบ) ก่อนคำนวณ ω เสมอ — ระวังหน่วยเวลาไม่ตรงกัน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: แรงสู่ศูนย์กลาง ===== -->
+  <div class="section" id="circ2">
+    <div class="section-heading"><span>หัวข้อ 6</span> · ความเร่งและแรงสู่ศูนย์กลาง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">➡️</div>ทำไมวัตถุที่หมุนด้วยอัตราเร็วคงที่ถึงมีความเร่ง?</div>
+      <p>ความเร่งเกิดจาก<strong>การเปลี่ยนทิศทาง</strong>ของความเร็ว ไม่จำเป็นต้องเปลี่ยนขนาด ความเร่งนี้ชี้เข้าหาจุดศูนย์กลางวงกลมเสมอ จึงเรียกว่าความเร่งสู่ศูนย์กลาง</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ความเร่งสู่ศูนย์กลาง (Centripetal Acceleration) มีทิศพุ่งเข้าหาศูนย์กลางวงกลมเสมอ ตั้งฉากกับทิศความเร็วในขณะนั้น
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧮</div>สูตรความเร่งและแรงสู่ศูนย์กลาง</div>
+      <div class="math-block">
+        a<sub>c</sub> = v²/r = ω²r<br>
+        F<sub>c</sub> = ma<sub>c</sub> = mv²/r = mω²r
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        มวล 2 kg เคลื่อนที่วงกลมรัศมี 0.5 m ด้วยอัตราเร็ว 4 m/s<br>
+        a<sub>c</sub> = 4²/0.5 = 32 m/s²<br>
+        F<sub>c</sub> = 2 × 32 = 64 N
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⚠️</div>แรงสู่ศูนย์กลางไม่ใช่แรงชนิดใหม่</div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวังที่พลาดบ่อยที่สุด</div>
+        "แรงสู่ศูนย์กลาง" ไม่ใช่แรงชนิดใหม่ที่เกิดขึ้นเอง แต่เป็น<strong>ผลรวมของแรงจริง</strong>ที่กระทำต่อวัตถุในทิศเข้าสู่ศูนย์กลาง เช่น แรงตึงเชือก แรงเสียดทาน แรงโน้มถ่วง หรือแรงปกติ — ห้ามวาดลูกศรแรงสู่ศูนย์กลางเพิ่มเข้าไปนอกเหนือจากแรงจริงที่มีอยู่
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคตอบโจทย์</div>
+        เขียนสมการ ΣF (แนวเข้าสู่ศูนย์กลาง) = mv²/r แล้วแทนแรงจริงทั้งหมดที่กระทำในแนวนั้นลงในฝั่งซ้าย
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: โค้งถนน/ลูกตุ้มกรวย ===== -->
+  <div class="section" id="circ3">
+    <div class="section-heading"><span>หัวข้อ 7</span> · การประยุกต์การเคลื่อนที่แบบวงกลม</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🛣️</div>รถเลี้ยวโค้งบนถนนราบ</div>
+      <p>เมื่อรถเลี้ยวโค้งบนถนนราบ แรงเสียดทานระหว่างยางกับถนนทำหน้าที่เป็นแรงสู่ศูนย์กลาง</p>
+      <div class="math-block">
+        f<sub>s</sub> = mv²/r<br>
+        เงื่อนไขไม่ลื่นไถล: f<sub>s</sub> ≤ μ<sub>s</sub>N = μ<sub>s</sub>mg<br>
+        ⟹ v<sub>max</sub> = √(μ<sub>s</sub>gr)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ถนนโค้งรัศมี 40 m, μ<sub>s</sub> = 0.5, g = 10 m/s²<br>
+        v<sub>max</sub> = √(0.5×10×40) = √200 ≈ 14.1 m/s
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🪢</div>ลูกตุ้มกรวย (Conical Pendulum)</div>
+      <p>วัตถุผูกเชือกแล้วแกว่งเป็นวงกลมในแนวราบ โดยเชือกทำมุม θ กับแนวดิ่ง แรงตึงเชือกแยกเป็น 2 องค์ประกอบ</p>
+      <div class="math-block">
+        แนวดิ่ง: T cos θ = mg<br>
+        แนวราบ (สู่ศูนย์กลาง): T sin θ = mv²/r
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค — หารสมการเพื่อตัด T และ m</div>
+        นำสมการแนวราบหารด้วยแนวดิ่ง: tan θ = v²/(rg) ทำให้ไม่ต้องรู้ค่า T หรือ m ก็หามุม θ หรือ v ได้
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🛰️</div>ดาวเทียมโคจรรอบโลก</div>
+      <p>สำหรับดาวเทียมที่โคจรเป็นวงกลมรอบโลก แรงโน้มถ่วงทำหน้าที่เป็นแรงสู่ศูนย์กลางทั้งหมด</p>
+      <div class="math-block">GMm/r² = mv²/r  ⟹  v = √(GM/r)</div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อสังเกต</div>
+        ยิ่งวงโคจรรัศมี r มาก อัตราเร็วของดาวเทียม v ยิ่งน้อยลง (v แปรผกผันกับ √r) ต่างจากความเข้าใจผิดทั่วไปที่คิดว่าไกลกว่าต้องเร็วกว่า
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ SECTION ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== A-LEVEL STYLE QUESTIONS ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> แนวข้อสอบสไตล์ A-Level — การเคลื่อนที่แนวโค้ง</div>
+    <p style="color:var(--text-dim); margin-bottom:20px;">โจทย์ต่อไปนี้เป็นแนวข้อสอบที่สร้างขึ้นเพื่อฝึกฝนในสไตล์เดียวกับข้อสอบ A-Level ไม่ใช่ข้อสอบจริงจากปีใดปีหนึ่ง</p>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — โพรเจกไทล์",
+    q: "วัตถุถูกยิงขึ้นด้วยมุม 30° จากพื้นราบ ด้วยความเร็วต้น v₀ ข้อใดกล่าวถูกต้องเกี่ยวกับความเร็วที่จุดสูงสุด",
+    opts: ["ความเร็วเป็นศูนย์ทั้งหมด", "มีเฉพาะองค์ประกอบแนวราบ v₀cos30°", "มีเฉพาะองค์ประกอบแนวดิ่ง v₀sin30°", "มีค่าเท่ากับความเร็วต้นทุกประการ"],
+    ans: 1,
+    explain: "ที่จุดสูงสุดของการเคลื่อนที่แบบโพรเจกไทล์ องค์ประกอบแนวดิ่ง v_y จะมีค่าเป็นศูนย์ชั่วขณะ (เพราะวัตถุหยุดขึ้นแล้วเริ่มตกลง)\nแต่องค์ประกอบแนวราบ v_x = v₀cos30° ไม่เคยเปลี่ยนแปลงตลอดการเคลื่อนที่ (ไม่มีแรงกระทำในแนวราบ)\nดังนั้นที่จุดสูงสุด ความเร็วที่เหลือคือ v_x = v₀cos30° เท่านั้น ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — โพรเจกไทล์",
+    q: "ยิงวัตถุจากพื้นราบด้วยความเร็วต้น 30 m/s มุม 90° (ยิงขึ้นตรงๆ) ข้อใดถูกต้อง",
+    opts: ["เป็นการเคลื่อนที่แบบโพรเจกไทล์ทั่วไป", "ระยะทางแนวราบ R มีค่ามากที่สุด", "ไม่ถือเป็นโพรเจกไทล์เพราะไม่มีการเคลื่อนที่แนวราบ", "ความเร็วต้นไม่ต้องแยกองค์ประกอบ"],
+    ans: 2,
+    explain: "เมื่อ θ = 90° องค์ประกอบแนวราบ v₀cos90° = 0 ทำให้วัตถุเคลื่อนที่ขึ้นลงในแนวดิ่งเพียงอย่างเดียว\nกรณีนี้จัดเป็นการตกอย่างอิสระ (free fall) แนวเดียว ไม่ถือว่าเป็นโพรเจกไทล์แบบสมบูรณ์ที่มี 2 มิติ เพราะไม่มีการกระจัดในแนวราบเลย ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — วงกลม",
+    q: "วัตถุเคลื่อนที่เป็นวงกลมด้วยอัตราเร็วคงที่ ข้อใดต่อไปนี้ถูกต้อง",
+    opts: ["ความเร่งเป็นศูนย์เพราะอัตราเร็วคงที่", "ความเร่งมีทิศเดียวกับความเร็ว", "ความเร่งมีทิศพุ่งเข้าหาศูนย์กลางวงกลม", "ความเร่งมีทิศพุ่งออกจากศูนย์กลางวงกลม"],
+    ans: 2,
+    explain: "แม้อัตราเร็ว (ขนาดของความเร็ว) จะคงที่ แต่ทิศทางของความเร็วเปลี่ยนแปลงตลอดเวลา\nการเปลี่ยนทิศทางนี้ทำให้เกิดความเร่ง ซึ่งมีทิศพุ่งเข้าหาศูนย์กลางวงกลมเสมอ เรียกว่า ความเร่งสู่ศูนย์กลาง (centripetal acceleration) ✓\nข้อควรจำ: ไม่มีสิ่งที่เรียกว่า 'แรงเหวี่ยงหนีศูนย์กลาง' กระทำต่อตัววัตถุจริงๆ ในกรอบอ้างอิงเฉื่อย"
+  },
+  {
+    level: "⭐ ระดับ 1 — วงกลม",
+    q: "วัตถุเคลื่อนที่วงกลมครบ 1 รอบใช้เวลา 5 วินาที จงหาความถี่ f",
+    opts: ["0.1 Hz", "0.2 Hz", "2 Hz", "5 Hz"],
+    ans: 1,
+    explain: "ความถี่ f สัมพันธ์กับคาบ T ด้วยสูตร f = 1/T\nกำหนด T = 5 s\nf = 1/5 = 0.2 Hz ✓\n(ความถี่ 0.2 Hz หมายถึง วัตถุเคลื่อนที่ครบ 0.2 รอบในเวลา 1 วินาที ซึ่งสอดคล้องกับการครบ 1 รอบใช้เวลา 5 วินาที)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — โพรเจกไทล์",
+    q: "ยิงวัตถุจากพื้นราบด้วยความเร็วต้น 40 m/s มุม 30° (g = 10 m/s²) จงหาความสูงสูงสุด H",
+    opts: ["10 m", "15 m", "20 m", "25 m"],
+    ans: 1,
+    explain: "ใช้สูตร H = v₀² sin²θ / 2g\nแทนค่า: H = (40)² (sin30°)² / (2×10)\n= 1600 × (0.5)² / 20\n= 1600 × 0.25 / 20\n= 400 / 20\n= 20 m\n\nตรวจทานอีกครั้ง: v₀sinθ = 40×0.5 = 20 m/s (องค์ประกอบแนวดิ่งต้น)\nH = (v₀y)²/2g = 20²/(2×10) = 400/20 = 20 m ✓\nคำตอบคือ 20 m (ตัวเลือก ค)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — โพรเจกไทล์",
+    q: "ยิงวัตถุจากพื้นราบด้วยความเร็วต้น v₀ มุม θ ถ้าต้องการให้ระยะไกลสุดตามแนวราบ (Range) มีค่ามากที่สุด ต้องยิงด้วยมุมใด",
+    opts: ["0°", "30°", "45°", "60°"],
+    ans: 2,
+    explain: "R = v₀² sin2θ / g\nค่า R จะมากที่สุดเมื่อ sin2θ มีค่ามากที่สุด คือ sin2θ = 1\nsin2θ = 1 เมื่อ 2θ = 90°  ⟹  θ = 45° ✓\n\n(สังเกตว่ามุม 30° กับ 60° ให้ sin2θ เท่ากัน คือ sin60° = sin120° จึงให้ระยะ R เท่ากัน แต่ไม่ใช่ค่าสูงสุด)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — วงกลม",
+    q: "มวล 3 kg เคลื่อนที่วงกลมรัศมี 2 m ด้วยอัตราเร็ว 6 m/s จงหาแรงสู่ศูนย์กลาง",
+    opts: ["18 N", "27 N", "36 N", "54 N"],
+    ans: 3,
+    explain: "ใช้สูตร F_c = mv²/r\nแทนค่า: F_c = 3 × 6² / 2\n= 3 × 36 / 2\n= 108 / 2\n= 54 N ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — วงกลม",
+    q: "รถวิ่งเลี้ยวโค้งราบรัศมี 25 m บนถนนที่มีสัมประสิทธิ์แรงเสียดทานสถิต μₛ = 0.4 (g = 10 m/s²) จงหาอัตราเร็วสูงสุดที่รถเลี้ยวโค้งได้โดยไม่ลื่นไถล",
+    opts: ["5 m/s", "10 m/s", "15 m/s", "20 m/s"],
+    ans: 1,
+    explain: "เงื่อนไขไม่ลื่นไถล: แรงเสียดทานสูงสุดต้องมากพอเป็นแรงสู่ศูนย์กลาง\nf_s(max) = μₛmg ≥ mv²/r\n⟹ v_max = √(μₛgr)\n\nแทนค่า: v_max = √(0.4 × 10 × 25)\n= √100\n= 10 m/s ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — โพรเจกไทล์",
+    q: "จากตึกสูง 45 m ขว้างวัตถุออกไปในแนวราบด้วยความเร็ว 10 m/s (g = 10 m/s²) จงหาระยะทางแนวราบที่วัตถุตกถึงพื้น",
+    opts: ["20 m", "25 m", "30 m", "45 m"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาเวลาที่ตกถึงพื้นจากสมการแนวดิ่ง (v_0y = 0 เพราะขว้างแนวราบ)\nh = ½gt²\n45 = ½(10)t²\n45 = 5t²\nt² = 9\nt = 3 วินาที\n\nขั้นที่ 2: หาระยะทางแนวราบ\nx = v₀t = 10 × 3 = 30 m ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — วงกลม",
+    q: "ลูกตุ้มกรวยมวล m แกว่งเป็นวงกลมโดยเชือกทำมุม 37° กับแนวดิ่ง (sin37°=0.6, cos37°=0.8, g=10 m/s²) รัศมีวงกลม 1.5 m จงหาอัตราเร็ว v ของวัตถุ",
+    opts: ["3 m/s", "3.35 m/s", "4 m/s", "4.5 m/s"],
+    ans: 1,
+    explain: "ใช้ความสัมพันธ์ tan θ = v²/(rg) ที่ได้จากการหารสมการแนวราบด้วยแนวดิ่ง\ntan37° = sin37°/cos37° = 0.6/0.8 = 0.75\n\nแทนค่า: 0.75 = v²/(1.5 × 10)\n0.75 = v²/15\nv² = 0.75 × 15 = 11.25\nv = √11.25 ≈ 3.35 m/s ✓"
+  }
+];
+
+// ===== แนวข้อสอบสไตล์ A-Level =====
+const alevelQuestions = [
+  {
+    year: "📘 แนวข้อสอบ — โพรเจกไทล์",
+    q: "ยิงวัตถุจากพื้นราบด้วยความเร็วต้น 50 m/s ทำมุม 37° กับแนวราบ (sin37°=0.6, cos37°=0.8, g=10 m/s²)\nจงหาเวลาที่วัตถุอยู่ในอากาศทั้งหมด",
+    opts: ["3 s", "4 s", "5 s", "6 s", "6.25 s"],
+    ans: 4,
+    explain: "ใช้สูตรเวลาที่วัตถุอยู่ในอากาศ (ยิงและตกที่ระดับเดียวกัน)\nT = 2v₀sinθ / g\n\nแทนค่า: T = 2(50)(0.6)/10\n= 60/10\n= 6 s\n\nตรวจทานอีกวิธี: v_0y = 50×0.6 = 30 m/s\nเวลาขึ้นถึงจุดสูงสุด t₁ = v_0y/g = 30/10 = 3 s\nเวลารวม T = 2t₁ = 6 s\n\nแต่ต้องตรวจตัวเลือกให้ครบถ้วน — คำตอบที่ถูกต้องคือ 6 s (ตัวเลือก ง)"
+  },
+  {
+    year: "📘 แนวข้อสอบ — โพรเจกไทล์",
+    q: "ยิงวัตถุ 2 ลูกจากพื้นราบด้วยความเร็วต้นเท่ากัน แต่ทำมุม 20° และ 70° ตามลำดับ ข้อใดถูกต้อง",
+    opts: [
+      "ทั้งสองลูกตกในระยะแนวราบเท่ากัน",
+      "ลูกที่ยิงมุม 20° ตกไกลกว่า",
+      "ลูกที่ยิงมุม 70° ตกไกลกว่า",
+      "ไม่สามารถเปรียบเทียบได้หากไม่ทราบค่า v₀",
+      "ทั้งสองลูกใช้เวลาในอากาศเท่ากัน"
+    ],
+    ans: 0,
+    explain: "ระยะทางแนวราบ R = v₀²sin2θ/g\n\nมุม 20° และ 70° รวมกันได้ 90° พอดี\nsin(2×20°) = sin40°\nsin(2×70°) = sin140°\n\nโดยคุณสมบัติของ sin: sin140° = sin(180°−140°) = sin40°\nดังนั้น sin40° = sin140° ทำให้ค่า R เท่ากันทั้งสองกรณี (เมื่อ v₀ เท่ากัน) ✓\n\nข้อควรรู้: มุมคู่ใดก็ตามที่บวกกันได้ 90° จะให้ระยะ R เท่ากันเสมอ แต่เวลาในอากาศและความสูงสูงสุดจะไม่เท่ากัน (มุมสูงกว่าจะลอยอยู่ในอากาศนานกว่าและขึ้นสูงกว่า)"
+  },
+  {
+    year: "📘 แนวข้อสอบ — โพรเจกไทล์",
+    q: "จากยอดหน้าผาสูง 80 m ขว้างวัตถุออกในแนวราบด้วยความเร็วต้น v₀ พบว่าวัตถุตกห่างจากฐานหน้าผา 60 m (g=10 m/s²) จงหาความเร็วต้น v₀",
+    opts: ["10 m/s", "12 m/s", "15 m/s", "18 m/s", "20 m/s"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาเวลาตกถึงพื้นจากความสูง (แนวดิ่งเป็นอิสระจากแนวราบ)\nh = ½gt²\n80 = ½(10)t²\n80 = 5t²\nt² = 16\nt = 4 s\n\nขั้นที่ 2: หา v₀ จากระยะแนวราบ\nx = v₀t\n60 = v₀ × 4\nv₀ = 15 m/s ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ — วงกลม",
+    q: "ดาวเทียมดวงหนึ่งโคจรรอบโลกเป็นวงกลมด้วยรัศมีวงโคจร r และอัตราเร็ว v หากรัศมีวงโคจรเพิ่มขึ้นเป็น 4r อัตราเร็วของดาวเทียมจะเปลี่ยนแปลงอย่างไร (ให้แรงโน้มถ่วงเป็นแรงสู่ศูนย์กลาง)",
+    opts: [
+      "เพิ่มขึ้นเป็น 4 เท่า",
+      "เพิ่มขึ้นเป็น 2 เท่า",
+      "ลดลงเหลือครึ่งหนึ่ง",
+      "ลดลงเหลือหนึ่งในสี่",
+      "ไม่เปลี่ยนแปลง"
+    ],
+    ans: 2,
+    explain: "จากสมการแรงโน้มถ่วงเป็นแรงสู่ศูนย์กลาง:\nGMm/r² = mv²/r\nv² = GM/r\nv = √(GM/r)\n\nจะเห็นว่า v แปรผกผันกับ √r\n\nเมื่อ r เพิ่มเป็น 4r:\nv_ใหม่ = √(GM/4r) = √(GM/r) × √(1/4) = v × (1/2)\n\nดังนั้นอัตราเร็วลดลงเหลือครึ่งหนึ่งของค่าเดิม ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ — วงกลม",
+    q: "วัตถุมวล 0.5 kg ผูกเชือกยาว 1 m แกว่งเป็นวงกลมในแนวราบบนพื้นโต๊ะลื่นสนิท (ไม่มีแรงเสียดทาน) ด้วยอัตราเร็วเชิงมุม 4 rad/s จงหาแรงตึงในเส้นเชือก",
+    opts: ["4 N", "6 N", "8 N", "10 N", "12 N"],
+    ans: 2,
+    explain: "บนพื้นโต๊ะแนวราบ แรงตึงเชือกทำหน้าที่เป็นแรงสู่ศูนย์กลางเพียงอย่างเดียว (ไม่มีองค์ประกอบแนวดิ่งเหมือนลูกตุ้มกรวย)\nT = mω²r\n\nแทนค่า: T = 0.5 × 4² × 1\n= 0.5 × 16 × 1\n= 8 N ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ — วงกลม",
+    q: "ข้อใดต่อไปนี้ไม่สามารถเป็นแรงสู่ศูนย์กลางได้ในสถานการณ์การเคลื่อนที่แบบวงกลม",
+    opts: [
+      "แรงตึงเชือกในลูกตุ้มกรวย",
+      "แรงเสียดทานของรถที่เลี้ยวโค้ง",
+      "แรงโน้มถ่วงที่กระทำต่อดาวเทียม",
+      "แรงสู่ศูนย์กลางที่เกิดขึ้นเองโดยไม่มีแรงจริงใดๆ กระทำ",
+      "แรงปกติของรางรถไฟเหาะที่จุดต่ำสุดของวง"
+    ],
+    ans: 3,
+    explain: "แรงสู่ศูนย์กลางไม่ใช่แรงชนิดใหม่ที่เกิดขึ้นเองตามธรรมชาติ แต่เป็นผลรวม (สุทธิ) ของแรงจริงที่มีอยู่แล้วซึ่งกระทำในทิศเข้าสู่ศูนย์กลาง\n\nตัวเลือก ก, ข, ค, จ ล้วนเป็นแรงจริงที่เกิดจากปฏิสัมพันธ์ทางกายภาพ (เชือก, พื้นถนน, มวลโลก, ราง) ซึ่งสามารถทำหน้าที่เป็นแรงสู่ศูนย์กลางได้\n\nส่วนตัวเลือก ง กล่าวถึงแรงที่ 'เกิดขึ้นเองโดยไม่มีแรงจริงกระทำ' ซึ่งขัดกับหลักฟิสิกส์ที่ว่าแรงสู่ศูนย์กลางต้องมาจากแรงจริงเสมอ → คำตอบคือ ง ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ — ผสม",
+    q: "รถไฟเหาะเคลื่อนที่ผ่านจุดสูงสุดของวงกลมแนวดิ่งรัศมี 5 m ด้วยอัตราเร็วขั้นต่ำที่ทำให้ผู้โดยสารยังคงสัมผัสกับที่นั่ง (แรงปกติ N ≥ 0) จงหาอัตราเร็วขั้นต่ำนี้ (g = 10 m/s²)",
+    opts: ["5 m/s", "10 m/s", "√50 m/s", "√100 m/s", "15 m/s"],
+    ans: 2,
+    explain: "ที่จุดสูงสุดของวงกลมแนวดิ่ง แรงที่กระทำในทิศเข้าสู่ศูนย์กลาง (ทิศลง) คือ น้ำหนัก mg และแรงปกติ N (ทั้งสองชี้ลงสู่ศูนย์กลาง)\nΣF = mg + N = mv²/r\n\nกรณีขั้นต่ำที่ N = 0 (ผู้โดยสารเริ่มลอยจากที่นั่งพอดี):\nmg = mv²/r\nv² = gr\nv = √(gr)\n\nแทนค่า: v = √(10 × 5) = √50 m/s ≈ 7.07 m/s ✓\n\nข้อสังเกต: หาก N = 0 มากกว่านี้ (v น้อยกว่า √(gr)) ผู้โดยสารจะหลุดออกจากที่นั่งก่อนถึงจุดสูงสุด เพราะน้ำหนักอย่างเดียวไม่พอเป็นแรงสู่ศูนย์กลางที่ต้องการ"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentTopic = '';
+  alevelQuestions.forEach((q, idx) => {
+    if (q.year !== currentTopic) {
+      currentTopic = q.year;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + currentTopic + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

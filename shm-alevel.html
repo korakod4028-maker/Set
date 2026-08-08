@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย (SHM) | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'x(t) v(t) a(t) T ω A φ ⤾ ⤿ ~';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(26px, 6vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 560px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active { background: var(--accent); color: #fff; font-weight: 600; }
+
+  /* CONTENT */
+  .content { max-width: 860px; margin: 0 auto; padding: 32px 20px 80px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent3); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent4); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* DIAGRAM */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    margin-bottom: 8px; font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question { font-size: 17px; font-weight: 600; margin-bottom: 16px; line-height: 1.6; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(108,99,255,0.1); }
+  .option-btn.correct { background: rgba(0,212,170,0.15); border-color: var(--accent2); color: var(--accent2); }
+  .option-btn.wrong { background: rgba(255,107,107,0.1); border-color: var(--accent3); color: var(--accent3); }
+  .feedback { margin-top: 12px; padding: 12px 16px; border-radius: 8px; font-size: 14px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3); color: var(--accent2); }
+  .feedback.wrong-fb { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.3); color: var(--accent3); }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px; font-weight: 800; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+  .sub-heading { font-size: 18px; font-weight: 700; margin: 24px 0 12px; color: var(--accent2); }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+  .summary-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .summary-item .sym { font-family: var(--mono); font-size: 22px; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+  .summary-item .sym-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>การเคลื่อนที่แบบ<span>ฮาร์มอนิกอย่างง่าย</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level เรื่อง Simple Harmonic Motion (SHM) ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="s1">1. นิยาม SHM</button>
+  <button class="tab-btn" data-sec="s2">2. สมการการเคลื่อนที่</button>
+  <button class="tab-btn" data-sec="s3">3. กราฟ x-t, v-t, a-t</button>
+  <button class="tab-btn" data-sec="s4">4. มวลติดสปริง</button>
+  <button class="tab-btn" data-sec="s5">5. ลูกตุ้มอย่างง่าย</button>
+  <button class="tab-btn" data-sec="s6">6. พลังงานใน SHM</button>
+  <button class="tab-btn" data-sec="s7">7. วงกลมอ้างอิง</button>
+  <button class="tab-btn" data-sec="s8">8. สรุปสูตรทั้งหมด</button>
+  <button class="tab-btn" data-sec="s9">9. โจทย์ผสมยากๆ</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: นิยาม SHM ===== -->
+  <div class="section active" id="s1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · นิยามและลักษณะของ SHM</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">〰️</div>การเคลื่อนที่แบบฮาร์มอนิกอย่างง่ายคืออะไร?</div>
+      <p>การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย (Simple Harmonic Motion, SHM) คือ <strong>การเคลื่อนที่กลับไปมาซ้ำแบบเดิมเป็นคาบ</strong> รอบตำแหน่งสมดุล โดยมีเงื่อนไขสำคัญเรื่องแรง</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        SHM คือการเคลื่อนที่ที่มี <strong>แรงดึงกลับ (Restoring Force)</strong> แปรผันตรงกับขนาดการกระจัดจากจุดสมดุลเสมอ และมีทิศทางตรงข้ามกับการกระจัดเสมอ
+      </div>
+      <div class="math-block">F = −kx</div>
+      <p>เมื่อ F คือแรงลัพธ์ (N), k คือค่าคงตัวของแรง (N/m), x คือการกระจัดจากจุดสมดุล (m) และเครื่องหมายลบแสดงว่าแรงมีทิศทางตรงข้ามกับ x เสมอ</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        ถ้าเจอโจทย์บอกว่า "ความเร่งแปรผันตรงกับการกระจัดแต่ทิศตรงข้าม" (a ∝ −x) ให้สรุปได้ทันทีว่าเป็น SHM
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔑</div>ปริมาณสำคัญที่ต้องรู้จัก</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">A</div>
+          <div class="sym-name">แอมพลิจูด (Amplitude)</div>
+          <div class="sym-desc">การกระจัดสูงสุดจากจุดสมดุล (m)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">T</div>
+          <div class="sym-name">คาบ (Period)</div>
+          <div class="sym-desc">เวลาที่ใช้เคลื่อนที่ครบ 1 รอบ (s)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">f</div>
+          <div class="sym-name">ความถี่ (Frequency)</div>
+          <div class="sym-desc">จำนวนรอบต่อวินาที f = 1/T (Hz)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">ω</div>
+          <div class="sym-name">ความถี่เชิงมุม</div>
+          <div class="sym-desc">ω = 2π/T = 2πf (rad/s)</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ลูกตุ้มแกว่งครบ 20 รอบ ใน 40 วินาที<br>
+        T = 40/20 = 2 s, f = 1/T = 0.5 Hz, ω = 2π/T = π rad/s
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⚠️</div>เงื่อนไขที่ต้องระวัง</div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        การเคลื่อนที่เป็นคาบ (Periodic) <strong>ไม่ได้แปลว่า</strong> เป็น SHM เสมอไป — การเคลื่อนที่เป็นวงกลมสม่ำเสมอก็เป็นคาบ แต่ไม่ใช่ SHM<br>
+        SHM ต้องมีเงื่อนไข a = −ω²x (ความเร่งแปรผันตรงกับการกระจัดแบบทิศตรงข้ามเท่านั้น) จึงจะเรียกว่า SHM ได้
+      </div>
+      <p>ตัวอย่างระบบที่เป็น SHM ที่พบบ่อยในข้อสอบ ได้แก่ มวลติดสปริง, ลูกตุ้มอย่างง่ายที่แกว่งมุมเล็ก ๆ (θ < 15°) และวัตถุลอยในของเหลว</p>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: สมการการเคลื่อนที่ ===== -->
+  <div class="section" id="s2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · สมการการกระจัด ความเร็ว ความเร่ง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">x(t)</div>สมการการกระจัด</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ถ้าเริ่มจับเวลาที่ตำแหน่งสมดุล การกระจัดที่เวลาใด ๆ เขียนเป็นฟังก์ชันไซน์หรือโคไซน์ตามเงื่อนไขเริ่มต้น
+      </div>
+      <div class="math-block">
+        x(t) = A sin(ωt)&nbsp;&nbsp; (เริ่มที่จุดสมดุล)<br>
+        x(t) = A cos(ωt)&nbsp;&nbsp; (เริ่มที่จุดปลายสุด/แอมพลิจูด)<br>
+        x(t) = A sin(ωt + φ)&nbsp;&nbsp; (กรณีทั่วไป มีเฟสเริ่มต้น φ)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">v(t)</div>สมการความเร็ว</div>
+      <p>ความเร็วหาได้จากอนุพันธ์ของการกระจัดเทียบกับเวลา</p>
+      <div class="math-block">
+        v(t) = Aω cos(ωt)&nbsp;&nbsp; (เมื่อ x = A sin ωt)<br>
+        v_max = Aω&nbsp;&nbsp; (เกิดที่จุดสมดุล x = 0)
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตรลัด — ความเร็วที่ตำแหน่งใด ๆ</div>
+        v = ω√(A² − x²)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A = 0.2 m, ω = 5 rad/s ที่ตำแหน่ง x = 0.12 m<br>
+        v = 5√(0.2² − 0.12²) = 5√(0.04 − 0.0144) = 5√0.0256 = 5(0.16) = 0.8 m/s
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">a(t)</div>สมการความเร่ง</div>
+      <div class="math-block">
+        a(t) = −Aω² sin(ωt) = −ω²x<br>
+        a_max = Aω²&nbsp;&nbsp; (เกิดที่จุดปลายสุด x = ±A)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ความสัมพันธ์หลักที่ต้องจำ</div>
+        a = −ω²x คือ "ลายเซ็น" ของ SHM เสมอ ไม่ว่าโจทย์จะซับซ้อนแค่ไหน หากพิสูจน์ได้ว่า a = −ω²x แสดงว่าเป็น SHM แน่นอน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>ค่าที่ตำแหน่งพิเศษ</div>
+      <table>
+        <tr><th>ตำแหน่ง</th><th>การกระจัด x</th><th>ความเร็ว v</th><th>ความเร่ง a</th></tr>
+        <tr><td>จุดสมดุล</td><td class="false-val">0</td><td class="true-val">v_max = Aω</td><td class="false-val">0</td></tr>
+        <tr><td>จุดปลายสุด (±A)</td><td class="true-val">±A</td><td class="false-val">0</td><td class="true-val">a_max = Aω²</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 จำง่าย</div>
+        เร็วสุดที่จุดกึ่งกลาง (สมดุล) เร่งสุดที่จุดปลาย — สลับกันเสมอ ไม่มีทางเกิดพร้อมกัน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: กราฟ ===== -->
+  <div class="section" id="s3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · กราฟ x-t, v-t, a-t และความสัมพันธ์เฟส</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📈</div>กราฟการกระจัด ความเร็ว ความเร่ง เทียบเวลา</div>
+      <div class="venn-container">
+        <svg width="420" height="260" viewBox="0 0 420 260">
+          <rect width="420" height="260" rx="10" fill="#1c2235"/>
+          <line x1="20" y1="50" x2="400" y2="50" stroke="#2a3050" stroke-width="1"/>
+          <line x1="20" y1="130" x2="400" y2="130" stroke="#2a3050" stroke-width="1"/>
+          <line x1="20" y1="210" x2="400" y2="210" stroke="#2a3050" stroke-width="1"/>
+          <path d="M 20 50 Q 65 10 110 50 T 200 50 T 290 50 T 380 50" stroke="#6c63ff" stroke-width="2.5" fill="none"/>
+          <text x="20" y="30" fill="#a89fff" font-size="12" font-family="Sarabun">x(t) = A sin ωt</text>
+          <path d="M 20 130 Q 65 170 110 130 T 200 130 T 290 130 T 380 130" stroke="#00d4aa" stroke-width="2.5" fill="none" transform="translate(0,0)"/>
+          <text x="20" y="112" fill="#00d4aa" font-size="12" font-family="Sarabun">v(t) = Aω cos ωt</text>
+          <path d="M 20 210 Q 65 250 110 210 T 200 210 T 290 210 T 380 210" stroke="#ff6b6b" stroke-width="2.5" fill="none"/>
+          <text x="20" y="192" fill="#ff6b6b" font-size="12" font-family="Sarabun">a(t) = −Aω² sin ωt</text>
+        </svg>
+      </div>
+      <div class="def-box">
+        <div class="def-label">ความสัมพันธ์เฟส</div>
+        v(t) นำหน้า x(t) อยู่ 90° (π/2 rad) และ a(t) มีเฟสตรงข้ามกับ x(t) อยู่ 180° (π rad) เสมอ
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 อ่านกราฟให้ไว</div>
+        เมื่อกราฟ x เป็นศูนย์ (ตัดแกน) กราฟ v จะอยู่ที่ค่าสูงสุดหรือต่ำสุดพอดี และเมื่อกราฟ x อยู่ที่จุดสูงสุด กราฟ a จะอยู่ที่จุดต่ำสุด (สวนทางกันเสมอ)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔄</div>กราฟพลังงานเทียบตำแหน่ง</div>
+      <p>กราฟพลังงานจลน์ (KE) และพลังงานศักย์ (PE) เทียบกับตำแหวน x มีลักษณะเป็นพาราโบลาสวนทางกัน โดยผลรวมคงที่เสมอ (ดูรายละเอียดในหัวข้อ 6)</p>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: มวลติดสปริง ===== -->
+  <div class="section" id="s4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · ระบบมวลติดสปริง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔩</div>มวลติดสปริงในแนวราบ/แนวดิ่ง</div>
+      <div class="def-box">
+        <div class="def-label">ที่มา</div>
+        จากกฎของฮุก แรงในสปริง F = −kx และจากกฎข้อ 2 ของนิวตัน F = ma<br>
+        ดังนั้น ma = −kx  →  a = −(k/m)x  ซึ่งอยู่ในรูป a = −ω²x
+      </div>
+      <div class="math-block">
+        ω² = k/m&nbsp;&nbsp;→&nbsp;&nbsp; ω = √(k/m)<br><br>
+        T = 2π√(m/k)<br><br>
+        f = (1/2π)√(k/m)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ข้อสังเกตสำคัญ</div>
+        คาบ T ของมวลติดสปริง <strong>ไม่ขึ้นกับแอมพลิจูด</strong> และ<strong>ไม่ขึ้นกับ g</strong> (ไม่ว่าจะแกว่งในแนวราบหรือแนวดิ่งคาบเท่ากัน) ขึ้นกับมวล m และค่าคงตัวสปริง k เท่านั้น
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        สปริง k = 200 N/m ผูกมวล 2 kg แล้วดึงให้ยืดออก 5 cm แล้วปล่อย<br>
+        T = 2π√(2/200) = 2π√0.01 = 2π(0.1) = 0.2π ≈ 0.63 s<br>
+        A = 0.05 m, v_max = Aω = A√(k/m) = 0.05×10 = 0.5 m/s
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔗</div>สปริงต่อกันแบบอนุกรมและขนาน</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ต่ออนุกรม (Series)</h4>
+          <div class="math-block" style="font-size:13px">1/k_รวม = 1/k₁ + 1/k₂</div>
+          <p style="font-size:13px; color:var(--text-dim)">แข็งน้อยลง (k รวมลดลง) → แกว่งช้าลง คาบนานขึ้น</p>
+        </div>
+        <div class="mini-card">
+          <h4>ต่อขนาน (Parallel)</h4>
+          <div class="math-block" style="font-size:13px">k_รวม = k₁ + k₂</div>
+          <p style="font-size:13px; color:var(--text-dim)">แข็งขึ้น (k รวมเพิ่มขึ้น) → แกว่งเร็วขึ้น คาบสั้นลง</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: ลูกตุ้มอย่างง่าย ===== -->
+  <div class="section" id="s5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · ลูกตุ้มอย่างง่าย (Simple Pendulum)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🕰️</div>สูตรคาบของลูกตุ้มอย่างง่าย</div>
+      <div class="def-box">
+        <div class="def-label">เงื่อนไข</div>
+        ลูกตุ้มจะเคลื่อนที่แบบ SHM ได้ก็ต่อเมื่อ <strong>แกว่งด้วยมุมเล็ก ๆ (θ ≤ 15°)</strong> เท่านั้น เพราะที่มุมเล็กจะประมาณ sin θ ≈ θ (rad) ได้
+      </div>
+      <div class="math-block">
+        T = 2π√(L/g)<br><br>
+        f = (1/2π)√(g/L)
+      </div>
+      <p>เมื่อ L คือความยาวเชือก (m) และ g คือความเร่งเนื่องจากแรงโน้มถ่วง (m/s²)</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 ข้อสังเกตสำคัญ</div>
+        คาบของลูกตุ้มอย่างง่าย <strong>ไม่ขึ้นกับมวลของลูกตุ้ม</strong> และ<strong>ไม่ขึ้นกับแอมพลิจูด (มุมแกว่ง)</strong> ขึ้นกับความยาวเชือก L และค่า g เท่านั้น
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ลูกตุ้มยาว 2.5 m แกว่งที่ g = 10 m/s²<br>
+        T = 2π√(2.5/10) = 2π√0.25 = 2π(0.5) = π ≈ 3.14 s
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⛰️</div>ผลของตำแหน่งที่มีต่อคาบ</div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง — เอาลูกตุ้มไปที่อื่น</div>
+        เนื่องจาก T ∝ 1/√g หากค่า g เปลี่ยน (เช่น นำไปดวงจันทร์ หรือขึ้นที่สูง) คาบจะเปลี่ยนตาม แม้ L เท่าเดิม<br>
+        ค่า g บนดวงจันทร์ ≈ g โลก/6 → คาบบนดวงจันทร์จะยาวกว่าบนโลกประมาณ √6 ≈ 2.45 เท่า
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการเทียบอัตราส่วน</div>
+        ลูกตุ้มเดียวกัน วัดคาบบนโลกได้ T₁ แล้วนำไปแกว่งบนดาวที่มี g₂ = 4g₁<br>
+        T₂/T₁ = √(g₁/g₂) = √(1/4) = 1/2  →  T₂ = T₁/2 (คาบสั้นลงครึ่งหนึ่ง)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: พลังงาน ===== -->
+  <div class="section" id="s6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · พลังงานในการเคลื่อนที่แบบฮาร์มอนิก</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚡</div>พลังงานจลน์และพลังงานศักย์</div>
+      <div class="math-block">
+        KE = ½mv² = ½mω²(A² − x²)<br>
+        PE = ½kx² = ½mω²x²<br>
+        E_รวม = KE + PE = ½kA² = ½mω²A² &nbsp;(คงที่ตลอดการเคลื่อนที่)
+      </div>
+      <div class="def-box">
+        <div class="def-label">หลักการอนุรักษ์พลังงาน</div>
+        พลังงานรวมของระบบ SHM มีค่า<strong>คงที่เสมอ</strong> ไม่ว่าจะอยู่ตำแหน่งใด — มีเพียงการแลกเปลี่ยนระหว่าง KE และ PE เท่านั้น
+      </div>
+      <table>
+        <tr><th>ตำแหน่ง</th><th>KE</th><th>PE</th><th>E รวม</th></tr>
+        <tr><td>จุดสมดุล (x=0)</td><td class="true-val">สูงสุด</td><td class="false-val">0</td><td>½mω²A²</td></tr>
+        <tr><td>จุดปลายสุด (x=±A)</td><td class="false-val">0</td><td class="true-val">สูงสุด</td><td>½mω²A²</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        มวล 0.5 kg ติดสปริง k = 50 N/m แกว่งด้วย A = 0.1 m<br>
+        E_รวม = ½kA² = ½(50)(0.1²) = ½(50)(0.01) = 0.25 J<br><br>
+        ที่ x = 0.06 m: PE = ½kx² = ½(50)(0.0036) = 0.09 J<br>
+        KE = E_รวม − PE = 0.25 − 0.09 = 0.16 J
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>กราฟพลังงานเทียบตำแหน่ง x</div>
+      <div class="venn-container">
+        <svg width="380" height="200" viewBox="0 0 380 200">
+          <rect width="380" height="200" rx="10" fill="#1c2235"/>
+          <line x1="30" y1="170" x2="350" y2="170" stroke="#8892b0" stroke-width="1"/>
+          <line x1="190" y1="20" x2="190" y2="170" stroke="#8892b0" stroke-width="1"/>
+          <path d="M 30 20 Q 190 170 350 20" stroke="#00d4aa" stroke-width="2.5" fill="none"/>
+          <path d="M 30 170 Q 190 20 350 170" stroke="#ff6b6b" stroke-width="2.5" fill="none"/>
+          <text x="35" y="35" fill="#00d4aa" font-size="12" font-family="Sarabun">PE = ½kx²</text>
+          <text x="230" y="35" fill="#ff6b6b" font-size="12" font-family="Sarabun">KE</text>
+          <text x="150" y="185" fill="#8892b0" font-size="11" font-family="Sarabun">−A          0          +A</text>
+        </svg>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 อ่านกราฟ</div>
+        กราฟ PE เป็นพาราโบลาหงายมีจุดต่ำสุดที่ x=0 ส่วนกราฟ KE เป็นพาราโบลาคว่ำมีจุดสูงสุดที่ x=0 ผลรวมของทั้งสองเส้นที่ x ใด ๆ จะเท่ากันเสมอ (เท่ากับ E รวม)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: วงกลมอ้างอิง ===== -->
+  <div class="section" id="s7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · วงกลมอ้างอิง (Reference Circle)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⭕</div>SHM คือเงาของการเคลื่อนที่เป็นวงกลม</div>
+      <p>SHM สามารถมองเป็น <strong>เงาฉาย (projection)</strong> ของวัตถุที่เคลื่อนที่เป็นวงกลมด้วยอัตราเร็วเชิงมุมคงที่ ω บนเส้นผ่านศูนย์กลาง</p>
+      <div class="venn-container">
+        <svg width="360" height="220" viewBox="0 0 360 220">
+          <rect width="360" height="220" rx="10" fill="#1c2235"/>
+          <circle cx="150" cy="110" r="80" fill="none" stroke="#6c63ff" stroke-width="2" stroke-dasharray="4,3"/>
+          <line x1="150" y1="110" x2="220" y2="60" stroke="#00d4aa" stroke-width="2.5"/>
+          <circle cx="220" cy="60" r="5" fill="#00d4aa"/>
+          <line x1="220" y1="60" x2="220" y2="200" stroke="#ff6b6b" stroke-width="1.5" stroke-dasharray="3,3"/>
+          <circle cx="220" cy="200" r="5" fill="#ffd93d"/>
+          <text x="230" y="55" fill="#00d4aa" font-size="12" font-family="Sarabun">จุดบนวงกลม (ωt)</text>
+          <text x="225" y="215" fill="#ffd93d" font-size="12" font-family="Sarabun">เงาบนแกน x = SHM</text>
+          <line x1="70" y1="200" x2="330" y2="200" stroke="#8892b0" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="def-box">
+        <div class="def-label">ความหมายทางกายภาพของ ω</div>
+        ω ในสมการ SHM มีค่าเท่ากับ <strong>อัตราเร็วเชิงมุม</strong> ของวัตถุสมมติที่เคลื่อนที่เป็นวงกลมรัศมี A ด้วยอัตราเร็วเชิงมุมคงที่ — เมื่อฉายเงาลงบนเส้นผ่านศูนย์กลางจะได้ตำแหน่ง x ตรงกับ SHM ทุกประการ
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ประโยชน์ของแนวคิดนี้</div>
+        ใช้อธิบายเฟส (phase) ของ SHM ได้ง่าย เพราะมุม φ ในสมการ x = A sin(ωt + φ) ก็คือมุมเริ่มต้นบนวงกลมอ้างอิงนั่นเอง
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: สรุปสูตร ===== -->
+  <div class="section" id="s8">
+    <div class="section-heading"><span>หัวข้อ 8</span> · สรุปสูตรทั้งหมดของ SHM</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>สูตรพื้นฐาน</div>
+      <div class="math-block">
+        ω = 2π/T = 2πf<br>
+        x = A sin(ωt + φ)&nbsp;&nbsp;,&nbsp;&nbsp; v = Aω cos(ωt + φ)&nbsp;&nbsp;,&nbsp;&nbsp; a = −Aω² sin(ωt + φ)<br>
+        a = −ω²x<br>
+        v = ω√(A² − x²)<br>
+        v_max = Aω&nbsp;&nbsp;,&nbsp;&nbsp; a_max = Aω²
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔩</div>สูตรระบบเฉพาะ</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>มวลติดสปริง</h4>
+          <div class="math-block" style="font-size:13px">T = 2π√(m/k)<br>ω = √(k/m)</div>
+        </div>
+        <div class="mini-card">
+          <h4>ลูกตุ้มอย่างง่าย</h4>
+          <div class="math-block" style="font-size:13px">T = 2π√(L/g)<br>ω = √(g/L)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⚡</div>สูตรพลังงาน</div>
+      <div class="math-block">
+        E_รวม = ½kA² = ½mω²A²<br>
+        KE = ½mv² = ½mω²(A² − x²)<br>
+        PE = ½kx² = ½mω²x²
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🧠</div>ตารางเช็คลิสต์ก่อนสอบ</div>
+      <table>
+        <tr><th>สิ่งที่ต้องจำ</th><th>รายละเอียด</th></tr>
+        <tr><td>เร็วสุดตรงไหน</td><td>จุดสมดุล (x=0)</td></tr>
+        <tr><td>เร่งสุดตรงไหน</td><td>จุดปลายสุด (x=±A)</td></tr>
+        <tr><td>คาบสปริงขึ้นกับอะไร</td><td>m, k เท่านั้น (ไม่ขึ้น A, g)</td></tr>
+        <tr><td>คาบลูกตุ้มขึ้นกับอะไร</td><td>L, g เท่านั้น (ไม่ขึ้น A, มวล)</td></tr>
+        <tr><td>เฟส v นำหน้า x เท่าไร</td><td>90° (π/2)</td></tr>
+        <tr><td>เฟส a กับ x ต่างกันเท่าไร</td><td>180° (π) — ตรงข้ามกันเสมอ</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: โจทย์ผสม ===== -->
+  <div class="section" id="s9">
+    <div class="section-heading"><span>หัวข้อ 9</span> · โจทย์ผสมและเทคนิคการแก้ปัญหาขั้นสูง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧩</div>เทคนิคการวิเคราะห์โจทย์ SHM แบบผสม</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ขั้นตอนแก้โจทย์อย่างเป็นระบบ</div>
+        1) ระบุก่อนว่าเป็นระบบสปริงหรือลูกตุ้ม เพื่อเลือกสูตรคาบที่ถูกต้อง<br>
+        2) หาค่า ω จากข้อมูลที่ให้ (จาก T, f หรือคำนวณจาก k/m หรือ g/L)<br>
+        3) ระบุค่า A จากโจทย์ (ระยะดึง/ระยะยืดสูงสุด/มุมแกว่งสูงสุด)<br>
+        4) เลือกสูตรที่ตรงกับสิ่งที่โจทย์ถาม (ตำแหน่ง ความเร็ว ความเร่ง หรือพลังงาน)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์ผสม</div>
+        มวล 4 kg ติดสปริง k = 100 N/m วางบนพื้นราบไม่มีความเสียดทาน ดึงให้ยืดออก 0.2 m แล้วปล่อย<br>
+        (ก) หาคาบ T = 2π√(m/k) = 2π√(4/100) = 2π(0.2) = 0.4π ≈ 1.26 s<br>
+        (ข) หา v ที่ x = 0.1 m: ω = √(k/m) = 5 rad/s<br>
+        &nbsp;&nbsp;&nbsp; v = ω√(A²−x²) = 5√(0.04−0.01) = 5√0.03 ≈ 0.87 m/s<br>
+        (ค) หา KE ที่ x = 0.1 m โดยใช้พลังงาน:<br>
+        &nbsp;&nbsp;&nbsp; E_รวม = ½kA² = ½(100)(0.04) = 2 J<br>
+        &nbsp;&nbsp;&nbsp; PE = ½kx² = ½(100)(0.01) = 0.5 J → KE = 2 − 0.5 = 1.5 J
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⚠️</div>กับดักที่พบบ่อยในข้อสอบ</div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กับดัก 1</div>
+        ห้ามสับสนระหว่าง "ระยะทางที่เคลื่อนที่ได้ใน 1 คาบ" (= 4A) กับ "แอมพลิจูด" (= A)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กับดัก 2</div>
+        มวลติดสปริงในแนวดิ่ง แม้จุดสมดุลจะเลื่อนลงจากตำแหน่งสปริงธรรมชาติ (เพราะน้ำหนักถ่วง) แต่สูตรคาบ T = 2π√(m/k) ยังใช้ได้เหมือนเดิม เพราะแรงโน้มถ่วงเพียงแค่เลื่อนจุดสมดุล ไม่มีผลต่อค่า k หรือ m
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กับดัก 3</div>
+        มุมเฟส φ ในสมการ x = A sin(ωt+φ) ต้องพิจารณาจากเงื่อนไขเริ่มต้น (ตำแหน่งและทิศทางความเร็วที่ t=0) อย่างระมัดระวัง มิฉะนั้นจะได้เครื่องหมายผิด
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมเนื้อหา SHM ทั้งหมด เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบ A-Level การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ข้อสอบจำลองแนว A-Level วิทยาศาสตร์ประยุกต์ เรื่อง SHM</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      โจทย์ SHM ใน A-Level มักผสมกับเรื่องพลังงานกลและกฎของนิวตัน — ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบาย
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — พื้นฐาน SHM",
+    q: "ข้อใดคือเงื่อนไขที่ทำให้การเคลื่อนที่เป็นแบบฮาร์มอนิกอย่างง่าย (SHM)?",
+    opts: [
+      "แรงลัพธ์คงที่ตลอดการเคลื่อนที่",
+      "ความเร่งแปรผันตรงกับการกระจัดแต่ทิศตรงข้าม (a = −ω²x)",
+      "อัตราเร็วคงที่ตลอดการเคลื่อนที่",
+      "การกระจัดเพิ่มขึ้นเรื่อย ๆ ตามเวลา"
+    ],
+    ans: 1,
+    explain: "SHM มีเงื่อนไขเฉพาะคือแรงดึงกลับ (และความเร่ง) ต้องแปรผันตรงกับขนาดการกระจัดจากจุดสมดุล และมีทิศทางตรงข้ามกับการกระจัดเสมอ เขียนเป็นสมการได้ว่า a = −ω²x\n\n• ตัวเลือก ก: แรงคงที่ทำให้เกิดความเร่งคงที่ ไม่ใช่ SHM (เป็นการเคลื่อนที่แบบเส้นตรงด้วยความเร่งคงที่)\n• ตัวเลือก ค: อัตราเร็วคงที่ไม่มีความเร่งเลย ไม่ใช่ SHM\n• ตัวเลือก ง: การกระจัดที่เพิ่มขึ้นเรื่อย ๆ ไม่ใช่การเคลื่อนที่แบบกลับไปมา จึงไม่ใช่ SHM\n\nดังนั้นคำตอบคือ ข้อ ข ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — ปริมาณพื้นฐาน",
+    q: "วัตถุแกว่งกลับไปมาครบ 30 รอบ ในเวลา 15 วินาที จงหาความถี่เชิงมุม ω",
+    opts: ["π rad/s", "2π rad/s", "4π rad/s", "0.5π rad/s"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาคาบ T\nT = เวลาทั้งหมด / จำนวนรอบ = 15/30 = 0.5 s\n\nขั้นที่ 2: หาความถี่เชิงมุม\nω = 2π/T = 2π/0.5 = 4π rad/s ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — สปริง",
+    q: "มวล 0.5 kg ติดสปริง k = 8 N/m จงหาคาบการแกว่ง T",
+    opts: ["π/2 s", "π/4 s", "π s", "2π s"],
+    ans: 0,
+    explain: "ใช้สูตรคาบของมวลติดสปริง:\nT = 2π√(m/k) = 2π√(0.5/8) = 2π√(1/16)\n\n√(1/16) = 1/4\nT = 2π(1/4) = π/2 s ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ลูกตุ้ม",
+    q: "ลูกตุ้มอย่างง่ายยาว 1.6 m แกว่งที่ g = 10 m/s² จงหาคาบ T",
+    opts: ["0.8π s", "1.2π s", "1.6π s", "2π s"],
+    ans: 0,
+    explain: "ใช้สูตรคาบของลูกตุ้มอย่างง่าย:\nT = 2π√(L/g) = 2π√(1.6/10) = 2π√0.16 = 2π(0.4) = 0.8π s ✓\n\n(√0.16 = 0.4 พอดี เพราะ 0.4×0.4 = 0.16)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ความเร็วและความเร่ง",
+    q: "วัตถุเคลื่อนที่แบบ SHM มี A = 0.3 m และ ω = 4 rad/s จงหาความเร็วสูงสุด v_max และความเร่งสูงสุด a_max",
+    opts: [
+      "v_max = 1.2 m/s, a_max = 4.8 m/s²",
+      "v_max = 0.075 m/s, a_max = 0.3 m/s²",
+      "v_max = 1.2 m/s, a_max = 1.6 m/s²",
+      "v_max = 4.8 m/s, a_max = 1.2 m/s²"
+    ],
+    ans: 0,
+    explain: "ใช้สูตร:\nv_max = Aω = 0.3 × 4 = 1.2 m/s\n\na_max = Aω² = 0.3 × 4² = 0.3 × 16 = 4.8 m/s²\n\nดังนั้น v_max = 1.2 m/s และ a_max = 4.8 m/s² ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ความเร็วที่ตำแหน่งใด ๆ",
+    q: "วัตถุเคลื่อนที่แบบ SHM มี A = 10 cm และ ω = 2 rad/s จงหาความเร็วที่ตำแหน่ง x = 6 cm",
+    opts: ["8 cm/s", "12 cm/s", "16 cm/s", "20 cm/s"],
+    ans: 2,
+    explain: "ใช้สูตรความเร็วที่ตำแหน่งใด ๆ:\nv = ω√(A² − x²)\n\nแทนค่า A = 10 cm, x = 6 cm, ω = 2 rad/s:\nA² − x² = 10² − 6² = 100 − 36 = 64\n√64 = 8\nv = ω × 8 = 2 × 8 = 16 cm/s ✓\n\n(ตรวจสอบด้วยสามเหลี่ยมมุมฉาก 6-8-10 ก็ได้เช่นกัน เพราะ 6² + 8² = 10² พอดี)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — พลังงาน",
+    q: "มวล 2 kg ติดสปริง k = 50 N/m แกว่งด้วยแอมพลิจูด A = 0.2 m จงหาพลังงานจลน์ (KE) ที่ตำแหน่ง x = 0.1 m",
+    opts: ["0.15 J", "0.75 J", "1.00 J", "0.375 J"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาพลังงานรวมของระบบ\nE_รวม = ½kA² = ½(50)(0.2²) = ½(50)(0.04) = 1.0 J\n\nขั้นที่ 2: หาพลังงานศักย์ที่ตำแหน่ง x = 0.1 m\nPE = ½kx² = ½(50)(0.1²) = ½(50)(0.01) = 0.25 J\n\nขั้นที่ 3: หาพลังงานจลน์จากหลักอนุรักษ์พลังงาน\nKE = E_รวม − PE = 1.0 − 0.25 = 0.75 J ✓ (ตรงกับตัวเลือก ข)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — ลูกตุ้มเปรียบเทียบ",
+    q: "ลูกตุ้มอย่างง่ายบนโลกมีคาบ T₁ หากนำไปแกว่งบนดาวเคราะห์ที่มีค่า g เป็น 4 เท่าของโลก (ความยาวเชือกเท่าเดิม) คาบใหม่ T₂ เป็นเท่าใดเมื่อเทียบกับ T₁",
+    opts: ["T₂ = 4T₁", "T₂ = 2T₁", "T₂ = T₁/2", "T₂ = T₁/4"],
+    ans: 2,
+    explain: "ใช้ความสัมพันธ์ T = 2π√(L/g) ซึ่งแสดงว่า T ∝ 1/√g (เมื่อ L คงที่)\n\nดังนั้น T₂/T₁ = √(g₁/g₂) = √(1/4) = 1/2\n\nT₂ = T₁/2 ✓\n\n(ค่า g มากขึ้น แรงดึงกลับต่อหน่วยการกระจัดมากขึ้น ทำให้แกว่งเร็วขึ้น คาบจึงสั้นลง)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — สปริงต่อกัน",
+    q: "สปริงสองเส้น k₁ = 100 N/m และ k₂ = 100 N/m ต่อกันแบบอนุกรม แล้วนำไปติดมวล 2 kg จงหาคาบการแกว่ง T",
+    opts: ["2π/5 s", "π/5 s", "2π√(1/25) s", "π s"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หาค่าคงตัวสปริงรวมแบบอนุกรม\n1/k_รวม = 1/k₁ + 1/k₂ = 1/100 + 1/100 = 2/100\nk_รวม = 50 N/m\n\nขั้นที่ 2: หาคาบ\nT = 2π√(m/k_รวม) = 2π√(2/50) = 2π√0.04 = 2π(0.2) = 0.4π = 2π/5 s ✓"
+  }
+];
+
+// ===== ข้อสอบ A-Level SHM =====
+const alevelQuestions = [
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "วัตถุมวล 1 kg เคลื่อนที่แบบ SHM มีสมการการกระจัด x = 0.5 sin(4t) เมตร (t มีหน่วยวินาที) จงหาแอมพลิจูดและความถี่เชิงมุม",
+    opts: [
+      "A = 0.5 m, ω = 4 rad/s",
+      "A = 4 m, ω = 0.5 rad/s",
+      "A = 0.5 m, ω = 2 rad/s",
+      "A = 2 m, ω = 4 rad/s",
+      "A = 0.5 m, ω = 8 rad/s"
+    ],
+    ans: 0,
+    explain: "เปรียบเทียบสมการที่กำหนด x = 0.5 sin(4t) กับรูปทั่วไป x = A sin(ωt)\n\nจับคู่สัมประสิทธิ์:\nA = 0.5 m (สัมประสิทธิ์หน้า sin)\nω = 4 rad/s (สัมประสิทธิ์ของ t ภายใน sin)\n\nดังนั้น A = 0.5 m และ ω = 4 rad/s ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "จากข้อข้างต้น (x = 0.5 sin(4t)) จงหาความเร็วสูงสุดของวัตถุ",
+    opts: ["1 m/s", "2 m/s", "0.5 m/s", "4 m/s", "8 m/s"],
+    ans: 0,
+    explain: "ใช้สูตรความเร็วสูงสุด:\nv_max = Aω\n\nแทนค่า A = 0.5 m, ω = 4 rad/s:\nv_max = 0.5 × 4 = 1 m/s ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "มวล 3 kg แขวนกับสปริงในแนวดิ่ง ทำให้สปริงยืดออก 0.03 m จากตำแหน่งธรรมชาติ (สมดุลใหม่) กำหนด g = 10 m/s² จงหาค่าคงตัวสปริง k",
+    opts: ["1000 N/m", "300 N/m", "100 N/m", "30 N/m", "3000 N/m"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ที่ตำแหน่งสมดุล แรงสปริงสมดุลกับน้ำหนัก\nkx = mg\n\nขั้นที่ 2: แทนค่า\nk(0.03) = 3 × 10 = 30\nk = 30/0.03 = 1000 N/m ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "จากข้อข้างต้น (มวล 3 kg, k = 1000 N/m) หากดึงมวลลงมาเพิ่มอีก 0.02 m จากตำแหน่งสมดุลแล้วปล่อย จงหาคาบการแกว่ง T",
+    opts: [
+      "(π√30)/50 s ≈ 0.34 s",
+      "2π/5 s ≈ 1.26 s",
+      "π/10 s ≈ 0.31 s",
+      "2π s ≈ 6.28 s",
+      "π s ≈ 3.14 s"
+    ],
+    ans: 0,
+    explain: "คาบของมวลติดสปริงไม่ขึ้นกับแนวการแกว่ง (แนวราบหรือแนวดิ่ง) และไม่ขึ้นกับระยะที่ดึง (แอมพลิจูด) ขึ้นกับ m และ k เท่านั้น\n\nT = 2π√(m/k) = 2π√(3/1000)\n\nจัดรูป: √(3/1000) = √30/100\nดังนั้น T = 2π(√30/100) = (π√30)/50\n\nคำนวณเป็นทศนิยม: √30 ≈ 5.477\nT ≈ π(5.477)/50 ≈ 0.344 s ✓ ตรงกับตัวเลือก ก"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "ลูกตุ้มอย่างง่ายแกว่งครบ 10 รอบ ใช้เวลา 20 วินาที (g = 10 m/s²) จงหาความยาวเชือก L",
+    opts: ["1 m", "2 m", "0.5 m", "4 m", "0.25 m"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หาคาบ T\nT = 20/10 = 2 s\n\nขั้นที่ 2: ใช้สูตร T = 2π√(L/g) แก้หา L\nยกกำลังสองทั้งสองข้าง: T² = 4π²(L/g)\nL = T²g / (4π²) = (2²)(10) / (4π²) = 40/(4π²) = 10/π²\n\nแทนค่า π² ≈ 9.87:\nL ≈ 10/9.87 ≈ 1.01 ≈ 1 m ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "วัตถุเคลื่อนที่แบบ SHM ผ่านจุดสมดุลด้วยอัตราเร็ว 2 m/s และมีความเร่งสูงสุด 8 m/s² จงหาแอมพลิจูด A",
+    opts: ["0.5 m", "1 m", "2 m", "4 m", "16 m"],
+    ans: 0,
+    explain: "ขั้นที่ 1: ตั้งสมการจากข้อมูลที่ให้\nv_max = Aω = 2  ... (1)\na_max = Aω² = 8  ... (2)\n\nขั้นที่ 2: หาร (2) ด้วย (1) เพื่อกำจัด A\n(Aω²)/(Aω) = 8/2\nω = 4 rad/s\n\nขั้นที่ 3: แทนค่ากลับใน (1) เพื่อหา A\nA(4) = 2\nA = 0.5 m ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "ข้อใดกล่าวถูกต้องเกี่ยวกับพลังงานรวมของระบบ SHM ที่ไม่มีความเสียดทาน",
+    opts: [
+      "คงที่ตลอดการเคลื่อนที่ เท่ากับ ½kA²",
+      "มีค่าสูงสุดที่จุดสมดุลเท่านั้น",
+      "มีค่าสูงสุดที่จุดปลายสุดเท่านั้น",
+      "เปลี่ยนแปลงตามเวลาแบบไซน์",
+      "เป็นศูนย์ที่จุดสมดุล"
+    ],
+    ans: 0,
+    explain: "พลังงานรวมของระบบ SHM ที่ไม่มีแรงเสียดทาน (แรงต้าน) มีค่าคงที่เสมอตลอดการเคลื่อนที่ เนื่องจากเป็นระบบอนุรักษ์ (conservative system) โดยมีเพียงการแลกเปลี่ยนไปมาระหว่างพลังงานจลน์และพลังงานศักย์เท่านั้น\n\nE_รวม = KE + PE = ½kA² = ½mω²A² (ค่าคงที่)\n\n• ตัวเลือก ข, ค ผิด เพราะพลังงานรวมไม่ได้ขึ้นกับตำแหน่ง มีค่าเท่ากันทุกตำแหน่ง\n• ตัวเลือก ง ผิด เพราะพลังงานรวมไม่เปลี่ยนตามเวลา (เฉพาะ KE และ PE แยกกันที่เปลี่ยน)\n• ตัวเลือก จ ผิด เพราะพลังงานรวมไม่เคยเป็นศูนย์ (ยกเว้น A=0)\n\nดังนั้นคำตอบคือ ข้อ ก ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "สปริงสองเส้น k₁ = 40 N/m และ k₂ = 60 N/m ต่อกันแบบขนาน แล้วนำไปติดมวล 1 kg จงหาความถี่เชิงมุม ω",
+    opts: ["10 rad/s", "100 rad/s", "5 rad/s", "50 rad/s", "1 rad/s"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หาค่าคงตัวสปริงรวมแบบขนาน\nk_รวม = k₁ + k₂ = 40 + 60 = 100 N/m\n\nขั้นที่ 2: หา ω\nω = √(k_รวม/m) = √(100/1) = √100 = 10 rad/s ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "ข้อใดต่อไปนี้ไม่ใช่ลักษณะของการเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย",
+    opts: [
+      "ลูกบอลเคลื่อนที่เป็นวงกลมด้วยอัตราเร็วเชิงมุมคงที่",
+      "มวลติดสปริงแกว่งในแนวราบไม่มีความเสียดทาน",
+      "ลูกตุ้มแกว่งด้วยมุมเล็กกว่า 15 องศา",
+      "วัตถุลอยขึ้นลงในของเหลวรอบตำแหน่งสมดุล",
+      "การกระจัดเป็นฟังก์ชันไซน์หรือโคไซน์ของเวลา"
+    ],
+    ans: 0,
+    explain: "การเคลื่อนที่เป็นวงกลมด้วยอัตราเร็วเชิงมุมคงที่เป็นการเคลื่อนที่แบบเป็นคาบ (periodic) ก็จริง แต่ความเร่งของวัตถุ (ความเร่งสู่ศูนย์กลาง) มีทิศเข้าสู่ศูนย์กลางวงกลมตลอดเวลา ไม่ใช่มีทิศตรงข้ามกับการกระจัดในแนวเส้นตรงตามเงื่อนไข a = −ω²x จึงไม่ใช่ SHM โดยตรง (แม้ว่าเงาฉายของมันบนเส้นผ่านศูนย์กลางจะเป็น SHM ก็ตาม)\n\nตัวเลือก ข, ค, ง, จ ล้วนเป็นระบบหรือคุณสมบัติของ SHM ที่ถูกต้อง\n\nดังนั้นคำตอบคือ ข้อ ก ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — SHM",
+    q: "วัตถุมวล 0.2 kg เคลื่อนที่แบบ SHM ด้วย A = 0.1 m และ T = 1 s จงหาแรงดึงกลับสูงสุดที่กระทำต่อวัตถุ",
+    opts: ["0.789 N", "0.5 N", "1 N", "2 N", "0.1 N"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา ω จากคาบ\nω = 2π/T = 2π/1 = 2π rad/s\n\nขั้นที่ 2: หาความเร่งสูงสุด\na_max = Aω² = 0.1 × (2π)² = 0.1 × 4π² ≈ 0.1 × 39.48 ≈ 3.948 m/s²\n\nขั้นที่ 3: หาแรงดึงกลับสูงสุดจาก F = ma\nF_max = m × a_max = 0.2 × 3.948 ≈ 0.79 N ✓\n\n(แรงดึงกลับสูงสุดเกิดขึ้นที่จุดปลายสุดของการแกว่ง ซึ่งเป็นตำแหน่งที่ความเร่งมีค่าสูงสุดด้วย)"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentYear = '';
+  alevelQuestions.forEach((q, idx) => {
+    const yearKey = q.year;
+    if (yearKey !== currentYear) {
+      currentYear = yearKey;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + yearKey + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

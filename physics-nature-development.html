@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ธรรมชาติและพัฒนาการทางฟิสิกส์ | ฟิสิกส์ ม.4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'F=ma  E=mc²  λν=c  g  Δx  ħ  v  P=IV';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 6px;
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 560px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+  .math-latex {
+    font-family: var(--sans);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* DIAGRAM */
+  .diagram-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* TIMELINE */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 16px 0;
+  }
+  .timeline-item {
+    display: flex;
+    gap: 16px;
+    position: relative;
+    padding-bottom: 20px;
+  }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+  }
+  .timeline-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 18px;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-content { flex: 1; }
+  .timeline-year {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent2);
+    font-weight: 600;
+  }
+  .timeline-title { font-size: 16px; font-weight: 700; margin: 2px 0 4px; }
+  .timeline-desc { font-size: 14px; color: var(--text-dim); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 20px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ ม.4 · หลักสูตรแกนกลาง สสวท.</div>
+  <h1>ธรรมชาติ<span>และ</span>พัฒนาการทางฟิสิกส์</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.4 บทที่ 1 วิชาฟิสิกส์ ครอบคลุมธรรมชาติของฟิสิกส์ พัฒนาการทางความคิด ปริมาณและหน่วย การวัด และเวกเตอร์เบื้องต้น</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">แนวข้อสอบ</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="phy1">1. ธรรมชาติของฟิสิกส์</button>
+  <button class="tab-btn" data-sec="phy2">2. พัฒนาการยุคคลาสสิก</button>
+  <button class="tab-btn" data-sec="phy3">3. ฟิสิกส์ยุคใหม่</button>
+  <button class="tab-btn" data-sec="phy4">4. สเกลาร์และเวกเตอร์</button>
+  <button class="tab-btn" data-sec="phy5">5. ระบบหน่วยสากล (SI)</button>
+  <button class="tab-btn" data-sec="phy6">6. เลขนัยสำคัญ</button>
+  <button class="tab-btn" data-sec="phy7">7. ความคลาดเคลื่อนในการวัด</button>
+  <button class="tab-btn" data-sec="phy8">8. การรวมเวกเตอร์</button>
+  <button class="tab-btn" data-sec="phy9">9. ทักษะกระบวนการวิทยาศาสตร์</button>
+  <button class="tab-btn" data-sec="quiz">🎯 แบบฝึกหัดเตรียมสอบ</button>
+  <button class="tab-btn" data-sec="exam">📋 แนวข้อสอบ O-NET/A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: ธรรมชาติของฟิสิกส์ ===== -->
+  <div class="section active" id="phy1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · ธรรมชาติของวิชาฟิสิกส์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚛️</div>ฟิสิกส์คืออะไร?</div>
+      <p>ฟิสิกส์ (Physics) เป็นแขนงหนึ่งของวิทยาศาสตร์ธรรมชาติ ที่ศึกษาว่าสสารและพลังงานมีพฤติกรรมอย่างไร และมีความสัมพันธ์กันอย่างไรในธรรมชาติ</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ฟิสิกส์ คือ วิชาที่ศึกษาปรากฏการณ์ทางธรรมชาติของสสารและพลังงาน โดยอาศัย<strong>การสังเกต การทดลอง</strong> และใช้<strong>คณิตศาสตร์เป็นภาษาอธิบายและทำนาย</strong>ปรากฏการณ์เหล่านั้นอย่างเป็นระบบ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างปรากฏการณ์ทางฟิสิกส์ในชีวิตประจำวัน</div>
+        การตกอย่างอิสระของวัตถุ, การเกิดรุ้งกินน้ำ, เสียงสะท้อนในห้องโถง, เข็มทิศชี้ทิศเหนือ, การลอยตัวของเรือ, แสงเลเซอร์ในเครื่องอ่านบาร์โค้ด
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ลักษณะสำคัญของวิชาฟิสิกส์</div>
+        เป็นวิทยาศาสตร์เชิงประจักษ์ (ต้องพิสูจน์ได้ด้วยการสังเกต/ทดลอง) · ใช้คณิตศาสตร์เป็นเครื่องมือหลัก · ผลสรุปต้องตรวจสอบซ้ำได้ (reproducible) · ใช้ในการทำนายเหตุการณ์ล่วงหน้าได้
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔭</div>สาขาของฟิสิกส์</div>
+      <p>วิชาฟิสิกส์แบ่งออกเป็นหลายสาขาตามปรากฏการณ์ที่ศึกษา</p>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">⚙️</div>
+          <div class="sym-name">กลศาสตร์ (Mechanics)</div>
+          <div class="sym-desc">การเคลื่อนที่ แรง และพลังงานของวัตถุ</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">🔥</div>
+          <div class="sym-name">ความร้อน (Thermodynamics)</div>
+          <div class="sym-desc">พลังงานความร้อนและการถ่ายเทความร้อน</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">〰️</div>
+          <div class="sym-name">คลื่นและเสียง</div>
+          <div class="sym-desc">การเคลื่อนที่แบบคลื่น การสั่นสะเทือน</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">⚡</div>
+          <div class="sym-name">ไฟฟ้าและแม่เหล็ก</div>
+          <div class="sym-desc">ประจุไฟฟ้า สนามไฟฟ้า สนามแม่เหล็ก</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">💡</div>
+          <div class="sym-name">แสงและทัศนศาสตร์</div>
+          <div class="sym-desc">การเดินทางของแสง เลนส์ กระจก</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">🌌</div>
+          <div class="sym-name">ฟิสิกส์ยุคใหม่</div>
+          <div class="sym-desc">ควอนตัม สัมพัทธภาพ นิวเคลียร์ อนุภาค</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔗</div>ฟิสิกส์กับศาสตร์อื่น</div>
+      <p>ความรู้ทางฟิสิกส์เป็นพื้นฐานของศาสตร์อื่นจำนวนมาก</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>วิทยาศาสตร์</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เคมี (พันธะเคมีอธิบายด้วยแรงไฟฟ้า) ชีววิทยา (การมองเห็น การได้ยิน) ดาราศาสตร์ (การเคลื่อนที่ของดาว)</p>
+        </div>
+        <div class="mini-card">
+          <h4>เทคโนโลยีและวิศวกรรม</h4>
+          <p style="font-size:13px; color:var(--text-dim)">วิศวกรรมโครงสร้าง การแพทย์ (MRI, X-ray) การสื่อสาร (ดาวเทียม, ใยแก้วนำแสง)</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        ฟิสิกส์ถูกเรียกว่าเป็น "แม่ของวิทยาศาสตร์แขนงอื่น" เพราะกฎพื้นฐานทางฟิสิกส์ (แรง พลังงาน การเคลื่อนที่) เป็นรากฐานที่ศาสตร์อื่นนำไปต่อยอด
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔬</div>กระบวนการแสวงหาความรู้ทางวิทยาศาสตร์</div>
+      <div class="def-box">
+        <div class="def-label">ขั้นตอนโดยทั่วไป</div>
+        <strong>สังเกต → ตั้งปัญหา/คำถาม → ตั้งสมมติฐาน → ออกแบบและทำการทดลอง → เก็บและวิเคราะห์ข้อมูล → สรุปผล → นำเสนอ/ตรวจสอบซ้ำ</strong>
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สมมติฐาน (Hypothesis)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">คำตอบที่คาดการณ์ไว้ล่วงหน้า ยังไม่ผ่านการทดสอบอย่างกว้างขวาง</p>
+        </div>
+        <div class="mini-card">
+          <h4>ทฤษฎี (Theory)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">คำอธิบายที่ผ่านการทดสอบซ้ำหลายครั้งจนเป็นที่ยอมรับ ใช้อธิบายกลุ่มปรากฏการณ์ได้กว้าง</p>
+        </div>
+        <div class="mini-card">
+          <h4>กฎ (Law)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ข้อสรุปเชิงปริมาณที่ใช้ได้แม่นยำในเงื่อนไขที่กำหนด มักอยู่ในรูปสมการคณิตศาสตร์</p>
+        </div>
+        <div class="mini-card">
+          <h4>แบบจำลอง (Model)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ภาพจำลองอย่างง่ายที่ช่วยอธิบายและจินตนาการปรากฏการณ์ที่มองไม่เห็นโดยตรง</p>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรเข้าใจ</div>
+        กฎและทฤษฎีทางฟิสิกส์ไม่ใช่ความจริงตายตัวที่เปลี่ยนแปลงไม่ได้ แต่เป็นคำอธิบายที่ดีที่สุดเท่าที่มีหลักฐานสนับสนุนในขณะนั้น และอาจถูกปรับปรุงหรือแทนที่ได้เมื่อมีข้อมูลหรือเทคโนโลยีการทดลองใหม่ ๆ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: พัฒนาการยุคคลาสสิก ===== -->
+  <div class="section" id="phy2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · พัฒนาการทางฟิสิกส์ยุคโบราณสู่ยุคคลาสสิก</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🏛️</div>แนวคิดยุคกรีกโบราณ — อริสโตเติล</div>
+      <div class="def-box">
+        <div class="def-label">แนวคิดของอริสโตเติล (384–322 ปีก่อนคริสตกาล)</div>
+        เชื่อว่าโลกเป็นศูนย์กลางของเอกภพ (Geocentric) และวัตถุเคลื่อนที่ตาม "ธรรมชาติ" ของมันเอง โดยไม่ได้อาศัยการทดลองพิสูจน์อย่างเป็นระบบ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างแนวคิดที่ผิดพลาด</div>
+        อริสโตเติลเชื่อว่า วัตถุที่หนักกว่าจะตกถึงพื้นเร็วกว่าวัตถุที่เบากว่า ซึ่งต่อมาถูกพิสูจน์ว่าไม่ถูกต้องด้วยการทดลองของกาลิเลโอ
+      </div>
+      <p>แนวคิดของอริสโตเติลมีอิทธิพลต่อความคิดทางวิทยาศาสตร์ตะวันตกนานเกือบ 2,000 ปี จนกระทั่งเกิดการปฏิวัติทางวิทยาศาสตร์ในยุโรป</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔄</div>การปฏิวัติทางวิทยาศาสตร์</div>
+      <div class="sub-heading">โคเปอร์นิคัส (Nicolaus Copernicus)</div>
+      <p>เสนอแบบจำลองที่ดวงอาทิตย์เป็นศูนย์กลางของระบบสุริยะ (Heliocentric Model) แทนที่แบบจำลองโลกเป็นศูนย์กลางของอริสโตเติลและปโตเลมี</p>
+
+      <div class="sub-heading">กาลิเลโอ กาลิเลอี (Galileo Galilei)</div>
+      <div class="def-box">
+        <div class="def-label">ผลงานสำคัญ</div>
+        ทดลองกลิ้งวัตถุบนพื้นเอียงเพื่อศึกษาการเคลื่อนที่ · ใช้กล้องโทรทรรศน์สังเกตดวงจันทร์บริวารของดาวพฤหัสบดี สนับสนุนแนวคิดดวงอาทิตย์เป็นศูนย์กลาง · แสดงให้เห็นว่าวัตถุทุกชนิด (เมื่อไม่มีแรงต้านอากาศ) ตกด้วยความเร่งเท่ากันไม่ว่าจะหนักหรือเบา
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        กาลิเลโอได้รับยกย่องเป็น "บิดาแห่งวิธีการทางวิทยาศาสตร์เชิงทดลอง" เพราะเน้นการทดลองจริงเพื่อพิสูจน์แนวคิด มากกว่าอาศัยเพียงเหตุผลเชิงปรัชญาอย่างที่ทำกันมาก่อน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🍎</div>ไอแซก นิวตัน (Isaac Newton)</div>
+      <div class="def-box">
+        <div class="def-label">กฎการเคลื่อนที่ 3 ข้อของนิวตัน</div>
+        กฎข้อที่ 1: วัตถุจะรักษาสภาพนิ่งหรือเคลื่อนที่ด้วยความเร็วคงตัว เว้นแต่มีแรงลัพธ์มากระทำ (กฎความเฉื่อย)<br>
+        กฎข้อที่ 2: แรงลัพธ์ที่กระทำต่อวัตถุแปรผันตรงกับความเร่งของวัตถุนั้น<br>
+        กฎข้อที่ 3: ทุกแรงกิริยาจะมีแรงปฏิกิริยาขนาดเท่ากันแต่ทิศทางตรงข้ามเสมอ
+      </div>
+      <div class="math-block">
+        F = ma<br>
+        F = Gm₁m₂ / r²  (กฎแรงโน้มถ่วงสากล)
+      </div>
+      <p>นิวตันยังพัฒนาแคลคูลัสขึ้นเป็นเครื่องมือทางคณิตศาสตร์เพื่ออธิบายการเคลื่อนที่และแรงโน้มถ่วงอย่างเป็นระบบ ผลงานของเขาถือเป็นรากฐานของ "กลศาสตร์ดั้งเดิม" หรือ "กลศาสตร์คลาสสิก"</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อจำกัดของกลศาสตร์นิวตัน</div>
+        กลศาสตร์แบบนิวตันใช้ได้แม่นยำกับวัตถุขนาดใหญ่ที่เคลื่อนที่ด้วยความเร็วต่ำกว่าความเร็วแสงมาก แต่ไม่สามารถอธิบายปรากฏการณ์ที่ความเร็วสูงมาก (ต้องใช้ทฤษฎีสัมพัทธภาพ) หรือในระดับอะตอม (ต้องใช้กลศาสตร์ควอนตัม) ได้อย่างถูกต้อง
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🕰️</div>เส้นเวลาโดยสรุป — ยุคคลาสสิก</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-year">~340 ปีก่อนคริสตกาล</div>
+            <div class="timeline-title">อริสโตเติล</div>
+            <div class="timeline-desc">เสนอแนวคิดโลกเป็นศูนย์กลางเอกภพ อธิบายการเคลื่อนที่ด้วยเหตุผลเชิงปรัชญา</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--accent2)"></div>
+          <div class="timeline-content">
+            <div class="timeline-year">ค.ศ. 1543</div>
+            <div class="timeline-title">โคเปอร์นิคัส</div>
+            <div class="timeline-desc">เสนอแบบจำลองดวงอาทิตย์เป็นศูนย์กลางระบบสุริยะ</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--accent2)"></div>
+          <div class="timeline-content">
+            <div class="timeline-year">ต้นคริสต์ศตวรรษที่ 17</div>
+            <div class="timeline-title">กาลิเลโอ</div>
+            <div class="timeline-desc">เริ่มใช้การทดลองอย่างเป็นระบบ พิสูจน์การตกอย่างอิสระของวัตถุ</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--accent4)"></div>
+          <div class="timeline-content">
+            <div class="timeline-year">ค.ศ. 1687</div>
+            <div class="timeline-title">นิวตัน</div>
+            <div class="timeline-desc">ตีพิมพ์ Principia Mathematica วางรากฐานกลศาสตร์คลาสสิกและกฎแรงโน้มถ่วงสากล</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ฟิสิกส์ยุคใหม่ ===== -->
+  <div class="section" id="phy3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · พัฒนาการฟิสิกส์ยุคใหม่</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧲</div>แม็กซ์เวลล์และการรวมทฤษฎีแม่เหล็กไฟฟ้า</div>
+      <div class="def-box">
+        <div class="def-label">เจมส์ เคลิร์ก แม็กซ์เวลล์ (James Clerk Maxwell)</div>
+        รวมทฤษฎีไฟฟ้า แม่เหล็ก และแสงเข้าด้วยกันเป็นทฤษฎีเดียว โดยแสดงให้เห็นว่า<strong>แสงคือคลื่นแม่เหล็กไฟฟ้าชนิดหนึ่ง</strong> ซึ่งเดินทางด้วยความเร็วคงที่ในสุญญากาศ
+      </div>
+      <p>ผลงานนี้ถือเป็นจุดสูงสุดของฟิสิกส์ยุคคลาสสิก และเป็นจุดเริ่มต้นที่นำไปสู่คำถามใหม่ ๆ ที่ฟิสิกส์คลาสสิกอธิบายไม่ได้</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">💡</div>จุดเปลี่ยนสู่ฟิสิกส์ยุคใหม่</div>
+      <p>ปลายคริสต์ศตวรรษที่ 19 นักฟิสิกส์พบปรากฏการณ์ที่ทฤษฎีคลาสสิกอธิบายไม่ได้ จึงนำไปสู่แนวคิดใหม่</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ปัญหารังสีวัตถุดำ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">แม็กซ์ พลังค์ (Max Planck) เสนอว่าพลังงานถูกปลดปล่อยเป็น "หน่วยย่อยไม่ต่อเนื่อง" เรียกว่า ควอนตัม (Quantum)</p>
+        </div>
+        <div class="mini-card">
+          <h4>ปรากฏการณ์โฟโตอิเล็กทริก</h4>
+          <p style="font-size:13px; color:var(--text-dim)">อัลเบิร์ต ไอน์สไตน์ อธิบายว่าแสงประกอบด้วยอนุภาคพลังงานเรียกว่า โฟตอน (Photon)</p>
+        </div>
+      </div>
+      <div class="math-block">
+        E = hf<br>
+        (h = ค่าคงตัวของพลังค์, f = ความถี่ของคลื่น)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🌌</div>ทฤษฎีสัมพัทธภาพของไอน์สไตน์</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สัมพัทธภาพพิเศษ (ค.ศ. 1905)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">กฎฟิสิกส์เหมือนกันในทุกกรอบอ้างอิงเฉื่อย และความเร็วแสงในสุญญากาศมีค่าคงที่เสมอ ไม่ว่าผู้สังเกตจะเคลื่อนที่อย่างไร</p>
+        </div>
+        <div class="mini-card">
+          <h4>สัมพัทธภาพทั่วไป (ค.ศ. 1915)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">อธิบายแรงโน้มถ่วงว่าเป็นผลจากความโค้งของปริภูมิ-เวลา (Space-time) ที่เกิดจากมวลของวัตถุ</p>
+        </div>
+      </div>
+      <div class="math-block">E = mc²</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความหมาย</div>
+        สมการ E = mc² แสดงว่ามวลและพลังงานสามารถเปลี่ยนรูปไปมาระหว่างกันได้ เป็นหลักการที่นำไปสู่ความเข้าใจปฏิกิริยานิวเคลียร์
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔬</div>กลศาสตร์ควอนตัม</div>
+      <p>ในช่วงต้นคริสต์ศตวรรษที่ 20 นักฟิสิกส์หลายคน เช่น นีลส์ บอร์, แวร์เนอร์ ไฮเซนแบร์ก และแอร์วิน ชเรอดิงเงอร์ ร่วมกันพัฒนากลศาสตร์ควอนตัม เพื่ออธิบายพฤติกรรมของอนุภาคระดับอะตอมและอนุภาคมูลฐาน</p>
+      <div class="def-box">
+        <div class="def-label">หลักความไม่แน่นอนของไฮเซนแบร์ก</div>
+        ไม่สามารถทราบตำแหน่งและโมเมนตัมของอนุภาคได้แม่นยำพร้อมกันทั้งสองค่าในเวลาเดียวกัน ยิ่งวัดค่าหนึ่งแม่นยำ ค่าอีกตัวจะยิ่งไม่แน่นอนมากขึ้น
+      </div>
+      <p>ความรู้เหล่านี้นำไปสู่การพัฒนาฟิสิกส์นิวเคลียร์และฟิสิกส์อนุภาค ซึ่งศึกษาโครงสร้างภายในของนิวเคลียสอะตอมและอนุภาคมูลฐานของสสาร</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🛰️</div>การประยุกต์ใช้ฟิสิกส์ยุคใหม่ในปัจจุบัน</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">📡</div>
+          <div class="sym-name">ระบบ GPS</div>
+          <div class="sym-desc">ต้องปรับแก้ค่าเวลาด้วยทฤษฎีสัมพัทธภาพเพื่อความแม่นยำ</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">🔦</div>
+          <div class="sym-name">เลเซอร์</div>
+          <div class="sym-desc">อาศัยหลักการทางกลศาสตร์ควอนตัม</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">💻</div>
+          <div class="sym-name">ทรานซิสเตอร์/สารกึ่งตัวนำ</div>
+          <div class="sym-desc">พื้นฐานของอิเล็กทรอนิกส์สมัยใหม่</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">☢️</div>
+          <div class="sym-name">การแพทย์นิวเคลียร์</div>
+          <div class="sym-desc">ใช้ในการวินิจฉัยและรักษาโรค</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: สเกลาร์และเวกเตอร์ ===== -->
+  <div class="section" id="phy4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · ปริมาณทางฟิสิกส์: สเกลาร์และเวกเตอร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📏</div>ปริมาณทางฟิสิกส์คืออะไร</div>
+      <p>ปริมาณทางฟิสิกส์ (Physical Quantity) คือ สิ่งที่สามารถวัดค่าได้และแสดงผลเป็นตัวเลขพร้อมหน่วย</p>
+      <div class="def-box">
+        <div class="def-label">การแบ่งประเภทปริมาณ</div>
+        <strong>ปริมาณฐาน (Base Quantity):</strong> ปริมาณพื้นฐานที่ไม่ได้นิยามจากปริมาณอื่น เช่น ความยาว มวล เวลา<br>
+        <strong>ปริมาณอนุพัทธ์ (Derived Quantity):</strong> ปริมาณที่เกิดจากการนำปริมาณฐานมาสัมพันธ์กัน เช่น ความเร็ว (ระยะทาง/เวลา) พื้นที่ (ความยาว × ความยาว)
+      </div>
+      <p>นอกจากนี้ ปริมาณทางฟิสิกส์ยังแบ่งตามลักษณะการแสดงค่าออกเป็น 2 ประเภทหลัก คือ ปริมาณสเกลาร์และปริมาณเวกเตอร์</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔢</div>ปริมาณสเกลาร์ (Scalar Quantity)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ปริมาณที่มีเฉพาะ<strong>ขนาด (magnitude)</strong> เพียงอย่างเดียว ไม่มีทิศทาง สามารถบวกลบกันได้ด้วยพีชคณิตทั่วไป
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างปริมาณสเกลาร์</div>
+        มวล (mass), เวลา (time), อุณหภูมิ (temperature), ระยะทาง (distance), พลังงาน (energy), อัตราเร็ว (speed), ปริมาตร (volume)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">➡️</div>ปริมาณเวกเตอร์ (Vector Quantity)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ปริมาณที่มีทั้ง<strong>ขนาด</strong>และ<strong>ทิศทาง</strong> การบวกลบต้องใช้กฎการรวมเวกเตอร์ ไม่ใช่พีชคณิตธรรมดา
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างปริมาณเวกเตอร์</div>
+        การกระจัด (displacement), ความเร็ว (velocity), ความเร่ง (acceleration), แรง (force), โมเมนตัม (momentum), น้ำหนัก (weight)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 การเขียนแทนเวกเตอร์</div>
+        นิยมเขียนสัญลักษณ์ตัวอักษรพร้อมลูกศรด้านบน เช่น <span class="math">v→</span> หรือใช้ตัวหนา และแสดงด้วยลูกศรที่มีความยาวแทนขนาดและหัวลูกศรชี้ทิศทาง
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📊</div>ตารางเปรียบเทียบสเกลาร์กับเวกเตอร์</div>
+      <table>
+        <tr><th>หัวข้อ</th><th>สเกลาร์</th><th>เวกเตอร์</th></tr>
+        <tr><td>องค์ประกอบ</td><td>ขนาดเท่านั้น</td><td>ขนาด + ทิศทาง</td></tr>
+        <tr><td>การบวก</td><td>บวกแบบพีชคณิต</td><td>ต้องใช้กฎรวมเวกเตอร์</td></tr>
+        <tr><td>ตัวอย่าง</td><td>มวล, เวลา, พลังงาน</td><td>แรง, ความเร็ว, การกระจัด</td></tr>
+        <tr><td>สัญลักษณ์</td><td>ตัวอักษรปกติ เช่น m, t</td><td>มีลูกศรกำกับ เช่น v→, F→</td></tr>
+      </table>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        อัตราเร็ว (speed) เป็นสเกลาร์ แต่ความเร็ว (velocity) เป็นเวกเตอร์ — แม้ทั้งสองมีหน่วยเดียวกัน (m/s) แต่ความเร็วต้องระบุทิศทางด้วยเสมอ ระยะทาง (distance) กับการกระจัด (displacement) ก็มีความแตกต่างในลักษณะเดียวกัน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: ระบบหน่วยสากล ===== -->
+  <div class="section" id="phy5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · ระบบหน่วยสากล (SI)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🌐</div>ทำไมต้องมีระบบหน่วยสากล</div>
+      <p>ระบบหน่วยสากล หรือ SI (Système International d'Unités) ถูกกำหนดขึ้นเพื่อให้นักวิทยาศาสตร์ทั่วโลกใช้หน่วยวัดมาตรฐานเดียวกัน ลดความสับสนและความผิดพลาดจากการแปลงหน่วยที่แตกต่างกัน</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>หน่วยฐาน SI ทั้ง 7 หน่วย</div>
+      <table>
+        <tr><th>ปริมาณฐาน</th><th>ชื่อหน่วย</th><th>สัญลักษณ์</th></tr>
+        <tr><td>ความยาว</td><td>เมตร</td><td>m</td></tr>
+        <tr><td>มวล</td><td>กิโลกรัม</td><td>kg</td></tr>
+        <tr><td>เวลา</td><td>วินาที</td><td>s</td></tr>
+        <tr><td>กระแสไฟฟ้า</td><td>แอมแปร์</td><td>A</td></tr>
+        <tr><td>อุณหภูมิทางเทอร์โมไดนามิกส์</td><td>เคลวิน</td><td>K</td></tr>
+        <tr><td>ปริมาณสาร</td><td>โมล</td><td>mol</td></tr>
+        <tr><td>ความเข้มของการส่องสว่าง</td><td>แคนเดลา</td><td>cd</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🧮</div>หน่วยอนุพัทธ์ที่พบบ่อย</div>
+      <table>
+        <tr><th>ปริมาณ</th><th>ชื่อหน่วย</th><th>สัญลักษณ์</th><th>เทียบหน่วยฐาน</th></tr>
+        <tr><td>แรง</td><td>นิวตัน</td><td>N</td><td>kg·m/s²</td></tr>
+        <tr><td>พลังงาน/งาน</td><td>จูล</td><td>J</td><td>kg·m²/s²</td></tr>
+        <tr><td>กำลัง</td><td>วัตต์</td><td>W</td><td>J/s</td></tr>
+        <tr><td>ความดัน</td><td>ปาสกาล</td><td>Pa</td><td>N/m²</td></tr>
+        <tr><td>ความถี่</td><td>เฮิรตซ์</td><td>Hz</td><td>1/s</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔟</div>คำนำหน้าหน่วย (SI Prefixes)</div>
+      <table>
+        <tr><th>คำนำหน้า</th><th>สัญลักษณ์</th><th>ตัวคูณ</th></tr>
+        <tr><td>เทระ (tera)</td><td>T</td><td>10¹²</td></tr>
+        <tr><td>กิกะ (giga)</td><td>G</td><td>10⁹</td></tr>
+        <tr><td>เมกะ (mega)</td><td>M</td><td>10⁶</td></tr>
+        <tr><td>กิโล (kilo)</td><td>k</td><td>10³</td></tr>
+        <tr><td>เซนติ (centi)</td><td>c</td><td>10⁻²</td></tr>
+        <tr><td>มิลลิ (milli)</td><td>m</td><td>10⁻³</td></tr>
+        <tr><td>ไมโคร (micro)</td><td>μ</td><td>10⁻⁶</td></tr>
+        <tr><td>นาโน (nano)</td><td>n</td><td>10⁻⁹</td></tr>
+        <tr><td>พิโค (pico)</td><td>p</td><td>10⁻¹²</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการแปลงหน่วย</div>
+        5 กิโลเมตร (km) = 5 × 10³ เมตร = 5,000 เมตร<br>
+        250 มิลลิวินาที (ms) = 250 × 10⁻³ วินาที = 0.25 วินาที
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: เลขนัยสำคัญ ===== -->
+  <div class="section" id="phy6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · เลขนัยสำคัญ</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔢</div>เลขนัยสำคัญคืออะไร</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เลขนัยสำคัญ (Significant Figures) คือ ตัวเลขทั้งหมดในผลการวัดที่บ่งบอกถึงความละเอียดหรือความแม่นยำของการวัดนั้น ๆ รวมถึงตัวเลขสุดท้ายที่เป็นการประมาณค่า
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📋</div>กฎการนับเลขนัยสำคัญ</div>
+      <table style="font-size:14px">
+        <tr><th>กฎ</th><th>ตัวอย่าง</th><th>จำนวนเลขนัยสำคัญ</th></tr>
+        <tr><td>เลขที่ไม่ใช่ 0 นับเสมอ</td><td>245</td><td>3</td></tr>
+        <tr><td>เลข 0 ระหว่างตัวเลขอื่นนับเสมอ</td><td>1005</td><td>4</td></tr>
+        <tr><td>เลข 0 ด้านหน้าไม่นับ</td><td>0.0034</td><td>2</td></tr>
+        <tr><td>เลข 0 ท้ายทศนิยมนับเสมอ</td><td>2.500</td><td>4</td></tr>
+        <tr><td>เลข 0 ท้ายจำนวนเต็มไม่มีจุดทศนิยม กำกวม</td><td>1500</td><td>2 หรือ 4 (ควรเขียนเป็น 1.5×10³)</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค — ใช้สัญกรณ์วิทยาศาสตร์</div>
+        การเขียนตัวเลขในรูป a × 10ⁿ (โดย 1 ≤ a < 10) ช่วยขจัดความกำกวมเรื่องเลขนัยสำคัญได้ชัดเจนที่สุด
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">➕</div>กฎการคำนวณเลขนัยสำคัญ</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>บวก / ลบ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ผลลัพธ์มีจำนวนตำแหน่งทศนิยมเท่ากับค่าที่มีทศนิยม<strong>น้อยที่สุด</strong></p>
+        </div>
+        <div class="mini-card">
+          <h4>คูณ / หาร</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ผลลัพธ์มีเลขนัยสำคัญเท่ากับค่าที่มีเลขนัยสำคัญ<strong>น้อยที่สุด</strong></p>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการบวก</div>
+        12.35 + 1.6 = 13.95 → ปัดเหลือทศนิยม 1 ตำแหน่ง (ตามค่าที่ทศนิยมน้อยสุดคือ 1.6) = <strong>14.0</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการคูณ</div>
+        4.5 × 2.10 = 9.45 → ค่า 4.5 มีเลขนัยสำคัญ 2 ตัว (น้อยกว่า) ดังนั้นผลลัพธ์ปัดเหลือ 2 ตัว = <strong>9.5</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อผิดพลาดที่พบบ่อย</div>
+        การนับจำนวนหรือค่าคงตัวทางคณิตศาสตร์ (เช่น จำนวนนักเรียน 30 คน หรือ π) ถือว่ามีเลขนัยสำคัญไม่จำกัด ไม่นำมาจำกัดผลลัพธ์การคำนวณ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: ความคลาดเคลื่อนในการวัด ===== -->
+  <div class="section" id="phy7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · ความคลาดเคลื่อนและความแม่นยำในการวัด</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚖️</div>ประเภทของความคลาดเคลื่อน</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ความคลาดเคลื่อนเชิงระบบ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">(Systematic Error) เกิดจากตัวเครื่องมือหรือวิธีการวัดที่ผิดพลาดคงที่ เช่น เครื่องชั่งไม่ได้ปรับศูนย์ ทำให้ค่าที่วัดเบี่ยงเบนไปทางเดียวเสมอ</p>
+        </div>
+        <div class="mini-card">
+          <h4>ความคลาดเคลื่อนแบบสุ่ม</h4>
+          <p style="font-size:13px; color:var(--text-dim)">(Random Error) เกิดจากปัจจัยที่ควบคุมไม่ได้ เช่น สายตาผู้อ่านค่า ความสั่นสะเทือน ทำให้ค่าที่วัดกระจายทั้งสูงและต่ำกว่าค่าจริง</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🎯</div>ความเที่ยงตรงและความแม่นยำ</div>
+      <div class="def-box">
+        <div class="def-label">ความเที่ยงตรง (Accuracy)</div>
+        ความใกล้เคียงระหว่างค่าที่วัดได้กับ<strong>ค่าจริง</strong>
+      </div>
+      <div class="def-box">
+        <div class="def-label">ความแม่นยำ (Precision)</div>
+        ความสอดคล้องกันของค่าที่วัดได้<strong>หลายครั้ง</strong> ไม่ว่าจะใกล้เคียงค่าจริงหรือไม่ก็ตาม
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เปรียบเทียบง่าย ๆ (เปรียบกับการยิงเป้า)</div>
+        ยิงกระจุกตัวกันแน่นตรงกลางเป้า = ทั้งเที่ยงตรงและแม่นยำ · ยิงกระจุกตัวแน่นแต่ไม่ตรงกลาง = แม่นยำแต่ไม่เที่ยงตรง · ยิงกระจายรอบกลางเป้า = เที่ยงตรงเฉลี่ยแต่ไม่แม่นยำ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📉</div>ร้อยละความคลาดเคลื่อน</div>
+      <div class="math-block">
+        %ความคลาดเคลื่อน = |ค่าที่วัดได้ − ค่าที่ยอมรับ| / ค่าที่ยอมรับ × 100
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัดค่า g ได้ 9.65 m/s² ขณะที่ค่ายอมรับคือ 9.80 m/s²<br>
+        %ความคลาดเคลื่อน = |9.65 − 9.80| / 9.80 × 100 = 1.53%
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📏</div>เครื่องมือวัดละเอียด</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เวอร์เนียคาลิปเปอร์</h4>
+          <p style="font-size:13px; color:var(--text-dim)">วัดความยาว ความหนา และเส้นผ่านศูนย์กลางได้ละเอียดถึงระดับ 0.01–0.1 มิลลิเมตร โดยอาศัยสเกลหลักและสเกลเวอร์เนียร่วมกัน</p>
+        </div>
+        <div class="mini-card">
+          <h4>ไมโครมิเตอร์</h4>
+          <p style="font-size:13px; color:var(--text-dim)">วัดความหนาหรือเส้นผ่านศูนย์กลางของวัตถุขนาดเล็กได้ละเอียดถึงระดับ 0.01 มิลลิเมตรหรือดีกว่า</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: การรวมเวกเตอร์ ===== -->
+  <div class="section" id="phy8">
+    <div class="section-heading"><span>หัวข้อ 8</span> · การรวมเวกเตอร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>วิธีเขียนแผนภาพ — หัวต่อหาง</div>
+      <p>นำเวกเตอร์มาต่อกันโดยให้หางของเวกเตอร์ที่สองเริ่มจากหัวของเวกเตอร์แรก เวกเตอร์ลัพธ์คือเส้นตรงจากหางของเวกเตอร์แรกไปยังหัวของเวกเตอร์สุดท้าย</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; height:auto;">
+          <defs>
+            <marker id="arrowA" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#6c63ff"/>
+            </marker>
+            <marker id="arrowB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#00d4aa"/>
+            </marker>
+            <marker id="arrowR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#ffd93d"/>
+            </marker>
+          </defs>
+          <line x1="30" y1="140" x2="180" y2="60" stroke="#6c63ff" stroke-width="3" marker-end="url(#arrowA)"/>
+          <text x="80" y="90" fill="#6c63ff" font-size="16" font-weight="600">A</text>
+          <line x1="180" y1="60" x2="300" y2="130" stroke="#00d4aa" stroke-width="3" marker-end="url(#arrowB)"/>
+          <text x="250" y="80" fill="#00d4aa" font-size="16" font-weight="600">B</text>
+          <line x1="30" y1="140" x2="300" y2="130" stroke="#ffd93d" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrowR)"/>
+          <text x="140" y="165" fill="#ffd93d" font-size="16" font-weight="600">R = A + B</text>
+        </svg>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        วิธีนี้เรียกอีกอย่างว่า "วิธีสามเหลี่ยม" (Triangle Method) ใช้ได้ดีเมื่อรวมเวกเตอร์ 2 ตัว
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">▱</div>วิธีสี่เหลี่ยมด้านขนาน</div>
+      <p>นำเวกเตอร์ทั้งสองมาวางให้หางอยู่จุดเดียวกัน แล้วสร้างรูปสี่เหลี่ยมด้านขนาน เวกเตอร์ลัพธ์คือเส้นทแยงมุมที่ลากจากจุดหางร่วมนั้น</p>
+      <div class="def-box">
+        <div class="def-label">กรณีพิเศษที่ควรจำ</div>
+        เมื่อเวกเตอร์สองตัวทำมุม 90° กัน ขนาดของเวกเตอร์ลัพธ์หาได้จาก R = √(A² + B²) (ทฤษฎีบทพีทาโกรัส)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🧮</div>วิธีองค์ประกอบ (Component Method)</div>
+      <div class="def-box">
+        <div class="def-label">ขั้นตอน</div>
+        1. แตกเวกเตอร์แต่ละตัวเป็นองค์ประกอบในแนวแกน x และ y<br>
+        2. รวมองค์ประกอบในแนวเดียวกัน: Rx = ΣAx, Ry = ΣAy<br>
+        3. หาขนาดของเวกเตอร์ลัพธ์: R = √(Rx² + Ry²)<br>
+        4. หาทิศทาง: θ = tan⁻¹(Ry / Rx)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์</div>
+        แรง A = 30 N ทิศทางแกน x และแรง B = 40 N ทิศทางแกน y ตั้งฉากกัน<br>
+        ขนาดของแรงลัพธ์: R = √(30² + 40²) = √(900+1600) = √2500 = 50 N<br>
+        ทิศทาง: θ = tan⁻¹(40/30) ≈ 53.1° จากแกน x
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9: ทักษะกระบวนการทางวิทยาศาสตร์ ===== -->
+  <div class="section" id="phy9">
+    <div class="section-heading"><span>หัวข้อ 9</span> · ทักษะกระบวนการทางวิทยาศาสตร์และการประยุกต์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧠</div>ทักษะกระบวนการทางวิทยาศาสตร์ที่สำคัญ</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">👁️</div>
+          <div class="sym-name">การสังเกต</div>
+          <div class="sym-desc">ใช้ประสาทสัมผัสหรือเครื่องมือเก็บข้อมูลอย่างเป็นระบบ</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">📐</div>
+          <div class="sym-name">การวัด</div>
+          <div class="sym-desc">การเลือกเครื่องมือและหน่วยที่เหมาะสมกับปริมาณที่วัด</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">📊</div>
+          <div class="sym-name">การแปลผลข้อมูล</div>
+          <div class="sym-desc">วิเคราะห์และตีความข้อมูลที่เก็บรวบรวมได้</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">🔮</div>
+          <div class="sym-name">การพยากรณ์</div>
+          <div class="sym-desc">คาดการณ์ผลลัพธ์จากรูปแบบข้อมูลที่มีอยู่</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">🧩</div>
+          <div class="sym-name">การตั้งสมมติฐาน</div>
+          <div class="sym-desc">เสนอคำตอบที่เป็นไปได้ก่อนการทดลอง</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">🗣️</div>
+          <div class="sym-name">การสื่อสาร</div>
+          <div class="sym-desc">นำเสนอผลการทดลองให้ผู้อื่นเข้าใจได้ชัดเจน</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🚀</div>การนำฟิสิกส์ไปประยุกต์ใช้ในเทคโนโลยี</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>การแพทย์</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เครื่อง MRI, การถ่ายภาพรังสีเอกซ์ (X-ray), เลเซอร์ผ่าตัด</p>
+        </div>
+        <div class="mini-card">
+          <h4>การสื่อสาร</h4>
+          <p style="font-size:13px; color:var(--text-dim)">คลื่นวิทยุ ดาวเทียมสื่อสาร ใยแก้วนำแสง</p>
+        </div>
+        <div class="mini-card">
+          <h4>พลังงาน</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เซลล์สุริยะ (โซลาร์เซลล์) กังหันลม โรงไฟฟ้านิวเคลียร์</p>
+        </div>
+        <div class="mini-card">
+          <h4>การขนส่งและนำทาง</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ระบบ GPS เครื่องยนต์ อากาศพลศาสตร์ของยานพาหนะ</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 สรุป</div>
+        การเรียนรู้ธรรมชาติและพัฒนาการทางฟิสิกส์ช่วยให้เข้าใจว่าความรู้ทางวิทยาศาสตร์เกิดขึ้นและพัฒนาอย่างต่อเนื่อง ไม่หยุดนิ่ง และเป็นรากฐานสำคัญของเทคโนโลยีที่ใช้ในชีวิตประจำวัน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียมสอบ — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมเนื้อหาบทที่ 1 ธรรมชาติและพัฒนาการทางฟิสิกส์ เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== EXAM SECTION ===== -->
+  <div class="section" id="exam">
+    <div class="section-heading"><span>📋</span> แนวข้อสอบ O-NET/A-Level — ธรรมชาติและพัฒนาการทางฟิสิกส์</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ตัวอย่างข้อสอบจำลองสไตล์ O-NET และ A-Level วิชาฟิสิกส์ เนื้อหาบทธรรมชาติและพัฒนาการทางฟิสิกส์</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      เนื้อหาบทนี้มักออกสอบเป็นความเข้าใจแนวคิด (conceptual) มากกว่าการคำนวณซับซ้อน ควรเน้นความเข้าใจนิยามและความแตกต่างของแนวคิดสำคัญให้แม่นยำ
+    </div>
+    <div id="exam-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียมสอบ 10 ข้อ =====
+const answered = [];
+const answeredEX = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — ธรรมชาติของฟิสิกส์",
+    q: "ข้อใดคือความหมายที่ถูกต้องที่สุดของวิชาฟิสิกส์?",
+    opts: [
+      "วิชาที่ศึกษาเฉพาะการเคลื่อนที่ของวัตถุขนาดใหญ่เท่านั้น",
+      "วิชาที่ศึกษาปรากฏการณ์ธรรมชาติของสสารและพลังงานโดยอาศัยการสังเกต การทดลอง และคณิตศาสตร์",
+      "วิชาที่ศึกษาเฉพาะปรากฏการณ์ที่มองเห็นด้วยตาเปล่า",
+      "วิชาที่ใช้อธิบายปรากฏการณ์ทางสังคมด้วยหลักเหตุผล"
+    ],
+    ans: 1,
+    explain: "ฟิสิกส์ คือ วิชาที่ศึกษาปรากฏการณ์ทางธรรมชาติของสสารและพลังงานอย่างเป็นระบบ โดยอาศัยการสังเกต การทดลอง และใช้คณิตศาสตร์เป็นเครื่องมือในการอธิบายและทำนายผล\n\nตัวเลือกอื่นผิดเพราะ:\n• ฟิสิกส์ศึกษาได้ทั้งวัตถุขนาดใหญ่ (ดาราศาสตร์) และขนาดเล็กมาก (อนุภาคมูลฐาน) ไม่ได้จำกัดเฉพาะวัตถุขนาดใหญ่\n• ฟิสิกส์ศึกษาปรากฏการณ์ที่มองไม่เห็นด้วยตาเปล่าได้ด้วย เช่น คลื่นวิทยุ อนุภาคอะตอม\n• ปรากฏการณ์ทางสังคมไม่ใช่ขอบเขตของวิชาฟิสิกส์"
+  },
+  {
+    level: "⭐ ระดับ 1 — พัฒนาการทางฟิสิกส์",
+    q: "นักวิทยาศาสตร์คนใดได้รับการยกย่องว่าเป็น \"บิดาแห่งวิธีการทางวิทยาศาสตร์เชิงทดลอง\" จากการใช้การทดลองพิสูจน์แนวคิดแทนการใช้เหตุผลเชิงปรัชญาเพียงอย่างเดียว?",
+    opts: ["อริสโตเติล", "โคเปอร์นิคัส", "กาลิเลโอ กาลิเลอี", "ไอแซก นิวตัน"],
+    ans: 2,
+    explain: "กาลิเลโอ กาลิเลอี เป็นผู้บุกเบิกการใช้การทดลองอย่างเป็นระบบเพื่อพิสูจน์แนวคิด เช่น การทดลองกลิ้งวัตถุบนพื้นเอียง และแสดงให้เห็นว่าวัตถุทุกชนิดตกด้วยความเร่งเท่ากันเมื่อไม่มีแรงต้านอากาศ ซึ่งขัดแย้งกับความเชื่อของอริสโตเติลที่ไม่ได้พิสูจน์ด้วยการทดลอง\n\n• อริสโตเติล ใช้เหตุผลเชิงปรัชญาโดยไม่ทดลอง\n• โคเปอร์นิคัส เสนอแบบจำลองดวงอาทิตย์เป็นศูนย์กลาง แต่ไม่ได้เน้นวิธีการทดลอง\n• นิวตัน มีชื่อเสียงจากกฎการเคลื่อนที่และแรงโน้มถ่วง แต่ตำแหน่ง 'บิดาแห่งวิธีการทดลอง' นิยมยกให้กาลิเลโอ"
+  },
+  {
+    level: "⭐ ระดับ 1 — ปริมาณทางฟิสิกส์",
+    q: "ข้อใดต่อไปนี้เป็น ปริมาณเวกเตอร์ ทั้งหมด?",
+    opts: [
+      "มวล, เวลา, อุณหภูมิ",
+      "การกระจัด, ความเร็ว, แรง",
+      "อัตราเร็ว, พลังงาน, ระยะทาง",
+      "ปริมาตร, ความหนาแน่น, มวล"
+    ],
+    ans: 1,
+    explain: "ปริมาณเวกเตอร์ต้องมีทั้งขนาดและทิศทาง\n\nตรวจตัวเลือก ข: การกระจัด ความเร็ว และแรง ล้วนต้องระบุทิศทางเสมอ จึงเป็นปริมาณเวกเตอร์ทั้งหมด ✓\n\nตัวเลือกอื่นเป็นปริมาณสเกลาร์ (มีเฉพาะขนาด ไม่มีทิศทาง) ได้แก่ มวล เวลา อุณหภูมิ อัตราเร็ว พลังงาน ระยะทาง ปริมาตร และความหนาแน่น"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ระบบหน่วย SI",
+    q: "ข้อใดต่อไปนี้เป็นหน่วยฐาน (Base Unit) ของระบบ SI ทั้งหมด?",
+    opts: [
+      "นิวตัน (N), จูล (J), วัตต์ (W)",
+      "เมตร (m), กิโลกรัม (kg), วินาที (s)",
+      "ปาสกาล (Pa), เฮิรตซ์ (Hz), นิวตัน (N)",
+      "จูล (J), เมตร (m), เคลวิน (K)"
+    ],
+    ans: 1,
+    explain: "หน่วยฐาน SI มีทั้งหมด 7 หน่วย ได้แก่ เมตร (ความยาว), กิโลกรัม (มวล), วินาที (เวลา), แอมแปร์ (กระแสไฟฟ้า), เคลวิน (อุณหภูมิ), โมล (ปริมาณสาร), แคนเดลา (ความเข้มการส่องสว่าง)\n\nตัวเลือก ข ประกอบด้วยเมตร กิโลกรัม และวินาที ซึ่งล้วนเป็นหน่วยฐานทั้งสามหน่วย ✓\n\nตัวเลือกอื่น ๆ มีหน่วยอนุพัทธ์ปะปนอยู่ เช่น นิวตัน จูล วัตต์ ปาสกาล เฮิรตซ์ ซึ่งเกิดจากการรวมหน่วยฐานหลายตัวเข้าด้วยกัน"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — เลขนัยสำคัญ",
+    q: "ตัวเลข 0.00580 มีเลขนัยสำคัญกี่ตัว?",
+    opts: ["2 ตัว", "3 ตัว", "5 ตัว", "6 ตัว"],
+    ans: 1,
+    explain: "พิจารณาทีละหลัก:\n• เลข 0 ที่อยู่ด้านหน้าสุด (0.00...) ไม่นับเป็นเลขนัยสำคัญ เพราะเป็นเพียงตัวบอกตำแหน่งทศนิยม\n• เลข 5, 8 นับเป็นเลขนัยสำคัญ (ไม่ใช่ 0)\n• เลข 0 ตัวสุดท้ายหลังทศนิยม (580) นับเป็นเลขนัยสำคัญเสมอ เพราะแสดงความละเอียดของการวัด\n\nดังนั้น 0.00580 มีเลขนัยสำคัญ 3 ตัว คือ 5, 8, 0 (ตัวท้าย) ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ความคลาดเคลื่อนในการวัด",
+    q: "การวัดความยาวโต๊ะซ้ำ 5 ครั้ง ได้ค่า 120.2, 120.3, 120.1, 120.2, 120.3 เซนติเมตร ลักษณะการวัดนี้เป็นแบบใด (ถ้าค่าจริงคือ 121.5 เซนติเมตร)?",
+    opts: [
+      "เที่ยงตรงสูง แต่แม่นยำต่ำ",
+      "แม่นยำสูง แต่เที่ยงตรงต่ำ",
+      "ทั้งเที่ยงตรงและแม่นยำสูง",
+      "ทั้งเที่ยงตรงและแม่นยำต่ำ"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: พิจารณาความแม่นยำ (Precision)\nค่าที่วัดได้ทั้ง 5 ครั้ง (120.1–120.3) ใกล้เคียงกันมาก แสดงว่าการวัดมี ความแม่นยำสูง (ผลการวัดสอดคล้องกันเอง)\n\nขั้นที่ 2: พิจารณาความเที่ยงตรง (Accuracy)\nค่าเฉลี่ยที่วัดได้ประมาณ 120.2 ซม. ห่างจากค่าจริง 121.5 ซม. อยู่พอสมควร (ต่างกันประมาณ 1.3 ซม.) แสดงว่าการวัดมี ความเที่ยงตรงต่ำ (ค่าที่วัดได้ไม่ใกล้เคียงค่าจริง)\n\nสรุป: แม่นยำสูงแต่เที่ยงตรงต่ำ ✓ (อาจเกิดจากความคลาดเคลื่อนเชิงระบบ เช่น เครื่องมือวัดที่ไม่ได้ปรับเทียบ)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — การรวมเวกเตอร์",
+    q: "แรง A ขนาด 6 นิวตัน กระทำในแนวแกน x และแรง B ขนาด 8 นิวตัน กระทำในแนวแกน y (ตั้งฉากกัน) จงหาขนาดของแรงลัพธ์",
+    opts: ["10 นิวตัน", "12 นิวตัน", "14 นิวตัน", "48 นิวตัน"],
+    ans: 0,
+    explain: "เนื่องจากแรงทั้งสองตั้งฉากกัน สามารถใช้ทฤษฎีบทพีทาโกรัสหาขนาดของแรงลัพธ์ได้โดยตรง\n\nR = √(A² + B²)\nR = √(6² + 8²)\nR = √(36 + 64)\nR = √100\nR = 10 นิวตัน ✓\n\n(นี่คือรูปสามเหลี่ยมมุมฉากขนาด 6-8-10 ซึ่งเป็นชุดตัวเลขพีทาโกรัสที่พบบ่อย)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — พัฒนาการฟิสิกส์ยุคใหม่",
+    q: "สมการ E = mc² ของไอน์สไตน์ มีความหมายสำคัญอย่างไร?",
+    opts: [
+      "แสดงความสัมพันธ์ระหว่างแรงกับความเร่งของวัตถุ",
+      "แสดงว่ามวลและพลังงานสามารถเปลี่ยนรูปไปมาระหว่างกันได้",
+      "แสดงความสัมพันธ์ระหว่างความถี่กับพลังงานของโฟตอน",
+      "แสดงหลักความไม่แน่นอนของตำแหน่งและโมเมนตัม"
+    ],
+    ans: 1,
+    explain: "สมการ E = mc² มาจากทฤษฎีสัมพัทธภาพพิเศษของไอน์สไตน์ แสดงให้เห็นว่ามวล (m) กับพลังงาน (E) เป็นสิ่งที่สัมพันธ์กันโดยมีความเร็วแสง (c) เป็นค่าคงตัวเชื่อมโยง กล่าวคือมวลสามารถแปลงเป็นพลังงานได้และพลังงานก็สามารถแปลงเป็นมวลได้ ซึ่งเป็นหลักการสำคัญที่นำไปสู่ความเข้าใจปฏิกิริยานิวเคลียร์\n\n• ตัวเลือก ก คือกฎข้อที่ 2 ของนิวตัน (F=ma) ไม่ใช่ของไอน์สไตน์\n• ตัวเลือก ค คือสมการ E=hf ของพลังค์/ไอน์สไตน์เรื่องโฟตอน คนละสมการกัน\n• ตัวเลือก ง คือหลักความไม่แน่นอนของไฮเซนแบร์ก ไม่เกี่ยวกับ E=mc²"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — เลขนัยสำคัญ",
+    q: "จงคำนวณ 15.24 × 2.3 พร้อมปัดผลลัพธ์ให้มีจำนวนเลขนัยสำคัญที่ถูกต้อง",
+    opts: ["35", "35.1", "35.05", "35.052"],
+    ans: 0,
+    explain: "ขั้นที่ 1: คูณตัวเลขตามปกติ\n15.24 × 2.3 = 35.052\n\nขั้นที่ 2: นับเลขนัยสำคัญของแต่ละค่า\n15.24 มีเลขนัยสำคัญ 4 ตัว\n2.3 มีเลขนัยสำคัญ 2 ตัว (น้อยกว่า)\n\nขั้นที่ 3: ปัดผลลัพธ์ให้เหลือเลขนัยสำคัญเท่ากับค่าที่น้อยที่สุด คือ 2 ตัว\n35.052 → ปัดเหลือ 2 เลขนัยสำคัญ = 35 ✓\n\n(กฎการคูณ/หาร: ผลลัพธ์มีเลขนัยสำคัญเท่ากับค่าที่มีเลขนัยสำคัญน้อยที่สุดในโจทย์)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — ธรรมชาติของฟิสิกส์",
+    q: "ข้อใดกล่าวถูกต้องเกี่ยวกับธรรมชาติของ \"กฎ\" และ \"ทฤษฎี\" ทางฟิสิกส์?",
+    opts: [
+      "กฎและทฤษฎีทางฟิสิกส์เป็นความจริงที่ตายตัว ไม่สามารถเปลี่ยนแปลงได้อีก",
+      "ทฤษฎีมีความน่าเชื่อถือน้อยกว่าสมมติฐานเสมอ",
+      "กฎและทฤษฎีเป็นคำอธิบายที่ดีที่สุดตามหลักฐานปัจจุบัน และอาจถูกปรับปรุงเมื่อมีข้อมูลใหม่",
+      "กฎทางฟิสิกส์ใช้ได้กับทุกสถานการณ์โดยไม่มีเงื่อนไขจำกัด"
+    ],
+    ans: 2,
+    explain: "หลักธรรมชาติของวิทยาศาสตร์ที่สำคัญคือ ความรู้ทางวิทยาศาสตร์ (รวมถึงกฎและทฤษฎี) ไม่ใช่ความจริงตายตัวสมบูรณ์ แต่เป็นคำอธิบายที่ดีที่สุดเท่าที่มีหลักฐานสนับสนุนในขณะนั้น และพร้อมจะถูกปรับปรุงหรือแทนที่เมื่อมีหลักฐานใหม่ที่ดีกว่า\n\nตัวอย่างที่ชัดเจนคือ กลศาสตร์ของนิวตันซึ่งใช้ได้ดีมานานหลายร้อยปี แต่ภายหลังพบว่าต้องปรับปรุงด้วยทฤษฎีสัมพัทธภาพและกลศาสตร์ควอนตัมเมื่อพิจารณาความเร็วสูงมากหรือขนาดเล็กระดับอะตอม\n\n• ตัวเลือก ก ผิด เพราะกฎ/ทฤษฎีสามารถถูกปรับปรุงได้\n• ตัวเลือก ข ผิด เพราะทฤษฎีที่ผ่านการทดสอบซ้ำแล้วน่าเชื่อถือกว่าสมมติฐาน\n• ตัวเลือก ง ผิด เพราะกฎฟิสิกส์ส่วนใหญ่มีเงื่อนไขหรือขอบเขตการใช้งาน เช่น กลศาสตร์นิวตันใช้ไม่ได้ที่ความเร็วใกล้แสง"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+// ===== แนวข้อสอบ O-NET/A-Level =====
+const examQuestions = [
+  {
+    topic: "📘 แนวข้อสอบ — ธรรมชาติของฟิสิกส์",
+    q: "การศึกษาปรากฏการณ์ทางฟิสิกส์แตกต่างจากศาสตร์อื่นอย่างไร?",
+    opts: [
+      "ฟิสิกส์ไม่จำเป็นต้องพิสูจน์ด้วยการทดลอง",
+      "ฟิสิกส์ใช้คณิตศาสตร์เป็นภาษาอธิบายและทำนายปรากฏการณ์อย่างเป็นระบบ",
+      "ฟิสิกส์ศึกษาได้เฉพาะสิ่งที่มองเห็นด้วยตาเปล่าเท่านั้น",
+      "ฟิสิกส์ไม่เกี่ยวข้องกับเทคโนโลยีในชีวิตประจำวัน",
+      "ฟิสิกส์ใช้ได้เฉพาะกับวัตถุที่มีขนาดใหญ่มาก"
+    ],
+    ans: 1,
+    explain: "จุดเด่นของวิชาฟิสิกส์คือการใช้คณิตศาสตร์เป็นภาษาหลักในการอธิบายปรากฏการณ์และสร้างสมการที่สามารถทำนายผลได้อย่างแม่นยำ ควบคู่กับการสังเกตและทดลองอย่างเป็นระบบเพื่อตรวจสอบความถูกต้อง\n\nตัวเลือกอื่นล้วนขัดกับธรรมชาติของวิชาฟิสิกส์: ฟิสิกส์ต้องพิสูจน์ด้วยการทดลอง ศึกษาได้ทั้งสิ่งที่มองเห็นและมองไม่เห็น เป็นรากฐานของเทคโนโลยีจำนวนมาก และศึกษาได้ทั้งระดับอนุภาคเล็กจนถึงจักรวาล"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — พัฒนาการฟิสิกส์ยุคคลาสสิก",
+    q: "เหตุการณ์ใดต่อไปนี้เรียงลำดับเวลาได้ถูกต้อง (จากอดีตไปหาปัจจุบัน)?",
+    opts: [
+      "นิวตันเสนอกฎการเคลื่อนที่ → กาลิเลโอทดลองพื้นเอียง → อริสโตเติลเสนอโลกเป็นศูนย์กลาง",
+      "อริสโตเติลเสนอโลกเป็นศูนย์กลาง → โคเปอร์นิคัสเสนอดวงอาทิตย์เป็นศูนย์กลาง → นิวตันเสนอกฎการเคลื่อนที่",
+      "โคเปอร์นิคัสเสนอดวงอาทิตย์เป็นศูนย์กลาง → อริสโตเติลเสนอโลกเป็นศูนย์กลาง → กาลิเลโอทดลองพื้นเอียง",
+      "กาลิเลโอทดลองพื้นเอียง → นิวตันเสนอกฎการเคลื่อนที่ → อริสโตเติลเสนอโลกเป็นศูนย์กลาง",
+      "นิวตันเสนอกฎการเคลื่อนที่ → โคเปอร์นิคัสเสนอดวงอาทิตย์เป็นศูนย์กลาง → กาลิเลโอทดลองพื้นเอียง"
+    ],
+    ans: 1,
+    explain: "ลำดับเวลาที่ถูกต้องคือ:\n1) อริสโตเติล (~340 ปีก่อนคริสตกาล) เสนอแนวคิดโลกเป็นศูนย์กลางเอกภพ\n2) โคเปอร์นิคัส (ค.ศ. 1543) เสนอแบบจำลองดวงอาทิตย์เป็นศูนย์กลาง\n3) กาลิเลโอ (ต้นคริสต์ศตวรรษที่ 17) ทดลองพื้นเอียงและสนับสนุนแนวคิดดวงอาทิตย์เป็นศูนย์กลาง\n4) นิวตัน (ค.ศ. 1687) เสนอกฎการเคลื่อนที่และแรงโน้มถ่วงสากล\n\nตัวเลือก ข เรียงลำดับได้ถูกต้องตามช่วงเวลาจริง ✓"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — พัฒนาการฟิสิกส์ยุคใหม่",
+    q: "ปรากฏการณ์ใดที่นำไปสู่แนวคิดเรื่อง \"โฟตอน\" (แสงมีสมบัติเป็นอนุภาค) ของไอน์สไตน์?",
+    opts: [
+      "การแทรกสอดของแสง (Interference)",
+      "ปรากฏการณ์โฟโตอิเล็กทริก (Photoelectric Effect)",
+      "การเลี้ยวเบนของแสง (Diffraction)",
+      "การหักเหของแสง (Refraction)",
+      "การกระเจิงของแสง (Scattering)"
+    ],
+    ans: 1,
+    explain: "ปรากฏการณ์โฟโตอิเล็กทริก คือ ปรากฏการณ์ที่แสงตกกระทบผิวโลหะแล้วทำให้อิเล็กตรอนหลุดออกมา ซึ่งทฤษฎีคลื่นแบบคลาสสิกไม่สามารถอธิบายได้อย่างสมบูรณ์ (เช่น เหตุใดต้องใช้ความถี่แสงขั้นต่ำค่าหนึ่งเท่านั้นจึงจะทำให้อิเล็กตรอนหลุดออกมาได้ ไม่ว่าความเข้มแสงจะสูงเพียงใด)\n\nไอน์สไตน์อธิบายปรากฏการณ์นี้โดยเสนอว่าแสงประกอบด้วยอนุภาคพลังงานที่เรียกว่า โฟตอน (Photon) แต่ละตัวมีพลังงาน E = hf ซึ่งสอดคล้องกับผลการทดลองได้อย่างแม่นยำ และเป็นผลงานที่ทำให้เขาได้รับรางวัลโนเบลสาขาฟิสิกส์\n\nส่วนการแทรกสอด การเลี้ยวเบน การหักเห และการกระเจิง ล้วนอธิบายได้ด้วยสมบัติความเป็นคลื่นของแสงตามทฤษฎีคลาสสิก"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — ปริมาณทางฟิสิกส์",
+    q: "ข้อใดอธิบายความแตกต่างระหว่าง \"ระยะทาง\" กับ \"การกระจัด\" ได้ถูกต้องที่สุด?",
+    opts: [
+      "ทั้งสองคำมีความหมายเหมือนกันทุกประการ",
+      "ระยะทางเป็นเวกเตอร์ ส่วนการกระจัดเป็นสเกลาร์",
+      "ระยะทางเป็นสเกลาร์ที่วัดตามเส้นทางการเคลื่อนที่จริง ส่วนการกระจัดเป็นเวกเตอร์ที่วัดจากจุดเริ่มต้นตรงไปยังจุดสิ้นสุด",
+      "ระยะทางใช้ได้เฉพาะการเคลื่อนที่เป็นเส้นตรงเท่านั้น",
+      "การกระจัดมีค่ามากกว่าระยะทางเสมอ"
+    ],
+    ans: 2,
+    explain: "ระยะทาง (Distance) เป็นปริมาณสเกลาร์ หมายถึงความยาวทั้งหมดของเส้นทางที่วัตถุเคลื่อนที่ผ่าน ไม่คำนึงถึงทิศทาง\n\nการกระจัด (Displacement) เป็นปริมาณเวกเตอร์ หมายถึงระยะและทิศทางที่วัดเป็นเส้นตรงจากจุดเริ่มต้นไปยังจุดสิ้นสุด\n\nดังนั้นขนาดของการกระจัดจะ น้อยกว่าหรือเท่ากับ ระยะทางเสมอ (ไม่ใช่มากกว่าตามตัวเลือก จ) เช่น ถ้าเดินเป็นวงกลมครบรอบแล้วกลับมาจุดเดิม ระยะทางจะมีค่ามากแต่การกระจัดเป็นศูนย์"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — ระบบหน่วยสากล",
+    q: "ปริมาณในข้อใดต่อไปนี้เป็น \"หน่วยอนุพัทธ์\" (Derived Unit) ทั้งหมด?",
+    opts: [
+      "เมตร, กิโลกรัม, วินาที",
+      "นิวตัน, จูล, ปาสกาล",
+      "แอมแปร์, เคลวิน, โมล",
+      "แคนเดลา, เมตร, แอมแปร์",
+      "กิโลกรัม, โมล, แคนเดลา"
+    ],
+    ans: 1,
+    explain: "หน่วยอนุพัทธ์ (Derived Unit) คือหน่วยที่เกิดจากการนำหน่วยฐานมาสัมพันธ์กันในรูปสมการ\n\n• นิวตัน (N) = kg·m/s² (จากมวล ความยาว และเวลา)\n• จูล (J) = kg·m²/s² (จากแรงคูณระยะทาง)\n• ปาสกาล (Pa) = N/m² (จากแรงหารพื้นที่)\n\nทั้งสามหน่วยนี้ล้วนเป็นหน่วยอนุพัทธ์ทั้งหมด ✓\n\nส่วนเมตร กิโลกรัม วินาที แอมแปร์ เคลวิน โมล และแคนเดลา ล้วนเป็นหน่วยฐานทั้ง 7 หน่วยของระบบ SI ไม่ใช่หน่วยอนุพัทธ์"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — เลขนัยสำคัญ",
+    q: "ผลการวัดความยาวสองครั้งได้ 12.5 เซนติเมตร และ 3.24 เซนติเมตร ถ้านำมาบวกกัน ผลลัพธ์ที่มีจำนวนเลขนัยสำคัญถูกต้องคือข้อใด?",
+    opts: ["15.7", "15.74", "15.740", "16"],
+    ans: 0,
+    explain: "ขั้นที่ 1: บวกค่าตามปกติ\n12.5 + 3.24 = 15.74\n\nขั้นที่ 2: ใช้กฎการบวก/ลบเลขนัยสำคัญ\nกฎ: ผลลัพธ์มีจำนวนตำแหน่งทศนิยมเท่ากับค่าที่มีทศนิยมน้อยที่สุด\n12.5 มีทศนิยม 1 ตำแหน่ง (น้อยกว่า)\n3.24 มีทศนิยม 2 ตำแหน่ง\n\nขั้นที่ 3: ปัดผลลัพธ์ให้เหลือทศนิยม 1 ตำแหน่ง\n15.74 → ปัดเป็น 15.7 ✓\n\n(ข้อนี้ต้องระวังไม่สับสนกับกฎการคูณ/หารซึ่งใช้จำนวนเลขนัยสำคัญ ไม่ใช่จำนวนตำแหน่งทศนิยม)"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — ความคลาดเคลื่อนในการวัด",
+    q: "ข้อใดเป็นตัวอย่างของ \"ความคลาดเคลื่อนเชิงระบบ\" (Systematic Error)?",
+    opts: [
+      "ผู้อ่านค่าเยื้องมุมมองทำให้อ่านค่าผิดพลาดแบบสุ่มในแต่ละครั้ง",
+      "เครื่องชั่งที่ไม่ได้ปรับให้ชี้ศูนย์ก่อนใช้งาน ทำให้ค่าที่วัดได้เบี่ยงเบนไปทางเดียวกันทุกครั้ง",
+      "ความสั่นสะเทือนของโต๊ะขณะทำการทดลองที่เกิดขึ้นแบบไม่แน่นอน",
+      "ความผันผวนของกระแสไฟฟ้าที่ทำให้ค่าที่วัดเปลี่ยนแปลงไม่แน่นอน",
+      "อุณหภูมิห้องที่เปลี่ยนแปลงเล็กน้อยแบบสุ่มระหว่างวัน"
+    ],
+    ans: 1,
+    explain: "ความคลาดเคลื่อนเชิงระบบ (Systematic Error) เกิดจากตัวเครื่องมือหรือวิธีการวัดที่มีข้อบกพร่องคงที่ ทำให้ผลการวัดเบี่ยงเบนไปในทิศทางเดียวกันทุกครั้งอย่างสม่ำเสมอ\n\nตัวอย่างในตัวเลือก ข: เครื่องชั่งที่ไม่ได้ปรับศูนย์ก่อนใช้งาน จะทำให้ค่าที่วัดได้สูงหรือต่ำกว่าความจริงในทิศทางเดียวกันทุกครั้ง ✓ ซึ่งตรงตามนิยามของความคลาดเคลื่อนเชิงระบบ\n\nส่วนตัวเลือกอื่น ๆ (การอ่านค่าเยื้องมุมแบบสุ่ม ความสั่นสะเทือนแบบไม่แน่นอน ความผันผวนของกระแสไฟฟ้า อุณหภูมิที่เปลี่ยนแปลงแบบสุ่ม) ล้วนเป็นตัวอย่างของ ความคลาดเคลื่อนแบบสุ่ม (Random Error) เพราะทำให้ค่าที่วัดกระจายทั้งสูงและต่ำกว่าค่าจริงแบบไม่แน่นอน"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — การรวมเวกเตอร์",
+    q: "เวกเตอร์ A ขนาด 10 หน่วย ทำมุม 0° กับแกน x และเวกเตอร์ B ขนาด 10 หน่วย ทำมุม 180° กับแกน x (ทิศตรงข้ามกับ A) เวกเตอร์ลัพธ์ A + B มีขนาดเท่าใด?",
+    opts: ["0 หน่วย", "10 หน่วย", "14.1 หน่วย", "20 หน่วย"],
+    ans: 0,
+    explain: "เนื่องจากเวกเตอร์ A และ B มีขนาดเท่ากัน (10 หน่วย) แต่มีทิศทางตรงข้ามกันโดยสิ้นเชิง (ต่างกัน 180°) เวกเตอร์ทั้งสองจึงหักล้างกันหมดพอดี\n\nวิธีคิดแบบองค์ประกอบ: กำหนดให้ A ชี้ไปทางขวา (+10, 0) และ B ชี้ไปทางซ้าย (−10, 0)\nRx = 10 + (−10) = 0\nRy = 0 + 0 = 0\n\nขนาดของเวกเตอร์ลัพธ์ R = √(0² + 0²) = 0 หน่วย ✓\n\nข้อควรจำ: การรวมเวกเตอร์ไม่ใช่การบวกขนาดแบบพีชคณิตธรรมดา (10+10=20) เพราะต้องพิจารณาทิศทางประกอบด้วยเสมอ"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — ธรรมชาติของฟิสิกส์",
+    q: "ข้อใดคือความแตกต่างสำคัญระหว่าง \"สมมติฐาน\" กับ \"ทฤษฎี\" ทางวิทยาศาสตร์?",
+    opts: [
+      "สมมติฐานและทฤษฎีมีความหมายเหมือนกันทุกประการ ใช้แทนกันได้",
+      "สมมติฐานคือคำตอบที่คาดการณ์ไว้ก่อนทดสอบ ส่วนทฤษฎีคือคำอธิบายที่ผ่านการทดสอบซ้ำหลายครั้งจนเป็นที่ยอมรับ",
+      "ทฤษฎีเป็นเพียงการคาดเดา ในขณะที่สมมติฐานผ่านการพิสูจน์แล้ว",
+      "สมมติฐานใช้ได้เฉพาะในวิชาฟิสิกส์ ส่วนทฤษฎีใช้ได้กับทุกวิชา",
+      "ทฤษฎีเปลี่ยนแปลงไม่ได้ ในขณะที่สมมติฐานเปลี่ยนแปลงได้ตลอดเวลา"
+    ],
+    ans: 1,
+    explain: "สมมติฐาน (Hypothesis) คือคำตอบหรือคำอธิบายที่คาดการณ์ไว้ล่วงหน้าก่อนการทดลอง ยังไม่ผ่านการทดสอบอย่างกว้างขวาง\n\nทฤษฎี (Theory) คือคำอธิบายที่ผ่านการทดสอบซ้ำหลายครั้งด้วยหลักฐานจำนวนมากจนเป็นที่ยอมรับในวงกว้าง และสามารถอธิบายกลุ่มปรากฏการณ์ได้อย่างครอบคลุม\n\nตัวเลือก ข อธิบายความแตกต่างนี้ได้ถูกต้อง ✓\n\nข้อควรระวัง: ทั้งสมมติฐานและทฤษฎีสามารถถูกปรับปรุงเปลี่ยนแปลงได้เมื่อมีหลักฐานใหม่ ไม่มีข้อใดที่ 'เปลี่ยนแปลงไม่ได้' อย่างสมบูรณ์"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — การรวมเวกเตอร์",
+    q: "แรง A ขนาด 12 นิวตัน ทำมุม 90° กับแรง B ขนาด 5 นิวตัน จงหาขนาดของแรงลัพธ์และมุมที่แรงลัพธ์ทำกับแรง A",
+    opts: [
+      "13 นิวตัน, ประมาณ 22.6°",
+      "17 นิวตัน, ประมาณ 30°",
+      "13 นิวตัน, ประมาณ 67.4°",
+      "7 นิวตัน, ประมาณ 45°"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: หาขนาดของแรงลัพธ์ (แรงตั้งฉากกัน ใช้ทฤษฎีบทพีทาโกรัส)\nR = √(A² + B²) = √(12² + 5²) = √(144+25) = √169 = 13 นิวตัน\n\nขั้นที่ 2: หามุมที่แรงลัพธ์ทำกับแรง A\nθ = tan⁻¹(B/A) = tan⁻¹(5/12) ≈ 22.6°\n\nดังนั้น แรงลัพธ์มีขนาด 13 นิวตัน ทำมุมประมาณ 22.6° กับแรง A ✓\n\n(นี่คือรูปสามเหลี่ยมมุมฉากขนาด 5-12-13 ซึ่งเป็นชุดตัวเลขพีทาโกรัสที่พบบ่อยอีกชุดหนึ่ง)"
+  },
+  {
+    topic: "📘 แนวข้อสอบ — พัฒนาการฟิสิกส์ยุคใหม่",
+    q: "หลักความไม่แน่นอนของไฮเซนแบร์ก (Heisenberg's Uncertainty Principle) กล่าวถึงเรื่องใด?",
+    opts: [
+      "ไม่สามารถทราบตำแหน่งและโมเมนตัมของอนุภาคได้แม่นยำพร้อมกันทั้งสองค่า",
+      "แสงเดินทางด้วยความเร็วคงที่ในทุกกรอบอ้างอิง",
+      "มวลและพลังงานสามารถเปลี่ยนรูปไปมาระหว่างกันได้",
+      "พลังงานถูกปลดปล่อยเป็นหน่วยย่อยไม่ต่อเนื่องเรียกว่าควอนตัม",
+      "แรงโน้มถ่วงเกิดจากความโค้งของปริภูมิ-เวลา"
+    ],
+    ans: 0,
+    explain: "หลักความไม่แน่นอนของไฮเซนแบร์กเป็นหลักการพื้นฐานของกลศาสตร์ควอนตัม กล่าวว่า ไม่สามารถทราบค่าตำแหน่งและโมเมนตัมของอนุภาคได้อย่างแม่นยำพร้อมกันทั้งสองค่าในเวลาเดียวกัน ยิ่งวัดค่าหนึ่งได้แม่นยำมากเท่าใด ค่าอีกตัวหนึ่งจะยิ่งไม่แน่นอนมากขึ้นเท่านั้น\n\n• ตัวเลือก ข คือหลักการของทฤษฎีสัมพัทธภาพพิเศษของไอน์สไตน์\n• ตัวเลือก ค คือความหมายของสมการ E=mc²\n• ตัวเลือก ง คือแนวคิดควอนตัมของพลังค์เรื่องรังสีวัตถุดำ\n• ตัวเลือก จ คือหลักการของทฤษฎีสัมพัทธภาพทั่วไป"
+  }
+];
+function buildExam() {
+  const container = document.getElementById('exam-container');
+  let currentTopic = '';
+  examQuestions.forEach((q, idx) => {
+    if (q.topic !== currentTopic) {
+      currentTopic = q.topic;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = currentTopic;
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `excard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${examQuestions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="exopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="exfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkExam(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkExam(qIdx, optIdx) {
+  if (answeredEX[qIdx]) return;
+  answeredEX[qIdx] = true;
+  const q = examQuestions[qIdx];
+  const opts = document.querySelectorAll(`#excard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`exfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildExam();
+</script>
+</body>
+</html>

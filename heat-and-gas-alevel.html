@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ความร้อนและแก๊ส | ฟิสิกส์ A-Level ม.5</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #ff7a45;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #401a10 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '°C °F K ΔT Q=mcΔT PV=nRT α β L';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(255,122,69,0.15);
+    border: 1px solid rgba(255,122,69,0.4);
+    color: #ffb08a;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(255,122,69,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(255,122,69,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(255,122,69,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>ความร้อน<span>และ</span>แก๊ส</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.5 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">โจทย์เตรียมสอบ</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="temp">1. อุณหภูมิ</button>
+  <button class="tab-btn" data-sec="heat">2. การถ่ายเทความร้อน</button>
+  <button class="tab-btn" data-sec="specific">3. ความร้อนจำเพาะ</button>
+  <button class="tab-btn" data-sec="phase">4. การเปลี่ยนสถานะ</button>
+  <button class="tab-btn" data-sec="expand">5. การขยายตัว</button>
+  <button class="tab-btn" data-sec="gaslaw">6. กฎของแก๊ส</button>
+  <button class="tab-btn" data-sec="idealgas">7. แก๊สอุดมคติ</button>
+  <button class="tab-btn" data-sec="thermo">8. อุณหพลศาสตร์</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัด</button>
+  <button class="tab-btn" data-sec="exam">📋 โจทย์เตรียมสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: อุณหภูมิ ===== -->
+  <div class="section active" id="temp">
+    <div class="section-heading"><span>บทที่ 1</span> · อุณหภูมิและการวัด</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🌡️</div>อุณหภูมิคืออะไร?</div>
+      <p>อุณหภูมิ (Temperature) เป็นปริมาณที่บ่งบอกถึง <strong>ระดับพลังงานจลน์เฉลี่ยของโมเลกุล</strong> ในสสาร ยิ่งโมเลกุลเคลื่อนที่เร็วเฉลี่ยมากเท่าไร อุณหภูมิก็ยิ่งสูงขึ้นเท่านั้น</p>
+      <div class="def-box">
+        <div class="def-label">กฎข้อที่ศูนย์ของอุณหพลศาสตร์</div>
+        ถ้าวัตถุ A อยู่ในภาวะสมดุลความร้อนกับวัตถุ B และวัตถุ B อยู่ในภาวะสมดุลความร้อนกับวัตถุ C แล้ว วัตถุ A ย่อมอยู่ในภาวะสมดุลความร้อนกับวัตถุ C ด้วย — เป็นหลักการที่ทำให้เทอร์โมมิเตอร์ใช้วัดอุณหภูมิได้
+      </div>
+      <p>เมื่อวัตถุสองชิ้นที่มีอุณหภูมิต่างกันสัมผัสกัน ความร้อนจะถ่ายเทจากวัตถุที่ร้อนกว่าไปยังวัตถุที่เย็นกว่า จนกระทั่งทั้งสองมีอุณหภูมิเท่ากัน เรียกว่า <strong>ภาวะสมดุลความร้อน (thermal equilibrium)</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>มาตราวัดอุณหภูมิ</div>
+      <table>
+        <tr><th>มาตรา</th><th>จุดเยือกแข็งของน้ำ</th><th>จุดเดือดของน้ำ</th></tr>
+        <tr><td>เซลเซียส (°C)</td><td>0 °C</td><td>100 °C</td></tr>
+        <tr><td>ฟาเรนไฮต์ (°F)</td><td>32 °F</td><td>212 °F</td></tr>
+        <tr><td>เคลวิน (K)</td><td>273 K</td><td>373 K</td></tr>
+      </table>
+      <div class="def-box">
+        <div class="def-label">สูตรแปลงหน่วย</div>
+        <span class="math">T(K) = T(°C) + 273</span><br>
+        <span class="math">T(°F) = (9/5)T(°C) + 32</span><br>
+        <span class="math">T(°C) = (5/9)[T(°F) − 32]</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        อุณหภูมิร่างกายปกติ 37°C แปลงเป็นเคลวินและฟาเรนไฮต์<br>
+        K = 37 + 273 = 310 K<br>
+        °F = (9/5)(37) + 32 = 66.6 + 32 = 98.6 °F
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        เคลวินคือ "เซลเซียสบวก 273" เสมอ ไม่มีค่าลบ (0 K คืออุณหภูมิต่ำสุดที่เป็นไปได้ เรียกว่า Absolute Zero) — <strong>ในสูตรฟิสิกส์เกี่ยวกับแก๊สต้องแปลงเป็นเคลวินก่อนเสมอ</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧪</div>เทอร์โมมิเตอร์และการเทียบมาตราส่วน</div>
+      <p>เทอร์โมมิเตอร์บางชนิดใช้มาตราส่วนสมมติ (เช่น มาตรา X ใด ๆ) ซึ่งเทียบกับมาตราเซลเซียสได้แบบเชิงเส้น โดยใช้อัตราส่วนระยะห่างจากจุดอ้างอิงสองจุด</p>
+      <div class="math-block">
+        (T_X − จุดเยือกแข็ง_X) / (จุดเดือด_X − จุดเยือกแข็ง_X)<br>
+        = (T_C − 0) / (100 − 0)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        การเทียบมาตราส่วนต้องใช้ "สัดส่วนระยะห่างจากจุดเยือกแข็ง" ให้เท่ากันทั้งสองมาตรา ห้ามใช้ตัวเลขอุณหภูมิเทียบตรง ๆ โดยไม่หักจุดเริ่มต้นออกก่อน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: การถ่ายเทความร้อน ===== -->
+  <div class="section" id="heat">
+    <div class="section-heading"><span>หัวข้อ 2</span> · การถ่ายเทความร้อน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔥</div>ความร้อนคืออะไร?</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ความร้อน (Heat, Q) คือ พลังงานที่ถ่ายเทจากวัตถุที่มีอุณหภูมิสูงกว่าไปยังวัตถุที่มีอุณหภูมิต่ำกว่า มีหน่วยเป็นจูล (J) หรือแคลอรี (cal)
+      </div>
+      <div class="math-block">1 cal = 4.186 J</div>
+      <p>ความร้อนถ่ายเทได้ 3 กลไกหลัก ได้แก่ <strong>การนำความร้อน การพาความร้อน และการแผ่รังสีความร้อน</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">➡️</div>การนำความร้อน (Conduction)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การถ่ายเทความร้อนผ่านการสั่นสะเทือนและการชนกันของอนุภาคในตัวกลาง โดยตัวกลางไม่เคลื่อนที่ไปด้วย — เกิดได้ดีในของแข็ง โดยเฉพาะโลหะ
+      </div>
+      <div class="math-block">
+        อัตราการนำความร้อน:<br>
+        Q/t = kA(ΔT)/L
+      </div>
+      <p>เมื่อ k = สภาพนำความร้อน (W/(m·K)), A = พื้นที่หน้าตัด, ΔT = ผลต่างอุณหภูมิระหว่างสองปลาย, L = ความยาว/ความหนาของตัวกลาง</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ด้ามช้อนโลหะที่จุ่มปลายหนึ่งในน้ำร้อน อีกไม่นานปลายอีกด้านก็ร้อนตามไปด้วย เพราะโลหะมีค่า k สูง นำความร้อนได้ดี
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🌀</div>การพาความร้อน (Convection)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การถ่ายเทความร้อนโดยการเคลื่อนที่ของ "ของไหล" (ของเหลวหรือแก๊ส) เอง โดยส่วนที่ร้อนจะมีความหนาแน่นต่ำลอยตัวขึ้น ส่วนที่เย็นจมลง เกิดเป็นการหมุนเวียน
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>การพาแบบธรรมชาติ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เกิดจากความแตกต่างของความหนาแน่น เช่น การต้มน้ำในหม้อ ลมบก–ลมทะเล</p>
+        </div>
+        <div class="mini-card">
+          <h4>การพาแบบบังคับ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">มีอุปกรณ์ช่วยเร่งการไหล เช่น พัดลม เครื่องปรับอากาศ ปั๊มหมุนเวียนน้ำหล่อเย็น</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">☀️</div>การแผ่รังสีความร้อน (Radiation)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การถ่ายเทความร้อนในรูปคลื่นแม่เหล็กไฟฟ้า (ส่วนใหญ่เป็นรังสีอินฟราเรด) ไม่ต้องอาศัยตัวกลาง จึงเดินทางผ่านสุญญากาศได้ เช่น ความร้อนจากดวงอาทิตย์เดินทางมาถึงโลก
+      </div>
+      <p>วัตถุสีเข้ม/ผิวขรุขระ ดูดกลืนและแผ่รังสีความร้อนได้ดีกว่าวัตถุสีอ่อน/ผิวมันวาว</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำแยก 3 กลไก</div>
+        นำ (Conduction) = สัมผัสกันโดยตรง ตัวกลางไม่เคลื่อนที่<br>
+        พา (Convection) = ตัวกลาง (ของไหล) เคลื่อนที่ไปพร้อมความร้อน<br>
+        แผ่รังสี (Radiation) = ไม่ต้องมีตัวกลางเลย เดินทางเป็นคลื่นแม่เหล็กไฟฟ้า
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ความร้อนจำเพาะ ===== -->
+  <div class="section" id="specific">
+    <div class="section-heading"><span>หัวข้อ 3</span> · ความร้อนจำเพาะและแคลอรีมิเตอร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>ความร้อนจำเพาะ (Specific Heat)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ความร้อนจำเพาะ (c) คือ ปริมาณความร้อนที่ทำให้สาร 1 หน่วยมวล มีอุณหภูมิเปลี่ยนไป 1 หน่วย มีหน่วยเป็น J/(kg·K)
+      </div>
+      <div class="math-block">
+        Q = mcΔT
+      </div>
+      <p>เมื่อ Q = ความร้อนที่ถ่ายเท (J), m = มวล (kg), c = ความร้อนจำเพาะ, ΔT = การเปลี่ยนแปลงอุณหภูมิ</p>
+      <table>
+        <tr><th>สาร</th><th>c (J/(kg·K))</th></tr>
+        <tr><td>น้ำ</td><td>4,186</td></tr>
+        <tr><td>อะลูมิเนียม</td><td>~900</td></tr>
+        <tr><td>เหล็ก</td><td>~450</td></tr>
+        <tr><td>ทองแดง</td><td>~387</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 ทำไมน้ำจึงเย็นตัว/ร้อนตัวช้า</div>
+        น้ำมีค่า c สูงมากเมื่อเทียบกับสารอื่น จึงต้องใช้ความร้อนมากในการเปลี่ยนอุณหภูมิ — เป็นเหตุผลที่พื้นที่ใกล้ทะเลมีอากาศไม่แปรปรวนรุนแรงเท่าพื้นที่ในแผ่นดิน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧯</div>ความจุความร้อน (Heat Capacity)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ความจุความร้อน (C) คือ ปริมาณความร้อนที่ทำให้วัตถุทั้งก้อนมีอุณหภูมิเปลี่ยนไป 1 หน่วย
+      </div>
+      <div class="math-block">C = mc &nbsp; (หน่วย J/K)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        น้ำมวล 2 kg อุณหภูมิเพิ่มจาก 20°C เป็น 80°C ใช้ความร้อนเท่าไร<br>
+        Q = mcΔT = 2 × 4,200 × 60 = 504,000 J = 504 kJ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⚖️</div>หลักการแคลอรีมิเตอร์</div>
+      <div class="def-box">
+        <div class="def-label">หลักการอนุรักษ์พลังงานความร้อน</div>
+        เมื่อวัตถุร้อนและวัตถุเย็นสัมผัสกันในภาชนะที่ไม่สูญเสียความร้อนออกสู่ภายนอก ความร้อนที่วัตถุร้อนคายออกจะเท่ากับความร้อนที่วัตถุเย็นดูดกลืนเข้าไป
+      </div>
+      <div class="math-block">Q_คาย = Q_ดูด</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างโจทย์</div>
+        น้ำร้อน 200 g ที่ 80°C ผสมกับน้ำเย็น 300 g ที่ 20°C จงหาอุณหภูมิสมดุล<br><br>
+        <strong>วิธีทำ:</strong> m₁c(T₁−T_f) = m₂c(T_f−T₂)<br>
+        200(80−T_f) = 300(T_f−20)<br>
+        16,000 − 200T_f = 300T_f − 6,000<br>
+        22,000 = 500T_f &nbsp;→&nbsp; T_f = <strong>44°C</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ถ้าสารที่ผสมกันไม่ใช่ชนิดเดียวกัน ต้องใช้ค่า c ที่แตกต่างกันของแต่ละสารในสมการ ไม่ใช่ c ตัวเดียวกันทั้งสองข้าง
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: การเปลี่ยนสถานะ ===== -->
+  <div class="section" id="phase">
+    <div class="section-heading"><span>หัวข้อ 4</span> · การเปลี่ยนสถานะและความร้อนแฝง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧊</div>การเปลี่ยนสถานะของสสาร</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">☃️→💧</div>
+          <div class="sym-name">หลอมเหลว (Melting)</div>
+          <div class="sym-desc">ของแข็ง → ของเหลว</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">💧→☃️</div>
+          <div class="sym-name">แข็งตัว (Freezing)</div>
+          <div class="sym-desc">ของเหลว → ของแข็ง</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">💧→💨</div>
+          <div class="sym-name">กลายเป็นไอ (Vaporization)</div>
+          <div class="sym-desc">ของเหลว → แก๊ส</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">💨→💧</div>
+          <div class="sym-name">ควบแน่น (Condensation)</div>
+          <div class="sym-desc">แก๊ส → ของเหลว</div>
+        </div>
+      </div>
+      <p style="margin-top:12px">นอกจากนี้ยังมี <strong>การระเหิด</strong> (ของแข็ง → แก๊ส โดยตรง เช่น น้ำแข็งแห้ง) และ <strong>การระเหิดกลับ</strong> (แก๊ส → ของแข็งโดยตรง)</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔥</div>ความร้อนแฝง (Latent Heat)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ความร้อนแฝง (L) คือ ปริมาณความร้อนต่อหนึ่งหน่วยมวลที่ใช้ในการเปลี่ยนสถานะ โดย<strong>อุณหภูมิไม่เปลี่ยนแปลง</strong>ระหว่างกระบวนการ
+      </div>
+      <div class="math-block">Q = mL</div>
+      <table>
+        <tr><th>ความร้อนแฝงของน้ำ</th><th>ค่า</th></tr>
+        <tr><td>L_f (การหลอมเหลว ที่ 0°C)</td><td>334,000 J/kg</td></tr>
+        <tr><td>L_v (การกลายเป็นไอ ที่ 100°C)</td><td>2,260,000 J/kg</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        น้ำแข็งมวล 500 g ที่ 0°C ต้องการความร้อนเท่าไรเพื่อหลอมเป็นน้ำทั้งหมดที่ 0°C<br>
+        Q = mL_f = 0.5 × 334,000 = <strong>167,000 J</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📈</div>กราฟความร้อน–อุณหภูมิ (Heating Curve)</div>
+      <p>เมื่อให้ความร้อนแก่น้ำแข็งอย่างต่อเนื่องตั้งแต่อุณหภูมิต่ำกว่า 0°C จนกลายเป็นไอน้ำ กราฟจะแบ่งเป็นช่วง ๆ ดังนี้</p>
+      <ol>
+        <li>อุณหภูมิน้ำแข็งเพิ่มขึ้น (ใช้ Q = mc_iceΔT)</li>
+        <li>น้ำแข็งหลอมเหลวที่ 0°C — <strong>อุณหภูมิคงที่</strong> (ใช้ Q = mL_f)</li>
+        <li>อุณหภูมิน้ำเพิ่มขึ้นจนถึง 100°C (ใช้ Q = mc_waterΔT)</li>
+        <li>น้ำเดือดกลายเป็นไอที่ 100°C — <strong>อุณหภูมิคงที่</strong> (ใช้ Q = mL_v)</li>
+        <li>อุณหภูมิไอน้ำเพิ่มขึ้นต่อไป (ใช้ Q = mc_steamΔT)</li>
+      </ol>
+      <div class="tip-box">
+        <div class="tip-label">💡 กับดักข้อสอบ</div>
+        ช่วงที่กำลังเปลี่ยนสถานะ (หลอมเหลว/เดือด) เส้นกราฟจะ<strong>ราบขนาน</strong>กับแกนเวลา เพราะพลังงานที่ใส่เข้าไปทั้งหมดถูกใช้สลายพันธะระหว่างโมเลกุล ไม่ได้ทำให้อุณหภูมิสูงขึ้น
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: การขยายตัว ===== -->
+  <div class="section" id="expand">
+    <div class="section-heading"><span>หัวข้อ 5</span> · การขยายตัวเนื่องจากความร้อน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📏</div>การขยายตัวเชิงเส้น</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่ออุณหภูมิของแท่งวัตถุแข็งเพิ่มขึ้น ความยาวของมันจะเพิ่มขึ้นตามสัมประสิทธิ์การขยายตัวเชิงเส้น (α) ของวัสดุ
+      </div>
+      <div class="math-block">
+        ΔL = L₀αΔT<br>
+        L = L₀(1 + αΔT)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แท่งเหล็กยาว 10 m ที่ 20°C (α = 12×10⁻⁶ /°C) อุณหภูมิเพิ่มเป็น 45°C<br>
+        ΔL = 10 × 12×10⁻⁶ × 25 = 0.003 m = <strong>3 มม.</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">◻️</div>การขยายตัวเชิงพื้นที่และเชิงปริมาตร</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เชิงพื้นที่</h4>
+          <div class="math-block">ΔA = A₀(2α)ΔT</div>
+        </div>
+        <div class="mini-card">
+          <h4>เชิงปริมาตร (ของแข็ง)</h4>
+          <div class="math-block">ΔV = V₀(3α)ΔT</div>
+        </div>
+      </div>
+      <p>สำหรับของเหลว มักใช้สัมประสิทธิ์การขยายตัวเชิงปริมาตร β โดยตรง (ของเหลวไม่มีรูปทรงตายตัว จึงไม่ใช้ α)</p>
+      <div class="math-block">ΔV = V₀βΔT</div>
+      <table>
+        <tr><th>วัสดุ</th><th>α (×10⁻⁶ /°C)</th></tr>
+        <tr><td>เหล็ก</td><td>~12</td></tr>
+        <tr><td>อะลูมิเนียม</td><td>~24</td></tr>
+        <tr><td>แก้ว</td><td>~9</td></tr>
+        <tr><td>ทองแดง</td><td>~17</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — ของเหลวล้นภาชนะ</div>
+        ถังแก้วบรรจุน้ำมันเต็มพอดีที่ 10°C ปริมาตร 2 L (2,000 mL)<br>
+        β_น้ำมัน = 9×10⁻⁴ /°C, β_แก้ว = 2.7×10⁻⁵ /°C<br>
+        อุณหภูมิเพิ่มเป็น 60°C น้ำมันจะล้นออกเท่าไร?<br><br>
+        <strong>วิธีทำ:</strong> ใช้สัมประสิทธิ์สุทธิ β_สุทธิ = β_น้ำมัน − β_แก้ว = 8.73×10⁻⁴ /°C<br>
+        ΔV = 2,000 × 8.73×10⁻⁴ × 50 = <strong>87.3 mL</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">💧</div>พฤติกรรมพิเศษของน้ำ</div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อยกเว้นสำคัญ</div>
+        น้ำมีความหนาแน่น<strong>สูงสุดที่ 4°C</strong> ไม่ใช่ที่ 0°C — ระหว่าง 0–4°C น้ำจะ<strong>หดตัว</strong>เมื่ออุณหภูมิสูงขึ้น (พฤติกรรมผิดปกติ) แล้วจึงขยายตัวตามปกติเมื่อสูงกว่า 4°C นี่คือเหตุผลที่น้ำแข็งลอยน้ำได้ และทำให้สิ่งมีชีวิตใต้น้ำรอดในฤดูหนาว
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: กฎของแก๊ส ===== -->
+  <div class="section" id="gaslaw">
+    <div class="section-heading"><span>หัวข้อ 6</span> · กฎของแก๊ส</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📦</div>ตัวแปรสถานะของแก๊ส</div>
+      <p>สถานะของแก๊สปริมาณคงที่ (ไม่มีการรั่วไหลหรือเติมเข้า) อธิบายได้ด้วยตัวแปร 3 ตัว คือ ความดัน (P) ปริมาตร (V) และอุณหภูมิสัมบูรณ์ (T หน่วยเคลวิน)</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กฎเหล็กของโจทย์แก๊ส</div>
+        ต้องแปลงอุณหภูมิเป็น<strong>เคลวินเสมอ</strong>ก่อนแทนค่าในทุกสูตร ห้ามใช้องศาเซลเซียสตรง ๆ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔄</div>กฎของบอยล์ (Boyle's Law)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่ออุณหภูมิคงที่ ความดันของแก๊สแปรผกผันกับปริมาตร
+      </div>
+      <div class="math-block">P₁V₁ = P₂V₂ &nbsp; (T คงที่)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แก๊สปริมาตร 4 L ความดัน 2 atm ถูกอัดจนความดันเป็น 8 atm ที่อุณหภูมิเดิม<br>
+        2×4 = 8×V₂ &nbsp;→&nbsp; V₂ = <strong>1 L</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📈</div>กฎของชาร์ล (Charles's Law)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่อความดันคงที่ ปริมาตรของแก๊สแปรผันตรงกับอุณหภูมิสัมบูรณ์
+      </div>
+      <div class="math-block">V₁/T₁ = V₂/T₂ &nbsp; (P คงที่)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ลูกโป่งปริมาตร 3 L ที่ 27°C (300 K) ความดันคงที่ อุณหภูมิเพิ่มเป็น 87°C (360 K)<br>
+        3/300 = V₂/360 &nbsp;→&nbsp; V₂ = <strong>3.6 L</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🌡️</div>กฎของเกย์-ลูสแซก (Gay-Lussac's Law)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่อปริมาตรคงที่ ความดันของแก๊สแปรผันตรงกับอุณหภูมิสัมบูรณ์
+      </div>
+      <div class="math-block">P₁/T₁ = P₂/T₂ &nbsp; (V คงที่)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ถังแก๊สปิดสนิท ความดันเริ่มต้น 2 atm ที่ 27°C (300 K) อุณหภูมิเพิ่มเป็น 127°C (400 K)<br>
+        2/300 = P₂/400 &nbsp;→&nbsp; P₂ = <strong>8/3 ≈ 2.67 atm</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧮</div>กฎรวมของแก๊ส (Combined Gas Law)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        รวมกฎทั้งสามเข้าด้วยกัน ใช้ได้เมื่อทั้งความดัน ปริมาตร และอุณหภูมิเปลี่ยนแปลงพร้อมกัน (ปริมาณแก๊สคงที่)
+      </div>
+      <div class="math-block">P₁V₁/T₁ = P₂V₂/T₂</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แก๊สปริมาตร 2 L ความดัน 1 atm ที่ 27°C (300 K) ถ้าความดันเพิ่มเป็น 3 atm และปริมาตรลดเหลือ 1 L จงหาอุณหภูมิสุดท้าย<br>
+        (1×2)/300 = (3×1)/T₂ &nbsp;→&nbsp; T₂ = <strong>450 K</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        กฎย่อยทั้งสามคือกรณีพิเศษของกฎรวม เมื่อตัวแปรใดตัวหนึ่งคงที่ ให้ตัดตัวแปรนั้นออกจากทั้งสองข้างของสมการ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: แก๊สอุดมคติ ===== -->
+  <div class="section" id="idealgas">
+    <div class="section-heading"><span>หัวข้อ 7</span> · แก๊สอุดมคติและทฤษฎีจลน์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚗️</div>สมการสถานะแก๊สอุดมคติ</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แก๊สอุดมคติ (Ideal Gas) คือแบบจำลองแก๊สที่โมเลกุลไม่มีปริมาตรและไม่มีแรงกระทำระหว่างกัน ยกเว้นขณะชนกัน — แก๊สจริงที่ความดันต่ำและอุณหภูมิสูงจะมีพฤติกรรมใกล้เคียงแก๊สอุดมคติ
+      </div>
+      <div class="math-block">
+        PV = nRT<br>
+        PV = NkT
+      </div>
+      <table>
+        <tr><th>สัญลักษณ์</th><th>ความหมาย</th><th>ค่า</th></tr>
+        <tr><td>R</td><td>ค่าคงที่แก๊สสากล</td><td>8.314 J/(mol·K)</td></tr>
+        <tr><td>k</td><td>ค่าคงที่บอลต์ซมันน์</td><td>1.38×10⁻²³ J/K</td></tr>
+        <tr><td>N_A</td><td>เลขอาโวกาโดร</td><td>6.022×10²³ /mol</td></tr>
+      </table>
+      <p>โดย n = จำนวนโมล, N = จำนวนโมเลกุล (N = nN_A)</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ถังบรรจุแก๊สออกซิเจน (M = 32 g/mol) ปริมาตร 10 L ความดัน 5 atm อุณหภูมิ 27°C (300 K) จงหามวลแก๊ส (R = 0.0821 L·atm/(mol·K))<br>
+        n = PV/RT = (5×10)/(0.0821×300) ≈ 2.03 mol<br>
+        มวล = n×M ≈ 2.03×32 ≈ <strong>65 g</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">💨</div>ทฤษฎีจลน์ของแก๊ส (Kinetic Theory)</div>
+      <div class="def-box">
+        <div class="def-label">สมมติฐานหลัก</div>
+        • โมเลกุลแก๊สเคลื่อนที่อย่างสุ่มและต่อเนื่องเป็นเส้นตรง<br>
+        • การชนระหว่างโมเลกุลและกับผนังภาชนะเป็นการชนแบบยืดหยุ่นสมบูรณ์<br>
+        • ปริมาตรของโมเลกุลเองน้อยมากเมื่อเทียบกับปริมาตรภาชนะ<br>
+        • ไม่มีแรงดึงดูด/ผลักระหว่างโมเลกุล ยกเว้นขณะชนกัน
+      </div>
+      <div class="math-block">
+        พลังงานจลน์เฉลี่ยต่อโมเลกุล:<br>
+        KE_เฉลี่ย = (3/2)kT
+      </div>
+      <div class="math-block">
+        อัตราเร็ว rms:<br>
+        v_rms = √(3kT/m) = √(3RT/M)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        พลังงานจลน์เฉลี่ยของโมเลกุลแก๊สที่ 27°C (300 K)<br>
+        KE = (3/2)(1.38×10⁻²³)(300) ≈ <strong>6.21×10⁻²¹ J</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ข้อสังเกตสำคัญ</div>
+        พลังงานจลน์เฉลี่ยขึ้นอยู่กับ<strong>อุณหภูมิเท่านั้น</strong> ไม่ขึ้นกับชนิดของแก๊ส แต่อัตราเร็ว rms ขึ้นกับมวลโมลาร์ด้วย — แก๊สที่เบากว่าจะเคลื่อนที่เร็วกว่าที่อุณหภูมิเดียวกัน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: อุณหพลศาสตร์ ===== -->
+  <div class="section" id="thermo">
+    <div class="section-heading"><span>หัวข้อ 8</span> · กฎข้อที่หนึ่งของอุณหพลศาสตร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚡</div>งานและพลังงานภายใน</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        พลังงานภายใน (Internal Energy, U) คือ ผลรวมพลังงานจลน์และพลังงานศักย์ของโมเลกุลทั้งหมดในระบบ สำหรับแก๊สอุดมคติแบบอะตอมเดี่ยว U ขึ้นกับอุณหภูมิเท่านั้น
+      </div>
+      <div class="math-block">U = (3/2)nRT</div>
+      <p>งานที่แก๊สทำขณะขยายตัวด้วยความดันคงที่: <span class="math">W = PΔV</span></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔁</div>กฎข้อที่หนึ่งของอุณหพลศาสตร์</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การเปลี่ยนแปลงพลังงานภายในของระบบ เท่ากับความร้อนที่ระบบได้รับ ลบด้วยงานที่ระบบทำให้สิ่งแวดล้อม (เป็นการอนุรักษ์พลังงานรูปแบบหนึ่ง)
+      </div>
+      <div class="math-block">ΔU = Q − W</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แก๊สอุดมคติได้รับความร้อน 500 J ขณะขยายตัวด้วยความดันคงที่และทำงานให้สิ่งแวดล้อม 200 J<br>
+        ΔU = 500 − 200 = <strong>300 J</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔀</div>กระบวนการทางอุณหพลศาสตร์แบบต่าง ๆ</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>Isobaric (P คงที่)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">W = PΔV, ทั้ง Q, W, ΔU มีค่าไม่เป็นศูนย์</p>
+        </div>
+        <div class="mini-card">
+          <h4>Isochoric (V คงที่)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">W = 0 (ไม่มีการขยาย/หด) → ΔU = Q ทั้งหมด</p>
+        </div>
+        <div class="mini-card">
+          <h4>Isothermal (T คงที่)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ΔU = 0 (แก๊สอุดมคติ) → Q = W ทั้งหมด</p>
+        </div>
+        <div class="mini-card">
+          <h4>Adiabatic (Q = 0)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ไม่มีการถ่ายเทความร้อน → ΔU = −W</p>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        เครื่องหมายของ Q และ W ขึ้นกับทิศทาง: Q เป็นบวกเมื่อระบบ<strong>รับ</strong>ความร้อน, W เป็นบวกเมื่อระบบ<strong>ทำงานให้</strong>สิ่งแวดล้อม (แก๊สขยายตัว)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">8 ข้อ เรียงจากง่ายไปยาก ครอบคลุมทั้งความร้อนและแก๊ส เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== EXAM: โจทย์เตรียมสอบ ===== -->
+  <div class="section" id="exam">
+    <div class="section-heading"><span>📋</span> โจทย์เตรียมสอบ A-Level ความร้อนและแก๊ส</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">โจทย์แนวข้อสอบ A-Level วิชาฟิสิกส์ เรื่องความร้อนและแก๊ส คำนวณเชิงตัวเลขครบทุกหัวข้อ</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบายทีละขั้นตอน อย่าลืมแปลงหน่วยอุณหภูมิเป็นเคลวินก่อนแทนค่าในสูตรแก๊สเสมอ
+    </div>
+    <div id="exam-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 8 ข้อ =====
+const answered = [];
+const answeredEX = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — อุณหภูมิ",
+    q: "อุณหภูมิ 37°C เท่ากับกี่เคลวิน?",
+    opts: ["300 K", "310 K", "273 K", "337 K"],
+    ans: 1,
+    explain: "ใช้สูตรแปลงหน่วย:\nT(K) = T(°C) + 273\nT(K) = 37 + 273 = 310 K ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — ความร้อนจำเพาะ",
+    q: "น้ำมวล 2 kg อุณหภูมิเพิ่มจาก 20°C เป็น 80°C ใช้ความร้อนกี่ kJ (c_น้ำ = 4,200 J/(kg·K))",
+    opts: ["420 kJ", "504 kJ", "600 kJ", "336 kJ"],
+    ans: 1,
+    explain: "ใช้สูตร Q = mcΔT\nΔT = 80 − 20 = 60°C (ผลต่างอุณหภูมิใช้ °C หรือ K ก็ได้ค่าเท่ากัน)\nQ = 2 × 4,200 × 60 = 504,000 J = 504 kJ ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — การถ่ายเทความร้อน",
+    q: "ข้อใดเป็นตัวอย่างของ 'การพาความร้อน' (convection)",
+    opts: [
+      "ความร้อนจากเตาไฟทำให้ด้ามช้อนโลหะร้อนขึ้นทั้งด้าม",
+      "การเกิดลมบก-ลมทะเล เนื่องจากอากาศร้อนลอยตัวขึ้น",
+      "ความร้อนจากดวงอาทิตย์เดินทางผ่านอวกาศมาถึงโลก",
+      "การใส่เสื้อสีดำแล้วรู้สึกร้อนกว่าเสื้อสีขาว"
+    ],
+    ans: 1,
+    explain: "การพาความร้อน (convection) คือการถ่ายเทความร้อนโดยการเคลื่อนที่ของของไหลเอง\n\n• ตัวเลือก ก: ความร้อนถ่ายผ่านเนื้อโลหะที่ไม่เคลื่อนที่ → เป็นการนำความร้อน (conduction)\n• ตัวเลือก ข: อากาศร้อนลอยตัวขึ้น อากาศเย็นไหลเข้ามาแทนที่ เกิดการหมุนเวียนของของไหล → เป็นการพาความร้อน ✓\n• ตัวเลือก ค: เดินทางผ่านสุญญากาศ ไม่มีตัวกลาง → เป็นการแผ่รังสี (radiation)\n• ตัวเลือก ง: เกี่ยวกับการดูดกลืนรังสี ไม่ใช่การพา"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ความร้อนแฝง",
+    q: "น้ำแข็งมวล 500 g อุณหภูมิ 0°C ต้องการความร้อนกี่ kJ เพื่อหลอมเป็นน้ำทั้งหมดที่ 0°C (L_f = 334,000 J/kg)",
+    opts: ["83.5 kJ", "167 kJ", "334 kJ", "500 kJ"],
+    ans: 1,
+    explain: "ระหว่างการเปลี่ยนสถานะ ใช้สูตร Q = mL\nQ = 0.5 kg × 334,000 J/kg = 167,000 J = 167 kJ ✓\n\nข้อควรระวัง: อุณหภูมิไม่เปลี่ยนแปลงระหว่างการหลอมเหลว จึงใช้ Q = mL ไม่ใช่ Q = mcΔT"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การขยายตัว",
+    q: "แท่งเหล็กยาว 10 m ที่ 20°C (α = 12×10⁻⁶ /°C) อุณหภูมิเพิ่มเป็น 45°C ความยาวเพิ่มขึ้นกี่มิลลิเมตร",
+    opts: ["1.5 มม.", "3 มม.", "6 มม.", "30 มม."],
+    ans: 1,
+    explain: "ใช้สูตรการขยายตัวเชิงเส้น: ΔL = L₀αΔT\nΔT = 45 − 20 = 25°C\nΔL = 10 × 12×10⁻⁶ × 25 = 0.003 m = 3 มม. ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — กฎของบอยล์",
+    q: "แก๊สปริมาตร 4 L ความดัน 2 atm ถูกอัดจนความดันเป็น 8 atm ที่อุณหภูมิเดิม จงหาปริมาตรใหม่",
+    opts: ["0.5 L", "1 L", "2 L", "16 L"],
+    ans: 1,
+    explain: "ที่อุณหภูมิคงที่ ใช้กฎของบอยล์: P₁V₁ = P₂V₂\n2 × 4 = 8 × V₂\n8 = 8V₂ → V₂ = 1 L ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — กฎรวมของแก๊ส",
+    q: "แก๊สปริมาตร 2 L ความดัน 1 atm อุณหภูมิ 27°C (300 K) ถ้าความดันเพิ่มเป็น 3 atm และปริมาตรลดเหลือ 1 L จงหาอุณหภูมิสุดท้าย",
+    opts: ["150 K", "300 K", "450 K", "900 K"],
+    ans: 2,
+    explain: "ใช้กฎรวมของแก๊ส: P₁V₁/T₁ = P₂V₂/T₂\n(1×2)/300 = (3×1)/T₂\n2/300 = 3/T₂\nT₂ = (3×300)/2 = 900/2 = 450 K ✓\n\nข้อควรระวัง: ต้องใช้อุณหภูมิหน่วยเคลวินเสมอในสูตรนี้"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — แก๊สอุดมคติ",
+    q: "แก๊สอุดมคติปริมาตร 24.6 L ที่อุณหภูมิ 27°C (300 K) ความดัน 1 atm (101,325 Pa) จงหาจำนวนโมลของแก๊ส (R = 8.314 J/(mol·K))",
+    opts: ["0.5 mol", "1 mol", "2 mol", "24.6 mol"],
+    ans: 1,
+    explain: "แปลงหน่วยให้เป็น SI: V = 24.6 L = 0.0246 m³\nใช้สมการแก๊สอุดมคติ: n = PV/RT\nn = (101,325 × 0.0246)/(8.314 × 300)\nn = 2,492.6/2,494.2 ≈ 1 mol ✓\n\n(นี่คือค่าปริมาตรโมลาร์มาตรฐานของแก๊สอุดมคติที่ 1 atm, 300 K โดยประมาณ)"
+  }
+];
+
+// ===== โจทย์เตรียมสอบ A-Level =====
+const examQuestions = [
+  {
+    topic: "🌡️ อุณหภูมิ",
+    q: "เทอร์โมมิเตอร์แบบ X วัดจุดเยือกแข็งของน้ำได้ 20°X และจุดเดือดได้ 220°X จงหาว่าอุณหภูมิ 60°C จะอ่านค่าได้กี่ °X",
+    opts: ["120 °X", "140 °X", "160 °X", "100 °X", "180 °X"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ตั้งสมการสัดส่วนระยะห่างจากจุดเยือกแข็งให้เท่ากันทั้งสองมาตรา\n(T_X − 20)/(220 − 20) = (T_C − 0)/(100 − 0)\n\nขั้นที่ 2: แทนค่า T_C = 60\n(T_X − 20)/200 = 60/100 = 0.6\n\nขั้นที่ 3: แก้สมการหา T_X\nT_X − 20 = 0.6 × 200 = 120\nT_X = 120 + 20 = 140 °X ✓"
+  },
+  {
+    topic: "🔥 การนำความร้อน",
+    q: "แผ่นโลหะหนา 0.02 m พื้นที่ 0.5 m² มีค่าการนำความร้อน k = 200 W/(m·K) ผลต่างอุณหภูมิระหว่างสองด้าน 50°C จงหาอัตราการถ่ายเทความร้อนผ่านแผ่นนี้",
+    opts: ["500 W", "2,500 W", "25,000 W", "250,000 W", "2,500,000 W"],
+    ans: 3,
+    explain: "ใช้สูตรอัตราการนำความร้อน: Q/t = kAΔT/L\n\nแทนค่า:\nQ/t = (200 × 0.5 × 50) / 0.02\n\nคำนวณตัวเศษก่อน: 200 × 0.5 = 100, 100 × 50 = 5,000\n\nQ/t = 5,000 / 0.02 = 250,000 W ✓\n\n(ค่าที่สูงมากนี้สมเหตุสมผล เพราะโลหะมีค่า k สูงและแผ่นบางมาก ทำให้นำความร้อนได้ดีมาก)"
+  },
+  {
+    topic: "⚖️ แคลอรีมิเตอร์",
+    q: "น้ำร้อน 200 g อุณหภูมิ 80°C ผสมกับน้ำเย็น 300 g อุณหภูมิ 20°C ในภาชนะที่ไม่สูญเสียความร้อนออกสู่ภายนอก จงหาอุณหภูมิสมดุลสุดท้าย",
+    opts: ["36°C", "40°C", "44°C", "50°C", "60°C"],
+    ans: 2,
+    explain: "ใช้หลักการอนุรักษ์พลังงานความร้อน: Q_คาย = Q_ดูด\nน้ำชนิดเดียวกัน ค่า c ตัดกันได้:\nm₁(T₁ − T_f) = m₂(T_f − T₂)\n\nแทนค่า:\n200(80 − T_f) = 300(T_f − 20)\n16,000 − 200T_f = 300T_f − 6,000\n16,000 + 6,000 = 300T_f + 200T_f\n22,000 = 500T_f\nT_f = 44°C ✓"
+  },
+  {
+    topic: "🧊 กราฟความร้อน",
+    q: "น้ำแข็งมวล 100 g อุณหภูมิ −10°C ต้องการความร้อนทั้งหมดกี่ kJ จึงจะกลายเป็นน้ำที่ 20°C ทั้งหมด (c_น้ำแข็ง = 2,100 J/(kg·K), L_f = 334,000 J/kg, c_น้ำ = 4,200 J/(kg·K))",
+    opts: ["8.4 kJ", "33.4 kJ", "41.8 kJ", "43.9 kJ", "50 kJ"],
+    ans: 3,
+    explain: "แบ่งการคำนวณเป็น 3 ขั้นตอนตามกราฟความร้อน:\n\nขั้นที่ 1: อุ่นน้ำแข็งจาก −10°C ถึง 0°C\nQ₁ = mc_iceΔT = 0.1 × 2,100 × 10 = 2,100 J\n\nขั้นที่ 2: หลอมน้ำแข็งเป็นน้ำที่ 0°C (อุณหภูมิคงที่)\nQ₂ = mL_f = 0.1 × 334,000 = 33,400 J\n\nขั้นที่ 3: อุ่นน้ำจาก 0°C ถึง 20°C\nQ₃ = mc_waterΔT = 0.1 × 4,200 × 20 = 8,400 J\n\nรวมทั้งหมด: Q = Q₁ + Q₂ + Q₃ = 2,100 + 33,400 + 8,400 = 43,900 J = 43.9 kJ ✓"
+  },
+  {
+    topic: "📏 การขยายตัว",
+    q: "ถังแก้วบรรจุน้ำมันเต็มพอดีที่ 10°C ปริมาตร 2 L (β_น้ำมัน = 9×10⁻⁴ /°C, β_แก้ว = 2.7×10⁻⁵ /°C) เมื่ออุณหภูมิเพิ่มเป็น 60°C น้ำมันจะล้นออกมากี่ mL",
+    opts: ["45 mL", "87.3 mL", "90 mL", "100 mL", "873 mL"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาสัมประสิทธิ์การขยายตัวสุทธิ (เพราะภาชนะแก้วก็ขยายตัวด้วย)\nβ_สุทธิ = β_น้ำมัน − β_แก้ว = 9×10⁻⁴ − 2.7×10⁻⁵ = 8.73×10⁻⁴ /°C\n\nขั้นที่ 2: หาปริมาตรที่ล้นออก\nΔT = 60 − 10 = 50°C\nΔV = V₀ × β_สุทธิ × ΔT = 2,000 mL × 8.73×10⁻⁴ × 50\nΔV = 2,000 × 0.04365 = 87.3 mL ✓"
+  },
+  {
+    topic: "🔄 กฎของชาร์ล",
+    q: "ลูกโป่งมีปริมาตร 3 L ที่อุณหภูมิ 27°C (300 K) ถ้าความดันคงที่ อุณหภูมิเพิ่มเป็น 87°C (360 K) จงหาปริมาตรใหม่",
+    opts: ["2.5 L", "3.0 L", "3.3 L", "3.6 L", "4.0 L"],
+    ans: 3,
+    explain: "ที่ความดันคงที่ ใช้กฎของชาร์ล: V₁/T₁ = V₂/T₂\n3/300 = V₂/360\nV₂ = (3 × 360)/300 = 1,080/300 = 3.6 L ✓"
+  },
+  {
+    topic: "🌡️ กฎของเกย์-ลูสแซก",
+    q: "ถังแก๊สปิดสนิทปริมาตรคงที่ ความดันเริ่มต้น 2 atm ที่ 27°C (300 K) ถ้าอุณหภูมิเพิ่มเป็น 127°C (400 K) จงหาความดันสุดท้าย",
+    opts: ["1.5 atm", "2 atm", "8/3 atm (≈2.67 atm)", "3 atm", "4 atm"],
+    ans: 2,
+    explain: "ที่ปริมาตรคงที่ ใช้กฎของเกย์-ลูสแซก: P₁/T₁ = P₂/T₂\n2/300 = P₂/400\nP₂ = (2 × 400)/300 = 800/300 = 8/3 ≈ 2.67 atm ✓"
+  },
+  {
+    topic: "🧮 กฎรวมของแก๊ส",
+    q: "แก๊สปริมาณคงที่บรรจุในถังปริมาตร 5 L ความดัน 4 atm อุณหภูมิ 25°C (298 K) ถูกปล่อยเข้าสู่ถังใหม่ปริมาตร 10 L ที่อุณหภูมิ 100°C (373 K) จงหาความดันสุดท้ายในถังใหม่",
+    opts: ["0.5 atm", "1.25 atm", "2.5 atm", "5 atm", "10 atm"],
+    ans: 2,
+    explain: "ใช้กฎรวมของแก๊ส: P₁V₁/T₁ = P₂V₂/T₂\n(4×5)/298 = (P₂×10)/373\n20/298 = 10P₂/373\nP₂ = (20 × 373)/(298 × 10) = 7,460/2,980 ≈ 2.5 atm ✓"
+  },
+  {
+    topic: "⚗️ แก๊สอุดมคติ",
+    q: "ถังบรรจุแก๊สออกซิเจน (O₂, มวลโมลาร์ 32 g/mol) ปริมาตร 10 L ความดัน 5 atm อุณหภูมิ 27°C (300 K) จงหามวลของแก๊สออกซิเจนในถัง (R = 0.0821 L·atm/(mol·K))",
+    opts: ["5 g", "16 g", "32 g", "65 g", "130 g"],
+    ans: 3,
+    explain: "ขั้นที่ 1: หาจำนวนโมลจากสมการแก๊สอุดมคติ\nn = PV/RT = (5 × 10)/(0.0821 × 300) = 50/24.63 ≈ 2.03 mol\n\nขั้นที่ 2: หามวลจากจำนวนโมล\nมวล = n × M = 2.03 × 32 ≈ 65 g ✓"
+  },
+  {
+    topic: "💨 ทฤษฎีจลน์ของแก๊ส",
+    q: "จงหาอัตราเร็ว rms ของโมเลกุลแก๊สไฮโดรเจน (H₂, มวลโมลาร์ 2×10⁻³ kg/mol) ที่อุณหภูมิ 300 K (R = 8.314 J/(mol·K))",
+    opts: ["500 m/s", "965 m/s", "1,930 m/s", "3,860 m/s", "5,000 m/s"],
+    ans: 2,
+    explain: "ใช้สูตรอัตราเร็ว rms: v_rms = √(3RT/M)\n\nแทนค่า:\nv_rms = √[(3 × 8.314 × 300)/(2×10⁻³)]\n= √(7,482.6/0.002)\n= √3,741,300\n≈ 1,934 m/s ≈ 1,930 m/s ✓\n\n(สังเกตว่าไฮโดรเจนซึ่งเป็นแก๊สที่เบามาก จึงมีอัตราเร็ว rms สูงมากเมื่อเทียบกับแก๊สทั่วไป)"
+  },
+  {
+    topic: "⚡ พลังงานจลน์เฉลี่ย",
+    q: "พลังงานจลน์เฉลี่ยของโมเลกุลแก๊สที่อุณหภูมิ 27°C (300 K) มีค่าเท่าไร (k = 1.38×10⁻²³ J/K)",
+    opts: ["1.38×10⁻²³ J", "2.07×10⁻²¹ J", "4.14×10⁻²¹ J", "6.21×10⁻²¹ J", "8.28×10⁻²¹ J"],
+    ans: 3,
+    explain: "ใช้สูตรพลังงานจลน์เฉลี่ยต่อโมเลกุล: KE_เฉลี่ย = (3/2)kT\n\nแทนค่า:\nKE = 1.5 × 1.38×10⁻²³ × 300\n= 1.5 × 4.14×10⁻²¹\n= 6.21×10⁻²¹ J ✓\n\nข้อสังเกต: พลังงานจลน์เฉลี่ยขึ้นกับอุณหภูมิเท่านั้น ไม่ขึ้นกับชนิดของแก๊ส"
+  },
+  {
+    topic: "🔁 กฎข้อที่หนึ่งของอุณหพลศาสตร์",
+    q: "แก๊สอุดมคติได้รับความร้อน 500 J ขณะขยายตัวด้วยความดันคงที่และทำงานให้สิ่งแวดล้อม 200 J จงหาการเปลี่ยนแปลงพลังงานภายในของแก๊ส",
+    opts: ["−300 J", "200 J", "300 J", "500 J", "700 J"],
+    ans: 2,
+    explain: "ใช้กฎข้อที่หนึ่งของอุณหพลศาสตร์: ΔU = Q − W\n\nโดย Q = 500 J (ระบบรับความร้อน จึงเป็นบวก)\nW = 200 J (แก๊สทำงานให้สิ่งแวดล้อม จึงเป็นบวก)\n\nΔU = 500 − 200 = 300 J ✓\n\nพลังงานภายในของแก๊สเพิ่มขึ้น 300 J"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildExam() {
+  const container = document.getElementById('exam-container');
+  let currentTopic = '';
+  examQuestions.forEach((q, idx) => {
+    if (q.topic !== currentTopic) {
+      currentTopic = q.topic;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(255,122,69,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + currentTopic + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `excard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${examQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(255,122,69,0.15); padding:2px 10px; border-radius:20px">${q.topic}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="exopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="exfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkExam(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkExam(qIdx, optIdx) {
+  if (answeredEX[qIdx]) return;
+  answeredEX[qIdx] = true;
+  const q = examQuestions[qIdx];
+  const opts = document.querySelectorAll(`#excard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`exfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildExam();
+</script>
+</body>
+</html>

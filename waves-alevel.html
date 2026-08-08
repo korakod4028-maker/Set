@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คลื่น | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #0d1a40 50%, #0a2230 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '〜 ∿ λ f T v ω β Δ';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 540px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 12px;
+    text-align: center;
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* WAVE DIAGRAM */
+  .wave-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>บทที่ว่าด้วย<span>คลื่น</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level เรื่องคลื่นกล คลื่นเสียง และคลื่นแม่เหล็กไฟฟ้า</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">13</div><div class="stat-label">โจทย์แนว A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="w1">1. ธรรมชาติของคลื่น</button>
+  <button class="tab-btn" data-sec="w2">2. สมการคลื่น</button>
+  <button class="tab-btn" data-sec="w3">3. การซ้อนทับ/แทรกสอด</button>
+  <button class="tab-btn" data-sec="w4">4. คลื่นนิ่ง</button>
+  <button class="tab-btn" data-sec="w5">5. คลื่นเสียง</button>
+  <button class="tab-btn" data-sec="w6">6. ดอปเพลอร์</button>
+  <button class="tab-btn" data-sec="w7">7. คลื่นแม่เหล็กไฟฟ้า</button>
+  <button class="tab-btn" data-sec="w8">8. การเลี้ยวเบน/แทรกสอดของแสง</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 โจทย์แนว A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: ธรรมชาติของคลื่น ===== -->
+  <div class="section active" id="w1">
+    <div class="section-heading"><span>บทที่ 1</span> · ธรรมชาติของคลื่น</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">〜</div>คลื่นคืออะไร?</div>
+      <p>คลื่น (Wave) คือ <strong>การถ่ายโอนพลังงานจากจุดหนึ่งไปยังอีกจุดหนึ่ง โดยไม่มีการถ่ายโอนเนื้อสาร (มวล) ไปด้วย</strong> อนุภาคของตัวกลางเพียงแค่สั่นอยู่กับที่ ไม่ได้เคลื่อนที่ตามคลื่นไป</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        คลื่น คือ การแผ่หรือการส่งผ่านพลังงานที่เกิดจากการสั่นของแหล่งกำเนิด ผ่านตัวกลางหรือสุญญากาศ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        โยนก้อนหินลงน้ำ → ระลอกน้ำแผ่ออกไป แต่เศษใบไม้ที่ลอยอยู่จะสั่นขึ้น-ลงอยู่กับที่ ไม่ได้ลอยตามคลื่นออกไป
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔀</div>ประเภทของคลื่น</div>
+      <div class="sub-heading">แบ่งตามการอาศัยตัวกลาง</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>คลื่นกล (Mechanical Wave)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ต้องอาศัยตัวกลางในการเคลื่อนที่ เช่น คลื่นน้ำ คลื่นเสียง คลื่นในเส้นเชือก</p>
+        </div>
+        <div class="mini-card">
+          <h4>คลื่นแม่เหล็กไฟฟ้า (EM Wave)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ไม่ต้องอาศัยตัวกลาง เคลื่อนที่ในสุญญากาศได้ เช่น แสง คลื่นวิทยุ รังสีเอกซ์</p>
+        </div>
+      </div>
+      <div class="sub-heading">แบ่งตามทิศทางการสั่นเทียบกับทิศการเคลื่อนที่</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>คลื่นตามขวาง (Transverse)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">อนุภาคสั่น <strong>ตั้งฉาก</strong> กับทิศการเคลื่อนที่ของคลื่น เช่น คลื่นในเส้นเชือก คลื่นน้ำ คลื่นแสง</p>
+        </div>
+        <div class="mini-card">
+          <h4>คลื่นตามยาว (Longitudinal)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">อนุภาคสั่น <strong>ขนานไปกับ</strong> ทิศการเคลื่อนที่ของคลื่น เช่น คลื่นเสียง คลื่นสปริง</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        คลื่นแม่เหล็กไฟฟ้า "ทุกชนิด" เป็นคลื่นตามขวางเสมอ ส่วนคลื่นเสียงเป็นคลื่นตามยาวเสมอ (อาศัยการอัด-ขยายของตัวกลาง)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📏</div>ส่วนประกอบของคลื่น</div>
+      <div class="wave-container">
+        <svg width="480" height="200" viewBox="0 0 480 200">
+          <rect width="480" height="200" rx="10" fill="#141828"/>
+          <line x1="20" y1="100" x2="460" y2="100" stroke="#4a5580" stroke-width="1"/>
+          <path d="M 20 100 Q 55 30, 90 100 T 160 100 T 230 100 T 300 100 T 370 100 T 440 100" fill="none" stroke="#6c63ff" stroke-width="3"/>
+          <line x1="55" y1="100" x2="55" y2="35" stroke="#00d4aa" stroke-width="1.5" stroke-dasharray="3,3"/>
+          <text x="60" y="55" fill="#00d4aa" font-size="13">แอมพลิจูด (A)</text>
+          <circle cx="55" cy="35" r="3" fill="#00d4aa"/>
+          <text x="35" y="120" fill="#ffd93d" font-size="12">สันคลื่น</text>
+          <text x="150" y="185" fill="#ffd93d" font-size="12">ท้องคลื่น</text>
+          <line x1="55" y1="150" x2="195" y2="150" stroke="#ff6b6b" stroke-width="1.5"/>
+          <line x1="55" y1="142" x2="55" y2="158" stroke="#ff6b6b" stroke-width="1.5"/>
+          <line x1="195" y1="142" x2="195" y2="158" stroke="#ff6b6b" stroke-width="1.5"/>
+          <text x="90" y="170" fill="#ff6b6b" font-size="13">ความยาวคลื่น (λ)</text>
+        </svg>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">A</div>
+          <div class="sym-name">แอมพลิจูด (Amplitude)</div>
+          <div class="sym-desc">การกระจัดสูงสุดจากแนวสมดุล (หน่วย: เมตร)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">λ</div>
+          <div class="sym-name">ความยาวคลื่น (Wavelength)</div>
+          <div class="sym-desc">ระยะระหว่างจุดที่เฟสตรงกัน 1 ลูกคลื่นเต็ม (เมตร)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">T</div>
+          <div class="sym-name">คาบ (Period)</div>
+          <div class="sym-desc">เวลาที่ใช้ครบ 1 รอบการสั่น (วินาที)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">f</div>
+          <div class="sym-name">ความถี่ (Frequency)</div>
+          <div class="sym-desc">จำนวนรอบต่อวินาที f = 1/T (เฮิรตซ์, Hz)</div>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ความถี่ของคลื่นขึ้นอยู่กับ<strong>แหล่งกำเนิด</strong>เท่านั้น จะไม่เปลี่ยนแม้คลื่นจะเดินทางผ่านตัวกลางต่างชนิดกัน (แต่ความเร็วและความยาวคลื่นเปลี่ยนได้)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: สมการคลื่น ===== -->
+  <div class="section" id="w2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · สมการคลื่นและอัตราเร็วคลื่น</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧮</div>ความสัมพันธ์พื้นฐาน</div>
+      <div class="math-block">
+        v = fλ &nbsp; (อัตราเร็ว = ความถี่ × ความยาวคลื่น)<br>
+        f = 1/T &nbsp; (ความถี่ = ส่วนกลับของคาบ)<br>
+        v = λ/T
+      </div>
+      <div class="def-box">
+        <div class="def-label">ตัวแปรและหน่วย</div>
+        v = อัตราเร็วคลื่น (m/s) &nbsp;|&nbsp; f = ความถี่ (Hz) &nbsp;|&nbsp; λ = ความยาวคลื่น (m) &nbsp;|&nbsp; T = คาบ (s)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        คลื่นน้ำมีความถี่ 5 Hz ความยาวคลื่น 0.4 m จงหาอัตราเร็วคลื่น<br><br>
+        v = fλ = 5 × 0.4 = <strong>2 m/s</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📈</div>กราฟคลื่น: y-x กับ y-t</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>กราฟ y-x (ภาพนิ่ง ณ เวลาหนึ่ง)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">แกนนอนคือระยะทาง x บอก<strong>ความยาวคลื่น λ</strong> และแอมพลิจูดได้โดยตรง</p>
+        </div>
+        <div class="mini-card">
+          <h4>กราฟ y-t (ที่จุดหนึ่งตามเวลา)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">แกนนอนคือเวลา t บอก<strong>คาบ T</strong> และแอมพลิจูดได้โดยตรง</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคอ่านกราฟ</div>
+        กราฟ y-x → อ่านค่า λ (แกน x ที่ครบ 1 ลูกคลื่น)<br>
+        กราฟ y-t → อ่านค่า T (แกน t ที่ครบ 1 รอบ)<br>
+        นำ λ และ T ที่อ่านได้จากกราฟสองรูป มาคำนวณ v = λ/T ต่อได้
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🌊</div>อัตราเร็วคลื่นในตัวกลางต่าง ๆ</div>
+      <p>อัตราเร็วของคลื่นกลขึ้นอยู่กับ<strong>สมบัติของตัวกลาง</strong> ไม่ขึ้นกับความถี่หรือแอมพลิจูดของคลื่น</p>
+      <table>
+        <tr><th>ตัวกลาง</th><th>ปัจจัยที่มีผล</th></tr>
+        <tr><td>เส้นเชือก</td><td>แรงตึงเชือก (มากขึ้น → เร็วขึ้น), มวลต่อความยาว (มากขึ้น → ช้าลง)</td></tr>
+        <tr><td>เสียงในอากาศ</td><td>อุณหภูมิ (สูงขึ้น → เร็วขึ้น)</td></tr>
+        <tr><td>คลื่นน้ำผิว</td><td>ความลึกของน้ำ (ลึกขึ้น → เร็วขึ้น โดยทั่วไป)</td></tr>
+      </table>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        เมื่อคลื่นเปลี่ยนตัวกลาง อัตราเร็ว v และความยาวคลื่น λ เปลี่ยนไป แต่ความถี่ f คงเดิมเสมอ (เพราะกำหนดโดยแหล่งกำเนิด)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: การซ้อนทับ/แทรกสอด ===== -->
+  <div class="section" id="w3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · การซ้อนทับและการแทรกสอดของคลื่น</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">➕</div>หลักการซ้อนทับ (Superposition)</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        เมื่อคลื่นสองขบวนเคลื่อนที่มาพบกัน ณ จุดใด ๆ การกระจัดรวม (y) ที่จุดนั้นเท่ากับ<strong>ผลรวมทางพีชคณิต</strong>ของการกระจัดของแต่ละคลื่น แล้วแต่ละคลื่นยังคงเคลื่อนที่ต่อไปตามเดิมหลังผ่านพ้นกัน
+      </div>
+      <div class="math-block">y รวม = y1 + y2</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">✨</div>การแทรกสอด (Interference)</div>
+      <p>เกิดขึ้นเมื่อคลื่นอาพันธ์ (coherent) สองขบวน — ความถี่เท่ากัน เฟสสัมพัทธ์คงที่ — ซ้อนทับกัน</p>
+      <div class="grid-2">
+        <div class="mini-card" style="border-color: rgba(0,212,170,0.3)">
+          <h4 style="color:var(--accent2)">แทรกสอดแบบเสริม (Constructive)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">สันคลื่นพบสันคลื่น (หรือท้องพบท้อง) → แอมพลิจูดรวมมากขึ้น</p>
+          <div class="math-block" style="font-size:13px">ผลต่างระยะทาง = nλ<br>(n = 0, 1, 2, ...)</div>
+        </div>
+        <div class="mini-card" style="border-color: rgba(255,107,107,0.3)">
+          <h4 style="color:var(--accent3)">แทรกสอดแบบหักล้าง (Destructive)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">สันคลื่นพบท้องคลื่น → แอมพลิจูดรวมลดลงหรือเป็นศูนย์</p>
+          <div class="math-block" style="font-size:13px">ผลต่างระยะทาง = (n + ½)λ<br>(n = 0, 1, 2, ...)</div>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        ผลต่างระยะทาง (path difference) เป็น<strong>จำนวนเต็มเท่าของ λ</strong> → เสริมกัน<br>
+        ผลต่างระยะทางเป็น<strong>จำนวนเต็มบวกครึ่งของ λ</strong> → หักล้างกัน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🎵</div>บีต (Beats)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เกิดจากคลื่นเสียงสองความถี่ที่<strong>ใกล้เคียงกัน</strong>ซ้อนทับกัน ทำให้ได้ยินเสียงดัง-เบาสลับกันเป็นจังหวะ
+      </div>
+      <div class="math-block">f บีต = |f1 − f2|</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ส้อมเสียงสองอันมีความถี่ 440 Hz และ 444 Hz เล่นพร้อมกัน<br>
+        f บีต = |444 − 440| = <strong>4 ครั้งต่อวินาที</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: คลื่นนิ่ง ===== -->
+  <div class="section" id="w4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · คลื่นนิ่ง (Standing Waves)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🎻</div>การเกิดคลื่นนิ่ง</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        คลื่นนิ่ง เกิดจากคลื่นตกกระทบและคลื่นสะท้อนที่มี<strong>ความถี่และแอมพลิจูดเท่ากัน เคลื่อนที่สวนทางกัน</strong> มาซ้อนทับกันในตัวกลางเดียวกัน
+      </div>
+      <div class="wave-container">
+        <svg width="440" height="150" viewBox="0 0 440 150">
+          <rect width="440" height="150" rx="10" fill="#141828"/>
+          <line x1="20" y1="75" x2="420" y2="75" stroke="#4a5580" stroke-width="1"/>
+          <path d="M 20 75 Q 75 20, 130 75 T 240 75 T 350 75 T 420 75" fill="none" stroke="#6c63ff" stroke-width="2.5"/>
+          <path d="M 20 75 Q 75 130, 130 75 T 240 75 T 350 75 T 420 75" fill="none" stroke="#6c63ff" stroke-width="1" opacity="0.35"/>
+          <circle cx="20" cy="75" r="4" fill="#ff6b6b"/>
+          <circle cx="130" cy="75" r="4" fill="#ff6b6b"/>
+          <circle cx="240" cy="75" r="4" fill="#ff6b6b"/>
+          <circle cx="350" cy="75" r="4" fill="#ff6b6b"/>
+          <text x="0" y="95" fill="#ff6b6b" font-size="11">บัพ</text>
+          <circle cx="75" cy="75" r="4" fill="#00d4aa"/>
+          <circle cx="185" cy="75" r="4" fill="#00d4aa"/>
+          <circle cx="295" cy="75" r="4" fill="#00d4aa"/>
+          <text x="60" y="35" fill="#00d4aa" font-size="11">ปฏิบัพ</text>
+        </svg>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">บัพ (Node)</div>
+          <div class="sym-name">จุดที่ไม่สั่นเลย</div>
+          <div class="sym-desc">การกระจัดเป็นศูนย์ตลอดเวลา</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">ปฏิบัพ (Antinode)</div>
+          <div class="sym-name">จุดที่สั่นแรงที่สุด</div>
+          <div class="sym-desc">แอมพลิจูดสูงสุด</div>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ระยะห่างสำคัญ</div>
+        บัพถึงบัพถัดไป หรือ ปฏิบัพถึงปฏิบัพถัดไป ห่างกัน λ/2 เสมอ<br>
+        บัพถึงปฏิบัพที่อยู่ติดกัน ห่างกัน λ/4
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🪕</div>เส้นเชือกสองปลายตรึง</div>
+      <p>ปลายที่ตรึงแน่น (fixed end) จะเป็น<strong>บัพเสมอ</strong> ดังนั้นความยาวเชือก L ต้องพอดีกับจำนวนครึ่งลูกคลื่น</p>
+      <div class="math-block">
+        L = n(λ/2) &nbsp; เมื่อ n = 1, 2, 3, ... (ฮาร์มอนิกที่ n)<br>
+        λn = 2L/n
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เชือกยาว 1.2 m สั่นเป็นคลื่นนิ่งฮาร์มอนิกที่ 3 (n=3) จงหาความยาวคลื่น<br><br>
+        λ = 2L/n = 2(1.2)/3 = <strong>0.8 m</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ปลายอิสระ (free end) ของเชือกจะเป็น<strong>ปฏิบัพ</strong> ไม่ใช่บัพ — ทำให้สมการความยาวคลื่นของหลอดปลายเปิด/ปิดในเรื่องเสียงต่างจากเส้นเชือกสองปลายตรึง
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: คลื่นเสียง ===== -->
+  <div class="section" id="w5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · คลื่นเสียง (Sound Waves)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔊</div>ธรรมชาติของเสียง</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เสียง คือ คลื่นกลตามยาว เกิดจากการอัดตัวและขยายตัวของตัวกลาง (ต้องมีตัวกลาง ไม่เดินทางในสุญญากาศ)
+      </div>
+      <div class="math-block">v เสียงในอากาศ ≈ 331 + 0.6T &nbsp; (T = อุณหภูมิเป็น °C, v มีหน่วย m/s)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ที่อุณหภูมิ 25°C อัตราเร็วเสียงในอากาศ ≈ 331 + 0.6(25) = <strong>346 m/s</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📢</div>ความเข้มเสียงและระดับความเข้มเสียง</div>
+      <div class="def-box">
+        <div class="def-label">ความเข้มเสียง (Intensity)</div>
+        กำลังเสียงต่อหนึ่งหน่วยพื้นที่ตั้งฉากกับทิศการเคลื่อนที่ หน่วยเป็น W/m² และแปรผกผันกับกำลังสองของระยะทาง
+      </div>
+      <div class="math-block">
+        I = P / (4πr²) &nbsp; (แหล่งกำเนิดจุด แผ่รอบทิศทาง)<br>
+        β = 10 log(I / I₀) &nbsp; (ระดับความเข้มเสียง หน่วย dB, I₀ = 10⁻¹² W/m²)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        ระยะทางเพิ่มเป็น 2 เท่า → ความเข้มเสียงลดลงเหลือ 1/4 (เพราะแปรผกผันกับ r²)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🎺</div>การสั่นพ้องในหลอดเสียง (Resonance)</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>หลอดปลายปิดหนึ่งด้าน</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ปลายปิด = บัพ, ปลายเปิด = ปฏิบัพ<br>เกิดฮาร์มอนิกคี่เท่านั้น</p>
+          <div class="math-block" style="font-size:13px">L = n(λ/4), n = 1, 3, 5, ...</div>
+        </div>
+        <div class="mini-card">
+          <h4>หลอดปลายเปิดสองด้าน</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ปลายเปิดทั้งสอง = ปฏิบัพ<br>เกิดได้ทุกฮาร์มอนิก</p>
+          <div class="math-block" style="font-size:13px">L = n(λ/2), n = 1, 2, 3, ...</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        หลอดเสียงปลายปิดหนึ่งด้าน ยาว 0.5 m เกิดการสั่นพ้องที่ฮาร์มอนิกมูลฐาน (n=1)<br><br>
+        λ = 4L/n = 4(0.5)/1 = <strong>2 m</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: ดอปเพลอร์ ===== -->
+  <div class="section" id="w6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · ปรากฏการณ์ดอปเพลอร์ (Doppler Effect)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🚑</div>หลักการ</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ปรากฏการณ์ดอปเพลอร์ คือ การที่ผู้ฟังได้ยิน<strong>ความถี่เปลี่ยนไปจากความถี่จริงของแหล่งกำเนิด</strong> เมื่อแหล่งกำเนิดเสียงและ/หรือผู้ฟังเคลื่อนที่เข้าหาหรือออกจากกัน
+      </div>
+      <div class="math-block">f' = f × (v ± v_ผู้ฟัง) / (v ∓ v_แหล่งกำเนิด)</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กฎเครื่องหมาย (จำง่าย ๆ)</div>
+        <strong>เข้าหากัน → ความถี่ที่ได้ยินสูงขึ้น</strong> (ใช้เครื่องหมายที่ทำให้เศษส่วนมีค่ามากขึ้น)<br>
+        <strong>ออกจากกัน → ความถี่ที่ได้ยินต่ำลง</strong> (ใช้เครื่องหมายที่ทำให้เศษส่วนมีค่าน้อยลง)<br>
+        เทคนิค: มองจากมุมผู้ฟัง — ถ้าผู้ฟังเข้าหาแหล่งกำเนิดใช้ (+) ที่ตัวเศษ, ถ้าแหล่งกำเนิดเข้าหาผู้ฟังใช้ (−) ที่ตัวส่วน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>ตัวอย่างการคำนวณ</div>
+      <div class="example-box">
+        <div class="ex-label">กรณีที่ 1 — แหล่งกำเนิดเข้าหาผู้ฟังที่อยู่นิ่ง</div>
+        รถพยาบาลความถี่ไซเรน 500 Hz วิ่งเข้าหาผู้ฟังด้วยอัตราเร็ว 20 m/s (v เสียง = 340 m/s)<br><br>
+        f' = f × v/(v − vs) = 500 × 340/(340−20) = 500 × 340/320 ≈ <strong>531 Hz</strong> (สูงขึ้น)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">กรณีที่ 2 — แหล่งกำเนิดเคลื่อนที่ออกจากผู้ฟังที่อยู่นิ่ง</div>
+        f' = f × v/(v + vs) = 500 × 340/360 ≈ <strong>472 Hz</strong> (ต่ำลง)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ความถี่จริงของแหล่งกำเนิด f ไม่เปลี่ยนแปลง สิ่งที่เปลี่ยนคือความถี่ที่<strong>ผู้ฟังได้ยิน (f')</strong> เท่านั้น ซึ่งเป็นผลจากความยาวคลื่นที่ถูกอัดหรือขยายเนื่องจากการเคลื่อนที่สัมพัทธ์
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: คลื่นแม่เหล็กไฟฟ้า ===== -->
+  <div class="section" id="w7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · คลื่นแม่เหล็กไฟฟ้า (Electromagnetic Waves)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📡</div>ธรรมชาติของคลื่นแม่เหล็กไฟฟ้า</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        คลื่นแม่เหล็กไฟฟ้า เกิดจากสนามไฟฟ้าและสนามแม่เหล็กที่สั่นตั้งฉากกัน และตั้งฉากกับทิศการเคลื่อนที่ของคลื่น (คลื่นตามขวางเสมอ)
+      </div>
+      <div class="math-block">c = fλ &nbsp; เมื่อ c = อัตราเร็วแสงในสุญญากาศ = 3×10⁸ m/s</div>
+      <div class="tip-box">
+        <div class="tip-label">💡 คุณสมบัติสำคัญ</div>
+        เดินทางในสุญญากาศได้ด้วยอัตราเร็วเท่ากันเสมอคือ c ไม่ต้องอาศัยตัวกลาง และไม่มีมวล
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🌈</div>สเปกตรัมคลื่นแม่เหล็กไฟฟ้า</div>
+      <p>เรียงลำดับจากความยาวคลื่นมากไปน้อย (ความถี่น้อยไปมาก):</p>
+      <table>
+        <tr><th>ชนิดคลื่น</th><th>ลักษณะการใช้งาน</th></tr>
+        <tr><td>คลื่นวิทยุ</td><td>การสื่อสาร วิทยุ โทรทัศน์</td></tr>
+        <tr><td>ไมโครเวฟ</td><td>เรดาร์ เตาไมโครเวฟ การสื่อสารดาวเทียม</td></tr>
+        <tr><td>อินฟราเรด</td><td>รีโมทคอนโทรล กล้องถ่ายภาพความร้อน</td></tr>
+        <tr><td>แสงที่มองเห็นได้</td><td>การมองเห็น (400–700 นาโนเมตร)</td></tr>
+        <tr><td>อัลตราไวโอเลต (UV)</td><td>ฆ่าเชื้อโรค ทำให้ผิวไหม้แดด</td></tr>
+        <tr><td>รังสีเอกซ์ (X-ray)</td><td>ถ่ายภาพทางการแพทย์ ตรวจสัมภาระ</td></tr>
+        <tr><td>รังสีแกมมา</td><td>ใช้รักษามะเร็ง พลังงานสูงสุด ทะลุทะลวงมากสุด</td></tr>
+      </table>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ยิ่งความถี่สูง → พลังงานต่อโฟตอนยิ่งมาก (E = hf) และความยาวคลื่นยิ่งสั้น — ความสัมพันธ์นี้เป็นไปตามลำดับในตารางเสมอ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: การเลี้ยวเบน/แทรกสอดของแสง ===== -->
+  <div class="section" id="w8">
+    <div class="section-heading"><span>หัวข้อ 8</span> · การเลี้ยวเบนและการแทรกสอดของแสง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✌️</div>การแทรกสอดของยัง (Young's Double Slit)</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        แสงอาพันธ์จากช่องแคบสองช่องที่ห่างกันระยะ d ผ่านไปตกบนฉากที่ระยะ L จะเกิดแถบสว่าง-มืดสลับกัน
+      </div>
+      <div class="math-block">
+        แถบสว่าง (Constructive): &nbsp; d sinθ = nλ &nbsp; (n = 0, 1, 2, ...)<br>
+        แถบมืด (Destructive): &nbsp; d sinθ = (n + ½)λ<br>
+        ระยะห่างระหว่างแถบสว่าง: &nbsp; Δy = λL/d &nbsp; (เมื่อ θ เล็ก)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ช่องแคบคู่ห่างกัน d = 0.2 mm ฉากอยู่ห่าง L = 2 m แสงความยาวคลื่น λ = 600 nm<br><br>
+        Δy = λL/d = (600×10⁻⁹ × 2)/(0.2×10⁻³) = <strong>6×10⁻³ m = 6 mm</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        เงื่อนไขแทรกสอดของแสงคล้ายกับคลื่นทั่วไป: ผลต่างทาง = nλ → สว่าง (เสริมกัน), = (n+½)λ → มืด (หักล้างกัน)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>เกรตติง (Diffraction Grating)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เกรตติง คือ แผ่นที่มีช่องแคบจำนวนมากเรียงชิดกันสม่ำเสมอ ใช้สมการเดียวกับช่องคู่ของยัง
+      </div>
+      <div class="math-block">d sinθ = nλ &nbsp; เมื่อ d = ระยะห่างระหว่างช่อง = 1/(จำนวนเส้นต่อหน่วยความยาว)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เกรตติงมี 5000 เส้นต่อเซนติเมตร → d = 1/5000 cm = 2×10⁻⁴ cm = 2×10⁻⁶ m
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🕳️</div>การเลี้ยวเบนผ่านช่องเดี่ยว (Single Slit Diffraction)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่อแสงผ่านช่องแคบเพียงช่องเดียว (กว้าง a) จะเกิดการเลี้ยวเบน ทำให้เกิดแถบมืดสลับสว่างบนฉาก แต่แถบสว่างกลางจะกว้างและสว่างที่สุด
+      </div>
+      <div class="math-block">แถบมืด (minima): &nbsp; a sinθ = nλ &nbsp; (n = 1, 2, 3, ...)</div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง — อย่าสับสน!</div>
+        สมการช่องเดี่ยว a sinθ = nλ ให้<strong>แถบมืด</strong> แต่สมการช่องคู่ d sinθ = nλ ให้<strong>แถบสว่าง</strong> — โจทย์มักหลอกด้วยสมการหน้าตาเหมือนกันแต่ความหมายตรงข้ามกัน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION: QUIZ ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> · แบบฝึกหัดเตรียมสอบ A-Level (10 ข้อ)</div>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== SECTION: A-LEVEL ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> · โจทย์แนวข้อสอบ A-Level เรื่องคลื่น</div>
+    <p style="color:var(--text-dim); margin-bottom:20px">โจทย์แนวข้อสอบที่สร้างขึ้นให้ครอบคลุมรูปแบบและระดับความยากที่มักออกสอบจริง ครอบคลุมทุกหัวข้อของบทคลื่น</p>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — ธรรมชาติของคลื่น",
+    q: "ข้อใดต่อไปนี้เป็นคลื่นตามยาว (Longitudinal Wave)?",
+    opts: ["คลื่นแสง", "คลื่นในเส้นเชือก", "คลื่นเสียง", "คลื่นวิทยุ"],
+    ans: 2,
+    explain: "คลื่นตามยาว คือ คลื่นที่อนุภาคของตัวกลางสั่นขนานไปกับทิศการเคลื่อนที่ของคลื่น\n\n• คลื่นแสง เป็นคลื่นแม่เหล็กไฟฟ้า → เป็นคลื่นตามขวางเสมอ\n• คลื่นในเส้นเชือก → อนุภาคสั่นตั้งฉากกับทิศเคลื่อนที่ → คลื่นตามขวาง\n• คลื่นเสียง เกิดจากการอัด-ขยายของอากาศในทิศเดียวกับการเคลื่อนที่ → คลื่นตามยาว ✓\n• คลื่นวิทยุ เป็นคลื่นแม่เหล็กไฟฟ้า → คลื่นตามขวาง\n\nดังนั้นคำตอบคือ คลื่นเสียง"
+  },
+  {
+    level: "⭐ ระดับ 1 — สมการคลื่น",
+    q: "คลื่นน้ำมีความถี่ 4 Hz และความยาวคลื่น 0.5 m จงหาอัตราเร็วของคลื่น",
+    opts: ["1 m/s", "2 m/s", "4 m/s", "8 m/s"],
+    ans: 1,
+    explain: "ใช้สูตร v = fλ\n\nแทนค่า: v = 4 × 0.5 = 2 m/s ✓\n\nดังนั้นอัตราเร็วของคลื่นคือ 2 m/s"
+  },
+  {
+    level: "⭐ ระดับ 1 — คลื่นแม่เหล็กไฟฟ้า",
+    q: "คลื่นแม่เหล็กไฟฟ้าชนิดใดมีความยาวคลื่นสั้นที่สุด (พลังงานสูงสุด)?",
+    opts: ["คลื่นวิทยุ", "แสงที่มองเห็นได้", "รังสีเอกซ์", "รังสีแกมมา"],
+    ans: 3,
+    explain: "เรียงลำดับสเปกตรัมคลื่นแม่เหล็กไฟฟ้าจากความยาวคลื่นมากไปน้อย (ความถี่และพลังงานน้อยไปมาก):\nคลื่นวิทยุ → ไมโครเวฟ → อินฟราเรด → แสงที่มองเห็นได้ → อัลตราไวโอเลต → รังสีเอกซ์ → รังสีแกมมา\n\nรังสีแกมมาอยู่ปลายสุดของสเปกตรัม มีความยาวคลื่นสั้นที่สุดและพลังงานต่อโฟตอนสูงที่สุด ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — คลื่นเสียง",
+    q: "อัตราเร็วเสียงในอากาศที่อุณหภูมิ 20°C มีค่าประมาณเท่าใด (ใช้ v = 331 + 0.6T)",
+    opts: ["331 m/s", "337 m/s", "343 m/s", "349 m/s"],
+    ans: 2,
+    explain: "ใช้สูตร v = 331 + 0.6T เมื่อ T คืออุณหภูมิเป็นองศาเซลเซียส\n\nแทนค่า T = 20:\nv = 331 + 0.6(20) = 331 + 12 = 343 m/s ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การแทรกสอด",
+    q: "แหล่งกำเนิดคลื่นอาพันธ์สองจุด A และ B ส่งคลื่นความยาวคลื่น 2 cm ออกมาพร้อมเฟส จุด P อยู่ห่างจาก A และ B เป็นระยะ 20 cm และ 25 cm ตามลำดับ ที่จุด P จะเกิดการแทรกสอดแบบใด",
+    opts: ["เสริมกัน (Constructive)", "หักล้างกัน (Destructive)", "ไม่เกิดการแทรกสอด", "ข้อมูลไม่เพียงพอ"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาผลต่างระยะทาง\nΔL = |25 − 20| = 5 cm\n\nขั้นที่ 2: เทียบกับความยาวคลื่น λ = 2 cm\nΔL/λ = 5/2 = 2.5 = 2 + 0.5\n\nขั้นที่ 3: ตรวจสอบเงื่อนไข\nผลต่างระยะทางเท่ากับ (n + ½)λ เมื่อ n = 2 (เป็นจำนวนเต็มบวกครึ่งลูกคลื่นพอดี)\n→ เข้าเงื่อนไขการหักล้างกัน (Destructive) ✓\n\nถ้าผลต่างเป็นจำนวนเต็มเท่าของ λ (เช่น 4, 6 cm) จึงจะเป็นการเสริมกัน"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — คลื่นนิ่ง",
+    q: "เส้นเชือกสองปลายตรึงยาว 90 cm เกิดคลื่นนิ่งโดยมีบัพทั้งหมด 4 จุด (รวมปลายทั้งสอง) จงหาความยาวคลื่น",
+    opts: ["30 cm", "45 cm", "60 cm", "90 cm"],
+    ans: 2,
+    explain: "ขั้นที่ 1: วิเคราะห์จำนวนบัพ\nเชือกสองปลายตรึง มีบัพที่ปลายทั้งสองข้างเสมอ\nถ้ามีบัพทั้งหมด 4 จุด (รวมปลาย) แสดงว่ามี 3 ช่วงระหว่างบัพ (loop) แต่ละช่วงยาว λ/2\nนั่นคือฮาร์มอนิกที่ n = 3\n\nขั้นที่ 2: ใช้สูตร L = n(λ/2)\n90 = 3(λ/2)\nλ = 90×2/3 = 60 cm ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — คลื่นเสียง",
+    q: "จุดสังเกตอยู่ห่างจากลำโพงเป็นระยะ 2 m วัดความเข้มเสียงได้ I ถ้าเลื่อนออกไปเป็นระยะ 4 m ความเข้มเสียงที่วัดได้จะเป็นเท่าใดเทียบกับค่าเดิม",
+    opts: ["เท่าเดิม", "ลดลงครึ่งหนึ่ง", "ลดลงเหลือ 1/4", "ลดลงเหลือ 1/8"],
+    ans: 2,
+    explain: "ความเข้มเสียงจากแหล่งกำเนิดจุดแปรผกผันกับกำลังสองของระยะทาง\nI ∝ 1/r²\n\nเมื่อระยะทางเพิ่มจาก 2 m เป็น 4 m คือเพิ่มขึ้น 2 เท่า\nดังนั้น I ใหม่ = I เดิม × (1/2²) = I เดิม × 1/4\n\nความเข้มเสียงจะลดลงเหลือ 1/4 ของค่าเดิม ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ดอปเพลอร์",
+    q: "รถพยาบาลเปิดไซเรนความถี่ 600 Hz วิ่งออกห่างจากผู้ฟังที่อยู่นิ่งด้วยอัตราเร็ว 20 m/s (กำหนดอัตราเร็วเสียง = 340 m/s) ผู้ฟังจะได้ยินความถี่ประมาณเท่าใด",
+    opts: ["565 Hz", "600 Hz", "618 Hz", "640 Hz"],
+    ans: 0,
+    explain: "แหล่งกำเนิดเคลื่อนที่ออกห่างจากผู้ฟังที่อยู่นิ่ง ใช้สูตร\nf' = f × v/(v + vs)\n\nแทนค่า: f' = 600 × 340/(340+20) = 600 × 340/360\nf' = 204000/360 ≈ 566.7 Hz\n\nค่าที่ใกล้เคียงที่สุดคือ 565 Hz ✓\n\nสังเกตว่าเมื่อแหล่งกำเนิดเคลื่อนที่ออกห่าง ความถี่ที่ได้ยินจะต่ำกว่าความถี่จริงเสมอ (566.7 < 600)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — การแทรกสอดของแสง",
+    q: "ในการทดลองช่องแคบคู่ของยัง ระยะห่างระหว่างช่อง d = 0.5 mm ฉากอยู่ห่าง L = 1.5 m วัดระยะห่างระหว่างแถบสว่างที่อยู่ติดกันได้ 1.8 mm จงหาความยาวคลื่นของแสงที่ใช้",
+    opts: ["400 nm", "500 nm", "600 nm", "700 nm"],
+    ans: 2,
+    explain: "ใช้สูตรระยะห่างระหว่างแถบสว่าง\nΔy = λL/d\n\nจัดรูปหา λ:\nλ = Δy × d / L\n\nแทนค่า (แปลงหน่วยให้เป็นเมตรทั้งหมด):\nΔy = 1.8×10⁻³ m, d = 0.5×10⁻³ m, L = 1.5 m\n\nλ = (1.8×10⁻³ × 0.5×10⁻³) / 1.5\nλ = (0.9×10⁻⁶) / 1.5\nλ = 0.6×10⁻⁶ m = 600×10⁻⁹ m = 600 nm ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — คลื่นนิ่งในหลอดเสียง",
+    q: "หลอดเสียงปลายปิดหนึ่งด้าน ยาว 40 cm เกิดการสั่นพ้องที่ฮาร์มอนิกที่ 3 (n=3) ถ้าอัตราเร็วเสียงในอากาศขณะนั้นเป็น 340 m/s จงหาความถี่ของการสั่นพ้อง",
+    opts: ["425 Hz", "531 Hz", "637.5 Hz", "850 Hz"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาความยาวคลื่นจากสูตรหลอดปลายปิดหนึ่งด้าน\nL = n(λ/4)  →  λ = 4L/n\n\nแทนค่า: λ = 4(0.40)/3 = 1.6/3 ≈ 0.5333 m\n\nขั้นที่ 2: หาความถี่จาก v = fλ\nf = v/λ = 340/0.5333 ≈ 637.5 Hz ✓\n\nข้อสังเกต: หลอดปลายปิดหนึ่งด้านเกิดได้เฉพาะฮาร์มอนิกคี่ (1, 3, 5, ...) เท่านั้น ซึ่ง n=3 เป็นฮาร์มอนิกคี่จึงเกิดขึ้นได้จริง"
+  }
+];
+
+// ===== โจทย์แนวข้อสอบ A-Level =====
+const alevelQuestions = [
+  {
+    year: "📘 แนวข้อสอบ A-Level — ธรรมชาติของคลื่น",
+    q: "ข้อใดกล่าวถูกต้องเกี่ยวกับคลื่นกล",
+    opts: [
+      "คลื่นกลสามารถเคลื่อนที่ผ่านสุญญากาศได้",
+      "ความถี่ของคลื่นกลจะเปลี่ยนแปลงเมื่อคลื่นเปลี่ยนตัวกลาง",
+      "อนุภาคของตัวกลางเคลื่อนที่ไปพร้อมกับคลื่นในระยะทางไกล",
+      "คลื่นกลอาศัยการสั่นของอนุภาคตัวกลางในการถ่ายโอนพลังงาน"
+    ],
+    ans: 3,
+    explain: "ตรวจแต่ละตัวเลือก:\n\nก. คลื่นกลต้องอาศัยตัวกลางเสมอ ไม่สามารถเคลื่อนที่ผ่านสุญญากาศได้ → ผิด\n\nข. ความถี่ของคลื่นถูกกำหนดโดยแหล่งกำเนิด จะไม่เปลี่ยนแปลงแม้เปลี่ยนตัวกลาง (สิ่งที่เปลี่ยนคือ v และ λ) → ผิด\n\nค. อนุภาคของตัวกลางเพียงสั่นอยู่กับที่ (แกว่งรอบตำแหน่งสมดุล) ไม่ได้เคลื่อนที่ตามคลื่นไปในระยะไกล → ผิด\n\nง. คลื่นกลถ่ายโอนพลังงานผ่านการสั่นของอนุภาคตัวกลางที่ส่งต่อกันเป็นทอด ๆ → ถูกต้อง ✓\n\nดังนั้นคำตอบคือ ข้อ ง"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — สมการคลื่น",
+    q: "คลื่นขบวนหนึ่งมีคาบ 0.02 s และความยาวคลื่น 4 m จงหาอัตราเร็วของคลื่นและความถี่",
+    opts: [
+      "v = 100 m/s, f = 25 Hz",
+      "v = 200 m/s, f = 50 Hz",
+      "v = 150 m/s, f = 40 Hz",
+      "v = 80 m/s, f = 20 Hz"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาความถี่\nf = 1/T = 1/0.02 = 50 Hz\n\nขั้นที่ 2: หาอัตราเร็ว\nv = fλ = 50 × 4 = 200 m/s\n\nดังนั้น v = 200 m/s และ f = 50 Hz ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — การซ้อนทับ/บีต",
+    q: "เครื่องดนตรีสองชิ้นเปล่งเสียงความถี่ 256 Hz และ 260 Hz พร้อมกัน ผู้ฟังจะได้ยินเสียงดัง-เบาสลับกันด้วยความถี่บีตเท่าใด และภายใน 5 วินาที จะได้ยินจังหวะบีตกี่ครั้ง",
+    opts: [
+      "2 Hz, 10 ครั้ง",
+      "4 Hz, 20 ครั้ง",
+      "4 Hz, 10 ครั้ง",
+      "8 Hz, 40 ครั้ง"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาความถี่บีต\nf บีต = |f1 − f2| = |260 − 256| = 4 Hz\n\nขั้นที่ 2: หาจำนวนครั้งใน 5 วินาที\nจำนวนครั้ง = f บีต × เวลา = 4 × 5 = 20 ครั้ง\n\nดังนั้น ความถี่บีต 4 Hz และได้ยิน 20 ครั้ง ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — คลื่นนิ่ง",
+    q: "เชือกเส้นหนึ่งยาว 2 m ปลายทั้งสองตรึงแน่น เมื่อสั่นเชือกจะเกิดคลื่นนิ่งฮาร์มอนิกมูลฐาน (n=1) ด้วยความถี่ 50 Hz จงหาอัตราเร็วคลื่นในเส้นเชือก",
+    opts: ["50 m/s", "100 m/s", "150 m/s", "200 m/s"],
+    ans: 3,
+    explain: "ขั้นที่ 1: หาความยาวคลื่นที่ฮาร์มอนิกมูลฐาน (n=1)\nL = n(λ/2)\n2 = 1(λ/2)\nλ = 4 m\n\nขั้นที่ 2: หาอัตราเร็วคลื่น\nv = fλ = 50 × 4 = 200 m/s ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — คลื่นเสียง",
+    q: "จุด A อยู่ห่างจากลำโพงเป็นระยะ r วัดระดับความเข้มเสียงได้ 60 dB ถ้าเลื่อนออกไปยังจุด B ซึ่งไกลกว่าเดิม 10 เท่า ระดับความเข้มเสียงที่จุด B จะเป็นเท่าใด",
+    opts: ["40 dB", "50 dB", "20 dB", "6 dB"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หาอัตราส่วนความเข้มเสียงใหม่\nเนื่องจาก I ∝ 1/r² และระยะทางเพิ่มขึ้น 10 เท่า\nI ใหม่ = I เดิม / 10² = I เดิม / 100\n\nขั้นที่ 2: หาการเปลี่ยนแปลงระดับความเข้มเสียง\nΔβ = 10 log(I ใหม่ / I เดิม) = 10 log(1/100) = 10 × (−2) = −20 dB\n\nขั้นที่ 3: หาค่าระดับความเข้มเสียงที่จุด B\nβ ใหม่ = 60 − 20 = 40 dB ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ดอปเพลอร์",
+    q: "ผู้ฟังเคลื่อนที่เข้าหาแหล่งกำเนิดเสียงที่อยู่นิ่งด้วยอัตราเร็ว 17 m/s แหล่งกำเนิดมีความถี่ 680 Hz กำหนดอัตราเร็วเสียง = 340 m/s ผู้ฟังจะได้ยินความถี่เท่าใด",
+    opts: ["646 Hz", "680 Hz", "714 Hz", "730 Hz"],
+    ans: 2,
+    explain: "ผู้ฟังเคลื่อนที่เข้าหาแหล่งกำเนิดที่อยู่นิ่ง ใช้สูตร\nf' = f × (v + v ผู้ฟัง)/v\n\nแทนค่า:\nf' = 680 × (340+17)/340 = 680 × 357/340\nf' = 680 × 1.05 = 714 Hz ✓\n\nสังเกตว่าเมื่อผู้ฟังเคลื่อนที่เข้าหาแหล่งกำเนิด ความถี่ที่ได้ยินจะสูงกว่าความถี่จริง (714 > 680)"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — คลื่นแม่เหล็กไฟฟ้า",
+    q: "คลื่นวิทยุ FM มีความถี่ 100 MHz จงหาความยาวคลื่นในสุญญากาศ (กำหนด c = 3×10⁸ m/s)",
+    opts: ["1 m", "2 m", "3 m", "5 m"],
+    ans: 2,
+    explain: "ใช้สูตร c = fλ\n\nจัดรูปหา λ:\nλ = c/f = (3×10⁸) / (100×10⁶) = (3×10⁸)/(1×10⁸)\nλ = 3 m ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — การแทรกสอดของแสง",
+    q: "แสงความยาวคลื่น 500 nm ตกกระทบช่องแคบคู่ที่ห่างกัน d = 1×10⁻⁴ m เกิดแถบมืดแถบแรก (n=0 ในสมการแถบมืด) ทำมุมเบี่ยงเบนเล็ก ๆ กับแนวกลาง จงหาผลต่างระยะทางของแสงจากช่องทั้งสองไปยังตำแหน่งแถบมืดแถบแรกนี้",
+    opts: ["125 nm", "250 nm", "500 nm", "1000 nm"],
+    ans: 1,
+    explain: "เงื่อนไขแถบมืด (destructive) ของช่องคู่: ผลต่างทาง = (n + ½)λ\n\nสำหรับแถบมืดแถบแรก ใช้ n = 0:\nผลต่างทาง = (0 + ½)λ = 0.5 × 500 nm = 250 nm ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — คลื่นเสียง (หลอดเรโซแนนซ์)",
+    q: "หลอดเรโซแนนซ์ปลายเปิดสองด้าน ยาว 68 cm อัตราเร็วเสียงในอากาศ = 340 m/s จงหาความถี่มูลฐาน (n=1) ของการสั่นพ้อง",
+    opts: ["125 Hz", "200 Hz", "250 Hz", "340 Hz"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาความยาวคลื่นที่ฮาร์มอนิกมูลฐาน (n=1) ของหลอดปลายเปิดสองด้าน\nL = n(λ/2)\n0.68 = 1(λ/2)\nλ = 1.36 m\n\nขั้นที่ 2: หาความถี่\nf = v/λ = 340/1.36 = 250 Hz ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — กราฟคลื่น",
+    q: "จากกราฟคลื่น y-x พบว่าระยะห่างระหว่างสันคลื่นสองลูกที่อยู่ติดกันคือ 0.8 m และจากกราฟ y-t ที่จุดหนึ่งพบว่าคลื่นใช้เวลา 0.4 s ในการครบหนึ่งรอบ จงหาอัตราเร็วของคลื่น",
+    opts: ["0.5 m/s", "1 m/s", "2 m/s", "3.2 m/s"],
+    ans: 2,
+    explain: "ขั้นที่ 1: อ่านค่าจากกราฟ\nจากกราฟ y-x: ระยะห่างระหว่างสันคลื่นที่อยู่ติดกัน = ความยาวคลื่น λ = 0.8 m\nจากกราฟ y-t: เวลาที่ครบหนึ่งรอบ = คาบ T = 0.4 s\n\nขั้นที่ 2: หาอัตราเร็วคลื่น\nv = λ/T = 0.8/0.4 = 2 m/s ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — สรุปรวมหลายหัวข้อ",
+    q: "ข้อใดต่อไปนี้ถูกต้องเกี่ยวกับปรากฏการณ์คลื่น",
+    opts: [
+      "คลื่นนิ่งเกิดจากคลื่นสองขบวนที่มีความถี่ต่างกันซ้อนทับกัน",
+      "ที่ตำแหน่งบัพของคลื่นนิ่ง อนุภาคตัวกลางจะมีการกระจัดเป็นศูนย์ตลอดเวลา",
+      "ปรากฏการณ์ดอปเพลอร์ทำให้ความถี่จริงของแหล่งกำเนิดเปลี่ยนแปลงไป",
+      "แสงที่ผ่านช่องแคบเดี่ยวจะให้แถบสว่างตรงตำแหน่งที่ a sinθ = nλ"
+    ],
+    ans: 1,
+    explain: "ตรวจแต่ละตัวเลือก:\n\nก. คลื่นนิ่งเกิดจากคลื่นสองขบวนที่มี ความถี่และแอมพลิจูดเท่ากัน เคลื่อนที่สวนทางกัน ไม่ใช่ความถี่ต่างกัน → ผิด\n\nข. บัพ คือตำแหน่งที่การกระจัดเป็นศูนย์ตลอดเวลา (ไม่สั่นเลย) → ถูกต้อง ✓\n\nค. ดอปเพลอร์ไม่ได้เปลี่ยนความถี่จริงของแหล่งกำเนิด เปลี่ยนเฉพาะความถี่ที่ผู้ฟังได้ยิน (f') เท่านั้น → ผิด\n\nง. สมการ a sinθ = nλ ของช่องเดี่ยวให้ตำแหน่ง แถบมืด ไม่ใช่แถบสว่าง → ผิด\n\nดังนั้นคำตอบคือ ข้อ ข"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — เกรตติง",
+    q: "เกรตติงมี 4000 เส้นต่อเซนติเมตร แสงความยาวคลื่น 600 nm ตกกระทบตั้งฉาก จงหามุมเบี่ยงเบนของแถบสว่างลำดับที่ 1 (n=1)",
+    opts: ["sinθ = 0.12", "sinθ = 0.24", "sinθ = 0.36", "sinθ = 0.48"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาระยะห่างระหว่างช่อง d\nd = 1/(จำนวนเส้นต่อหน่วยความยาว) = 1/4000 cm = 2.5×10⁻⁴ cm = 2.5×10⁻⁶ m\n\nขั้นที่ 2: ใช้สมการเกรตติง d sinθ = nλ\nsinθ = nλ/d = (1 × 600×10⁻⁹)/(2.5×10⁻⁶)\nsinθ = 600×10⁻⁹ / 2.5×10⁻⁶ = 0.24 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — บทประยุกต์",
+    q: "รถไฟเป่าหวูดความถี่ 450 Hz วิ่งเข้าหาสถานีด้วยอัตราเร็ว 30 m/s ในขณะที่มีผู้โดยสารยืนรอที่ชานชาลา (v เสียง = 340 m/s) จงประมาณความถี่ที่ผู้โดยสารได้ยิน",
+    opts: ["407 Hz", "435 Hz", "465 Hz", "489 Hz"],
+    ans: 3,
+    explain: "แหล่งกำเนิด (รถไฟ) เคลื่อนที่เข้าหาผู้ฟังที่อยู่นิ่ง ใช้สูตร\nf' = f × v/(v − vs)\n\nแทนค่า:\nf' = 450 × 340/(340−30) = 450 × 340/310\nf' = 450 × 1.0968 ≈ 489.4 Hz ✓\n\nค่าที่ใกล้เคียงที่สุดคือ 489 Hz — ความถี่ที่ได้ยินสูงกว่าความถี่จริงเพราะรถไฟเคลื่อนที่เข้าหา"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  alevelQuestions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

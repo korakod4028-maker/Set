@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การเคลื่อนที่แนวตรง | ฟิสิกส์ A-Level ม.4</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '∀ ∃ ∩ ∪ ~ → ↔ ∈ ⊂ ∅';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+  .math-latex {
+    font-family: var(--sans);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* VENN DIAGRAM */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+  .reset-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    display: none;
+  }
+  .reset-btn.show { display: inline-block; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* PROGRESS */
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .prog-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .prog-dot.done { background: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>การเคลื่อนที่<span>แนว</span>ตรง</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.4 เตรียมสอบ A-Level วิชาฟิสิกส์ ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">15</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="kin1">1. ระยะทาง/การกระจัด</button>
+  <button class="tab-btn" data-sec="kin2">2. อัตราเร็ว/ความเร็ว</button>
+  <button class="tab-btn" data-sec="kin3">3. ความเร่ง</button>
+  <button class="tab-btn" data-sec="kin4">4. กราฟการเคลื่อนที่</button>
+  <button class="tab-btn" data-sec="kin5">5. สมการ SUVAT</button>
+  <button class="tab-btn" data-sec="kin6">6. การตกอย่างเสรี</button>
+  <button class="tab-btn" data-sec="kin7">7. เคลื่อนที่แนวดิ่งขึ้น-ลง</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: ระยะทางและการกระจัด ===== -->
+  <div class="section active" id="kin1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · ระยะทางและการกระจัด</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📏</div>ระยะทาง (Distance)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ระยะทาง คือ ความยาวทั้งหมดของเส้นทางที่วัตถุเคลื่อนที่ผ่าน เป็น<strong>ปริมาณสเกลาร์</strong> (มีแต่ขนาด ไม่มีทิศทาง) มีค่าเป็น<strong>บวกเสมอ</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เดินจากจุด A ไปจุด B เป็นระยะ 5 เมตร แล้วเดินต่อไปจุด C อีก 3 เมตร<br>
+        ระยะทางรวม = 5 + 3 = 8 เมตร (ไม่ว่าจะเดินไปทิศไหนก็บวกกันตรง ๆ)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">➡️</div>การกระจัด (Displacement)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การกระจัด คือ เวกเตอร์ที่ชี้จาก<strong>ตำแหน่งเริ่มต้น</strong>ไปยัง<strong>ตำแหน่งสุดท้าย</strong> เป็น<strong>ปริมาณเวกเตอร์</strong> (มีทั้งขนาดและทิศทาง) และมีค่าได้ทั้งบวก ลบ หรือศูนย์
+      </div>
+      <div class="venn-container">
+        <svg width="420" height="150" viewBox="0 0 420 150">
+          <rect width="420" height="150" rx="10" fill="#1c2235"/>
+          <line x1="30" y1="100" x2="390" y2="100" stroke="#4a5580" stroke-width="2"/>
+          <circle cx="60" cy="100" r="5" fill="#00d4aa"/>
+          <text x="45" y="130" fill="#00d4aa" font-size="13" font-family="Sarabun">เริ่มต้น (0 m)</text>
+          <circle cx="300" cy="100" r="5" fill="#6c63ff"/>
+          <text x="255" y="130" fill="#a89fff" font-size="13" font-family="Sarabun">ไปหน้า +240 m</text>
+          <path d="M 65 85 Q 180 40 295 85" stroke="#ffd93d" stroke-width="2" fill="none" stroke-dasharray="4,3"/>
+          <text x="150" y="45" fill="#ffd93d" font-size="12" font-family="Sarabun">เดินอ้อม ระยะทาง = 300 m</text>
+          <circle cx="180" cy="100" r="5" fill="#ff6b6b"/>
+          <text x="150" y="130" fill="#ff6b6b" font-size="13" font-family="Sarabun">สุดท้าย (+180 m)</text>
+          <line x1="300" y1="115" x2="185" y2="115" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrow1)"/>
+          <defs><marker id="arrow1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#ff6b6b"/></marker></defs>
+        </svg>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เดินหน้าไป 5 เมตร แล้วถอยหลังกลับมา 2 เมตร<br>
+        ระยะทาง = 5 + 2 = <strong>7 เมตร</strong><br>
+        การกระจัด = 5 − 2 = <strong>3 เมตร (ไปทางหน้า)</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ระยะทาง ≥ |การกระจัด| เสมอ<br>
+        ทั้งสองค่าจะเท่ากันก็ต่อเมื่อวัตถุเคลื่อนที่เป็น<strong>เส้นตรงในทิศทางเดียวโดยไม่เปลี่ยนทิศ</strong><br>
+        ถ้าวัตถุเคลื่อนที่กลับมาที่จุดเริ่มต้นพอดี การกระจัด = 0 แต่ระยะทาง ≠ 0
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        ระยะทาง = เดินจริงกี่เมตร (นับตามที่เดิน) &nbsp;|&nbsp; การกระจัด = ห่างจากจุดเริ่มต้นเท่าไร ไปทิศไหน (เส้นตรงสั้นสุด)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔣</div>สัญลักษณ์และหน่วย</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">s, d</div>
+          <div class="sym-name">ระยะทาง / การกระจัด</div>
+          <div class="sym-desc">หน่วย SI: เมตร (m)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">+/−</div>
+          <div class="sym-name">เครื่องหมายทิศทาง</div>
+          <div class="sym-desc">กำหนดทิศบวกไว้ก่อน แล้วให้ทิศตรงข้ามเป็นลบ</div>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ก่อนทำโจทย์ทุกข้อ</div>
+        ให้กำหนด "ทิศทางบวก" ก่อนเสมอ (เช่น ทิศขวาหรือทิศขึ้นเป็นบวก) แล้วยึดตามนั้นตลอดการคำนวณ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: อัตราเร็วและความเร็ว ===== -->
+  <div class="section" id="kin2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · อัตราเร็วและความเร็ว</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🏃</div>อัตราเร็ว (Speed)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        อัตราเร็วเฉลี่ย = ระยะทางทั้งหมด ÷ เวลาที่ใช้ทั้งหมด เป็น<strong>ปริมาณสเกลาร์</strong>
+      </div>
+      <div class="math-block">อัตราเร็วเฉลี่ย = ระยะทาง / เวลา = s / t</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วิ่งได้ระยะทาง 400 เมตร ใช้เวลา 50 วินาที<br>
+        อัตราเร็วเฉลี่ย = 400/50 = <strong>8 เมตร/วินาที</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧭</div>ความเร็ว (Velocity)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ความเร็วเฉลี่ย = การกระจัด ÷ เวลาที่ใช้ เป็น<strong>ปริมาณเวกเตอร์</strong> (มีทิศทางกำกับ)
+      </div>
+      <div class="math-block">ความเร็วเฉลี่ย = การกระจัด / เวลา = Δs / Δt</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        รถวิ่งไปทางทิศตะวันออก 100 เมตร ใน 20 วินาที แล้ววิ่งกลับ 40 เมตร ใน 10 วินาที<br>
+        ระยะทางรวม = 140 m, เวลารวม = 30 s → อัตราเร็วเฉลี่ย = 140/30 ≈ 4.67 m/s<br>
+        การกระจัดรวม = 100 − 40 = 60 m (ทิศตะวันออก) → ความเร็วเฉลี่ย = 60/30 = <strong>2 m/s ทิศตะวันออก</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ จุดที่สับสนบ่อย</div>
+        อัตราเร็วเฉลี่ยกับความเร็วเฉลี่ยมักมีค่า<strong>ไม่เท่ากัน</strong> เพราะระยะทางกับการกระจัดต่างกัน — จะเท่ากันได้เฉพาะกรณีเคลื่อนที่ทิศเดียวไม่เปลี่ยนทิศ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⏱️</div>อัตราเร็ว/ความเร็วขณะหนึ่ง (Instantaneous)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        คือค่าอัตราเร็วหรือความเร็ว ณ ช่วงเวลาสั้น ๆ ช่วงหนึ่ง (Δt เข้าใกล้ 0) — สิ่งที่มาตรวัดความเร็วในรถแสดงคือ<strong>อัตราเร็วขณะหนึ่ง</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความสัมพันธ์กับกราฟ</div>
+        ความเร็วขณะหนึ่ง = ความชัน (slope) ของเส้นสัมผัสกราฟตำแหน่ง-เวลา (s-t) ที่จุดนั้น
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ความเร่ง ===== -->
+  <div class="section" id="kin3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · ความเร่ง (Acceleration)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🚀</div>ความเร่งคืออะไร?</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ความเร่ง คือ อัตราการเปลี่ยนแปลงความเร็วต่อหน่วยเวลา เป็น<strong>ปริมาณเวกเตอร์</strong>
+      </div>
+      <div class="math-block">a = (v − u) / t &nbsp; หรือ &nbsp; a = Δv / Δt</div>
+      <p>เมื่อ u = ความเร็วต้น, v = ความเร็วปลาย, t = เวลาที่ใช้ &nbsp; หน่วย: เมตร/วินาที² (m/s²)</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        รถเริ่มจากหยุดนิ่ง (u = 0) แล้วมีความเร็ว 20 m/s ในเวลา 4 วินาที<br>
+        a = (20 − 0)/4 = <strong>5 m/s²</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔀</div>ทิศทางของความเร่ง</div>
+      <div class="grid-2">
+        <div class="mini-card" style="border-color: rgba(0,212,170,0.3)">
+          <h4 style="color:var(--accent2)">ความเร่ง (Speeding up)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ความเร่งมีทิศ<strong>เดียวกับ</strong>ความเร็ว → วัตถุเคลื่อนที่เร็วขึ้น</p>
+        </div>
+        <div class="mini-card" style="border-color: rgba(255,107,107,0.3)">
+          <h4 style="color:var(--accent3)">ความหน่วง (Slowing down)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ความเร่งมีทิศ<strong>ตรงข้าม</strong>กับความเร็ว → วัตถุเคลื่อนที่ช้าลง (a เป็นลบเมื่อเทียบกับทิศบวก)</p>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ความเร่งเป็น "ลบ" ไม่ได้แปลว่าเป็นความหน่วงเสมอไป ต้องดูเทียบกับทิศของความเร็วด้วย<br>
+        ถ้า v และ a มีเครื่องหมาย<strong>เหมือนกัน</strong> → เร่ง (เร็วขึ้น)<br>
+        ถ้า v และ a มีเครื่องหมาย<strong>ต่างกัน</strong> → หน่วง (ช้าลง)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กรณีพิเศษ</div>
+        ความเร่ง = 0 หมายถึง วัตถุเคลื่อนที่ด้วย<strong>ความเร็วคงที่</strong> (Uniform velocity)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: กราฟการเคลื่อนที่ ===== -->
+  <div class="section" id="kin4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · กราฟการเคลื่อนที่</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📈</div>กราฟตำแหน่ง-เวลา (s-t Graph)</div>
+      <div class="venn-container">
+        <svg width="380" height="200" viewBox="0 0 380 200">
+          <rect width="380" height="200" rx="10" fill="#1c2235"/>
+          <line x1="40" y1="20" x2="40" y2="170" stroke="#8892b0" stroke-width="1.5"/>
+          <line x1="40" y1="170" x2="360" y2="170" stroke="#8892b0" stroke-width="1.5"/>
+          <text x="360" y="185" fill="#8892b0" font-size="12" font-family="Sarabun">t (s)</text>
+          <text x="15" y="25" fill="#8892b0" font-size="12" font-family="Sarabun">s (m)</text>
+          <line x1="40" y1="150" x2="340" y2="40" stroke="#6c63ff" stroke-width="2.5"/>
+          <text x="200" y="80" fill="#a89fff" font-size="13" font-family="Sarabun">เส้นตรง = ความเร็วคงที่</text>
+          <path d="M 40 170 Q 200 165 340 60" stroke="#00d4aa" stroke-width="2.5" fill="none"/>
+          <text x="180" y="150" fill="#00d4aa" font-size="13" font-family="Sarabun">เส้นโค้ง = ความเร็วเปลี่ยน (มีความเร่ง)</text>
+        </svg>
+      </div>
+      <div class="def-box">
+        <div class="def-label">การอ่านค่าจากกราฟ</div>
+        <strong>ความชัน (slope)</strong> ของกราฟ s-t ณ จุดใด ๆ = <strong>ความเร็ว</strong> ณ ขณะนั้น
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>เส้นตรงเอียงคงที่</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ความเร็วคงที่ (a = 0)</p>
+        </div>
+        <div class="mini-card">
+          <h4>เส้นโค้งชันขึ้นเรื่อย ๆ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ความเร็วเพิ่มขึ้น (มีความเร่ง)</p>
+        </div>
+        <div class="mini-card">
+          <h4>เส้นตรงราบขนานแกน t</h4>
+          <p style="font-size:13px; color:var(--text-dim)">วัตถุหยุดนิ่ง (v = 0)</p>
+        </div>
+        <div class="mini-card">
+          <h4>ความชันเป็นลบ</h4>
+          <p style="font-size:13px; color:var(--text-dim)">เคลื่อนที่ย้อนกลับทิศ (v เป็นลบ)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>กราฟความเร็ว-เวลา (v-t Graph)</div>
+      <div class="venn-container">
+        <svg width="380" height="200" viewBox="0 0 380 200">
+          <rect width="380" height="200" rx="10" fill="#1c2235"/>
+          <line x1="40" y1="20" x2="40" y2="170" stroke="#8892b0" stroke-width="1.5"/>
+          <line x1="40" y1="170" x2="360" y2="170" stroke="#8892b0" stroke-width="1.5"/>
+          <text x="360" y="185" fill="#8892b0" font-size="12" font-family="Sarabun">t (s)</text>
+          <text x="15" y="25" fill="#8892b0" font-size="12" font-family="Sarabun">v (m/s)</text>
+          <polygon points="40,170 40,60 300,60 300,170" fill="rgba(255,217,61,0.15)" stroke="none"/>
+          <line x1="40" y1="60" x2="300" y2="60" stroke="#ffd93d" stroke-width="2.5"/>
+          <line x1="40" y1="170" x2="40" y2="60" stroke-dasharray="3,3" stroke="#4a5580"/>
+          <text x="120" y="130" fill="#ffd93d" font-size="13" font-family="Sarabun">พื้นที่ = การกระจัด</text>
+          <line x1="300" y1="60" x2="340" y2="30" stroke="#ff6b6b" stroke-width="2.5"/>
+          <text x="305" y="45" fill="#ff6b6b" font-size="12" font-family="Sarabun">ความชัน = ความเร่ง</text>
+        </svg>
+      </div>
+      <div class="def-box">
+        <div class="def-label">การอ่านค่าจากกราฟ v-t</div>
+        <strong>ความชัน</strong> ของกราฟ v-t = <strong>ความเร่ง</strong> &nbsp;|&nbsp; <strong>พื้นที่ใต้กราฟ</strong> = <strong>การกระจัด</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุเคลื่อนที่ด้วยความเร็วคงที่ 8 m/s เป็นเวลา 5 วินาที (กราฟเป็นเส้นตรงราบ)<br>
+        การกระจัด = พื้นที่สี่เหลี่ยม = 8 × 5 = <strong>40 เมตร</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 รูปทรงที่พบบ่อย</div>
+        กราฟ v-t เป็นสี่เหลี่ยมผืนผ้า → พื้นที่ = ฐาน × สูง (v คงที่)<br>
+        กราฟ v-t เป็นสามเหลี่ยมหรือคางหมู (v เปลี่ยนเชิงเส้น) → ใช้สูตรพื้นที่สามเหลี่ยม/คางหมู
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📉</div>สรุปความสัมพันธ์ของกราฟทั้งสามแบบ</div>
+      <table>
+        <tr><th>กราฟ</th><th>แกนตั้ง/แกนนอน</th><th>ความชัน (slope)</th><th>พื้นที่ใต้กราฟ</th></tr>
+        <tr><td>s-t</td><td>ตำแหน่ง / เวลา</td><td class="true-val">ความเร็ว</td><td>—</td></tr>
+        <tr><td>v-t</td><td>ความเร็ว / เวลา</td><td class="true-val">ความเร่ง</td><td class="true-val">การกระจัด</td></tr>
+        <tr><td>a-t</td><td>ความเร่ง / เวลา</td><td>—</td><td class="true-val">ความเร็วที่เปลี่ยนไป (Δv)</td></tr>
+      </table>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ถ้ากราฟ v-t อยู่<strong>ใต้แกน t</strong> (v เป็นลบ) พื้นที่ตรงนั้นถือเป็นการกระจัด<strong>ทิศตรงข้าม</strong> — เวลาหาระยะทางรวมต้องเอาพื้นที่มา<strong>บวกกันแบบ|ค่าสัมบูรณ์|</strong> แต่การกระจัดสุทธิให้คิดเครื่องหมายตามทิศ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: สมการ SUVAT ===== -->
+  <div class="section" id="kin5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · สมการการเคลื่อนที่แนวตรงด้วยความเร่งคงที่</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧮</div>ตัวแปรที่ต้องรู้จัก (SUVAT)</div>
+      <div class="summary-grid">
+        <div class="summary-item"><div class="sym">s</div><div class="sym-name">การกระจัด</div><div class="sym-desc">หน่วย เมตร (m)</div></div>
+        <div class="summary-item"><div class="sym">u</div><div class="sym-name">ความเร็วต้น</div><div class="sym-desc">หน่วย m/s</div></div>
+        <div class="summary-item"><div class="sym">v</div><div class="sym-name">ความเร็วปลาย</div><div class="sym-desc">หน่วย m/s</div></div>
+        <div class="summary-item"><div class="sym">a</div><div class="sym-name">ความเร่ง (คงที่)</div><div class="sym-desc">หน่วย m/s²</div></div>
+        <div class="summary-item"><div class="sym">t</div><div class="sym-name">เวลา</div><div class="sym-desc">หน่วย วินาที (s)</div></div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 หลักการใช้สมการ</div>
+        สมการแต่ละสูตรมีตัวแปรอยู่ 4 จาก 5 ตัว — เลือกสูตรที่<strong>มีตัวแปรที่โจทย์ให้ครบ</strong> และมีตัวแปรที่ต้องการหาอยู่ด้วย จะได้ไม่ต้องคำนวณหลายขั้นตอน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">1️⃣</div>สมการที่ 1: v = u + at</div>
+      <div class="def-box">
+        <div class="def-label">ใช้เมื่อ</div>
+        ไม่มี s (การกระจัด) อยู่ในสมการ — ใช้หาความเร็วปลาย เมื่อรู้ u, a, t
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        รถเริ่มเคลื่อนที่ด้วย u = 10 m/s ความเร่ง 2 m/s² เป็นเวลา 5 วินาที<br>
+        v = 10 + (2)(5) = <strong>20 m/s</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">2️⃣</div>สมการที่ 2: s = ut + ½at²</div>
+      <div class="def-box">
+        <div class="def-label">ใช้เมื่อ</div>
+        ไม่มี v (ความเร็วปลาย) อยู่ในสมการ — ใช้หาการกระจัด เมื่อรู้ u, a, t
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        u = 10 m/s, a = 2 m/s², t = 5 s<br>
+        s = (10)(5) + ½(2)(5²) = 50 + 25 = <strong>75 เมตร</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">3️⃣</div>สมการที่ 3: v² = u² + 2as</div>
+      <div class="def-box">
+        <div class="def-label">ใช้เมื่อ</div>
+        ไม่มี t (เวลา) อยู่ในสมการ — ใช้เมื่อโจทย์ไม่บอกเวลามาให้
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        u = 0, a = 4 m/s², s = 50 m<br>
+        v² = 0 + 2(4)(50) = 400 → v = <strong>20 m/s</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">4️⃣</div>สมการที่ 4: s = (u + v)t / 2</div>
+      <div class="def-box">
+        <div class="def-label">ใช้เมื่อ</div>
+        ไม่มี a (ความเร่ง) อยู่ในสมการ — ใช้เมื่อไม่ทราบความเร่ง แต่รู้ u, v, t
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        u = 4 m/s, v = 12 m/s, t = 4 s<br>
+        s = (4+12)(4)/2 = <strong>32 เมตร</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อสังเกต</div>
+        สมการนี้ใช้หลักการ "ความเร็วเฉลี่ย" คือ (u+v)/2 คูณเวลา — ใช้ได้เฉพาะเมื่อ<strong>ความเร่งคงที่</strong>เท่านั้น
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📋</div>สรุปสมการทั้ง 4 พร้อมตารางเลือกใช้</div>
+      <table>
+        <tr><th>สมการ</th><th>ตัวแปรที่มี</th><th>ตัวแปรที่ไม่มี</th></tr>
+        <tr><td>v = u + at</td><td>u,v,a,t</td><td class="false-val">s</td></tr>
+        <tr><td>s = ut + ½at²</td><td>s,u,a,t</td><td class="false-val">v</td></tr>
+        <tr><td>v² = u² + 2as</td><td>s,u,v,a</td><td class="false-val">t</td></tr>
+        <tr><td>s = (u+v)t/2</td><td>s,u,v,t</td><td class="false-val">a</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคทำโจทย์ A-Level</div>
+        1) เขียนตัวแปรที่โจทย์ให้มาก่อนเสมอ พร้อมกำหนดทิศบวก<br>
+        2) ดูว่าตัวแปรที่ยังขาดคือตัวไหน แล้วเลือกสูตรที่ไม่มีตัวแปรนั้น<br>
+        3) แทนค่าและระวังเรื่องเครื่องหมาย +/− ตามทิศทางที่กำหนดไว้
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: การตกอย่างเสรี ===== -->
+  <div class="section" id="kin6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · การตกอย่างเสรี (Free Fall)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🍎</div>การตกอย่างเสรีคืออะไร?</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การตกอย่างเสรี คือ การเคลื่อนที่ในแนวดิ่งภายใต้แรงโน้มถ่วงเพียงอย่างเดียว โดย<strong>ไม่มีความเร็วต้น</strong> (u = 0) และไม่คิดแรงต้านอากาศ
+      </div>
+      <div class="def-box">
+        <div class="def-label">ความเร่งโน้มถ่วง (g)</div>
+        g ≈ 9.8 m/s² (มักปัดเป็น 10 m/s² เพื่อความสะดวกในการคำนวณ) มีทิศ<strong>ลงเสมอ</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧮</div>สมการสำหรับการตกอย่างเสรี</div>
+      <p>แทน u = 0 และ a = g ลงในสมการ SUVAT เดิม จะได้สมการเฉพาะดังนี้ (กำหนดทิศลงเป็นบวก)</p>
+      <div class="math-block">
+        v = gt<br>
+        h = ½gt²<br>
+        v² = 2gh
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ปล่อยลูกบอลจากที่สูง 20 เมตร (g = 10 m/s²)<br>
+        <strong>หาเวลาที่ตกถึงพื้น:</strong> h = ½gt² → 20 = ½(10)t² → t² = 4 → t = <strong>2 วินาที</strong><br>
+        <strong>หาความเร็วเมื่อกระทบพื้น:</strong> v = gt = 10×2 = <strong>20 m/s</strong><br>
+        <em>ตรวจสอบ:</em> v² = 2gh = 2(10)(20) = 400 → v = 20 m/s ✓ (ตรงกัน)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ข้อสังเกต</div>
+        มวลของวัตถุ<strong>ไม่มีผล</strong>ต่อความเร่งในการตกอย่างเสรี — วัตถุทุกชิ้น (เมื่อไม่คิดแรงต้านอากาศ) ตกด้วยความเร่งเท่ากันคือ g เสมอ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: การเคลื่อนที่แนวดิ่งขึ้น-ลง ===== -->
+  <div class="section" id="kin7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · การเคลื่อนที่ในแนวดิ่งโยนขึ้น-ลง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">⬆️</div>การโยนวัตถุขึ้นในแนวดิ่ง</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        เมื่อโยนวัตถุขึ้นด้วยความเร็วต้น u วัตถุจะถูกแรงโน้มถ่วงหน่วงให้ช้าลงเรื่อย ๆ (a = −g เมื่อกำหนดทิศขึ้นเป็นบวก) จนกระทั่งความเร็ว = 0 ที่<strong>จุดสูงสุด</strong> แล้วตกกลับลงมา
+      </div>
+      <div class="venn-container">
+        <svg width="300" height="200" viewBox="0 0 300 200">
+          <rect width="300" height="200" rx="10" fill="#1c2235"/>
+          <line x1="150" y1="180" x2="150" y2="20" stroke="#8892b0" stroke-width="1.5" marker-end="url(#arrowUp)"/>
+          <defs><marker id="arrowUp" markerWidth="8" markerHeight="8" refX="4" refY="0" orient="auto"><path d="M0,6 L4,0 L8,6 Z" fill="#8892b0"/></marker></defs>
+          <circle cx="150" cy="180" r="6" fill="#00d4aa"/>
+          <text x="160" y="185" fill="#00d4aa" font-size="12" font-family="Sarabun">จุดโยน (v=u)</text>
+          <circle cx="150" cy="40" r="6" fill="#ff6b6b"/>
+          <text x="160" y="35" fill="#ff6b6b" font-size="12" font-family="Sarabun">จุดสูงสุด (v=0)</text>
+          <line x1="100" y1="170" x2="100" y2="50" stroke="#6c63ff" stroke-width="2" stroke-dasharray="4,3"/>
+          <text x="20" y="110" fill="#a89fff" font-size="12" font-family="Sarabun">h สูงสุด</text>
+        </svg>
+      </div>
+      <div class="math-block">
+        เวลาถึงจุดสูงสุด: t = u / g<br>
+        ความสูงสุด: h = u² / (2g)<br>
+        เวลาทั้งหมดที่ลอยอยู่ในอากาศ (กลับมาจุดเดิม): t รวม = 2u / g
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        โยนลูกบอลขึ้นด้วยความเร็วต้น 20 m/s (g = 10 m/s²)<br>
+        เวลาถึงจุดสูงสุด: t = 20/10 = <strong>2 วินาที</strong><br>
+        ความสูงสุด: h = 20²/(2×10) = 400/20 = <strong>20 เมตร</strong><br>
+        เวลาทั้งหมดในอากาศ (ก่อนกลับถึงจุดเดิม): 2×2 = <strong>4 วินาที</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 สมมาตรของการเคลื่อนที่</div>
+        เวลาขาขึ้น = เวลาขาลง (เมื่อกลับถึงจุดเดิม) และความเร็วตอนกลับถึงจุดเดิมจะมี<strong>ขนาดเท่าความเร็วต้น แต่ทิศตรงข้าม</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวังเรื่องเครื่องหมาย</div>
+        ถ้ากำหนดทิศ<strong>ขึ้นเป็นบวก</strong>: u เป็นบวก, g เป็น<strong>ลบ</strong> (−9.8 หรือ −10 m/s²)<br>
+        ถ้ากำหนดทิศ<strong>ลงเป็นบวก</strong>: u เป็นลบ (เพราะโยนขึ้นสวนทาง), g เป็น<strong>บวก</strong><br>
+        ควรเลือกทิศบวกทิศเดียวแล้วยึดตลอดข้อ ห้ามสลับกลางคัน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🎯</div>โจทย์ผสม: โยนวัตถุจากที่สูง</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        โยนลูกบอลขึ้นจากดาดฟ้าสูง 25 เมตร ด้วยความเร็วต้น 10 m/s (g = 10 m/s², ทิศขึ้นเป็นบวก)<br>
+        จงหาความเร็วเมื่อลูกบอลกระทบพื้นด้านล่าง<br><br>
+        <strong>วิธีทำ:</strong> กำหนด s = −25 m (เพราะจุดกระทบอยู่ต่ำกว่าจุดโยน), u = +10 m/s, a = −10 m/s²<br>
+        ใช้ v² = u² + 2as = 10² + 2(−10)(−25) = 100 + 500 = 600<br>
+        v = √600 ≈ <strong>24.5 m/s</strong> (ทิศลง เพราะ v ที่แท้จริงเป็นลบ)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคโจทย์ผสม</div>
+        กำหนดจุดเริ่มต้น (จุดโยน) เป็นจุดอ้างอิง s = 0 เสมอ แล้วให้ตำแหน่งอื่น ๆ มีเครื่องหมายตามทิศที่กำหนดไว้ — จะช่วยไม่ให้สับสนเรื่องเครื่องหมาย
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมการเคลื่อนที่แนวตรงทั้งหมด เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบ A-Level การเคลื่อนที่แนวตรง</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ข้อสอบจำลองแนว A-Level ฟิสิกส์ เรื่องการเคลื่อนที่แนวตรง</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      โจทย์การเคลื่อนที่แนวตรงมักออกสอบร่วมกับกราฟและสมการ SUVAT — ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบาย
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — ระยะทาง/การกระจัด",
+    q: "ชายคนหนึ่งเดินไปทางทิศตะวันออก 12 เมตร แล้วเดินกลับทางทิศตะวันตก 5 เมตร จงหาขนาดของการกระจัด",
+    opts: ["5 เมตร", "7 เมตร", "12 เมตร", "17 เมตร"],
+    ans: 1,
+    explain: "ขั้นที่ 1: กำหนดทิศตะวันออกเป็นทิศบวก\n  เดินไปตะวันออก 12 m → +12\n  เดินกลับทางตะวันตก 5 m → −5\n\nขั้นที่ 2: หาการกระจัดสุทธิ\n  การกระจัด = 12 + (−5) = +7 (ทิศตะวันออก)\n  ขนาดของการกระจัด = 7 เมตร ✓\n\n(ระยะทางรวมในกรณีนี้คือ 12+5 = 17 เมตร ซึ่งเป็นคนละค่ากับการกระจัด — ข้อนี้ถามหาการกระจัดเท่านั้น)"
+  },
+  {
+    level: "⭐ ระดับ 1 — อัตราเร็ว/ความเร็ว",
+    q: "นักวิ่งคนหนึ่งวิ่งได้ระยะทาง 200 เมตร โดยใช้เวลา 25 วินาที จงหาอัตราเร็วเฉลี่ย",
+    opts: ["5 m/s", "6 m/s", "8 m/s", "10 m/s"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้สูตรอัตราเร็วเฉลี่ย\n  อัตราเร็วเฉลี่ย = ระยะทาง / เวลา\n\nขั้นที่ 2: แทนค่า\n  อัตราเร็วเฉลี่ย = 200 / 25 = 8 m/s ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — ความเร่ง",
+    q: "วัตถุมีความเร็วต้น 4 m/s แล้วเพิ่มเป็น 16 m/s ในเวลา 4 วินาที จงหาความเร่ง",
+    opts: ["2 m/s²", "3 m/s²", "4 m/s²", "5 m/s²"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ใช้สูตรความเร่ง\n  a = (v − u) / t\n\nขั้นที่ 2: แทนค่า u = 4, v = 16, t = 4\n  a = (16 − 4) / 4 = 12/4 = 3 m/s² ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — กราฟการเคลื่อนที่",
+    q: "จากกราฟความเร็ว-เวลา วัตถุเคลื่อนที่จากหยุดนิ่งด้วยความเร่งคงที่ จนมีความเร็ว 20 m/s เมื่อเวลาผ่านไป 5 วินาที (กราฟเป็นเส้นตรงเอียงขึ้นจากจุดกำเนิด) จงหาการกระจัดในช่วงเวลานี้",
+    opts: ["25 เมตร", "50 เมตร", "75 เมตร", "100 เมตร"],
+    ans: 1,
+    explain: "ขั้นที่ 1: การกระจัด = พื้นที่ใต้กราฟ v-t\n  กราฟเป็นเส้นตรงจาก (0,0) ถึง (5,20) → รูปร่างเป็นสามเหลี่ยม\n\nขั้นที่ 2: หาพื้นที่สามเหลี่ยม\n  พื้นที่ = ½ × ฐาน × สูง = ½ × 5 × 20 = 50 เมตร ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — สมการ SUVAT",
+    q: "รถเคลื่อนที่ด้วยความเร็วต้น 5 m/s ความเร่งคงที่ 2 m/s² เป็นเวลา 6 วินาที จงหาระยะทางที่เคลื่อนที่ได้",
+    opts: ["60 เมตร", "63 เมตร", "66 เมตร", "72 เมตร"],
+    ans: 2,
+    explain: "ขั้นที่ 1: เลือกสมการที่ไม่มีตัวแปร v (เพราะไม่ทราบความเร็วปลาย)\n  s = ut + ½at²\n\nขั้นที่ 2: แทนค่า u = 5, a = 2, t = 6\n  s = (5)(6) + ½(2)(6²)\n  s = 30 + ½(2)(36)\n  s = 30 + 36 = 66 เมตร ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — สมการ SUVAT",
+    q: "วัตถุเคลื่อนที่ด้วยความเร็วต้น 6 m/s ความเร่งคงที่ 4 m/s² เป็นระยะทาง 20 เมตร จงหาความเร็วปลาย",
+    opts: ["10 m/s", "12 m/s", "14 m/s", "16 m/s"],
+    ans: 2,
+    explain: "ขั้นที่ 1: เลือกสมการที่ไม่มีตัวแปร t (เพราะไม่ทราบเวลา)\n  v² = u² + 2as\n\nขั้นที่ 2: แทนค่า u = 6, a = 4, s = 20\n  v² = 6² + 2(4)(20)\n  v² = 36 + 160 = 196\n\nขั้นที่ 3: หา v\n  v = √196 = 14 m/s ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การตกอย่างเสรี",
+    q: "ปล่อยวัตถุจากที่สูง 45 เมตร (g = 10 m/s²) จงหาเวลาที่วัตถุใช้ในการตกถึงพื้น",
+    opts: ["2 วินาที", "2.5 วินาที", "3 วินาที", "4.5 วินาที"],
+    ans: 2,
+    explain: "ขั้นที่ 1: การตกอย่างเสรี u = 0 ใช้สูตร\n  h = ½gt²\n\nขั้นที่ 2: แทนค่า h = 45, g = 10\n  45 = ½(10)t²\n  45 = 5t²\n  t² = 9\n\nขั้นที่ 3: หา t\n  t = √9 = 3 วินาที ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — เคลื่อนที่แนวดิ่งขึ้น",
+    q: "โยนวัตถุขึ้นในแนวดิ่งด้วยความเร็วต้น 30 m/s (g = 10 m/s²) จงหาความสูงสุดที่วัตถุขึ้นไปได้",
+    opts: ["30 เมตร", "45 เมตร", "60 เมตร", "90 เมตร"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ที่จุดสูงสุด ความเร็ว v = 0\n  ใช้สูตร h = u² / (2g)\n\nขั้นที่ 2: แทนค่า u = 30, g = 10\n  h = 30² / (2×10) = 900 / 20 = 45 เมตร ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — ความเร่ง/ความหน่วง",
+    q: "รถเคลื่อนที่ไปทางขวาด้วยความเร็ว 10 m/s แล้วเบรกด้วยความเร่งขนาด 2 m/s² ในทิศตรงข้าม จงหาว่าอีกกี่วินาทีรถจะหยุดนิ่ง",
+    opts: ["3 วินาที", "4 วินาที", "5 วินาที", "6 วินาที"],
+    ans: 2,
+    explain: "ขั้นที่ 1: กำหนดทิศขวาเป็นบวก ดังนั้น u = 10 m/s, a = −2 m/s² (เบรกจึงมีทิศตรงข้ามกับความเร็ว)\n\nขั้นที่ 2: ใช้สูตร v = u + at โดยรถหยุดนิ่งเมื่อ v = 0\n  0 = 10 + (−2)t\n  2t = 10\n\nขั้นที่ 3: หา t\n  t = 5 วินาที ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — เคลื่อนที่แนวดิ่งขึ้น",
+    q: "โยนลูกบอลขึ้นจากพื้นด้วยความเร็วต้น 20 m/s (g = 10 m/s²) จงหาเวลาทั้งหมดที่ลูกบอลใช้ก่อนจะตกกลับถึงพื้นเดิม",
+    opts: ["2 วินาที", "3 วินาที", "4 วินาที", "5 วินาที"],
+    ans: 2,
+    explain: "ขั้นที่ 1: เมื่อวัตถุกลับมาที่จุดเริ่มต้น (พื้นเดิม) การกระจัดสุทธิ = 0 และเวลาขาขึ้นเท่ากับเวลาขาลง\n  ใช้สูตร t รวม = 2u / g\n\nขั้นที่ 2: แทนค่า u = 20, g = 10\n  t รวม = 2(20)/10 = 40/10 = 4 วินาที ✓\n\n(ตรวจสอบ: เวลาถึงจุดสูงสุด t = u/g = 20/10 = 2 วินาที และเวลาขาลงเท่ากันคือ 2 วินาที รวมเป็น 4 วินาที)"
+  }
+];
+const alevelQuestions = [
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — การกระจัด",
+    q: "ชายคนหนึ่งเดินทางไปทิศเหนือ 30 เมตร แล้วเดินไปทิศใต้ 50 เมตร จงหาขนาดของการกระจัด",
+    opts: ["10 เมตร", "20 เมตร", "30 เมตร", "80 เมตร"],
+    ans: 1,
+    explain: "ขั้นที่ 1: กำหนดทิศเหนือเป็นบวก\n  เดินไปเหนือ 30 m → +30\n  เดินไปใต้ 50 m → −50\n\nขั้นที่ 2: หาการกระจัดสุทธิ\n  การกระจัด = 30 + (−50) = −20\n  ขนาดของการกระจัด = 20 เมตร (ทิศใต้) ✓\n\n(ระยะทางรวม = 30+50 = 80 เมตร ซึ่งเป็นคนละค่ากับการกระจัด)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — กราฟ s-t",
+    q: "กราฟตำแหน่ง-เวลา (s-t) ของวัตถุหนึ่งเป็นเส้นตรงผ่านจุด (0, 2) และ (4, 18) (หน่วยเวลาเป็นวินาที ตำแหน่งเป็นเมตร) จงหาความเร็วของวัตถุ",
+    opts: ["2 m/s", "4 m/s", "6 m/s", "8 m/s"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ความเร็ว = ความชันของกราฟ s-t\n  ความชัน = (s₂ − s₁)/(t₂ − t₁)\n\nขั้นที่ 2: แทนค่าจุด (0,2) และ (4,18)\n  ความชัน = (18 − 2)/(4 − 0) = 16/4 = 4 m/s ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — ความเร่ง",
+    q: "วัตถุเคลื่อนที่ด้วยความเร็วต้น 15 m/s และมีความเร่งคงที่ −3 m/s² อีกกี่วินาทีวัตถุจะหยุดนิ่ง",
+    opts: ["3 วินาที", "4 วินาที", "5 วินาที", "6 วินาที"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้สูตร v = u + at โดยวัตถุหยุดนิ่งเมื่อ v = 0\n  0 = 15 + (−3)t\n\nขั้นที่ 2: แก้สมการหา t\n  3t = 15\n  t = 5 วินาที ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — ความเร่ง",
+    q: "จากข้อก่อนหน้า (u = 15 m/s, a = −3 m/s²) จงหาระยะทางที่วัตถุเคลื่อนที่ได้ทั้งหมดก่อนหยุดนิ่ง",
+    opts: ["30 เมตร", "32.5 เมตร", "37.5 เมตร", "45 เมตร"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้สูตร s = ut + ½at² โดยแทน t = 5 วินาที (เวลาที่วัตถุหยุดนิ่งจากข้อก่อนหน้า)\n\nขั้นที่ 2: แทนค่า u = 15, a = −3, t = 5\n  s = (15)(5) + ½(−3)(5²)\n  s = 75 + ½(−3)(25)\n  s = 75 − 37.5 = 37.5 เมตร ✓\n\nวิธีตรวจสอบ (ใช้ v² = u² + 2as โดย v = 0):\n  0 = 15² + 2(−3)s → 0 = 225 − 6s → s = 225/6 = 37.5 เมตร ✓ (ตรงกัน)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — กราฟ v-t",
+    q: "กราฟความเร็ว-เวลาของวัตถุหนึ่งเป็นเส้นตรง ความเร็วเพิ่มจาก 4 m/s เป็น 12 m/s ในเวลา 4 วินาที จงหาการกระจัดในช่วงเวลานี้",
+    opts: ["24 เมตร", "28 เมตร", "32 เมตร", "36 เมตร"],
+    ans: 2,
+    explain: "ขั้นที่ 1: การกระจัด = พื้นที่ใต้กราฟ v-t ซึ่งมีรูปร่างเป็นสี่เหลี่ยมคางหมู\n  พื้นที่คางหมู = ½(ผลรวมด้านคู่ขนาน) × ความสูง = ½(u+v) × t\n\nขั้นที่ 2: แทนค่า u = 4, v = 12, t = 4\n  s = ½(4+12)(4) = ½(16)(4) = 32 เมตร ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — การตกอย่างเสรี",
+    q: "ลูกบอลถูกปล่อยจากที่สูง h แล้วตกถึงพื้นด้วยความเร็ว 30 m/s (g = 10 m/s²) จงหาความสูง h",
+    opts: ["30 เมตร", "40 เมตร", "45 เมตร", "60 เมตร"],
+    ans: 2,
+    explain: "ขั้นที่ 1: การตกอย่างเสรี u = 0 ใช้สูตร v² = 2gh\n\nขั้นที่ 2: แทนค่า v = 30, g = 10\n  30² = 2(10)h\n  900 = 20h\n\nขั้นที่ 3: หา h\n  h = 900/20 = 45 เมตร ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — การเคลื่อนที่สวนทาง",
+    q: "รถสองคัน A และ B วิ่งสวนทางเข้าหากันบนถนนเส้นตรง โดย A มีความเร็ว 20 m/s และ B มีความเร็ว 15 m/s ขณะเริ่มต้นทั้งสองห่างกัน 210 เมตร จงหาเวลาที่รถทั้งสองจะพบกัน",
+    opts: ["5 วินาที", "6 วินาที", "7 วินาที", "8 วินาที"],
+    ans: 1,
+    explain: "ขั้นที่ 1: เมื่อวัตถุสองชิ้นเคลื่อนที่เข้าหากัน อัตราที่ระยะห่างลดลงเท่ากับผลรวมของอัตราเร็วทั้งสอง\n  อัตราเร็วสัมพัทธ์ = 20 + 15 = 35 m/s\n\nขั้นที่ 2: ระยะห่างเริ่มต้น = 210 เมตร ใช้สูตร เวลา = ระยะทาง/อัตราเร็ว\n  t = 210/35 = 6 วินาที ✓\n\n(ที่เวลานี้ A เคลื่อนที่ได้ 20×6=120 m และ B เคลื่อนที่ได้ 15×6=90 m รวมกันได้ 120+90=210 m พอดีกับระยะห่างเริ่มต้น)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เคลื่อนที่แนวดิ่งขึ้น",
+    q: "จรวดของเล่นถูกยิงขึ้นในแนวดิ่งด้วยความเร็วต้น 40 m/s (g = 10 m/s²) จงหาเวลาทั้งหมดก่อนที่จรวดจะตกกลับถึงจุดยิงเดิม",
+    opts: ["4 วินาที", "6 วินาที", "8 วินาที", "10 วินาที"],
+    ans: 2,
+    explain: "ขั้นที่ 1: เมื่อกลับถึงจุดเริ่มต้น การกระจัดสุทธิ = 0 ใช้สูตร t รวม = 2u/g\n\nขั้นที่ 2: แทนค่า u = 40, g = 10\n  t รวม = 2(40)/10 = 80/10 = 8 วินาที ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — โจทย์ผสมแนวดิ่ง",
+    q: "นักดำน้ำกระโดดขึ้นจากสปริงบอร์ดด้วยความเร็วต้น 6 m/s ในแนวดิ่ง โดยสปริงบอร์ดอยู่สูงจากผิวน้ำ 8 เมตร จงหาความเร็วของนักดำน้ำขณะกระทบผิวน้ำ (g = 10 m/s², กำหนดทิศขึ้นเป็นบวก)",
+    opts: ["10 m/s", "12 m/s", "14 m/s", "16 m/s"],
+    ans: 2,
+    explain: "ขั้นที่ 1: กำหนดจุดกระโดดเป็นจุดอ้างอิง s = 0 จุดกระทบผิวน้ำอยู่ต่ำกว่า 8 เมตร\n  u = +6 m/s, a = −g = −10 m/s², s = −8 m (ต่ำกว่าจุดเริ่มต้น)\n\nขั้นที่ 2: ใช้สูตร v² = u² + 2as\n  v² = 6² + 2(−10)(−8)\n  v² = 36 + 160 = 196\n\nขั้นที่ 3: หา v\n  v = √196 = 14 m/s ✓ (ทิศลง)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — กราฟผสม",
+    q: "วัตถุเคลื่อนที่ตามกราฟ v-t ดังนี้: ช่วงแรกความเร็วเพิ่มจาก 0 เป็น 10 m/s อย่างสม่ำเสมอในเวลา 2 วินาที จากนั้นเคลื่อนที่ด้วยความเร็วคงที่ 10 m/s ต่ออีก 3 วินาที จงหาการกระจัดรวมทั้งหมด",
+    opts: ["30 เมตร", "35 เมตร", "40 เมตร", "45 เมตร"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาการกระจัดในช่วงแรก (รูปสามเหลี่ยม)\n  s₁ = ½ × 2 × 10 = 10 เมตร\n\nขั้นที่ 2: หาการกระจัดในช่วงที่สอง (รูปสี่เหลี่ยมผืนผ้า ความเร็วคงที่)\n  s₂ = 10 × 3 = 30 เมตร\n\nขั้นที่ 3: รวมการกระจัดทั้งหมด\n  s รวม = 10 + 30 = 40 เมตร ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — แรงโน้มถ่วงดวงจันทร์",
+    q: "ความเร่งเนื่องจากแรงโน้มถ่วงบนดวงจันทร์มีค่าประมาณ 1.6 m/s² ถ้าปล่อยวัตถุจากที่สูง 20 เมตรบนดวงจันทร์ จะใช้เวลาประมาณเท่าใดจึงจะถึงพื้น",
+    opts: ["3 วินาที", "4 วินาที", "5 วินาที", "6 วินาที"],
+    ans: 2,
+    explain: "ขั้นที่ 1: การตกอย่างเสรี u = 0 ใช้สูตร h = ½gt² (แทนที่ g ด้วยความเร่งบนดวงจันทร์)\n\nขั้นที่ 2: แทนค่า h = 20, g = 1.6\n  20 = ½(1.6)t²\n  20 = 0.8t²\n  t² = 25\n\nขั้นที่ 3: หา t\n  t = √25 = 5 วินาที ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — ระยะทางในวินาทีที่ n",
+    q: "รถออกตัวจากหยุดนิ่งด้วยความเร่งคงที่ ผ่านไป 10 วินาที มีความเร็ว 25 m/s จงหาระยะทางที่รถเคลื่อนที่ได้ในวินาทีที่ 10 (นับตั้งแต่ t=9s ถึง t=10s)",
+    opts: ["20 เมตร", "22.5 เมตร", "23.75 เมตร", "25 เมตร"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาความเร่งจากข้อมูลที่ให้\n  a = (v−u)/t = (25−0)/10 = 2.5 m/s²\n\nขั้นที่ 2: หาระยะทางสะสมถึง t=9s และ t=10s แล้วลบกัน\n  s(t) = ½at² (เพราะ u=0)\n  s(9) = ½(2.5)(9²) = ½(2.5)(81) = 101.25 เมตร\n  s(10) = ½(2.5)(10²) = ½(2.5)(100) = 125 เมตร\n\nขั้นที่ 3: ระยะทางในวินาทีที่ 10\n  Δs = s(10) − s(9) = 125 − 101.25 = 23.75 เมตร ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — โจทย์ผสมแนวดิ่งขึ้น",
+    q: "นักเรียนโยนลูกบอลขึ้นด้วยความเร็วต้น 10 m/s จากขอบตึกสูง 15 เมตรเหนือพื้น จะใช้เวลาทั้งหมดกี่วินาทีก่อนลูกบอลกระทบพื้นด้านล่าง (g = 10 m/s², ทิศขึ้นเป็นบวก)",
+    opts: ["2 วินาที", "2.5 วินาที", "3 วินาที", "4 วินาที"],
+    ans: 2,
+    explain: "ขั้นที่ 1: กำหนดจุดโยนเป็น s=0 จุดกระทบพื้นอยู่ต่ำกว่า 15 เมตร ดังนั้น s = −15\n  u = 10, a = −10\n\nขั้นที่ 2: ใช้สูตร s = ut + ½at²\n  −15 = 10t + ½(−10)t²\n  −15 = 10t − 5t²\n\nขั้นที่ 3: จัดรูปสมการกำลังสอง\n  5t² − 10t − 15 = 0\n  t² − 2t − 3 = 0\n  (t − 3)(t + 1) = 0\n  t = 3 หรือ t = −1 (ไม่รับเพราะเวลาต้องเป็นบวก)\n\nดังนั้น t = 3 วินาที ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — อ่านกราฟเชิงมโนทัศน์",
+    q: "กราฟตำแหน่ง-เวลา (s-t) ของวัตถุหนึ่งเป็นเส้นโค้งพาราโบลา ผ่านจุด (0,0), (2,8) และ (4,32) ลักษณะการเคลื่อนที่นี้เป็นแบบใด",
+    opts: ["ความเร็วคงที่", "มีความเร่งคงที่ (เริ่มจากหยุดนิ่ง)", "ความเร่งเปลี่ยนแปลงตลอดเวลา", "วัตถุหยุดนิ่งตลอดเวลา"],
+    ans: 1,
+    explain: "ขั้นที่ 1: ตรวจสอบว่าข้อมูลสอดคล้องกับสูตรใด ลองสมมติว่าเริ่มจากหยุดนิ่ง (u=0) และมีความเร่งคงที่ a\n  ใช้สูตร s = ½at²\n\nขั้นที่ 2: แทนจุด (2,8): 8 = ½a(2²) = 2a → a = 4\n\nขั้นที่ 3: ตรวจสอบกับจุด (4,32): s = ½(4)(4²) = ½(4)(16) = 32 ✓ ตรงกันพอดี\n\nเนื่องจากข้อมูลทั้งหมดสอดคล้องกับสูตร s = ½at² (กราฟรูปพาราโบลาที่ผ่านจุดกำเนิด) ซึ่งเป็นลักษณะของการเคลื่อนที่ด้วย<strong>ความเร่งคงที่จากหยุดนิ่ง</strong> ✓\n\n(ถ้าเป็นความเร็วคงที่ กราฟ s-t จะเป็นเส้นตรง ไม่ใช่เส้นโค้ง)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — มโนทัศน์รวม",
+    q: "ข้อใดต่อไปนี้ถูกต้องเกี่ยวกับการเคลื่อนที่แนวตรงด้วยความเร่งคงที่",
+    opts: [
+      "ความเร็วเฉลี่ยเท่ากับค่าเฉลี่ยของความเร็วต้นและความเร็วปลายเสมอ",
+      "ความเร่งเป็นลบแปลว่าวัตถุกำลังเคลื่อนที่ช้าลงเสมอ",
+      "กราฟ s-t ของการเคลื่อนที่ด้วยความเร่งคงที่เป็นเส้นตรงเสมอ",
+      "พื้นที่ใต้กราฟ s-t คือความเร็วของวัตถุ"
+    ],
+    ans: 0,
+    explain: "ตรวจแต่ละตัวเลือก:\n\nตัวเลือกที่ 1: เมื่อความเร่งคงที่ ความเร็วเปลี่ยนแปลงอย่างสม่ำเสมอ (เชิงเส้นตามเวลา) ทำให้ความเร็วเฉลี่ยเท่ากับ (u+v)/2 เสมอ → ถูกต้อง ✓\n\nตัวเลือกที่ 2: ความเร่งเป็นลบไม่ได้แปลว่าช้าลงเสมอไป ต้องพิจารณาทิศของความเร็วด้วย — ถ้าความเร็วก็เป็นลบด้วย (ทิศเดียวกับความเร่ง) วัตถุจะเร็วขึ้น ไม่ใช่ช้าลง → ไม่ถูกต้อง ✗\n\nตัวเลือกที่ 3: กราฟ s-t ของการเคลื่อนที่ด้วยความเร่งคงที่เป็นเส้นโค้งพาราโบลา (s = ut + ½at²) ไม่ใช่เส้นตรง (เส้นตรงเป็นกรณีความเร็วคงที่ a=0 เท่านั้น) → ไม่ถูกต้อง ✗\n\nตัวเลือกที่ 4: พื้นที่ใต้กราฟ s-t ไม่มีความหมายทางฟิสิกส์ที่ใช้บ่อย ความเร็วคือ<strong>ความชัน</strong>ของกราฟ s-t ไม่ใช่พื้นที่ใต้กราฟ → ไม่ถูกต้อง ✗\n\nดังนั้นคำตอบคือ ตัวเลือกที่ 1 ✓"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentYear = '';
+  alevelQuestions.forEach((q, idx) => {
+    const yearKey = q.year;
+    if (yearKey !== currentYear) {
+      currentYear = yearKey;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + yearKey + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

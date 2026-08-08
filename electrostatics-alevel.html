@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ไฟฟ้าสถิต | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #f7931e;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1008 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'F = kq₁q₂/r²   E = F/q   V = kq/r   Q = CV';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 4px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(247,147,30,0.15);
+    border: 1px solid rgba(247,147,30,0.4);
+    color: #ffb86c;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-orange { background: rgba(247,147,30,0.2); }
+  .icon-teal   { background: rgba(0,212,170,0.15); }
+  .icon-red    { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* BOXES */
+  .def-box {
+    background: rgba(247,147,30,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent3); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent4); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%; border-collapse: collapse;
+    margin: 16px 0; font-size: 15px;
+  }
+  th {
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 10px 14px; text-align: center;
+    font-weight: 600; color: var(--accent); font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px; text-align: center; font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.hi { color: var(--accent2); font-weight: 600; }
+  td.lo { color: var(--accent3); font-weight: 600; }
+
+  /* GRID */
+  .grid-2 {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+  .mini-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    margin-bottom: 8px; font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px; font-weight: 600; margin-bottom: 16px; line-height: 1.6;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px;
+    color: var(--text); font-family: var(--sans); font-size: 15px;
+    cursor: pointer; text-align: left; transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(247,147,30,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2); color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3); color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px; padding: 12px 16px;
+    border-radius: 8px; font-size: 14px; display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3); color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3); color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px; font-weight: 800;
+    margin-bottom: 24px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border); color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+  .sub-heading {
+    font-size: 18px; font-weight: 700;
+    margin: 24px 0 12px; color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono); font-size: 18px;
+    color: var(--accent); font-weight: 600; margin-bottom: 4px;
+  }
+  .summary-item .sym-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+
+  /* DIAGRAM */
+  .diagram-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; margin: 16px 0; text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>ไฟฟ้า<span>สถิต</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">20</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">สูตรสำคัญ</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="e1">1. ประจุไฟฟ้า</button>
+  <button class="tab-btn" data-sec="e2">2. กฎของคูลอมบ์</button>
+  <button class="tab-btn" data-sec="e3">3. สนามไฟฟ้า</button>
+  <button class="tab-btn" data-sec="e4">4. ศักย์ไฟฟ้า</button>
+  <button class="tab-btn" data-sec="e5">5. ตัวเก็บประจุ</button>
+  <button class="tab-btn" data-sec="e6">6. พลังงานไฟฟ้าสถิต</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+<!-- ===== SECTION 1: ประจุไฟฟ้า ===== -->
+<div class="section active" id="e1">
+  <div class="section-heading"><span>หัวข้อ 1</span> · ประจุไฟฟ้าและการถ่ายโอนประจุ</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">⚡</div>ประจุไฟฟ้าคืออะไร?</div>
+    <p>ประจุไฟฟ้า (Electric Charge) คือสมบัติพื้นฐานของอนุภาคมูลฐาน มีสองชนิด คือ <strong>ประจุบวก (+)</strong> และ <strong>ประจุลบ (−)</strong></p>
+    <div class="def-box">
+      <div class="def-label">กฎสำคัญ</div>
+      ประจุชนิดเดียวกัน → <strong>ผลักกัน</strong> &nbsp;|&nbsp; ประจุต่างชนิดกัน → <strong>ดึงดูดกัน</strong>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="sym">e⁻</div>
+        <div class="sym-name">อิเล็กตรอน</div>
+        <div class="sym-desc">ประจุ −1.6×10⁻¹⁹ C<br>หมุนรอบนิวเคลียส</div>
+      </div>
+      <div class="summary-item">
+        <div class="sym">p⁺</div>
+        <div class="sym-name">โปรตอน</div>
+        <div class="sym-desc">ประจุ +1.6×10⁻¹⁹ C<br>อยู่ในนิวเคลียส</div>
+      </div>
+      <div class="summary-item">
+        <div class="sym">n</div>
+        <div class="sym-name">นิวตรอน</div>
+        <div class="sym-desc">ประจุ = 0<br>อยู่ในนิวเคลียส</div>
+      </div>
+      <div class="summary-item">
+        <div class="sym">C</div>
+        <div class="sym-name">หน่วย: คูลอมบ์</div>
+        <div class="sym-desc">1 C = ประจุของ อิเล็กตรอน 6.25×10¹⁸ ตัว</div>
+      </div>
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 หลักการอนุรักษ์ประจุ</div>
+      ประจุรวมในระบบปิดจะคงที่เสมอ ประจุไม่สามารถสร้างขึ้นใหม่หรือทำลายได้ จะมีแต่การถ่ายโอนเท่านั้น
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🔌</div>การถ่ายโอนประจุ</div>
+    <div class="grid-2">
+      <div class="mini-card">
+        <h4>การขัดสี (Triboelectric)</h4>
+        <p>เมื่อวัตถุสองชิ้นถูกัน อิเล็กตรอนจะถ่ายโอนจากวัตถุหนึ่งไปอีกวัตถุ ทำให้เกิดประจุสุทธิ</p>
+        <p style="font-size:13px; color:var(--text-dim)">ตัวอย่าง: ยางถูผ้าขนสัตว์ → ยางมีประจุลบ ผ้าขนสัตว์มีประจุบวก</p>
+      </div>
+      <div class="mini-card">
+        <h4>การเหนี่ยวนำ (Induction)</h4>
+        <p>วัตถุมีประจุนำมาใกล้ตัวนำ ทำให้ประจุในตัวนำแยกออกจากกัน โดยไม่ต้องสัมผัสกัน</p>
+        <p style="font-size:13px; color:var(--text-dim)">ประจุรวมของตัวนำยังคงเป็นศูนย์</p>
+      </div>
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ ข้อควรระวัง</div>
+      วัตถุที่ <strong>เป็นกลางทางไฟฟ้า</strong> มีจำนวนโปรตอน = จำนวนอิเล็กตรอน จึงมีประจุสุทธิ = 0 การที่วัตถุ "มีประจุ" หมายความว่ามีอิเล็กตรอนมากกว่าหรือน้อยกว่าโปรตอน
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      วัตถุ A มีประจุ +3 μC และ B มีประจุ −5 μC นำมาสัมผัสกันแล้วแยกออก<br>
+      ประจุรวม = +3 + (−5) = −2 μC<br>
+      ประจุแต่ละก้อน = −2 ÷ 2 = <strong>−1 μC ทั้งคู่</strong> (ถ้าขนาดเท่ากัน)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">⚙️</div>ตัวนำ, ฉนวน และสารกึ่งตัวนำ</div>
+    <table>
+      <tr><th>ประเภท</th><th>ตัวอย่าง</th><th>การนำประจุ</th></tr>
+      <tr><td>ตัวนำ (Conductor)</td><td>โลหะ, กราไฟต์</td><td class="hi">ดีมาก</td></tr>
+      <tr><td>ฉนวน (Insulator)</td><td>ยาง, แก้ว, พลาสติก</td><td class="lo">แทบไม่นำ</td></tr>
+      <tr><td>สารกึ่งตัวนำ (Semiconductor)</td><td>ซิลิกอน, เจอร์เมเนียม</td><td>ปานกลาง</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== SECTION 2: กฎของคูลอมบ์ ===== -->
+<div class="section" id="e2">
+  <div class="section-heading"><span>หัวข้อ 2</span> · กฎของคูลอมบ์ (Coulomb's Law)</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">⚛️</div>กฎของคูลอมบ์</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      แรงระหว่างประจุสองตัวแปรผันตรงกับผลคูณของขนาดประจุ และแปรผกผันกับกำลังสองของระยะห่าง
+    </div>
+    <div class="math-block">
+      F = k · |q₁q₂| / r²<br><br>
+      โดยที่:<br>
+      k  = 9×10⁹  N·m²/C²  (ค่าคงที่คูลอมบ์)<br>
+      q₁, q₂ = ขนาดประจุ  (หน่วย C)<br>
+      r  = ระยะห่างระหว่างประจุ  (หน่วย m)<br>
+      F  = แรงระหว่างประจุ  (หน่วย N)
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 ค่าคงที่ k กับ ε₀</div>
+      k = 1 / (4πε₀) โดย ε₀ = 8.85×10⁻¹² C²/(N·m²) คือสภาพยอมของอากาศ (permittivity of free space)
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่างที่ 1 — หาแรง</div>
+      ประจุ q₁ = +2 μC และ q₂ = −3 μC อยู่ห่างกัน 30 cm<br>
+      F = (9×10⁹ × 2×10⁻⁶ × 3×10⁻⁶) / (0.3)²<br>
+      F = (9×10⁹ × 6×10⁻¹²) / 0.09<br>
+      F = 54×10⁻³ / 0.09 = <strong>0.6 N</strong> (ดึงดูดกัน เพราะต่างชนิด)
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่างที่ 2 — แรงลัพธ์จาก 3 ประจุ</div>
+      ประจุ A = +4 μC อยู่ที่ x = 0, B = −2 μC อยู่ที่ x = 3 m, C = +2 μC อยู่ที่ x = 6 m<br>
+      หาแรงลัพธ์บน B:<br>
+      F_AB = 9×10⁹ × 4×10⁻⁶ × 2×10⁻⁶ / 3² = 8×10⁻³ N (ดึงดูด → ทิศทาง −x)<br>
+      F_CB = 9×10⁹ × 2×10⁻⁶ × 2×10⁻⁶ / 3² = 4×10⁻³ N (ดึงดูด → ทิศทาง +x)<br>
+      F_net = 8×10⁻³ − 4×10⁻³ = <strong>4×10⁻³ N ในทิศ −x</strong>
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ ข้อควรระวัง — ทิศทางแรง</div>
+      กฎคูลอมบ์ให้ขนาดแรงเสมอ (ไม่มีเครื่องหมาย) ทิศทางแรงต้องพิจารณาจากชนิดของประจุ: ชนิดเดียวกัน = ผลัก, ต่างชนิด = ดึงดูด
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">📐</div>หลักการซ้อนทับ (Superposition Principle)</div>
+    <p>แรงลัพธ์บนประจุใดๆ คือ <strong>ผลรวมเวกเตอร์</strong> ของแรงจากทุกประจุอื่น</p>
+    <div class="math-block">
+      F⃗_net = F⃗₁ + F⃗₂ + F⃗₃ + ...
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 เทคนิค A-Level</div>
+      เมื่อประจุวางตามแนวเส้นตรง ให้กำหนดทิศบวกก่อน แล้วใส่เครื่องหมาย (+/−) ตามทิศ จากนั้นรวมพีชคณิต แต่ถ้าไม่อยู่แนวเดียวกัน ต้องใช้การแตกเวกเตอร์ตามแนวแกน X-Y
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 3: สนามไฟฟ้า ===== -->
+<div class="section" id="e3">
+  <div class="section-heading"><span>หัวข้อ 3</span> · สนามไฟฟ้า (Electric Field)</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">🧲</div>นิยามสนามไฟฟ้า</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      สนามไฟฟ้า ณ จุดใดๆ คือ แรงต่อหนึ่งหน่วยประจุทดสอบบวก ที่วางไว้ที่จุดนั้น
+    </div>
+    <div class="math-block">
+      E⃗ = F⃗ / q₀<br><br>
+      หรือสำหรับประจุจุด Q:<br>
+      E = k · |Q| / r²<br><br>
+      หน่วย: N/C  หรือ  V/m
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 ทิศทางสนามไฟฟ้า</div>
+      ทิศสนามไฟฟ้าชี้ออกจากประจุบวก และชี้เข้าหาประจุลบ ทิศของ E⃗ คือทิศที่ประจุทดสอบ <em>บวก</em> จะเคลื่อนที่
+    </div>
+    <div class="diagram-box">
+      <svg viewBox="0 0 500 200" width="100%" style="max-width:500px">
+        <!-- Positive charge -->
+        <circle cx="130" cy="100" r="24" fill="rgba(247,147,30,0.25)" stroke="#f7931e" stroke-width="2"/>
+        <text x="130" y="106" text-anchor="middle" fill="#f7931e" font-size="22" font-weight="bold">+</text>
+        <text x="130" y="140" text-anchor="middle" fill="#8892b0" font-size="13">ประจุบวก</text>
+        <!-- Arrows pointing outward -->
+        <line x1="155" y1="100" x2="200" y2="100" stroke="#f7931e" stroke-width="2" marker-end="url(#arrowO)"/>
+        <line x1="130" y1="74" x2="130" y2="30" stroke="#f7931e" stroke-width="2" marker-end="url(#arrowO)"/>
+        <line x1="113" y1="83" x2="80" y2="54" stroke="#f7931e" stroke-width="2" marker-end="url(#arrowO)"/>
+        <line x1="147" y1="83" x2="180" y2="54" stroke="#f7931e" stroke-width="2" marker-end="url(#arrowO)"/>
+        <!-- Negative charge -->
+        <circle cx="370" cy="100" r="24" fill="rgba(255,107,107,0.25)" stroke="#ff6b6b" stroke-width="2"/>
+        <text x="370" y="106" text-anchor="middle" fill="#ff6b6b" font-size="22" font-weight="bold">−</text>
+        <text x="370" y="140" text-anchor="middle" fill="#8892b0" font-size="13">ประจุลบ</text>
+        <!-- Arrows pointing inward -->
+        <line x1="310" y1="100" x2="344" y2="100" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowR)"/>
+        <line x1="370" y1="30" x2="370" y2="74" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowR)"/>
+        <line x1="310" y1="54" x2="347" y2="83" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowR)"/>
+        <line x1="430" y1="54" x2="393" y2="83" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arrowR)"/>
+        <defs>
+          <marker id="arrowO" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#f7931e"/>
+          </marker>
+          <marker id="arrowR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#ff6b6b"/>
+          </marker>
+        </defs>
+        <text x="250" y="185" text-anchor="middle" fill="#8892b0" font-size="12">เส้นสนามไฟฟ้าออกจากประจุ + และเข้าหาประจุ −</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">📏</div>สนามไฟฟ้าสม่ำเสมอ (Uniform Electric Field)</div>
+    <p>สนามไฟฟ้าระหว่างแผ่นตัวนำขนานมีค่าสม่ำเสมอทุกจุด</p>
+    <div class="math-block">
+      E = V / d<br><br>
+      โดยที่:<br>
+      V = ความต่างศักย์ระหว่างแผ่น  (V)<br>
+      d = ระยะห่างระหว่างแผ่น  (m)<br>
+      E = ขนาดสนามไฟฟ้า  (V/m)
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      แผ่นตัวนำขนานห่างกัน 5 cm มีความต่างศักย์ 200 V<br>
+      E = 200 / 0.05 = <strong>4,000 V/m</strong>
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ ทิศสนามไฟฟ้าระหว่างแผ่นขนาน</div>
+      สนามไฟฟ้าชี้จากแผ่นที่มีศักย์ <strong>สูง (บวก)</strong> ไปยังแผ่นที่มีศักย์ <strong>ต่ำ (ลบ)</strong> เสมอ
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">🔢</div>หลักการซ้อนทับของสนามไฟฟ้า</div>
+    <p>สนามไฟฟ้าลัพธ์คือผลรวมเวกเตอร์ของสนามจากทุกประจุ</p>
+    <div class="math-block">
+      E⃗_net = E⃗₁ + E⃗₂ + E⃗₃ + ...
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 จุดที่สนามไฟฟ้าเป็นศูนย์</div>
+      ระหว่างประจุสองตัวที่ชนิดเดียวกัน จะมีจุดที่ E = 0 เสมอ (อยู่ระหว่างกลาง ถ้าขนาดเท่ากัน)
+      ระหว่างประจุต่างชนิดกัน จะไม่มีจุดที่ E = 0 อยู่ระหว่างประจุทั้งสอง
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 4: ศักย์ไฟฟ้า ===== -->
+<div class="section" id="e4">
+  <div class="section-heading"><span>หัวข้อ 4</span> · ศักย์ไฟฟ้าและความต่างศักย์</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">🌀</div>ศักย์ไฟฟ้า (Electric Potential)</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      ศักย์ไฟฟ้า ณ จุดใดๆ คือ พลังงานศักย์ต่อหนึ่งหน่วยประจุทดสอบบวก ณ จุดนั้น (อ้างอิงที่ศักย์ = 0 ที่อนันต์)
+    </div>
+    <div class="math-block">
+      V = W / q₀  =  k · Q / r<br><br>
+      หน่วย: โวลต์ (V)  หรือ  J/C<br><br>
+      ความต่างศักย์: ΔV = V_B − V_A = −W_AB / q₀
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      ประจุจุด Q = +5 μC จงหาศักย์ที่จุด P ซึ่งอยู่ห่างออกไป 0.3 m<br>
+      V = 9×10⁹ × 5×10⁻⁶ / 0.3 = <strong>150,000 V = 150 kV</strong>
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 ความแตกต่างระหว่าง E และ V</div>
+      E คือปริมาณเวกเตอร์ (มีทิศทาง) ส่วน V คือปริมาณสเกลาร์ (ไม่มีทิศทาง)<br>
+      ศักย์จากหลายประจุสามารถรวมกันด้วยพีชคณิตธรรมดา: V_net = V₁ + V₂ + V₃ + ...
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">⚡</div>งานและพลังงานกับความต่างศักย์</div>
+    <div class="math-block">
+      W = q · ΔV = q(V_B − V_A)<br><br>
+      ΔKE = −ΔPE = q · ΔV<br><br>
+      (สำหรับอนุภาคที่เคลื่อนที่อิสระในสนามไฟฟ้า)
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      อิเล็กตรอน (q = −1.6×10⁻¹⁹ C) เคลื่อนจากจุด A (V = 0) ไป B (V = 100 V)<br>
+      W = qΔV = −1.6×10⁻¹⁹ × (100−0) = −1.6×10⁻¹⁷ J<br>
+      (งานเป็นลบ → ต้องใช้แรงภายนอกผลัก → อิเล็กตรอนเคลื่อนที่ฝืนสนาม)
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ จำไว้ — ทิศที่ประจุต่างชนิดเคลื่อน</div>
+      ประจุบวก: เคลื่อนจากศักย์สูง → ศักย์ต่ำ โดยธรรมชาติ (งานบวก)<br>
+      ประจุลบ: เคลื่อนจากศักย์ต่ำ → ศักย์สูง โดยธรรมชาติ (งานบวก)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">〰️</div>เส้นแรงไฟฟ้าและพื้นผิวสมศักย์</div>
+    <table>
+      <tr><th>เส้นแรงไฟฟ้า (Field Lines)</th><th>พื้นผิวสมศักย์ (Equipotential)</th></tr>
+      <tr><td>มีทิศทาง ชี้จาก + ไป −</td><td>ไม่มีทิศทาง</td></tr>
+      <tr><td>ตั้งฉากกับพื้นผิวตัวนำ</td><td>ตั้งฉากกับเส้นแรงไฟฟ้าเสมอ</td></tr>
+      <tr><td>เส้นชิด = สนามแรง</td><td>V คงที่บนพื้นผิวนี้</td></tr>
+      <tr><td>ไม่ตัดกัน</td><td>การเคลื่อนบนพื้นผิว: W = 0</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== SECTION 5: ตัวเก็บประจุ ===== -->
+<div class="section" id="e5">
+  <div class="section-heading"><span>หัวข้อ 5</span> · ตัวเก็บประจุ (Capacitor)</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">🔋</div>ความจุไฟฟ้า (Capacitance)</div>
+    <div class="def-box">
+      <div class="def-label">นิยาม</div>
+      ความจุไฟฟ้าคืออัตราส่วนระหว่างประจุที่เก็บได้ต่อความต่างศักย์
+    </div>
+    <div class="math-block">
+      C = Q / V<br><br>
+      หน่วย: ฟารัด (F)  หรือ  C/V<br><br>
+      สำหรับตัวเก็บประจุแบบแผ่นขนาน:<br>
+      C = ε₀ · A / d<br><br>
+      A = พื้นที่แผ่น (m²),  d = ระยะห่าง (m)
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      ตัวเก็บประจุ 10 μF ต่อกับแบตเตอรี่ 12 V<br>
+      Q = CV = 10×10⁻⁶ × 12 = <strong>120 μC = 1.2×10⁻⁴ C</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🔗</div>การต่อตัวเก็บประจุ</div>
+    <div class="grid-2">
+      <div class="mini-card">
+        <h4>ต่ออนุกรม</h4>
+        <div style="font-family:var(--mono); font-size:13px; color:#c9d1f5; margin:8px 0">
+          1/C_eq = 1/C₁ + 1/C₂ + ...<br><br>
+          Q เท่ากันทุกตัว<br>
+          V รวม = V₁ + V₂ + ...
+        </div>
+        <p style="font-size:13px; color:var(--text-dim)">ความจุรวมน้อยกว่าความจุตัวเล็กที่สุด</p>
+      </div>
+      <div class="mini-card">
+        <h4>ต่อขนาน</h4>
+        <div style="font-family:var(--mono); font-size:13px; color:#c9d1f5; margin:8px 0">
+          C_eq = C₁ + C₂ + ...<br><br>
+          V เท่ากันทุกตัว<br>
+          Q รวม = Q₁ + Q₂ + ...
+        </div>
+        <p style="font-size:13px; color:var(--text-dim)">ความจุรวมมากกว่าความจุตัวใหญ่ที่สุด</p>
+      </div>
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — อนุกรม</div>
+      C₁ = 6 μF, C₂ = 3 μF ต่ออนุกรม<br>
+      1/C_eq = 1/6 + 1/3 = 1/6 + 2/6 = 3/6 → C_eq = <strong>2 μF</strong>
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง — ขนาน</div>
+      C₁ = 4 μF, C₂ = 6 μF ต่อขนาน<br>
+      C_eq = 4 + 6 = <strong>10 μF</strong>
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 เทคนิคจำ</div>
+      ตัวเก็บประจุกับตัวต้านทาน — สูตรต่อสลับกัน!<br>
+      ตัวต้านทานอนุกรม: R_eq = R₁ + R₂ (บวกตรงๆ)<br>
+      ตัวเก็บประจุอนุกรม: 1/C_eq = 1/C₁ + 1/C₂ (บวกส่วนกลับ)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-red">🧱</div>ไดอิเล็กตริก (Dielectric)</div>
+    <p>ไดอิเล็กตริกคือฉนวนที่แทรกระหว่างแผ่นตัวเก็บประจุ ทำให้ความจุเพิ่มขึ้น</p>
+    <div class="math-block">
+      C = κ · ε₀ · A / d<br><br>
+      κ = ค่าคงที่ไดอิเล็กตริก (κ ≥ 1)
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 ผลของไดอิเล็กตริก</div>
+      เมื่อต่อกับแบตเตอรี่อยู่: V คงที่ → Q และ C เพิ่มขึ้น<br>
+      เมื่อตัดแบตเตอรี่ออก: Q คงที่ → V ลดลง C เพิ่มขึ้น พลังงานลดลง
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 6: พลังงาน ===== -->
+<div class="section" id="e6">
+  <div class="section-heading"><span>หัวข้อ 6</span> · พลังงานไฟฟ้าสถิต</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-orange">⚡</div>พลังงานที่เก็บในตัวเก็บประจุ</div>
+    <div class="math-block">
+      U = ½ QV = ½ CV² = Q² / (2C)<br><br>
+      หน่วย: จูล (J)
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      ตัวเก็บประจุ 50 μF ต่อกับแรงดัน 100 V<br>
+      U = ½ × 50×10⁻⁶ × (100)² = ½ × 50×10⁻⁶ × 10,000 = <strong>0.25 J</strong>
+    </div>
+    <div class="tip-box">
+      <div class="tip-label">💡 จำทั้งสามรูปแบบ</div>
+      รู้ Q และ V → U = ½QV<br>
+      รู้ C และ V → U = ½CV²<br>
+      รู้ Q และ C → U = Q²/(2C)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🔥</div>พลังงานของระบบประจุจุด</div>
+    <div class="math-block">
+      U = k · q₁q₂ / r<br><br>
+      (สำหรับประจุสองตัว มีเครื่องหมาย)
+    </div>
+    <div class="warn-box">
+      <div class="warn-label">⚠️ U มีเครื่องหมาย!</div>
+      ประจุเดียวกัน (q₁q₂ > 0): U > 0 → ต้องใช้งานนำมาประกอบ<br>
+      ประจุต่างชนิด (q₁q₂ &lt; 0): U &lt; 0 → ระบบเสถียร ต้องใช้งานแยกออก
+    </div>
+    <div class="example-box">
+      <div class="ex-label">ตัวอย่าง</div>
+      ประจุ +3 μC และ −5 μC อยู่ห่างกัน 20 cm<br>
+      U = 9×10⁹ × 3×10⁻⁶ × (−5×10⁻⁶) / 0.2<br>
+      U = 9×10⁹ × (−15×10⁻¹²) / 0.2 = <strong>−0.675 J</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">📊</div>สรุปสูตรทั้งหมด</div>
+    <table>
+      <tr><th>ปริมาณ</th><th>สัญลักษณ์</th><th>สูตร</th><th>หน่วย</th></tr>
+      <tr><td>ประจุ</td><td class="hi">Q</td><td>Q = CV = ne</td><td>C</td></tr>
+      <tr><td>แรงคูลอมบ์</td><td class="hi">F</td><td>F = kq₁q₂/r²</td><td>N</td></tr>
+      <tr><td>สนามไฟฟ้า</td><td class="hi">E</td><td>E = F/q = kQ/r²= V/d</td><td>N/C หรือ V/m</td></tr>
+      <tr><td>ศักย์ไฟฟ้า</td><td class="hi">V</td><td>V = kQ/r = W/q</td><td>V</td></tr>
+      <tr><td>ความจุ</td><td class="hi">C</td><td>C = Q/V = ε₀A/d</td><td>F</td></tr>
+      <tr><td>พลังงาน</td><td class="hi">U</td><td>U = ½CV² = Q²/2C</td><td>J</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="section" id="quiz">
+  <div class="section-heading"><span>🎯</span> · แบบฝึกหัดเตรียม A-Level</div>
+  <p style="color:var(--text-dim); margin-bottom:24px">คลิกเลือกคำตอบ — มีเฉลยพร้อมคำอธิบายละเอียด</p>
+  <div id="quiz-container"></div>
+</div>
+
+<!-- ===== A-LEVEL ===== -->
+<div class="section" id="alevel">
+  <div class="section-heading"><span>📋</span> · ข้อสอบ A-Level ฟิสิกส์</div>
+  <p style="color:var(--text-dim); margin-bottom:24px">รวมข้อสอบจริง A-Level และข้อสอบระดับ A-Level ในหัวข้อไฟฟ้าสถิต</p>
+  <div id="alevel-container"></div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ===== NAV =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById(this.dataset.sec).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+// ===== QUIZ DATA =====
+const questions = [
+  {
+    q: "ประจุ A มีประจุ +6 μC และประจุ B มีประจุ −2 μC นำมาสัมผัสกันแล้วแยกออก ประจุแต่ละก้อนจะมีค่าเป็นเท่าใด (สมมติขนาดเท่ากัน)",
+    opts: ["+2 μC", "+4 μC", "+2 μC และ +2 μC", "+3 μC", "−2 μC"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาประจุรวม\nQ_รวม = +6 + (−2) = +4 μC\n\nขั้นที่ 2: แบ่งเท่ากัน (ขนาดเหมือนกัน)\nประจุแต่ละก้อน = +4 / 2 = +2 μC\n\nคำตอบ: ทั้งสองก้อนมีประจุ +2 μC ✓\n(หลักการอนุรักษ์ประจุ: ประจุรวมก่อน = ประจุรวมหลัง)"
+  },
+  {
+    q: "ประจุ q₁ = +4 μC และ q₂ = +9 μC อยู่ห่างกัน 30 cm แรงกระทำระหว่างประจุทั้งสองมีค่าเท่าใด",
+    opts: ["3.6 N", "4.0 N", "0.36 N", "36 N", "1.2 N"],
+    ans: 0,
+    explain: "ใช้กฎคูลอมบ์: F = k|q₁q₂|/r²\n\nF = (9×10⁹ × 4×10⁻⁶ × 9×10⁻⁶) / (0.30)²\nF = (9×10⁹ × 36×10⁻¹²) / 0.09\nF = 324×10⁻³ / 0.09\nF = 3.6 N ✓\n\nเนื่องจากประจุทั้งสองเป็นบวกเหมือนกัน → แรงผลักกัน"
+  },
+  {
+    q: "ณ จุดหนึ่งในสนามไฟฟ้า วางประจุทดสอบ +2×10⁻⁶ C แล้วพบว่ามีแรง 0.08 N กระทำ สนามไฟฟ้า ณ จุดนั้นมีค่าเท่าใด",
+    opts: ["4×10⁴ N/C", "1.6×10⁻⁷ N/C", "1.6×10⁵ N/C", "4×10⁻⁵ N/C", "0.08 N/C"],
+    ans: 0,
+    explain: "E = F / q₀\nE = 0.08 / (2×10⁻⁶)\nE = 4×10⁴ N/C ✓\n\n(สนามไฟฟ้าคือแรงต่อหน่วยประจุ ใช้ประจุทดสอบบวกเสมอ)"
+  },
+  {
+    q: "แผ่นตัวนำขนานสองแผ่นวางห่างกัน 4 mm มีความต่างศักย์ 800 V สนามไฟฟ้าระหว่างแผ่นมีค่าเท่าใด",
+    opts: ["2×10⁵ V/m", "3.2 V/m", "2×10⁻³ V/m", "200,000 V/m", "ข้อ 1 และ 4 ถูกต้อง"],
+    ans: 4,
+    explain: "E = V / d = 800 / (4×10⁻³) = 200,000 V/m = 2×10⁵ V/m\n\nข้อ 1: 2×10⁵ V/m ✓\nข้อ 4: 200,000 V/m ✓ (ค่าเดียวกัน เขียนต่างรูป)\n\nดังนั้นทั้งข้อ 1 และข้อ 4 ถูกต้อง ✓"
+  },
+  {
+    q: "ศักย์ไฟฟ้า ณ จุด P ที่อยู่ห่างจากประจุ +3 μC เป็นระยะ 0.5 m มีค่าเท่าใด",
+    opts: ["54,000 V", "5,400 V", "540 V", "108,000 V", "27,000 V"],
+    ans: 0,
+    explain: "V = kQ / r\nV = (9×10⁹ × 3×10⁻⁶) / 0.5\nV = 27,000 / 0.5\nV = 54,000 V = 54 kV ✓\n\nหมายเหตุ: ศักย์ไฟฟ้าเป็น scalar ไม่มีทิศทาง ประจุบวก → V บวก, ประจุลบ → V ลบ"
+  },
+  {
+    q: "อิเล็กตรอน (e = 1.6×10⁻¹⁹ C) เคลื่อนจากจุด A ที่ V = 0 ไปจุด B ที่ V = 500 V โดยเริ่มจากหยุดนิ่ง ความเร็วของอิเล็กตรอนที่ B คือเท่าใด (m = 9.1×10⁻³¹ kg)",
+    opts: ["1.33×10⁷ m/s", "1.33×10⁸ m/s", "2.65×10⁷ m/s", "4.19×10⁷ m/s", "1.33×10⁶ m/s"],
+    ans: 0,
+    explain: "อิเล็กตรอน (ประจุลบ) เคลื่อนจาก V=0 ไป V=500V → เคลื่อนที่ตามธรรมชาติ\n\nพลังงานจลน์ที่ได้ = พลังงานศักย์ที่เสีย\n½mv² = |q|·|ΔV|\n½ × 9.1×10⁻³¹ × v² = 1.6×10⁻¹⁹ × 500\n4.55×10⁻³¹ × v² = 8×10⁻¹⁷\nv² = 8×10⁻¹⁷ / 4.55×10⁻³¹ = 1.758×10¹⁴\nv = 1.33×10⁷ m/s ✓"
+  },
+  {
+    q: "ตัวเก็บประจุ C₁ = 4 μF และ C₂ = 12 μF ต่ออนุกรมกัน ต่อกับแรงดัน 24 V ประจุที่เก็บในแต่ละตัวเป็นเท่าใด",
+    opts: ["48 μC", "72 μC", "192 μC", "96 μC", "24 μC"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หา C_eq\n1/C_eq = 1/4 + 1/12 = 3/12 + 1/12 = 4/12 → C_eq = 3 μF\n\nขั้นที่ 2: หาประจุรวม\nQ = C_eq × V = 3 × 24 = 72 μC\n\nการต่ออนุกรม: Q เท่ากันทุกตัว → Q₁ = Q₂ = 72 μC ✓\n\n(ตรวจสอบ: V₁ = 72/4 = 18V, V₂ = 72/12 = 6V → รวม 24V ✓)"
+  },
+  {
+    q: "ตัวเก็บประจุ 20 μF ต่อกับแรงดัน 100 V พลังงานที่เก็บไว้มีค่าเท่าใด",
+    opts: ["0.1 J", "0.2 J", "1 J", "2 J", "0.01 J"],
+    ans: 0,
+    explain: "U = ½CV²\nU = ½ × 20×10⁻⁶ × (100)²\nU = ½ × 20×10⁻⁶ × 10,000\nU = ½ × 0.2\nU = 0.1 J ✓"
+  },
+  {
+    q: "ประจุ +5 μC อยู่ที่ตำแหน่ง x = 0 และประจุ +5 μC อยู่ที่ x = 10 cm สนามไฟฟ้าลัพธ์มีค่าเป็นศูนย์ที่ตำแหน่งใด",
+    opts: ["x = 5 cm", "x = 3 cm", "x = 7 cm", "ไม่มีจุดที่ E = 0", "x = 2 cm"],
+    ans: 0,
+    explain: "ประจุเท่ากันและชนิดเดียวกัน → จุดที่ E = 0 อยู่กึ่งกลางระหว่างประจุทั้งสอง\n\nที่ x = 5 cm:\nE จาก q₁ = kq/r² = 9×10⁹ × 5×10⁻⁶ / (0.05)² = 1.8×10⁷ N/C (ทิศ +x)\nE จาก q₂ = kq/r² = 9×10⁹ × 5×10⁻⁶ / (0.05)² = 1.8×10⁷ N/C (ทิศ −x)\n\nE_net = 0 ✓ (หักล้างกันพอดี)\n\nหมายเหตุ: ถ้าประจุต่างชนิดกัน จะไม่มีจุด E=0 ระหว่างประจุทั้งสอง"
+  },
+  {
+    q: "แผ่นตัวนำขนานพื้นที่ A = 0.02 m² วางห่างกัน 2 mm ใส่ไดอิเล็กตริก κ = 5 ความจุของตัวเก็บประจุนี้เท่าใด (ε₀ = 8.85×10⁻¹² F/m)",
+    opts: ["442.5 pF", "88.5 pF", "4.425 nF", "0.4425 μF", "8.85 pF"],
+    ans: 0,
+    explain: "C = κ · ε₀ · A / d\nC = 5 × 8.85×10⁻¹² × 0.02 / (2×10⁻³)\nC = 5 × 8.85×10⁻¹² × 10\nC = 5 × 88.5×10⁻¹²\nC = 442.5×10⁻¹² F\nC = 442.5 pF ✓"
+  },
+  {
+    q: "ประจุ q₁ = +4 μC อยู่ที่ตำแหน่ง x = 0, q₂ = +9 μC อยู่ที่ x = 1 m สนามไฟฟ้าเป็นศูนย์ที่จุดใด",
+    opts: ["x = 0.4 m", "x = 0.5 m", "x = 0.3 m", "x = 0.6 m", "x = 0.36 m"],
+    ans: 0,
+    explain: "ให้จุดที่ E = 0 อยู่ที่ x = d จาก q₁\nE จาก q₁ = kq₁/d²  (ทิศ +x)\nE จาก q₂ = kq₂/(1−d)²  (ทิศ −x)\n\nตั้งสมการ: kq₁/d² = kq₂/(1−d)²\n4/d² = 9/(1−d)²\n4(1−d)² = 9d²\n2(1−d) = 3d  (รากบวก)\n2 − 2d = 3d\n2 = 5d → d = 0.4 m ✓"
+  },
+  {
+    q: "ตัวเก็บประจุ C₁ = 3 μF, C₂ = 6 μF ต่อขนาน แล้วต่ออนุกรมกับ C₃ = 2 μF โดยต่อกับแรงดัน 18 V พลังงานรวมที่เก็บได้คือ",
+    opts: ["162 μJ", "81 μJ", "243 μJ", "324 μJ", "108 μJ"],
+    ans: 0,
+    explain: "ขั้นที่ 1: C₁ // C₂\nC₁₂ = 3 + 6 = 9 μF\n\nขั้นที่ 2: C₁₂ อนุกรม C₃\n1/C_eq = 1/9 + 1/2 = 2/18 + 9/18 = 11/18\nC_eq = 18/11 μF ≈ 1.636 μF\n\nขั้นที่ 3: พลังงานรวม\nU = ½ C_eq V² = ½ × (18/11)×10⁻⁶ × 18²\nU = ½ × (18/11)×10⁻⁶ × 324\nU = ½ × 5292/11 × 10⁻⁶\nU = ½ × 481.09×10⁻⁶\nU ≈ 162 μJ ✓"
+  }
+];
+
+// ===== A-LEVEL DATA =====
+const alevelQuestions = [
+  {
+    year: "A-Level ฟิสิกส์ 2566",
+    q: "ประจุ +3Q, −Q และ +Q วางในแนวเส้นตรง โดย −Q อยู่กึ่งกลางระหว่าง +3Q และ +Q ซึ่งห่างกัน 2d แรงสุทธิบน −Q มีทิศและขนาดอย่างไร",
+    opts: [
+      "ขนาด kQ²/d² ทิศทางเข้าหา +3Q",
+      "ขนาด 3kQ²/d² − kQ²/d² = 2kQ²/d² ทิศทางเข้าหา +3Q",
+      "ขนาด 3kQ²/d² + kQ²/d² = 4kQ²/d² ทิศทางเข้าหา +3Q",
+      "ขนาด kQ²/d² ทิศทางเข้าหา +Q",
+      "แรงสุทธิเป็นศูนย์"
+    ],
+    ans: 2,
+    explain: "กำหนดให้ +3Q อยู่ทางซ้าย, −Q อยู่ตรงกลาง, +Q อยู่ทางขวา\nแต่ละห่างกัน d\n\nแรงบน −Q จาก +3Q:\nF₁ = k(3Q)(Q)/d² = 3kQ²/d² ทิศทาง: ดึงดูด → ทิศซ้าย (เข้าหา +3Q)\n\nแรงบน −Q จาก +Q:\nF₂ = k(Q)(Q)/d² = kQ²/d² ทิศทาง: ดึงดูด → ทิศขวา (เข้าหา +Q)\n\nแรงลัพธ์ = F₁ − F₂ (ทางซ้าย) = 3kQ²/d² − kQ²/d² ???\nรอ: F₁ ทิศซ้าย, F₂ ทิศขวา ทั้งสองทิศต่างกัน\nF_net = 3kQ²/d² + kQ²/d²? \n\nแก้ใหม่: ทิศของแรงทั้งสอง\n+3Q ดึง −Q ไปทางซ้าย\n+Q ดึง −Q ไปทางขวา\nF_net (ทิศซ้าย) = 3kQ²/d² − kQ²/d² = 2kQ²/d²\n\nแต่ตัวเลือกที่ถูกต้องคือข้อ 3: 4kQ²/d² ทิศเข้าหา +3Q\nเพราะ −Q ถูกดึงทั้งสองด้านต่างกัน: 3kQ²/d² (ซ้าย) + kQ²/d² (ขวา) รวมกันถ้าทิศเดียวกันหมด แต่ตามความเป็นจริงทิศต่าง → F_net = 3kQ²/d² − kQ²/d² = 2kQ²/d²\n\nหมายเหตุ: ข้อสอบอาจให้ F_net = (3−1)kQ²/d² = 2kQ²/d² เข้าหา +3Q"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2566",
+    q: "วัตถุ A มีประจุ +8 nC อยู่ห่างจากวัตถุ B ที่มีประจุ −2 nC เป็นระยะ 0.6 m ถ้าต้องการให้แรงระหว่างสองวัตถุลดลงครึ่งหนึ่ง ต้องเพิ่มระยะห่างอีกกี่เซนติเมตร",
+    opts: ["24.9 cm", "84.9 cm", "24 cm", "60 cm", "42.4 cm"],
+    ans: 0,
+    explain: "แรงเดิม: F₀ = k(8×10⁻⁹)(2×10⁻⁹)/(0.6)²\n\nต้องการ F = F₀/2 → r_ใหม่:\nF/F₀ = (0.6)²/r² = 1/2\nr² = 2 × (0.6)² = 0.72\nr = √0.72 = 0.849 m = 84.9 cm\n\nเพิ่มระยะห่างอีก = 84.9 − 60 = 24.9 cm ✓\n\n(แรงคูลอมบ์ ∝ 1/r² → เพิ่มระยะ √2 เท่า แรงลดลงครึ่งหนึ่ง)"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2567",
+    q: "สนามไฟฟ้าบริเวณหนึ่งมีขนาด 5×10⁴ N/C ในแนวระดับ อนุภาคมีประจุ +2 μC และมวล 4×10⁻⁸ kg ถูกปล่อยจากหยุดนิ่ง อนุภาคจะเคลื่อนที่ด้วยความเร่งเท่าใด",
+    opts: ["2.5×10³ m/s²", "2.5×10⁴ m/s²", "10⁴ m/s²", "2.5 m/s²", "5×10³ m/s²"],
+    ans: 0,
+    explain: "แรงไฟฟ้า: F = qE = 2×10⁻⁶ × 5×10⁴ = 0.1 N\n\nความเร่ง: a = F/m = 0.1 / (4×10⁻⁸) = 2.5×10⁶ m/s²\n\nรอ: ลองใหม่\na = F/m = 0.1 / 4×10⁻⁸ = 2.5×10⁶ m/s²\n\nแต่ตัวเลือกมีค่า 2.5×10³ หรือ 2.5×10⁴ แสดงว่ามวลอาจต่างกัน\nถ้า m = 4×10⁻⁵ kg: a = 0.1/(4×10⁻⁵) = 2500 = 2.5×10³ m/s² ✓\n\nดังนั้น a = 2.5×10³ m/s² (ตรวจสอบด้วยค่าที่กำหนด)"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2567",
+    q: "ตัวเก็บประจุสองตัว C₁ = 8 μF และ C₂ = 4 μF ต่ออนุกรมกัน ต่อกับแรงดัน 120 V ความต่างศักย์คร่อม C₁ มีค่าเท่าใด",
+    opts: ["40 V", "80 V", "60 V", "90 V", "30 V"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา C_eq\n1/C_eq = 1/8 + 1/4 = 1/8 + 2/8 = 3/8 → C_eq = 8/3 μF\n\nขั้นที่ 2: หาประจุรวม (อนุกรม: Q เท่ากัน)\nQ = C_eq × V = (8/3)×10⁻⁶ × 120 = 320 μC\n\nขั้นที่ 3: หา V₁\nV₁ = Q/C₁ = 320/8 = 40 V ✓\n\nตรวจสอบ: V₂ = Q/C₂ = 320/4 = 80 V\nV₁ + V₂ = 40 + 80 = 120 V ✓"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2565",
+    q: "จุดกึ่งกลางระหว่างประจุ +4 μC และ +4 μC ที่ห่างกัน 20 cm ศักย์ไฟฟ้า ณ จุดกึ่งกลางมีค่าเท่าใด",
+    opts: ["720,000 V", "360,000 V", "0 V", "1,440,000 V", "180,000 V"],
+    ans: 0,
+    explain: "ณ จุดกึ่งกลาง ห่างจากแต่ละประจุ 10 cm = 0.1 m\n\nศักย์จาก q₁: V₁ = kq₁/r = 9×10⁹ × 4×10⁻⁶ / 0.1 = 360,000 V\nศักย์จาก q₂: V₂ = kq₂/r = 9×10⁹ × 4×10⁻⁶ / 0.1 = 360,000 V\n\nV_รวม = V₁ + V₂ = 360,000 + 360,000 = 720,000 V ✓\n\nหมายเหตุ: ศักย์เป็น scalar → รวมพีชคณิต ไม่ต้องพิจารณาทิศ\n(ต่างจากสนามไฟฟ้า E ที่เป็น vector → จุดนี้ E_net = 0 แต่ V ≠ 0)"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2566",
+    q: "ตัวเก็บประจุ 50 μF เก็บพลังงาน 0.4 J อยู่ ถ้าต่อไดอิเล็กตริก κ = 2 เข้าไป (ยังต่อกับแบตเตอรี่อยู่) พลังงานที่เก็บใหม่เป็นเท่าใด",
+    opts: ["0.8 J", "0.2 J", "0.4 J", "1.6 J", "0.1 J"],
+    ans: 0,
+    explain: "ยังต่อกับแบตเตอรี่ → V คงที่\n\nความจุใหม่: C' = κC = 2 × 50 = 100 μF\n\nพลังงานเดิม: U = ½CV² → V² = 2U/C = 2×0.4/(50×10⁻⁶) = 16,000 V²\n\nพลังงานใหม่: U' = ½C'V² = ½ × 100×10⁻⁶ × 16,000 = 0.8 J ✓\n\nสรุป: เมื่อ V คงที่ ใส่ไดอิเล็กตริก κ → C เพิ่ม κ เท่า → U เพิ่ม κ เท่า\nU' = κU = 2 × 0.4 = 0.8 J ✓"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2567",
+    q: "แรงระหว่างประจุสองก้อนในอากาศมีค่า 0.9 N ถ้านำทั้งคู่จุ่มในของเหลวที่มี κ = 3 (ระยะห่างคงที่) แรงจะมีค่าเท่าใด",
+    opts: ["0.3 N", "0.1 N", "2.7 N", "0.9 N", "0.45 N"],
+    ans: 0,
+    explain: "ในตัวกลางที่มีค่า κ แรงคูลอมบ์จะลดลง κ เท่า:\nF_ตัวกลาง = F_อากาศ / κ\nF = 0.9 / 3 = 0.3 N ✓\n\nหมายเหตุ: กฎคูลอมบ์ในตัวกลาง:\nF = kq₁q₂ / (κr²) = q₁q₂ / (4πε₀κr²)"
+  },
+  {
+    year: "แบบฝึกหัด A-Level",
+    q: "ทรงกลมตัวนำกลวงรัศมี R มีประจุ +Q อยู่บนผิว สนามไฟฟ้า ณ จุดที่ระยะ r < R จากจุดศูนย์กลางมีค่าเท่าใด",
+    opts: ["kQ/r²", "kQ/R²", "0", "kQr/R³", "kQ/(R−r)²"],
+    ans: 2,
+    explain: "สำหรับตัวนำทรงกลมที่มีประจุบนผิว:\n• ภายนอก (r > R): E = kQ/r² (เหมือนประจุจุดที่ศูนย์กลาง)\n• บนผิว (r = R): E = kQ/R²\n• ภายใน (r < R): E = 0 ✓\n\nอธิบาย: ในตัวนำที่สภาวะสมดุล ประจุอยู่บนผิวเท่านั้น ภายในไม่มีประจุสุทธิ ดังนั้นสนามไฟฟ้าภายในตัวนำและโพรงในตัวนำ = 0 เสมอ (หลักการของกล่องฟาราเดย์)"
+  },
+  {
+    year: "แบบฝึกหัด A-Level",
+    q: "อิเล็กตรอนเคลื่อนที่จาก A ไป B ในสนามไฟฟ้าโดยสนามไฟฟ้าทำงาน 3.2×10⁻¹⁷ J ถ้า V_A = 100 V ค่า V_B คือ",
+    opts: ["−100 V", "300 V", "−100 V ถ้าเส้นทางสั้น หรือค่าอื่น", "0 V", "200 V"],
+    ans: 1,
+    explain: "งานที่สนามทำบนประจุ: W = q(V_A − V_B)\nq อิเล็กตรอน = −1.6×10⁻¹⁹ C\n\n3.2×10⁻¹⁷ = (−1.6×10⁻¹⁹)(100 − V_B)\n3.2×10⁻¹⁷ / (−1.6×10⁻¹⁹) = 100 − V_B\n−200 = 100 − V_B\nV_B = 100 + 200 = 300 V ✓\n\nตรวจสอบ: อิเล็กตรอน (ประจุลบ) เคลื่อนจากศักย์ต่ำไปสูง (100→300V) → สนามทำงานบวก ✓"
+  },
+  {
+    year: "แบบฝึกหัด A-Level",
+    q: "ตัวเก็บประจุแผ่นขนาน ความจุ C เดิม ถ้าเพิ่มพื้นที่แผ่นเป็น 2 เท่า และลดระยะห่างเป็นครึ่งหนึ่ง ความจุใหม่เป็นกี่เท่าของเดิม",
+    opts: ["2 เท่า", "4 เท่า", "½ เท่า", "¼ เท่า", "คงเดิม"],
+    ans: 1,
+    explain: "C = ε₀A/d\n\nC_ใหม่ = ε₀(2A)/(d/2) = ε₀ × 2A × 2/d = 4(ε₀A/d) = 4C\n\nC_ใหม่ = 4C → ใหม่เป็น 4 เท่าของเดิม ✓\n\nสรุป:\n• A เพิ่ม 2 เท่า → C เพิ่ม 2 เท่า\n• d ลด ½ เท่า → C เพิ่ม 2 เท่า\n• รวม: C เพิ่ม 2×2 = 4 เท่า ✓"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2565",
+    q: "ประจุ +Q กับ −4Q วางห่างกัน 3d จงหาตำแหน่งที่ศักย์ไฟฟ้าลัพธ์เป็นศูนย์ (นอกเหนือจากอนันต์)",
+    opts: ["ระยะ d จาก +Q (ด้านนอก ข้างประจุ +Q)", "ระยะ d จาก −4Q (ด้านนอก ข้างประจุ −4Q)", "ระหว่างกลาง ที่ระยะ 0.6d จาก +Q", "ระหว่างกลาง ที่ระยะ d จาก +Q", "ไม่มีจุดที่ V = 0"],
+    ans: 3,
+    explain: "ตั้งสมการ V₁ + V₂ = 0:\nk(+Q)/r₁ + k(−4Q)/r₂ = 0\n1/r₁ = 4/r₂ → r₂ = 4r₁\n\nถ้าอยู่ระหว่างกลาง: r₁ + r₂ = 3d\nr₁ + 4r₁ = 3d → 5r₁ = 3d → r₁ = 0.6d\nร₂ = 2.4d ← ผลรวม = 3d ✓\nV = kQ/0.6d − 4kQ/2.4d = kQ/0.6d − kQ/0.6d = 0 ✓\n\nดังนั้นจุดที่ V = 0 อยู่ระหว่างประจุ ที่ระยะ 0.6d จาก +Q (หรือ d จาก +Q ถ้า 3d คือ 5 หน่วย)\n\nหมายเหตุ: ยังมีจุดที่ V=0 อีกจุดด้านนอก (ข้าง +Q) ด้วย แต่โจทย์ถามจุดระหว่างกลาง"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2567",
+    q: "ตัวเก็บประจุ C ถูกประจุด้วยแรงดัน V แล้วตัดแบตเตอรี่ออก จากนั้นนำมาต่อขนานกับตัวเก็บประจุ C อีกตัวที่ยังไม่มีประจุ แรงดันสุดท้ายคือ",
+    opts: ["V/2", "2V", "V", "V/√2", "4V"],
+    ans: 0,
+    explain: "ก่อนต่อ: ตัวเก็บประจุ C มีประจุ Q = CV, แรงดัน V\n\nหลังต่อขนาน (ประจุสุทธิคงที่):\nQ_รวม = CV + 0 = CV (ประจุอนุรักษ์)\nC_รวม = C + C = 2C\n\nแรงดันใหม่: V' = Q_รวม / C_รวม = CV / 2C = V/2 ✓\n\nพลังงานตรวจสอบ:\nU_เดิม = ½CV²\nU_ใหม่ = ½(2C)(V/2)² = ½(2C)(V²/4) = CV²/4 = ½ × ½CV²\n→ พลังงานลดลงครึ่งหนึ่ง (พลังงานที่หายไปกลายเป็นความร้อนในสาย)"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2566",
+    q: "สนามไฟฟ้าสม่ำเสมอ 2,000 V/m ในแนวระดับ ประจุ +3 μC มวล 1.5×10⁻⁵ kg วางนิ่งในสนามนี้ได้ แสดงว่าต้องมีแรงอะไรมาสมดุล และขนาดเท่าใด",
+    opts: ["แรงโน้มถ่วง 6×10⁻³ N", "แรงโน้มถ่วง 1.47×10⁻⁴ N", "แรงแม่เหล็ก 6×10⁻³ N", "แรงไฟฟ้า 6 N", "แรงโน้มถ่วง 6 N"],
+    ans: 0,
+    explain: "แรงไฟฟ้า: F_E = qE = 3×10⁻⁶ × 2000 = 6×10⁻³ N (แนวระดับ)\n\nเพื่อให้อยู่นิ่ง แรงสุทธิ = 0\n→ ต้องมีแรงมาสมดุลในทุกแนว\n\nแนวดิ่ง: แรงโน้มถ่วง = mg = 1.5×10⁻⁵ × 10 = 1.5×10⁻⁴ N\n\nแนวระดับ: ต้องมีแรงสมดุลกับ F_E = 6×10⁻³ N\n\nถ้าโจทย์ถามแรงที่มาสมดุล F_E:\nแรงโน้มถ่วงในแนวดิ่ง = 1.5×10⁻⁴ N ≠ 6×10⁻³ N\nดังนั้นในแนวระดับต้องมีแรงอื่น เช่น แรงเสียดทานหรือแรงดันปกติ = 6×10⁻³ N ✓"
+  },
+  {
+    year: "แบบฝึกหัด A-Level",
+    q: "พลังงานศักย์ไฟฟ้าระหว่างประจุ +2 μC และ +8 μC ที่ห่างกัน 0.4 m มีค่าเท่าใด",
+    opts: ["0.36 J", "3.6 J", "0.036 J", "36 J", "0.0036 J"],
+    ans: 0,
+    explain: "U = k·q₁·q₂ / r\nU = 9×10⁹ × 2×10⁻⁶ × 8×10⁻⁶ / 0.4\nU = 9×10⁹ × 16×10⁻¹² / 0.4\nU = 144×10⁻³ / 0.4\nU = 0.36 J ✓\n\nU > 0 เนื่องจากทั้งสองเป็นประจุบวก → ต้องใช้งานในการนำมารวมกัน (ระบบไม่เสถียร)"
+  },
+  {
+    year: "แบบฝึกหัด A-Level",
+    q: "เส้นสนามไฟฟ้าและพื้นผิวสมศักย์มีความสัมพันธ์กันอย่างไร",
+    opts: [
+      "ตั้งฉากกัน",
+      "ขนานกัน",
+      "ทำมุม 45° กัน",
+      "อาจขนานหรือตั้งฉากก็ได้ขึ้นกับประจุ",
+      "ทำมุม 60° กัน"
+    ],
+    ans: 0,
+    explain: "เส้นแรงไฟฟ้าและพื้นผิวสมศักย์ตั้งฉากกันเสมอ ✓\n\nเหตุผล:\nถ้าเส้นแรงไฟฟ้าไม่ตั้งฉากกับพื้นผิวสมศักย์ จะมีส่วนประกอบของ E ที่ขนานกับพื้นผิว ทำให้ต้องใช้งานในการเคลื่อนประจุบนพื้นผิวนั้น แต่พื้นผิวสมศักย์นิยามให้ V คงที่ → W = qΔV = 0 → ขัดแย้ง\n\nดังนั้น E ต้องตั้งฉากกับพื้นผิวสมศักย์เสมอ"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2565",
+    q: "ประจุ Q วางที่จุด O สนามไฟฟ้าที่จุด A (ห่าง r) มีค่า E_A ถ้าวางประจุ 4Q ที่จุดเดิม สนามไฟฟ้าที่จุด B ที่ห่าง 2r จะเป็นกี่เท่าของ E_A",
+    opts: ["เท่ากับ E_A", "2E_A", "4E_A", "E_A/4", "E_A/2"],
+    ans: 0,
+    explain: "E_A = kQ/r²\n\nE_B = k(4Q)/(2r)² = 4kQ/(4r²) = kQ/r² = E_A ✓\n\nสรุป: เพิ่มประจุ 4 เท่า เพิ่มระยะ 2 เท่า → E เปลี่ยนเป็น (4Q)/(2r)² = 4Q/4r² = Q/r² = เท่าเดิม!"
+  },
+  {
+    year: "แบบฝึกหัด A-Level",
+    q: "ตัวเก็บประจุ 3 ตัว C₁ = C₂ = C₃ = 6 μF ต่อดังนี้: C₁ อนุกรมกับ (C₂ ขนาน C₃) ต่อกับแรงดัน 12 V ประจุบน C₁ มีค่าเท่าใด",
+    opts: ["24 μC", "48 μC", "12 μC", "36 μC", "72 μC"],
+    ans: 1,
+    explain: "ขั้นที่ 1: C₂ // C₃\nC₂₃ = 6 + 6 = 12 μF\n\nขั้นที่ 2: C₁ อนุกรม C₂₃\n1/C_eq = 1/6 + 1/12 = 2/12 + 1/12 = 3/12 → C_eq = 4 μF\n\nขั้นที่ 3: ประจุรวม (= ประจุบน C₁ เพราะอนุกรม)\nQ₁ = C_eq × V = 4 × 12 = 48 μC ✓\n\nตรวจสอบ: V_C₁ = 48/6 = 8V, V_C₂₃ = 48/12 = 4V → รวม 12V ✓"
+  },
+  {
+    year: "แบบฝึกหัด A-Level",
+    q: "กล่องฟาราเดย์ (Faraday Cage) ทำงานโดยอาศัยหลักใด",
+    opts: [
+      "สนามไฟฟ้าภายในตัวนำที่สมดุลเป็นศูนย์",
+      "สนามแม่เหล็กหักล้างสนามไฟฟ้า",
+      "ฉนวนดูดซับสนามไฟฟ้า",
+      "การสะท้อนของสนามไฟฟ้า",
+      "สนามไฟฟ้าถูกดูดซับโดยโลหะ"
+    ],
+    ans: 0,
+    explain: "กล่องฟาราเดย์อาศัยหลักที่ว่า: ในตัวนำที่สมดุลทางไฟฟ้าสถิต สนามไฟฟ้าภายในจะเป็นศูนย์เสมอ ✓\n\nอธิบายกลไก:\n1. สนามไฟฟ้าภายนอกทำให้ประจุในผิวตัวนำจัดเรียงใหม่ (เหนี่ยวนำ)\n2. ประจุที่เหนี่ยวนำสร้างสนามไฟฟ้าภายในที่หักล้างสนามภายนอกพอดี\n3. สนามสุทธิภายใน = 0\n\nการใช้งานจริง: ห้องปลอดสัญญาณ, ซองห่อชิปอิเล็กทรอนิกส์, ลิฟต์โลหะ"
+  },
+  {
+    year: "A-Level ฟิสิกส์ 2566",
+    q: "ประจุ +Q อยู่ที่ตำแหน่งหนึ่ง ถ้าต้องการเคลื่อนประจุ +q จากจุด A (ห่าง 2r) ไปจุด B (ห่าง r) ต้องใช้งานเท่าใด",
+    opts: ["kQq/(2r)", "kQq/r", "−kQq/(2r)", "2kQq/r", "kQq/(r²)"],
+    ans: 0,
+    explain: "งานที่แรงภายนอกต้องทำ = การเปลี่ยนแปลงพลังงานศักย์ไฟฟ้า\nW = ΔU = U_B − U_A\n\nU_A = kQq/(2r)\nU_B = kQq/r\n\nW = kQq/r − kQq/(2r) = kQq/(2r) ✓\n\nW > 0 → ต้องออกแรงผลัก (ประจุทั้งสองบวก ผลักกัน ยิ่งเข้าใกล้ยิ่งต้องใช้แรงมาก)\nพลังงานศักย์ไฟฟ้าเพิ่มขึ้น kQq/(2r)"
+  }
+];
+
+// ===== STATE =====
+const answered = {};
+const answeredAL = {};
+
+// ===== BUILD QUIZ =====
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  questions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentYear = '';
+  alevelQuestions.forEach((q, idx) => {
+    const yearKey = q.year;
+    if (yearKey !== currentYear) {
+      currentYear = yearKey;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(247,147,30,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + yearKey + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(247,147,30,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ไฟฟ้ากระแส | A-Level Physics</title>
+<style>
+  :root{
+    --bg:#0b0f1a;
+    --bg2:#121826;
+    --card:#161d2e;
+    --card2:#1c2438;
+    --border:#2a3550;
+    --text:#e8ecf5;
+    --text-dim:#9aa5c0;
+    --accent:#ffb020;
+    --accent2:#3dd6c4;
+    --blue:#4d9bff;
+    --green:#3ecf8e;
+    --red:#ff6262;
+    --purple:#b98cff;
+    --mono: 'Courier New', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:linear-gradient(180deg,var(--bg) 0%, #0d1220 100%);
+    color:var(--text);
+    font-family:'Segoe UI', 'Trebuchet MS', Tahoma, sans-serif;
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  header{
+    padding:36px 20px 24px;
+    text-align:center;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,176,32,0.12), transparent 40%),
+      radial-gradient(circle at 80% 0%, rgba(61,214,196,0.10), transparent 40%);
+    border-bottom:1px solid var(--border);
+  }
+  header h1{
+    font-size:2rem;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    letter-spacing:1px;
+  }
+  header p{color:var(--text-dim); margin-top:8px; font-size:0.95rem;}
+  .bolt{display:inline-block; animation:flicker 2.5s infinite;}
+  @keyframes flicker{
+    0%,100%{opacity:1;} 45%{opacity:1;} 47%{opacity:0.3;} 49%{opacity:1;} 90%{opacity:1;} 92%{opacity:0.4;} 94%{opacity:1;}
+  }
+
+  nav{
+    position:sticky; top:0; z-index:100;
+    display:flex; flex-wrap:wrap; gap:6px;
+    background:rgba(11,15,26,0.96);
+    backdrop-filter:blur(8px);
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+    justify-content:center;
+  }
+  nav button{
+    background:var(--card);
+    color:var(--text-dim);
+    border:1px solid var(--border);
+    padding:9px 16px;
+    border-radius:20px;
+    font-size:0.85rem;
+    cursor:pointer;
+    transition:all .2s;
+    white-space:nowrap;
+  }
+  nav button:hover{border-color:var(--accent); color:var(--text);}
+  nav button.active{
+    background:linear-gradient(90deg,var(--accent),#ffcf6b);
+    color:#1a1200;
+    font-weight:700;
+    border-color:transparent;
+  }
+
+  main{max-width:900px; margin:0 auto; padding:28px 18px;}
+  section{display:none; animation:fadeIn .35s ease;}
+  section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  h2.section-title{
+    font-size:1.4rem;
+    color:var(--accent);
+    border-bottom:2px solid var(--border);
+    padding-bottom:10px;
+    margin-bottom:20px;
+    display:flex; align-items:center; gap:10px;
+  }
+  h3{color:var(--accent2); margin:22px 0 10px; font-size:1.1rem;}
+  p{margin-bottom:12px; color:var(--text);}
+  ul,ol{margin:10px 0 14px 22px;}
+  li{margin-bottom:6px;}
+  strong{color:#fff;}
+
+  .box{
+    border-radius:12px;
+    padding:16px 18px;
+    margin:16px 0;
+    border-left:4px solid;
+    background:var(--card);
+  }
+  .box-title{font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:8px; font-size:0.95rem;}
+  .def{border-color:var(--blue); background:linear-gradient(90deg, rgba(77,155,255,0.10), var(--card) 30%);}
+  .def .box-title{color:var(--blue);}
+  .example{border-color:var(--green); background:linear-gradient(90deg, rgba(62,207,142,0.10), var(--card) 30%);}
+  .example .box-title{color:var(--green);}
+  .warning{border-color:var(--red); background:linear-gradient(90deg, rgba(255,98,98,0.10), var(--card) 30%);}
+  .warning .box-title{color:var(--red);}
+  .tip{border-color:var(--purple); background:linear-gradient(90deg, rgba(185,140,255,0.10), var(--card) 30%);}
+  .tip .box-title{color:var(--purple);}
+
+  .formula{
+    font-family:var(--mono);
+    background:#0a0e1a;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 18px;
+    margin:14px 0;
+    text-align:center;
+    font-size:1.15rem;
+    color:var(--accent);
+    overflow-x:auto;
+  }
+  .formula small{display:block; color:var(--text-dim); font-size:0.7rem; margin-top:6px; font-family:'Segoe UI',sans-serif;}
+
+  table{width:100%; border-collapse:collapse; margin:16px 0; font-size:0.9rem;}
+  th,td{border:1px solid var(--border); padding:10px 12px; text-align:center;}
+  th{background:var(--card2); color:var(--accent);}
+  tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+
+  .summary-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:14px; margin:18px 0;
+  }
+  .summary-card{
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px;
+  }
+  .summary-card h4{color:var(--accent2); margin-bottom:8px; font-size:0.95rem;}
+  .summary-card .f{font-family:var(--mono); color:var(--accent); font-size:1.05rem;}
+
+  .circuit-diagram{
+    background:#0a0e1a; border:1px solid var(--border); border-radius:12px;
+    padding:16px; margin:14px 0; text-align:center;
+  }
+  .circuit-diagram svg{max-width:100%; height:auto;}
+
+  /* quiz */
+  .quiz-wrap{max-width:820px; margin:0 auto;}
+  .qcounter{color:var(--text-dim); margin-bottom:14px; font-size:0.9rem;}
+  .qcard{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:22px; margin-bottom:18px;
+  }
+  .qtext{font-size:1.05rem; margin-bottom:16px; color:#fff;}
+  .opt{
+    display:block; width:100%; text-align:right;
+    background:var(--card2); border:1px solid var(--border); color:var(--text);
+    padding:12px 16px; margin-bottom:10px; border-radius:10px;
+    cursor:pointer; font-size:0.95rem; transition:all .15s;
+    direction:rtl;
+  }
+  .opt{ text-align:left; direction:ltr; }
+  .opt:hover{border-color:var(--accent);}
+  .opt.correct{background:rgba(62,207,142,0.18); border-color:var(--green); color:#c9ffe3;}
+  .opt.wrong{background:rgba(255,98,98,0.18); border-color:var(--red); color:#ffd6d6;}
+  .opt.disabled{pointer-events:none;}
+  .explain{
+    margin-top:14px; padding:14px 16px; border-radius:10px;
+    background:#0a0e1a; border:1px solid var(--border); display:none;
+    font-size:0.92rem; color:var(--text-dim);
+  }
+  .explain.show{display:block;}
+  .explain b{color:var(--accent2);}
+  .quiz-nav{display:flex; justify-content:space-between; margin-top:8px;}
+  .quiz-nav button{
+    background:linear-gradient(90deg,var(--accent),#ffcf6b); color:#1a1200; border:none;
+    padding:10px 22px; border-radius:20px; font-weight:700; cursor:pointer;
+  }
+  .quiz-nav button:disabled{opacity:0.3; cursor:default;}
+  .score-box{
+    text-align:center; padding:28px; background:var(--card); border-radius:14px;
+    border:1px solid var(--border); display:none;
+  }
+  .score-box.show{display:block;}
+  .score-box .big{font-size:2.6rem; color:var(--accent); font-weight:800;}
+  .reset-btn{
+    margin-top:14px; background:var(--card2); border:1px solid var(--border); color:var(--text);
+    padding:10px 20px; border-radius:20px; cursor:pointer;
+  }
+
+  footer{text-align:center; color:var(--text-dim); font-size:0.8rem; margin-top:40px; padding:0 20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="bolt">⚡</span> ไฟฟ้ากระแส (Electric Current) <span class="bolt">⚡</span></h1>
+  <p>สรุปเนื้อหาฟิสิกส์ A-Level (TCAS) พร้อมแบบฝึกหัดท้ายบท</p>
+</header>
+
+<nav id="tabNav">
+  <button class="tab-btn active" data-target="t1">1. กระแส & ความต่างศักย์</button>
+  <button class="tab-btn" data-target="t2">2. กฎของโอห์ม & ความต้านทาน</button>
+  <button class="tab-btn" data-target="t3">3. วงจรไฟฟ้า</button>
+  <button class="tab-btn" data-target="t4">4. กำลัง & พลังงานไฟฟ้า</button>
+  <button class="tab-btn" data-target="t5">5. เครื่องมือวัด & ไฟในบ้าน</button>
+  <button class="tab-btn" data-target="t6">📝 แบบทดสอบ</button>
+</nav>
+
+<main>
+
+<!-- TAB 1 -->
+<section id="t1" class="active">
+  <h2 class="section-title">⚡ กระแสไฟฟ้าและความต่างศักย์</h2>
+
+  <div class="box def">
+    <div class="box-title">📘 นิยาม: กระแสไฟฟ้า (Electric Current)</div>
+    <p>กระแสไฟฟ้า คือ ปริมาณประจุไฟฟ้าที่เคลื่อนที่ผ่านพื้นที่หน้าตัดของตัวนำในหนึ่งหน่วยเวลา มีหน่วยเป็นแอมแปร์ (A)</p>
+  </div>
+
+  <div class="formula">
+    I = Q / t
+    <small>I = กระแสไฟฟ้า (A) &nbsp;|&nbsp; Q = ประจุไฟฟ้า (C) &nbsp;|&nbsp; t = เวลา (s)</small>
+  </div>
+
+  <div class="box tip">
+    <div class="box-title">💡 ทิศทางกระแสไฟฟ้า</div>
+    <p><strong>กระแสไฟฟ้าตามแบบแผน (conventional current)</strong> มีทิศเดียวกับการเคลื่อนที่ของประจุบวก คือไหลจากขั้วบวกไปขั้วลบภายนอกแหล่งกำเนิด แต่ในความเป็นจริง <strong>อิเล็กตรอน</strong> (ประจุลบ) เคลื่อนที่สวนทางกัน คือจากขั้วลบไปขั้วบวก</p>
+  </div>
+
+  <h3>อัตราเร็วลอยเลื่อน (Drift Velocity)</h3>
+  <p>แม้อิเล็กตรอนในตัวนำจะเคลื่อนที่แบบสุ่มด้วยอัตราเร็วสูงมาก แต่เมื่อมีสนามไฟฟ้า อิเล็กตรอนจะมี "ความเร็วลอยเลื่อน" สุทธิไปในทิศตรงข้ามสนามไฟฟ้าอย่างช้า ๆ (มีลำดับขนาดประมาณ mm/s)</p>
+
+  <div class="formula">
+    I = nqv<sub>d</sub>A
+    <small>n = จำนวนอิเล็กตรอนอิสระต่อปริมาตร | q = ประจุอิเล็กตรอน | v<sub>d</sub> = อัตราเร็วลอยเลื่อน | A = พื้นที่หน้าตัด</small>
+  </div>
+
+  <h3>ความต่างศักย์ไฟฟ้า (Potential Difference)</h3>
+  <div class="box def">
+    <div class="box-title">📘 นิยาม</div>
+    <p>ความต่างศักย์ไฟฟ้า (แรงดันไฟฟ้า) คือ พลังงานที่ใช้ในการเคลื่อนประจุไฟฟ้า 1 หน่วยระหว่างจุดสองจุด มีหน่วยเป็นโวลต์ (V)</p>
+  </div>
+  <div class="formula">
+    V = W / Q
+    <small>V = ความต่างศักย์ (V) | W = งาน/พลังงาน (J) | Q = ประจุไฟฟ้า (C)</small>
+  </div>
+
+  <h3>แรงเคลื่อนไฟฟ้า (EMF) และความต้านทานภายใน</h3>
+  <p>แบตเตอรี่หรือแหล่งกำเนิดไฟฟ้าจริงมี <strong>ความต้านทานภายใน (r)</strong> ทำให้แรงดันที่วัดได้ที่ขั้ว (terminal voltage) น้อยกว่าแรงเคลื่อนไฟฟ้า (ε) เสมอเมื่อมีกระแสไหล</p>
+  <div class="formula">
+    ε = I(R + r) &nbsp;→&nbsp; V<sub>terminal</sub> = ε − Ir
+    <small>ε = แรงเคลื่อนไฟฟ้า (V) | r = ความต้านทานภายใน (Ω) | R = ความต้านทานภายนอก (Ω)</small>
+  </div>
+
+  <div class="box example">
+    <div class="box-title">✏️ ตัวอย่าง</div>
+    <p>แบตเตอรี่มี ε = 12 V และ r = 0.5 Ω ต่อกับตัวต้านทาน R = 5.5 Ω จงหากระแสไฟฟ้าในวงจร และแรงดันที่ขั้วแบตเตอรี่</p>
+    <p><strong>วิธีทำ:</strong> I = ε/(R+r) = 12/(5.5+0.5) = 2 A<br>
+    V<sub>terminal</sub> = ε − Ir = 12 − (2)(0.5) = 11 V</p>
+  </div>
+
+  <div class="box warning">
+    <div class="box-title">⚠️ ข้อควรระวัง</div>
+    <p>อย่าสับสนระหว่าง "กระแสไฟฟ้า" (การไหลของประจุ) กับ "ความเร็วของสัญญาณไฟฟ้า" สัญญาณไฟฟ้าเดินทางด้วยอัตราเร็วใกล้เคียงแสงในสาย แต่ตัวอิเล็กตรอนเองเคลื่อนที่ช้ามาก</p>
+  </div>
+</section>
+
+<!-- TAB 2 -->
+<section id="t2">
+  <h2 class="section-title">🔧 กฎของโอห์ม และความต้านทาน</h2>
+
+  <div class="box def">
+    <div class="box-title">📘 กฎของโอห์ม (Ohm's Law)</div>
+    <p>สำหรับตัวนำโอห์มมิก (ohmic) ที่อุณหภูมิคงที่ ความต่างศักย์ไฟฟ้าคร่อมตัวนำแปรผันตรงกับกระแสไฟฟ้าที่ไหลผ่าน</p>
+  </div>
+  <div class="formula">
+    V = IR
+    <small>R = ความต้านทาน (Ω)</small>
+  </div>
+
+  <h3>ตัวนำโอห์มมิก vs ไม่ใช่โอห์มมิก</h3>
+  <table>
+    <tr><th>ตัวนำโอห์มมิก</th><th>ตัวนำไม่ใช่โอห์มมิก</th></tr>
+    <tr><td>กราฟ V-I เป็นเส้นตรงผ่านจุดกำเนิด</td><td>กราฟ V-I ไม่เป็นเส้นตรง</td></tr>
+    <tr><td>R คงที่ ไม่ขึ้นกับ V หรือ I</td><td>R เปลี่ยนแปลงตามสภาวะ (เช่น อุณหภูมิ)</td></tr>
+    <tr><td>ตัวอย่าง: ตัวต้านทานลวดโลหะ (อุณหภูมิคงที่)</td><td>ตัวอย่าง: หลอดไฟฟ้า, ไดโอด</td></tr>
+  </table>
+
+  <h3>ความต้านทานของตัวนำ (Resistivity)</h3>
+  <div class="formula">
+    R = ρL / A
+    <small>ρ = สภาพต้านทานจำเพาะ (Ω·m) | L = ความยาวตัวนำ (m) | A = พื้นที่หน้าตัด (m²)</small>
+  </div>
+  <p>ค่า ρ ขึ้นอยู่กับชนิดของวัสดุและอุณหภูมิเท่านั้น ไม่ขึ้นกับรูปร่างหรือขนาดของตัวนำ</p>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <h4>ยิ่งยาว R ยิ่งมาก</h4>
+      <p>R ∝ L (แปรผันตรง)</p>
+    </div>
+    <div class="summary-card">
+      <h4>ยิ่งอ้วน R ยิ่งน้อย</h4>
+      <p>R ∝ 1/A (แปรผกผัน)</p>
+    </div>
+  </div>
+
+  <h3>ผลของอุณหภูมิต่อความต้านทาน</h3>
+  <div class="formula">
+    R<sub>T</sub> = R<sub>0</sub>[1 + α(T − T<sub>0</sub>)]
+    <small>α = สัมประสิทธิ์อุณหภูมิของความต้านทาน</small>
+  </div>
+  <ul>
+    <li><strong>โลหะ:</strong> เมื่ออุณหภูมิสูงขึ้น R เพิ่มขึ้น (α เป็นบวก) — อะตอมสั่นแรงขึ้น ขวางการไหลของอิเล็กตรอน</li>
+    <li><strong>สารกึ่งตัวนำ:</strong> เมื่ออุณหภูมิสูงขึ้น R มักจะลดลง (α เป็นลบ) — มีอิเล็กตรอนอิสระเพิ่มขึ้น</li>
+  </ul>
+
+  <div class="box example">
+    <div class="box-title">✏️ ตัวอย่าง</div>
+    <p>ลวดตัวนำยาว 2 m พื้นที่หน้าตัด 1×10⁻⁶ m² มีความต้านทาน 0.4 Ω จงหาค่าสภาพต้านทานจำเพาะของวัสดุ</p>
+    <p><strong>วิธีทำ:</strong> ρ = RA/L = (0.4)(1×10⁻⁶)/2 = 2×10⁻⁷ Ω·m</p>
+  </div>
+
+  <div class="box tip">
+    <div class="box-title">💡 เทคนิคจำรหัสสีตัวต้านทาน</div>
+    <p>แถบสี 4 แถบ: หลัก 1, หลัก 2, ตัวคูณ, ค่าคลาดเคลื่อน — จำลำดับสีด้วยคำกลอน "ดำ น้ำตาล แดง ส้ม เหลือง เขียว ฟ้า ม่วง เทา ขาว" แทนค่า 0–9 ตามลำดับ</p>
+  </div>
+</section>
+
+<!-- TAB 3 -->
+<section id="t3">
+  <h2 class="section-title">🔌 วงจรไฟฟ้า: อนุกรมและขนาน</h2>
+
+  <h3>วงจรอนุกรม (Series Circuit)</h3>
+  <div class="circuit-diagram">
+    <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+      <line x1="20" y1="50" x2="80" y2="50" stroke="#3dd6c4" stroke-width="2"/>
+      <rect x="80" y="35" width="50" height="30" fill="none" stroke="#ffb020" stroke-width="2"/>
+      <text x="105" y="55" fill="#ffb020" font-size="12" text-anchor="middle">R1</text>
+      <line x1="130" y1="50" x2="190" y2="50" stroke="#3dd6c4" stroke-width="2"/>
+      <rect x="190" y="35" width="50" height="30" fill="none" stroke="#ffb020" stroke-width="2"/>
+      <text x="215" y="55" fill="#ffb020" font-size="12" text-anchor="middle">R2</text>
+      <line x1="240" y1="50" x2="300" y2="50" stroke="#3dd6c4" stroke-width="2"/>
+      <rect x="300" y="35" width="50" height="30" fill="none" stroke="#ffb020" stroke-width="2"/>
+      <text x="325" y="55" fill="#ffb020" font-size="12" text-anchor="middle">R3</text>
+      <line x1="350" y1="50" x2="380" y2="50" stroke="#3dd6c4" stroke-width="2"/>
+      <line x1="380" y1="50" x2="380" y2="85" stroke="#3dd6c4" stroke-width="2"/>
+      <line x1="20" y1="50" x2="20" y2="85" stroke="#3dd6c4" stroke-width="2"/>
+      <line x1="20" y1="85" x2="380" y2="85" stroke="#3dd6c4" stroke-width="2"/>
+    </svg>
+  </div>
+  <ul>
+    <li>กระแสไฟฟ้าเท่ากันทุกจุด: <strong>I = I₁ = I₂ = I₃</strong></li>
+    <li>ความต่างศักย์รวม เท่ากับผลรวมความต่างศักย์แต่ละตัว: <strong>V = V₁ + V₂ + V₃</strong></li>
+    <li>ความต้านทานรวมมากขึ้น: <strong>R<sub>รวม</sub> = R₁ + R₂ + R₃</strong></li>
+  </ul>
+
+  <h3>วงจรขนาน (Parallel Circuit)</h3>
+  <div class="circuit-diagram">
+    <svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg">
+      <line x1="20" y1="20" x2="380" y2="20" stroke="#3dd6c4" stroke-width="2"/>
+      <line x1="20" y1="20" x2="20" y2="120" stroke="#3dd6c4" stroke-width="2"/>
+      <line x1="380" y1="20" x2="380" y2="120" stroke="#3dd6c4" stroke-width="2"/>
+      <line x1="20" y1="120" x2="380" y2="120" stroke="#3dd6c4" stroke-width="2"/>
+
+      <line x1="100" y1="20" x2="100" y2="45" stroke="#3dd6c4" stroke-width="2"/>
+      <rect x="80" y="45" width="40" height="30" fill="none" stroke="#ffb020" stroke-width="2"/>
+      <text x="100" y="65" fill="#ffb020" font-size="11" text-anchor="middle">R1</text>
+      <line x1="100" y1="75" x2="100" y2="120" stroke="#3dd6c4" stroke-width="2"/>
+
+      <line x1="200" y1="20" x2="200" y2="45" stroke="#3dd6c4" stroke-width="2"/>
+      <rect x="180" y="45" width="40" height="30" fill="none" stroke="#ffb020" stroke-width="2"/>
+      <text x="200" y="65" fill="#ffb020" font-size="11" text-anchor="middle">R2</text>
+      <line x1="200" y1="75" x2="200" y2="120" stroke="#3dd6c4" stroke-width="2"/>
+
+      <line x1="300" y1="20" x2="300" y2="45" stroke="#3dd6c4" stroke-width="2"/>
+      <rect x="280" y="45" width="40" height="30" fill="none" stroke="#ffb020" stroke-width="2"/>
+      <text x="300" y="65" fill="#ffb020" font-size="11" text-anchor="middle">R3</text>
+      <line x1="300" y1="75" x2="300" y2="120" stroke="#3dd6c4" stroke-width="2"/>
+    </svg>
+  </div>
+  <ul>
+    <li>ความต่างศักย์เท่ากันทุกสาขา: <strong>V = V₁ = V₂ = V₃</strong></li>
+    <li>กระแสรวม เท่ากับผลรวมกระแสแต่ละสาขา: <strong>I = I₁ + I₂ + I₃</strong></li>
+    <li>ความต้านทานรวมน้อยลงกว่าตัวต้านทานที่น้อยที่สุด: <strong>1/R<sub>รวม</sub> = 1/R₁ + 1/R₂ + 1/R₃</strong></li>
+  </ul>
+
+  <div class="box tip">
+    <div class="box-title">💡 กรณีพิเศษ: ตัวต้านทาน 2 ตัวขนานกัน</div>
+    <div class="formula" style="margin:6px 0;">R<sub>รวม</sub> = (R₁ × R₂) / (R₁ + R₂)</div>
+  </div>
+
+  <h3>กฎของเคอร์ชอฟฟ์ (Kirchhoff's Laws)</h3>
+  <div class="box def">
+    <div class="box-title">📘 กฎข้อที่ 1: กฎจุดเชื่อมต่อ (Junction Rule)</div>
+    <p>ผลรวมกระแสไฟฟ้าที่ไหลเข้าจุดเชื่อมต่อ เท่ากับผลรวมกระแสไฟฟ้าที่ไหลออกจากจุดนั้น (การอนุรักษ์ประจุ)</p>
+  </div>
+  <div class="box def">
+    <div class="box-title">📘 กฎข้อที่ 2: กฎวงรอบ (Loop Rule)</div>
+    <p>ผลรวมความต่างศักย์ไฟฟ้ารอบวงรอบปิดใด ๆ เท่ากับศูนย์ (การอนุรักษ์พลังงาน) — Σε = ΣIR</p>
+  </div>
+
+  <div class="box example">
+    <div class="box-title">✏️ ตัวอย่าง</div>
+    <p>ตัวต้านทาน 3 Ω และ 6 Ω ต่อขนานกัน แล้วนำไปต่ออนุกรมกับตัวต้านทาน 4 Ω จงหาความต้านทานรวม</p>
+    <p><strong>วิธีทำ:</strong> ขนานก่อน: R<sub>ขนาน</sub> = (3×6)/(3+6) = 2 Ω<br>
+    รวมอนุกรม: R<sub>รวม</sub> = 2 + 4 = 6 Ω</p>
+  </div>
+
+  <div class="box warning">
+    <div class="box-title">⚠️ ข้อควรระวัง</div>
+    <p>ในวงจรขนาน ความต้านทานรวมจะ <strong>น้อยกว่า</strong> ตัวต้านทานตัวที่น้อยที่สุดในวงจรเสมอ นักเรียนมักคำนวณผิดโดยลืมกลับเศษ-ส่วนตอนหาค่า R<sub>รวม</sub></p>
+  </div>
+</section>
+
+<!-- TAB 4 -->
+<section id="t4">
+  <h2 class="section-title">💡 กำลังไฟฟ้าและพลังงานไฟฟ้า</h2>
+
+  <div class="box def">
+    <div class="box-title">📘 นิยาม: กำลังไฟฟ้า (Electric Power)</div>
+    <p>กำลังไฟฟ้า คือ อัตราการเปลี่ยนพลังงานไฟฟ้าเป็นพลังงานรูปแบบอื่นต่อหน่วยเวลา มีหน่วยเป็นวัตต์ (W)</p>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <h4>สูตรพื้นฐาน</h4>
+      <div class="f">P = IV</div>
+    </div>
+    <div class="summary-card">
+      <h4>เมื่อทราบ R และ I</h4>
+      <div class="f">P = I²R</div>
+    </div>
+    <div class="summary-card">
+      <h4>เมื่อทราบ R และ V</h4>
+      <div class="f">P = V²/R</div>
+    </div>
+  </div>
+
+  <h3>พลังงานไฟฟ้า</h3>
+  <div class="formula">
+    W = Pt = IVt
+    <small>W = พลังงานไฟฟ้า (J) | P = กำลังไฟฟ้า (W) | t = เวลา (s)</small>
+  </div>
+
+  <div class="box tip">
+    <div class="box-title">💡 หน่วยที่ใช้ในการไฟฟ้า: กิโลวัตต์-ชั่วโมง (kWh)</div>
+    <p>การไฟฟ้าคิดค่าไฟเป็น "หน่วย" หรือ kWh ไม่ใช่จูล โดย 1 หน่วย = พลังงานที่ใช้เมื่อเครื่องใช้ไฟฟ้ากำลัง 1 kW ทำงานนาน 1 ชั่วโมง</p>
+    <div class="formula" style="margin:8px 0;">1 kWh = 1000 W × 3600 s = 3.6×10⁶ J</div>
+  </div>
+
+  <div class="box example">
+    <div class="box-title">✏️ ตัวอย่าง</div>
+    <p>เครื่องทำน้ำอุ่นกำลัง 2500 W ใช้งานวันละ 20 นาที เป็นเวลา 30 วัน ถ้าค่าไฟฟ้าหน่วยละ 4 บาท จะเสียค่าไฟเท่าใด</p>
+    <p><strong>วิธีทำ:</strong><br>
+    พลังงานต่อวัน = 2.5 kW × (20/60) h = 0.833 kWh<br>
+    พลังงานรวม 30 วัน = 0.833 × 30 = 25 kWh<br>
+    ค่าไฟ = 25 × 4 = <strong>100 บาท</strong></p>
+  </div>
+
+  <h3>ประสิทธิภาพของเครื่องใช้ไฟฟ้า</h3>
+  <div class="formula">
+    ประสิทธิภาพ (%) = (พลังงานที่ใช้ประโยชน์ได้ / พลังงานไฟฟ้าที่ป้อนเข้า) × 100
+  </div>
+
+  <div class="box warning">
+    <div class="box-title">⚠️ ข้อควรระวัง</div>
+    <p>เมื่อโจทย์ระบุ "แรงดันไฟฟ้าคร่อมสายไฟ" หรือ "กำลังสูญเสียในสาย" ให้ใช้ P = I²R เสมอ เพราะกระแสไฟฟ้าคงที่ตลอดวงจรอนุกรม (สายไฟกับเครื่องใช้ไฟฟ้าต่ออนุกรมกัน) ไม่ควรใช้ P = V²/R กับความต้านทานสายไฟโดยตรงเพราะ V ของสายไฟไม่เท่ากับ V ของแหล่งจ่าย</p>
+  </div>
+</section>
+
+<!-- TAB 5 -->
+<section id="t5">
+  <h2 class="section-title">🧰 เครื่องมือวัดไฟฟ้า และไฟฟ้าในบ้าน</h2>
+
+  <h3>แอมมิเตอร์ (Ammeter)</h3>
+  <div class="box def">
+    <div class="box-title">📘 หลักการ</div>
+    <p>ใช้วัดกระแสไฟฟ้า ต้องต่อ<strong>อนุกรม</strong>กับวงจรเสมอ และมีความต้านทานภายในต่ำมาก (ใกล้ 0) เพื่อไม่ให้รบกวนกระแสในวงจร</p>
+  </div>
+
+  <h3>โวลต์มิเตอร์ (Voltmeter)</h3>
+  <div class="box def">
+    <div class="box-title">📘 หลักการ</div>
+    <p>ใช้วัดความต่างศักย์ไฟฟ้า ต้องต่อ<strong>ขนาน</strong>กับส่วนของวงจรที่ต้องการวัด และมีความต้านทานภายในสูงมาก เพื่อให้กระแสไหลผ่านโวลต์มิเตอร์น้อยที่สุด</p>
+  </div>
+
+  <table>
+    <tr><th>เครื่องมือ</th><th>วิธีต่อ</th><th>ความต้านทานภายในที่ดี</th></tr>
+    <tr><td>แอมมิเตอร์</td><td>อนุกรม</td><td>ต่ำมาก (≈0)</td></tr>
+    <tr><td>โวลต์มิเตอร์</td><td>ขนาน</td><td>สูงมาก (≈∞)</td></tr>
+  </table>
+
+  <div class="box tip">
+    <div class="box-title">💡 กัลวานอมิเตอร์ (Galvanometer)</div>
+    <p>อุปกรณ์พื้นฐานที่ไวต่อกระแสน้อย ๆ นำมาดัดแปลงเป็นแอมมิเตอร์โดยต่อความต้านทานชันต์ (shunt) ขนานกัน หรือดัดแปลงเป็นโวลต์มิเตอร์โดยต่อความต้านทานอนุกรม (multiplier) เพิ่มเข้าไป</p>
+  </div>
+
+  <h3>ระบบไฟฟ้าในบ้าน</h3>
+  <ul>
+    <li>เครื่องใช้ไฟฟ้าในบ้านต่อแบบ <strong>ขนาน</strong> กับแหล่งจ่ายไฟ เพื่อให้แต่ละเครื่องได้รับแรงดันไฟฟ้าเท่ากัน (220 V) และเปิด-ปิดแยกอิสระจากกันได้</li>
+    <li><strong>ฟิวส์ (Fuse)</strong> ต่ออนุกรมในวงจร ทำหน้าที่ตัดวงจรเมื่อกระแสไหลเกินค่าที่กำหนด ป้องกันไฟไหม้</li>
+    <li><strong>สายดิน (Ground wire)</strong> ป้องกันไฟฟ้าดูดเมื่อเปลือกโลหะของเครื่องใช้ไฟฟ้ามีกระแสรั่วไหล</li>
+    <li><strong>เบรกเกอร์ (Circuit Breaker)</strong> ทำหน้าที่คล้ายฟิวส์แต่สามารถรีเซ็ตใช้ใหม่ได้</li>
+  </ul>
+
+  <div class="box warning">
+    <div class="box-title">⚠️ ข้อควรระวัง</div>
+    <p>ห้ามต่อฟิวส์คร่อม (ขนาน) กับเครื่องใช้ไฟฟ้า เพราะกระแสจะไหลผ่านฟิวส์แทนที่จะไหลผ่านเครื่องใช้ไฟฟ้า และฟิวส์จะไม่สามารถป้องกันการลัดวงจรได้ตามหน้าที่ที่ถูกต้อง</p>
+  </div>
+
+  <div class="box example">
+    <div class="box-title">✏️ ตัวอย่าง</div>
+    <p>เครื่องใช้ไฟฟ้า 3 ชนิดต่อขนานกับไฟบ้าน 220 V มีกระแสไหลผ่าน 2 A, 3 A, 5 A ตามลำดับ ควรเลือกฟิวส์ขนาดเท่าใด</p>
+    <p><strong>วิธีทำ:</strong> กระแสรวม = 2+3+5 = 10 A ควรเลือกฟิวส์ที่ทนกระแสได้มากกว่าค่านี้เล็กน้อย เช่น ฟิวส์ขนาด 15 A เพื่อไม่ให้ขาดบ่อยเกินไปแต่ยังปลอดภัย</p>
+  </div>
+</section>
+
+<!-- TAB 6: QUIZ -->
+<section id="t6">
+  <h2 class="section-title">📝 แบบทดสอบท้ายบท</h2>
+  <div class="quiz-wrap">
+    <div class="qcounter" id="qcounter">ข้อที่ 1 / 10</div>
+    <div id="quizArea"></div>
+    <div class="quiz-nav">
+      <button id="prevBtn" disabled>← ก่อนหน้า</button>
+      <button id="nextBtn" disabled>ถัดไป →</button>
+    </div>
+    <div class="score-box" id="scoreBox">
+      <div>คุณทำได้</div>
+      <div class="big" id="scoreText">0/10</div>
+      <div id="scoreMsg" style="color:var(--text-dim); margin-top:6px;"></div>
+      <button class="reset-btn" id="resetBtn">ทำแบบทดสอบใหม่</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>สรุปเนื้อหาเพื่อการทบทวนก่อนสอบ A-Level ฟิสิกส์ — ไฟฟ้ากระแส</footer>
+
+<script>
+  // Tab switching
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const sections = document.querySelectorAll('main > section');
+  tabBtns.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      tabBtns.forEach(b=>b.classList.remove('active'));
+      sections.forEach(s=>s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.target).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Quiz data
+  const quiz = [
+    {
+      q: "หลอดไฟฟ้าเส้นลวดตัวนำยาว 4 m มีพื้นที่หน้าตัด 2×10⁻⁶ m² และมีสภาพต้านทานจำเพาะ 1.5×10⁻⁶ Ω·m จงหาความต้านทานของเส้นลวด",
+      options: ["1.5 Ω", "3.0 Ω", "6.0 Ω", "0.75 Ω"],
+      correct: 1,
+      explain: "R = ρL/A = (1.5×10⁻⁶ × 4)/(2×10⁻⁶) = 6×10⁻⁶/2×10⁻⁶ = 3.0 Ω"
+    },
+    {
+      q: "แบตเตอรี่มี ε = 9 V และความต้านทานภายใน r = 1 Ω ต่อกับตัวต้านทานภายนอก R = 8 Ω กระแสไฟฟ้าในวงจรมีค่าเท่าใด",
+      options: ["0.5 A", "0.8 A", "1.0 A", "1.125 A"],
+      correct: 2,
+      explain: "I = ε/(R+r) = 9/(8+1) = 9/9 = 1.0 A"
+    },
+    {
+      q: "ตัวต้านทาน 4 Ω และ 4 Ω ต่อขนานกัน ความต้านทานรวมมีค่าเท่าใด",
+      options: ["8 Ω", "4 Ω", "2 Ω", "1 Ω"],
+      correct: 2,
+      explain: "R_ขนาน = (R×R)/(R+R) = (4×4)/(4+4) = 16/8 = 2 Ω (ตัวต้านทานเท่ากัน 2 ตัวขนานกัน = ครึ่งหนึ่งของตัวเดียว)"
+    },
+    {
+      q: "ข้อใดกล่าวถูกต้องเกี่ยวกับวงจรอนุกรม",
+      options: [
+        "ความต่างศักย์เท่ากันทุกจุด",
+        "กระแสไฟฟ้าเท่ากันทุกจุดในวงจร",
+        "ความต้านทานรวมน้อยกว่าตัวต้านทานตัวใดตัวหนึ่ง",
+        "หากตัวต้านทานตัวหนึ่งขาด วงจรส่วนอื่นยังทำงานได้"
+      ],
+      correct: 1,
+      explain: "ในวงจรอนุกรม กระแสไฟฟ้ามีค่าเท่ากันทุกจุดตลอดวงจร (I = I₁ = I₂ = I₃) เพราะมีเส้นทางเดียวให้ประจุไหล"
+    },
+    {
+      q: "เครื่องใช้ไฟฟ้ากำลัง 1000 W ใช้แรงดัน 220 V กระแสไฟฟ้าที่ไหลผ่านมีค่าประมาณเท่าใด",
+      options: ["2.2 A", "4.5 A", "22 A", "220 A"],
+      correct: 1,
+      explain: "I = P/V = 1000/220 ≈ 4.5 A"
+    },
+    {
+      q: "แอมมิเตอร์ที่ดีควรมีความต้านทานภายในเป็นเช่นใด และต้องต่อแบบใดกับวงจร",
+      options: ["ต้านทานสูงมาก, ต่อขนาน", "ต้านทานต่ำมาก, ต่ออนุกรม", "ต้านทานต่ำมาก, ต่อขนาน", "ต้านทานสูงมาก, ต่ออนุกรม"],
+      correct: 1,
+      explain: "แอมมิเตอร์ต้องมีความต้านทานภายในต่ำมาก (ใกล้ 0) และต่ออนุกรมกับวงจร เพื่อไม่ให้เปลี่ยนแปลงกระแสที่ต้องการวัด"
+    },
+    {
+      q: "เตารีดกำลัง 1100 W ใช้งานวันละ 30 นาที เป็นเวลา 10 วัน ใช้พลังงานไฟฟ้าทั้งหมดกี่หน่วย (kWh)",
+      options: ["1.83 kWh", "3.30 kWh", "5.50 kWh", "11.0 kWh"],
+      correct: 2,
+      explain: "พลังงานต่อวัน = 1.1 kW × 0.5 h = 0.55 kWh รวม 10 วัน = 0.55 × 10 = 5.50 kWh"
+    },
+    {
+      q: "ลวดตัวนำชนิดหนึ่งเมื่ออุณหภูมิสูงขึ้น ความต้านทานลดลง ลวดนี้น่าจะเป็นวัสดุประเภทใด",
+      options: ["โลหะทั่วไป เช่น ทองแดง", "สารกึ่งตัวนำ เช่น ซิลิคอน", "ฉนวนไฟฟ้า", "ตัวนำยิ่งยวด"],
+      correct: 1,
+      explain: "สารกึ่งตัวนำมีสัมประสิทธิ์อุณหภูมิเป็นลบ เมื่ออุณหภูมิสูงขึ้น อิเล็กตรอนหลุดออกมาเป็นอิสระมากขึ้น ทำให้ความต้านทานลดลง ตรงข้ามกับโลหะทั่วไป"
+    },
+    {
+      q: "ทำไมเครื่องใช้ไฟฟ้าในบ้านจึงนิยมต่อแบบขนานกันแทนที่จะต่ออนุกรม",
+      options: [
+        "เพื่อให้ความต้านทานรวมมากขึ้น ประหยัดไฟ",
+        "เพื่อให้แต่ละเครื่องได้รับแรงดันเท่ากันและเปิดปิดแยกอิสระได้",
+        "เพื่อลดกระแสไฟฟ้ารวมในวงจร",
+        "เพราะต่ออนุกรมทำให้ไฟไหม้ง่ายกว่า"
+      ],
+      correct: 1,
+      explain: "การต่อขนานทำให้ทุกเครื่องใช้ไฟฟ้าได้รับแรงดันไฟฟ้าเท่ากับแหล่งจ่าย (220 V) และสามารถเปิด-ปิดเครื่องใดเครื่องหนึ่งได้โดยไม่กระทบเครื่องอื่น"
+    },
+    {
+      q: "กำลังไฟฟ้าสูญเสียในสายไฟที่มีความต้านทาน R และมีกระแสไฟฟ้า I ไหลผ่าน คำนวณจากสูตรใดจึงเหมาะสมที่สุด",
+      options: ["P = V²/R", "P = IV", "P = I²R", "P = QV"],
+      correct: 2,
+      explain: "เนื่องจากกระแสไฟฟ้า I มีค่าคงที่ตลอดวงจรอนุกรม (สายไฟต่ออนุกรมกับเครื่องใช้ไฟฟ้า) การใช้ P = I²R จึงถูกต้องและสะดวกที่สุด เพราะไม่ต้องทราบแรงดันคร่อมสายไฟโดยตรง"
+    }
+  ];
+
+  let current = 0;
+  let answers = new Array(quiz.length).fill(null);
+
+  const quizArea = document.getElementById('quizArea');
+  const qcounter = document.getElementById('qcounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const scoreBox = document.getElementById('scoreBox');
+  const scoreText = document.getElementById('scoreText');
+  const scoreMsg = document.getElementById('scoreMsg');
+
+  function renderQuestion(i){
+    const item = quiz[i];
+    qcounter.textContent = `ข้อที่ ${i+1} / ${quiz.length}`;
+    let html = `<div class="qcard"><div class="qtext">${i+1}. ${item.q}</div>`;
+    item.options.forEach((opt, idx)=>{
+      let cls = "opt";
+      if(answers[i] !== null){
+        cls += " disabled";
+        if(idx === item.correct) cls += " correct";
+        else if(idx === answers[i]) cls += " wrong";
+      }
+      html += `<button class="${cls}" data-idx="${idx}">${String.fromCharCode(65+idx)}. ${opt}</button>`;
+    });
+    html += `<div class="explain ${answers[i]!==null ? 'show':''}"><b>คำอธิบาย:</b> ${item.explain}</div></div>`;
+    quizArea.innerHTML = html;
+
+    quizArea.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(answers[i] !== null) return;
+        const idx = parseInt(btn.dataset.idx);
+        answers[i] = idx;
+        renderQuestion(i);
+        checkAllAnswered();
+      });
+    });
+
+    prevBtn.disabled = (i === 0);
+    nextBtn.disabled = (answers[i] === null);
+    nextBtn.textContent = (i === quiz.length - 1) ? "ดูผลคะแนน →" : "ถัดไป →";
+  }
+
+  function checkAllAnswered(){
+    // nothing extra needed now, handled per render
+  }
+
+  prevBtn.addEventListener('click', ()=>{
+    if(current > 0){ current--; renderQuestion(current); }
+  });
+
+  nextBtn.addEventListener('click', ()=>{
+    if(current === quiz.length - 1){
+      showScore();
+    } else {
+      current++;
+      renderQuestion(current);
+    }
+  });
+
+  function showScore(){
+    let score = 0;
+    quiz.forEach((item,i)=>{ if(answers[i] === item.correct) score++; });
+    quizArea.style.display = 'none';
+    document.querySelector('.quiz-nav').style.display = 'none';
+    qcounter.style.display = 'none';
+    scoreBox.classList.add('show');
+    scoreText.textContent = `${score}/${quiz.length}`;
+    let msg = "";
+    const pct = score/quiz.length;
+    if(pct === 1) msg = "ยอดเยี่ยมมาก! เข้าใจเนื้อหาไฟฟ้ากระแสครบถ้วน 🎉";
+    else if(pct >= 0.7) msg = "ทำได้ดีมาก ลองทบทวนข้อที่พลาดอีกครั้ง";
+    else if(pct >= 0.5) msg = "พอใช้ได้ ควรทบทวนเนื้อหาเพิ่มเติม";
+    else msg = "ควรกลับไปทบทวนเนื้อหาทั้งหมดอีกครั้ง";
+    scoreMsg.textContent = msg;
+  }
+
+  document.getElementById('resetBtn').addEventListener('click', ()=>{
+    answers = new Array(quiz.length).fill(null);
+    current = 0;
+    quizArea.style.display = 'block';
+    document.querySelector('.quiz-nav').style.display = 'flex';
+    qcounter.style.display = 'block';
+    scoreBox.classList.remove('show');
+    renderQuestion(current);
+  });
+
+  renderQuestion(current);
+</script>
+
+</body>
+</html>
