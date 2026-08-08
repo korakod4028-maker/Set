@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>คลังบทเรียน A-Level คณิต & ฟิสิกส์</title>
+  <style>
+    :root {
+      --primary-math: #2563eb;
+      --primary-physics: #059669;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-sub: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px 0;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: var(--text-sub);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f1f5f9;
+    }
+
+    .math .section-title {
+      color: var(--primary-math);
+    }
+
+    .physics .section-title {
+      color: var(--primary-physics);
+    }
+
+    .lesson-list {
+      list-style: none;
+    }
+
+    .lesson-item {
+      margin-bottom: 8px;
+    }
+
+    .lesson-link {
+      display: block;
+      padding: 10px 14px;
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .math .lesson-link:hover {
+      background-color: #eff6ff;
+      border-color: #93c5fd;
+      color: var(--primary-math);
+      transform: translateX(4px);
+    }
+
+    .physics .lesson-link:hover {
+      background-color: #ecfdf5;
+      border-color: #6ee7b7;
+      color: var(--primary-physics);
+      transform: translateX(4px);
+    }
+
+    .chapter-num {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>📚 คลังบทเรียน A-Level</h1>
+    <p>คลิกที่ชื่อบทเพื่อเข้าสู่เนื้อหาบทเรียน</p>
+  </div>
+
+  <div class="container">
+    
+    <!-- คณิตศาสตร์ -->
+    <div class="section-card math">
+      <h2 class="section-title">📐 คณิตศาสตร์ (14 บท)</h2>
+      <ul class="lesson-list">
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/sets-and-logic-alevel.html" target="_blank">
+            <span class="chapter-num">01.</span> เซตและตรรกศาสตร์
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/real-numbers-alevel.html" target="_blank">
+            <span class="chapter-num">02.</span> ระบบจำนวนจริง
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/analytic-geometry-alevel.html" target="_blank">
+            <span class="chapter-num">03.</span> เรขาคณิตวิเคราะห์และภาคตัดกรวย
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/functions-alevel.html" target="_blank">
+            <span class="chapter-num">04.</span> ฟังก์ชัน
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/exponential-logarithm-alevel.html" target="_blank">
+            <span class="chapter-num">05.</span> ฟังก์ชันเอ็กซ์โพเนนเชียลและลอการิทึม
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/trigonometry-alevel.html" target="_blank">
+            <span class="chapter-num">06.</span> ฟังก์ชันตรีโกณมิติ
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/matrix-alevel.html" target="_blank">
+            <span class="chapter-num">07.</span> เมทริกซ์
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/vectors-alevel.html" target="_blank">
+            <span class="chapter-num">08.</span> เวกเตอร์
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/complex-numbers-alevel.html" target="_blank">
+            <span class="chapter-num">09.</span> จำนวนเชิงซ้อน
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/sequences-and-series-alevel.html" target="_blank">
+            <span class="chapter-num">10.</span> ลำดับและอนุกรม
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/calculus-alevel.html" target="_blank">
+            <span class="chapter-num">11.</span> แคลคูลัส
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/counting-probability-alevel.html" target="_blank">
+            <span class="chapter-num">12.</span> หลักการนับและความน่าจะเป็น
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/statistics-alevel.html" target="_blank">
+            <span class="chapter-num">13.</span> สถิติ
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/prob-distribution-alevel.html" target="_blank">
+            <span class="chapter-num">14.</span> การแจกแจงความน่าจะเป็น
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ฟิสิกส์ -->
+    <div class="section-card physics">
+      <h2 class="section-title">🧲 ฟิสิกส์ (19 บท)</h2>
+      <ul class="lesson-list">
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/physics-nature-development.html" target="_blank">
+            <span class="chapter-num">01.</span> ธรรมชาติและพัฒนาการทางฟิสิกส์
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/linear-motion-alevel.html" target="_blank">
+            <span class="chapter-num">02.</span> การเคลื่อนที่แนวตรง
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/force-and-motion-alevel.html" target="_blank">
+            <span class="chapter-num">03.</span> แรงและกฎการเคลื่อนที่
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/mechanical-equilibrium-alevel.html" target="_blank">
+            <span class="chapter-num">04.</span> สภาพสมดุล
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/work-energy-alevel.html" target="_blank">
+            <span class="chapter-num">05.</span> งานและพลังงาน
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/momentum-collision-alevel.html" target="_blank">
+            <span class="chapter-num">06.</span> โมเมนตัมและการชน
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/curved-motion-alevel.html" target="_blank">
+            <span class="chapter-num">07.</span> การเคลื่อนที่แนวโค้ง
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/shm-alevel.html" target="_blank">
+            <span class="chapter-num">08.</span> การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/waves-alevel.html" target="_blank">
+            <span class="chapter-num">09.</span> คลื่น
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/wave-optics-alevel.html" target="_blank">
+            <span class="chapter-num">10.</span> แสงเชิงคลื่น
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/ray-optics-alevel.html" target="_blank">
+            <span class="chapter-num">11.</span> แสงเชิงรังสี
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/solid-and-fluid-alevel.html" target="_blank">
+            <span class="chapter-num">12.</span> ของแข็งและของไหล
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/heat-and-gas-alevel.html" target="_blank">
+            <span class="chapter-num">13.</span> ความร้อนและแก๊ส
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/electrostatics-alevel.html" target="_blank">
+            <span class="chapter-num">14.</span> ไฟฟ้าสถิต
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/electric-current-alevel.html" target="_blank">
+            <span class="chapter-num">15.</span> ไฟฟ้ากระแส
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/magnetism-electricity-alevel.html" target="_blank">
+            <span class="chapter-num">16.</span> แม่เหล็กและไฟฟ้า
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/em-waves-alevel.html" target="_blank">
+            <span class="chapter-num">17.</span> คลื่นแม่เหล็กไฟฟ้า
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/atomic-physics-alevel.html" target="_blank">
+            <span class="chapter-num">18.</span> ฟิสิกส์อะตอม
+          </a>
+        </li>
+        <li class="lesson-item">
+          <a class="lesson-link" href="https://korakod4028-maker.github.io/Set/nuclear-particle-physics-alevel.html" target="_blank">
+            <span class="chapter-num">19.</span> ฟิสิกส์นิวเคลียร์และฟิสิกส์อนุภาค
+          </a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+</body>
+</html>
