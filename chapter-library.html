@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คลังบทเรียน A-Level | คณิตศาสตร์ · ฟิสิกส์</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0c14;
+    --surface: #12151f;
+    --surface2: #191d2c;
+    --border: #262b42;
+    --math: #7c6fff;
+    --math-dim: rgba(124,111,255,0.12);
+    --physics: #ff8a5c;
+    --physics-dim: rgba(255,138,92,0.12);
+    --text: #eef0fa;
+    --text-dim: #8b92b3;
+    --text-muted: #4b5278;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background:
+      radial-gradient(ellipse 900px 500px at 20% -10%, rgba(124,111,255,0.14), transparent),
+      radial-gradient(ellipse 900px 500px at 85% 5%, rgba(255,138,92,0.12), transparent),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 72px 24px 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--math); box-shadow: 12px 0 0 var(--physics); }
+  .hero h1 {
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    letter-spacing: -0.5px;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(90deg, var(--math), var(--physics));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: var(--mono); font-size: 26px; font-weight: 600; }
+  .stat-num.mnum { color: var(--math); }
+  .stat-num.pnum { color: var(--physics); }
+  .stat-num.tnum { color: var(--text); }
+  .stat-label { font-size: 12px; color: var(--text-dim); letter-spacing: 0.5px; }
+
+  .search-wrap { max-width: 440px; margin: 0 auto; position: relative; }
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 13px 16px 13px 42px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--math); }
+  .search-wrap input::placeholder { color: var(--text-muted); }
+  .search-icon {
+    position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); font-size: 15px; pointer-events: none;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    padding: 14px 20px;
+    background: rgba(10,12,20,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .pill {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pill:hover { color: var(--text); border-color: var(--text-muted); }
+  .pill.active[data-cat="all"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .pill.active[data-cat="math"] { background: var(--math); color: #fff; border-color: var(--math); }
+  .pill.active[data-cat="physics"] { background: var(--physics); color: #1a0e06; border-color: var(--physics); }
+  .pill .count { font-family: var(--mono); opacity: 0.75; font-size: 12px; }
+
+  /* CONTENT */
+  .content { max-width: 1080px; margin: 0 auto; padding: 40px 20px 90px; }
+
+  .subject-block { margin-bottom: 52px; }
+  .subject-block:last-child { margin-bottom: 0; }
+
+  .subject-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .subject-heading h2 {
+    font-size: 22px;
+    font-weight: 800;
+  }
+  .subject-heading .icon-lg { font-size: 24px; }
+  .subject-heading .subject-count {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+  .subject-block.math .subject-heading h2 { color: var(--math); }
+  .subject-block.physics .subject-heading h2 { color: var(--physics); }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+
+  .chapter-card {
+    position: relative;
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+    text-decoration: none;
+    color: var(--text);
+    overflow: hidden;
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+  .chapter-card:hover {
+    transform: translateY(-3px);
+    background: var(--surface2);
+  }
+  .subject-block.math .chapter-card:hover { border-left-color: var(--math); }
+  .subject-block.physics .chapter-card:hover { border-left-color: var(--physics); }
+
+  .chapter-card .num-watermark {
+    position: absolute;
+    right: 10px;
+    top: -6px;
+    font-family: var(--mono);
+    font-size: 46px;
+    font-weight: 600;
+    color: var(--text);
+    opacity: 0.05;
+    line-height: 1;
+    user-select: none;
+  }
+  .chapter-card .top-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .chapter-card .chip-icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .subject-block.math .chip-icon { background: var(--math-dim); }
+  .subject-block.physics .chip-icon { background: var(--physics-dim); }
+
+  .chapter-card .num-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+  .chapter-card .title {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .chapter-card .go-link {
+    font-family: var(--mono);
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.7;
+    transition: gap 0.18s, opacity 0.18s;
+  }
+  .subject-block.math .go-link { color: var(--math); }
+  .subject-block.physics .go-link { color: var(--physics); }
+  .chapter-card:hover .go-link { gap: 8px; opacity: 1; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    display: none;
+  }
+  .empty-state.show { display: block; }
+  .empty-state .icon { font-size: 34px; margin-bottom: 12px; }
+
+  footer {
+    text-align: center;
+    padding: 30px 20px 50px;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--text-dim); }
+
+  @media (max-width: 480px) {
+    .hero { padding: 52px 18px 32px; }
+    .hero-stats { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow"><span class="dot"></span>&nbsp;&nbsp;สื่อการสอน A-Level · หลักสูตร สพฐ.</div>
+  <h1>คลังบทเรียน <span class="grad">คณิต · ฟิสิกส์</span></h1>
+  <p>รวมสรุปเนื้อหา สูตร ตัวอย่าง และแบบฝึกหัดเตรียมสอบ A-Level ครบทุกบท คลิกที่บทเพื่อเปิดอ่านได้ทันที</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num mnum">14</div><div class="stat-label">บทคณิตศาสตร์</div></div>
+    <div class="stat"><div class="stat-num pnum">19</div><div class="stat-label">บทฟิสิกส์</div></div>
+    <div class="stat"><div class="stat-num tnum">33</div><div class="stat-label">บททั้งหมด</div></div>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="ค้นหาชื่อบท เช่น เวกเตอร์, คลื่น, แคลคูลัส...">
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button class="pill active" data-cat="all">ทั้งหมด <span class="count" id="count-all">33</span></button>
+  <button class="pill" data-cat="math">📐 คณิตศาสตร์ <span class="count" id="count-math">14</span></button>
+  <button class="pill" data-cat="physics">🧲 ฟิสิกส์ <span class="count" id="count-physics">19</span></button>
+</div>
+
+<div class="content">
+  <div class="subject-block math" id="block-math">
+    <div class="subject-heading">
+      <span class="icon-lg">📐</span>
+      <h2>คณิตศาสตร์</h2>
+      <span class="subject-count">14 บท</span>
+    </div>
+    <div class="card-grid" id="grid-math"></div>
+  </div>
+
+  <div class="subject-block physics" id="block-physics">
+    <div class="subject-heading">
+      <span class="icon-lg">🧲</span>
+      <h2>ฟิสิกส์</h2>
+      <span class="subject-count">19 บท</span>
+    </div>
+    <div class="card-grid" id="grid-physics"></div>
+  </div>
+
+  <div class="empty-state" id="empty-state">
+    <div class="icon">🔎</div>
+    ไม่พบบทที่ตรงกับคำค้นหา ลองคำอื่นดูนะ
+  </div>
+</div>
+
+<footer>
+  คลังบทเรียนสำหรับเตรียมสอบ A-Level · แต่ละบทเปิดในแท็บใหม่
+</footer>
+
+<script>
+const mathChapters = [
+  { n: 1, icon: "🧩", title: "เซตและตรรกศาสตร์", url: "https://korakod4028-maker.github.io/Set/sets-and-logic-alevel.html" },
+  { n: 2, icon: "🔢", title: "ระบบจำนวนจริง", url: "https://korakod4028-maker.github.io/Set/real-numbers-alevel.html" },
+  { n: 3, icon: "🌀", title: "เรขาคณิตวิเคราะห์และภาคตัดกรวย", url: "https://korakod4028-maker.github.io/Set/analytic-geometry-alevel.html" },
+  { n: 4, icon: "📈", title: "ฟังก์ชัน", url: "https://korakod4028-maker.github.io/Set/functions-alevel.html" },
+  { n: 5, icon: "📊", title: "ฟังก์ชันเอ็กซ์โพเนนเชียลและลอการิทึม", url: "https://korakod4028-maker.github.io/Set/exponential-logarithm-alevel.html" },
+  { n: 6, icon: "📐", title: "ฟังก์ชันตรีโกณมิติ", url: "https://korakod4028-maker.github.io/Set/trigonometry-alevel.html" },
+  { n: 7, icon: "🔲", title: "เมทริกซ์", url: "https://korakod4028-maker.github.io/Set/matrix-alevel.html" },
+  { n: 8, icon: "➡️", title: "เวกเตอร์", url: "https://korakod4028-maker.github.io/Set/vectors-alevel.html" },
+  { n: 9, icon: "🌐", title: "จำนวนเชิงซ้อน", url: "https://korakod4028-maker.github.io/Set/complex-numbers-alevel.html" },
+  { n: 10, icon: "🔗", title: "ลำดับและอนุกรม", url: "https://korakod4028-maker.github.io/Set/sequences-and-series-alevel.html" },
+  { n: 11, icon: "∫", title: "แคลคูลัส", url: "https://korakod4028-maker.github.io/Set/calculus-alevel.html" },
+  { n: 12, icon: "🎲", title: "หลักการนับและความน่าจะเป็น", url: "https://korakod4028-maker.github.io/Set/counting-probability-alevel.html" },
+  { n: 13, icon: "📊", title: "สถิติ", url: "https://korakod4028-maker.github.io/Set/statistics-alevel.html" },
+  { n: 14, icon: "🔔", title: "การแจกแจงความน่าจะเป็น", url: "https://korakod4028-maker.github.io/Set/prob-distribution-alevel.html" }
+];
+
+const physicsChapters = [
+  { n: 1, icon: "🔭", title: "ธรรมชาติและพัฒนาการทางฟิสิกส์", url: "https://korakod4028-maker.github.io/Set/physics-nature-development.html" },
+  { n: 2, icon: "🏃", title: "การเคลื่อนที่แนวตรง", url: "https://korakod4028-maker.github.io/Set/linear-motion-alevel.html" },
+  { n: 3, icon: "🍎", title: "แรงและกฎการเคลื่อนที่", url: "https://korakod4028-maker.github.io/Set/force-and-motion-alevel.html" },
+  { n: 4, icon: "⚖️", title: "สภาพสมดุล", url: "https://korakod4028-maker.github.io/Set/mechanical-equilibrium-alevel.html" },
+  { n: 5, icon: "⚡", title: "งานและพลังงาน", url: "https://korakod4028-maker.github.io/Set/work-energy-alevel.html" },
+  { n: 6, icon: "💥", title: "โมเมนตัมและการชน", url: "https://korakod4028-maker.github.io/Set/momentum-collision-alevel.html" },
+  { n: 7, icon: "🎯", title: "การเคลื่อนที่แนวโค้ง (โพรเจกไทล์และวงกลม)", url: "https://korakod4028-maker.github.io/Set/curved-motion-alevel.html" },
+  { n: 8, icon: "🔁", title: "การเคลื่อนที่แบบฮาร์มอนิกอย่างง่าย (SHM)", url: "https://korakod4028-maker.github.io/Set/shm-alevel.html" },
+  { n: 9, icon: "🌊", title: "คลื่น", url: "https://korakod4028-maker.github.io/Set/waves-alevel.html" },
+  { n: 10, icon: "🌈", title: "แสงเชิงคลื่น", url: "https://korakod4028-maker.github.io/Set/wave-optics-alevel.html" },
+  { n: 11, icon: "🔦", title: "แสงเชิงรังสี", url: "https://korakod4028-maker.github.io/Set/ray-optics-alevel.html" },
+  { n: 12, icon: "💧", title: "ของแข็งและของไหล", url: "https://korakod4028-maker.github.io/Set/solid-and-fluid-alevel.html" },
+  { n: 13, icon: "🌡️", title: "ความร้อนและแก๊ส", url: "https://korakod4028-maker.github.io/Set/heat-and-gas-alevel.html" },
+  { n: 14, icon: "✨", title: "ไฟฟ้าสถิต", url: "https://korakod4028-maker.github.io/Set/electrostatics-alevel.html" },
+  { n: 15, icon: "🔋", title: "ไฟฟ้ากระแส", url: "https://korakod4028-maker.github.io/Set/electric-current-alevel.html" },
+  { n: 16, icon: "🧲", title: "แม่เหล็กและไฟฟ้า", url: "https://korakod4028-maker.github.io/Set/magnetism-electricity-alevel.html" },
+  { n: 17, icon: "📡", title: "คลื่นแม่เหล็กไฟฟ้า", url: "https://korakod4028-maker.github.io/Set/em-waves-alevel.html" },
+  { n: 18, icon: "⚛️", title: "ฟิสิกส์อะตอม", url: "https://korakod4028-maker.github.io/Set/atomic-physics-alevel.html" },
+  { n: 19, icon: "☢️", title: "ฟิสิกส์นิวเคลียร์และฟิสิกส์อนุภาค", url: "https://korakod4028-maker.github.io/Set/nuclear-particle-physics-alevel.html" }
+];
+
+function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+function renderCards(list, gridId) {
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = list.map(ch => `
+    <a class="chapter-card" href="${ch.url}" target="_blank" rel="noopener" data-title="${ch.title}">
+      <span class="num-watermark">${pad(ch.n)}</span>
+      <div class="top-row">
+        <div class="chip-icon">${ch.icon}</div>
+        <span class="num-tag">บทที่ ${pad(ch.n)}</span>
+      </div>
+      <div class="title">${ch.title}</div>
+      <span class="go-link">เปิดบทเรียน →</span>
+    </a>
+  `).join('');
+}
+
+renderCards(mathChapters, 'grid-math');
+renderCards(physicsChapters, 'grid-physics');
+
+const searchInput = document.getElementById('search-input');
+const pills = document.querySelectorAll('.pill');
+const blockMath = document.getElementById('block-math');
+const blockPhysics = document.getElementById('block-physics');
+const emptyState = document.getElementById('empty-state');
+let activeCat = 'all';
+
+function applyFilters() {
+  const term = searchInput.value.trim().toLowerCase();
+  let mathVisible = 0, physicsVisible = 0;
+
+  document.querySelectorAll('#grid-math .chapter-card').forEach(card => {
+    const match = card.dataset.title.toLowerCase().includes(term);
+    const catOk = activeCat === 'all' || activeCat === 'math';
+    const show = match && catOk;
+    card.style.display = show ? '' : 'none';
+    if (show) mathVisible++;
+  });
+
+  document.querySelectorAll('#grid-physics .chapter-card').forEach(card => {
+    const match = card.dataset.title.toLowerCase().includes(term);
+    const catOk = activeCat === 'all' || activeCat === 'physics';
+    const show = match && catOk;
+    card.style.display = show ? '' : 'none';
+    if (show) physicsVisible++;
+  });
+
+  blockMath.style.display = (activeCat === 'all' || activeCat === 'math') && mathVisible > 0 ? '' : 'none';
+  blockPhysics.style.display = (activeCat === 'all' || activeCat === 'physics') && physicsVisible > 0 ? '' : 'none';
+
+  emptyState.classList.toggle('show', mathVisible === 0 && physicsVisible === 0);
+}
+
+searchInput.addEventListener('input', applyFilters);
+
+pills.forEach(pill => {
+  pill.addEventListener('click', () => {
+    pills.forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeCat = pill.dataset.cat;
+    applyFilters();
+  });
+});
+</script>
+</body>
+</html>
