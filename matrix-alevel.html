@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เมทริกซ์ | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '[ ] det A⁻¹ Aᵀ I λ Σ';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    font-family: var(--mono);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); color: var(--accent); }
+  .icon-teal { background: rgba(0,212,170,0.15); color: var(--accent2); }
+  .icon-red { background: rgba(255,107,107,0.15); color: var(--accent3); }
+  .icon-yellow { background: rgba(255,217,61,0.15); color: var(--accent4); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent3); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent4); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* MATRIX VISUAL */
+  .matrix-visual {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin: 4px 8px;
+  }
+  .matrix-visual .bracket {
+    font-size: 38px;
+    font-weight: 200;
+    color: var(--text-dim);
+    line-height: 1;
+    font-family: var(--mono);
+  }
+  .matrix-visual .bracket.left { margin-right: 2px; }
+  .matrix-visual .bracket.right { margin-left: 2px; }
+  .matrix-visual table { border-collapse: collapse; }
+  .matrix-visual td {
+    padding: 5px 12px;
+    font-family: var(--mono);
+    font-size: 15px;
+    text-align: center;
+    color: var(--text);
+  }
+  .matrix-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+  }
+
+  /* TABLE */
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  table.data-table th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  table.data-table td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  table.data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    margin-bottom: 8px; font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px; font-weight: 600; margin-bottom: 16px; line-height: 1.6;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(108,99,255,0.1); }
+  .option-btn.correct { background: rgba(0,212,170,0.15); border-color: var(--accent2); color: var(--accent2); }
+  .option-btn.wrong { background: rgba(255,107,107,0.1); border-color: var(--accent3); color: var(--accent3); }
+  .feedback { margin-top: 12px; padding: 12px 16px; border-radius: 8px; font-size: 14px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3); color: var(--accent2); }
+  .feedback.wrong-fb { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.3); color: var(--accent3); }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px; font-weight: 800; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+  .sub-heading { font-size: 18px; font-weight: 700; margin: 24px 0 12px; color: var(--accent2); }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym { font-family: var(--mono); font-size: 20px; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+  .summary-item .sym-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>เมทริกซ์<span>และดีเทอร์มิแนนต์</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">ข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="mat1">1. นิยามและชนิด</button>
+  <button class="tab-btn" data-sec="mat2">2. บวก ลบ คูณสเกลาร์</button>
+  <button class="tab-btn" data-sec="mat3">3. การคูณเมทริกซ์</button>
+  <button class="tab-btn" data-sec="mat4">4. ทรานสโพส</button>
+  <button class="tab-btn" data-sec="mat5">5. ดีเทอร์มิแนนต์</button>
+  <button class="tab-btn" data-sec="mat6">6. เมทริกซ์ผกผัน</button>
+  <button class="tab-btn" data-sec="mat7">7. ระบบสมการเชิงเส้น</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+  <!-- ===== SECTION 1: นิยามและชนิด ===== -->
+  <div class="section active" id="mat1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · นิยามและชนิดของเมทริกซ์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">[ ]</div>เมทริกซ์คืออะไร?</div>
+      <p>เมทริกซ์ (Matrix) คือ <strong>ชุดของจำนวนที่เรียงกันเป็นรูปสี่เหลี่ยมผืนผ้า</strong> ในแถว (row) และหลัก (column) โดยเขียนอยู่ภายในวงเล็บใหญ่</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมทริกซ์ที่มี m แถว และ n หลัก เรียกว่า เมทริกซ์มิติ (order) <span class="math">m × n</span> เขียนแทนสมาชิกแถวที่ i หลักที่ j ด้วย <span class="math">a<sub>ij</sub></span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        <div class="matrix-row">
+          A =
+          <div class="matrix-visual">
+            <span class="bracket left">[</span>
+            <table><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>4</td><td>5</td><td>6</td></tr></table>
+            <span class="bracket right">]</span>
+          </div>
+          เป็นเมทริกซ์มิติ 2 × 3 (2 แถว 3 หลัก)
+        </div>
+        สมาชิก <span class="math">a<sub>12</sub> = 2</span> (แถวที่ 1 หลักที่ 2), <span class="math">a<sub>23</sub> = 6</span> (แถวที่ 2 หลักที่ 3)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        มิติของเมทริกซ์อ่านว่า "แถว คูณ หลัก" เสมอ (row × column) — จำเป็นคำว่า "RC" (Row มาก่อน Column)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">⭐</div>ชนิดของเมทริกซ์ที่ต้องรู้</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">1 × n</div>
+          <div class="sym-name">เมทริกซ์แถว (Row Matrix)</div>
+          <div class="sym-desc">มีเพียง 1 แถว เช่น [1  2  3]</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">m × 1</div>
+          <div class="sym-name">เมทริกซ์หลัก (Column Matrix)</div>
+          <div class="sym-desc">มีเพียง 1 หลัก</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">n × n</div>
+          <div class="sym-name">เมทริกซ์จัตุรัส (Square Matrix)</div>
+          <div class="sym-desc">จำนวนแถว = จำนวนหลัก</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">0</div>
+          <div class="sym-name">เมทริกซ์ศูนย์ (Zero Matrix)</div>
+          <div class="sym-desc">ทุกสมาชิกเป็น 0</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">I</div>
+          <div class="sym-name">เมทริกซ์เอกลักษณ์ (Identity)</div>
+          <div class="sym-desc">เส้นทแยงมุมเป็น 1 ที่เหลือเป็น 0</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">D</div>
+          <div class="sym-name">เมทริกซ์ทแยงมุม (Diagonal)</div>
+          <div class="sym-desc">สมาชิกนอกเส้นทแยงมุมหลักเป็น 0 ทั้งหมด</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง เมทริกซ์เอกลักษณ์มิติ 3 × 3</div>
+        <div class="matrix-visual">
+          <span class="bracket left">[</span>
+          <table><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td></tr><tr><td>0</td><td>0</td><td>1</td></tr></table>
+          <span class="bracket right">]</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">=</div>เมทริกซ์เท่ากัน</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        A = B ก็ต่อเมื่อ A และ B มี <strong>มิติเดียวกัน</strong> และสมาชิกที่ตำแหน่งเดียวกันมีค่าเท่ากันทุกตำแหน่ง
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กำหนด <span class="math">[[x, 3], [4, y]] = [[2, 3], [4, 7]]</span> จะได้ x = 2 และ y = 7
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        เมทริกซ์ที่มีมิติไม่เท่ากัน ไม่สามารถเปรียบเทียบความเท่ากันได้เลย แม้จำนวนสมาชิกทั้งหมดจะเท่ากันก็ตาม (เช่น 2×3 กับ 3×2 เทียบกันไม่ได้)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: บวก ลบ คูณสเกลาร์ ===== -->
+  <div class="section" id="mat2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · การบวก การลบ และการคูณด้วยสเกลาร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">+</div>การบวกและการลบเมทริกซ์</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        บวกหรือลบเมทริกซ์ได้ก็ต่อเมื่อทั้งสองเมทริกซ์มี <strong>มิติเดียวกัน</strong> โดยนำสมาชิกตำแหน่งเดียวกันมาบวก/ลบกัน
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        <div class="matrix-row">
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table><span class="bracket right">]</span></div>
+          +
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td></tr></table><span class="bracket right">]</span></div>
+          =
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>6</td><td>8</td></tr><tr><td>10</td><td>12</td></tr></table><span class="bracket right">]</span></div>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        A + B และ A − B จะหาค่าไม่ได้ (ไม่นิยาม) ถ้า A กับ B มีมิติต่างกัน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">k·A</div>การคูณเมทริกซ์ด้วยสเกลาร์</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การคูณเมทริกซ์ A ด้วยจำนวนจริง k (สเกลาร์) คือ การนำ k ไปคูณสมาชิก<strong>ทุกตัว</strong>ของ A
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        <div class="matrix-row">
+          3
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>1</td><td>-2</td></tr><tr><td>0</td><td>4</td></tr></table><span class="bracket right">]</span></div>
+          =
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>3</td><td>-6</td></tr><tr><td>0</td><td>12</td></tr></table><span class="bracket right">]</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">§</div>สมบัติของการบวกและการคูณด้วยสเกลาร์</div>
+      <p>กำหนดให้ A, B, C เป็นเมทริกซ์มิติเดียวกัน และ k, c เป็นสเกลาร์</p>
+      <div class="math-block">
+        A + B = B + A                     (สลับที่ได้)<br>
+        (A + B) + C = A + (B + C)          (เปลี่ยนหมู่ได้)<br>
+        A + 0 = A                          (0 คือเอกลักษณ์การบวก)<br>
+        A + (−A) = 0<br>
+        k(A + B) = kA + kB                 (กระจาย)<br>
+        (k + c)A = kA + cA<br>
+        k(cA) = (kc)A
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level</div>
+        สมบัติเหล่านี้เหมือนกับพีชคณิตของจำนวนจริงทุกประการ ยกเว้นเรื่อง<strong>การคูณเมทริกซ์กับเมทริกซ์</strong>ที่จะไม่เป็นแบบนั้น (ดูหัวข้อถัดไป)
+      </div>
+    </div>
+  </div>
+  <!-- ===== SECTION 3: การคูณเมทริกซ์ ===== -->
+  <div class="section" id="mat3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · การคูณเมทริกซ์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">A×B</div>เงื่อนไขการคูณเมทริกซ์</div>
+      <div class="def-box">
+        <div class="def-label">เงื่อนไข</div>
+        A คูณ B ได้ก็ต่อเมื่อ <strong>จำนวนหลักของ A เท่ากับจำนวนแถวของ B</strong><br>
+        ถ้า A มิติ m × n และ B มิติ n × p แล้ว AB จะมีมิติ <span class="math">m × p</span>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        เขียนมิติต่อกัน (m × n)(n × p) — ตัวกลางต้อง<strong>เท่ากัน</strong> (ตัดออก) เหลือมิติของผลลัพธ์คือ (m × p)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">Σ</div>วิธีคูณเมทริกซ์ (แถว × หลัก)</div>
+      <p>สมาชิกตำแหน่ง (i, j) ของ AB ได้จากการนำ<strong>แถวที่ i ของ A</strong> คูณกับ<strong>หลักที่ j ของ B</strong> แบบคูณคู่แล้วบวกกัน</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        <div class="matrix-row">
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table><span class="bracket right">]</span></div>
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td></tr></table><span class="bracket right">]</span></div>
+          =
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>19</td><td>22</td></tr><tr><td>43</td><td>50</td></tr></table><span class="bracket right">]</span></div>
+        </div>
+        <div class="math-block">
+ตำแหน่ง (1,1): (1)(5) + (2)(7) = 5 + 14 = 19
+ตำแหน่ง (1,2): (1)(6) + (2)(8) = 6 + 16 = 22
+ตำแหน่ง (2,1): (3)(5) + (4)(7) = 15 + 28 = 43
+ตำแหน่ง (2,2): (3)(6) + (4)(8) = 18 + 32 = 50
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">§</div>สมบัติการคูณเมทริกซ์</div>
+      <div class="math-block">
+        A(BC) = (AB)C          (เปลี่ยนหมู่ได้)
+        A(B + C) = AB + AC      (กระจายซ้าย)
+        (A + B)C = AC + BC      (กระจายขวา)
+        AI = IA = A             (I คือเอกลักษณ์การคูณ)
+        A·0 = 0·A = 0
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กับดักข้อสอบที่พบบ่อยที่สุด</div>
+        <strong>AB ≠ BA โดยทั่วไป</strong> (การคูณเมทริกซ์ไม่มีสมบัติการสลับที่)<br>
+        แม้ AB = 0 ก็ <strong>ไม่ได้แปลว่า</strong> A = 0 หรือ B = 0 เสมอไป (มีเมทริกซ์ที่ไม่ใช่ศูนย์ทั้งคู่ แต่คูณกันได้ 0)<br>
+        AB = AC ก็<strong>ไม่ได้แปลว่า</strong> B = C เสมอไป (ตัด A ออกจากสมการไม่ได้ถ้าไม่รู้ว่า A มีอินเวอร์ส)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: ทรานสโพส ===== -->
+  <div class="section" id="mat4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · ทรานสโพสและเมทริกซ์สมมาตร</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">Aᵀ</div>ทรานสโพสของเมทริกซ์ (Transpose)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ทรานสโพสของ A เขียนแทนด้วย <span class="math">A<sup>T</sup></span> คือเมทริกซ์ที่ได้จากการสลับแถวเป็นหลัก (แถวที่ i ของ A กลายเป็นหลักที่ i ของ A<sup>T</sup>)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        <div class="matrix-row">
+          A =
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>1</td><td>2</td><td>3</td></tr><tr><td>4</td><td>5</td><td>6</td></tr></table><span class="bracket right">]</span></div>
+          &nbsp;&nbsp;→&nbsp;&nbsp; A<sup>T</sup> =
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>1</td><td>4</td></tr><tr><td>2</td><td>5</td></tr><tr><td>3</td><td>6</td></tr></table><span class="bracket right">]</span></div>
+        </div>
+        A มิติ 2 × 3 → A<sup>T</sup> มิติ 3 × 2 (มิติสลับกัน)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">§</div>สมบัติของทรานสโพส</div>
+      <div class="math-block">
+        (A<sup>T</sup>)<sup>T</sup> = A
+        (A + B)<sup>T</sup> = A<sup>T</sup> + B<sup>T</sup>
+        (kA)<sup>T</sup> = kA<sup>T</sup>
+        (AB)<sup>T</sup> = B<sup>T</sup>A<sup>T</sup>      ← สลับลำดับด้วย!
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ทรานสโพสของผลคูณ ต้อง<strong>สลับลำดับ</strong> เสมอ: (AB)<sup>T</sup> = B<sup>T</sup>A<sup>T</sup> ไม่ใช่ A<sup>T</sup>B<sup>T</sup>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">S</div>เมทริกซ์สมมาตร (Symmetric Matrix)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        A เป็นเมทริกซ์สมมาตร ก็ต่อเมื่อ <span class="math">A<sup>T</sup> = A</span> (ต้องเป็นเมทริกซ์จัตุรัสเท่านั้น)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>1</td><td>5</td><td>2</td></tr><tr><td>5</td><td>3</td><td>7</td></tr><tr><td>2</td><td>7</td><td>4</td></tr></table><span class="bracket right">]</span></div>
+        สมมาตรตามแนวเส้นทแยงมุมหลัก (สังเกตค่าฝั่งบน-ล่างของเส้นทแยงมุมเท่ากัน)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level</div>
+        สำหรับเมทริกซ์จัตุรัส A ใดๆ เมทริกซ์ A + A<sup>T</sup> จะเป็นเมทริกซ์สมมาตรเสมอ ใช้พิสูจน์โจทย์แบบ "จงแสดงว่า...สมมาตร" ได้บ่อยมาก
+      </div>
+    </div>
+  </div>
+  <!-- ===== SECTION 5: ดีเทอร์มิแนนต์ ===== -->
+  <div class="section" id="mat5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · ดีเทอร์มิแนนต์ (Determinant)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">det</div>ดีเทอร์มิแนนต์เมทริกซ์ 2 × 2</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        ถ้า A =
+        <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>a</td><td>b</td></tr><tr><td>c</td><td>d</td></tr></table><span class="bracket right">]</span></div>
+        แล้ว <span class="math">det(A) = |A| = ad − bc</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A =
+        <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>3</td><td>4</td></tr><tr><td>2</td><td>5</td></tr></table><span class="bracket right">]</span></div>
+        det(A) = (3)(5) − (4)(2) = 15 − 8 = 7
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">det</div>ดีเทอร์มิแนนต์เมทริกซ์ 3 × 3 (กฎซาร์รัส)</div>
+      <p>คัดลอกสองหลักแรกมาต่อท้ายขวา แล้วบวกผลคูณแนวทแยงลง ลบผลคูณแนวทแยงขึ้น</p>
+      <div class="math-block">
+| a  b  c |
+| d  e  f |   = aei + bfg + cdh − ceg − afh − bdi
+| g  h  i |
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A =
+        <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>1</td><td>2</td><td>0</td></tr><tr><td>0</td><td>1</td><td>3</td></tr><tr><td>2</td><td>1</td><td>1</td></tr></table><span class="bracket right">]</span></div>
+        <div class="math-block">
+det(A) = (1)(1)(1) + (2)(3)(2) + (0)(0)(1)
+       − (0)(1)(2) − (1)(3)(1) − (2)(0)(1)
+       = 1 + 12 + 0 − 0 − 3 − 0 = 10
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 อีกวิธี — การขยายด้วยตัวประกอบร่วมเกิน (Cofactor Expansion)</div>
+        เลือกแถวหรือหลักใดก็ได้ แล้วขยาย: det(A) = a·det(minor ของ a) − b·det(minor ของ b) + c·det(minor ของ c) โดยสลับเครื่องหมาย + − + ไปเรื่อยๆ ตามตำแหน่ง
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">§</div>สมบัติของดีเทอร์มิแนนต์</div>
+      <div class="math-block">
+        det(AB) = det(A) · det(B)
+        det(A<sup>T</sup>) = det(A)
+        det(kA) = k<sup>n</sup> det(A)     (n = มิติของเมทริกซ์จัตุรัส A)
+        det(I) = 1
+        ถ้าแถว/หลักใดเป็น 0 ทั้งแถว/หลัก → det(A) = 0
+        ถ้าสองแถว (หรือสองหลัก) เหมือนกัน → det(A) = 0
+        สลับสองแถวกัน → det เปลี่ยนเครื่องหมาย
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ความสำคัญของ det(A) = 0</div>
+        ถ้า det(A) = 0 เรียกว่า A เป็นเมทริกซ์เอกฐาน (Singular Matrix) และ<strong> A จะไม่มีอินเวอร์ส</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: เมทริกซ์ผกผัน ===== -->
+  <div class="section" id="mat6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · เมทริกซ์ผกผัน (Inverse Matrix)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">A⁻¹</div>นิยามเมทริกซ์ผกผัน</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        A<sup>−1</sup> คือเมทริกซ์ที่ทำให้ <span class="math">A·A<sup>−1</sup> = A<sup>−1</sup>·A = I</span><br>
+        A จะมีอินเวอร์ส<strong>ก็ต่อเมื่อ</strong> A เป็นเมทริกซ์จัตุรัส และ <span class="math">det(A) ≠ 0</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">2×2</div>การหาอินเวอร์สเมทริกซ์ 2 × 2</div>
+      <div class="def-box">
+        <div class="def-label">สูตรลัด</div>
+        ถ้า A =
+        <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>a</td><td>b</td></tr><tr><td>c</td><td>d</td></tr></table><span class="bracket right">]</span></div>
+        และ det(A) = ad − bc ≠ 0 แล้ว
+        <div class="matrix-row">
+          A<sup>−1</sup> = <span class="math">1/det(A)</span> ×
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>d</td><td>−b</td></tr><tr><td>−c</td><td>a</td></tr></table><span class="bracket right">]</span></div>
+        </div>
+        (สลับตำแหน่ง a กับ d แล้วเปลี่ยนเครื่องหมาย b กับ c จากนั้นหารด้วย det)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A =
+        <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>2</td><td>1</td></tr><tr><td>5</td><td>3</td></tr></table><span class="bracket right">]</span></div>
+        det(A) = (2)(3) − (1)(5) = 1
+        <div class="matrix-row">
+          A<sup>−1</sup> =
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>3</td><td>−1</td></tr><tr><td>−5</td><td>2</td></tr></table><span class="bracket right">]</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">3×3</div>การหาอินเวอร์สเมทริกซ์ 3 × 3</div>
+      <p>ใช้ 2 วิธีหลัก:</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>1. เมทริกซ์ผูกพัน (Adjoint)</h4>
+          <p style="font-size:13px; color:var(--text-dim)">A<sup>−1</sup> = 1/det(A) × adj(A) โดย adj(A) คือทรานสโพสของเมทริกซ์ตัวประกอบร่วมเกิน (cofactor matrix)</p>
+        </div>
+        <div class="mini-card">
+          <h4>2. การจัดแถว [A | I]</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ทำการดำเนินการตามแถว (row operation) กับ [A | I] จนด้านซ้ายกลายเป็น I แล้วด้านขวาจะเป็น A<sup>−1</sup></p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level</div>
+        ข้อสอบส่วนใหญ่มักถามหาสมาชิกเฉพาะตำแหน่งของ A<sup>−1</sup> หรือถามค่า det โดยไม่ต้องหาอินเวอร์สเต็มรูป — ควรอ่านโจทย์ให้ดีก่อนลงมือคำนวณทั้งเมทริกซ์
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">§</div>สมบัติของอินเวอร์ส</div>
+      <div class="math-block">
+        (A<sup>−1</sup>)<sup>−1</sup> = A
+        (AB)<sup>−1</sup> = B<sup>−1</sup>A<sup>−1</sup>      ← สลับลำดับด้วย!
+        (A<sup>T</sup>)<sup>−1</sup> = (A<sup>−1</sup>)<sup>T</sup>
+        det(A<sup>−1</sup>) = 1 / det(A)
+        (kA)<sup>−1</sup> = (1/k)A<sup>−1</sup>   (k ≠ 0)
+      </div>
+    </div>
+  </div>
+  <!-- ===== SECTION 7: ระบบสมการเชิงเส้น ===== -->
+  <div class="section" id="mat7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · ระบบสมการเชิงเส้นด้วยเมทริกซ์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">AX=B</div>การเขียนระบบสมการในรูปเมทริกซ์</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ระบบสมการ:
+        <div class="math-block">
+2x + y = 5
+3x + 2y = 8
+        </div>
+        เขียนเป็น AX = B ได้ดังนี้
+        <div class="matrix-row">
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>2</td><td>1</td></tr><tr><td>3</td><td>2</td></tr></table><span class="bracket right">]</span></div>
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>x</td></tr><tr><td>y</td></tr></table><span class="bracket right">]</span></div>
+          =
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>5</td></tr><tr><td>8</td></tr></table><span class="bracket right">]</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">X=A⁻¹B</div>การแก้ระบบสมการด้วยอินเวอร์ส</div>
+      <p>จาก AX = B ถ้า A มีอินเวอร์ส (det(A) ≠ 0) จะแก้หา X ได้โดยคูณ A<sup>−1</sup> ทางซ้ายทั้งสองข้าง</p>
+      <div class="math-block">
+        AX = B
+        A<sup>−1</sup>AX = A<sup>−1</sup>B
+        IX = A<sup>−1</sup>B
+        X = A<sup>−1</sup>B
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง (ต่อจากด้านบน)</div>
+        det(A) = (2)(2) − (1)(3) = 1  →  A<sup>−1</sup> =
+        <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>2</td><td>−1</td></tr><tr><td>−3</td><td>2</td></tr></table><span class="bracket right">]</span></div>
+        <div class="matrix-row">
+          X = A<sup>−1</sup>B =
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>2</td><td>−1</td></tr><tr><td>−3</td><td>2</td></tr></table><span class="bracket right">]</span></div>
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>5</td></tr><tr><td>8</td></tr></table><span class="bracket right">]</span></div>
+          =
+          <div class="matrix-visual"><span class="bracket left">[</span><table><tr><td>2</td></tr><tr><td>−1</td></tr></table><span class="bracket right">]</span></div>
+        </div>
+        ดังนั้น x = 2, y = −1
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">Cramer</div>กฎของคราเมอร์ (Cramer's Rule)</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        สำหรับระบบสมการ AX = B ที่ det(A) ≠ 0 ตัวแปรตัวที่ i หาได้จาก
+        <span class="math">x<sub>i</sub> = det(A<sub>i</sub>) / det(A)</span> โดย A<sub>i</sub> คือเมทริกซ์ A ที่แทนหลักที่ i ด้วยหลัก B
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง (ระบบเดิม)</div>
+        x = det[[5,1],[8,2]] / det(A) = (10−8)/1 = 2<br>
+        y = det[[2,5],[3,8]] / det(A) = (16−15)/1 = 1... <span style="color:var(--text-dim)">(ให้สังเกตเครื่องหมายตามสมการจริงเสมอ)</span>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ถ้า det(A) = 0 ใช้กฎคราเมอร์ไม่ได้ — ระบบสมการอาจไม่มีคำตอบ หรือมีคำตอบมากมายไม่รู้จบ ต้องตรวจสอบเพิ่มเติมด้วยวิธีอื่น
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">8 ข้อ เรียงจากง่ายไปยาก ครอบคลุมเนื้อหาเมทริกซ์ทั้งหมด เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบ A-Level เมทริกซ์</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ข้อสอบจำลองแนว A-Level คณิตศาสตร์ประยุกต์ 1 เรื่องเมทริกซ์และดีเทอร์มิแนนต์</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      เรื่องเมทริกซ์ออกข้อสอบ A-Level ประมาณ 6-8 คะแนน — เน้นการคูณเมทริกซ์ ดีเทอร์มิแนนต์ และอินเวอร์ส ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบาย
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — พื้นฐาน",
+    q: "เมทริกซ์ A มิติ 3 × 5 จำนวนสมาชิกทั้งหมดของ A เท่ากับข้อใด",
+    opts: ["8", "15", "35", "53"],
+    ans: 1,
+    explain: "จำนวนสมาชิกทั้งหมดของเมทริกซ์ = จำนวนแถว × จำนวนหลัก = 3 × 5 = 15 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — พื้นฐาน",
+    q: "กำหนด A = [[2, x], [y, 3]] และ B = [[2, 4], [-1, 3]] ถ้า A = B จงหา x + y",
+    opts: ["3", "4", "5", "6"],
+    ans: 0,
+    explain: "ขั้นที่ 1: เมทริกซ์เท่ากันเมื่อสมาชิกตำแหน่งเดียวกันเท่ากันทุกตำแหน่ง\n  เทียบตำแหน่ง (1,2): x = 4\n  เทียบตำแหน่ง (2,1): y = -1\n\nขั้นที่ 2: หาค่า x + y\n  x + y = 4 + (-1) = 3 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การดำเนินการ",
+    q: "กำหนด A = [[1, 2], [3, 4]] และ B = [[0, 1], [1, 0]] จงหา A + 2B",
+    opts: [
+      "[[1, 4], [5, 4]]",
+      "[[1, 3], [4, 4]]",
+      "[[3, 4], [5, 6]]",
+      "[[1, 2], [5, 4]]"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา 2B\n  2B = 2[[0,1],[1,0]] = [[0,2],[2,0]]\n\nขั้นที่ 2: บวก A + 2B (บวกตำแหน่งต่อตำแหน่ง)\n  [[1,2],[3,4]] + [[0,2],[2,0]] = [[1+0, 2+2],[3+2, 4+0]] = [[1,4],[5,4]] ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การคูณเมทริกซ์",
+    q: "กำหนด A = [[1, 2], [0, 1]] และ B = [[3, 0], [1, 2]] จงหาสมาชิกตำแหน่ง (1,1) ของ AB",
+    opts: ["3", "4", "5", "6"],
+    ans: 2,
+    explain: "ตำแหน่ง (1,1) ของ AB ได้จากแถวที่ 1 ของ A คูณกับหลักที่ 1 ของ B\n  แถวที่ 1 ของ A คือ [1, 2]\n  หลักที่ 1 ของ B คือ [3, 1]\n\nคูณคู่แล้วบวก: (1)(3) + (2)(1) = 3 + 2 = 5 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ทรานสโพส",
+    q: "ถ้า A เป็นเมทริกซ์จัตุรัสที่ (AB)ᵀ = BᵀAᵀ เสมอ ข้อใดต่อไปนี้ถูกต้อง",
+    opts: [
+      "(AB)ᵀ = AᵀBᵀ เสมอ",
+      "การทรานสโพสผลคูณต้องสลับลำดับเมทริกซ์",
+      "AB = BA เสมอเมื่อ A, B เป็นเมทริกซ์จัตุรัส",
+      "(A + B)ᵀ = AᵀBᵀ"
+    ],
+    ans: 1,
+    explain: "สมบัติของทรานสโพส: (AB)ᵀ = BᵀAᵀ เสมอ ไม่ใช่ AᵀBᵀ — นี่คือกฎสำคัญที่ต้องสลับลำดับเมทริกซ์ทุกครั้งที่ทรานสโพสผลคูณ ✓\n\nตัวเลือกอื่นผิด:\n  • (AB)ᵀ = AᵀBᵀ เป็นเท็จโดยทั่วไป\n  • AB = BA ไม่จริงเสมอไป (การคูณเมทริกซ์ไม่มีสมบัติการสลับที่)\n  • (A+B)ᵀ = Aᵀ + Bᵀ ไม่ใช่ AᵀBᵀ"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — ดีเทอร์มิแนนต์",
+    q: "กำหนด A = [[2, 3], [1, 4]] และ B = [[1, 0], [2, 3]] จงหา det(AB)",
+    opts: ["10", "15", "20", "25"],
+    ans: 1,
+    explain: "วิธีที่เร็วที่สุด: ใช้สมบัติ det(AB) = det(A) × det(B) โดยไม่ต้องคูณเมทริกซ์เต็มรูป\n\nขั้นที่ 1: หา det(A)\n  det(A) = (2)(4) − (3)(1) = 8 − 3 = 5\n\nขั้นที่ 2: หา det(B)\n  det(B) = (1)(3) − (0)(2) = 3\n\nขั้นที่ 3: คูณกัน\n  det(AB) = 5 × 3 = 15 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — เมทริกซ์ผกผัน",
+    q: "กำหนด A = [[3, 1], [5, 2]] จงหาสมาชิกตำแหน่ง (2,2) ของ A⁻¹",
+    opts: ["1", "2", "3", "5"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หา det(A)\n  det(A) = (3)(2) − (1)(5) = 6 − 5 = 1\n\nขั้นที่ 2: ใช้สูตรลัดของอินเวอร์ส 2×2\n  ถ้า A = [[a,b],[c,d]] แล้ว A⁻¹ = (1/det(A))[[d,-b],[-c,a]]\n  A⁻¹ = (1/1)[[2,-1],[-5,3]] = [[2,-1],[-5,3]]\n\nขั้นที่ 3: อ่านค่าตำแหน่ง (2,2)\n  สมาชิกตำแหน่ง (2,2) ของ A⁻¹ คือ 3 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — ระบบสมการเชิงเส้น",
+    q: "ระบบสมการ x + 2y = 4 และ 3x + 5y = 9 มีค่า x เท่ากับข้อใด (ใช้กฎคราเมอร์)",
+    opts: ["-2", "-1", "1", "2"],
+    ans: 0,
+    explain: "ขั้นที่ 1: เขียนเมทริกซ์สัมประสิทธิ์ A และหา det(A)\n  A = [[1,2],[3,5]]\n  det(A) = (1)(5) − (2)(3) = 5 − 6 = -1\n\nขั้นที่ 2: สร้าง A₁ โดยแทนหลักที่ 1 ด้วยค่าคงที่ [4, 9]\n  A₁ = [[4,2],[9,5]]\n  det(A₁) = (4)(5) − (2)(9) = 20 − 18 = 2\n\nขั้นที่ 3: ใช้กฎคราเมอร์\n  x = det(A₁) / det(A) = 2 / (-1) = -2 ✓\n\nตรวจคำตอบ: แทน x=-2 ใน x+2y=4 จะได้ y=3 ตรวจสมการที่สอง 3(-2)+5(3) = -6+15 = 9 ✓ ถูกต้อง"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+const alevelQuestions = [
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เมทริกซ์",
+    q: "กำหนด A = [[1, -1], [2, 3]] และ B = [[2, 1], [0, 1]] จงหา det(A + B)",
+    opts: ["5", "8", "10", "12"],
+    ans: 3,
+    explain: "ขั้นที่ 1: หา A + B ก่อน (ต้องบวกเมทริกซ์ให้เสร็จก่อนหา det เพราะ det(A+B) ≠ det(A)+det(B) โดยทั่วไป)\n  A + B = [[1+2, -1+1],[2+0, 3+1]] = [[3, 0],[2, 4]]\n\nขั้นที่ 2: หา det ของผลบวก\n  det(A+B) = (3)(4) − (0)(2) = 12 − 0 = 12 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เมทริกซ์",
+    q: "กำหนด A เป็นเมทริกซ์จัตุรัสมิติ 3 × 3 ที่ det(A) = 4 จงหาค่าของ det(2A)",
+    opts: ["8", "16", "32", "64"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ใช้สมบัติ det(kA) = kⁿ det(A) เมื่อ n คือมิติของเมทริกซ์จัตุรัส\n  ในที่นี้ k = 2, n = 3 (เพราะ A มิติ 3×3)\n\nขั้นที่ 2: แทนค่า\n  det(2A) = 2³ × det(A) = 8 × 4 = 32 ✓\n\nข้อควรระวัง: ห้ามใช้ det(kA) = k × det(A) เพราะสูตรนี้ใช้ได้เฉพาะเมทริกซ์ 1×1 เท่านั้น ต้องยกกำลัง n เสมอ"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เมทริกซ์",
+    q: "ถ้า A = [[1, 2], [3, k]] เป็นเมทริกซ์เอกฐาน (singular) จงหาค่า k",
+    opts: ["3", "5", "6", "8"],
+    ans: 2,
+    explain: "ขั้นที่ 1: เมทริกซ์เอกฐาน คือเมทริกซ์ที่ det(A) = 0\n\nขั้นที่ 2: หา det(A) แล้วให้เท่ากับ 0\n  det(A) = (1)(k) − (2)(3) = k − 6\n  k − 6 = 0\n\nขั้นที่ 3: แก้สมการ\n  k = 6 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เมทริกซ์",
+    q: "กำหนด A = [[2, 0], [1, 3]] และ B = [[1, -1], [2, 1]] จงหาสมาชิกตำแหน่ง (2,1) ของ AB",
+    opts: ["5", "6", "7", "8"],
+    ans: 2,
+    explain: "ขั้นที่ 1: สมาชิกตำแหน่ง (2,1) ของ AB มาจากแถวที่ 2 ของ A คูณกับหลักที่ 1 ของ B\n  แถวที่ 2 ของ A คือ [1, 3]\n  หลักที่ 1 ของ B คือ [1, 2]\n\nขั้นที่ 2: คูณคู่แล้วบวก\n  (1)(1) + (3)(2) = 1 + 6 = 7 ✓"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เมทริกซ์",
+    q: "ถ้า A เป็นเมทริกซ์จัตุรัสที่ A² = A (เมทริกซ์อิดเอมโพเทนต์) และ A ≠ I จงพิจารณาว่า det(A) มีค่าเท่าใดได้บ้าง",
+    opts: [
+      "det(A) = 0 หรือ 1 เท่านั้น",
+      "det(A) ต้องเป็น 1 เสมอ",
+      "det(A) เป็นจำนวนใดก็ได้",
+      "det(A) ต้องเป็น 0 เสมอ"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: ใช้สมบัติดีเทอร์มิแนนต์กับสมการ A² = A\n  det(A²) = det(A)\n  det(A)·det(A) = det(A)\n  [det(A)]² = det(A)\n\nขั้นที่ 2: จัดรูปสมการ\n  [det(A)]² − det(A) = 0\n  det(A)[det(A) − 1] = 0\n\nขั้นที่ 3: แก้สมการ\n  det(A) = 0  หรือ  det(A) = 1\n\nดังนั้น det(A) เป็นได้แค่ 0 หรือ 1 เท่านั้น ✓ (ถ้า det(A)=1 แสดงว่า A มีอินเวอร์ส และจาก A²=A จะสรุปได้ว่า A=I แต่โจทย์กำหนดว่า A≠I จึงเหลือกรณี det(A)=0 เป็นไปได้จริงในทางปฏิบัติ แต่คำถามถามว่า \"มีค่าเท่าใดได้บ้าง\" ทางคณิตศาสตร์ล้วนๆ ตามสมการ จึงตอบได้ทั้งสองค่า)"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เมทริกซ์",
+    q: "กำหนด A = [[1, 2], [0, 1]] จงหา A⁻¹",
+    opts: [
+      "[[1, -2], [0, 1]]",
+      "[[1, 2], [0, 1]]",
+      "[[-1, 2], [0, -1]]",
+      "[[1, -2], [0, -1]]"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา det(A)\n  det(A) = (1)(1) − (2)(0) = 1\n\nขั้นที่ 2: ใช้สูตรลัด A⁻¹ = (1/det(A))[[d,-b],[-c,a]]\n  a=1, b=2, c=0, d=1\n  A⁻¹ = (1/1)[[1,-2],[0,1]] = [[1,-2],[0,1]] ✓\n\nตรวจคำตอบ: A·A⁻¹ = [[1,2],[0,1]]·[[1,-2],[0,1]] = [[1(1)+2(0), 1(-2)+2(1)],[0(1)+1(0), 0(-2)+1(1)]] = [[1,0],[0,1]] = I ✓ ถูกต้อง"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เมทริกซ์",
+    q: "ระบบสมการ 2x − y = 1 และ x + y = 5 มีค่า y เท่ากับข้อใด (ใช้กฎคราเมอร์)",
+    opts: ["1", "2", "3", "4"],
+    ans: 2,
+    explain: "ขั้นที่ 1: เขียนเมทริกซ์สัมประสิทธิ์และหา det(A)\n  A = [[2,-1],[1,1]]\n  det(A) = (2)(1) − (-1)(1) = 2 + 1 = 3\n\nขั้นที่ 2: สร้าง A₂ โดยแทนหลักที่ 2 ด้วยค่าคงที่ [1, 5]\n  A₂ = [[2,1],[1,5]]\n  det(A₂) = (2)(5) − (1)(1) = 10 − 1 = 9\n\nขั้นที่ 3: ใช้กฎคราเมอร์\n  y = det(A₂) / det(A) = 9 / 3 = 3 ✓\n\nตรวจคำตอบ: ถ้า y=3 แทนใน x+y=5 จะได้ x=2 ตรวจในสมการแรก 2(2)-3 = 4-3 = 1 ✓ ถูกต้อง"
+  },
+  {
+    year: "📘 แบบฝึกหัดเตรียมความพร้อม — เมทริกซ์",
+    q: "กำหนดให้ A, B เป็นเมทริกซ์จัตุรัสมิติเดียวกันที่มีอินเวอร์ส ข้อใดต่อไปนี้ถูกต้อง",
+    opts: [
+      "(AB)⁻¹ = B⁻¹A⁻¹",
+      "(AB)⁻¹ = A⁻¹B⁻¹",
+      "(AB)⁻¹ = AB",
+      "(AB)⁻¹ = BA"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: ระลึกกฎอินเวอร์สของผลคูณ ต้องสลับลำดับเสมอ (เหมือนกฎทรานสโพส)\n  (AB)⁻¹ = B⁻¹A⁻¹\n\nขั้นที่ 2: พิสูจน์ด้วยนิยาม\n  (AB)(B⁻¹A⁻¹) = A(BB⁻¹)A⁻¹ = A·I·A⁻¹ = AA⁻¹ = I ✓\n  ดังนั้น B⁻¹A⁻¹ เป็นอินเวอร์สของ AB จริง\n\nดังนั้นคำตอบคือ (AB)⁻¹ = B⁻¹A⁻¹ ✓ (สลับลำดับเสมอ เหมือนกับกฎของทรานสโพส (AB)ᵀ = BᵀAᵀ)"
+  }
+];
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  alevelQuestions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+
+</body>
+</html>

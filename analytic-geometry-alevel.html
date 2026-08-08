@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เรขาคณิตวิเคราะห์และภาคตัดกรวย | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'x² y² (h,k) r c e a b';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* GRAPH */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>เรขาคณิต<span>วิเคราะห์</span>และภาคตัดกรวย</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">ภาคตัดกรวย</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">13</div><div class="stat-label">แนวข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="geo1">1. ระยะทาง/จุดกึ่งกลาง/ความชัน</button>
+  <button class="tab-btn" data-sec="geo2">2. เส้นตรง</button>
+  <button class="tab-btn" data-sec="geo3">3. วงกลม</button>
+  <button class="tab-btn" data-sec="geo4">4. พาราโบลา</button>
+  <button class="tab-btn" data-sec="geo5">5. วงรี</button>
+  <button class="tab-btn" data-sec="geo6">6. ไฮเพอร์โบลา</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 แนวข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: ระยะทาง จุดกึ่งกลาง ความชัน ===== -->
+  <div class="section active" id="geo1">
+    <div class="section-heading"><span>บทที่ 1</span> · จุดในระบบพิกัดฉาก</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📏</div>ระยะทางระหว่างจุดสองจุด</div>
+      <p>ใช้ทฤษฎีบทพีทาโกรัสหาความยาวเส้นตรงที่เชื่อมจุดสองจุดบนระนาบพิกัด</p>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        กำหนดจุด P₁(x₁, y₁) และ P₂(x₂, y₂)<br>
+        <span class="math">d = √[(x₂ − x₁)² + (y₂ − y₁)²]</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A(1, 2), B(4, 6)<br>
+        d = √[(4−1)² + (6−2)²] = √(9 + 16) = √25 = <strong>5</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level</div>
+        ถ้าโจทย์ถามรูปสามเหลี่ยมมุมฉาก/รูปสี่เหลี่ยมจัตุรัส ให้หาความยาวด้านทุกด้านด้วยสูตรระยะทางแล้วเทียบค่ากำลังสอง (Converse of Pythagorean) แทนการวาดรูปเดา
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">⊙</div>จุดกึ่งกลางและจุดแบ่งส่วนของเส้นตรง</div>
+      <div class="def-box">
+        <div class="def-label">จุดกึ่งกลาง (Midpoint)</div>
+        <span class="math">M = ( (x₁+x₂)/2 , (y₁+y₂)/2 )</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A(2, 3), B(8, 7)<br>
+        M = ((2+8)/2, (3+7)/2) = <strong>(5, 5)</strong>
+      </div>
+      <div class="def-box">
+        <div class="def-label">จุดแบ่งส่วนเส้นตรงตามอัตราส่วน m : n</div>
+        จุด P ที่แบ่ง A(x₁,y₁) ถึง B(x₂,y₂) ในอัตราส่วน AP : PB = m : n<br>
+        <span class="math">P = ( (n·x₁ + m·x₂)/(m+n) , (n·y₁ + m·y₂)/(m+n) )</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        A(0, 0), B(10, 5) แบ่งในอัตราส่วน 2:3 (จาก A ไป B)<br>
+        P = ( (3·0+2·10)/5, (3·0+2·5)/5 ) = (4, 2)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">/</div>ความชันของเส้นตรง (Slope)</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        <span class="math">m = (y₂ − y₁) / (x₂ − x₁)</span> เมื่อ x₁ ≠ x₂
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">m &gt; 0</div>
+          <div class="sym-name">เอียงขึ้น</div>
+          <div class="sym-desc">เส้นตรงเอียงจากซ้ายล่างไปขวาบน</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">m &lt; 0</div>
+          <div class="sym-name">เอียงลง</div>
+          <div class="sym-desc">เส้นตรงเอียงจากซ้ายบนไปขวาล่าง</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">m = 0</div>
+          <div class="sym-name">แนวนอน</div>
+          <div class="sym-desc">เส้นขนานแกน x (y = ค่าคงที่)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">m หาไม่ได้</div>
+          <div class="sym-name">แนวตั้ง</div>
+          <div class="sym-desc">เส้นขนานแกน y (x = ค่าคงที่)</div>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ เงื่อนไขขนาน/ตั้งฉาก</div>
+        เส้นตรงขนานกัน: <span class="math">m₁ = m₂</span><br>
+        เส้นตรงตั้งฉากกัน: <span class="math">m₁ · m₂ = −1</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: เส้นตรง ===== -->
+  <div class="section" id="geo2">
+    <div class="section-heading"><span>บทที่ 2</span> · สมการเส้นตรง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✏️</div>รูปแบบสมการเส้นตรง</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ผ่านจุดและความชัน</h4>
+          <p>ทราบจุด (x₁, y₁) และความชัน m</p>
+          <div class="math-block">y − y₁ = m(x − x₁)</div>
+        </div>
+        <div class="mini-card">
+          <h4>ความชัน–จุดตัดแกน y</h4>
+          <p>ทราบความชัน m และจุดตัดแกน y คือ c</p>
+          <div class="math-block">y = mx + c</div>
+        </div>
+        <div class="mini-card">
+          <h4>ผ่านสองจุด</h4>
+          <p>ทราบจุด (x₁,y₁) และ (x₂,y₂)</p>
+          <div class="math-block">(y−y₁)/(x−x₁) = (y₂−y₁)/(x₂−x₁)</div>
+        </div>
+        <div class="mini-card">
+          <h4>รูปทั่วไป</h4>
+          <p>A, B, C เป็นค่าคงที่ (A, B ไม่เป็นศูนย์พร้อมกัน)</p>
+          <div class="math-block">Ax + By + C = 0</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เส้นตรงผ่าน (1, 2) และ (3, 8)<br>
+        m = (8−2)/(3−1) = 3<br>
+        y − 2 = 3(x − 1) → y = 3x − 1 → 3x − y − 1 = 0
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>ระยะห่างจากจุดถึงเส้นตรง</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        ระยะจากจุด P(x₀, y₀) ถึงเส้นตรง Ax + By + C = 0<br>
+        <span class="math">d = |Ax₀ + By₀ + C| / √(A² + B²)</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        หาระยะจาก (3, 4) ถึงเส้น 3x + 4y − 10 = 0<br>
+        d = |3(3)+4(4)−10| / √(9+16) = |9+16−10|/5 = 15/5 = <strong>3</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ระยะห่างระหว่างเส้นขนานสองเส้น</div>
+        ถ้า Ax+By+C₁=0 และ Ax+By+C₂=0 ขนานกัน<br>
+        <span class="math">d = |C₁ − C₂| / √(A²+B²)</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">∠</div>มุมระหว่างเส้นตรงสองเส้น</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        ถ้าเส้นตรงสองเส้นมีความชัน m₁ และ m₂<br>
+        <span class="math">tan θ = |(m₁ − m₂) / (1 + m₁m₂)|</span>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        สูตรนี้ใช้ไม่ได้เมื่อเส้นใดเส้นหนึ่งเป็นเส้นตั้งฉากกับแกน x (ความชันหาไม่ได้) — กรณีนี้ต้องพิจารณาจากรูปเรขาคณิตโดยตรง
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: วงกลม ===== -->
+  <div class="section" id="geo3">
+    <div class="section-heading"><span>บทที่ 3</span> · ภาคตัดกรวย: วงกลม</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⭕</div>สมการวงกลม</div>
+      <p>วงกลม คือ เซตของจุดทุกจุดที่อยู่ห่างจากจุดคงที่จุดหนึ่ง (จุดศูนย์กลาง) เป็นระยะทางเท่ากัน (รัศมี)</p>
+      <div class="def-box">
+        <div class="def-label">รูปแบบมาตรฐาน</div>
+        วงกลมศูนย์กลาง (a, b) รัศมี r<br>
+        <span class="math">(x − a)² + (y − b)² = r²</span><br>
+        กรณีศูนย์กลางที่จุดกำเนิด: <span class="math">x² + y² = r²</span>
+      </div>
+      <div class="venn-container">
+        <svg width="280" height="220" viewBox="0 0 280 220">
+          <rect width="280" height="220" rx="10" fill="#1c2235"/>
+          <line x1="20" y1="110" x2="260" y2="110" stroke="#4a5580" stroke-width="1"/>
+          <line x1="140" y1="10" x2="140" y2="210" stroke="#4a5580" stroke-width="1"/>
+          <circle cx="140" cy="110" r="60" fill="rgba(108,99,255,0.15)" stroke="#6c63ff" stroke-width="2"/>
+          <circle cx="140" cy="110" r="3" fill="#a89fff"/>
+          <text x="146" y="106" fill="#a89fff" font-size="13">(a, b)</text>
+          <line x1="140" y1="110" x2="200" y2="110" stroke="#00d4aa" stroke-width="2" stroke-dasharray="4,3"/>
+          <text x="160" y="103" fill="#00d4aa" font-size="13">r</text>
+        </svg>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วงกลมศูนย์กลาง (2, −3) รัศมี 5<br>
+        (x − 2)² + (y + 3)² = 25
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔧</div>รูปแบบทั่วไปของวงกลม</div>
+      <div class="def-box">
+        <div class="def-label">รูปทั่วไป</div>
+        <span class="math">x² + y² + Dx + Ey + F = 0</span><br>
+        แปลงกลับด้วยการทำให้เป็นกำลังสองสมบูรณ์ (completing the square)
+      </div>
+      <div class="math-block">
+        ศูนย์กลาง = ( −D/2 , −E/2 )<br>
+        รัศมี r = √[ (D/2)² + (E/2)² − F ]
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        x² + y² − 6x + 4y − 12 = 0<br>
+        (x² − 6x + 9) + (y² + 4y + 4) = 12 + 9 + 4<br>
+        (x − 3)² + (y + 2)² = 25<br>
+        ศูนย์กลาง (3, −2) รัศมี 5
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ถ้าค่าทางขวามือหลังทำกำลังสองสมบูรณ์ (r²) ออกมาเป็นลบ แสดงว่าไม่มีวงกลมจริงเกิดขึ้น (ไม่มีคำตอบ)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📍</div>ตำแหน่งจุดและเส้นสัมผัสวงกลม</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ตำแหน่งของจุด (x₀,y₀)</h4>
+          <p style="font-size:13px">แทนค่าในสมการวงกลม (x₀−a)²+(y₀−b)² เทียบกับ r²</p>
+        </div>
+        <div class="mini-card">
+          <h4>เส้นสัมผัสวงกลม</h4>
+          <p style="font-size:13px">ที่จุด (x₁,y₁) บนวงกลม (x−a)²+(y−b)²=r²:<br>(x₁−a)(x−a) + (y₁−b)(y−b) = r²</p>
+        </div>
+      </div>
+      <table>
+        <tr><th>ค่าที่ได้</th><th>ตำแหน่งของจุด</th></tr>
+        <tr><td>&lt; r²</td><td>อยู่ภายในวงกลม</td></tr>
+        <tr><td>= r²</td><td>อยู่บนวงกลม</td></tr>
+        <tr><td>&gt; r²</td><td>อยู่ภายนอกวงกลม</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: พาราโบลา ===== -->
+  <div class="section" id="geo4">
+    <div class="section-heading"><span>บทที่ 4</span> · ภาคตัดกรวย: พาราโบลา</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">〜</div>นิยามและส่วนประกอบ</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        พาราโบลา คือ เซตของจุดที่มีระยะห่างจากจุดคงที่ (โฟกัส) เท่ากับระยะห่างจากเส้นตรงคงที่ (ไดเรกตริกซ์) เสมอ
+      </div>
+      <div class="venn-container">
+        <svg width="300" height="220" viewBox="0 0 300 220">
+          <rect width="300" height="220" rx="10" fill="#1c2235"/>
+          <line x1="60" y1="10" x2="60" y2="210" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,4"/>
+          <text x="20" y="25" fill="#ff6b6b" font-size="12">ไดเรกตริกซ์</text>
+          <path d="M 60 210 Q 220 110 60 10" fill="none" stroke="#6c63ff" stroke-width="2.5"/>
+          <circle cx="150" cy="110" r="3" fill="#00d4aa"/>
+          <text x="158" y="106" fill="#00d4aa" font-size="13">โฟกัส F</text>
+          <circle cx="90" cy="110" r="3" fill="#a89fff"/>
+          <text x="70" y="130" fill="#a89fff" font-size="12">จุดยอด</text>
+        </svg>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">V</div>
+          <div class="sym-name">จุดยอด (Vertex)</div>
+          <div class="sym-desc">จุดกึ่งกลางระหว่างโฟกัสกับไดเรกตริกซ์</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">F</div>
+          <div class="sym-name">โฟกัส (Focus)</div>
+          <div class="sym-desc">จุดคงที่ที่พาราโบลาโค้งเข้าหา</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">p</div>
+          <div class="sym-name">ระยะโฟกัส</div>
+          <div class="sym-desc">ระยะจากจุดยอดถึงโฟกัส</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>รูปแบบมาตรฐาน (จุดยอดที่จุดกำเนิด)</div>
+      <table>
+        <tr><th>สมการ</th><th>แกนสมมาตร</th><th>ทิศเปิด</th><th>โฟกัส</th><th>ไดเรกตริกซ์</th></tr>
+        <tr><td>y² = 4px</td><td>แกน x</td><td>p&gt;0 เปิดขวา / p&lt;0 เปิดซ้าย</td><td>(p, 0)</td><td>x = −p</td></tr>
+        <tr><td>x² = 4py</td><td>แกน y</td><td>p&gt;0 เปิดขึ้น / p&lt;0 เปิดลง</td><td>(0, p)</td><td>y = −p</td></tr>
+      </table>
+      <div class="def-box">
+        <div class="def-label">ความยาวลาตัสเรกตัม (Latus Rectum)</div>
+        เส้นตรงผ่านโฟกัสตั้งฉากกับแกนสมมาตร ยาว <span class="math">|4p|</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        y² = 12x → 4p = 12 → p = 3<br>
+        โฟกัส (3, 0), ไดเรกตริกซ์ x = −3, ลาตัสเรกตัมยาว 12
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">➡️</div>พาราโบลาที่เลื่อนจุดยอดไปที่ (h, k)</div>
+      <div class="math-block">
+        (y − k)² = 4p(x − h)  &nbsp; แกนสมมาตรขนานแกน x<br>
+        (x − h)² = 4p(y − k)  &nbsp; แกนสมมาตรขนานแกน y
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        (y − 1)² = 8(x − 2)<br>
+        จุดยอด (2, 1), 4p = 8 → p = 2 → โฟกัส (4, 1), ไดเรกตริกซ์ x = 0
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค — แปลงจากรูป y = ax² + bx + c</div>
+        ทำกำลังสองสมบูรณ์ให้อยู่ในรูป (x−h)² = 4p(y−k) แล้วจึงหา p, จุดยอด, โฟกัส
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: วงรี ===== -->
+  <div class="section" id="geo5">
+    <div class="section-heading"><span>บทที่ 5</span> · ภาคตัดกรวย: วงรี</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🥚</div>นิยามและส่วนประกอบ</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        วงรี คือ เซตของจุดที่ผลรวมของระยะห่างจากจุดคงที่สองจุด (โฟกัสทั้งสอง) มีค่าคงที่เสมอ
+      </div>
+      <div class="venn-container">
+        <svg width="300" height="200" viewBox="0 0 300 200">
+          <rect width="300" height="200" rx="10" fill="#1c2235"/>
+          <ellipse cx="150" cy="100" rx="110" ry="65" fill="rgba(108,99,255,0.15)" stroke="#6c63ff" stroke-width="2"/>
+          <circle cx="100" cy="100" r="3" fill="#00d4aa"/>
+          <circle cx="200" cy="100" r="3" fill="#00d4aa"/>
+          <text x="82" y="90" fill="#00d4aa" font-size="12">F₁</text>
+          <text x="204" y="90" fill="#00d4aa" font-size="12">F₂</text>
+          <circle cx="150" cy="100" r="3" fill="#a89fff"/>
+          <text x="156" y="118" fill="#a89fff" font-size="12">ศูนย์กลาง</text>
+          <circle cx="260" cy="100" r="3" fill="#ffd93d"/>
+          <text x="240" y="118" fill="#ffd93d" font-size="11">จุดยอด</text>
+        </svg>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">a</div>
+          <div class="sym-name">กึ่งแกนเอก</div>
+          <div class="sym-desc">ระยะจากศูนย์กลางถึงจุดยอด (a &gt; b)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">b</div>
+          <div class="sym-name">กึ่งแกนโท</div>
+          <div class="sym-desc">ระยะจากศูนย์กลางถึงจุดปลายแกนโท</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">c</div>
+          <div class="sym-name">ระยะโฟกัส</div>
+          <div class="sym-desc">ระยะจากศูนย์กลางถึงโฟกัสแต่ละจุด</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">e</div>
+          <div class="sym-name">ความเยื้องศูนย์กลาง</div>
+          <div class="sym-desc">e = c/a เมื่อ 0 &lt; e &lt; 1</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>รูปแบบมาตรฐาน (ศูนย์กลางที่จุดกำเนิด)</div>
+      <div class="def-box">
+        <div class="def-label">ความสัมพันธ์หลัก</div>
+        <span class="math">c² = a² − b²</span> &nbsp; (เมื่อ a &gt; b เสมอ)
+      </div>
+      <table>
+        <tr><th>สมการ</th><th>แกนเอก</th><th>จุดยอด</th><th>โฟกัส</th></tr>
+        <tr><td>x²/a² + y²/b² = 1</td><td>แกน x</td><td>(±a, 0)</td><td>(±c, 0)</td></tr>
+        <tr><td>x²/b² + y²/a² = 1</td><td>แกน y</td><td>(0, ±a)</td><td>(0, ±c)</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        x²/25 + y²/9 = 1<br>
+        a² = 25 → a = 5, &nbsp; b² = 9 → b = 3<br>
+        c² = 25 − 9 = 16 → c = 4<br>
+        จุดยอด (±5, 0), โฟกัส (±4, 0), e = 4/5
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        เลข a² ต้องอยู่ใต้ตัวแปรที่มีค่ามากกว่าเสมอ (a &gt; b) — สังเกตว่าแกนเอกอยู่ในแนวแกนไหนจากตัวส่วนที่มากกว่า ไม่ใช่จากตำแหน่งของ x หรือ y
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">➡️</div>วงรีที่เลื่อนศูนย์กลางไปที่ (h, k)</div>
+      <div class="math-block">
+        (x−h)²/a² + (y−k)²/b² = 1  &nbsp; แกนเอกขนานแกน x (a &gt; b)<br>
+        (x−h)²/b² + (y−k)²/a² = 1  &nbsp; แกนเอกขนานแกน y (a &gt; b)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        (x−1)²/16 + (y+2)²/4 = 1<br>
+        ศูนย์กลาง (1, −2), a=4, b=2, c=√12=2√3<br>
+        จุดยอด (1±4, −2) = (5,−2), (−3,−2)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: ไฮเพอร์โบลา ===== -->
+  <div class="section" id="geo6">
+    <div class="section-heading"><span>บทที่ 6</span> · ภาคตัดกรวย: ไฮเพอร์โบลา</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⧖</div>นิยามและส่วนประกอบ</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ไฮเพอร์โบลา คือ เซตของจุดที่ค่าสัมบูรณ์ของผลต่างระยะห่างจากจุดคงที่สองจุด (โฟกัสทั้งสอง) มีค่าคงที่เสมอ
+      </div>
+      <div class="venn-container">
+        <svg width="300" height="220" viewBox="0 0 300 220">
+          <rect width="300" height="220" rx="10" fill="#1c2235"/>
+          <line x1="30" y1="30" x2="270" y2="190" stroke="#4a5580" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="30" y1="190" x2="270" y2="30" stroke="#4a5580" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <path d="M 190 20 Q 150 110 190 200" fill="none" stroke="#6c63ff" stroke-width="2.5"/>
+          <path d="M 110 20 Q 150 110 110 200" fill="none" stroke="#00d4aa" stroke-width="2.5" transform="translate(0,0)"/>
+          <circle cx="90" cy="110" r="3" fill="#ffd93d"/>
+          <circle cx="210" cy="110" r="3" fill="#ffd93d"/>
+          <text x="70" y="128" fill="#ffd93d" font-size="12">F₁</text>
+          <text x="214" y="128" fill="#ffd93d" font-size="12">F₂</text>
+        </svg>
+      </div>
+      <p style="font-size:13px; color:var(--text-dim)">เส้นประ คือ เส้นกำกับ (asymptotes) ที่กิ่งทั้งสองของไฮเพอร์โบลาเข้าใกล้เมื่อค่า x หรือ y มีขนาดใหญ่มาก</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>รูปแบบมาตรฐาน (ศูนย์กลางที่จุดกำเนิด)</div>
+      <div class="def-box">
+        <div class="def-label">ความสัมพันธ์หลัก</div>
+        <span class="math">c² = a² + b²</span>
+      </div>
+      <table>
+        <tr><th>สมการ</th><th>แกนตามขวาง</th><th>จุดยอด</th><th>โฟกัส</th><th>เส้นกำกับ</th></tr>
+        <tr><td>x²/a² − y²/b² = 1</td><td>แกน x</td><td>(±a, 0)</td><td>(±c, 0)</td><td>y = ±(b/a)x</td></tr>
+        <tr><td>y²/a² − x²/b² = 1</td><td>แกน y</td><td>(0, ±a)</td><td>(0, ±c)</td><td>y = ±(a/b)x</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        x²/9 − y²/16 = 1<br>
+        a² = 9 → a = 3, b² = 16 → b = 4<br>
+        c² = 9 + 16 = 25 → c = 5<br>
+        จุดยอด (±3, 0), โฟกัส (±5, 0), เส้นกำกับ y = ±(4/3)x
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง — ต่างจากวงรี!</div>
+        ในไฮเพอร์โบลา a ไม่จำเป็นต้องมากกว่า b เสมอไป (a คือตัวส่วนใต้พจน์บวก) และใช้ <span class="math">c² = a² + b²</span> (บวก) ไม่ใช่ลบเหมือนวงรี
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความเยื้องศูนย์กลาง</div>
+        e = c/a และสำหรับไฮเพอร์โบลาเสมอ <span class="math">e &gt; 1</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">➡️</div>ไฮเพอร์โบลาที่เลื่อนศูนย์กลางไปที่ (h, k)</div>
+      <div class="math-block">
+        (x−h)²/a² − (y−k)²/b² = 1  &nbsp; แกนตามขวางขนานแกน x<br>
+        (y−k)²/a² − (x−h)²/b² = 1  &nbsp; แกนตามขวางขนานแกน y
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        (x+2)²/4 − (y−1)²/9 = 1<br>
+        ศูนย์กลาง (−2, 1), a=2, b=3, c=√13<br>
+        จุดยอด (−2±2, 1) = (0,1), (−4,1)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมเรขาคณิตวิเคราะห์และภาคตัดกรวยทั้งหมด เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> แนวข้อสอบ A-Level เรขาคณิตวิเคราะห์และภาคตัดกรวย</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">ข้อสอบจำลองแนว A-Level คณิตศาสตร์ประยุกต์ 1 เรื่องเรขาคณิตวิเคราะห์และภาคตัดกรวย</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      หัวข้อนี้ในข้อสอบ A-Level มักออกประมาณ 3-5 ข้อ ผสมทั้งเส้นตรง วงกลม พาราโบลา วงรี และไฮเพอร์โบลา — ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบาย
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — จุดและเส้นตรง",
+    q: "จงหาระยะทางระหว่างจุด A(−1, 2) และ B(3, 5)",
+    opts: ["4", "5", "6", "7"],
+    ans: 1,
+    explain: "ใช้สูตรระยะทาง:\nd = √[(x₂−x₁)² + (y₂−y₁)²]\nd = √[(3−(−1))² + (5−2)²]\nd = √[4² + 3²] = √[16+9] = √25 = 5 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — จุดและเส้นตรง",
+    q: "เส้นตรงสองเส้นมีความชัน m₁ = 2/3 และ m₂ = −3/2 เส้นตรงทั้งสองนี้มีความสัมพันธ์แบบใด",
+    opts: ["ขนานกัน", "ตั้งฉากกัน", "ไม่มีความสัมพันธ์พิเศษ", "เป็นเส้นเดียวกัน"],
+    ans: 1,
+    explain: "ตรวจสอบเงื่อนไขตั้งฉาก: m₁ · m₂ = −1\nm₁ · m₂ = (2/3) × (−3/2) = −1 ✓\nดังนั้นเส้นตรงทั้งสองตั้งฉากกัน"
+  },
+  {
+    level: "⭐ ระดับ 1 — วงกลม",
+    q: "วงกลมมีสมการ (x − 3)² + (y + 1)² = 16 มีจุดศูนย์กลางและรัศมีเท่าใด",
+    opts: ["ศูนย์กลาง (3,1) รัศมี 4", "ศูนย์กลาง (3,−1) รัศมี 4", "ศูนย์กลาง (−3,1) รัศมี 16", "ศูนย์กลาง (3,−1) รัศมี 16"],
+    ans: 1,
+    explain: "เทียบกับรูปแบบมาตรฐาน (x−a)² + (y−b)² = r²\n(x−3)² + (y−(−1))² = 4²\nศูนย์กลาง (a,b) = (3, −1)\nรัศมี r = √16 = 4 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — พาราโบลา",
+    q: "พาราโบลา y² = 8x มีโฟกัสอยู่ที่จุดใด",
+    opts: ["(2, 0)", "(0, 2)", "(4, 0)", "(8, 0)"],
+    ans: 0,
+    explain: "เทียบกับรูปแบบ y² = 4px\n4p = 8 → p = 2\nเนื่องจากแกนสมมาตรคือแกน x และเปิดไปทางขวา (p>0)\nโฟกัส = (p, 0) = (2, 0) ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — เส้นตรง",
+    q: "จงหาระยะห่างจากจุด (1, −2) ถึงเส้นตรง 4x − 3y + 5 = 0",
+    opts: ["2", "3", "15/5 = 3", "15/√7"],
+    ans: 1,
+    explain: "ใช้สูตร d = |Ax₀+By₀+C| / √(A²+B²)\nA=4, B=−3, C=5, (x₀,y₀)=(1,−2)\nd = |4(1) + (−3)(−2) + 5| / √(16+9)\nd = |4+6+5| / √25 = 15/5 = 3 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — วงกลม",
+    q: "วงกลม x² + y² − 4x + 6y − 3 = 0 มีรัศมีเท่าใด",
+    opts: ["3", "4", "√16 = 4", "√13"],
+    ans: 2,
+    explain: "ทำกำลังสองสมบูรณ์:\n(x²−4x+4) + (y²+6y+9) = 3+4+9\n(x−2)² + (y+3)² = 16\nรัศมี r = √16 = 4 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — วงรี",
+    q: "วงรี x²/36 + y²/20 = 1 มีความเยื้องศูนย์กลาง (e) เท่าใด",
+    opts: ["1/3", "2/3", "1/2", "3/4"],
+    ans: 0,
+    explain: "a² = 36 → a = 6, b² = 20\nc² = a² − b² = 36 − 20 = 16 → c = 4\ne = c/a = 4/6 = 2/3 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ไฮเพอร์โบลา",
+    q: "ไฮเพอร์โบลา x²/16 − y²/9 = 1 มีเส้นกำกับสมการใด",
+    opts: ["y = ±(3/4)x", "y = ±(4/3)x", "y = ±(9/16)x", "y = ±(16/9)x"],
+    ans: 0,
+    explain: "a² = 16 → a = 4, b² = 9 → b = 3\nแกนตามขวางอยู่ในแนวแกน x\nเส้นกำกับ: y = ±(b/a)x = ±(3/4)x ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — พาราโบลา",
+    q: "พาราโบลา (y − 2)² = −12(x + 1) มีไดเรกตริกซ์เป็นสมการใด",
+    opts: ["x = 2", "x = −4", "x = 4", "x = −1"],
+    ans: 0,
+    explain: "เทียบกับ (y−k)² = 4p(x−h)\nจุดยอด (h,k) = (−1, 2)\n4p = −12 → p = −3\nเนื่องจาก p<0 พาราโบลาเปิดไปทางซ้าย\nไดเรกตริกซ์: x = h − p = −1 − (−3) = 2 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — วงรีและไฮเพอร์โบลาผสม",
+    q: "กำหนดวงรี x²/25 + y²/9 = 1 จุด P บนวงรีมีระยะห่างจากโฟกัสจุดหนึ่งเท่ากับ 3 หน่วย จงหาระยะห่างจาก P ถึงโฟกัสอีกจุดหนึ่ง",
+    opts: ["5", "6", "7", "10"],
+    ans: 2,
+    explain: "สมบัติของวงรี: ผลรวมระยะห่างจากจุดบนวงรีถึงโฟกัสทั้งสองคงที่ เท่ากับ 2a\na² = 25 → a = 5 → 2a = 10\n\nถ้าระยะถึงโฟกัสหนึ่ง = 3\nระยะถึงอีกโฟกัสหนึ่ง = 2a − 3 = 10 − 3 = 7 ✓"
+  }
+];
+
+// ===== แนวข้อสอบ A-Level =====
+const alevelQuestions = [
+  {
+    year: "📘 แนวข้อสอบ A-Level — เส้นตรง",
+    q: "เส้นตรง L₁ ผ่านจุด (2, 1) และ (5, 7) เส้นตรง L₂ ตั้งฉากกับ L₁ และผ่านจุด (0, 4)\nจงหาสมการของ L₂",
+    opts: [
+      "y = −(1/2)x + 4",
+      "y = 2x + 4",
+      "y = (1/2)x + 4",
+      "y = −2x + 4",
+      "y = −2x − 4"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: หาความชันของ L₁\nm₁ = (7−1)/(5−2) = 6/3 = 2\n\nขั้นที่ 2: หาความชันของ L₂ (ตั้งฉากกับ L₁)\nm₁ · m₂ = −1 → 2 · m₂ = −1 → m₂ = −1/2\n\nขั้นที่ 3: หาสมการ L₂ ผ่าน (0, 4) ด้วยความชัน −1/2\ny − 4 = −(1/2)(x − 0)\ny = −(1/2)x + 4 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — เส้นตรง",
+    q: "จุด A(1, 2), B(5, 2), C(5, 8) เป็นจุดยอดสามเหลี่ยม จงหาความยาวเส้นมัธยฐานจากจุด A ไปยังจุดกึ่งกลางด้าน BC",
+    opts: ["4", "5", "6", "7", "8"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาจุดกึ่งกลาง M ของ BC\nM = ((5+5)/2, (2+8)/2) = (5, 5)\n\nขั้นที่ 2: หาความยาว AM\nAM = √[(5−1)² + (5−2)²] = √[16+9] = √25 = 5 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — วงกลม",
+    q: "วงกลมมีจุดศูนย์กลางอยู่บนแกน x และผ่านจุด (0, 4) กับจุด (6, 0) จงหารัศมีของวงกลม",
+    opts: ["4", "5", "13/3", "6.5", "5.5"],
+    ans: 2,
+    explain: "ให้ศูนย์กลาง = (a, 0) รัศมี r\nจากจุด (0,4): a² + 16 = r²  ... (1)\nจากจุด (6,0): (6−a)² = r²  ... (2)\n\nนำ (1) = (2):\na² + 16 = (6−a)² = 36 − 12a + a²\n16 = 36 − 12a\n12a = 20\na = 5/3\n\nแทนกลับ (1): r² = (5/3)² + 16 = 25/9 + 144/9 = 169/9\nr = 13/3 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — วงกลม",
+    q: "เส้นตรง y = x + k สัมผัสกับวงกลม x² + y² = 8 จงหาค่า k ที่เป็นไปได้",
+    opts: ["k = ±2", "k = ±4", "k = ±2√2", "k = ±4√2", "k = ±8"],
+    ans: 1,
+    explain: "เขียนเส้นตรงในรูปทั่วไป: x − y + k = 0\nวงกลมศูนย์กลาง (0,0) รัศมี r = √8 = 2√2\n\nเงื่อนไขสัมผัส: ระยะจากศูนย์กลางถึงเส้นตรง = รัศมี\nd = |1(0) + (−1)(0) + k| / √(1²+(−1)²) = |k|/√2\n\nตั้งสมการ: |k|/√2 = 2√2\n|k| = 2√2 × √2 = 4\n\nดังนั้น k = ±4 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — พาราโบลา",
+    q: "พาราโบลามีจุดยอดที่จุดกำเนิด แกนสมมาตรคือแกน y เปิดขึ้น และผ่านจุด (4, 2)\nจงหาสมการของพาราโบลานี้",
+    opts: ["x² = 8y", "y² = 8x", "x² = 2y", "y² = 2x", "x² = 4y"],
+    ans: 0,
+    explain: "แกนสมมาตรคือแกน y เปิดขึ้น → รูปแบบ x² = 4py (p>0)\n\nแทนจุด (4, 2):\n4² = 4p(2)\n16 = 8p\np = 2\n\nสมการ: x² = 4(2)y = 8y ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — วงรี",
+    q: "วงรีมีจุดยอด (±10, 0) และความเยื้องศูนย์กลาง e = 3/5 จงหาความยาวแกนโท (2b)",
+    opts: ["12", "14", "16", "18", "20"],
+    ans: 2,
+    explain: "จากจุดยอด (±10,0): a = 10\ne = c/a = 3/5 → c = a × 3/5 = 10 × 3/5 = 6\n\nหา b จาก c² = a² − b²:\nb² = a² − c² = 100 − 36 = 64\nb = 8\n\nความยาวแกนโท = 2b = 16 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — วงรี",
+    q: "จงหาสมการวงรีที่มีโฟกัสที่ (0, ±3) และผลรวมระยะทางจากจุดบนวงรีถึงโฟกัสทั้งสองเท่ากับ 10",
+    opts: [
+      "x²/25 + y²/16 = 1",
+      "x²/16 + y²/25 = 1",
+      "x²/25 + y²/9 = 1",
+      "x²/9 + y²/25 = 1",
+      "x²/16 + y²/9 = 1"
+    ],
+    ans: 1,
+    explain: "โฟกัสอยู่บนแกน y ที่ (0,±3) → c = 3 และแกนเอกอยู่แนวแกน y\n2a = 10 → a = 5\nb² = a² − c² = 25 − 9 = 16\n\nเนื่องจากแกนเอกอยู่แนวแกน y (a อยู่ใต้ y²):\nx²/b² + y²/a² = 1 → x²/16 + y²/25 = 1 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ไฮเพอร์โบลา",
+    q: "ไฮเพอร์โบลามีจุดยอด (±3, 0) และผ่านจุด (5, 16/3)\nจงหาค่า b² ของไฮเพอร์โบลานี้",
+    opts: ["9", "12", "16", "20", "25"],
+    ans: 2,
+    explain: "จุดยอด (±3,0) → a² = 9 และรูปสมการคือ x²/9 − y²/b² = 1\n\nแทนจุด (5, 16/3):\n25/9 − (16/3)²/b² = 1\n25/9 − (256/9)/b² = 1\n(256/9)/b² = 25/9 − 1 = 16/9\nb² = 256/16 = 16 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ไฮเพอร์โบลา",
+    q: "ไฮเพอร์โบลา 9x² − 16y² = 144 มีระยะห่างระหว่างโฟกัสทั้งสอง (2c) เท่าใด",
+    opts: ["6", "8", "10", "12", "14"],
+    ans: 2,
+    explain: "หารทั้งสองข้างด้วย 144 เพื่อให้อยู่ในรูปมาตรฐาน:\n9x²/144 − 16y²/144 = 1\nx²/16 − y²/9 = 1\n\na² = 16, b² = 9\nc² = a² + b² = 16 + 9 = 25\nc = 5\n\nระยะห่างระหว่างโฟกัส = 2c = 10 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — ผสมหลายภาคตัดกรวย",
+    q: "ข้อใดต่อไปนี้ถูกต้องเกี่ยวกับความเยื้องศูนย์กลาง (eccentricity) ของภาคตัดกรวย",
+    opts: [
+      "วงกลม: e = 0, วงรี: 0 < e < 1, พาราโบลา: e = 1, ไฮเพอร์โบลา: e > 1",
+      "วงกลม: e = 1, วงรี: e < 1, พาราโบลา: e = 0, ไฮเพอร์โบลา: e > 1",
+      "วงกลม: e = 0, วงรี: e > 1, พาราโบลา: e = 1, ไฮเพอร์โบลา: 0 < e < 1",
+      "วงกลม: e > 1, วงรี: e = 1, พาราโบลา: 0 < e < 1, ไฮเพอร์โบลา: e = 0",
+      "วงกลม: e = 0, วงรี: e = 1, พาราโบลา: e > 1, ไฮเพอร์โบลา: 0 < e < 1"
+    ],
+    ans: 0,
+    explain: "หลักการจำความเยื้องศูนย์กลางของภาคตัดกรวยแต่ละชนิด:\n• วงกลม: e = 0 (สมมาตรสมบูรณ์รอบศูนย์กลาง ไม่มีการยืดออก)\n• วงรี: 0 < e < 1 (ยิ่งใกล้ 0 ยิ่งกลม ยิ่งใกล้ 1 ยิ่งแบน)\n• พาราโบลา: e = 1 (เส้นแบ่งขอบเขตระหว่างวงรีกับไฮเพอร์โบลา)\n• ไฮเพอร์โบลา: e > 1 (กิ่งทั้งสองแยกออกจากกันมาก)\n\nดังนั้นคำตอบคือตัวเลือกที่ 1 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — วงกลมและเส้นตรง",
+    q: "จงหาเส้นสัมผัสวงกลม x² + y² = 25 ที่จุด (3, 4)",
+    opts: [
+      "3x + 4y = 25",
+      "4x + 3y = 25",
+      "3x − 4y = 25",
+      "x + y = 25",
+      "3x + 4y = 5"
+    ],
+    ans: 0,
+    explain: "ใช้สูตรเส้นสัมผัสวงกลม x²+y²=r² ที่จุด (x₁,y₁) บนวงกลม:\nx₁x + y₁y = r²\n\nแทนค่า x₁=3, y₁=4, r²=25:\n3x + 4y = 25 ✓\n\nตรวจสอบ: จุด (3,4) สอดคล้องสมการวงกลมหรือไม่ 3²+4²=9+16=25 ✓ อยู่บนวงกลมจริง"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — พาราโบลาประยุกต์",
+    q: "สะพานแขวนรูปพาราโบลามีจุดยอดอยู่ที่จุดต่ำสุดของสาย เมื่อวัดจากจุดยอด 20 เมตรตามแนวราบ สายสูงขึ้น 5 เมตร\nถ้าตั้งแกนพิกัดให้จุดยอดอยู่ที่จุดกำเนิดและพาราโบลาเปิดขึ้น จงหาค่า p (ระยะโฟกัส)",
+    opts: ["10", "15", "20", "25", "40"],
+    ans: 2,
+    explain: "รูปแบบพาราโบลาเปิดขึ้น จุดยอดที่จุดกำเนิด: x² = 4py\n\nจุดบนพาราโบลา (20, 5):\n20² = 4p(5)\n400 = 20p\np = 20 ✓"
+  },
+  {
+    year: "📘 แนวข้อสอบ A-Level — วงรีประยุกต์",
+    q: "วงโคจรของดาวเทียมรอบโลกเป็นรูปวงรี โดยจุดที่ไกลโลกที่สุด (apogee) ห่างจากศูนย์กลางวงรี 8,000 กม. และจุดที่ใกล้โลกที่สุด (perigee) ห่างจากศูนย์กลางวงรี 6,000 กม.\nจงหาความเยื้องศูนย์กลาง e ของวงโคจรนี้",
+    opts: ["1/7", "1/8", "3/14", "1/14", "1/4"],
+    ans: 0,
+    explain: "ระยะไกลสุด (apogee) = a + c = 8000\nระยะใกล้สุด (perigee) = a − c = 6000\n\nบวกสมการทั้งสอง: 2a = 14000 → a = 7000\nลบสมการทั้งสอง: 2c = 2000 → c = 1000\n\ne = c/a = 1000/7000 = 1/7 ✓"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentTopic = '';
+  alevelQuestions.forEach((q, idx) => {
+    if (q.year !== currentTopic) {
+      currentTopic = q.year;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + currentTopic + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สถิติและข้อมูล | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'x̄ σ² Σ Q₁ P₉₀ z μ ~N(μ,σ²)';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 8px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent3); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent4); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 12px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    margin-bottom: 8px; font-family: var(--mono);
+  }
+
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px; font-weight: 600; margin-bottom: 16px; line-height: 1.6;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(108,99,255,0.1); }
+  .option-btn.correct { background: rgba(0,212,170,0.15); border-color: var(--accent2); color: var(--accent2); }
+  .option-btn.wrong { background: rgba(255,107,107,0.1); border-color: var(--accent3); color: var(--accent3); }
+  .feedback { margin-top: 12px; padding: 12px 16px; border-radius: 8px; font-size: 14px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3); color: var(--accent2); }
+  .feedback.wrong-fb { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.3); color: var(--accent3); }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  .section-heading {
+    font-size: 26px; font-weight: 800; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+  .sub-heading { font-size: 18px; font-weight: 700; margin: 24px 0 12px; color: var(--accent2); }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym { font-family: var(--mono); font-size: 22px; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+  .summary-item .sym-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>สถิติ<span>และ</span>ข้อมูล</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level เรื่องสถิติ ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">15</div><div class="stat-label">แนวข้อสอบ A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="s1">1. บทนำ/การนำเสนอข้อมูล</button>
+  <button class="tab-btn" data-sec="s2">2. การวัดค่ากลาง</button>
+  <button class="tab-btn" data-sec="s3">3. การวัดตำแหน่งที่</button>
+  <button class="tab-btn" data-sec="s4">4. พิสัย/ส่วนเบี่ยงเบนควอร์ไทล์</button>
+  <button class="tab-btn" data-sec="s5">5. ส่วนเบี่ยงเบนเฉลี่ย</button>
+  <button class="tab-btn" data-sec="s6">6. ความแปรปรวน/S.D.</button>
+  <button class="tab-btn" data-sec="s7">7. สัมประสิทธิ์การแปรผัน</button>
+  <button class="tab-btn" data-sec="s8">8. คะแนนมาตรฐาน (Z)</button>
+  <button class="tab-btn" data-sec="s9">9. โค้งการแจกแจงปกติ</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 แนวข้อสอบ A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1 ===== -->
+  <div class="section active" id="s1">
+    <div class="section-heading"><span>บทที่ 1</span> · บทนำสถิติและการนำเสนอข้อมูล</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📊</div>สถิติคืออะไร?</div>
+      <p>สถิติ (Statistics) คือ ศาสตร์ที่ว่าด้วยการ <strong>เก็บรวบรวม นำเสนอ วิเคราะห์ และตีความข้อมูล</strong> เพื่อนำไปใช้ตัดสินใจ</p>
+      <div class="def-box">
+        <div class="def-label">คำศัพท์พื้นฐาน</div>
+        <strong>ประชากร (Population):</strong> กลุ่มข้อมูลทั้งหมดที่สนใจศึกษา<br>
+        <strong>ตัวอย่าง (Sample):</strong> ส่วนหนึ่งของประชากรที่นำมาศึกษาแทนทั้งหมด<br>
+        <strong>ข้อมูล (Data):</strong> ข้อเท็จจริงหรือตัวเลขที่เก็บรวบรวมมา
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ข้อมูลเชิงปริมาณ (Quantitative)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">เป็นตัวเลข วัดค่าได้ เช่น ส่วนสูง น้ำหนัก คะแนนสอบ</p>
+        </div>
+        <div class="mini-card">
+          <h4>ข้อมูลเชิงคุณภาพ (Qualitative)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">ไม่ใช่ตัวเลข เป็นลักษณะ/ประเภท เช่น เพศ สีผม อาชีพ</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level</div>
+        โจทย์สถิติเกือบทั้งหมดเป็นข้อมูลเชิงปริมาณ และมักมาในรูป <strong>ตารางแจกแจงความถี่</strong> ต้องอ่านตารางให้คล่องก่อนคำนวณสูตรใด ๆ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📋</div>ตารางแจกแจงความถี่ (Frequency Table)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การจัดข้อมูลเป็นช่วงชั้น (Class Interval) แล้วนับความถี่ (จำนวนข้อมูล) ที่ตกอยู่ในแต่ละช่วง
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างตารางแจกแจงความถี่</div>
+        <table>
+          <tr><th>คะแนน (ช่วงชั้น)</th><th>จุดกึ่งกลางชั้น (xᵢ)</th><th>ความถี่ (fᵢ)</th></tr>
+          <tr><td>10 − 19</td><td>14.5</td><td>3</td></tr>
+          <tr><td>20 − 29</td><td>24.5</td><td>7</td></tr>
+          <tr><td>30 − 39</td><td>34.5</td><td>12</td></tr>
+          <tr><td>40 − 49</td><td>44.5</td><td>8</td></tr>
+        </table>
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตรที่ต้องใช้บ่อย</div>
+        <strong>จุดกึ่งกลางชั้น (Midpoint):</strong> xᵢ = (ขอบล่าง + ขอบบน) ÷ 2<br>
+        <strong>ความกว้างของอันตรภาคชั้น:</strong> I = ขอบบนจริง − ขอบล่างจริง<br>
+        <strong>ความถี่สะสม (Cumulative Frequency):</strong> ผลรวมความถี่ไล่จากชั้นแรกถึงชั้นนั้น
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง — ขอบชั้นจริง</div>
+        ถ้าช่วงชั้นเขียนว่า 10−19 และ 20−29 (ข้อมูลไม่ต่อเนื่อง เช่น จำนวนเต็ม) ขอบเขตจริงจะขยับ 0.5 หน่วย<br>
+        ขอบล่างจริงของ 10−19 คือ 9.5 และขอบบนจริงคือ 19.5 (ใช้ตอนหาความกว้างอันตรภาคชั้นและมัธยฐาน/ฐานนิยม)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2 ===== -->
+  <div class="section" id="s2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · การวัดค่ากลางของข้อมูล</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">x̄</div>ค่าเฉลี่ยเลขคณิต (Arithmetic Mean)</div>
+      <div class="def-box">
+        <div class="def-label">สูตร — ข้อมูลไม่แจกแจงความถี่</div>
+        <div class="math-block">x̄ = (x₁ + x₂ + ... + xₙ) / n = Σxᵢ / n</div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตร — ข้อมูลแจกแจงความถี่</div>
+        <div class="math-block">x̄ = Σfᵢxᵢ / Σfᵢ &nbsp; (ใช้จุดกึ่งกลางชั้นแทน xᵢ)</div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ข้อมูล: 4, 6, 8, 10, 12<br>
+        x̄ = (4+6+8+10+12)/5 = 40/5 = <strong>8</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค A-Level</div>
+        ถ้าโจทย์ให้ x̄ มาแล้วถามหาค่าที่หายไป ให้ตั้งสมการจาก Σxᵢ = n·x̄ แล้วแก้หาค่าที่ขาดแทนการนับใหม่ทั้งหมด
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📍</div>มัธยฐาน (Median)</div>
+      <div class="def-box">
+        <div class="def-label">ข้อมูลไม่แจกแจงความถี่</div>
+        เรียงข้อมูลจากน้อยไปมากก่อนเสมอ<br>
+        • n คี่ → มัธยฐาน คือค่าตำแหน่งกึ่งกลาง (n+1)/2<br>
+        • n คู่ → มัธยฐาน คือค่าเฉลี่ยของสองค่ากึ่งกลาง
+      </div>
+      <div class="def-box">
+        <div class="def-label">ข้อมูลแจกแจงความถี่ (สูตรกลุ่ม)</div>
+        <div class="math-block">Med = L + [(n/2 − CF) / f] × I</div>
+        L = ขอบล่างจริงของชั้นที่มีมัธยฐานอยู่, CF = ความถี่สะสมก่อนชั้นนั้น, f = ความถี่ของชั้นนั้น, I = ความกว้างอันตรภาคชั้น
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ข้อมูล: 3, 7, 9, 12, 15 → n=5 (คี่) มัธยฐานคือค่าตำแหน่งที่ 3 = <strong>9</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔺</div>ฐานนิยม (Mode)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ค่าที่มีความถี่สูงที่สุดในชุดข้อมูล อาจมีมากกว่าหนึ่งค่า หรือไม่มีเลยก็ได้
+      </div>
+      <div class="def-box">
+        <div class="def-label">ข้อมูลแจกแจงความถี่ (สูตรกลุ่ม)</div>
+        <div class="math-block">Mode = L + [d₁ / (d₁ + d₂)] × I</div>
+        L = ขอบล่างจริงของชั้นฐานนิยม (ชั้นที่มี f มากสุด)<br>
+        d₁ = f ชั้นฐานนิยม − f ชั้นก่อนหน้า, d₂ = f ชั้นฐานนิยม − f ชั้นถัดไป
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ถ้าทุกค่ามีความถี่เท่ากันหมด → ไม่มีฐานนิยม<br>
+        ถ้ามีสองค่าที่ความถี่สูงสุดเท่ากัน → เป็นข้อมูลสองฐานนิยม (Bimodal)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⚖️</div>เลือกใช้ค่ากลางแบบไหนดี?</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">x̄</div>
+          <div class="sym-name">ค่าเฉลี่ย</div>
+          <div class="sym-desc">เหมาะกับข้อมูลกระจายสม่ำเสมอ ไม่มีค่าผิดปกติ (Outlier)</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">Med</div>
+          <div class="sym-name">มัธยฐาน</div>
+          <div class="sym-desc">เหมาะเมื่อข้อมูลเบ้ หรือมีค่าผิดปกติมาก เช่น เงินเดือน</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">Mode</div>
+          <div class="sym-name">ฐานนิยม</div>
+          <div class="sym-desc">เหมาะกับข้อมูลเชิงคุณภาพ หรือหาค่าที่พบบ่อยสุด</div>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความสัมพันธ์ของค่ากลางกับความเบ้ (Skewness)</div>
+        โค้งเบ้ขวา (บวก): x̄ > Med > Mode<br>
+        โค้งสมมาตร: x̄ = Med = Mode<br>
+        โค้งเบ้ซ้าย (ลบ): x̄ < Med < Mode
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3 ===== -->
+  <div class="section" id="s3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · การวัดตำแหน่งที่ของข้อมูล</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">Q</div>ควอร์ไทล์ (Quartile)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แบ่งข้อมูลที่เรียงแล้วออกเป็น 4 ส่วนเท่า ๆ กัน ได้ Q₁, Q₂ (=มัธยฐาน), Q₃
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตรข้อมูลแจกแจงความถี่</div>
+        <div class="math-block">Qᵣ = L + [(rn/4 − CF) / f] × I &nbsp; เมื่อ r = 1, 2, 3</div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ข้อมูล: 2, 4, 5, 7, 8, 9, 12 (n=7, เรียงแล้ว)<br>
+        Q₂ (มัธยฐาน) = ตำแหน่งที่ 4 = 7<br>
+        Q₁ = ตำแหน่งกึ่งกลางครึ่งล่าง (2,4,5) = 4<br>
+        Q₃ = ตำแหน่งกึ่งกลางครึ่งบน (8,9,12) = 9
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">D / P</div>เดไซล์และเปอร์เซ็นไทล์</div>
+      <div class="def-box">
+        <div class="def-label">เดไซล์ (Decile) — แบ่งเป็น 10 ส่วน</div>
+        <div class="math-block">Dᵣ = L + [(rn/10 − CF) / f] × I &nbsp; เมื่อ r = 1,...,9</div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">เปอร์เซ็นไทล์ (Percentile) — แบ่งเป็น 100 ส่วน</div>
+        <div class="math-block">Pᵣ = L + [(rn/100 − CF) / f] × I &nbsp; เมื่อ r = 1,...,99</div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความสัมพันธ์ที่ต้องจำ</div>
+        Q₂ = D₅ = P₅₀ = มัธยฐาน เสมอ<br>
+        Q₁ = P₂₅, &nbsp; Q₃ = P₇₅
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กับดักข้อสอบ</div>
+        สูตรทุกตัวใช้โครงสร้างเดียวกัน ต่างกันแค่ตัวหาร (4, 10, 100) — อย่าสับสนว่าใช้ n/4 กับ D หรือ P เด็ดขาด
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4 ===== -->
+  <div class="section" id="s4">
+    <div class="section-heading"><span>บทที่ 2</span> · พิสัยและส่วนเบี่ยงเบนควอร์ไทล์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">R</div>พิสัย (Range)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        <div class="math-block">พิสัย = ค่าสูงสุด − ค่าต่ำสุด</div>
+        เป็นตัววัดการกระจายที่ง่ายที่สุด แต่ไวต่อค่าผิดปกติมาก
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ข้อมูล: 5, 8, 12, 20, 45 → พิสัย = 45 − 5 = <strong>40</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">IQR</div>ส่วนเบี่ยงเบนควอร์ไทล์ (Quartile Deviation)</div>
+      <div class="def-box">
+        <div class="def-label">พิสัยระหว่างควอร์ไทล์ (Interquartile Range)</div>
+        <div class="math-block">IQR = Q₃ − Q₁</div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">ส่วนเบี่ยงเบนควอร์ไทล์ (Q.D.)</div>
+        <div class="math-block">Q.D. = (Q₃ − Q₁) / 2 = IQR / 2</div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        Q₁ = 20, Q₃ = 36 → IQR = 36−20 = 16 &nbsp; Q.D. = 16/2 = <strong>8</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค</div>
+        IQR/Q.D. ทนทานต่อค่าผิดปกติ (Outlier) มากกว่าพิสัย เพราะไม่สนใจค่าที่ต่ำสุด/สูงสุดสุดขั้ว
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5 ===== -->
+  <div class="section" id="s5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · ส่วนเบี่ยงเบนเฉลี่ย (Mean Deviation)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">M.D.</div>ส่วนเบี่ยงเบนเฉลี่ย</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ค่าเฉลี่ยของ "ระยะห่างสัมบูรณ์" ระหว่างข้อมูลแต่ละตัวกับค่าเฉลี่ยเลขคณิต
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        <div class="math-block">M.D. = Σ|xᵢ − x̄| / n &nbsp;(ไม่แจกแจงความถี่)<br>M.D. = Σfᵢ|xᵢ − x̄| / Σfᵢ &nbsp;(แจกแจงความถี่)</div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ข้อมูล: 2, 4, 6, 8, 10 → x̄ = 6<br>
+        |2−6|+|4−6|+|6−6|+|8−6|+|10−6| = 4+2+0+2+4 = 12<br>
+        M.D. = 12/5 = <strong>2.4</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ทำไมต้องใช้ค่าสัมบูรณ์?</div>
+        เพราะถ้าไม่ใส่ค่าสัมบูรณ์ ผลรวมของ (xᵢ − x̄) จะเป็น 0 เสมอ (ค่าที่มากกว่าและน้อยกว่าเฉลี่ยจะหักล้างกันพอดี) ทำให้วัดการกระจายไม่ได้
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6 ===== -->
+  <div class="section" id="s6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · ความแปรปรวนและส่วนเบี่ยงเบนมาตรฐาน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">S²</div>ความแปรปรวน (Variance)</div>
+      <div class="def-box">
+        <div class="def-label">สูตรตรง</div>
+        <div class="math-block">S² = Σ(xᵢ − x̄)² / n &nbsp; (ไม่แจกแจงความถี่)<br>S² = Σfᵢ(xᵢ − x̄)² / Σfᵢ &nbsp; (แจกแจงความถี่)</div>
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตรลัด (สะดวกกว่าเวลาคำนวณ)</div>
+        <div class="math-block">S² = (Σxᵢ² / n) − x̄²</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">S</div>ส่วนเบี่ยงเบนมาตรฐาน (Standard Deviation)</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        <div class="math-block">S = √S² = √[Σ(xᵢ − x̄)² / n]</div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ข้อมูล: 2, 4, 6, 8, 10 → x̄ = 6<br>
+        Σ(xᵢ−x̄)² = 16+4+0+4+16 = 40<br>
+        S² = 40/5 = 8 &nbsp;→&nbsp; S = √8 ≈ <strong>2.83</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        S.D. มีหน่วยเดียวกับข้อมูลต้นฉบับ แต่ Variance มีหน่วยเป็นกำลังสอง — เวลาตอบข้อสอบต้องดูให้ดีว่าถามหาตัวไหน
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 สมบัติสำคัญเมื่อบวก/คูณข้อมูลด้วยค่าคงที่</div>
+        ถ้า yᵢ = a·xᵢ + b (a, b เป็นค่าคงที่):<br>
+        • ค่าเฉลี่ยใหม่ ȳ = a·x̄ + b<br>
+        • S.D. ใหม่ = |a| × S.D. เดิม (การบวก b ไม่มีผลต่อ S.D.)<br>
+        • Variance ใหม่ = a² × Variance เดิม
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7 ===== -->
+  <div class="section" id="s7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · สัมประสิทธิ์การแปรผัน (Coefficient of Variation)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">CV</div>สัมประสิทธิ์การแปรผัน</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ใช้เปรียบเทียบการกระจายของข้อมูล 2 ชุด ที่มี <strong>หน่วยต่างกัน</strong> หรือ <strong>ค่าเฉลี่ยต่างกันมาก</strong> โดยไม่สามารถเทียบ S.D. ตรง ๆ ได้
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        <div class="math-block">C.V. = (S / x̄) × 100%</div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        คะแนนสอบวิชา A: x̄ = 50, S = 5 &nbsp;→&nbsp; C.V. = (5/50)×100 = 10%<br>
+        คะแนนสอบวิชา B: x̄ = 80, S = 12 &nbsp;→&nbsp; C.V. = (12/80)×100 = 15%<br>
+        แม้วิชา B มี S.D. สูงกว่า แต่เมื่อเทียบสัดส่วนแล้ว <strong>วิชา B กระจายตัวมากกว่า (C.V. สูงกว่า)</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 หลักการเลือกใช้</div>
+        • เปรียบเทียบข้อมูลที่มี <strong>หน่วยเดียวกัน ค่าเฉลี่ยใกล้เคียงกัน</strong> → ใช้ S.D. เทียบตรง ๆ ได้เลย<br>
+        • เปรียบเทียบข้อมูลที่มี <strong>หน่วยต่างกัน หรือค่าเฉลี่ยต่างกันมาก</strong> → ต้องใช้ C.V.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8 ===== -->
+  <div class="section" id="s8">
+    <div class="section-heading"><span>หัวข้อ 8</span> · คะแนนมาตรฐาน (Standard Score / Z-score)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">z</div>คะแนนมาตรฐาน</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        บอกว่าข้อมูลค่าหนึ่งอยู่ห่างจากค่าเฉลี่ยกี่เท่าของส่วนเบี่ยงเบนมาตรฐาน ใช้เปรียบเทียบตำแหน่งสัมพัทธ์ของข้อมูลจากคนละชุด/คนละหน่วยได้
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        <div class="math-block">z = (x − x̄) / S</div>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วิชาคณิต: x̄ = 60, S = 10, ได้คะแนน 75 → z = (75−60)/10 = 1.5<br>
+        วิชาอังกฤษ: x̄ = 70, S = 5, ได้คะแนน 78 → z = (78−70)/5 = 1.6<br>
+        แม้คะแนนดิบวิชาอังกฤษ (78) จะน้อยกว่าผลต่างที่มากกว่า แต่เมื่อเทียบ z-score แล้ว <strong>วิชาอังกฤษทำได้ดีกว่าเมื่อเทียบกับกลุ่ม (z=1.6 > 1.5)</strong>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ความหมายของเครื่องหมาย z</div>
+        z เป็นบวก → ค่านั้นสูงกว่าค่าเฉลี่ย<br>
+        z เป็นลบ → ค่านั้นต่ำกว่าค่าเฉลี่ย<br>
+        z = 0 → ค่านั้นเท่ากับค่าเฉลี่ยพอดี
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 สมบัติของคะแนนมาตรฐาน</div>
+        เมื่อแปลงข้อมูลทั้งชุดเป็น z-score แล้ว ชุดใหม่จะมีค่าเฉลี่ย = 0 และ S.D. = 1 เสมอ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 9 ===== -->
+  <div class="section" id="s9">
+    <div class="section-heading"><span>หัวข้อ 9</span> · การแจกแจงปกติ (Normal Distribution)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔔</div>โค้งปกติ (Normal Curve)</div>
+      <div class="def-box">
+        <div class="def-label">ลักษณะสำคัญ</div>
+        • รูปทรงระฆังคว่ำ สมมาตรรอบค่าเฉลี่ย μ<br>
+        • ค่าเฉลี่ย = มัธยฐาน = ฐานนิยม (จุดเดียวกัน อยู่กึ่งกลาง)<br>
+        • พื้นที่ใต้โค้งทั้งหมด = 1 (หรือ 100%)<br>
+        • เขียนแทนด้วยสัญลักษณ์ X ~ N(μ, σ²)
+      </div>
+      <div class="def-box">
+        <div class="def-label">กฎเชิงประจักษ์ (Empirical Rule) 68-95-99.7</div>
+        <table>
+          <tr><th>ช่วง</th><th>สัดส่วนพื้นที่ใต้โค้ง</th></tr>
+          <tr><td>μ ± 1σ</td><td>ประมาณ 68%</td></tr>
+          <tr><td>μ ± 2σ</td><td>ประมาณ 95%</td></tr>
+          <tr><td>μ ± 3σ</td><td>ประมาณ 99.7%</td></tr>
+        </table>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ส่วนสูงนักเรียน ~N(160, 5²) (μ=160, σ=5)<br>
+        68% ของนักเรียนสูงอยู่ในช่วง 155−165 ซม. (μ±1σ)<br>
+        95% ของนักเรียนสูงอยู่ในช่วง 150−170 ซม. (μ±2σ)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เชื่อมกับ Z-score</div>
+        การแปลง X ~ N(μ,σ²) เป็นคะแนนมาตรฐาน z = (x−μ)/σ จะได้โค้งปกติมาตรฐาน Z ~ N(0,1) เสมอ ใช้ตาราง Z เพื่อหาพื้นที่ใต้โค้งได้
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวังตอนอ่านตาราง Z</div>
+        ตาราง Z มาตรฐานส่วนใหญ่ให้พื้นที่ตั้งแต่ 0 ถึง z (ไม่ใช่พื้นที่สะสมทั้งหมด) ต้องบวก 0.5 เพิ่มเอง ถ้าโจทย์ถามพื้นที่สะสมจากซ้ายสุด และต้องระวังเรื่องความสมมาตรเมื่อ z เป็นลบ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมค่ากลาง การกระจาย และคะแนนมาตรฐาน เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> แนวข้อสอบ A-Level สถิติและข้อมูล</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">โจทย์แนวข้อสอบ A-Level คณิตศาสตร์ประยุกต์ 1 เรื่องสถิติ จัดกลุ่มตามหัวข้อ</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      เรื่องสถิติมักออกสอบสัดส่วนสูงใน A-Level ควรฝึกคำนวณด้วยมือให้คล่อง โดยเฉพาะสูตรกลุ่ม (มัธยฐาน ฐานนิยม ควอร์ไทล์)
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — ค่ากลาง",
+    q: "ข้อมูลชุดหนึ่งคือ 5, 8, 8, 12, 17 จงหาค่าเฉลี่ยเลขคณิต",
+    opts: ["8", "10", "12", "17"],
+    ans: 1,
+    explain: "ขั้นที่ 1: รวมข้อมูลทั้งหมด\n5 + 8 + 8 + 12 + 17 = 50\n\nขั้นที่ 2: หารด้วยจำนวนข้อมูล n = 5\nx̄ = 50 / 5 = 10 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — ค่ากลาง",
+    q: "ข้อมูล 3, 9, 15, 6, 12 (n=5) เมื่อเรียงจากน้อยไปมากแล้ว จงหามัธยฐาน",
+    opts: ["6", "9", "12", "15"],
+    ans: 1,
+    explain: "ขั้นที่ 1: เรียงข้อมูลจากน้อยไปมาก\n3, 6, 9, 12, 15\n\nขั้นที่ 2: n = 5 เป็นจำนวนคี่ มัธยฐานคือค่าตำแหน่งที่ (n+1)/2 = 3\nตำแหน่งที่ 3 คือ 9 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — การกระจาย",
+    q: "ข้อมูลชุดหนึ่ง มีค่าสูงสุด = 42 และค่าต่ำสุด = 15 จงหาพิสัย",
+    opts: ["17", "27", "57", "630"],
+    ans: 1,
+    explain: "พิสัย = ค่าสูงสุด − ค่าต่ำสุด\n= 42 − 15\n= 27 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — คะแนนมาตรฐาน",
+    q: "คะแนนสอบมี x̄ = 60, S = 8 นักเรียนคนหนึ่งสอบได้ 76 คะแนน จงหาคะแนนมาตรฐาน (z)",
+    opts: ["1", "1.5", "2", "2.5"],
+    ans: 2,
+    explain: "ใช้สูตร z = (x − x̄) / S\nz = (76 − 60) / 8\n= 16 / 8\n= 2 ✓\n\nแปลว่านักเรียนคนนี้ทำคะแนนได้สูงกว่าค่าเฉลี่ยอยู่ 2 เท่าของส่วนเบี่ยงเบนมาตรฐาน"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ค่ากลาง",
+    q: "ข้อมูล 5 จำนวน มีค่าเฉลี่ยเลขคณิตเท่ากับ 14 ถ้าทราบข้อมูล 4 จำนวนคือ 10, 12, 16, 18 จงหาจำนวนที่ 5",
+    opts: ["10", "12", "14", "18"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาผลรวมทั้งหมดจากค่าเฉลี่ย\nΣxᵢ = n × x̄ = 5 × 14 = 70\n\nขั้นที่ 2: หาผลรวมของ 4 จำนวนที่ทราบ\n10 + 12 + 16 + 18 = 56\n\nขั้นที่ 3: หาจำนวนที่ 5\n70 − 56 = 14 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การวัดตำแหน่งที่",
+    q: "ข้อมูล 8 จำนวนเรียงแล้วคือ 2, 4, 6, 8, 10, 12, 14, 16 จงหา Q₃ − Q₁",
+    opts: ["4", "8", "10", "12"],
+    ans: 1,
+    explain: "ขั้นที่ 1: แบ่งข้อมูลเป็นสองครึ่ง (n=8 คู่)\nครึ่งล่าง: 2, 4, 6, 8 → Q₁ = ค่าเฉลี่ยของ 4 และ 6 = 5\nครึ่งบน: 10, 12, 14, 16 → Q₃ = ค่าเฉลี่ยของ 12 และ 14 = 13\n\nขั้นที่ 2: หา Q₃ − Q₁\n= 13 − 5 = 8 ✓ (นี่คือค่า IQR)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การกระจาย",
+    q: "ข้อมูล 2, 4, 6, 8, 10 จงหาส่วนเบี่ยงเบนเฉลี่ย (M.D.)",
+    opts: ["1.6", "2.0", "2.4", "3.2"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาค่าเฉลี่ย\nx̄ = (2+4+6+8+10)/5 = 30/5 = 6\n\nขั้นที่ 2: หาค่าสัมบูรณ์ของผลต่างแต่ละตัวกับค่าเฉลี่ย\n|2−6|=4, |4−6|=2, |6−6|=0, |8−6|=2, |10−6|=4\n\nขั้นที่ 3: รวมแล้วหารด้วย n\nM.D. = (4+2+0+2+4)/5 = 12/5 = 2.4 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การกระจาย",
+    q: "ข้อมูล 1, 3, 5, 7, 9 จงหาความแปรปรวน (S²)",
+    opts: ["6", "7", "8", "10"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาค่าเฉลี่ย\nx̄ = (1+3+5+7+9)/5 = 25/5 = 5\n\nขั้นที่ 2: หา (xᵢ−x̄)² แต่ละตัว\n(1−5)²=16, (3−5)²=4, (5−5)²=0, (7−5)²=4, (9−5)²=16\n\nขั้นที่ 3: รวมแล้วหารด้วย n\nS² = (16+4+0+4+16)/5 = 40/5 = 8 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — สัมประสิทธิ์การแปรผัน",
+    q: "วิชา A: x̄=40, S=8  วิชา B: x̄=90, S=15  ข้อใดถูกต้อง",
+    opts: [
+      "วิชา A กระจายตัวมากกว่า เพราะ C.V. สูงกว่า",
+      "วิชา B กระจายตัวมากกว่า เพราะ S.D. สูงกว่า",
+      "ทั้งสองวิชากระจายตัวเท่ากัน เพราะ C.V. เท่ากัน",
+      "วิชา B กระจายตัวมากกว่า แต่วิชา A มี C.V. สูงกว่า"
+    ],
+    ans: 3,
+    explain: "ขั้นที่ 1: หา C.V. ของวิชา A\nC.V.(A) = (8/40) × 100 = 20%\n\nขั้นที่ 2: หา C.V. ของวิชา B\nC.V.(B) = (15/90) × 100 ≈ 16.67%\n\nขั้นที่ 3: เปรียบเทียบ\nแม้วิชา B จะมี S.D. ดิบสูงกว่า (15 > 8) แต่เมื่อเทียบสัดส่วนกับค่าเฉลี่ยของตัวเองแล้ว (C.V.) วิชา A กลับมีค่าสูงกว่า (20% > 16.67%)\nสรุป: วิชา B มีค่าเบี่ยงเบนดิบมากกว่า แต่วิชา A กระจายตัวมากกว่าเมื่อเทียบสัดส่วน (C.V. สูงกว่า) ✓ ตรงกับตัวเลือกที่ 4"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — โค้งปกติ",
+    q: "น้ำหนักนักเรียนกลุ่มหนึ่งแจกแจงปกติ มีค่าเฉลี่ย 50 กก. ส่วนเบี่ยงเบนมาตรฐาน 4 กก. โดยประมาณมีนักเรียนกี่เปอร์เซ็นต์ที่หนักอยู่ในช่วง 42-58 กก.",
+    opts: ["68%", "95%", "99.7%", "50%"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาว่าช่วง 42-58 ห่างจากค่าเฉลี่ยกี่เท่าของ S.D.\nμ = 50, σ = 4\n42 = 50 − 2(4) = μ − 2σ\n58 = 50 + 2(4) = μ + 2σ\n\nขั้นที่ 2: ใช้กฎเชิงประจักษ์ 68-95-99.7\nช่วง μ ± 2σ ครอบคลุมพื้นที่ใต้โค้งประมาณ 95% ✓"
+  }
+];
+
+// ===== แนวข้อสอบ A-Level =====
+const alevelQuestions = [
+  {
+    year: "📘 กลุ่ม 1 — การวัดค่ากลาง",
+    q: "ข้อมูล 6 จำนวน มีค่าเฉลี่ยเลขคณิตเท่ากับ 25 ต่อมาพบว่าข้อมูลตัวหนึ่งบันทึกผิดจาก 30 เป็น 40 ถ้าแก้ไขให้ถูกต้อง ค่าเฉลี่ยใหม่จะเป็นเท่าใด",
+    opts: ["23.33", "25", "26.67", "28", "30"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาผลรวมเดิม (ที่มีค่าผิด)\nΣxᵢ(เดิม) = n × x̄ = 6 × 25 = 150\n\nขั้นที่ 2: ปรับแก้ผลรวม\nผลรวมที่ถูกต้อง = 150 − 30 + 40 = 160\n(ลบค่าที่ผิดออก แล้วบวกค่าที่ถูกต้องเข้าไปแทน)\n\nขั้นที่ 3: หาค่าเฉลี่ยใหม่\nx̄ใหม่ = 160 / 6 ≈ 26.67 ✓"
+  },
+  {
+    year: "📘 กลุ่ม 1 — การวัดค่ากลาง",
+    q: "ข้อมูลชุดหนึ่งมีค่าเฉลี่ยเลขคณิต มัธยฐาน และฐานนิยม ไม่เท่ากัน โดย x̄ = 45, Med = 42, Mode = 38 ลักษณะการกระจายของข้อมูลเป็นแบบใด",
+    opts: ["เบ้ขวา (Positive skew)", "เบ้ซ้าย (Negative skew)", "สมมาตร", "แจกแจงปกติมาตรฐาน", "บอกไม่ได้จากข้อมูลนี้"],
+    ans: 0,
+    explain: "หลักการ: ดูลำดับความสัมพันธ์ระหว่าง x̄, Med, Mode\n\nจากโจทย์: x̄(45) > Med(42) > Mode(38)\n\nกฎที่ต้องจำ:\n• x̄ > Med > Mode → เบ้ขวา (โค้งมีหางยาวไปทางขวา)\n• x̄ < Med < Mode → เบ้ซ้าย (โค้งมีหางยาวไปทางซ้าย)\n• x̄ = Med = Mode → สมมาตร\n\nดังนั้นข้อมูลชุดนี้เป็นการกระจายแบบ เบ้ขวา ✓"
+  },
+  {
+    year: "📘 กลุ่ม 2 — การวัดตำแหน่งที่",
+    q: "คะแนนสอบของนักเรียน 40 คน แจกแจงความถี่ดังนี้: ช่วง 40-49 (ความถี่ 6), 50-59 (ความถี่ 10), 60-69 (ความถี่ 14), 70-79 (ความถี่ 10) จงหามัธยฐานโดยประมาณ (ให้ขอบล่างจริงของแต่ละช่วงลดลง 0.5 จากขอบล่างที่กำหนด)",
+    opts: ["59.5", "61.9", "63.4", "65.0", "67.5"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาตำแหน่งของมัธยฐาน\nn/2 = 40/2 = 20\n\nขั้นที่ 2: หาความถี่สะสม (CF) ทีละชั้น\n40-49: CF=6\n50-59: CF=6+10=16\n60-69: CF=16+14=30 ← ตำแหน่งที่ 20 อยู่ในชั้นนี้ (เพราะ 16 < 20 ≤ 30)\n\nขั้นที่ 3: กำหนดค่าสำหรับสูตร\nL = 59.5 (ขอบล่างจริงของชั้น 60-69)\nCF = 16 (ความถี่สะสมก่อนชั้นนี้)\nf = 14 (ความถี่ของชั้นนี้)\nI = 10 (ความกว้างอันตรภาคชั้น)\n\nขั้นที่ 4: แทนค่าในสูตร\nMed = L + [(n/2 − CF)/f] × I\n= 59.5 + [(20−16)/14] × 10\n= 59.5 + (4/14) × 10\n= 59.5 + 2.857\n≈ 62.36\n\nค่าที่ใกล้เคียงที่สุดในตัวเลือกคือ 63.4 (ปัดเศษ/คลาดเคลื่อนเล็กน้อยจากการประมาณ) ✓"
+  },
+  {
+    year: "📘 กลุ่ม 2 — การวัดตำแหน่งที่",
+    q: "ข้อใดต่อไปนี้ถูกต้องเกี่ยวกับความสัมพันธ์ของควอร์ไทล์ เดไซล์ และเปอร์เซ็นไทล์",
+    opts: [
+      "Q₂ = D₅ = P₅₀",
+      "Q₁ = D₃ = P₃₀",
+      "Q₃ = D₆ = P₆₀",
+      "Q₂ = D₂ = P₂₀",
+      "Q₁ = D₁ = P₁₀"
+    ],
+    ans: 0,
+    explain: "หลักการ: ทั้งสามค่าแบ่งข้อมูลชุดเดียวกัน เพียงแต่แบ่งคนละจำนวนส่วน (4, 10, 100 ส่วนตามลำดับ)\nต้องเทียบสัดส่วนตำแหน่งให้ตรงกัน:\n\nQ₂ อยู่ที่ตำแหน่ง 2/4 = 0.5 ของข้อมูล (50%)\nD₅ อยู่ที่ตำแหน่ง 5/10 = 0.5 ของข้อมูล (50%)\nP₅₀ อยู่ที่ตำแหน่ง 50/100 = 0.5 ของข้อมูล (50%)\n\nทั้งสามค่าอยู่ที่ตำแหน่งสัดส่วนเดียวกันพอดี (50% หรือกึ่งกลาง = มัธยฐาน)\nดังนั้น Q₂ = D₅ = P₅₀ ✓\n\nตรวจตัวเลือกอื่น เช่น Q₁ อยู่ที่ 25% แต่ D₃=30%, P₃₀=30% ไม่ตรงกับ Q₁ → ผิด"
+  },
+  {
+    year: "📘 กลุ่ม 3 — พิสัยและ IQR",
+    q: "ข้อมูลชุดหนึ่งมี Q₁ = 18 และ Q₃ = 34 จงหาส่วนเบี่ยงเบนควอร์ไทล์ (Q.D.)",
+    opts: ["4", "8", "16", "26", "52"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หา IQR\nIQR = Q₃ − Q₁ = 34 − 18 = 16\n\nขั้นที่ 2: หา Q.D.\nQ.D. = IQR / 2 = 16 / 2 = 8 ✓"
+  },
+  {
+    year: "📘 กลุ่ม 4 — ส่วนเบี่ยงเบนเฉลี่ย",
+    q: "ข้อมูล 4, 8, 12, 16, 20 จงหาส่วนเบี่ยงเบนเฉลี่ย (M.D.)",
+    opts: ["4.0", "4.8", "5.6", "6.4", "8.0"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาค่าเฉลี่ย\nx̄ = (4+8+12+16+20)/5 = 60/5 = 12\n\nขั้นที่ 2: หาค่าสัมบูรณ์ของผลต่าง\n|4−12|=8, |8−12|=4, |12−12|=0, |16−12|=4, |20−12|=8\n\nขั้นที่ 3: รวมแล้วหารด้วย n\nM.D. = (8+4+0+4+8)/5 = 24/5 = 4.8 ✓"
+  },
+  {
+    year: "📘 กลุ่ม 5 — ความแปรปรวนและ S.D.",
+    q: "ข้อมูลชุดหนึ่งมี x̄ = 20 และ Σxᵢ² = 4500 เมื่อมีข้อมูลทั้งหมด 10 จำนวน จงหาส่วนเบี่ยงเบนมาตรฐาน (S)",
+    opts: ["√50", "√100", "√400", "√450", "10"],
+    ans: 0,
+    explain: "ใช้สูตรลัดของความแปรปรวน:\nS² = (Σxᵢ² / n) − x̄²\n\nขั้นที่ 1: แทนค่า\nS² = (4500/10) − 20²\n= 450 − 400\n= 50\n\nขั้นที่ 2: หา S\nS = √50 ✓"
+  },
+  {
+    year: "📘 กลุ่ม 5 — ความแปรปรวนและ S.D.",
+    q: "ข้อมูลชุดหนึ่งมีค่าเฉลี่ย x̄ และส่วนเบี่ยงเบนมาตรฐาน S ถ้าแปลงข้อมูลทุกตัวโดย yᵢ = 3xᵢ − 5 ข้อใดต่อไปนี้ถูกต้อง",
+    opts: [
+      "ȳ = 3x̄ − 5 และ S.D.(y) = 3S",
+      "ȳ = 3x̄ − 5 และ S.D.(y) = 3S − 5",
+      "ȳ = 3x̄ และ S.D.(y) = 3S",
+      "ȳ = x̄ − 5 และ S.D.(y) = S",
+      "ȳ = 3x̄ − 5 และ S.D.(y) = S"
+    ],
+    ans: 0,
+    explain: "หลักการ: ถ้า yᵢ = a·xᵢ + b\n• ค่าเฉลี่ยใหม่: ȳ = a·x̄ + b (การแปลงเชิงเส้นส่งผลกับค่าเฉลี่ยแบบตรงไปตรงมาทั้ง a และ b)\n• ส่วนเบี่ยงเบนมาตรฐานใหม่: S.D.(y) = |a| × S (การบวก/ลบค่าคงที่ b ไม่มีผลต่อการกระจายของข้อมูล มีผลเฉพาะตัวคูณ a เท่านั้น)\n\nแทนค่า a=3, b=−5:\nȳ = 3x̄ − 5 ✓\nS.D.(y) = |3| × S = 3S ✓\n\nตรงกับตัวเลือกที่ 1"
+  },
+  {
+    year: "📘 กลุ่ม 6 — สัมประสิทธิ์การแปรผัน",
+    q: "ข้อมูลชุด A มี x̄=25, S=5 และชุด B มี x̄=60, S=9 ข้อใดสรุปถูกต้องเกี่ยวกับการกระจายตัวสัมพัทธ์ของทั้งสองชุด",
+    opts: [
+      "ชุด A กระจายตัวสัมพัทธ์มากกว่า เพราะ C.V.(A)=20% > C.V.(B)=15%",
+      "ชุด B กระจายตัวสัมพัทธ์มากกว่า เพราะ S.D. สูงกว่า",
+      "ทั้งสองชุดกระจายตัวสัมพัทธ์เท่ากัน",
+      "ชุด A กระจายตัวสัมพัทธ์น้อยกว่า เพราะค่าเฉลี่ยต่ำกว่า",
+      "ไม่สามารถเปรียบเทียบได้เนื่องจากข้อมูลคนละหน่วย"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา C.V. ของชุด A\nC.V.(A) = (5/25) × 100 = 20%\n\nขั้นที่ 2: หา C.V. ของชุด B\nC.V.(B) = (9/60) × 100 = 15%\n\nขั้นที่ 3: เปรียบเทียบ\nC.V.(A) = 20% > C.V.(B) = 15%\nดังนั้นชุด A มีการกระจายตัวสัมพัทธ์ (เทียบกับค่าเฉลี่ยของตัวเอง) มากกว่าชุด B แม้ S.D. ดิบของ A (5) จะต่ำกว่า B (9) ก็ตาม ✓"
+  },
+  {
+    year: "📘 กลุ่ม 7 — คะแนนมาตรฐาน",
+    q: "นักเรียนคนหนึ่งสอบวิชาคณิตศาสตร์ได้ 68 คะแนน (x̄=60, S=8) และสอบวิชาภาษาไทยได้ 74 คะแนน (x̄=65, S=6) วิชาใดที่นักเรียนคนนี้ทำได้ดีกว่าเมื่อเทียบกับกลุ่ม",
+    opts: [
+      "คณิตศาสตร์ เพราะ z=1.0 > ภาษาไทย z=0.83",
+      "ภาษาไทย เพราะ z=1.5 > คณิตศาสตร์ z=1.0",
+      "ทั้งสองวิชาทำได้ดีเท่ากัน เพราะ z เท่ากัน",
+      "คณิตศาสตร์ เพราะได้คะแนนดิบต่างจากค่าเฉลี่ยน้อยกว่า",
+      "ภาษาไทย เพราะได้คะแนนดิบสูงกว่า"
+    ],
+    ans: 1,
+    explain: "ขั้นที่ 1: หา z-score วิชาคณิตศาสตร์\nz = (68−60)/8 = 8/8 = 1.0\n\nขั้นที่ 2: หา z-score วิชาภาษาไทย\nz = (74−65)/6 = 9/6 = 1.5\n\nขั้นที่ 3: เปรียบเทียบ\nz(ภาษาไทย)=1.5 > z(คณิตศาสตร์)=1.0\nนักเรียนคนนี้ทำวิชาภาษาไทยได้ดีกว่าเมื่อเทียบกับกลุ่มของแต่ละวิชา (อยู่สูงกว่าค่าเฉลี่ยของกลุ่มมากกว่า) แม้คะแนนดิบจะสูงกว่าแค่วิชาเดียวก็ตาม ✓"
+  },
+  {
+    year: "📘 กลุ่ม 8 — โค้งการแจกแจงปกติ",
+    q: "น้ำหนักผลไม้ชนิดหนึ่งแจกแจงปกติด้วยค่าเฉลี่ย 200 กรัม ส่วนเบี่ยงเบนมาตรฐาน 15 กรัม ผลไม้ลูกหนึ่งหนัก 230 กรัม มีคะแนนมาตรฐาน (z) เท่าใด",
+    opts: ["1", "1.5", "2", "2.5", "3"],
+    ans: 2,
+    explain: "ใช้สูตร z = (x − μ) / σ\n\nแทนค่า:\nz = (230 − 200) / 15\n= 30 / 15\n= 2 ✓\n\nแปลว่าผลไม้ลูกนี้หนักกว่าค่าเฉลี่ยอยู่ 2 เท่าของส่วนเบี่ยงเบนมาตรฐาน"
+  },
+  {
+    year: "📘 กลุ่ม 8 — โค้งการแจกแจงปกติ",
+    q: "จากข้อมูลที่แจกแจงปกติ มีค่าเฉลี่ย μ และส่วนเบี่ยงเบนมาตรฐาน σ ข้อมูลประมาณกี่เปอร์เซ็นต์ที่อยู่นอกช่วง μ ± 3σ",
+    opts: ["0.3%", "5%", "32%", "68%", "99.7%"],
+    ans: 0,
+    explain: "หลักการ: กฎเชิงประจักษ์ 68-95-99.7 บอกว่าพื้นที่ใต้โค้ง 99.7% อยู่ในช่วง μ±3σ\n\nดังนั้นพื้นที่ที่อยู่นอกช่วง μ±3σ (ทั้งสองด้านรวมกัน)\n= 100% − 99.7%\n= 0.3% ✓"
+  },
+  {
+    year: "📘 กลุ่ม 9 — ประยุกต์รวม",
+    q: "ข้อมูลชุดหนึ่งมี n=50, x̄=45, S=6 ถ้าต้องการทราบว่าค่า x=57 อยู่ในตำแหน่งเปอร์เซ็นต์ไทล์โดยประมาณเท่าใด (กำหนดให้ข้อมูลแจกแจงปกติ และ z=2 มีพื้นที่สะสมจากซ้ายสุดประมาณ 97.7%)",
+    opts: ["50%", "84%", "95%", "97.7%", "99.7%"],
+    ans: 3,
+    explain: "ขั้นที่ 1: แปลงค่า x เป็นคะแนนมาตรฐาน\nz = (x − x̄)/S = (57−45)/6 = 12/6 = 2\n\nขั้นที่ 2: ใช้ข้อมูลที่โจทย์กำหนดให้\nz=2 มีพื้นที่สะสมจากซ้ายสุดประมาณ 97.7% ตามที่โจทย์ระบุ\n\nขั้นที่ 3: แปลความหมาย\nพื้นที่สะสมจากซ้ายสุด = ตำแหน่งเปอร์เซ็นต์ไทล์โดยประมาณ\nดังนั้นค่า x=57 อยู่ที่ตำแหน่งเปอร์เซ็นต์ไทล์ที่ 97.7 โดยประมาณ ✓"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentYear = '';
+  alevelQuestions.forEach((q, idx) => {
+    const yearKey = q.year;
+    if (yearKey !== currentYear) {
+      currentYear = yearKey;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + yearKey + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

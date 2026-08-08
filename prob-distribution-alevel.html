@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การแจกแจงความน่าจะเป็น | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'P(X) E(X) Var(X) σ μ B(n,p) N(μ,σ²) Z Σ C(n,x)';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 6px;
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>การแจกแจง<span>ความน่าจะเป็น</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level เรื่องตัวแปรสุ่มและการแจกแจงความน่าจะเป็น</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">ข้อสอบแนว A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="s1">1. ตัวแปรสุ่ม</button>
+  <button class="tab-btn" data-sec="s2">2. การแจกแจง P(X)</button>
+  <button class="tab-btn" data-sec="s3">3. ค่าคาดหมาย E(X)</button>
+  <button class="tab-btn" data-sec="s4">4. ความแปรปรวน Var(X)</button>
+  <button class="tab-btn" data-sec="s5">5. การแจกแจงทวินาม</button>
+  <button class="tab-btn" data-sec="s6">6. การแจกแจงปกติ</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบแนว A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: ตัวแปรสุ่ม ===== -->
+  <div class="section active" id="s1">
+    <div class="section-heading"><span>บทที่ 1</span> · ตัวแปรสุ่ม (Random Variable)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🎲</div>ตัวแปรสุ่มคืออะไร?</div>
+      <p>ตัวแปรสุ่ม (Random Variable) คือ <strong>ฟังก์ชันที่กำหนดค่าตัวเลขให้กับแต่ละผลลัพธ์</strong> ในปริภูมิตัวอย่าง (Sample Space) ของการทดลองสุ่ม</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ตัวแปรสุ่ม มักเขียนแทนด้วยตัวอักษรพิมพ์ใหญ่ เช่น X, Y ส่วนค่าที่ตัวแปรสุ่มรับ มักเขียนแทนด้วยตัวพิมพ์เล็ก เช่น x
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        โยนเหรียญ 2 เหรียญ ปริภูมิตัวอย่าง S = {HH, HT, TH, TT}<br>
+        ให้ X = จำนวนหัวที่ได้ → X(HH)=2, X(HT)=1, X(TH)=1, X(TT)=0
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>ประเภทของตัวแปรสุ่ม</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ตัวแปรสุ่มไม่ต่อเนื่อง (Discrete)</h4>
+          <p>รับค่าเป็นจำนวนที่<strong>นับได้</strong> (มักเป็นจำนวนเต็ม) เช่น จำนวนหัว จำนวนลูกค้า จำนวนของเสีย</p>
+        </div>
+        <div class="mini-card">
+          <h4>ตัวแปรสุ่มต่อเนื่อง (Continuous)</h4>
+          <p>รับค่าเป็นจำนวนที่<strong>วัดได้</strong> ในช่วงของจำนวนจริง เช่น ส่วนสูง น้ำหนัก เวลา อุณหภูมิ</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        นับได้ (0,1,2,3,...) → ไม่ต่อเนื่อง | วัดได้ (ค่าใดก็ได้ในช่วง) → ต่อเนื่อง<br>
+        บทนี้จะเน้น <strong>ตัวแปรสุ่มไม่ต่อเนื่อง</strong> เป็นหลัก และกล่าวถึง<strong>การแจกแจงปกติ</strong>ซึ่งเป็นตัวแปรสุ่มต่อเนื่องในหัวข้อสุดท้าย
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🪙</div>ตัวอย่างการสร้างตัวแปรสุ่มจากปริภูมิตัวอย่าง</div>
+      <p>โยนเหรียญ 3 เหรียญ (แต่ละเหรียญไม่เที่ยงตรง P(H) = P(T) = 1/2) ให้ X = จำนวนหัวที่ได้</p>
+      <div class="math-block">
+        S = {HHH, HHT, HTH, THH, HTT, THT, TTH, TTT}  (8 แบบ ความน่าจะเป็นเท่ากันแบบละ 1/8)
+      </div>
+      <table>
+        <tr><th>ผลลัพธ์</th><th>HHH</th><th>HHT</th><th>HTH</th><th>THH</th><th>HTT</th><th>THT</th><th>TTH</th><th>TTT</th></tr>
+        <tr><td>X (จำนวนหัว)</td><td>3</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+      <p>จะเห็นว่า X รับค่าได้ 4 ค่า คือ 0, 1, 2, 3 — ตัวอย่างนี้จะถูกใช้ต่อในหัวข้อถัดไป</p>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: การแจกแจงความน่าจะเป็น ===== -->
+  <div class="section" id="s2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · การแจกแจงความน่าจะเป็นของตัวแปรสุ่มไม่ต่อเนื่อง</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📋</div>ตารางแจกแจงความน่าจะเป็น</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การแจกแจงความน่าจะเป็น (Probability Distribution) ของตัวแปรสุ่มไม่ต่อเนื่อง X คือ ตารางหรือฟังก์ชันที่แสดง <strong>ค่าที่ X รับได้</strong> คู่กับ <strong>ความน่าจะเป็นที่ X จะรับค่านั้น</strong> เขียนแทนด้วย P(X = x)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ สมบัติที่ต้องเป็นจริงเสมอ</div>
+        1) 0 ≤ P(X = x) ≤ 1 สำหรับทุกค่า x<br>
+        2) Σ P(X = x) = 1 (ผลรวมความน่าจะเป็นของทุกค่าต้องเท่ากับ 1)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧮</div>ตัวอย่างการสร้างตารางแจกแจง</div>
+      <p>ต่อจากตัวอย่างการโยนเหรียญ 3 เหรียญ (X = จำนวนหัว) จากหัวข้อที่แล้ว</p>
+      <div class="math-block">
+        P(X=0) = 1/8   (มีแบบเดียวคือ TTT)<br>
+        P(X=1) = 3/8   (HTT, THT, TTH)<br>
+        P(X=2) = 3/8   (HHT, HTH, THH)<br>
+        P(X=3) = 1/8   (มีแบบเดียวคือ HHH)
+      </div>
+      <table>
+        <tr><th>x</th><th>0</th><th>1</th><th>2</th><th>3</th><th>รวม</th></tr>
+        <tr><td>P(X=x)</td><td>1/8</td><td>3/8</td><td>3/8</td><td>1/8</td><td class="true-val">1</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 ตรวจสอบเสมอ</div>
+        1/8 + 3/8 + 3/8 + 1/8 = 8/8 = 1 ✓ สอดคล้องกับสมบัติข้อ 2
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">Σ</div>การหาค่า k ในตารางแจกแจง</div>
+      <p>โจทย์มักให้ตารางแจกแจงที่มีค่าคงที่ k ปนอยู่ แล้วให้หาค่า k จากสมบัติ Σ P(X=x) = 1</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กำหนดตารางแจกแจงความน่าจะเป็นของ X ดังนี้
+        <table>
+          <tr><th>x</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+          <tr><td>P(X=x)</td><td>k</td><td>2k</td><td>3k</td><td>4k</td></tr>
+        </table>
+        จงหาค่า k<br><br>
+        <strong>วิธีทำ:</strong> ใช้สมบัติ Σ P(X=x) = 1<br>
+        k + 2k + 3k + 4k = 1<br>
+        10k = 1<br>
+        k = 0.1 ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ค่าคาดหมาย ===== -->
+  <div class="section" id="s3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · ค่าคาดหมาย E(X)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🎯</div>นิยามค่าคาดหมาย (Expected Value)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ค่าคาดหมาย E(X) คือ <strong>ค่าเฉลี่ยถ่วงน้ำหนักด้วยความน่าจะเป็น</strong> ของตัวแปรสุ่ม X บอกว่าโดยเฉลี่ยแล้ว X มีค่าประมาณเท่าใด
+      </div>
+      <div class="math-block">
+        E(X) = Σ x · P(X = x)
+      </div>
+      <p>บางตำราเขียนแทนด้วย μ (มิว) หรือ μ<sub>X</sub></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧮</div>ตัวอย่างการคำนวณ E(X)</div>
+      <p>จากตารางแจกแจงของ X = จำนวนหัวจากการโยนเหรียญ 3 เหรียญ</p>
+      <table>
+        <tr><th>x</th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
+        <tr><td>P(X=x)</td><td>1/8</td><td>3/8</td><td>3/8</td><td>1/8</td></tr>
+      </table>
+      <div class="math-block">
+        E(X) = 0(1/8) + 1(3/8) + 2(3/8) + 3(1/8)<br>
+             = 0 + 3/8 + 6/8 + 3/8<br>
+             = 12/8 = 1.5
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ความหมาย</div>
+        โดยเฉลี่ยแล้ว เมื่อโยนเหรียญ 3 เหรียญซ้ำ ๆ กันหลายครั้ง จำนวนหัวที่ได้เฉลี่ยจะอยู่ที่ประมาณ 1.5 หัวต่อครั้ง (ไม่จำเป็นต้องเป็นค่าที่ X รับได้จริง)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>สมบัติของค่าคาดหมาย</div>
+      <div class="math-block">
+        E(aX + b) = a·E(X) + b   (เมื่อ a, b เป็นค่าคงที่)<br>
+        E(a) = a   (ค่าคาดหมายของค่าคงที่ คือค่าคงที่นั้นเอง)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        จากตัวอย่างข้างต้น E(X) = 1.5 จงหา E(2X + 3)<br>
+        E(2X+3) = 2(1.5) + 3 = 3 + 3 = 6 ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: ความแปรปรวน ===== -->
+  <div class="section" id="s4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · ความแปรปรวนและส่วนเบี่ยงเบนมาตรฐาน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📏</div>ความแปรปรวน Var(X)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ความแปรปรวน (Variance) วัด<strong>การกระจายตัว</strong>ของค่า X รอบค่าคาดหมาย ยิ่งค่ามาก ยิ่งกระจายตัวมาก
+      </div>
+      <div class="math-block">
+        Var(X) = E(X²) − [E(X)]²
+      </div>
+      <p>โดยที่ E(X²) = Σ x² · P(X = x)</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧮</div>ตัวอย่างการคำนวณ Var(X)</div>
+      <p>ต่อจากตัวอย่างเดิม X = จำนวนหัวจากการโยนเหรียญ 3 เหรียญ (E(X) = 1.5)</p>
+      <div class="math-block">
+        E(X²) = 0²(1/8) + 1²(3/8) + 2²(3/8) + 3²(1/8)<br>
+              = 0 + 3/8 + 12/8 + 9/8<br>
+              = 24/8 = 3
+      </div>
+      <div class="math-block">
+        Var(X) = E(X²) − [E(X)]² = 3 − (1.5)² = 3 − 2.25 = 0.75
+      </div>
+      <div class="def-box">
+        <div class="def-label">ส่วนเบี่ยงเบนมาตรฐาน SD(X)</div>
+        SD(X) = √Var(X) = √0.75 ≈ 0.866
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>สมบัติของความแปรปรวน</div>
+      <div class="math-block">
+        Var(aX + b) = a² · Var(X)   (ค่าคงที่ b ที่บวกเพิ่มไม่มีผลต่อการกระจายตัว)<br>
+        Var(a) = 0   (ค่าคงที่ไม่มีการกระจายตัวเลย)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        การบวกค่าคงที่ b เข้าไปใน X (เลื่อนตำแหน่งข้อมูล) ไม่เปลี่ยนการกระจายตัว จึงไม่มี b ปรากฏในสูตร Var(aX+b) — ต่างจากสูตร E(aX+b) ที่มี b ติดมาด้วย
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        จาก Var(X) = 0.75 จงหา Var(4X − 5)<br>
+        Var(4X−5) = 4² × 0.75 = 16 × 0.75 = 12 ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: การแจกแจงทวินาม ===== -->
+  <div class="section" id="s5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · การแจกแจงทวินาม (Binomial Distribution)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🎯</div>การทดลองแบบเบอร์นูลลี (Bernoulli Trial)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การทดลองที่มีผลลัพธ์เพียง<strong>สองแบบ</strong> คือ "สำเร็จ" (Success) กับ "ไม่สำเร็จ" (Failure)<br>
+        ให้ p = ความน่าจะเป็นที่จะสำเร็จ, q = 1 − p = ความน่าจะเป็นที่จะไม่สำเร็จ
+      </div>
+      <p>เมื่อทำการทดลองแบบเบอร์นูลลีซ้ำกัน <strong>n ครั้งอย่างอิสระต่อกัน</strong> โดยความน่าจะเป็นสำเร็จ p คงที่ทุกครั้ง เรียกว่า <strong>การทดลองทวินาม</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📊</div>สูตรการแจกแจงทวินาม</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ถ้า X = จำนวนครั้งที่สำเร็จจาก n ครั้ง เรียก X ว่ามีการแจกแจงทวินาม เขียนแทนด้วย X ~ B(n, p)
+      </div>
+      <div class="math-block">
+        P(X = x) = C(n, x) · p<sup>x</sup> · q<sup>n−x</sup>  ,  x = 0, 1, 2, …, n
+      </div>
+      <p>โดยที่ C(n, x) = n! / [x!(n−x)!] คือจำนวนวิธีเลือกว่าครั้งใดสำเร็จบ้าง</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 เงื่อนไขของการแจกแจงทวินาม (ต้องครบทั้ง 4 ข้อ)</div>
+        1) ทำซ้ำ n ครั้งที่แน่นอน<br>
+        2) แต่ละครั้งมีผลลัพธ์แค่ 2 แบบ (สำเร็จ/ไม่สำเร็จ)<br>
+        3) ความน่าจะเป็นสำเร็จ p คงที่ทุกครั้ง<br>
+        4) แต่ละครั้งเป็นอิสระต่อกัน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧮</div>ตัวอย่างการคำนวณ</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        โยนเหรียญเที่ยงตรง 5 ครั้ง ให้ X = จำนวนครั้งที่ออกหัว จงหา P(X = 3)<br><br>
+        ที่นี่ n = 5, p = 0.5, q = 0.5, x = 3<br>
+        P(X=3) = C(5,3) · (0.5)³ · (0.5)²<br>
+        C(5,3) = 10<br>
+        P(X=3) = 10 × 0.125 × 0.25 = 0.3125 ✓
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📐</div>ค่าคาดหมายและความแปรปรวนของการแจกแจงทวินาม</div>
+      <p>สำหรับ X ~ B(n, p) ไม่ต้องคำนวณจากตารางทีละค่า สามารถใช้สูตรลัดได้เลย</p>
+      <div class="math-block">
+        E(X) = np<br>
+        Var(X) = npq<br>
+        SD(X) = √(npq)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        จากตัวอย่างโยนเหรียญ 5 ครั้ง (n=5, p=0.5, q=0.5)<br>
+        E(X) = 5 × 0.5 = 2.5<br>
+        Var(X) = 5 × 0.5 × 0.5 = 1.25
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        สูตรลัด E(X)=np และ Var(X)=npq ใช้ได้เฉพาะเมื่อ X มีการแจกแจงทวินามจริง ๆ (ครบเงื่อนไขทั้ง 4 ข้อ) เท่านั้น หากเป็นการหยิบโดยไม่ใส่คืน (ไม่อิสระ) จะใช้สูตรนี้ไม่ได้
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: การแจกแจงปกติ ===== -->
+  <div class="section" id="s6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · การแจกแจงปกติ (Normal Distribution)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔔</div>ลักษณะของการแจกแจงปกติ</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        การแจกแจงปกติ คือการแจกแจงความน่าจะเป็นของ<strong>ตัวแปรสุ่มต่อเนื่อง</strong> ที่มีกราฟรูประฆังคว่ำ (Bell-shaped) สมมาตรรอบค่าเฉลี่ย μ เขียนแทนด้วย X ~ N(μ, σ²)
+      </div>
+      <ul>
+        <li>สมมาตรรอบค่าเฉลี่ย μ (μ = มัธยฐาน = ฐานนิยม)</li>
+        <li>พื้นที่ใต้กราฟทั้งหมดเท่ากับ 1</li>
+        <li>รูปร่างกว้าง-แคบขึ้นกับส่วนเบี่ยงเบนมาตรฐาน σ (σ มาก → กราฟแบนกว้าง, σ น้อย → กราฟสูงแคบ)</li>
+      </ul>
+      <div class="tip-box">
+        <div class="tip-label">💡 กฎเชิงประจักษ์ (Empirical Rule) 68-95-99.7</div>
+        ประมาณ 68% ของข้อมูลอยู่ในช่วง μ ± σ<br>
+        ประมาณ 95% ของข้อมูลอยู่ในช่วง μ ± 2σ<br>
+        ประมาณ 99.7% ของข้อมูลอยู่ในช่วง μ ± 3σ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">Z</div>การแจกแจงปกติมาตรฐาน (Standard Normal)</div>
+      <p>เนื่องจากค่า μ, σ ของแต่ละปัญหาไม่เท่ากัน จึงต้อง<strong>แปลงค่า X ให้เป็นมาตรฐานเดียวกัน</strong>ก่อนเปิดตาราง โดยใช้คะแนนมาตรฐาน Z</p>
+      <div class="math-block">
+        Z = (X − μ) / σ
+      </div>
+      <p>เมื่อแปลงแล้ว Z จะมีการแจกแจงปกติมาตรฐาน คือ Z ~ N(0, 1) ซึ่งมี μ = 0 และ σ = 1 เสมอ ทำให้สามารถเปิดตารางค่า Z มาตรฐานเพื่อหาพื้นที่ใต้กราฟ (ความน่าจะเป็น) ได้</p>
+      <div class="sub-heading">ตัวอย่างค่า P(Z &lt; z) จากตารางมาตรฐาน (บางส่วน)</div>
+      <table>
+        <tr><th>z</th><th>−2.00</th><th>−1.00</th><th>0.00</th><th>1.00</th><th>2.00</th></tr>
+        <tr><td>P(Z &lt; z)</td><td>0.0228</td><td>0.1587</td><td>0.5000</td><td>0.8413</td><td>0.9772</td></tr>
+      </table>
+      <p style="font-size:13px; color:var(--text-dim)">ในข้อสอบจริง โจทย์จะแนบตาราง Z มาให้เสมอ ไม่ต้องท่องจำค่า แต่ควรฝึกอ่านตารางให้คล่อง</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🧮</div>ตัวอย่างการคำนวณด้วยการแจกแจงปกติ</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 1</div>
+        กำหนด X ~ N(50, 100) (หมายถึง μ=50, σ²=100 ดังนั้น σ=10) จงหา P(X &lt; 60)<br><br>
+        แปลงเป็น Z: Z = (60 − 50)/10 = 1<br>
+        P(X &lt; 60) = P(Z &lt; 1) = 0.8413 ✓
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 2</div>
+        จากข้อมูลเดิม (μ=50, σ=10) จงหา P(40 &lt; X &lt; 60)<br><br>
+        Z₁ = (40−50)/10 = −1 , Z₂ = (60−50)/10 = 1<br>
+        P(40&lt;X&lt;60) = P(−1&lt;Z&lt;1) = P(Z&lt;1) − P(Z&lt;−1) = 0.8413 − 0.1587 = 0.6826 ✓
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        อย่าสับสนระหว่าง σ² (ความแปรปรวน) กับ σ (ส่วนเบี่ยงเบนมาตรฐาน) — สัญกรณ์ N(μ, σ²) ระบุ<strong>ความแปรปรวน</strong>ไว้ในวงเล็บเสมอ ต้องถอดรากที่สองก่อนนำไปหาร Z
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมทุกหัวข้อของการแจกแจงความน่าจะเป็น เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบแนว A-Level — การแจกแจงความน่าจะเป็น</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">โจทย์แนวข้อสอบจำลอง ระดับความยากใกล้เคียงข้อสอบจริง ครอบคลุมตัวแปรสุ่ม การแจกแจงทวินาม และการแจกแจงปกติ</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      ฝึกทำให้ครบทุกข้อ อ่านเฉลยละเอียดทีละขั้น แล้วลองปิดเฉลยทำซ้ำด้วยตัวเองอีกครั้งเพื่อความชำนาญ
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — ตัวแปรสุ่ม",
+    q: "โยนเหรียญ 2 เหรียญ ให้ X = จำนวนหัวที่ได้ จงหา P(X = 1)",
+    opts: ["1/4", "1/2", "3/4", "1"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาปริภูมิตัวอย่าง\n  S = {HH, HT, TH, TT} มีทั้งหมด 4 แบบ ความน่าจะเป็นเท่ากันแบบละ 1/4\n\nขั้นที่ 2: หาผลลัพธ์ที่ X = 1 (ได้หัว 1 เหรียญพอดี)\n  HT และ TH → มี 2 แบบ\n\nขั้นที่ 3: คำนวณความน่าจะเป็น\n  P(X=1) = 2/4 = 1/2 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — การแจกแจง P(X)",
+    q: "กำหนดตารางแจกแจงความน่าจะเป็นของ X ดังนี้\nx: 1, 2, 3, 4    P(X=x): k, 2k, 3k, 4k\nจงหาค่า k",
+    opts: ["0.05", "0.1", "0.15", "0.2"],
+    ans: 1,
+    explain: "ใช้สมบัติ Σ P(X=x) = 1\n\nk + 2k + 3k + 4k = 1\n10k = 1\nk = 0.1 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การแจกแจง P(X)",
+    q: "จากตารางแจกแจงข้อที่แล้ว (k = 0.1) จงหา P(X ≥ 3)",
+    opts: ["0.3", "0.5", "0.7", "0.9"],
+    ans: 2,
+    explain: "ขั้นที่ 1: แทนค่า k = 0.1 ลงในตาราง\n  P(X=1)=0.1, P(X=2)=0.2, P(X=3)=0.3, P(X=4)=0.4\n\nขั้นที่ 2: หา P(X ≥ 3) = P(X=3) + P(X=4)\n  = 0.3 + 0.4 = 0.7 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ค่าคาดหมาย",
+    q: "จากตารางแจกแจงเดิม (x=1,2,3,4 ; P(X=x)=0.1,0.2,0.3,0.4) จงหา E(X)",
+    opts: ["2.5", "2.8", "3.0", "3.2"],
+    ans: 2,
+    explain: "ใช้สูตร E(X) = Σ x·P(X=x)\n\nE(X) = 1(0.1) + 2(0.2) + 3(0.3) + 4(0.4)\n     = 0.1 + 0.4 + 0.9 + 1.6\n     = 3.0 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ความแปรปรวน",
+    q: "จากตารางแจกแจงเดิม (E(X) = 3.0) จงหา Var(X)",
+    opts: ["0.5", "0.8", "1.0", "1.2"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หา E(X²)\n  E(X²) = 1²(0.1) + 2²(0.2) + 3²(0.3) + 4²(0.4)\n        = 0.1 + 0.8 + 2.7 + 6.4\n        = 10.0\n\nขั้นที่ 2: ใช้สูตร Var(X) = E(X²) − [E(X)]²\n  Var(X) = 10.0 − (3.0)² = 10.0 − 9.0 = 1.0 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การแจกแจงทวินาม",
+    q: "โยนเหรียญเที่ยงตรง 4 ครั้ง ให้ X = จำนวนหัวที่ได้ จงหา P(X = 2)",
+    opts: ["0.25", "0.375", "0.5", "0.625"],
+    ans: 1,
+    explain: "ที่นี่ X ~ B(4, 0.5) เพราะโยนอิสระ 4 ครั้ง แต่ละครั้งมี 2 ผลลัพธ์ ความน่าจะเป็นคงที่\n\nP(X=2) = C(4,2) × (0.5)² × (0.5)²\nC(4,2) = 6\nP(X=2) = 6 × 0.25 × 0.25 = 6 × 0.0625 = 0.375 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การแจกแจงทวินาม",
+    q: "จากข้อที่แล้ว (X ~ B(4, 0.5)) จงหาค่าคาดหมาย E(X)",
+    opts: ["1", "1.5", "2", "2.5"],
+    ans: 2,
+    explain: "ใช้สูตรลัดของการแจกแจงทวินาม\n\nE(X) = np = 4 × 0.5 = 2 ✓\n\n(ไม่ต้องคำนวณทีละค่าจากตารางเพราะทราบแล้วว่า X มีการแจกแจงทวินาม)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — การแจกแจงปกติ",
+    q: "กำหนด X ~ N(60, 64) (คือ μ=60, σ²=64) จงหาค่ามาตรฐาน Z เมื่อ X = 76",
+    opts: ["1", "1.5", "2", "2.5"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หา σ จาก σ² = 64\n  σ = √64 = 8\n\nขั้นที่ 2: ใช้สูตร Z = (X − μ)/σ\n  Z = (76 − 60)/8 = 16/8 = 2 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — การแจกแจงปกติ",
+    q: "กำหนด Z ~ N(0,1) และ P(Z &lt; 1) = 0.8413 จงหา P(Z &gt; 1)",
+    opts: ["0.1587", "0.3413", "0.8413", "0.9772"],
+    ans: 0,
+    explain: "ใช้สมบัติพื้นที่ใต้กราฟรวมกันเท่ากับ 1\n\nP(Z > 1) = 1 − P(Z < 1) = 1 − 0.8413 = 0.1587 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — การแจกแจงปกติ",
+    q: "กำหนด X ~ N(50, 25) (μ=50, σ²=25) และ P(Z&lt;1)=0.8413, P(Z&lt;−1)=0.1587\nจงหา P(45 &lt; X &lt; 55)",
+    opts: ["0.5", "0.6826", "0.75", "0.9544"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หา σ จาก σ² = 25 → σ = 5\n\nขั้นที่ 2: แปลงค่าขอบเขตเป็น Z\n  Z₁ = (45−50)/5 = −1\n  Z₂ = (55−50)/5 = 1\n\nขั้นที่ 3: หา P(−1 &lt; Z &lt; 1)\n  = P(Z&lt;1) − P(Z&lt;−1) = 0.8413 − 0.1587 = 0.6826 ✓"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+// ===== ข้อสอบแนว A-Level =====
+const alevelQuestions = [
+  {
+    tag: "📘 แนว A-Level — ตัวแปรสุ่มและการแจกแจง P(X)",
+    q: "ในกล่องมีลูกบอลสีแดง 3 ลูก สีขาว 2 ลูก หยิบลูกบอล 2 ลูกพร้อมกันโดยไม่ใส่คืน\nให้ X = จำนวนลูกบอลสีแดงที่หยิบได้ จงหา P(X = 2)",
+    opts: ["0.1", "0.2", "0.3", "0.4", "0.5"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาจำนวนวิธีหยิบทั้งหมด\n  จำนวนวิธีหยิบ 2 ลูกจาก 5 ลูก = C(5,2) = 10 วิธี\n\nขั้นที่ 2: หาจำนวนวิธีที่ได้สีแดง 2 ลูก\n  เลือกแดง 2 จาก 3 และขาว 0 จาก 2 = C(3,2) × C(2,0) = 3 × 1 = 3 วิธี\n\nขั้นที่ 3: คำนวณความน่าจะเป็น\n  P(X=2) = 3/10 = 0.3 ✓"
+  },
+  {
+    tag: "📘 แนว A-Level — ตัวแปรสุ่มและการแจกแจง P(X)",
+    q: "จากสถานการณ์ข้อที่แล้ว (ลูกบอลแดง 3 ขาว 2 หยิบ 2 ลูกไม่ใส่คืน)\nจงหา E(X) เมื่อ X = จำนวนลูกบอลสีแดงที่หยิบได้",
+    opts: ["0.8", "1.0", "1.2", "1.4", "1.6"],
+    ans: 2,
+    explain: "ขั้นที่ 1: สร้างตารางแจกแจงความน่าจะเป็นให้ครบทุกค่า\n  P(X=0) = C(3,0)C(2,2)/C(5,2) = 1/10 = 0.1\n  P(X=1) = C(3,1)C(2,1)/C(5,2) = 6/10 = 0.6\n  P(X=2) = C(3,2)C(2,0)/C(5,2) = 3/10 = 0.3\n  ตรวจสอบผลรวม: 0.1+0.6+0.3 = 1.0 ✓\n\nขั้นที่ 2: คำนวณ E(X)\n  E(X) = 0(0.1) + 1(0.6) + 2(0.3)\n       = 0 + 0.6 + 0.6 = 1.2 ✓"
+  },
+  {
+    tag: "📘 แนว A-Level — การแจกแจงทวินาม",
+    q: "โยนลูกเต๋าลูกหนึ่ง 3 ครั้ง ให้ X = จำนวนครั้งที่ได้แต้ม 6 จงหา P(X = 1)",
+    opts: ["25/72", "1/6", "5/36", "125/216", "1/2"],
+    ans: 0,
+    explain: "ที่นี่ X ~ B(3, 1/6) เพราะโยนอิสระ 3 ครั้ง แต่ละครั้งมี 2 กรณี (ได้ 6 หรือไม่ได้ 6)\n\np = 1/6 (ได้แต้ม 6), q = 5/6 (ไม่ได้แต้ม 6)\n\nP(X=1) = C(3,1) × (1/6)¹ × (5/6)²\n       = 3 × (1/6) × (25/36)\n       = 3 × 25/216\n       = 75/216 = 25/72 ✓"
+  },
+  {
+    tag: "📘 แนว A-Level — การแจกแจงทวินาม",
+    q: "จากข้อที่แล้ว (X ~ B(3, 1/6)) จงหาค่า E(X) + Var(X)",
+    opts: ["11/12", "5/6", "3/4", "2/3", "1"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา E(X)\n  E(X) = np = 3 × 1/6 = 1/2\n\nขั้นที่ 2: หา Var(X)\n  Var(X) = npq = 3 × (1/6) × (5/6) = 15/36 = 5/12\n\nขั้นที่ 3: หาผลรวม\n  E(X) + Var(X) = 1/2 + 5/12 = 6/12 + 5/12 = 11/12 ✓"
+  },
+  {
+    tag: "📘 แนว A-Level — การแจกแจงปกติ",
+    q: "ส่วนสูงของนักเรียนกลุ่มหนึ่งมีการแจกแจงปกติ ค่าเฉลี่ย 165 ซม. ส่วนเบี่ยงเบนมาตรฐาน 5 ซม.\nกำหนด P(Z &lt; 2) = 0.9772 จงหาสัดส่วนนักเรียนที่สูงมากกว่า 175 ซม.",
+    opts: ["0.0228", "0.0456", "0.1587", "0.3174", "0.5"],
+    ans: 0,
+    explain: "ขั้นที่ 1: แปลง X = 175 เป็นค่า Z\n  Z = (175 − 165)/5 = 10/5 = 2\n\nขั้นที่ 2: หา P(X &gt; 175) = P(Z &gt; 2)\n  = 1 − P(Z &lt; 2) = 1 − 0.9772 = 0.0228 ✓"
+  },
+  {
+    tag: "📘 แนว A-Level — การแจกแจงปกติ",
+    q: "จากข้อมูลเดิม (μ=165, σ=5) และกำหนด P(Z&lt;2)=0.9772, P(Z&lt;−2)=0.0228\nจงหาสัดส่วนนักเรียนที่สูงอยู่ในช่วง 155 ถึง 175 ซม.",
+    opts: ["0.6826", "0.9544", "0.9772", "0.9974", "1.0"],
+    ans: 1,
+    explain: "ขั้นที่ 1: แปลงขอบเขตเป็นค่า Z\n  Z₁ = (155−165)/5 = −2\n  Z₂ = (175−165)/5 = 2\n\nขั้นที่ 2: หา P(−2 &lt; Z &lt; 2)\n  = P(Z&lt;2) − P(Z&lt;−2) = 0.9772 − 0.0228 = 0.9544 ✓\n\n(สอดคล้องกับกฎเชิงประจักษ์ที่ว่า μ±2σ ครอบคลุมประมาณ 95% ของข้อมูล)"
+  },
+  {
+    tag: "📘 แนว A-Level — การแจกแจง P(X)",
+    q: "กำหนดตัวแปรสุ่ม X มีตารางแจกแจงความน่าจะเป็นดังนี้\nx: −1, 0, 1, 2   P(X=x): 0.2, 0.3, a, 0.1\nจงหาค่า a",
+    opts: ["0.2", "0.3", "0.4", "0.5", "0.6"],
+    ans: 2,
+    explain: "ใช้สมบัติ Σ P(X=x) = 1\n\n0.2 + 0.3 + a + 0.1 = 1\n0.6 + a = 1\na = 0.4 ✓"
+  },
+  {
+    tag: "📘 แนว A-Level — ค่าคาดหมาย",
+    q: "จากตารางแจกแจงข้อที่แล้ว (a = 0.4) จงหา E(X)",
+    opts: ["0.2", "0.3", "0.4", "0.5", "0.6"],
+    ans: 2,
+    explain: "แทนค่า a = 0.4 ลงในตาราง: P(X=−1)=0.2, P(X=0)=0.3, P(X=1)=0.4, P(X=2)=0.1\n\nE(X) = (−1)(0.2) + 0(0.3) + 1(0.4) + 2(0.1)\n     = −0.2 + 0 + 0.4 + 0.2\n     = 0.4 ✓"
+  },
+  {
+    tag: "📘 แนว A-Level — การแจกแจงทวินาม",
+    q: "โรงงานผลิตชิ้นงาน พบว่ามีอัตราของเสีย 5% สุ่มชิ้นงานมา 10 ชิ้น ให้ X = จำนวนชิ้นงานเสีย\nจงหาค่า SD(X) โดยประมาณ (ปัดทศนิยม 2 ตำแหน่ง)",
+    opts: ["0.48", "0.69", "0.71", "0.87", "0.95"],
+    ans: 1,
+    explain: "ที่นี่ X ~ B(10, 0.05) เพราะสุ่มชิ้นงาน 10 ชิ้นอย่างอิสระ แต่ละชิ้นมี 2 กรณี (เสีย/ไม่เสีย)\n\nVar(X) = npq = 10 × 0.05 × 0.95 = 0.475\n\nSD(X) = √0.475 ≈ 0.6892 ≈ 0.69 ✓"
+  },
+  {
+    tag: "📘 แนว A-Level — การแจกแจงทวินาม",
+    q: "ข้อสอบปรนัย 10 ข้อ แต่ละข้อมี 4 ตัวเลือก นักเรียนคนหนึ่งเดาสุ่มคำตอบทุกข้อ\nให้ X = จำนวนข้อที่ตอบถูก จงหา P(X = 0) (ตอบผิดหมดทุกข้อ)",
+    opts: ["0.0282", "0.0563", "0.1", "0.1877", "0.25"],
+    ans: 1,
+    explain: "ที่นี่ X ~ B(10, 1/4) เพราะแต่ละข้อเดาอย่างอิสระ ความน่าจะเป็นถูก p = 1/4, ผิด q = 3/4\n\nP(X=0) = C(10,0) × (1/4)⁰ × (3/4)¹⁰ = 1 × 1 × (3/4)¹⁰\n\n(3/4)¹⁰ = 59049/1048576 ≈ 0.0563 ✓"
+  }
+];
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  let currentTag = '';
+  alevelQuestions.forEach((q, idx) => {
+    if (q.tag !== currentTag) {
+      currentTag = q.tag;
+      const sep = document.createElement('div');
+      sep.style.cssText = 'margin:32px 0 12px; padding:10px 16px; background:linear-gradient(90deg,rgba(108,99,255,0.18),transparent); border-left:4px solid var(--accent); border-radius:4px; font-size:15px; font-weight:700; color:var(--accent4); letter-spacing:0.5px;';
+      sep.textContent = '━━━  ' + currentTag + '  ━━━';
+      container.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${alevelQuestions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

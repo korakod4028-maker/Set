@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ลำดับและอนุกรม | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'aₙ Sₙ Σ r d limₙ→∞ a₁+d a₁rⁿ⁻¹';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 6px;
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>ลำดับ<span>และ</span>อนุกรม</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">15</div><div class="stat-label">ข้อสอบแนว A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="seq1">1. ลำดับ</button>
+  <button class="tab-btn" data-sec="seq2">2. ลำดับเลขคณิต</button>
+  <button class="tab-btn" data-sec="seq3">3. ลำดับเรขาคณิต</button>
+  <button class="tab-btn" data-sec="sigma">4. สัญลักษณ์ผลบวก (Σ)</button>
+  <button class="tab-btn" data-sec="series1">5. อนุกรมเลขคณิต</button>
+  <button class="tab-btn" data-sec="series2">6. อนุกรมเรขาคณิต</button>
+  <button class="tab-btn" data-sec="series3">7. อนุกรมอนันต์</button>
+  <button class="tab-btn" data-sec="apps">8. โจทย์ประยุกต์</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบแนว A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: ลำดับ ===== -->
+  <div class="section active" id="seq1">
+    <div class="section-heading"><span>บทที่ 1</span> · ลำดับ (Sequences)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔗</div>ลำดับคืออะไร?</div>
+      <p>ลำดับ (Sequence) คือ <strong>ฟังก์ชันที่มีโดเมนเป็นเซตของจำนวนนับ</strong> เขียนแทนพจน์ต่าง ๆ เรียงกันตามลำดับ</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ลำดับ คือ กลุ่มของจำนวนที่เรียงกันอย่างมีระบบ เรียกแต่ละจำนวนว่า <strong>พจน์ (Term)</strong> เขียนแทนพจน์ที่ n ด้วย <span class="math">aₙ</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        2, 4, 6, 8, 10, ... → a₁=2, a₂=4, a₃=6, ...<br>
+        1, 4, 9, 16, 25, ... → aₙ = n²
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>ลำดับจำกัด (Finite)</h4>
+          <p>มีจำนวนพจน์จำกัด เช่น 1, 3, 5, 7, 9 (5 พจน์)</p>
+        </div>
+        <div class="mini-card">
+          <h4>ลำดับอนันต์ (Infinite)</h4>
+          <p>มีพจน์ไม่สิ้นสุด เช่น 1, 3, 5, 7, 9, ...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧮</div>การหาพจน์ทั่วไป aₙ</div>
+      <p>การหา<strong>สูตรพจน์ทั่วไป</strong> ต้องสังเกตรูปแบบความสัมพันธ์ระหว่างตำแหน่ง n กับค่าของพจน์</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 1</div>
+        ลำดับ 3, 5, 7, 9, ... สังเกตว่าเพิ่มขึ้นทีละ 2 และเริ่มจาก 3<br>
+        aₙ = 2n + 1 (ตรวจสอบ: a₁=3, a₂=5, a₃=7 ✓)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 2</div>
+        ลำดับ 1, 4, 9, 16, ... คือกำลังสองของตำแหน่ง<br>
+        aₙ = n²
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคหาสูตร</div>
+        ลองหาผลต่างระหว่างพจน์ที่ติดกัน ถ้าผลต่างคงที่ → ลำดับเลขคณิต<br>
+        ลองหาอัตราส่วนระหว่างพจน์ที่ติดกัน ถ้าอัตราส่วนคงที่ → ลำดับเรขาคณิต
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔁</div>ลำดับที่นิยามแบบเวียนเกิด (Recursive)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ลำดับเวียนเกิด คือ ลำดับที่กำหนดพจน์แรก (หรือหลายพจน์แรก) แล้วนิยามพจน์ถัดไปจากพจน์ก่อนหน้า
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กำหนด a₁ = 2 และ aₙ₊₁ = aₙ + 3 (n ≥ 1)<br>
+        a₁=2, a₂=2+3=5, a₃=5+3=8, a₄=8+3=11, ...
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ต้องไล่คำนวณทีละพจน์จากพจน์เริ่มต้นเสมอ ไม่สามารถกระโดดข้ามไปหาพจน์ที่ต้องการได้โดยตรง เว้นแต่จะแปลงเป็นสูตรปิด (closed form) ได้ก่อน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: ลำดับเลขคณิต ===== -->
+  <div class="section" id="seq2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · ลำดับเลขคณิต (Arithmetic Sequence)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">➕</div>นิยามและสูตรพจน์ทั่วไป</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ลำดับเลขคณิต คือ ลำดับที่ <strong>ผลต่างระหว่างพจน์ที่ติดกันคงที่เสมอ</strong> เรียกค่าคงที่นี้ว่า <strong>ผลต่างร่วม (common difference)</strong> แทนด้วย d
+      </div>
+      <div class="math-block">
+        d = aₙ − aₙ₋₁ (ค่าคงที่ทุกคู่พจน์ที่ติดกัน)<br>
+        aₙ = a₁ + (n − 1)d
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        3, 7, 11, 15, ... → a₁ = 3, d = 4<br>
+        a₁₀ = 3 + (10−1)(4) = 3 + 36 = 39
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคหา d</div>
+        d = a₂ − a₁ = a₃ − a₂ = ... เลือกคู่ที่คำนวณง่ายที่สุด
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔍</div>การหา a₁ และ d เมื่อรู้สองพจน์</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กำหนด a₃ = 11 และ a₇ = 23 จงหา a₁ และ d<br><br>
+        <strong>วิธีทำ:</strong> a₇ − a₃ = 4d (ห่างกัน 4 ตำแหน่ง)<br>
+        23 − 11 = 4d → d = 3<br>
+        a₃ = a₁ + 2d → 11 = a₁ + 6 → a₁ = 5
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        จำนวนช่วง (ผลต่างของ d) ระหว่างพจน์ที่ m และพจน์ที่ n คือ <span class="math">|n − m|</span> ไม่ใช่ n − m + 1
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⚖️</div>ค่าเฉลี่ยเลขคณิต (Arithmetic Mean)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ค่าเฉลี่ยเลขคณิตระหว่าง a และ b คือ ค่ากึ่งกลางที่ทำให้ a, A, b เป็นลำดับเลขคณิต
+      </div>
+      <div class="math-block">A = (a + b) / 2</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ค่าเฉลี่ยเลขคณิตระหว่าง 8 และ 20 คือ (8+20)/2 = 14
+      </div>
+      <div class="sub-heading">การแทรกค่าเฉลี่ยเลขคณิตหลายค่า</div>
+      <p>ถ้าต้องการแทรกค่าเฉลี่ยเลขคณิต k ค่า ระหว่าง a และ b จะได้ลำดับทั้งหมด k+2 พจน์ (รวม a และ b)</p>
+      <div class="math-block">d = (b − a) / (k + 1)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แทรกค่าเฉลี่ยเลขคณิต 3 ค่า ระหว่าง 5 และ 25 (รวมเป็น 5 พจน์)<br>
+        d = (25−5)/(3+1) = 20/4 = 5<br>
+        ลำดับ: 5, 10, 15, 20, 25 → ค่าที่แทรกคือ 10, 15, 20
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ลำดับเรขาคณิต ===== -->
+  <div class="section" id="seq3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · ลำดับเรขาคณิต (Geometric Sequence)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✖️</div>นิยามและสูตรพจน์ทั่วไป</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ลำดับเรขาคณิต คือ ลำดับที่ <strong>อัตราส่วนระหว่างพจน์ที่ติดกันคงที่เสมอ</strong> เรียกค่าคงที่นี้ว่า <strong>อัตราส่วนร่วม (common ratio)</strong> แทนด้วย r
+      </div>
+      <div class="math-block">
+        r = aₙ / aₙ₋₁ (ค่าคงที่ทุกคู่พจน์ที่ติดกัน, aₙ₋₁ ≠ 0)<br>
+        aₙ = a₁ · rⁿ⁻¹
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        2, 6, 18, 54, ... → a₁ = 2, r = 3<br>
+        a₆ = 2 · 3⁵ = 2 · 243 = 486
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        r อาจเป็นค่าลบได้ (ทำให้เครื่องหมายของพจน์สลับ + / −) หรือเป็นเศษส่วนก็ได้ (ทำให้ค่าพจน์ลดลงเรื่อย ๆ)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔍</div>การหา a₁ และ r เมื่อรู้สองพจน์</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กำหนด a₂ = 6 และ a₅ = 48 จงหา a₁ และ r<br><br>
+        <strong>วิธีทำ:</strong> a₅ / a₂ = r³ (ห่างกัน 3 ตำแหน่ง)<br>
+        48 / 6 = r³ → r³ = 8 → r = 2<br>
+        a₂ = a₁ · r → 6 = a₁ · 2 → a₁ = 3
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⚖️</div>ค่าเฉลี่ยเรขาคณิต (Geometric Mean)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ค่าเฉลี่ยเรขาคณิตระหว่าง a และ b (ที่มีเครื่องหมายเดียวกัน) คือค่า G ที่ทำให้ a, G, b เป็นลำดับเรขาคณิต
+      </div>
+      <div class="math-block">G = ±√(ab)  (เลือกเครื่องหมายให้สอดคล้องกับ a และ b)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ค่าเฉลี่ยเรขาคณิตระหว่าง 4 และ 100 (ค่าบวก) คือ √(4×100) = √400 = 20
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        เปรียบเทียบ: ค่าเฉลี่ยเลขคณิต A = (a+b)/2 (การบวก-หาร) แต่ค่าเฉลี่ยเรขาคณิต G = √(ab) (การคูณ-ถอดราก) — เข้าคู่กับชื่อของลำดับแต่ละแบบ
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: สัญลักษณ์ผลบวก (Sigma) ===== -->
+  <div class="section" id="sigma">
+    <div class="section-heading"><span>หัวข้อ 4</span> · สัญลักษณ์แทนการบวก (Σ)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">Σ</div>ความหมายของสัญลักษณ์ผลบวก</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        <span class="math">Σᵢ₌₁ⁿ aᵢ</span> หมายถึง ผลบวกของพจน์ a₁ + a₂ + a₃ + ... + aₙ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        Σᵢ₌₁⁵ i = 1+2+3+4+5 = 15<br>
+        Σᵢ₌₁⁴ (2i) = 2+4+6+8 = 20
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>สมบัติของสัญลักษณ์ผลบวก</div>
+      <div class="math-block">
+        Σᵢ₌₁ⁿ c = cn  (c เป็นค่าคงที่)<br>
+        Σᵢ₌₁ⁿ (aᵢ + bᵢ) = Σaᵢ + Σbᵢ<br>
+        Σᵢ₌₁ⁿ (k·aᵢ) = k·Σaᵢ  (k เป็นค่าคงที่)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        Σᵢ₌₁¹⁰ (2i + 1) = 2·Σᵢ₌₁¹⁰i + Σᵢ₌₁¹⁰1 = 2(55) + 10 = 120
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧾</div>สูตรลัดผลบวกที่ต้องจำ</div>
+      <table>
+        <tr><th>ผลบวก</th><th>สูตร</th></tr>
+        <tr><td>Σᵢ₌₁ⁿ i</td><td>n(n+1)/2</td></tr>
+        <tr><td>Σᵢ₌₁ⁿ i²</td><td>n(n+1)(2n+1)/6</td></tr>
+        <tr><td>Σᵢ₌₁ⁿ i³</td><td>[n(n+1)/2]²</td></tr>
+      </table>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        Σᵢ₌₁⁵ i² = 5(6)(11)/6 = 55 (ตรวจสอบ: 1+4+9+16+25 = 55 ✓)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคการใช้งาน</div>
+        เมื่อเจอผลบวกที่มีพจน์ผสม เช่น Σ(3i² − 2i + 1) ให้แยกเป็นผลบวกย่อยแต่ละส่วนแล้วใช้สูตรลัดทีละส่วน
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: อนุกรมเลขคณิต ===== -->
+  <div class="section" id="series1">
+    <div class="section-heading"><span>บทที่ 2</span> · อนุกรมเลขคณิต (Arithmetic Series)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">Σ</div>อนุกรมคืออะไร?</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        อนุกรม (Series) คือ ผลบวกของพจน์ในลำดับ เขียนแทนผลบวก n พจน์แรกด้วย <span class="math">Sₙ</span>
+      </div>
+      <div class="math-block">Sₙ = a₁ + a₂ + a₃ + ... + aₙ</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>สูตรผลบวก n พจน์แรกของอนุกรมเลขคณิต</div>
+      <div class="math-block">
+        Sₙ = n/2 (a₁ + aₙ)<br>
+        Sₙ = n/2 [2a₁ + (n−1)d]
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        1 + 4 + 7 + 10 + ... (20 พจน์แรก) → a₁=1, d=3<br>
+        a₂₀ = 1 + 19(3) = 58<br>
+        S₂₀ = 20/2 (1 + 58) = 10 × 59 = 590
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคเลือกสูตร</div>
+        ถ้ารู้ a₁ กับ aₙ อยู่แล้ว ใช้สูตรแรก (เร็วกว่า) — ถ้ารู้แค่ a₁ กับ d ใช้สูตรที่สอง
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔗</div>ความสัมพันธ์ระหว่าง Sₙ และ aₙ</div>
+      <div class="def-box">
+        <div class="def-label">สูตรสำคัญ</div>
+        aₙ = Sₙ − Sₙ₋₁  (สำหรับ n ≥ 2)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กำหนด Sₙ = n² + 2n จงหา a₅<br>
+        S₅ = 25+10 = 35, S₄ = 16+8 = 24<br>
+        a₅ = S₅ − S₄ = 35 − 24 = 11
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔎</div>การหาจำนวนพจน์ (n) จาก Sₙ</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        อนุกรมเลขคณิต a₁ = 5, d = 3 มี Sₙ = 440 จงหาค่า n<br><br>
+        <strong>วิธีทำ:</strong> Sₙ = n/2[2(5)+3(n−1)] = n/2[3n+7] = 440<br>
+        n(3n+7) = 880 → 3n² + 7n − 880 = 0<br>
+        แยกตัวประกอบ/ใช้สูตร: n = 16 (ค่า n ต้องเป็นจำนวนนับ ปฏิเสธคำตอบที่ติดลบ)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        เมื่อแก้สมการกำลังสองได้สองคำตอบ ต้องเลือกเฉพาะ <strong>n ที่เป็นจำนวนนับ (บวกและเป็นจำนวนเต็ม)</strong> เท่านั้น
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: อนุกรมเรขาคณิต ===== -->
+  <div class="section" id="series2">
+    <div class="section-heading"><span>หัวข้อ 6</span> · อนุกรมเรขาคณิต (Geometric Series)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📐</div>สูตรผลบวก n พจน์แรกของอนุกรมเรขาคณิต</div>
+      <div class="math-block">
+        Sₙ = a₁(1 − rⁿ) / (1 − r)   เมื่อ r ≠ 1<br>
+        หรือเทียบเท่า Sₙ = a₁(rⁿ − 1) / (r − 1)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        3 + 6 + 12 + 24 + ... (6 พจน์แรก) → a₁=3, r=2<br>
+        S₆ = 3(2⁶ − 1)/(2 − 1) = 3(63)/1 = 189
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคเลือกสูตร</div>
+        ถ้า r &gt; 1 มักใช้รูป (rⁿ−1)/(r−1) เพื่อให้ตัวเศษและส่วนเป็นบวกทั้งคู่ คำนวณง่ายกว่า
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กรณีพิเศษ r = 1</div>
+        ถ้า r = 1 ทุกพจน์มีค่าเท่ากับ a₁ ดังนั้น Sₙ = n·a₁ (ใช้สูตรเดิมไม่ได้ เพราะส่วนเป็น 0)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔎</div>การหาจำนวนพจน์ (n) จาก Sₙ</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        อนุกรมเรขาคณิต a₁ = 3, r = 2 มี Sₙ = 381 จงหาค่า n<br><br>
+        <strong>วิธีทำ:</strong> Sₙ = 3(2ⁿ−1)/(2−1) = 3(2ⁿ−1) = 381<br>
+        2ⁿ − 1 = 127 → 2ⁿ = 128 = 2⁷ → n = 7
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: อนุกรมอนันต์ ===== -->
+  <div class="section" id="series3">
+    <div class="section-heading"><span>หัวข้อ 7</span> · อนุกรมอนันต์ (Infinite Series)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">∞</div>อนุกรมเรขาคณิตอนันต์ที่ลู่เข้า</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เมื่อ n เพิ่มขึ้นไม่มีที่สิ้นสุด ผลบวก Sₙ ของอนุกรมเรขาคณิตจะ<strong>ลู่เข้าสู่ค่าคงที่ค่าหนึ่ง</strong> ได้ก็ต่อเมื่อ <span class="math">|r| &lt; 1</span>
+      </div>
+      <div class="math-block">S = a₁ / (1 − r)   เมื่อ |r| &lt; 1</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        8 + 4 + 2 + 1 + ... → a₁ = 8, r = 1/2<br>
+        S = 8 / (1 − 1/2) = 8 / (1/2) = 16
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กรณีลู่ออก (Divergent)</div>
+        ถ้า |r| ≥ 1 อนุกรมจะ<strong>ไม่มีผลบวกจำกัด</strong> (ไม่ลู่เข้า) จึงหาค่า S แบบนี้ไม่ได้
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔢</div>การเขียนทศนิยมซ้ำเป็นเศษส่วน</div>
+      <p>ทศนิยมซ้ำสามารถมองเป็นอนุกรมเรขาคณิตอนันต์ได้</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        0.777... = 7/10 + 7/100 + 7/1000 + ...<br>
+        a₁ = 7/10, r = 1/10<br>
+        S = (7/10) / (1 − 1/10) = (7/10)/(9/10) = 7/9
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        ทศนิยมซ้ำ 1 ตำแหน่งซ้ำ (0.ẋ) → เศษส่วนที่มีตัวส่วนเป็น 9 (เช่น 0.7̇ = 7/9)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🏀</div>โจทย์ประยุกต์ — ระยะทางลูกบอลกระดอน</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ปล่อยลูกบอลจากความสูง 20 เมตร แต่ละครั้งที่กระดอนขึ้นจะสูงเป็น 1/2 ของครั้งก่อน จงหาระยะทางรวมทั้งหมดที่ลูกบอลเคลื่อนที่จนหยุดนิ่ง<br><br>
+        <strong>แนวคิด:</strong> ระยะตกครั้งแรก = 20 ม.<br>
+        หลังจากนั้นลูกบอลจะกระดอนขึ้น-ลง ซ้ำ ๆ ด้วยความสูงที่ลดลงเป็นอัตราส่วนเรขาคณิต จึงนับระยะขึ้น-ลงรวมเป็น 2 เท่าของผลบวกอนันต์ของความสูงที่กระดอน<br><br>
+        ระยะทางรวม = 20 + 2 × [20(1/2) / (1 − 1/2)] = 20 + 2(20) = <strong>60 เมตร</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 8: โจทย์ประยุกต์ ===== -->
+  <div class="section" id="apps">
+    <div class="section-heading"><span>บทที่ 3</span> · โจทย์ประยุกต์ลำดับและอนุกรม</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🏦</div>ดอกเบี้ยทบต้น (Compound Interest)</div>
+      <p>เงินฝากที่ได้ดอกเบี้ยทบต้นจะเติบโตแบบ<strong>ลำดับเรขาคณิต</strong> เพราะแต่ละปีคูณด้วยอัตราเติบโตคงที่</p>
+      <div class="math-block">Aₙ = A₀(1 + i)ⁿ</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ฝากเงิน 10,000 บาท ดอกเบี้ยทบต้น 5% ต่อปี หลังจาก 3 ปี จะมีเงินเท่าใด<br><br>
+        A₃ = 10,000 × (1.05)³ = 10,000 × 1.157625 ≈ <strong>11,576 บาท</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">👥</div>การเติบโตของประชากร</div>
+      <p>ถ้าประชากรเพิ่มขึ้นเป็น<strong>อัตราร้อยละคงที่</strong>ทุกปี ก็จัดเป็นลำดับเรขาคณิตเช่นกัน</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        เมืองหนึ่งมีประชากร 5,000 คน เพิ่มขึ้นปีละ 4% หลังจาก 2 ปี ประชากรจะมีประมาณเท่าใด<br><br>
+        P₂ = 5,000 × (1.04)² = 5,000 × 1.0816 = <strong>5,408 คน</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🎫</div>โจทย์การจัดเรียง / เวียนเกิด</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        กำหนด a₁ = 2 และ aₙ₊₁ = aₙ + 3n จงหาค่า a₅<br><br>
+        a₁=2<br>
+        a₂ = a₁ + 3(1) = 2+3 = 5<br>
+        a₃ = a₂ + 3(2) = 5+6 = 11<br>
+        a₄ = a₃ + 3(3) = 11+9 = 20<br>
+        a₅ = a₄ + 3(4) = 20+12 = <strong>32</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคโจทย์เวียนเกิด</div>
+        ไล่คำนวณทีละพจน์อย่างมีระบบ เขียนตารางหรือรายการกำกับไว้กันสับสน โดยเฉพาะเมื่อสูตรเวียนเกิดมีตัวแปร n ปนอยู่ด้วย
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧩</div>โจทย์ผสม Sₙ สองค่า</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        อนุกรมเลขคณิตมี S₃ = 15 และ S₆ = 66 จงหา a₁, d และ S₁₀<br><br>
+        S₃ = 3/2(2a₁+2d) = 3(a₁+d) = 15 → a₁+d = 5<br>
+        S₆ = 6/2(2a₁+5d) = 3(2a₁+5d) = 66 → 2a₁+5d = 22<br><br>
+        แทน a₁ = 5−d: 2(5−d)+5d = 22 → 10+3d = 22 → d = 4, a₁ = 1<br>
+        S₁₀ = 10/2[2(1)+9(4)] = 5(38) = <strong>190</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมลำดับและอนุกรมทั้งเลขคณิตและเรขาคณิต เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบแนว A-Level ลำดับและอนุกรม</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">โจทย์ฝึกหัดที่จำลองรูปแบบและระดับความยากของข้อสอบ A-Level คณิตศาสตร์ประยุกต์ 1 (ไม่ใช่ข้อสอบจริงจากปีใดปีหนึ่ง)</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      เรื่องลำดับและอนุกรมมักออกสอบประมาณ 2-4 ข้อในข้อสอบ A-Level — ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบายทีละขั้นตอน
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — ลำดับเลขคณิต",
+    q: "ลำดับเลขคณิต 3, 7, 11, 15, ... จงหาพจน์ที่ 10",
+    opts: ["35", "37", "39", "41"],
+    ans: 2,
+    explain: "หา a₁ และ d จากลำดับ:\na₁ = 3, d = 7−3 = 4\n\nใช้สูตร aₙ = a₁ + (n−1)d\na₁₀ = 3 + (10−1)(4) = 3 + 36 = 39 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — ลำดับเรขาคณิต",
+    q: "ลำดับเรขาคณิต 2, 6, 18, 54, ... จงหาพจน์ที่ 6",
+    opts: ["162", "324", "486", "648"],
+    ans: 2,
+    explain: "หา a₁ และ r จากลำดับ:\na₁ = 2, r = 6/2 = 3\n\nใช้สูตร aₙ = a₁ · rⁿ⁻¹\na₆ = 2 · 3⁵ = 2 · 243 = 486 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ลำดับเลขคณิต",
+    q: "กำหนด a₁ = 5 และ d = −3 จงหาพจน์ที่ 15",
+    opts: ["−37", "−32", "−40", "−35"],
+    ans: 0,
+    explain: "ใช้สูตร aₙ = a₁ + (n−1)d\na₁₅ = 5 + (15−1)(−3) = 5 + 14(−3) = 5 − 42 = −37 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — อนุกรมเลขคณิต",
+    q: "อนุกรมเลขคณิต 1 + 4 + 7 + 10 + ... (20 พจน์แรก) จงหาผลบวก",
+    opts: ["570", "580", "590", "600"],
+    ans: 2,
+    explain: "หา a₂₀ ก่อน: a₁=1, d=3\na₂₀ = 1 + (20−1)(3) = 1 + 57 = 58\n\nใช้สูตร Sₙ = n/2 (a₁+aₙ)\nS₂₀ = 20/2 (1+58) = 10 × 59 = 590 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — อนุกรมเรขาคณิต",
+    q: "อนุกรมเรขาคณิต a₁ = 3, r = 2 จงหาผลบวก 6 พจน์แรก (S₆)",
+    opts: ["189", "186", "192", "180"],
+    ans: 0,
+    explain: "ใช้สูตร Sₙ = a₁(rⁿ−1)/(r−1)\nS₆ = 3(2⁶−1)/(2−1) = 3(64−1)/1 = 3(63) = 189 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ค่าเฉลี่ย",
+    q: "จงหาค่าเฉลี่ยเลขคณิตระหว่าง 8 และ 20",
+    opts: ["12", "13", "14", "16"],
+    ans: 2,
+    explain: "ใช้สูตรค่าเฉลี่ยเลขคณิต A = (a+b)/2\nA = (8+20)/2 = 28/2 = 14 ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — ค่าเฉลี่ย",
+    q: "จงหาค่าเฉลี่ยเรขาคณิต (ค่าบวก) ระหว่าง 4 และ 16",
+    opts: ["8", "10", "6", "12"],
+    ans: 0,
+    explain: "ใช้สูตรค่าเฉลี่ยเรขาคณิต G = √(ab)\nG = √(4×16) = √64 = 8 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — สัญลักษณ์ผลบวก",
+    q: "จงหาผลบวก Σᵢ₌₁¹⁰ (2i + 1)",
+    opts: ["100", "110", "120", "130"],
+    ans: 2,
+    explain: "แยกผลบวกโดยใช้สมบัติของสัญลักษณ์ Σ:\nΣ(2i+1) = 2Σi + Σ1\n\nΣᵢ₌₁¹⁰ i = 10(11)/2 = 55\nΣᵢ₌₁¹⁰ 1 = 10\n\nดังนั้น = 2(55) + 10 = 110 + 10 = 120 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — อนุกรมอนันต์",
+    q: "อนุกรมเรขาคณิตอนันต์ a₁ = 8, r = 1/2 จงหาผลบวกอนันต์",
+    opts: ["12", "14", "16", "20"],
+    ans: 2,
+    explain: "เนื่องจาก |r| = 1/2 < 1 อนุกรมนี้ลู่เข้า สามารถใช้สูตรผลบวกอนันต์ได้\n\nS = a₁ / (1−r) = 8 / (1 − 1/2) = 8 / (1/2) = 16 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — โจทย์ผสม",
+    q: "ลำดับเลขคณิตมี a₃ = 11 และ a₇ = 23 จงหาพจน์ที่ 10 (a₁₀)",
+    opts: ["29", "32", "35", "38"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หา d จากระยะห่าง 4 ตำแหน่งระหว่าง a₃ กับ a₇\na₇ − a₃ = 4d → 23 − 11 = 4d → d = 3\n\nขั้นที่ 2: หา a₁ จาก a₃\na₃ = a₁ + 2d → 11 = a₁ + 6 → a₁ = 5\n\nขั้นที่ 3: หา a₁₀\na₁₀ = a₁ + 9d = 5 + 27 = 32 ✓"
+  }
+];
+
+// ===== ข้อสอบแนว A-Level 15 ข้อ =====
+const alevelQuestions = [
+  {
+    year: "📘 แนว A-Level — ลำดับเลขคณิต",
+    q: "กำหนดลำดับเลขคณิต a₁ = 7 และ a₅ = 19 จงหาพจน์ที่ 20 (a₂₀)",
+    opts: ["60", "64", "67", "70"],
+    ans: 1,
+    explain: "ขั้นที่ 1: หาค่า d\na₅ − a₁ = 4d (ห่างกัน 4 ตำแหน่ง)\n19 − 7 = 4d → d = 3\n\nขั้นที่ 2: หา a₂₀\na₂₀ = a₁ + (20−1)d = 7 + 19(3) = 7 + 57 = 64 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — ลำดับเรขาคณิต",
+    q: "กำหนดลำดับเรขาคณิต a₂ = 6 และ a₅ = 48 จงหาพจน์ที่ 7 (a₇)",
+    opts: ["96", "144", "192", "216"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาค่า r\na₅ / a₂ = r³ (ห่างกัน 3 ตำแหน่ง)\n48/6 = r³ → r³ = 8 → r = 2\n\nขั้นที่ 2: หา a₁\na₂ = a₁·r → 6 = a₁(2) → a₁ = 3\n\nขั้นที่ 3: หา a₇\na₇ = a₁·r⁶ = 3 · 2⁶ = 3 · 64 = 192 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — ค่าเฉลี่ยเลขคณิต",
+    q: "แทรกค่าเฉลี่ยเลขคณิต 3 ค่า ระหว่าง 5 และ 25 จงหาผลรวมของค่าที่แทรกทั้ง 3 ค่า",
+    opts: ["40", "45", "50", "55"],
+    ans: 1,
+    explain: "ขั้นที่ 1: เมื่อแทรก 3 ค่า จะได้ลำดับทั้งหมด 5 พจน์ (รวม 5 และ 25)\nd = (25−5)/(3+1) = 20/4 = 5\n\nขั้นที่ 2: หาลำดับทั้งหมด\n5, 10, 15, 20, 25\nค่าที่แทรกคือ 10, 15, 20\n\nขั้นที่ 3: หาผลรวม\n10+15+20 = 45 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — ค่าเฉลี่ยเรขาคณิต",
+    q: "แทรกค่าเฉลี่ยเรขาคณิต 1 ค่า (ค่าบวก) ระหว่าง 4 และ 100 จงหาค่านั้น",
+    opts: ["20", "40", "50", "25"],
+    ans: 0,
+    explain: "ใช้สูตรค่าเฉลี่ยเรขาคณิต G = √(ab)\nG = √(4×100) = √400 = 20 ✓\n\n(ตรวจสอบ: 4, 20, 100 มีอัตราส่วนร่วม r = 5 ทั้งคู่ → 20/4=5, 100/20=5 ✓)"
+  },
+  {
+    year: "📘 แนว A-Level — สัญลักษณ์ผลบวก",
+    q: "จงหาผลบวก Σᵢ₌₁²⁰ (3i − 2)",
+    opts: ["570", "580", "590", "600"],
+    ans: 2,
+    explain: "แยกผลบวก: Σ(3i−2) = 3Σi − Σ2\n\nΣᵢ₌₁²⁰ i = 20(21)/2 = 210\nΣᵢ₌₁²⁰ 2 = 2×20 = 40\n\nดังนั้น = 3(210) − 40 = 630 − 40 = 590 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — สูตรลัดผลบวก",
+    q: "จงหาผลบวก Σᵢ₌₁⁵ i²",
+    opts: ["50", "55", "60", "65"],
+    ans: 1,
+    explain: "ใช้สูตรลัด Σᵢ₌₁ⁿ i² = n(n+1)(2n+1)/6\n\nΣᵢ₌₁⁵ i² = 5(6)(11)/6 = 330/6 = 55 ✓\n\n(ตรวจสอบโดยตรง: 1+4+9+16+25 = 55 ✓)"
+  },
+  {
+    year: "📘 แนว A-Level — อนุกรมเลขคณิต",
+    q: "อนุกรมเลขคณิต a₁ = 5, d = 3 มีผลบวก Sₙ = 440 จงหาค่า n",
+    opts: ["14", "15", "16", "18"],
+    ans: 2,
+    explain: "ใช้สูตร Sₙ = n/2[2a₁+(n−1)d]\n440 = n/2[10+3(n−1)] = n/2[3n+7]\n880 = n(3n+7) = 3n²+7n\n\nแก้สมการ 3n²+7n−880 = 0\nพิจารณาตัวประกอบ (n−16)(3n+55) = 0\nได้ n = 16 หรือ n = −55/3 (ปฏิเสธ เพราะ n ต้องเป็นจำนวนนับ)\n\nดังนั้น n = 16 ✓\n\nตรวจสอบ: a₁₆ = 5+15(3) = 50, S₁₆ = 16/2(5+50) = 8(55) = 440 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — อนุกรมเรขาคณิต",
+    q: "อนุกรมเรขาคณิต a₁ = 3, r = 2 มีผลบวก Sₙ = 381 จงหาค่า n",
+    opts: ["6", "7", "8", "9"],
+    ans: 1,
+    explain: "ใช้สูตร Sₙ = a₁(rⁿ−1)/(r−1)\n381 = 3(2ⁿ−1)/(2−1) = 3(2ⁿ−1)\n127 = 2ⁿ−1\n2ⁿ = 128 = 2⁷\n\nดังนั้น n = 7 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — อนุกรมอนันต์",
+    q: "จงเขียนทศนิยมซ้ำ 0.777... ในรูปเศษส่วนอย่างต่ำ",
+    opts: ["7/9", "7/90", "70/99", "77/100"],
+    ans: 0,
+    explain: "มองเป็นอนุกรมเรขาคณิตอนันต์:\n0.777... = 7/10 + 7/100 + 7/1000 + ...\na₁ = 7/10, r = 1/10\n\nใช้สูตร S = a₁/(1−r)\nS = (7/10) / (1−1/10) = (7/10)/(9/10) = 7/9 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — โจทย์ประยุกต์ (ฟิสิกส์)",
+    q: "ปล่อยลูกบอลจากความสูง 20 เมตร แต่ละครั้งที่กระดอนขึ้นจะสูงเป็น 1/2 ของครั้งก่อน จงหาระยะทางรวมที่ลูกบอลเคลื่อนที่จนหยุดนิ่ง",
+    opts: ["40 เมตร", "50 เมตร", "60 เมตร", "80 เมตร"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ระยะตกลงครั้งแรก = 20 เมตร\n\nขั้นที่ 2: หลังจากนั้นลูกบอลกระดอนขึ้น-ลงซ้ำ ๆ ด้วยความสูงที่ลดลงเป็นลำดับเรขาคณิต (a₁=20×1/2=10, r=1/2) นับระยะขึ้น-ลงรวมเป็น 2 เท่าของผลบวกอนันต์นี้\n\nผลบวกอนันต์ของความสูงกระดอน = 10/(1−1/2) = 20\n\nขั้นที่ 3: ระยะทางรวม = 20 + 2(20) = 20+40 = 60 เมตร ✓"
+  },
+  {
+    year: "📘 แนว A-Level — โจทย์ประยุกต์ (การเงิน)",
+    q: "ฝากเงิน 10,000 บาท ดอกเบี้ยทบต้นปีละ 5% หลังจาก 3 ปี จะมีเงินประมาณเท่าใด",
+    opts: ["11,500 บาท", "11,576 บาท", "11,625 บาท", "12,000 บาท"],
+    ans: 1,
+    explain: "เงินที่ได้ดอกเบี้ยทบต้นเติบโตแบบลำดับเรขาคณิต ใช้สูตร Aₙ = A₀(1+i)ⁿ\n\nA₃ = 10,000 × (1.05)³ = 10,000 × 1.157625 = 11,576.25\n\nปัดเป็นจำนวนเต็ม ≈ 11,576 บาท ✓"
+  },
+  {
+    year: "📘 แนว A-Level — ลำดับเวียนเกิด",
+    q: "กำหนด a₁ = 2 และ aₙ₊₁ = aₙ + 3n จงหาค่า a₅",
+    opts: ["26", "29", "32", "35"],
+    ans: 2,
+    explain: "ไล่คำนวณทีละพจน์:\na₁ = 2\na₂ = a₁ + 3(1) = 2+3 = 5\na₃ = a₂ + 3(2) = 5+6 = 11\na₄ = a₃ + 3(3) = 11+9 = 20\na₅ = a₄ + 3(4) = 20+12 = 32 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — โจทย์ผสม Sₙ",
+    q: "อนุกรมเลขคณิตมี S₃ = 15 และ S₆ = 66 จงหาผลบวก 10 พจน์แรก (S₁₀)",
+    opts: ["170", "180", "190", "200"],
+    ans: 2,
+    explain: "ขั้นที่ 1: ตั้งสมการจาก S₃ และ S₆\nS₃ = 3/2(2a₁+2d) = 3(a₁+d) = 15 → a₁+d = 5  ... (1)\nS₆ = 6/2(2a₁+5d) = 3(2a₁+5d) = 66 → 2a₁+5d = 22  ... (2)\n\nขั้นที่ 2: แก้ระบบสมการ\nจาก (1): a₁ = 5−d แทนใน (2)\n2(5−d)+5d = 22 → 10+3d = 22 → d = 4, a₁ = 1\n\nขั้นที่ 3: หา S₁₀\nS₁₀ = 10/2[2(1)+9(4)] = 5[2+36] = 5(38) = 190 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — โจทย์ประยุกต์ (ประชากร)",
+    q: "เมืองหนึ่งมีประชากร 5,000 คน เพิ่มขึ้นปีละ 4% หลังจาก 2 ปี ประชากรจะมีประมาณเท่าใด",
+    opts: ["5,200 คน", "5,400 คน", "5,408 คน", "5,600 คน"],
+    ans: 2,
+    explain: "ประชากรเติบโตแบบลำดับเรขาคณิต ใช้สูตร Pₙ = P₀(1+i)ⁿ\n\nP₂ = 5,000 × (1.04)² = 5,000 × 1.0816 = 5,408 คน ✓"
+  },
+  {
+    year: "📘 แนว A-Level — สูตรลัดผลบวก",
+    q: "จงหาผลบวกของจำนวนคี่บวก 15 ตัวแรก (1+3+5+...+29)",
+    opts: ["200", "210", "225", "240"],
+    ans: 2,
+    explain: "ผลบวกของจำนวนคี่บวก n ตัวแรกมีสูตรลัดคือ n²\n(สามารถพิสูจน์ได้จาก Σᵢ₌₁ⁿ(2i−1) = 2·Σi − Σ1 = n(n+1) − n = n²)\n\nเมื่อ n = 15: ผลบวก = 15² = 225 ✓\n\nตรวจสอบด้วยสูตรอนุกรมเลขคณิต: a₁=1, d=2, a₁₅=1+14(2)=29\nS₁₅ = 15/2(1+29) = 15/2(30) = 225 ✓"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  alevelQuestions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>

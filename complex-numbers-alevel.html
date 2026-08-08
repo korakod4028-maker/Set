@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จำนวนเชิงซ้อน | คณิตศาสตร์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'i² = −1  z = a+bi  |z|  z̄  reⁱθ';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 4px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+  .math-latex {
+    font-family: var(--sans);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* ARGAND / DIAGRAM */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+  .reset-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    display: none;
+  }
+  .reset-btn.show { display: inline-block; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* PROGRESS */
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .prog-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .prog-dot.done { background: var(--accent2); }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">คณิตศาสตร์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>จำนวน<span>เชิงซ้อน</span></h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">โจทย์แนว A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="cx1">1. นิยามจำนวนเชิงซ้อน</button>
+  <button class="tab-btn" data-sec="cx2">2. บวก ลบ คูณ หาร</button>
+  <button class="tab-btn" data-sec="cx3">3. สังยุค/ค่าสัมบูรณ์</button>
+  <button class="tab-btn" data-sec="cx4">4. อาร์กองด์/รูปเชิงขั้ว</button>
+  <button class="tab-btn" data-sec="cx5">5. คูณ-หารเชิงขั้ว/เดอมัวร์</button>
+  <button class="tab-btn" data-sec="cx6">6. รากที่ n</button>
+  <button class="tab-btn" data-sec="cx7">7. สมการพหุนามเชิงซ้อน</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 โจทย์แนว A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: นิยามจำนวนเชิงซ้อน ===== -->
+  <div class="section active" id="cx1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · นิยามจำนวนเชิงซ้อน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">✨</div>หน่วยจินตภาพ i</div>
+      <p>สมการ <span class="math">x² + 1 = 0</span> ไม่มีคำตอบในจำนวนจริง เพราะไม่มีจำนวนจริงใดยกกำลังสองแล้วได้ค่าลบ นักคณิตศาสตร์จึงนิยาม <strong>หน่วยจินตภาพ i</strong> ขึ้นมาเพื่อแก้ปัญหานี้</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        <span class="math">i</span> คือจำนวนที่สอดคล้องกับ <span class="math">i² = −1</span> หรือกล่าวได้ว่า <span class="math">i = √(−1)</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — รากที่สองของจำนวนลบ</div>
+        √(−9) = √(9 × −1) = √9 × √(−1) = 3i<br>
+        √(−20) = √(20) × i = 2√5 · i
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        กฎ √a · √b = √(ab) ใช้ได้เฉพาะเมื่อ a, b ≥ 0 เท่านั้น ห้ามใช้กฎนี้ตรง ๆ กับจำนวนลบสองตัว เช่น √(−4)·√(−9) ≠ √36 (ต้องเปลี่ยนเป็นรูป i ก่อนคูณเสมอ: 2i·3i = 6i² = −6)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧮</div>รูปแบบมาตรฐาน a + bi</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        จำนวนเชิงซ้อน z เขียนในรูปแบบมาตรฐานได้เป็น <span class="math">z = a + bi</span> เมื่อ a, b ∈ ℝ<br>
+        เรียก a ว่า <strong>ส่วนจริง</strong> เขียนแทนด้วย Re(z) และเรียก b ว่า <strong>ส่วนจินตภาพ</strong> เขียนแทนด้วย Im(z)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        z = 3 − 4i → Re(z) = 3, Im(z) = −4
+      </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>จำนวนจริง</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ถ้า b = 0 จะได้ z = a ซึ่งคือจำนวนจริงธรรมดา ดังนั้น ℝ ⊂ ℂ</p>
+        </div>
+        <div class="mini-card">
+          <h4>จำนวนจินตภาพแท้</h4>
+          <p style="font-size:13px; color:var(--text-dim)">ถ้า a = 0 และ b ≠ 0 จะได้ z = bi เรียกว่าจำนวนจินตภาพแท้ (pure imaginary)</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ระบบจำนวน</div>
+        ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ ⊂ ℂ — จำนวนเชิงซ้อน (ℂ) เป็นระบบจำนวนที่กว้างที่สุดที่เราเรียนในระดับมัธยม
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">⚖️</div>ความเท่ากันของจำนวนเชิงซ้อน</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        a + bi = c + di ก็ต่อเมื่อ <strong>a = c และ b = d</strong> (ส่วนจริงเท่ากัน และส่วนจินตภาพเท่ากัน พร้อมกัน)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ถ้า (2x − 1) + (y + 3)i = 5 + 2i แล้ว<br>
+        2x − 1 = 5 → x = 3<br>
+        y + 3 = 2 → y = −1
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        หลักการนี้ใช้ได้เมื่อทั้งสองข้างเขียนในรูปมาตรฐาน a+bi แล้วเท่านั้น (จัดรูปให้เรียบร้อยก่อนเทียบสัมประสิทธิ์เสมอ)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔁</div>กำลังของ i</div>
+      <p>เนื่องจาก i² = −1 ทำให้กำลังของ i มีรูปแบบวนซ้ำทุก 4 รอบ</p>
+      <table>
+        <tr><th>i¹</th><th>i²</th><th>i³</th><th>i⁴</th></tr>
+        <tr><td>i</td><td class="false-val">−1</td><td>−i</td><td class="true-val">1</td></tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคหา iⁿ อย่างรวดเร็ว</div>
+        นำ n หารด้วย 4 แล้วดูเศษ:<br>
+        เศษ 1 → i &nbsp;&nbsp; เศษ 2 → −1 &nbsp;&nbsp; เศษ 3 → −i &nbsp;&nbsp; เศษ 0 → 1
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        หาค่า i²³<br>
+        23 ÷ 4 = 5 เศษ 3 → i²³ = i³ = −i ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: บวก ลบ คูณ หาร ===== -->
+  <div class="section" id="cx2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · การบวก ลบ คูณ หาร</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">➕</div>การบวกและการลบ</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        บวก/ลบส่วนจริงกับส่วนจริง และส่วนจินตภาพกับส่วนจินตภาพ แยกกัน
+      </div>
+      <div class="math-block">
+        (a + bi) + (c + di) = (a+c) + (b+d)i<br>
+        (a + bi) − (c + di) = (a−c) + (b−d)i
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        (3 + 4i) + (1 − 2i) = 4 + 2i<br>
+        (3 + 4i) − (1 − 2i) = 2 + 6i
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">✖️</div>การคูณ</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        กระจายแบบพหุนามปกติ (FOIL) แล้วแทน i² = −1
+      </div>
+      <div class="math-block">
+        (a+bi)(c+di) = ac + adi + bci + bdi²<br>
+        = (ac − bd) + (ad + bc)i
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        (2 + 3i)(1 − 4i) = 2 − 8i + 3i − 12i²<br>
+        = 2 − 8i + 3i + 12 = 14 − 5i
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค</div>
+        ไม่จำเป็นต้องท่องสูตร (ac−bd)+(ad+bc)i ให้ขึ้นใจ แค่กระจายแบบพหุนามตามปกติ แล้วจำไว้ว่า i² = −1 เสมอ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">➗</div>การหาร</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        คูณทั้งเศษและส่วนด้วย <strong>สังยุคของตัวส่วน</strong> เพื่อกำจัด i ออกจากส่วน (ทำให้ส่วนเป็นจำนวนจริง)
+      </div>
+      <div class="math-block">
+        a+bi
+        ─────  ×  c−di  =  (ac+bd) + (bc−ad)i
+        c+di      c−di          c² + d²
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        (3 + 2i) / (1 − i) &nbsp;→&nbsp; คูณด้วย (1+i)/(1+i)<br>
+        เศษ: (3+2i)(1+i) = 3+3i+2i+2i² = 3+5i−2 = 1+5i<br>
+        ส่วน: (1−i)(1+i) = 1−i² = 1+1 = 2<br>
+        ผลลัพธ์ = (1+5i)/2 = 1/2 + 5/2 i
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">📐</div>สมบัติของการดำเนินการ</div>
+      <p>จำนวนเชิงซ้อนมีสมบัติการสลับที่ การเปลี่ยนหมู่ และการแจกแจง เช่นเดียวกับจำนวนจริง</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>สลับที่ (Commutative)</h4>
+          <div class="math-block">z₁+z₂ = z₂+z₁<br>z₁z₂ = z₂z₁</div>
+        </div>
+        <div class="mini-card">
+          <h4>เปลี่ยนหมู่ (Associative)</h4>
+          <div class="math-block">(z₁+z₂)+z₃ = z₁+(z₂+z₃)</div>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        จำนวนเชิงซ้อน<strong>ไม่มีการเรียงลำดับ</strong> (ไม่สามารถบอกได้ว่า z₁ &gt; z₂ เมื่อ z₁, z₂ ไม่ใช่จำนวนจริงทั้งคู่) ดังนั้นอสมการของจำนวนเชิงซ้อนที่ไม่ใช่จำนวนจริงจึงไม่มีความหมาย
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: สังยุคและค่าสัมบูรณ์ ===== -->
+  <div class="section" id="cx3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · สังยุคและค่าสัมบูรณ์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">z̄</div>สังยุคเชิงซ้อน (Conjugate)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        สังยุคของ z = a+bi เขียนแทนด้วย <span class="math">z̄</span> (อ่านว่า z-bar) นิยามเป็น <span class="math">z̄ = a − bi</span> (เปลี่ยนเครื่องหมายส่วนจินตภาพ)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        z = 3 − 4i → z̄ = 3 + 4i<br>
+        z = 5i → z̄ = −5i
+      </div>
+      <div class="def-box">
+        <div class="def-label">สมบัติสำคัญของสังยุค</div>
+        z + z̄ = 2Re(z) &nbsp;(เป็นจำนวนจริงเสมอ)<br>
+        z − z̄ = 2Im(z)·i<br>
+        z · z̄ = a² + b² = |z|² &nbsp;(เป็นจำนวนจริงและไม่เป็นลบเสมอ)<br>
+        (z₁ + z₂)‾ = z̄₁ + z̄₂<br>
+        (z₁ · z₂)‾ = z̄₁ · z̄₂
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ทำไมต้องใช้สังยุค</div>
+        z · z̄ ให้ผลลัพธ์เป็นจำนวนจริงเสมอ นี่คือเหตุผลที่เราคูณด้วยสังยุคเมื่อต้องการกำจัด i ออกจากตัวส่วนในการหาร
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">|z|</div>ค่าสัมบูรณ์ / มอดุลัส (Modulus)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        ค่าสัมบูรณ์ของ z = a+bi คือระยะห่างจากจุดกำเนิดถึงจุด (a,b) บนระนาบเชิงซ้อน<br>
+        <span class="math">|z| = √(a² + b²)</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        z = 3 − 4i → |z| = √(3² + (−4)²) = √(9+16) = √25 = 5<br>
+        (สังเกตความสัมพันธ์แบบสามเหลี่ยม 3-4-5)
+      </div>
+      <div class="def-box">
+        <div class="def-label">สมบัติสำคัญของมอดุลัส</div>
+        |z|² = z · z̄<br>
+        |z₁ · z₂| = |z₁| · |z₂|<br>
+        |z₁ / z₂| = |z₁| / |z₂| &nbsp; (z₂ ≠ 0)<br>
+        |z̄| = |z|
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างการใช้สมบัติ</div>
+        z₁ = 3+4i (|z₁|=5), z₂ = 1+i (|z₂|=√2)<br>
+        z₁z₂ = (3+4i)(1+i) = 3+3i+4i+4i² = −1+7i<br>
+        |z₁z₂| = √(1+49) = √50 = 5√2 = |z₁|·|z₂| ✓
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧩</div>โจทย์ประยุกต์ที่พบบ่อย</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — หาจำนวนเชิงซ้อนจากเงื่อนไข</div>
+        กำหนด z = x + yi โดยที่ |z| = 5 และ Re(z) = 3 จงหา z ที่เป็นไปได้ทั้งหมด<br><br>
+        x = 3 → 3² + y² = 25 → y² = 16 → y = ±4<br>
+        ดังนั้น z = 3+4i หรือ z = 3−4i
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        |z| เป็นจำนวนจริงที่ไม่เป็นลบเสมอ ห้ามเขียน |z| เป็นจำนวนเชิงซ้อนหรือจำนวนลบเด็ดขาด
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: อาร์กองด์และรูปเชิงขั้ว ===== -->
+  <div class="section" id="cx4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · ระนาบอาร์กองด์และรูปเชิงขั้ว</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📍</div>ระนาบอาร์กองด์ (Argand Plane)</div>
+      <p>เราแทนจำนวนเชิงซ้อน z = a+bi ด้วยจุด (a, b) บนระนาบ โดยแกนนอนเป็น<strong>แกนจริง</strong> และแกนตั้งเป็น<strong>แกนจินตภาพ</strong></p>
+      <div class="venn-container">
+        <svg width="320" height="240" viewBox="0 0 320 240">
+          <rect width="320" height="240" rx="10" fill="#1c2235"/>
+          <line x1="20" y1="120" x2="300" y2="120" stroke="#4a5580" stroke-width="1.5"/>
+          <line x1="160" y1="20" x2="160" y2="220" stroke="#4a5580" stroke-width="1.5"/>
+          <text x="290" y="115" fill="#8892b0" font-size="13">Re</text>
+          <text x="168" y="30" fill="#8892b0" font-size="13">Im</text>
+          <circle cx="220" cy="60" r="4" fill="#6c63ff"/>
+          <line x1="160" y1="120" x2="220" y2="60" stroke="#6c63ff" stroke-width="2" stroke-dasharray="3,3"/>
+          <text x="228" y="58" fill="#a89fff" font-size="14" font-weight="bold">z = a+bi</text>
+          <line x1="160" y1="120" x2="220" y2="120" stroke="#00d4aa" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <line x1="220" y1="120" x2="220" y2="60" stroke="#00d4aa" stroke-width="1.5" stroke-dasharray="2,2"/>
+          <text x="185" y="135" fill="#00d4aa" font-size="12">a</text>
+          <text x="228" y="95" fill="#00d4aa" font-size="12">b</text>
+          <path d="M 185 120 A 25 25 0 0 0 205 100" fill="none" stroke="#ffd93d" stroke-width="1.5"/>
+          <text x="188" y="108" fill="#ffd93d" font-size="12">θ</text>
+        </svg>
+      </div>
+      <div class="def-box">
+        <div class="def-label">การแทนจุด</div>
+        z = a + bi ↔ จุด (a, b) &nbsp; และ |z| = √(a²+b²) คือระยะจากจุดกำเนิด (0,0) ถึงจุด (a,b)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">θ</div>รูปเชิงขั้ว (Polar Form)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        <span class="math">z = r(cos θ + i sin θ)</span> เมื่อ r = |z| เรียกว่า <strong>มอดุลัส</strong> และ θ เรียกว่า <strong>อาร์กิวเมนต์</strong> (มุมที่วัดจากแกนจริงบวก ทวนเข็มนาฬิกา)
+      </div>
+      <div class="math-block">
+        r = |z| = √(a²+b²)&nbsp;&nbsp;&nbsp; cos θ = a/r&nbsp;&nbsp;&nbsp; sin θ = b/r
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — แปลงเป็นรูปเชิงขั้ว</div>
+        z = 1 + i<br>
+        r = √(1²+1²) = √2<br>
+        cos θ = 1/√2, sin θ = 1/√2 → θ = 45° = π/4<br>
+        ดังนั้น z = √2 (cos 45° + i sin 45°)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — มุมในควอดรันต์ที่ 2</div>
+        z = −1 + i√3<br>
+        r = √(1+3) = 2<br>
+        cos θ = −1/2, sin θ = √3/2 → θ อยู่ควอดรันต์ 2 → θ = 120° = 2π/3<br>
+        ดังนั้น z = 2 (cos 120° + i sin 120°)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง — เลือกควอดรันต์ให้ถูก</div>
+        ห้ามใช้ θ = arctan(b/a) ตรง ๆ โดยไม่ดูเครื่องหมายของ a และ b เพราะ arctan ให้คำตอบในช่วง (−90°, 90°) เท่านั้น ต้องพิจารณาว่าจุด (a,b) อยู่ควอดรันต์ใดก่อนเสมอ
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 อาร์กิวเมนต์หลัก (Principal Argument)</div>
+        นิยมกำหนดให้ −π &lt; θ ≤ π (หรือ −180° &lt; θ ≤ 180°) เพื่อให้อาร์กิวเมนต์มีค่าเดียวไม่ซ้ำซ้อน เขียนแทนด้วย Arg(z)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: คูณ-หารเชิงขั้ว และเดอมัวร์ ===== -->
+  <div class="section" id="cx5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · การคูณ-หารเชิงขั้ว และทฤษฎีบทเดอมัวร์</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">×</div>การคูณและการหารในรูปเชิงขั้ว</div>
+      <div class="def-box">
+        <div class="def-label">การคูณ</div>
+        z₁z₂ = r₁r₂ [cos(θ₁+θ₂) + i sin(θ₁+θ₂)]<br>
+        <span style="color:var(--text-dim); font-size:13px">คูณมอดุลัส แต่ "บวก" อาร์กิวเมนต์</span>
+      </div>
+      <div class="def-box">
+        <div class="def-label">การหาร</div>
+        z₁/z₂ = (r₁/r₂) [cos(θ₁−θ₂) + i sin(θ₁−θ₂)]<br>
+        <span style="color:var(--text-dim); font-size:13px">หารมอดุลัส แต่ "ลบ" อาร์กิวเมนต์</span>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        z₁ = 2(cos30° + i sin30°), z₂ = 3(cos60° + i sin60°)<br>
+        z₁z₂ = 6(cos90° + i sin90°) = 6(0 + i) = 6i<br>
+        z₁/z₂ = (2/3)(cos(−30°) + i sin(−30°))
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">ⁿ</div>ทฤษฎีบทของเดอมัวร์ (De Moivre's Theorem)</div>
+      <div class="def-box">
+        <div class="def-label">ทฤษฎีบท</div>
+        ถ้า z = r(cos θ + i sin θ) และ n เป็นจำนวนเต็ม แล้ว<br>
+        <span class="math">zⁿ = rⁿ (cos nθ + i sin nθ)</span>
+      </div>
+      <p>ทฤษฎีบทนี้ได้จากการใช้กฎการคูณเชิงขั้วซ้ำ ๆ กัน n ครั้ง (บวกมุม θ ทีละครั้ง)</p>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        z = 2(cos 30° + i sin 30°) จงหา z³<br>
+        z³ = 2³ (cos(3×30°) + i sin(3×30°)) = 8(cos 90° + i sin 90°) = 8(0+i) = 8i
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ประโยชน์ของเดอมัวร์</div>
+        ใช้หาเลขยกกำลังสูง ๆ ของจำนวนเชิงซ้อนได้ง่ายกว่าการคูณตรง ๆ มาก เช่น (1+i)¹⁰ จะแปลงเป็นรูปเชิงขั้วก่อนแล้วยกกำลังจะเร็วกว่าการคูณ (1+i) สิบครั้ง
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — เลขยกกำลังสูง</div>
+        หา (1+i)⁸<br>
+        1+i = √2(cos45° + i sin45°)<br>
+        (1+i)⁸ = (√2)⁸ (cos(8×45°) + i sin(8×45°)) = 16(cos360° + i sin360°) = 16(1+0) = 16
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: รากที่ n ===== -->
+  <div class="section" id="cx6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · รากที่ n ของจำนวนเชิงซ้อน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">√ⁿ</div>สูตรหารากที่ n</div>
+      <div class="def-box">
+        <div class="def-label">ทฤษฎีบท</div>
+        ถ้า z = r(cos θ + i sin θ) แล้ว รากที่ n ของ z มีทั้งหมด <strong>n ค่า</strong> หาได้จาก<br>
+        <span class="math">zₖ = r^(1/n) [cos((θ+2kπ)/n) + i sin((θ+2kπ)/n)]</span><br>
+        เมื่อ k = 0, 1, 2, ..., n−1
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 แนวคิด</div>
+        เพราะมุม θ, θ+2π, θ+4π, ... ต่างก็ชี้ตำแหน่งเดียวกันบนวงกลม การบวก 2kπ ก่อนหารด้วย n จึงทำให้ได้รากที่ต่างกัน n ค่า ก่อนที่จะวนกลับมาซ้ำ
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🌀</div>ตัวอย่าง — รากที่สาม (รากที่สามของ 1)</div>
+      <div class="example-box">
+        <div class="ex-label">โจทย์</div>
+        จงหารากที่สามทั้งหมดของ 1
+      </div>
+      <p>1 = 1(cos 0° + i sin 0°) → r=1, θ=0°</p>
+      <div class="math-block">
+        k=0: cos(0°) + i sin(0°) = 1<br>
+        k=1: cos(120°) + i sin(120°) = −1/2 + (√3/2)i<br>
+        k=2: cos(240°) + i sin(240°) = −1/2 − (√3/2)i
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 การกระจายตัวของราก</div>
+        รากที่ n ทั้ง n ค่านี้จะอยู่ห่างกันเป็นมุม 360°/n เท่า ๆ กัน บนวงกลมรัศมี r^(1/n) เสมอ (เป็นจุดยอดของรูปหลายเหลี่ยมด้านเท่า n ด้าน)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🔎</div>ตัวอย่าง — รากที่สองของจำนวนเชิงซ้อน</div>
+      <div class="example-box">
+        <div class="ex-label">โจทย์</div>
+        จงหารากที่สองของ z = 4i
+      </div>
+      <p>4i = 4(cos 90° + i sin 90°) → r=4, θ=90°</p>
+      <div class="math-block">
+        r^(1/2) = 2<br>
+        k=0: θ = 90°/2 = 45° → 2(cos45°+isin45°) = √2 + √2 i<br>
+        k=1: θ = (90°+360°)/2 = 225° → 2(cos225°+isin225°) = −√2 − √2 i
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตรวจคำตอบ</div>
+        (√2 + √2 i)² = 2 + 2(√2)(√2)i + 2i² = 2 + 4i − 2 = 4i ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: สมการพหุนามเชิงซ้อน ===== -->
+  <div class="section" id="cx7">
+    <div class="section-heading"><span>หัวข้อ 7</span> · สมการพหุนามเชิงซ้อน</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">📜</div>ทฤษฎีบทหลักมูลของพีชคณิต</div>
+      <div class="def-box">
+        <div class="def-label">ทฤษฎีบท (Fundamental Theorem of Algebra)</div>
+        สมการพหุนามดีกรี n (n ≥ 1) มีคำตอบในระบบจำนวนเชิงซ้อนเสมอ และมีคำตอบทั้งหมด <strong>n คำตอบ</strong> เมื่อนับรวมคำตอบซ้ำ
+      </div>
+      <p>นี่คือเหตุผลสำคัญที่เราต้องขยายระบบจำนวนจริงไปเป็นจำนวนเชิงซ้อน — เพื่อให้สมการพหุนามทุกสมการมีคำตอบครบ</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🪞</div>ทฤษฎีบทรากสังยุค (Conjugate Root Theorem)</div>
+      <div class="def-box">
+        <div class="def-label">ทฤษฎีบท</div>
+        ถ้าพหุนามมี<strong>สัมประสิทธิ์เป็นจำนวนจริงทุกพจน์</strong> และ z = a+bi (b≠0) เป็นคำตอบหนึ่งของสมการ แล้ว <strong>z̄ = a−bi ก็เป็นคำตอบด้วยเสมอ</strong> (คำตอบเชิงซ้อนเกิดเป็นคู่สังยุคกันเสมอ)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ทฤษฎีบทนี้ใช้ได้เฉพาะเมื่อ<strong>สัมประสิทธิ์ของพหุนามเป็นจำนวนจริงเท่านั้น</strong> ถ้าสัมประสิทธิ์เป็นจำนวนเชิงซ้อน คำตอบไม่จำเป็นต้องเกิดเป็นคู่สังยุค
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">√</div>สมการกำลังสองที่มีค่าจำแนกเป็นลบ</div>
+      <div class="def-box">
+        <div class="def-label">สูตร</div>
+        ax² + bx + c = 0 &nbsp;→&nbsp; x = (−b ± √(b²−4ac)) / 2a<br>
+        ถ้า b²−4ac &lt; 0 คำตอบจะเป็นจำนวนเชิงซ้อนคู่สังยุคกันเสมอ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        แก้สมการ x² − 4x + 13 = 0<br>
+        ค่าจำแนก = 16 − 52 = −36<br>
+        x = (4 ± √(−36))/2 = (4 ± 6i)/2 = 2 ± 3i<br>
+        คำตอบคือ x = 2+3i และ x = 2−3i (คู่สังยุคกันตามทฤษฎีบท) ✓
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧮</div>การแก้สมการดีกรีสูงด้วยรากสังยุค</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        สมการ x³ − 5x² + 11x − 15 = 0 มีคำตอบหนึ่งคือ x = 3<br><br>
+        <strong>ขั้นที่ 1:</strong> หารพหุนามด้วย (x−3)<br>
+        x³ − 5x² + 11x − 15 = (x−3)(x² − 2x + 5)<br><br>
+        <strong>ขั้นที่ 2:</strong> แก้ x² − 2x + 5 = 0<br>
+        ค่าจำแนก = 4 − 20 = −16<br>
+        x = (2 ± √(−16))/2 = (2 ± 4i)/2 = 1 ± 2i<br><br>
+        <strong>สรุป:</strong> คำตอบทั้งสามคือ x = 3, x = 1+2i, x = 1−2i ✓ (ครบ 3 คำตอบตามดีกรีของสมการ และคำตอบเชิงซ้อนเป็นคู่สังยุคกัน)
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กลยุทธ์การแก้โจทย์</div>
+        ถ้าโจทย์บอกคำตอบเชิงซ้อนตัวหนึ่งมาให้ (เช่น 1+2i) ให้สังยุค (1−2i) เป็นคำตอบทันทีโดยไม่ต้องคำนวณเพิ่ม แล้วใช้ทั้งสองตัวสร้างตัวประกอบกำลังสอง (x−(1+2i))(x−(1−2i)) = x²−2x+5 เพื่อหาคำตอบที่เหลือได้ง่ายขึ้น
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">8 ข้อ เรียงจากง่ายไปยาก ครอบคลุมเนื้อหาจำนวนเชิงซ้อนทั้งหมด เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> โจทย์แนว A-Level จำนวนเชิงซ้อน</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">โจทย์จำลองแนว A-Level คณิตศาสตร์ประยุกต์ 1 เรื่องจำนวนเชิงซ้อน จัดทำขึ้นเพื่อฝึกฝนโดยเฉพาะ</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      เรื่องจำนวนเชิงซ้อนมักออกสอบประมาณ 2-3 ข้อในข้อสอบ A-Level — ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบาย
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 8 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — พื้นฐาน",
+    q: "จงหาค่าของ i¹⁴",
+    opts: ["1", "−1", "i", "−i"],
+    ans: 1,
+    explain: "หา 14 ÷ 4 = 3 เศษ 2\nเศษ 2 → iⁿ = i² = −1\nดังนั้น i¹⁴ = −1 ✓"
+  },
+  {
+    level: "⭐ ระดับ 1 — การดำเนินการ",
+    q: "กำหนด z₁ = 2 + 3i และ z₂ = 1 − 4i จงหา z₁ + z₂",
+    opts: ["3 − i", "3 + i", "1 + 7i", "1 − 7i"],
+    ans: 0,
+    explain: "บวกส่วนจริงกับส่วนจริง และส่วนจินตภาพกับส่วนจินตภาพ แยกกัน\nส่วนจริง: 2 + 1 = 3\nส่วนจินตภาพ: 3 + (−4) = −1\nดังนั้น z₁ + z₂ = 3 − i ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การคูณ",
+    q: "จงหาผลคูณ (2 + i)(3 − 2i)",
+    opts: ["8 − i", "6 − i", "8 + i", "4 − i"],
+    ans: 0,
+    explain: "กระจายแบบพหุนาม (FOIL):\n(2+i)(3−2i) = 6 − 4i + 3i − 2i²\n= 6 − 4i + 3i + 2 &nbsp;(เพราะ −2i² = −2(−1) = 2)\n= 8 − i ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — สังยุคและมอดุลัส",
+    q: "กำหนด z = 5 − 12i จงหา |z|",
+    opts: ["7", "13", "17", "169"],
+    ans: 1,
+    explain: "ใช้สูตร |z| = √(a² + b²)\n|z| = √(5² + (−12)²) = √(25 + 144) = √169 = 13 ✓\n\n(นี่คือสามเหลี่ยมมุมฉากอัตราส่วน 5-12-13 ที่พบบ่อยในโจทย์)"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การหาร",
+    q: "จงหาผลลัพธ์ของ (4 + 2i) / (1 + i) ในรูปมาตรฐาน a+bi",
+    opts: ["3 − i", "3 + i", "1 − i", "2 − 2i"],
+    ans: 0,
+    explain: "คูณทั้งเศษและส่วนด้วยสังยุคของส่วน (1−i):\nเศษ: (4+2i)(1−i) = 4 − 4i + 2i − 2i² = 4 − 2i + 2 = 6 − 2i\nส่วน: (1+i)(1−i) = 1 − i² = 1 + 1 = 2\nผลลัพธ์ = (6−2i)/2 = 3 − i ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — รูปเชิงขั้ว",
+    q: "จงเขียน z = −√3 + i ในรูปเชิงขั้ว",
+    opts: [
+      "2(cos150° + i sin150°)",
+      "2(cos30° + i sin30°)",
+      "2(cos120° + i sin120°)",
+      "4(cos150° + i sin150°)"
+    ],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา r\nr = √((−√3)² + 1²) = √(3+1) = √4 = 2\n\nขั้นที่ 2: หา θ\ncos θ = −√3/2, sin θ = 1/2\nเนื่องจาก a<0, b>0 → จุดอยู่ควอดรันต์ 2\nθ = 180° − 30° = 150°\n\nดังนั้น z = 2(cos150° + i sin150°) ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — เดอมัวร์",
+    q: "กำหนด z = √2(cos45° + i sin45°) จงหา z⁴ ในรูปมาตรฐาน",
+    opts: ["−4", "4", "4i", "−4i"],
+    ans: 0,
+    explain: "ใช้ทฤษฎีบทเดอมัวร์: zⁿ = rⁿ(cos nθ + i sin nθ)\nr = √2, θ = 45°, n = 4\nrⁿ = (√2)⁴ = 4\nnθ = 4×45° = 180°\nz⁴ = 4(cos180° + i sin180°) = 4(−1 + 0i) = −4 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — สมการพหุนาม",
+    q: "สมการ x² − 6x + 25 = 0 มีคำตอบตรงกับข้อใด",
+    opts: [
+      "x = 3 + 4i หรือ x = 3 − 4i",
+      "x = 3 + 5i หรือ x = 3 − 5i",
+      "x = −3 + 4i หรือ x = −3 − 4i",
+      "x = 6 + 4i หรือ x = 6 − 4i"
+    ],
+    ans: 0,
+    explain: "ใช้สูตร x = (−b ± √(b²−4ac)) / 2a โดย a=1, b=−6, c=25\nค่าจำแนก = (−6)² − 4(1)(25) = 36 − 100 = −64\nx = (6 ± √(−64)) / 2 = (6 ± 8i) / 2 = 3 ± 4i\nดังนั้นคำตอบคือ x = 3+4i หรือ x = 3−4i ✓ (คู่สังยุคกันตามทฤษฎีบทรากสังยุค เพราะสัมประสิทธิ์เป็นจำนวนจริงทั้งหมด)"
+  }
+];
+
+// ===== โจทย์แนว A-Level — จำนวนเชิงซ้อน =====
+const alevelQuestions = [
+  {
+    year: "📘 แนว A-Level — พื้นฐาน",
+    q: "กำหนด z = 2 − 3i จงหา z + z̄",
+    opts: ["4", "−6i", "4 − 6i", "0"],
+    ans: 0,
+    explain: "ใช้สมบัติ z + z̄ = 2Re(z)\nz = 2 − 3i → Re(z) = 2\nz + z̄ = 2(2) = 4 ✓\n\nตรวจสอบตรง ๆ: z̄ = 2 + 3i\nz + z̄ = (2−3i) + (2+3i) = 4 (ส่วนจินตภาพหักล้างกันพอดี) ✓"
+  },
+  {
+    year: "📘 แนว A-Level — การดำเนินการ",
+    q: "ถ้า (x + 2i)(3 − i) = 11 + yi เมื่อ x, y เป็นจำนวนจริง จงหาค่าของ x + y",
+    opts: ["4", "6", "8", "9"],
+    ans: 1,
+    explain: "ขั้นที่ 1: กระจายด้านซ้าย\n(x+2i)(3−i) = 3x − xi + 6i − 2i²\n= 3x − xi + 6i + 2 = (3x+2) + (6−x)i\n\nขั้นที่ 2: เทียบส่วนจริงและส่วนจินตภาพกับ 11 + yi\nส่วนจริง: 3x + 2 = 11 → x = 3\nส่วนจินตภาพ: 6 − x = y → y = 6 − 3 = 3\n\nขั้นที่ 3: หา x + y = 3 + 3 = 6\n\nตรวจคำตอบ: (3+2i)(3−i) = 9 − 3i + 6i − 2i² = 9 + 3i + 2 = 11 + 3i ✓ ตรงกับโจทย์ที่ y = 3\nดังนั้น x + y = 6 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — มอดุลัสและสังยุค",
+    q: "กำหนด z₁ = 1 + i และ z₂ = 3 − 4i จงหา |z₁ · z₂|",
+    opts: ["5√2", "5", "10", "√2"],
+    ans: 0,
+    explain: "ใช้สมบัติ |z₁z₂| = |z₁||z₂|\n|z₁| = |1+i| = √(1+1) = √2\n|z₂| = |3−4i| = √(9+16) = √25 = 5\n|z₁z₂| = √2 × 5 = 5√2 ✓\n\n(ไม่จำเป็นต้องคูณ z₁z₂ ออกมาก่อนแล้วค่อยหามอดุลัส ใช้สมบัติจะเร็วกว่ามาก)"
+  },
+  {
+    year: "📘 แนว A-Level — การหาร",
+    q: "จงหาค่าของ (1 + i)² / (1 − i)",
+    opts: ["−1 + i", "2i", "1 − i", "1 + i"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หา (1+i)² ก่อน\n(1+i)² = 1 + 2i + i² = 1 + 2i − 1 = 2i\n\nขั้นที่ 2: หาร 2i ด้วย (1−i) โดยคูณทั้งเศษและส่วนด้วยสังยุค (1+i)\n2i(1+i) / [(1−i)(1+i)] = (2i + 2i²) / (1 − i²)\n= (2i − 2) / (1 + 1) = (−2 + 2i) / 2 = −1 + i ✓"
+  },
+  {
+    year: "📘 แนว A-Level — รูปเชิงขั้ว",
+    q: "จำนวนเชิงซ้อน z มี |z| = 4 และ Arg(z) = 60° จงหา z ในรูปมาตรฐาน a+bi",
+    opts: ["2 + 2√3 i", "2√3 + 2i", "4 + 4√3 i", "1 + √3 i"],
+    ans: 0,
+    explain: "ใช้ z = r(cosθ + i sinθ) โดย r=4, θ=60°\ncos60° = 1/2, sin60° = √3/2\nz = 4(1/2 + (√3/2)i) = 4×1/2 + 4×(√3/2) i = 2 + 2√3 i ✓"
+  },
+  {
+    year: "📘 แนว A-Level — เดอมัวร์",
+    q: "กำหนด z = 1 + i√3 จงหา z⁶ ในรูปมาตรฐาน",
+    opts: ["64", "−64", "64i", "−64i"],
+    ans: 0,
+    explain: "ขั้นที่ 1: แปลง z เป็นรูปเชิงขั้ว\nr = √(1+3) = 2\ncosθ = 1/2, sinθ = √3/2 → θ = 60°\nz = 2(cos60° + i sin60°)\n\nขั้นที่ 2: ใช้เดอมัวร์ zⁿ = rⁿ(cos nθ + i sin nθ)\nrⁿ = 2⁶ = 64\nnθ = 6×60° = 360°\nz⁶ = 64(cos360° + i sin360°) = 64(1+0) = 64 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — รากที่ n",
+    q: "จงหารากที่สองของ z = −4 (จำนวนจริงลบ) ในรูปมาตรฐาน",
+    opts: ["±2i", "±4i", "±2", "2 ± 2i"],
+    ans: 0,
+    explain: "วิธีตรง: หาค่า x ที่ทำให้ x² = −4\nx² = −4 = 4i² → x = ±2i\n\nตรวจสอบ: (2i)² = 4i² = −4 ✓ และ (−2i)² = 4i² = −4 ✓\n\n(อีกวิธีคือแปลง −4 เป็นรูปเชิงขั้ว r=4, θ=180° แล้วใช้สูตรราก n ก็จะได้คำตอบเดียวกัน)"
+  },
+  {
+    year: "📘 แนว A-Level — สมการพหุนาม",
+    q: "สมการ x³ − 3x² + 4x − 12 = 0 มีคำตอบจริงหนึ่งคำตอบคือ x = 3 จงหาคำตอบเชิงซ้อนอีกสองคำตอบ",
+    opts: ["±2i", "2 ± 2i", "±4i", "1 ± 2i"],
+    ans: 0,
+    explain: "ขั้นที่ 1: หารพหุนามด้วย (x−3)\nx³ − 3x² + 4x − 12 = (x−3)(x² + 4)\n\nขั้นที่ 2: แก้ x² + 4 = 0\nx² = −4 → x = ±√(−4) = ±2i\n\nดังนั้นคำตอบทั้งสามคือ x = 3, x = 2i, x = −2i ✓\n(คำตอบเชิงซ้อนเป็นคู่สังยุคกันตามทฤษฎีบทรากสังยุค)"
+  },
+  {
+    year: "📘 แนว A-Level — โจทย์ผสม",
+    q: "กำหนด z เป็นจำนวนเชิงซ้อนที่สอดคล้องกับ z · z̄ = 25 และ z + z̄ = 8 จงหาค่าที่เป็นไปได้ของ z",
+    opts: ["4 + 3i หรือ 4 − 3i", "3 + 4i หรือ 3 − 4i", "5 + 3i หรือ 5 − 3i", "8 + 5i หรือ 8 − 5i"],
+    ans: 0,
+    explain: "ให้ z = a + bi\nจาก z + z̄ = 2a = 8 → a = 4\nจาก z·z̄ = a² + b² = 25 → 16 + b² = 25 → b² = 9 → b = ±3\n\nดังนั้น z = 4 + 3i หรือ z = 4 − 3i ✓"
+  },
+  {
+    year: "📘 แนว A-Level — โจทย์ผสม",
+    q: "ถ้า z₁ = 2(cos40° + i sin40°) และ z₂ = 5(cos20° + i sin20°) จงหา z₁ · z₂ ในรูปเชิงขั้ว",
+    opts: [
+      "10(cos60° + i sin60°)",
+      "10(cos20° + i sin20°)",
+      "7(cos60° + i sin60°)",
+      "10(cos800° + i sin800°)"
+    ],
+    ans: 0,
+    explain: "ใช้กฎการคูณเชิงขั้ว: คูณมอดุลัส บวกอาร์กิวเมนต์\nr₁×r₂ = 2×5 = 10\nθ₁+θ₂ = 40°+20° = 60°\nดังนั้น z₁z₂ = 10(cos60° + i sin60°) ✓"
+  }
+];
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  alevelQuestions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>
