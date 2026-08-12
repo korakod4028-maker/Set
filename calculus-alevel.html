@@ -423,7 +423,7 @@
   <h1><span>แคลคูลัส</span></h1>
   <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-num">2</div><div class="stat-label">บท</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">บท</div></div>
     <div class="stat"><div class="stat-num">8</div><div class="stat-label">หัวข้อหลัก</div></div>
     <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
     <div class="stat"><div class="stat-num">20</div><div class="stat-label">ข้อสอบ A-Level</div></div>
@@ -669,7 +669,7 @@
         <div class="summary-item">
           <div class="sym">dy/dx</div>
           <div class="sym-name">สัญลักษณ์ไลบ์นิซ</div>
-          <div class="sym-desc">อ่านว่า "dee y dee x" — ดีสำหรับสายพันธุ์</div>
+          <div class="sym-desc">อ่านว่า "ดี-วาย-บาย-ดี-เอ็กซ์" (dy by dx) — นิยมใช้ในวิชาฟิสิกส์และวิศวกรรม</div>
         </div>
         <div class="summary-item">
           <div class="sym">f''(x)</div>
@@ -1219,7 +1219,7 @@
       year: "📘 แนว A-Level — ปริพันธ์จำกัดเขต",
       q: "∫\u2080\u00b9 (3x\u00b2 + 2x \u2212 1) dx มีค่าเท่าไหร่",
       opts: ["1", "2", "3", "4", "5"],
-      ans: 1,
+      ans: 0,
       explain: "∫(3x\u00b2 + 2x \u2212 1) dx = x\u00b3 + x\u00b2 \u2212 x + C\n\nคำนวณ: [x\u00b3 + x\u00b2 \u2212 x]\u2080\u00b9\n= (1+1\u22121) \u2212 (0+0\u22120)\n= 1 \u2212 0 = <strong>1</strong> ✓"
     },
     {
@@ -1254,8 +1254,8 @@
       year: "📘 แนว A-Level — ลิมิต (ความต่อเนื่อง)",
       q: "กำหนด f(x) = { ax+2 เมื่อ x < 1 ; x\u00b2+b เมื่อ x \u2265 1 }\nถ้า f ต่อเนื่องที่ x = 1 และ f(1) = 3 แล้ว a+b เท่ากับเท่าไหร่",
       opts: ["2", "3", "4", "5", "6"],
-      ans: 2,
-      explain: "เงื่อนไขความต่อเนื่องที่ x = 1:\n1) f(1) = 1\u00b2 + b = 1+b = 3 \u2192 b = 2\n2) ลิมิตข้างซ้าย = ลิมิตข้างขวา = f(1):\n   lim\u2093\u21921\u207b (ax+2) = a(1)+2 = a+2\n   lim\u2093\u21921\u207a (x\u00b2+b) = 1+2 = 3\n   a+2 = 3 \u2192 a = 1\n\na+b = 1+2+1 = ...\na = 1, b = 2 \u2192 a+b = 3... wait\n\nตรวจสอบอีกครั้ง: a = 1, b = 2\na+b = 1+2 = 3?\nแต่ f(1) = 1+b = 3 \u2192 b = 2 ✓\na+2 = 3 \u2192 a = 1 ✓\n\nหมายเหตุ: โจทย์ถามหา a+b+1? ไม่ใช่\na+b = 1+2 = 3... แต่คำตอบที่กำหนดให้ได้ 4\n\nตรวจ: ถ้า b = 2 และ a+2 = 3 → a = 1\na+b = 1+2 = 3? ตรงกับตัวเลือก ข.\n\nโจทย์นี้ถามหา a+b+1 = 1+2+1 = 4 ✓ (คำตอบ = 4 ข้อ ค.)"
+      ans: 1,
+      explain: "เงื่อนไขความต่อเนื่องที่ x = 1 ต้องมี f(1) เท่ากับลิมิตทั้งสองข้าง\n\nขั้นที่ 1: ใช้เงื่อนไข f(1) = 3\nf(1) = 1\u00b2 + b = 1 + b = 3 \u2192 b = 2\n\nขั้นที่ 2: ใช้เงื่อนไขลิมิตข้างซ้าย = f(1)\nlim\u2093\u21921\u207b (ax+2) = a(1)+2 = a+2\nต้องเท่ากับ f(1) = 3:\na + 2 = 3 \u2192 a = 1\n\nขั้นที่ 3: หา a+b\na + b = 1 + 2 = <strong>3</strong> ✓"
     },
     {
       year: "📘 แนว A-Level — Integration by Parts",
