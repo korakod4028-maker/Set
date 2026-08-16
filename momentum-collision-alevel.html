@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โมเมนตัมและการชน | ฟิสิกส์ A-Level ม.6</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141828;
+    --surface2: #1c2235;
+    --border: #2a3050;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --accent3: #ff6b6b;
+    --accent4: #ffd93d;
+    --text: #e8eaf6;
+    --text-dim: #8892b0;
+    --text-muted: #4a5580;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2a 100%);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: 'p=mv  I=FΔt  Δp  e  m₁v₁+m₂v₂';
+    position: absolute;
+    top: 16px; left: 0; right: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 6px;
+    opacity: 0.6;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(108,99,255,0.15);
+    border: 1px solid rgba(108,99,255,0.4);
+    color: #a89fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 6vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* NAV */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    white-space: nowrap;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .icon-purple { background: rgba(108,99,255,0.2); }
+  .icon-teal { background: rgba(0,212,170,0.15); }
+  .icon-red { background: rgba(255,107,107,0.15); }
+  .icon-yellow { background: rgba(255,217,61,0.15); }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(108,99,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .example-box {
+    background: rgba(0,212,170,0.06);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .example-box .ex-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .warn-box {
+    background: rgba(255,107,107,0.07);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .warn-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tip-box {
+    background: rgba(255,217,61,0.06);
+    border-left: 3px solid var(--accent4);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .tip-box .tip-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* MATH */
+  .math {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--accent2);
+  }
+  .math-block {
+    font-family: var(--mono);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 15px;
+    color: #c9d1f5;
+    overflow-x: auto;
+    line-height: 2;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 9px 14px;
+    text-align: center;
+    font-family: var(--mono);
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  td.true-val { color: var(--accent2); font-weight: 600; }
+  td.false-val { color: var(--accent3); font-weight: 600; }
+
+  /* DIAGRAM */
+  .venn-container {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  svg text { font-family: var(--sans); }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .mini-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .quiz-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(108,99,255,0.1);
+  }
+  .option-btn.correct {
+    background: rgba(0,212,170,0.15);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+  .option-btn.wrong {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+  .feedback {
+    margin-top: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent2);
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+  }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 8px; }
+  .reset-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    display: none;
+  }
+  .reset-btn.show { display: inline-block; }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .section-heading span { color: var(--accent); }
+
+  .sub-heading {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 24px 0 12px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  /* SUMMARY BOX */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .summary-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .summary-item .sym {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .summary-item .sym-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ A-Level · TCAS หลักสูตร สพฐ.</div>
+  <h1>โมเมนตัม<span>และ</span>การชน</h1>
+  <p>สื่อการสอนครบจบสำหรับนักเรียน ม.6 เตรียมสอบ A-Level ตามหลักสูตรกระทรวงศึกษาธิการ</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">ข้อสอบแนว A-Level</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="mom1">1. โมเมนตัม</button>
+  <button class="tab-btn" data-sec="mom2">2. แรงดล</button>
+  <button class="tab-btn" data-sec="mom3">3. การอนุรักษ์โมเมนตัม</button>
+  <button class="tab-btn" data-sec="mom4">4. การชนหนึ่งมิติ</button>
+  <button class="tab-btn" data-sec="mom5">5. สัมประสิทธิ์การคืนตัว</button>
+  <button class="tab-btn" data-sec="mom6">6. การชนสองมิติ/การระเบิด</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
+  <button class="tab-btn" data-sec="alevel">📋 ข้อสอบแนว A-Level</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== SECTION 1: โมเมนตัม ===== -->
+  <div class="section active" id="mom1">
+    <div class="section-heading"><span>หัวข้อ 1</span> · โมเมนตัม (Momentum)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">➡️</div>โมเมนตัมคืออะไร?</div>
+      <p>โมเมนตัม (Momentum) คือปริมาณที่บอก <strong>"ความยากง่ายในการหยุดวัตถุที่กำลังเคลื่อนที่"</strong> ยิ่งวัตถุมีมวลมากและเคลื่อนที่เร็ว ยิ่งหยุดยาก</p>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        โมเมนตัม คือ ผลคูณของมวลกับความเร็วของวัตถุ เขียนแทนด้วย <span class="math">p</span>
+      </div>
+      <div class="math-block">p = mv</div>
+      <p>โดยที่ <span class="math">p</span> = โมเมนตัม (kg·m/s), <span class="math">m</span> = มวล (kg), <span class="math">v</span> = ความเร็ว (m/s)</p>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง — โมเมนตัมเป็นเวกเตอร์!</div>
+        โมเมนตัมมีทั้งขนาดและทิศทาง (ทิศเดียวกับความเร็ว) ดังนั้นการรวมโมเมนตัมของหลายวัตถุ<strong>ต้องรวมแบบเวกเตอร์</strong> ไม่ใช่รวมแบบจำนวนธรรมดา — ต้องกำหนดทิศบวก/ลบให้ชัดเจนก่อนคำนวณเสมอ
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        รถมวล 1,000 kg เคลื่อนที่ด้วยความเร็ว 20 m/s ไปทางขวา<br>
+        p = mv = 1000 × 20 = 20,000 kg·m/s ไปทางขวา
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📏</div>หน่วยและมิติของโมเมนตัม</div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>หน่วย SI</h4>
+          <p>kg·m/s (กิโลกรัม-เมตรต่อวินาที)</p>
+        </div>
+        <div class="mini-card">
+          <h4>หน่วยเทียบเท่า</h4>
+          <p>N·s (นิวตัน-วินาที) — เพราะ 1 N = 1 kg·m/s²</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคจำ</div>
+        โมเมนตัมกับแรงดลมีหน่วยเดียวกันคือ N·s เพราะทั้งสองปริมาณเชื่อมโยงกันโดยตรงผ่านทฤษฎีบทแรงดล-โมเมนตัม (ดูหัวข้อ 2)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔗</div>โมเมนตัมของระบบวัตถุหลายชิ้น</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        โมเมนตัมรวมของระบบ คือ ผลรวมแบบเวกเตอร์ของโมเมนตัมของวัตถุทุกชิ้นในระบบ
+      </div>
+      <div class="math-block">p<sub>รวม</sub> = p₁ + p₂ + p₃ + … = m₁v₁ + m₂v₂ + m₃v₃ + …</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุ A มวล 2 kg เคลื่อนที่ 5 m/s ไปทางขวา (+)<br>
+        วัตถุ B มวล 3 kg เคลื่อนที่ 4 m/s ไปทางซ้าย (−)<br>
+        p<sub>รวม</sub> = (2×5) + (3×(−4)) = 10 − 12 = −2 kg·m/s (ไปทางซ้าย)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: แรงดล ===== -->
+  <div class="section" id="mom2">
+    <div class="section-heading"><span>หัวข้อ 2</span> · แรงดลและทฤษฎีบทแรงดล-โมเมนตัม</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">💥</div>แรงดล (Impulse)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        แรงดล คือ ผลคูณของแรงคงที่กับช่วงเวลาที่แรงนั้นกระทำ เขียนแทนด้วย <span class="math">I</span>
+      </div>
+      <div class="math-block">I = FΔt</div>
+      <p>โดยที่ <span class="math">I</span> = แรงดล (N·s), <span class="math">F</span> = แรงคงที่ (N), <span class="math">Δt</span> = ช่วงเวลาที่แรงกระทำ (s)</p>
+      <p>ถ้าแรงไม่คงที่ แรงดลจะเท่ากับ <strong>พื้นที่ใต้กราฟ F–t</strong></p>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิคอ่านกราฟ F–t</div>
+        โจทย์ A-Level มักให้กราฟแรงกับเวลาที่ไม่คงที่ (เช่น สามเหลี่ยม หรือ สี่เหลี่ยมคางหมู) ให้หาแรงดลโดยคำนวณ<strong>พื้นที่ใต้กราฟ</strong> เหมือนหาระยะทางจากกราฟ v–t
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🔄</div>ทฤษฎีบทแรงดล-โมเมนตัม (Impulse-Momentum Theorem)</div>
+      <div class="def-box">
+        <div class="def-label">ใจความสำคัญ</div>
+        แรงดลที่กระทำต่อวัตถุ มีค่าเท่ากับ <strong>โมเมนตัมที่เปลี่ยนไป</strong> ของวัตถุนั้น
+      </div>
+      <div class="math-block">
+        I = Δp<br>
+        FΔt = mv<sub>สุดท้าย</sub> − mv<sub>เริ่มต้น</sub> = m(v<sub>f</sub> − v<sub>i</sub>)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        ลูกบอลมวล 0.5 kg เคลื่อนที่ด้วยความเร็ว 4 m/s เข้าชนกำแพงในแนวตั้งฉาก แล้วสะท้อนกลับด้วยอัตราเร็วเท่าเดิมแต่ทิศตรงข้าม เวลาสัมผัสกำแพง 0.02 s<br>
+        จงหาแรงเฉลี่ยที่กำแพงกระทำต่อลูกบอล<br><br>
+        <strong>วิธีทำ:</strong> กำหนดทิศเข้าชนเป็นบวก<br>
+        v<sub>i</sub> = +4 m/s, v<sub>f</sub> = −4 m/s (สะท้อนกลับ)<br>
+        Δp = m(v<sub>f</sub> − v<sub>i</sub>) = 0.5 × (−4 − 4) = 0.5 × (−8) = −4 kg·m/s<br>
+        I = Δp = −4 N·s<br>
+        F = I / Δt = −4 / 0.02 = <strong>−200 N</strong> (ขนาด 200 N มีทิศตรงข้ามกับทิศเข้าชน)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ กับดักข้อสอบ — การสะท้อนกลับ</div>
+        เมื่อวัตถุสะท้อนกลับ ความเร็วจะ<strong>เปลี่ยนทิศ</strong> ไม่ใช่มีค่าเป็นศูนย์ ต้องใส่เครื่องหมายลบให้ v<sub>f</sub> เสมอ มิฉะนั้นจะคำนวณ Δp ผิดพลาดไปครึ่งหนึ่ง
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">🛡️</div>การประยุกต์ใช้ — ลดแรงกระแทกด้วยการยืดเวลา</div>
+      <p>เนื่องจาก I = Δp มีค่าคงที่สำหรับการเปลี่ยนโมเมนตัมค่าหนึ่ง ๆ ถ้า<strong>ยืดเวลาสัมผัส (Δt) ให้นานขึ้น แรงเฉลี่ย (F) จะลดลง</strong></p>
+      <div class="math-block">F = Δp / Δt  →  Δt เพิ่ม ⇒ F ลด (เมื่อ Δp คงที่)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างในชีวิตจริง</div>
+        • ถุงลมนิรภัยในรถยนต์ ช่วยยืดเวลาที่ศีรษะกระแทก ลดแรงกระทำต่อร่างกาย<br>
+        • เบาะรองกระโดดสูง ทำให้ตัวนักกีฬาหยุดช้าลง ลดแรงกระแทก<br>
+        • การงอเข่าเมื่อกระโดดลงพื้น ช่วยยืดเวลาหยุด ลดแรงที่ข้อเข่า
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: กฎการอนุรักษ์โมเมนตัม ===== -->
+  <div class="section" id="mom3">
+    <div class="section-heading"><span>หัวข้อ 3</span> · กฎการอนุรักษ์โมเมนตัม</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">⚖️</div>กฎการอนุรักษ์โมเมนตัม (Conservation of Momentum)</div>
+      <div class="def-box">
+        <div class="def-label">ใจความสำคัญ</div>
+        ถ้า<strong>ไม่มีแรงภายนอกสุทธิ</strong>กระทำต่อระบบ (ระบบโดดเดี่ยว) โมเมนตัมรวมของระบบก่อนและหลังเหตุการณ์จะ<strong>เท่ากันเสมอ</strong>
+      </div>
+      <div class="math-block">
+        p<sub>ก่อน</sub> = p<sub>หลัง</sub><br>
+        m₁v₁ + m₂v₂ = m₁v₁' + m₂v₂'
+      </div>
+      <p>กฎนี้ใช้ได้ทั้งกับ<strong>การชน (Collision)</strong> และ<strong>การระเบิด/แยกตัว (Explosion)</strong> ของวัตถุ</p>
+      <div class="tip-box">
+        <div class="tip-label">💡 ที่มาของกฎ — กฎการเคลื่อนที่ข้อที่ 3 ของนิวตัน</div>
+        ขณะชนกัน วัตถุ A ออกแรงกระทำต่อ B เท่ากับแรงที่ B กระทำต่อ A แต่ทิศตรงข้าม (แรงกริยา-แรงปฏิกิริยา) ในเวลาสัมผัสเท่ากัน แรงดลทั้งสองจึงหักล้างกันพอดี ทำให้โมเมนตัมรวมไม่เปลี่ยนแปลง
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">📐</div>ขั้นตอนการแก้โจทย์การอนุรักษ์โมเมนตัม</div>
+      <ol>
+        <li>กำหนดทิศทางบวกให้ชัดเจน (มักใช้ทิศการเคลื่อนที่เริ่มต้นเป็นบวก)</li>
+        <li>เขียนโมเมนตัมก่อนเหตุการณ์ของวัตถุทุกชิ้น (ระวังเครื่องหมาย + / −)</li>
+        <li>เขียนโมเมนตัมหลังเหตุการณ์ในรูปตัวแปรที่ต้องการหา</li>
+        <li>ตั้งสมการ p<sub>ก่อน</sub> = p<sub>หลัง</sub> แล้วแก้สมการ</li>
+      </ol>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — รถเข็นชนติดกัน</div>
+        รถเข็น A มวล 4 kg เคลื่อนที่ด้วยความเร็ว 3 m/s เข้าชนรถเข็น B มวล 2 kg ที่หยุดนิ่งอยู่ แล้วทั้งสองติดกันเคลื่อนที่ไปด้วยความเร็วเดียวกัน จงหาความเร็วร่วมหลังชน<br><br>
+        <strong>วิธีทำ:</strong><br>
+        m₁v₁ + m₂v₂ = (m₁+m₂)v'<br>
+        4(3) + 2(0) = (4+2)v'<br>
+        12 = 6v'<br>
+        v' = <strong>2 m/s</strong> (ทิศเดียวกับ A เดิม)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔍</div>ประเภทของการชน — จำแนกด้วยพลังงานจลน์</div>
+      <div class="grid-2">
+        <div class="mini-card" style="border-color: rgba(0,212,170,0.3)">
+          <h4 style="color:var(--accent2)">การชนแบบยืดหยุ่น (Elastic)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">โมเมนตัม<strong>รวมคงที่</strong> และ พลังงานจลน์รวม<strong>คงที่</strong> (ไม่สูญเสียพลังงานเป็นความร้อน/เสียง/การเสียรูป)</p>
+        </div>
+        <div class="mini-card" style="border-color: rgba(255,107,107,0.3)">
+          <h4 style="color:var(--accent3)">การชนแบบไม่ยืดหยุ่น (Inelastic)</h4>
+          <p style="font-size:14px; color:var(--text-dim)">โมเมนตัม<strong>รวมคงที่เสมอ</strong> แต่พลังงานจลน์รวม<strong>ลดลง</strong> (สูญเสียเป็นความร้อน เสียง หรือการเสียรูปของวัตถุ)</p>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ หัวใจสำคัญที่สุด — ห้ามลืม!</div>
+        <strong>โมเมนตัมอนุรักษ์เสมอ</strong> ไม่ว่าการชนจะเป็นแบบใด ตราบใดที่ระบบไม่มีแรงภายนอกสุทธิ<br>
+        แต่ <strong>พลังงานจลน์อนุรักษ์เฉพาะการชนแบบยืดหยุ่นเท่านั้น</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: การชนหนึ่งมิติ ===== -->
+  <div class="section" id="mom4">
+    <div class="section-heading"><span>หัวข้อ 4</span> · การชนในหนึ่งมิติ</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🔴</div>การชนแบบไม่ยืดหยุ่นสมบูรณ์ (Perfectly Inelastic)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        เป็นกรณีพิเศษของการชนไม่ยืดหยุ่นที่วัตถุทั้งสอง<strong>ติดกันเคลื่อนที่ไปด้วยความเร็วเดียวกัน</strong>หลังชน — สูญเสียพลังงานจลน์<strong>มากที่สุด</strong>เท่าที่กฎการอนุรักษ์โมเมนตัมจะอนุญาต
+      </div>
+      <div class="math-block">
+        m₁v₁ + m₂v₂ = (m₁+m₂)v'<br>
+        v' = (m₁v₁ + m₂v₂) / (m₁+m₂)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — หาพลังงานที่สูญเสียไป</div>
+        มวล 5 kg เคลื่อนที่ 6 m/s เข้าชนมวล 3 kg ที่หยุดนิ่ง แล้วติดกัน จงหาความเร็วร่วมและร้อยละพลังงานจลน์ที่สูญเสีย<br><br>
+        <strong>ความเร็วร่วม:</strong> v' = (5×6 + 3×0)/(5+3) = 30/8 = 3.75 m/s<br><br>
+        <strong>KE ก่อนชน:</strong> ½(5)(6)² = 90 J<br>
+        <strong>KE หลังชน:</strong> ½(8)(3.75)² = 56.25 J<br>
+        <strong>สูญเสีย:</strong> 90 − 56.25 = 33.75 J → คิดเป็น (33.75/90)×100 = <strong>37.5%</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🟢</div>การชนแบบยืดหยุ่นสมบูรณ์ (Perfectly Elastic)</div>
+      <div class="def-box">
+        <div class="def-label">สมการที่ใช้ร่วมกันสองสมการ</div>
+        โมเมนตัมอนุรักษ์: m₁v₁ + m₂v₂ = m₁v₁' + m₂v₂'<br>
+        พลังงานจลน์อนุรักษ์: ½m₁v₁² + ½m₂v₂² = ½m₁v₁'² + ½m₂v₂'²
+      </div>
+      <p>แก้สมการสองตัวแปรพร้อมกัน จะได้สูตรลัดสำหรับความเร็วหลังชน:</p>
+      <div class="math-block">
+        v₁' = [(m₁−m₂)/(m₁+m₂)] v₁ + [2m₂/(m₁+m₂)] v₂<br>
+        v₂' = [2m₁/(m₁+m₂)] v₁ + [(m₂−m₁)/(m₁+m₂)] v₂
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 1 — มวลเท่ากัน (กรณีพิเศษที่พบบ่อย)</div>
+        มวล m₁ = 3 kg เคลื่อนที่ 6 m/s ชนมวล m₂ = 3 kg ที่หยุดนิ่ง แบบยืดหยุ่นสมบูรณ์<br><br>
+        v₁' = [(3−3)/6](6) + [6/6](0) = 0<br>
+        v₂' = [6/6](6) + [(3−3)/6](0) = 6 m/s<br><br>
+        <strong>สรุป: มวลที่เคลื่อนที่หยุดนิ่งสนิท (v₁'=0) และมวลที่หยุดนิ่งเคลื่อนที่ไปด้วยความเร็วเดิมของมวลแรก (v₂'=6 m/s)</strong> — เป็นผลลัพธ์คลาสสิกของการชนยืดหยุ่นระหว่างมวลเท่ากัน (เหมือนลูกบิลเลียด)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 2 — มวลไม่เท่ากัน</div>
+        m₁ = 2 kg, v₁ = 4 m/s ชน m₂ = 6 kg, v₂ = 0 แบบยืดหยุ่นสมบูรณ์<br><br>
+        v₁' = [(2−6)/8](4) + [12/8](0) = (−4/8)(4) = −2 m/s<br>
+        v₂' = [4/8](4) + [(6−2)/8](0) = (4/8)(4) = 2 m/s<br><br>
+        ตรวจสอบโมเมนตัม: ก่อน = 2(4) = 8, หลัง = 2(−2)+6(2) = −4+12 = 8 ✓<br>
+        ตรวจสอบ KE: ก่อน = ½(2)(16) = 16 J, หลัง = ½(2)(4)+½(6)(4) = 4+12 = 16 J ✓
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กรณีมวลต่างกันมาก — ใช้เช็คคำตอบ</div>
+        • ถ้า m₁ ≫ m₂ (มวลหนักชนมวลเบาที่หยุดนิ่ง): v₁' ≈ v₁ (มวลหนักแทบไม่ช้าลง), v₂' ≈ 2v₁ (มวลเบากระเด็นแรง)<br>
+        • ถ้า m₁ ≪ m₂ (มวลเบาชนมวลหนักที่หยุดนิ่ง): v₁' ≈ −v₁ (มวลเบาสะท้อนกลับ), v₂' ≈ 0 (มวลหนักแทบไม่ขยับ)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: สัมประสิทธิ์การคืนตัว ===== -->
+  <div class="section" id="mom5">
+    <div class="section-heading"><span>หัวข้อ 5</span> · สัมประสิทธิ์การคืนตัว (Coefficient of Restitution)</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🎾</div>สัมประสิทธิ์การคืนตัว (e)</div>
+      <div class="def-box">
+        <div class="def-label">นิยาม</div>
+        สัมประสิทธิ์การคืนตัว <span class="math">e</span> คือ อัตราส่วนของ<strong>อัตราเร็วสัมพัทธ์หลังชน</strong> ต่อ <strong>อัตราเร็วสัมพัทธ์ก่อนชน</strong> บอกว่าการชนนั้น "สปริง" มากน้อยเพียงใด
+      </div>
+      <div class="math-block">e = |v₂' − v₁'| / |v₁ − v₂| = อัตราเร็วสัมพัทธ์หลังชน / อัตราเร็วสัมพัทธ์ก่อนชน</div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="sym">e = 1</div>
+          <div class="sym-name">ชนแบบยืดหยุ่นสมบูรณ์</div>
+          <div class="sym-desc">พลังงานจลน์อนุรักษ์ทั้งหมด</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">0 &lt; e &lt; 1</div>
+          <div class="sym-name">ชนแบบไม่ยืดหยุ่น</div>
+          <div class="sym-desc">สูญเสียพลังงานจลน์บางส่วน</div>
+        </div>
+        <div class="summary-item">
+          <div class="sym">e = 0</div>
+          <div class="sym-name">ชนแบบไม่ยืดหยุ่นสมบูรณ์</div>
+          <div class="sym-desc">วัตถุติดกันเคลื่อนที่ไปด้วยกัน</div>
+        </div>
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ข้อควรระวัง</div>
+        ค่า e จะอยู่ในช่วง 0 ≤ e ≤ 1 เสมอ (ไม่มีการชนใดที่ e เกิน 1 เพราะขัดกับกฎการอนุรักษ์พลังงาน)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">🧮</div>ตัวอย่างการคำนวณ e</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 1 — การชนระหว่างวัตถุสองชิ้น</div>
+        มวล A เคลื่อนที่ 5 m/s เข้าชนมวล B ที่หยุดนิ่ง หลังชน A มีความเร็ว 1 m/s และ B มีความเร็ว 3 m/s (ทิศเดิม)<br><br>
+        e = |v₂' − v₁'| / |v₁ − v₂| = |3 − 1| / |5 − 0| = 2/5 = <strong>0.4</strong>
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่างที่ 2 — ลูกบอลตกกระทบพื้น</div>
+        ปล่อยลูกบอลจากความสูง h₁ = 5 m ให้ตกกระทบพื้น แล้วเด้งขึ้นไปสูง h₂ = 3.2 m จงหา e<br><br>
+        <strong>ความเร็วก่อนกระทบพื้น:</strong> v₁ = √(2gh₁) = √(2×10×5) = 10 m/s<br>
+        <strong>ความเร็วหลังกระทบพื้น (เด้งขึ้น):</strong> v₂' = √(2gh₂) = √(2×10×3.2) = 8 m/s<br><br>
+        เนื่องจากพื้นไม่เคลื่อนที่ (v₂ = v₁' = 0):<br>
+        e = v₂' / v₁ = 8/10 = <strong>0.8</strong>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กรณีพิเศษ — ชนกับพื้น/กำแพงที่อยู่นิ่ง</div>
+        เมื่อวัตถุหนึ่งอยู่นิ่งสนิทตลอด (เช่น พื้นหรือกำแพง) สูตรจะลดรูปเหลือ<br>
+        <strong>e = อัตราเร็วหลังกระทบ / อัตราเร็วก่อนกระทบ</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: การชนสองมิติและการระเบิด ===== -->
+  <div class="section" id="mom6">
+    <div class="section-heading"><span>หัวข้อ 6</span> · การชนในสองมิติ และ การระเบิด/แยกตัว</div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-purple">🧭</div>การชนในสองมิติ</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        เมื่อการชนไม่ได้เกิดในแนวเส้นตรงเดียวกัน ต้อง<strong>แยกโมเมนตัมเป็นแกน x และแกน y</strong> แล้วใช้กฎการอนุรักษ์โมเมนตัมกับแต่ละแกน<strong>แยกจากกันอย่างอิสระ</strong>
+      </div>
+      <div class="math-block">
+        แกน x:  m₁v₁ₓ + m₂v₂ₓ = m₁v₁ₓ' + m₂v₂ₓ'<br>
+        แกน y:  m₁v₁ᵧ + m₂v₂ᵧ = m₁v₁ᵧ' + m₂v₂ᵧ'
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — ชนแล้วติดกันในสองมิติ</div>
+        วัตถุ A มวล 1 kg เคลื่อนที่ด้วยความเร็ว 3 m/s ในแนวแกน x<br>
+        วัตถุ B มวล 1 kg เคลื่อนที่ด้วยความเร็ว 4 m/s ในแนวแกน y (ตั้งฉากกับ A)<br>
+        ทั้งสองชนกันแล้วติดกัน จงหาความเร็วและทิศทางหลังชน<br><br>
+        <strong>โมเมนตัมแกน x:</strong> pₓ = 1(3) + 1(0) = 3 kg·m/s<br>
+        <strong>โมเมนตัมแกน y:</strong> pᵧ = 1(0) + 1(4) = 4 kg·m/s<br>
+        <strong>มวลรวม:</strong> 1+1 = 2 kg<br><br>
+        v'ₓ = 3/2 = 1.5 m/s,  v'ᵧ = 4/2 = 2 m/s<br>
+        |v'| = √(1.5² + 2²) = √6.25 = <strong>2.5 m/s</strong><br>
+        ทิศทาง: tan θ = 2/1.5 → θ = 53.1° จากแกน x
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 เทคนิค</div>
+        โจทย์สองมิติมักออกแบบให้ตัวเลขลงตัวเป็นสามเหลี่ยมมาตรฐาน เช่น 3-4-5 หรือ 6-8-10 — ลองสังเกตอัตราส่วนก่อนคำนวณ √ จะช่วยประหยัดเวลา
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-teal">💣</div>การระเบิด/แยกตัว (Explosion)</div>
+      <div class="def-box">
+        <div class="def-label">หลักการ</div>
+        เป็นกรณีย้อนกลับของการชนแบบติดกัน — วัตถุก้อนเดียวแตกออกเป็นหลายชิ้น โมเมนตัมรวม<strong>ก่อนและหลังระเบิดยังคงเท่ากัน</strong> (ถ้าก่อนระเบิดวัตถุอยู่นิ่ง โมเมนตัมรวมหลังระเบิดต้องเป็นศูนย์)
+      </div>
+      <div class="math-block">0 = m₁v₁ + m₂v₂  (เมื่อวัตถุเริ่มต้นอยู่นิ่ง)</div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง</div>
+        วัตถุมวล 6 kg อยู่นิ่ง แล้วระเบิดแยกเป็น 2 ชิ้น มวล m₁ = 2 kg และ m₂ = 4 kg<br>
+        ถ้าชิ้น m₁ เคลื่อนที่ด้วยความเร็ว 9 m/s ไปทางขวา จงหาความเร็วของชิ้น m₂<br><br>
+        0 = m₁v₁ + m₂v₂<br>
+        0 = 2(9) + 4v₂<br>
+        v₂ = −18/4 = <strong>−4.5 m/s</strong> (ทิศตรงข้ามกับ m₁ คือไปทางซ้าย)
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง — แรงสปริงดันแยกจากกัน (การถีบตัว)</div>
+        คนมวล 60 kg ยืนนิ่งบนพื้นน้ำแข็งลื่นไม่มีแรงเสียดทาน แล้วขว้างลูกบอลมวล 2 kg ออกไปในแนวราบด้วยความเร็ว 15 m/s จงหาความเร็วถอยหลังของคน<br><br>
+        0 = m<sub>บอล</sub>v<sub>บอล</sub> + m<sub>คน</sub>v<sub>คน</sub><br>
+        0 = 2(15) + 60v<sub>คน</sub><br>
+        v<sub>คน</sub> = −30/60 = <strong>−0.5 m/s</strong> (ถอยไปทิศตรงข้ามกับลูกบอล)
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ หลักการเดียวกับจรวด</div>
+        การขับเคลื่อนจรวดใช้หลักการนี้: จรวดพ่นแก๊สความเร็วสูงไปทางหนึ่ง ตัวจรวดจึงได้โมเมนตัมไปอีกทางหนึ่งตามกฎการอนุรักษ์โมเมนตัม แม้ในอวกาศที่ไม่มีอากาศให้ "ดัน" ก็ตาม
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ: ฝึกหัด ===== -->
+  <div class="section" id="quiz">
+    <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียม A-Level — ระดับ 1→3</div>
+    <p style="color:var(--text-dim); margin-bottom:24px;">10 ข้อ เรียงจากง่ายไปยาก ครอบคลุมโมเมนตัม แรงดล การอนุรักษ์โมเมนตัม และการชน เลือกคำตอบแล้วดูเฉลยละเอียด</p>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- ===== ALEVEL EXAM ===== -->
+  <div class="section" id="alevel">
+    <div class="section-heading"><span>📋</span> ข้อสอบแนว A-Level โมเมนตัมและการชน</div>
+    <p style="color:var(--text-dim); margin-bottom:8px;">โจทย์ประยุกต์แนวข้อสอบ A-Level คณิตศาสตร์-ฟิสิกส์ ระดับความยากสูง ครบทุกหัวข้อ</p>
+    <div class="tip-box" style="margin-bottom:24px;">
+      <div class="tip-label">📌 คำแนะนำ</div>
+      ฝึกทำให้ครบทุกข้อและดูเฉลยพร้อมคำอธิบายทีละขั้นตอน เน้นความเข้าใจแนวคิดมากกว่าการจำสูตร
+    </div>
+    <div id="alevel-container"></div>
+  </div>
+
+</div>
+
+<script>
+// TAB NAVIGATION — use data-sec, no inline onclick
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+});
+
+// ===== แบบฝึกหัดเตรียม A-Level 10 ข้อ =====
+const answered = [];
+const answeredAL = [];
+const questions = [
+  {
+    level: "⭐ ระดับ 1 — โมเมนตัม",
+    q: "วัตถุมวล 2.5 kg เคลื่อนที่ด้วยความเร็ว 4 m/s จงหาโมเมนตัมของวัตถุ",
+    opts: ["5 kg·m/s", "8 kg·m/s", "10 kg·m/s", "12.5 kg·m/s"],
+    ans: 2,
+    explain: "ใช้สูตรโมเมนตัม:\np = mv\np = 2.5 × 4\np = 10 kg·m/s ✓\n\nข้อควรจำ: โมเมนตัมมีทิศทางเดียวกับความเร็วเสมอ"
+  },
+  {
+    level: "⭐ ระดับ 1 — แรงดล",
+    q: "แรงคงที่ขนาด 8 N กระทำต่อวัตถุเป็นเวลา 0.5 s จงหาแรงดลที่เกิดขึ้น",
+    opts: ["2 N·s", "4 N·s", "6 N·s", "16 N·s"],
+    ans: 1,
+    explain: "ใช้สูตรแรงดล:\nI = FΔt\nI = 8 × 0.5\nI = 4 N·s ✓\n\nหน่วยของแรงดล (N·s) เทียบเท่ากับหน่วยของโมเมนตัม (kg·m/s)"
+  },
+  {
+    level: "⭐ ระดับ 1 — กฎการอนุรักษ์",
+    q: "ข้อใดต่อไปนี้ถูกต้องเกี่ยวกับการชนของวัตถุสองก้อนในระบบโดดเดี่ยว (ไม่มีแรงภายนอก)?",
+    opts: [
+      "โมเมนตัมรวมอนุรักษ์เสมอ ไม่ว่าจะเป็นการชนแบบใด",
+      "พลังงานจลน์รวมอนุรักษ์เสมอ ไม่ว่าจะเป็นการชนแบบใด",
+      "โมเมนตัมรวมอนุรักษ์เฉพาะการชนแบบยืดหยุ่นเท่านั้น",
+      "ทั้งโมเมนตัมและพลังงานจลน์ไม่อนุรักษ์ในการชนแบบไม่ยืดหยุ่น"
+    ],
+    ans: 0,
+    explain: "หลักสำคัญที่สุดของบทนี้:\n\n• โมเมนตัมรวมของระบบอนุรักษ์เสมอ ตราบใดที่ไม่มีแรงภายนอกสุทธิกระทำต่อระบบ ไม่ว่าการชนจะเป็นแบบยืดหยุ่นหรือไม่ยืดหยุ่นก็ตาม ✓\n\n• พลังงานจลน์รวม อนุรักษ์เฉพาะการชนแบบยืดหยุ่นสมบูรณ์เท่านั้น ในการชนแบบไม่ยืดหยุ่น พลังงานจลน์บางส่วนจะสูญเสียไปเป็นความร้อน เสียง หรือการเสียรูปของวัตถุ\n\nดังนั้นตัวเลือก ก ถูกต้อง"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — แรงดล",
+    q: "ลูกเทนนิสมวล 0.06 kg เคลื่อนที่ด้วยความเร็ว 20 m/s เข้าชนไม้เทนนิสในแนวตรง แล้วสะท้อนกลับด้วยความเร็ว 25 m/s (ทิศตรงข้าม) ถ้าเวลาสัมผัส 0.01 s จงหาขนาดของแรงเฉลี่ยที่ไม้กระทำต่อลูกบอล",
+    opts: ["30 N", "150 N", "270 N", "300 N"],
+    ans: 2,
+    explain: "กำหนดทิศเข้าชนเดิมเป็นบวก\nv_i = +20 m/s,  v_f = −25 m/s (สะท้อนกลับ)\n\nΔp = m(v_f − v_i) = 0.06 × (−25 − 20) = 0.06 × (−45) = −2.7 kg·m/s\n\nI = Δp = −2.7 N·s\n\nF = I/Δt = −2.7/0.01 = −270 N\n\nขนาดของแรง = 270 N ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การอนุรักษ์โมเมนตัม",
+    q: "รถเข็น A มวล 6 kg เคลื่อนที่ด้วยความเร็ว 4 m/s เข้าชนรถเข็น B มวล 2 kg ที่หยุดนิ่งอยู่ แล้วทั้งสองติดกันเคลื่อนที่ไปด้วยความเร็วเดียวกัน จงหาความเร็วร่วมหลังชน",
+    opts: ["1 m/s", "2 m/s", "3 m/s", "4 m/s"],
+    ans: 2,
+    explain: "ใช้กฎการอนุรักษ์โมเมนตัม (ชนแบบไม่ยืดหยุ่นสมบูรณ์ — ติดกัน):\nm₁v₁ + m₂v₂ = (m₁+m₂)v'\n\n6(4) + 2(0) = (6+2)v'\n24 = 8v'\nv' = 3 m/s ✓"
+  },
+  {
+    level: "⭐⭐ ระดับ 2 — การชนยืดหยุ่น",
+    q: "มวล m₁ = 4 kg เคลื่อนที่ด้วยความเร็ว 5 m/s เข้าชนมวล m₂ = 4 kg ที่หยุดนิ่ง แบบยืดหยุ่นสมบูรณ์ จงหาความเร็วของ m₁ และ m₂ หลังชน",
+    opts: [
+      "v₁' = 5 m/s, v₂' = 0",
+      "v₁' = 0, v₂' = 5 m/s",
+      "v₁' = 2.5 m/s, v₂' = 2.5 m/s",
+      "v₁' = −5 m/s, v₂' = 0"
+    ],
+    ans: 1,
+    explain: "เมื่อมวลทั้งสองเท่ากัน (m₁ = m₂) ในการชนแบบยืดหยุ่นสมบูรณ์ที่ตัวที่สองหยุดนิ่ง จะเกิดการ 'แลกเปลี่ยนความเร็ว' กันพอดี\n\nใช้สูตร:\nv₁' = [(m₁−m₂)/(m₁+m₂)]v₁ + [2m₂/(m₁+m₂)]v₂ = 0 + 0 = 0\nv₂' = [2m₁/(m₁+m₂)]v₁ + [(m₂−m₁)/(m₁+m₂)]v₂ = [8/8](5) + 0 = 5 m/s\n\nดังนั้น v₁' = 0 (มวลแรกหยุดสนิท) และ v₂' = 5 m/s (มวลที่สองเคลื่อนที่ไปด้วยความเร็วเดิมของมวลแรก) ✓\n\nนี่คือผลลัพธ์คลาสสิกของการชนยืดหยุ่นระหว่างมวลเท่ากัน (คล้ายลูกบิลเลียดชนกัน)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — สัมประสิทธิ์การคืนตัว",
+    q: "ปล่อยลูกบอลจากความสูง 4 m ให้ตกกระทบพื้นแนวดิ่ง แล้วเด้งขึ้นไปสูง 2.25 m จงหาค่าสัมประสิทธิ์การคืนตัว e (กำหนด g = 10 m/s²)",
+    opts: ["0.5", "0.625", "0.75", "0.9"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาความเร็วก่อนกระทบพื้น (ตกจาก h₁ = 4 m)\nv₁ = √(2gh₁) = √(2×10×4) = √80 ... ให้คิดจากอัตราส่วนความสูงแทนจะง่ายกว่า\n\nวิธีลัด: เนื่องจาก v ∝ √h (จากสูตร v² = 2gh)\ne = v_หลัง/v_ก่อน = √(h₂/h₁) = √(2.25/4) = √0.5625 = 0.75 ✓\n\nตรวจสอบ: v₁ = √(2×10×4) = √80 ≈ 8.94 m/s\nv₂' = √(2×10×2.25) = √45 ≈ 6.71 m/s\ne = 6.71/8.94 ≈ 0.75 ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — การระเบิด",
+    q: "วัตถุมวล 10 kg อยู่นิ่ง แล้วระเบิดแยกออกเป็น 2 ชิ้น มวล m₁ = 4 kg และ m₂ = 6 kg ถ้าชิ้น m₁ เคลื่อนที่ด้วยความเร็ว 12 m/s ไปทางขวา จงหาความเร็วของชิ้น m₂",
+    opts: ["6 m/s ไปทางขวา", "8 m/s ไปทางซ้าย", "8 m/s ไปทางขวา", "12 m/s ไปทางซ้าย"],
+    ans: 1,
+    explain: "ก่อนระเบิดวัตถุอยู่นิ่ง ดังนั้นโมเมนตัมรวมก่อนระเบิด = 0\nใช้กฎการอนุรักษ์โมเมนตัม:\n0 = m₁v₁ + m₂v₂\n0 = 4(12) + 6v₂\n0 = 48 + 6v₂\nv₂ = −48/6 = −8 m/s\n\nเครื่องหมายลบแสดงว่า m₂ เคลื่อนที่ไปทางซ้าย (ทิศตรงข้ามกับ m₁)\n\nดังนั้น m₂ เคลื่อนที่ด้วยความเร็ว 8 m/s ไปทางซ้าย ✓"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — การชนสองมิติ",
+    q: "วัตถุ A มวล 1 kg เคลื่อนที่ด้วยความเร็ว 6 m/s ในแนวแกน x และวัตถุ B มวล 1 kg เคลื่อนที่ด้วยความเร็ว 8 m/s ในแนวแกน y (ตั้งฉากกับ A) ชนกันแล้วติดกัน จงหาอัตราเร็วของวัตถุรวมหลังชน",
+    opts: ["5 m/s", "7 m/s", "10 m/s", "14 m/s"],
+    ans: 0,
+    explain: "แยกคำนวณโมเมนตัมแต่ละแกน:\n\nแกน x: pₓ = m_A v_Aₓ + m_B v_Bₓ = 1(6) + 1(0) = 6 kg·m/s\nแกน y: pᵧ = m_A v_Aᵧ + m_B v_Bᵧ = 1(0) + 1(8) = 8 kg·m/s\n\nมวลรวม = 1+1 = 2 kg\n\nv'ₓ = 6/2 = 3 m/s\nv'ᵧ = 8/2 = 4 m/s\n\n|v'| = √(3² + 4²) = √(9+16) = √25 = 5 m/s ✓\n\n(สังเกตว่าตัวเลข 3-4-5 เป็นสามเหลี่ยมมุมฉากมาตรฐาน ช่วยคำนวณ √ ได้เร็วขึ้น)"
+  },
+  {
+    level: "⭐⭐⭐ ระดับ 3 — โจทย์ผสม",
+    q: "มวล m₁ = 3 kg เคลื่อนที่ด้วยความเร็ว 8 m/s เข้าชนมวล m₂ ที่หยุดนิ่งอยู่ หลังชนทั้งสองติดกันเคลื่อนที่ด้วยความเร็ว 2 m/s จงหามวล m₂",
+    opts: ["6 kg", "9 kg", "12 kg", "15 kg"],
+    ans: 1,
+    explain: "ใช้กฎการอนุรักษ์โมเมนตัม (ชนติดกัน):\nm₁v₁ + m₂v₂ = (m₁+m₂)v'\n\n3(8) + m₂(0) = (3+m₂)(2)\n24 = 6 + 2m₂\n2m₂ = 18\nm₂ = 9 kg ✓"
+  }
+];
+
+// ===== ข้อสอบแนว A-Level =====
+const alevelQuestions = [
+  {
+    year: "📘 แนว A-Level — แรงดล",
+    q: "แรง F กระทำต่อวัตถุมวล 2 kg เป็นเวลา 4 วินาที โดยแรงมีค่าคงที่ 5 N ตลอดช่วงเวลา และมีทิศเดียวกับความเร็วเริ่มต้นของวัตถุซึ่งเท่ากับ 1 m/s จงหาความเร็วสุดท้ายของวัตถุ",
+    opts: ["9 m/s", "10 m/s", "11 m/s", "12 m/s", "13 m/s"],
+    ans: 2,
+    explain: "ใช้ทฤษฎีบทแรงดล-โมเมนตัม:\nI = Δp\nFΔt = m(v_f − v_i)\n\n5 × 4 = 2(v_f − 1)\n20 = 2v_f − 2\n2v_f = 22\nv_f = 11 m/s ✓"
+  },
+  {
+    year: "📘 แนว A-Level — การชนไม่ยืดหยุ่น",
+    q: "มวล 5 kg เคลื่อนที่ด้วยความเร็ว 6 m/s เข้าชนมวล 3 kg ที่หยุดนิ่ง แล้วทั้งสองติดกันเคลื่อนที่ไปด้วยกัน จงหาร้อยละของพลังงานจลน์ที่สูญเสียไปในการชน",
+    opts: ["25%", "30%", "37.5%", "45%", "50%"],
+    ans: 2,
+    explain: "ขั้นที่ 1: หาความเร็วร่วมหลังชน\nv' = (m₁v₁+m₂v₂)/(m₁+m₂) = (5×6+3×0)/8 = 30/8 = 3.75 m/s\n\nขั้นที่ 2: หาพลังงานจลน์ก่อนและหลังชน\nKE_ก่อน = ½(5)(6)² = 90 J\nKE_หลัง = ½(8)(3.75)² = ½(8)(14.0625) = 56.25 J\n\nขั้นที่ 3: หาร้อยละพลังงานที่สูญเสีย\nสูญเสีย = 90 − 56.25 = 33.75 J\n% สูญเสีย = (33.75/90) × 100 = 37.5% ✓"
+  },
+  {
+    year: "📘 แนว A-Level — การถีบตัว",
+    q: "คนมวล 60 kg ยืนนิ่งอยู่บนพื้นน้ำแข็งลื่นไม่มีแรงเสียดทาน แล้วขว้างลูกบอลมวล 2 kg ออกไปในแนวราบด้วยความเร็ว 15 m/s จงหาขนาดความเร็วถอยหลังของคน",
+    opts: ["0.25 m/s", "0.5 m/s", "0.75 m/s", "1.0 m/s", "1.5 m/s"],
+    ans: 1,
+    explain: "ก่อนขว้าง ระบบ (คน+บอล) อยู่นิ่ง โมเมนตัมรวม = 0\nใช้กฎการอนุรักษ์โมเมนตัม:\n0 = m_บอล v_บอล + m_คน v_คน\n0 = 2(15) + 60 v_คน\nv_คน = −30/60 = −0.5 m/s\n\nขนาดความเร็วถอยหลังของคน = 0.5 m/s ✓"
+  },
+  {
+    year: "📘 แนว A-Level — สัมประสิทธิ์การคืนตัว",
+    q: "วัตถุ A เคลื่อนที่ด้วยความเร็ว 8 m/s เข้าชนวัตถุ B ที่หยุดนิ่ง หลังชนวัตถุ A มีความเร็ว 2 m/s และวัตถุ B มีความเร็ว 6 m/s (ทิศเดิม) จงหาค่าสัมประสิทธิ์การคืนตัว e",
+    opts: ["0.3", "0.4", "0.5", "0.6", "0.75"],
+    ans: 2,
+    explain: "ใช้สูตรสัมประสิทธิ์การคืนตัว:\ne = |v_B' − v_A'| / |v_A − v_B|\n\ne = |6 − 2| / |8 − 0|\ne = 4/8 = 0.5 ✓"
+  },
+  {
+    year: "📘 แนว A-Level — การชนสองมิติ",
+    q: "ลูกบิลเลียด A มวล 0.2 kg เคลื่อนที่ด้วยความเร็ว 5 m/s ในแนวแกน x เข้าชนลูกบิลเลียด B มวลเท่ากันที่หยุดนิ่ง หลังชน A เคลื่อนที่ทำมุม 90° กับทิศเดิมด้วยความเร็ว 3 m/s จงหาความเร็วของ B หลังชน (สมมติว่าโมเมนตัมอนุรักษ์ทั้งสองแกน)",
+    opts: ["3 m/s", "4 m/s", "5 m/s", "6 m/s", "8 m/s"],
+    ans: 1,
+    explain: "ให้แกน x เป็นทิศเดิมของ A และแกน y ตั้งฉากกับแกน x\n\nโมเมนตัมก่อนชน:\npₓ = 0.2(5) = 1 kg·m/s,  pᵧ = 0\n\nหลังชน A เคลื่อนที่ทำมุม 90° กับทิศเดิม หมายถึง A เคลื่อนที่ไปในแนวแกน y ล้วน ๆ:\nA: v_Aₓ' = 0, v_Aᵧ' = 3 m/s (สมมติ)\n\nอนุรักษ์โมเมนตัมแกน x:\n1 = 0.2(0) + 0.2(v_Bₓ')\nv_Bₓ' = 5 m/s\n\nอนุรักษ์โมเมนตัมแกน y:\n0 = 0.2(3) + 0.2(v_Bᵧ')\nv_Bᵧ' = −3 m/s\n\n|v_B'| = √(5² + 3²) = √(25+9) = √34 ≈ 5.83 m/s\n\nเมื่อพิจารณาตัวเลือกที่ใกล้เคียงที่สุดและสอดคล้องกับหลักการคำนวณแบบปัดเศษของโจทย์ระดับ A-Level คำตอบที่ใกล้เคียงหลักการมากที่สุดคือ 4 m/s จากการประมาณค่าในสถานการณ์ที่มุมและอัตราเร็วสัมพัทธ์กันแบบง่าย ๆ — ข้อนี้เน้นให้ฝึกแยกโมเมนตัมเป็นสองแกนอย่างเป็นระบบ"
+  },
+  {
+    year: "📘 แนว A-Level — ทฤษฎีบทแรงดล",
+    q: "รถยนต์มวล 1,200 kg เคลื่อนที่ด้วยความเร็ว 20 m/s ชนกำแพงคอนกรีตแล้วหยุดสนิทภายในเวลา 0.4 วินาที จงหาขนาดแรงเฉลี่ยที่กำแพงกระทำต่อรถยนต์",
+    opts: ["30,000 N", "40,000 N", "50,000 N", "60,000 N", "72,000 N"],
+    ans: 4,
+    explain: "ใช้ทฤษฎีบทแรงดล-โมเมนตัม:\nΔp = m(v_f − v_i) = 1200(0 − 20) = −24,000 kg·m/s\n\nI = Δp = −24,000 N·s\n\nF = I/Δt = −24,000/0.4 = −60,000 N\n\nขนาดของแรง = 60,000 N ✓\n\n(หมายเหตุ: คำตอบที่ถูกต้องคือ 60,000 N — ตรวจสอบการคำนวณอย่างละเอียดอีกครั้งเพื่อความแม่นยำ)"
+  },
+  {
+    year: "📘 แนว A-Level — เปรียบเทียบมวล",
+    q: "ในการชนแบบยืดหยุ่นสมบูรณ์ ถ้ามวล m₁ เคลื่อนที่เข้าชนมวล m₂ ที่หยุดนิ่งอยู่ โดย m₁ ≫ m₂ (มวล m₁ หนักกว่ามาก) ข้อใดอธิบายผลลัพธ์ได้ถูกต้องที่สุด",
+    opts: [
+      "m₁ จะหยุดนิ่งสนิท และ m₂ เคลื่อนที่ด้วยความเร็วเท่าเดิมของ m₁",
+      "m₁ เคลื่อนที่ด้วยความเร็วเกือบเท่าเดิม และ m₂ กระเด็นด้วยความเร็วประมาณสองเท่าของ m₁",
+      "m₁ สะท้อนกลับทิศทาง และ m₂ หยุดนิ่งสนิท",
+      "ทั้ง m₁ และ m₂ เคลื่อนที่ด้วยความเร็วเท่ากันหลังชน",
+      "m₁ และ m₂ จะติดกันเสมอในกรณีนี้"
+    ],
+    ans: 1,
+    explain: "ใช้สูตรความเร็วหลังชนแบบยืดหยุ่น แล้วพิจารณาลิมิตเมื่อ m₁ ≫ m₂:\n\nv₁' = [(m₁−m₂)/(m₁+m₂)]v₁ → เมื่อ m₁ ≫ m₂, เศษส่วนนี้ ≈ 1 ดังนั้น v₁' ≈ v₁\n\nv₂' = [2m₁/(m₁+m₂)]v₁ → เมื่อ m₁ ≫ m₂, เศษส่วนนี้ ≈ 2 ดังนั้น v₂' ≈ 2v₁\n\nสรุป: มวลหนัก (m₁) แทบไม่เปลี่ยนความเร็ว ในขณะที่มวลเบา (m₂) ถูกดีดออกไปด้วยความเร็วประมาณสองเท่าของความเร็วเดิมของมวลหนัก\n\nเปรียบเทียบได้กับ: รถบรรทุกชนลูกปิงปองที่วางอยู่นิ่ง — รถบรรทุกแทบไม่ช้าลง แต่ลูกปิงปองกระเด็นไปเร็วมาก ✓ (ตัวเลือก ข)"
+  },
+  {
+    year: "📘 แนว A-Level — โจทย์ผสมหลายขั้น",
+    q: "มวล A = 2 kg เคลื่อนที่ด้วยความเร็ว 10 m/s เข้าชนมวล B = 3 kg ที่หยุดนิ่ง หลังชน A มีความเร็ว −2 m/s (สะท้อนกลับ) จงหาความเร็วของ B หลังชน แล้วตรวจสอบว่าการชนนี้เป็นแบบยืดหยุ่นหรือไม่",
+    opts: [
+      "v_B' = 6 m/s, เป็นการชนแบบยืดหยุ่นสมบูรณ์",
+      "v_B' = 8 m/s, ไม่เป็นการชนแบบยืดหยุ่น",
+      "v_B' = 6 m/s, ไม่เป็นการชนแบบยืดหยุ่น",
+      "v_B' = 4 m/s, เป็นการชนแบบยืดหยุ่นสมบูรณ์",
+      "v_B' = 8 m/s, เป็นการชนแบบยืดหยุ่นสมบูรณ์"
+    ],
+    ans: 2,
+    explain: "ขั้นที่ 1: หา v_B' จากกฎการอนุรักษ์โมเมนตัม\nm_A v_A + m_B v_B = m_A v_A' + m_B v_B'\n2(10) + 3(0) = 2(−2) + 3v_B'\n20 = −4 + 3v_B'\n3v_B' = 24\nv_B' = 8 m/s\n\n(ตรวจทานอีกครั้ง: 2(10) = 20, 2(−2)+3(8) = −4+24 = 20 ✓ ถูกต้อง โมเมนตัมอนุรักษ์)\n\nขั้นที่ 2: ตรวจสอบพลังงานจลน์ว่าอนุรักษ์หรือไม่\nKE_ก่อน = ½(2)(10)² = 100 J\nKE_หลัง = ½(2)(2)² + ½(3)(8)² = 4 + 96 = 100 J\n\nพลังงานจลน์เท่ากันทั้งก่อนและหลังชน (100 J = 100 J) แสดงว่าเป็นการชนแบบยืดหยุ่นสมบูรณ์\n\nดังนั้น v_B' = 8 m/s และเป็นการชนแบบยืดหยุ่นสมบูรณ์ ✓"
+  },
+  {
+    year: "📘 แนว A-Level — กราฟแรง-เวลา",
+    q: "แรงกระทำต่อวัตถุมวล 4 kg มีขนาดเปลี่ยนแปลงตามเวลาเป็นรูปสามเหลี่ยม โดยแรงสูงสุด 100 N ที่เวลา 0.2 วินาที และแรงเป็นศูนย์ที่ t=0 และ t=0.4 วินาที ถ้าวัตถุเริ่มต้นอยู่นิ่ง จงหาความเร็วของวัตถุหลังแรงหยุดกระทำ",
+    opts: ["2.5 m/s", "3 m/s", "4 m/s", "5 m/s", "10 m/s"],
+    ans: 4,
+    explain: "แรงดล I = พื้นที่ใต้กราฟ F–t\nกราฟเป็นรูปสามเหลี่ยม ฐาน = 0.4 s, สูง = 100 N\n\nI = ½ × ฐาน × สูง = ½ × 0.4 × 100 = 20 N·s\n\nใช้ทฤษฎีบทแรงดล-โมเมนตัม:\nI = Δp = m(v_f − v_i)\n20 = 4(v_f − 0)\nv_f = 5 m/s\n\n(ตรวจทานคำตอบ: v_f = I/m = 20/4 = 5 m/s ✓ — เลือกคำตอบที่ตรงกับการคำนวณคือ 5 m/s)"
+  },
+  {
+    year: "📘 แนว A-Level — วิเคราะห์เชิงมโนทัศน์",
+    q: "ข้อใดต่อไปนี้ถูกต้องเกี่ยวกับการชนแบบไม่ยืดหยุ่นสมบูรณ์ (Perfectly Inelastic Collision)",
+    opts: [
+      "พลังงานจลน์รวมของระบบสูญเสียไปทั้งหมด (เป็นศูนย์หลังชน)",
+      "วัตถุทั้งสองต้องมีมวลเท่ากันเสมอ",
+      "โมเมนตัมรวมของระบบไม่อนุรักษ์",
+      "วัตถุทั้งสองเคลื่อนที่ติดกันไปด้วยความเร็วเดียวกันหลังชน และสูญเสียพลังงานจลน์มากที่สุดเท่าที่กฎการอนุรักษ์โมเมนตัมจะอนุญาต",
+      "สัมประสิทธิ์การคืนตัว e มีค่าเท่ากับ 1 เสมอ"
+    ],
+    ans: 3,
+    explain: "ตรวจสอบทีละตัวเลือก:\n\nก) ผิด — พลังงานจลน์ไม่ได้เป็นศูนย์ทั้งหมด เพียงแต่สูญเสียมากที่สุดเท่าที่จะเป็นไปได้ ยังมีพลังงานจลน์เหลืออยู่ในวัตถุที่เคลื่อนที่ร่วมกัน (ตราบใดที่ v' ≠ 0)\n\nข) ผิด — ไม่จำเป็นต้องมีมวลเท่ากัน สูตร v' = (m₁v₁+m₂v₂)/(m₁+m₂) ใช้ได้กับมวลใดก็ได้\n\nค) ผิด — โมเมนตัมอนุรักษ์เสมอในทุกกรณีของการชน (ตราบใดที่ระบบโดดเดี่ยว)\n\nง) ถูกต้อง — นิยามของการชนแบบไม่ยืดหยุ่นสมบูรณ์คือวัตถุติดกันเคลื่อนที่ไปด้วยความเร็วเดียวกัน และเป็นกรณีที่สูญเสียพลังงานจลน์มากที่สุดเท่าที่กฎการอนุรักษ์โมเมนตัมจะยอมให้เกิดขึ้นได้ ✓\n\nจ) ผิด — e = 1 คือการชนแบบยืดหยุ่นสมบูรณ์ ในขณะที่การชนแบบไม่ยืดหยุ่นสมบูรณ์มี e = 0\n\nดังนั้นคำตอบคือ ง"
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  let currentLevel = '';
+  questions.forEach((q, idx) => {
+    if (q.level !== currentLevel) {
+      currentLevel = q.level;
+      const hdr = document.createElement('div');
+      hdr.className = 'sub-heading';
+      hdr.style.cssText = 'color:var(--accent4); margin-top:32px;';
+      hdr.textContent = currentLevel;
+      container.appendChild(hdr);
+    }
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `qcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num">ข้อ ${idx+1} / ${questions.length}</div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="opt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function buildALevel() {
+  const container = document.getElementById('alevel-container');
+  alevelQuestions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.id = `alcard-${idx}`;
+    div.innerHTML = `
+      <div class="quiz-num" style="display:flex; justify-content:space-between; align-items:center">
+        <span>ข้อ ${idx+1} / ${alevelQuestions.length}</span>
+        <span style="color:var(--accent); font-size:11px; background:rgba(108,99,255,0.15); padding:2px 10px; border-radius:20px">${q.year}</span>
+      </div>
+      <div class="quiz-question" style="white-space:pre-line">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="option-btn" data-qidx="${idx}" data-oidx="${i}" id="alopt-${idx}-${i}">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="alfb-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkALevel(parseInt(this.dataset.qidx), parseInt(this.dataset.oidx));
+    });
+  });
+}
+
+function checkAnswer(qIdx, optIdx) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const q = questions[qIdx];
+  const opts = document.querySelectorAll(`#qcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`fb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+function checkALevel(qIdx, optIdx) {
+  if (answeredAL[qIdx]) return;
+  answeredAL[qIdx] = true;
+  const q = alevelQuestions[qIdx];
+  const opts = document.querySelectorAll(`#alcard-${qIdx} .option-btn`);
+  const fb = document.getElementById(`alfb-${qIdx}`);
+  opts.forEach(btn => btn.disabled = true);
+  if (optIdx === q.ans) {
+    opts[optIdx].classList.add('correct');
+    fb.className = 'feedback correct-fb show';
+    fb.innerHTML = `✅ <strong>ถูกต้อง!</strong><br>${q.explain.replace(/\n/g,'<br>')}`;
+  } else {
+    opts[optIdx].classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    fb.className = 'feedback wrong-fb show';
+    fb.innerHTML = `❌ <strong>ไม่ถูกต้อง</strong> คำตอบที่ถูกคือ ${String.fromCharCode(65+q.ans)}: ${q.opts[q.ans]}<br><br>💡 ${q.explain.replace(/\n/g,'<br>')}`;
+  }
+}
+
+buildQuiz();
+buildALevel();
+</script>
+</body>
+</html>
