@@ -533,6 +533,8 @@
 
     <div class="card">
       <div class="card-title"><div class="icon icon-purple">💥</div>แรงดล (Impulse)</div>
+      <p>ลองนึกภาพ: เตะบอลที่วางนิ่งอยู่ ขณะเท้าสัมผัสบอล เท้าจะออก<strong>แรง</strong>กระทำต่อบอลอยู่ช่วง<strong>เวลา</strong>สั้น ๆ (เสี้ยววินาที) และผลจากการกระทำนั้นทำให้บอลซึ่งเดิม<strong>หยุดนิ่ง (โมเมนตัมเป็นศูนย์)</strong> พุ่งออกไปด้วยความเร็วสูง (<strong>มีโมเมนตัมเกิดขึ้น</strong>)</p>
+      <p>ปริมาณที่อธิบาย "ผลสะสม" ของแรงตลอดช่วงเวลาที่กระทำนี้ เราเรียกว่า <strong>แรงดล</strong> — มันคือตัวเชื่อมระหว่าง "แรงที่กระทำ" กับ "การเปลี่ยนแปลงโมเมนตัม" ที่เกิดขึ้นกับวัตถุ ยิ่งแรงมาก หรือกระทำนานขึ้น ผลที่มีต่อการเปลี่ยนโมเมนตัมก็ยิ่งมาก</p>
       <div class="def-box">
         <div class="def-label">นิยาม</div>
         แรงดล คือ ผลคูณของแรงคงที่กับช่วงเวลาที่แรงนั้นกระทำ เขียนแทนด้วย <span class="math">I</span>
@@ -607,6 +609,47 @@
     </div>
 
     <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🔍</div>การชนมีกี่แบบ? — ภาพรวมก่อนลงรายละเอียด</div>
+      <p>เวลาวัตถุสองชิ้นชนกัน <strong>โมเมนตัมรวมจะอนุรักษ์เสมอ</strong> แต่สิ่งที่ "ไม่แน่นอน" คือพลังงานจลน์รวม — บางส่วนอาจสูญเสียไปเป็นความร้อน เสียง หรือการเสียรูปของวัตถุ นักฟิสิกส์จึงใช้พลังงานจลน์เป็นตัวจำแนกการชนออกเป็น <strong>3 แบบหลัก</strong> ดังนี้</p>
+      <table>
+        <tr>
+          <th>ประเภทการชน</th>
+          <th>โมเมนตัม</th>
+          <th>พลังงานจลน์</th>
+          <th>ลักษณะหลังชน</th>
+        </tr>
+        <tr>
+          <td style="color:var(--accent2); font-weight:600">1. ยืดหยุ่นสมบูรณ์<br>(Elastic)</td>
+          <td class="true-val">อนุรักษ์</td>
+          <td class="true-val">อนุรักษ์ (ไม่สูญเสีย)</td>
+          <td>วัตถุแยกออกจากกัน เคลื่อนที่คนละความเร็ว</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent4); font-weight:600">2. ไม่ยืดหยุ่น<br>(Inelastic)</td>
+          <td class="true-val">อนุรักษ์</td>
+          <td class="false-val">สูญเสียบางส่วน</td>
+          <td>วัตถุแยกออกจากกัน แต่มีความเร็วต่างไปจากกรณียืดหยุ่น</td>
+        </tr>
+        <tr>
+          <td style="color:var(--accent3); font-weight:600">3. ไม่ยืดหยุ่นสมบูรณ์<br>(Perfectly Inelastic)</td>
+          <td class="true-val">อนุรักษ์</td>
+          <td class="false-val">สูญเสีย<strong>มากที่สุด</strong></td>
+          <td>วัตถุ<strong>ติดกัน</strong> เคลื่อนที่ไปด้วยความเร็วเดียวกัน</td>
+        </tr>
+      </table>
+      <div class="tip-box">
+        <div class="tip-label">💡 มองภาพให้ง่ายขึ้น</div>
+        ให้นึกว่า "ไม่ยืดหยุ่นสมบูรณ์" คือ<strong>กรณีสุดขั้ว</strong>ของ "ไม่ยืดหยุ่น" — เป็นจุดที่วัตถุสูญเสียพลังงานจลน์ไปมากที่สุดเท่าที่กฎการอนุรักษ์โมเมนตัมจะยอมให้เกิดขึ้นได้ (จนวัตถุติดกันสนิท เคลื่อนที่เป็นก้อนเดียว) ส่วน "ยืดหยุ่นสมบูรณ์" คือ<strong>อีกขั้วหนึ่ง</strong>ที่ไม่สูญเสียพลังงานเลย
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ หัวใจสำคัญที่สุด — ห้ามลืม!</div>
+        <strong>โมเมนตัมอนุรักษ์เสมอ</strong> ไม่ว่าการชนจะเป็นแบบใด ตราบใดที่ระบบไม่มีแรงภายนอกสุทธิ<br>
+        แต่ <strong>พลังงานจลน์อนุรักษ์เฉพาะการชนแบบยืดหยุ่นสมบูรณ์เท่านั้น</strong><br><br>
+        ในหัวข้อถัดไปจะลงรายละเอียดวิธีคำนวณการชนแบบ<strong>ไม่ยืดหยุ่นสมบูรณ์</strong>และ<strong>ยืดหยุ่นสมบูรณ์</strong> ซึ่งเป็นสองแบบที่ข้อสอบออกบ่อยที่สุด
+      </div>
+    </div>
+
+    <div class="card">
       <div class="card-title"><div class="icon icon-teal">📐</div>ขั้นตอนการแก้โจทย์การอนุรักษ์โมเมนตัม</div>
       <ol>
         <li>กำหนดทิศทางบวกให้ชัดเจน (มักใช้ทิศการเคลื่อนที่เริ่มต้นเป็นบวก)</li>
@@ -624,30 +667,12 @@
         v' = <strong>2 m/s</strong> (ทิศเดียวกับ A เดิม)
       </div>
     </div>
-
-    <div class="card">
-      <div class="card-title"><div class="icon icon-yellow">🔍</div>ประเภทของการชน — จำแนกด้วยพลังงานจลน์</div>
-      <div class="grid-2">
-        <div class="mini-card" style="border-color: rgba(0,212,170,0.3)">
-          <h4 style="color:var(--accent2)">การชนแบบยืดหยุ่น (Elastic)</h4>
-          <p style="font-size:14px; color:var(--text-dim)">โมเมนตัม<strong>รวมคงที่</strong> และ พลังงานจลน์รวม<strong>คงที่</strong> (ไม่สูญเสียพลังงานเป็นความร้อน/เสียง/การเสียรูป)</p>
-        </div>
-        <div class="mini-card" style="border-color: rgba(255,107,107,0.3)">
-          <h4 style="color:var(--accent3)">การชนแบบไม่ยืดหยุ่น (Inelastic)</h4>
-          <p style="font-size:14px; color:var(--text-dim)">โมเมนตัม<strong>รวมคงที่เสมอ</strong> แต่พลังงานจลน์รวม<strong>ลดลง</strong> (สูญเสียเป็นความร้อน เสียง หรือการเสียรูปของวัตถุ)</p>
-        </div>
-      </div>
-      <div class="warn-box">
-        <div class="warn-label">⚠️ หัวใจสำคัญที่สุด — ห้ามลืม!</div>
-        <strong>โมเมนตัมอนุรักษ์เสมอ</strong> ไม่ว่าการชนจะเป็นแบบใด ตราบใดที่ระบบไม่มีแรงภายนอกสุทธิ<br>
-        แต่ <strong>พลังงานจลน์อนุรักษ์เฉพาะการชนแบบยืดหยุ่นเท่านั้น</strong>
-      </div>
-    </div>
   </div>
 
   <!-- ===== SECTION 4: การชนหนึ่งมิติ ===== -->
   <div class="section" id="mom4">
     <div class="section-heading"><span>หัวข้อ 4</span> · การชนในหนึ่งมิติ</div>
+    <p style="color:var(--text-dim); margin-top:-12px; margin-bottom:20px;">จากภาพรวม 3 ประเภทการชนในหัวข้อที่แล้ว ตอนนี้จะลงรายละเอียดวิธีคำนวณของ 2 แบบที่ข้อสอบออกบ่อยที่สุด คือ <strong style="color:var(--accent3)">ไม่ยืดหยุ่นสมบูรณ์</strong> และ <strong style="color:var(--accent2)">ยืดหยุ่นสมบูรณ์</strong></p>
 
     <div class="card">
       <div class="card-title"><div class="icon icon-purple">🔴</div>การชนแบบไม่ยืดหยุ่นสมบูรณ์ (Perfectly Inelastic)</div>
@@ -769,23 +794,48 @@
       <div class="card-title"><div class="icon icon-purple">🧭</div>การชนในสองมิติ</div>
       <div class="def-box">
         <div class="def-label">หลักการ</div>
-        เมื่อการชนไม่ได้เกิดในแนวเส้นตรงเดียวกัน ต้อง<strong>แยกโมเมนตัมเป็นแกน x และแกน y</strong> แล้วใช้กฎการอนุรักษ์โมเมนตัมกับแต่ละแกน<strong>แยกจากกันอย่างอิสระ</strong>
+        เมื่อการชนไม่ได้เกิดในแนวเส้นตรงเดียวกัน ต้อง<strong>แยกโมเมนตัมเป็นแกน x และแกน y</strong> แล้วใช้กฎการอนุรักษ์โมเมนตัมกับแต่ละแกน<strong>แยกจากกันอย่างอิสระ</strong> — คิดเสมือนเป็นการอนุรักษ์โมเมนตัม 2 สมการ (หนึ่งสมการต่อหนึ่งแกน)
       </div>
+      <div class="grid-2">
+        <div class="mini-card">
+          <h4>กรณีทั่วไป — วัตถุแยกจากกันหลังชน</h4>
+          <p style="font-size:14px; color:var(--text-dim)">แต่ละวัตถุมีความเร็วเป็นของตัวเอง <span class="math">v₁'</span> และ <span class="math">v₂'</span> ไม่เท่ากัน</p>
+        </div>
+        <div class="mini-card">
+          <h4>กรณีติดกัน — Perfectly Inelastic</h4>
+          <p style="font-size:14px; color:var(--text-dim)">วัตถุทั้งสองรวมเป็นก้อนเดียว จึงมี<strong>ความเร็วร่วมเดียว</strong> <span class="math">v'</span> (ไม่มี v₁' หรือ v₂' แยกกันอีกต่อไป)</p>
+        </div>
+      </div>
+      <p><strong>สมการทั่วไป</strong> (วัตถุแยกจากกันหลังชน — แต่ละวัตถุมีความเร็ว v₁' และ v₂' เป็นของตัวเอง):</p>
       <div class="math-block">
         แกน x:  m₁v₁ₓ + m₂v₂ₓ = m₁v₁ₓ' + m₂v₂ₓ'<br>
         แกน y:  m₁v₁ᵧ + m₂v₂ᵧ = m₁v₁ᵧ' + m₂v₂ᵧ'
+      </div>
+      <p><strong>กรณีชนแล้วติดกัน</strong> (Perfectly Inelastic — วัตถุรวมเป็นก้อนเดียว มีความเร็วร่วม <span class="math">v'</span> เดียว จึงใช้มวลรวมคูณกับความเร็วร่วม):</p>
+      <div class="math-block">
+        แกน x:  m₁v₁ₓ + m₂v₂ₓ = (m₁+m₂) v'ₓ<br>
+        แกน y:  m₁v₁ᵧ + m₂v₂ᵧ = (m₁+m₂) v'ᵧ
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ อย่าสับสน v'ₓ กับ v₁'ₓ / v₂'ₓ</div>
+        ในตัวอย่างข้างล่างนี้ วัตถุ<strong>ติดกัน</strong>หลังชน จึงเหลือวัตถุก้อนเดียวที่มีความเร็ว <span class="math">v'</span> เพียงค่าเดียว — <strong>v'ₓ และ v'ᵧ ในที่นี้คือองค์ประกอบของความเร็วก้อนรวม (ไม่ใช่ความเร็วของ A หรือ B แยกกัน)</strong> เพราะหลังชน A กับ B ไม่มีตัวตนแยกกันอีกแล้ว จึงคำนวณโดยเอาโมเมนตัมรวมแต่ละแกนหารด้วย<strong>มวลรวม</strong> (ไม่ใช่มวลของวัตถุใดวัตถุหนึ่ง)
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง — ชนแล้วติดกันในสองมิติ</div>
         วัตถุ A มวล 1 kg เคลื่อนที่ด้วยความเร็ว 3 m/s ในแนวแกน x<br>
         วัตถุ B มวล 1 kg เคลื่อนที่ด้วยความเร็ว 4 m/s ในแนวแกน y (ตั้งฉากกับ A)<br>
         ทั้งสองชนกันแล้วติดกัน จงหาความเร็วและทิศทางหลังชน<br><br>
-        <strong>โมเมนตัมแกน x:</strong> pₓ = 1(3) + 1(0) = 3 kg·m/s<br>
-        <strong>โมเมนตัมแกน y:</strong> pᵧ = 1(0) + 1(4) = 4 kg·m/s<br>
-        <strong>มวลรวม:</strong> 1+1 = 2 kg<br><br>
-        v'ₓ = 3/2 = 1.5 m/s,  v'ᵧ = 4/2 = 2 m/s<br>
-        |v'| = √(1.5² + 2²) = √6.25 = <strong>2.5 m/s</strong><br>
-        ทิศทาง: tan θ = 2/1.5 → θ = 53.1° จากแกน x
+        <strong>ขั้นที่ 1 — หาโมเมนตัมรวมแต่ละแกน (ก่อนชน):</strong><br>
+        pₓ = m<sub>A</sub>v<sub>Aₓ</sub> + m<sub>B</sub>v<sub>Bₓ</sub> = 1(3) + 1(0) = 3 kg·m/s<br>
+        pᵧ = m<sub>A</sub>v<sub>Aᵧ</sub> + m<sub>B</sub>v<sub>Bᵧ</sub> = 1(0) + 1(4) = 4 kg·m/s<br><br>
+        <strong>ขั้นที่ 2 — หามวลรวมของก้อนที่ติดกัน:</strong><br>
+        m<sub>รวม</sub> = m<sub>A</sub> + m<sub>B</sub> = 1+1 = 2 kg<br><br>
+        <strong>ขั้นที่ 3 — หาความเร็วร่วม v' แต่ละแกน</strong> (โมเมนตัมรวมแต่ละแกน ÷ มวลรวม — เพราะหลังชนเหลือก้อนเดียว):<br>
+        v'ₓ = pₓ / m<sub>รวม</sub> = 3/2 = 1.5 m/s<br>
+        v'ᵧ = pᵧ / m<sub>รวม</sub> = 4/2 = 2 m/s<br><br>
+        <strong>ขั้นที่ 4 — รวมสองแกนเป็นอัตราเร็วและทิศทางเดียว</strong> (ใช้พีทาโกรัส เพราะ v'ₓ กับ v'ᵧ ตั้งฉากกัน):<br>
+        |v'| = √(v'ₓ² + v'ᵧ²) = √(1.5² + 2²) = √6.25 = <strong>2.5 m/s</strong><br>
+        ทิศทาง: tan θ = v'ᵧ / v'ₓ = 2/1.5 → θ = 53.1° จากแกน x
       </div>
       <div class="tip-box">
         <div class="tip-label">💡 เทคนิค</div>
