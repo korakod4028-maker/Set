@@ -424,45 +424,80 @@
     <div class="section-heading"><span>หัวข้อ 2</span> · สมการการกระจัด ความเร็ว ความเร่ง</div>
 
     <div class="card">
-      <div class="card-title"><div class="icon icon-purple">x(t)</div>สมการการกระจัด</div>
+      <div class="card-title"><div class="icon icon-purple">x(t)</div>สมการทั่วไปของ SHM (แบบที่ใช้สอบจริง)</div>
       <div class="def-box">
-        <div class="def-label">นิยาม</div>
-        ถ้าเริ่มจับเวลาที่ตำแหน่งสมดุล การกระจัดที่เวลาใด ๆ เขียนเป็นฟังก์ชันไซน์หรือโคไซน์ตามเงื่อนไขเริ่มต้น
+        <div class="def-label">นิยาม — ฟอร์มมาตรฐาน</div>
+        โจทย์ SHM ทั่วไป <strong>ไม่ได้เริ่มจับเวลาที่จุดสมดุลเสมอไป</strong> จึงต้องใส่ <strong>เฟสเริ่มต้น φ (phi)</strong> เข้าไปในสมการเพื่อรองรับทุกเงื่อนไขเริ่มต้น สมการนี้คือฟอร์มที่ใช้เป็นหลักในการแก้โจทย์และสอบทุกกรณี
       </div>
       <div class="math-block">
-        x(t) = A sin(ωt)&nbsp;&nbsp; (เริ่มที่จุดสมดุล)<br>
-        x(t) = A cos(ωt)&nbsp;&nbsp; (เริ่มที่จุดปลายสุด/แอมพลิจูด)<br>
-        x(t) = A sin(ωt + φ)&nbsp;&nbsp; (กรณีทั่วไป มีเฟสเริ่มต้น φ)
+        x(t) = A cos(ωt + φ)<br>
+        v(t) = −Aω sin(ωt + φ)<br>
+        a(t) = −Aω² cos(ωt + φ) = −ω²x
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 ทำไมถึงใช้ cos เป็นหลัก ไม่ใช่ sin</div>
+        เป็นแค่ธรรมเนียมการเขียน (convention) เท่านั้น — จริง ๆ แล้ว sin กับ cos คือฟังก์ชันเดียวกันที่เลื่อนเฟส 90° จึงเขียนแทนกันได้เสมอ (cos θ = sin(θ+90°)) อาจารย์แต่ละท่านอาจเริ่มด้วย sin หรือ cos ก็ได้ ไม่ขัดแย้งกัน ขอแค่ <strong>นิยาม φ ให้สอดคล้องกับฟังก์ชันที่เลือกใช้</strong>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title"><div class="icon icon-teal">v(t)</div>สมการความเร็ว</div>
-      <p>ความเร็วหาได้จากอนุพันธ์ของการกระจัดเทียบกับเวลา</p>
+      <div class="card-title"><div class="icon icon-teal">🔎</div>ที่มา — v(t) และ a(t) จากอนุพันธ์</div>
+      <p>ได้ v(t) และ a(t) จากการหาอนุพันธ์ของ x(t) เทียบกับเวลาไปเรื่อย ๆ (อนุพันธ์ของ cos คือ −sin, อนุพันธ์ของ −sin คือ −cos)</p>
       <div class="math-block">
-        v(t) = Aω cos(ωt)&nbsp;&nbsp; (เมื่อ x = A sin ωt)<br>
-        v_max = Aω&nbsp;&nbsp; (เกิดที่จุดสมดุล x = 0)
+        x(t) = A cos(ωt + φ)&nbsp;&nbsp; ← ตำแหน่ง<br>
+        v(t) = dx/dt = −Aω sin(ωt + φ)&nbsp;&nbsp; ← ความเร็ว<br>
+        a(t) = dv/dt = −Aω² cos(ωt + φ) = −ω²x&nbsp;&nbsp; ← ความเร่ง
+      </div>
+      <div class="warn-box">
+        <div class="warn-label">⚠️ ความสัมพันธ์หลักที่ต้องจำ</div>
+        a = −ω²x คือ "ลายเซ็น" ของ SHM เสมอ ไม่ว่าจะเขียนสมการด้วย sin หรือ cos ก็ตาม หากพิสูจน์ได้ว่า a = −ω²x แสดงว่าเป็น SHM แน่นอน
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-yellow">🧮</div>หา A และ φ จากเงื่อนไขเริ่มต้น (x_i, v_i ที่ t = 0)</div>
+      <p>โจทย์มักให้ตำแหน่งเริ่มต้น x_i และความเร็วเริ่มต้น v_i มาที่เวลา t = 0 ให้แทน t = 0 ในสมการ x(t) และ v(t) แล้วตั้งเป็นระบบสมการ 2 ตัวแปร (A, φ)</p>
+      <div class="math-block">
+        ที่ t = 0:<br>
+        x(0) = A cos φ = x_i&nbsp;&nbsp; ...(1)<br>
+        v(0) = −Aω sin φ = v_i&nbsp;&nbsp; ...(2)
       </div>
       <div class="def-box">
-        <div class="def-label">สูตรลัด — ความเร็วที่ตำแหน่งใด ๆ</div>
+        <div class="def-label">ขั้นตอนแก้สมการ</div>
+        <strong>หา φ:</strong> นำ (2) หาร (1) เพื่อกำจัด A ออก<br>
+        tan φ = −v_i / (ω x_i)<br><br>
+        <strong>หา A:</strong> ยกกำลังสองแล้วบวก (1) กับ (2) โดยจัดรูปก่อน แล้วใช้เอกลักษณ์ sin²+cos²=1<br>
+        A = √( x_i² + (v_i/ω)² )
+      </div>
+      <div class="example-box">
+        <div class="ex-label">ตัวอย่าง (สไตล์ข้อสอบจริง)</div>
+        วัตถุ SHM มี ω = 5.00 rad/s เริ่มต้นที่ x_i = 5.00 cm, v_i = −0.100 m/s (=−10.0 cm/s) จงหา A และ φ<br><br>
+        tan φ = −v_i/(ω x_i) = −(−10.0)/(5.00 × 5.00) = 10.0/25.0 = 0.400<br>
+        φ = tan⁻¹(0.400) ≈ 0.121π (หรือประมาณ 21.8°)<br><br>
+        A = x_i/cos φ = 5.00/cos(0.121π) ≈ 5.00/0.9285 ≈ 5.39 cm
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">💡 กรณีพิเศษที่พบบ่อย</div>
+        • ปล่อยจากจุดปลายสุดโดยไม่มีความเร็วต้น (v_i = 0): φ = 0 → x(t) = A cos(ωt)<br>
+        • เริ่มที่จุดสมดุลเคลื่อนที่ไปทางบวก (x_i = 0, v_i > 0): φ = −90° → x(t) = A cos(ωt−90°) = A sin(ωt)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon icon-red">📈</div>ความเร็วสูงสุดและความเร่งสูงสุด</div>
+      <p>ไม่ว่าเฟสเริ่มต้น φ จะเป็นเท่าใด ขนาดสูงสุดของ v และ a จะไม่เปลี่ยน เพราะ φ มีผลแค่ "เลื่อนกราฟ" ไปตามแกนเวลา ไม่ได้เปลี่ยนขนาดแอมพลิจูดของแต่ละกราฟ</p>
+      <div class="math-block">
+        v_max = Aω&nbsp;&nbsp; (เกิดที่จุดสมดุล x = 0)<br>
+        a_max = Aω²&nbsp;&nbsp; (เกิดที่จุดปลายสุด x = ±A)
+      </div>
+      <div class="def-box">
+        <div class="def-label">สูตรลัด — ความเร็วที่ตำแหน่งใด ๆ (ไม่ต้องรู้ φ)</div>
         v = ω√(A² − x²)
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
         A = 0.2 m, ω = 5 rad/s ที่ตำแหน่ง x = 0.12 m<br>
         v = 5√(0.2² − 0.12²) = 5√(0.04 − 0.0144) = 5√0.0256 = 5(0.16) = 0.8 m/s
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><div class="icon icon-red">a(t)</div>สมการความเร่ง</div>
-      <div class="math-block">
-        a(t) = −Aω² sin(ωt) = −ω²x<br>
-        a_max = Aω²&nbsp;&nbsp; (เกิดที่จุดปลายสุด x = ±A)
-      </div>
-      <div class="warn-box">
-        <div class="warn-label">⚠️ ความสัมพันธ์หลักที่ต้องจำ</div>
-        a = −ω²x คือ "ลายเซ็น" ของ SHM เสมอ ไม่ว่าโจทย์จะซับซ้อนแค่ไหน หากพิสูจน์ได้ว่า a = −ω²x แสดงว่าเป็น SHM แน่นอน
       </div>
     </div>
 
@@ -475,7 +510,7 @@
       </table>
       <div class="tip-box">
         <div class="tip-label">💡 จำง่าย</div>
-        เร็วสุดที่จุดกึ่งกลาง (สมดุล) เร่งสุดที่จุดปลาย — สลับกันเสมอ ไม่มีทางเกิดพร้อมกัน
+        เร็วสุดที่จุดกึ่งกลาง (สมดุล) เร่งสุดที่จุดปลาย — สลับกันเสมอ ไม่มีทางเกิดพร้อมกัน (ข้อเท็จจริงนี้จริงเสมอไม่ว่า φ จะเป็นเท่าไร)
       </div>
     </div>
   </div>
@@ -486,6 +521,7 @@
 
     <div class="card">
       <div class="card-title"><div class="icon icon-purple">📈</div>กราฟการกระจัด ความเร็ว ความเร่ง เทียบเวลา</div>
+      <p style="color:var(--text-dim); font-size:14px; margin-bottom:10px;">กราฟด้านล่างวาดกรณี φ = 0 (ปล่อยวัตถุจากจุดปลายสุดโดยไม่มีความเร็วต้น) ซึ่งเป็นกรณีที่นิยมใช้อธิบายในห้องเรียนมากที่สุด</p>
       <div class="venn-container">
         <svg width="420" height="290" viewBox="0 0 420 290">
           <rect width="420" height="290" rx="10" fill="#1c2235"/>
@@ -493,44 +529,44 @@
           <line x1="20" y1="145" x2="400" y2="145" stroke="#2a3050" stroke-width="1"/>
           <line x1="20" y1="225" x2="400" y2="225" stroke="#2a3050" stroke-width="1"/>
 
-          <!-- x(t) = A sin ωt : starts at baseline, rises first -->
-          <path d="M 20,65
-                   C 42.5,65 42.5,35 65,35
-                   C 87.5,35 87.5,65 110,65
-                   C 132.5,65 132.5,95 155,95
-                   C 177.5,95 177.5,65 200,65
-                   C 222.5,65 222.5,35 245,35
-                   C 267.5,35 267.5,65 290,65
-                   C 312.5,65 312.5,95 335,95
-                   C 357.5,95 357.5,65 380,65"
+          <!-- x(t) = A cos ωt : starts at PEAK (released from max displacement) -->
+          <path d="M 20,35
+                   C 42.5,35 42.5,65 65,65
+                   C 87.5,65 87.5,95 110,95
+                   C 132.5,95 132.5,65 155,65
+                   C 177.5,65 177.5,35 200,35
+                   C 222.5,35 222.5,65 245,65
+                   C 267.5,65 267.5,95 290,95
+                   C 312.5,95 312.5,65 335,65
+                   C 357.5,65 357.5,35 380,35"
                 stroke="#6c63ff" stroke-width="2.5" fill="none"/>
-          <text x="20" y="25" fill="#a89fff" font-size="12" font-family="Sarabun">x(t) = A sin ωt</text>
+          <text x="20" y="25" fill="#a89fff" font-size="12" font-family="Sarabun">x(t) = A cos ωt</text>
 
-          <!-- v(t) = Aω cos ωt : starts at PEAK (leads x by 90°) -->
-          <path d="M 20,115
-                   C 42.5,115 42.5,145 65,145
-                   C 87.5,145 87.5,175 110,175
-                   C 132.5,175 132.5,145 155,145
-                   C 177.5,145 177.5,115 200,115
-                   C 222.5,115 222.5,145 245,145
-                   C 267.5,145 267.5,175 290,175
-                   C 312.5,175 312.5,145 335,145
-                   C 357.5,145 357.5,115 380,115"
+          <!-- v(t) = −Aω sin ωt : starts at 0, dips down first (leads x by 90°) -->
+          <path d="M 20,145
+                   C 42.5,145 42.5,175 65,175
+                   C 87.5,175 87.5,145 110,145
+                   C 132.5,145 132.5,115 155,115
+                   C 177.5,115 177.5,145 200,145
+                   C 222.5,145 222.5,175 245,175
+                   C 267.5,175 267.5,145 290,145
+                   C 312.5,145 312.5,115 335,115
+                   C 357.5,115 357.5,145 380,145"
                 stroke="#00d4aa" stroke-width="2.5" fill="none"/>
-          <text x="20" y="105" fill="#00d4aa" font-size="12" font-family="Sarabun">v(t) = Aω cos ωt</text>
+          <text x="20" y="105" fill="#00d4aa" font-size="12" font-family="Sarabun">v(t) = −Aω sin ωt</text>
 
-          <!-- a(t) = −Aω² sin ωt : mirror of x(t), starts by dipping down (180° out of phase) -->
-          <path d="M 20,225
-                   C 42.5,225 42.5,255 65,255
-                   C 87.5,255 87.5,225 110,225
-                   C 132.5,225 132.5,195 155,195
-                   C 177.5,195 177.5,225 200,225
-                   C 222.5,225 222.5,255 245,255
-                   C 267.5,255 267.5,225 290,225
-                   C 312.5,225 312.5,195 335,195
-                   C 357.5,195 357.5,225 380,225"
+          <!-- a(t) = −Aω² cos ωt : starts at TROUGH (180° out of phase with x) -->
+          <path d="M 20,255
+                   C 42.5,255 42.5,225 65,225
+                   C 87.5,225 87.5,195 110,195
+                   C 132.5,195 132.5,225 155,225
+                   C 177.5,225 177.5,255 200,255
+                   C 222.5,255 222.5,225 245,225
+                   C 267.5,225 267.5,195 290,195
+                   C 312.5,195 312.5,225 335,225
+                   C 357.5,225 357.5,255 380,255"
                 stroke="#ff6b6b" stroke-width="2.5" fill="none"/>
-          <text x="20" y="185" fill="#ff6b6b" font-size="12" font-family="Sarabun">a(t) = −Aω² sin ωt</text>
+          <text x="20" y="185" fill="#ff6b6b" font-size="12" font-family="Sarabun">a(t) = −Aω² cos ωt</text>
         </svg>
       </div>
       <div class="def-box">
@@ -711,7 +747,7 @@
       </div>
       <div class="tip-box">
         <div class="tip-label">💡 ประโยชน์ของแนวคิดนี้</div>
-        ใช้อธิบายเฟส (phase) ของ SHM ได้ง่าย เพราะมุม φ ในสมการ x = A sin(ωt + φ) ก็คือมุมเริ่มต้นบนวงกลมอ้างอิงนั่นเอง
+        ใช้อธิบายเฟส (phase) ของ SHM ได้ง่าย เพราะมุม φ ในสมการ x = A cos(ωt + φ) ก็คือมุมเริ่มต้นบนวงกลมอ้างอิงนั่นเอง
       </div>
     </div>
   </div>
@@ -724,7 +760,8 @@
       <div class="card-title"><div class="icon icon-purple">📐</div>สูตรพื้นฐาน</div>
       <div class="math-block">
         ω = 2π/T = 2πf<br>
-        x = A sin(ωt + φ)&nbsp;&nbsp;,&nbsp;&nbsp; v = Aω cos(ωt + φ)&nbsp;&nbsp;,&nbsp;&nbsp; a = −Aω² sin(ωt + φ)<br>
+        x = A cos(ωt + φ)&nbsp;&nbsp;,&nbsp;&nbsp; v = −Aω sin(ωt + φ)&nbsp;&nbsp;,&nbsp;&nbsp; a = −Aω² cos(ωt + φ)<br>
+        tan φ = −v_i/(ω x_i)&nbsp;&nbsp;,&nbsp;&nbsp; A = √(x_i² + (v_i/ω)²)<br>
         a = −ω²x<br>
         v = ω√(A² − x²)<br>
         v_max = Aω&nbsp;&nbsp;,&nbsp;&nbsp; a_max = Aω²
@@ -805,7 +842,7 @@
       </div>
       <div class="warn-box">
         <div class="warn-label">⚠️ กับดัก 3</div>
-        มุมเฟส φ ในสมการ x = A sin(ωt+φ) ต้องพิจารณาจากเงื่อนไขเริ่มต้น (ตำแหน่งและทิศทางความเร็วที่ t=0) อย่างระมัดระวัง มิฉะนั้นจะได้เครื่องหมายผิด
+        มุมเฟส φ ในสมการ x = A cos(ωt+φ) ต้องพิจารณาจากเงื่อนไขเริ่มต้น (ตำแหน่งและทิศทางความเร็วที่ t=0) อย่างระมัดระวัง โดยใช้ tan φ = −v_i/(ωx_i) มิฉะนั้นจะได้เครื่องหมายผิด
       </div>
     </div>
   </div>
