@@ -44,7 +44,7 @@
     border-bottom: 1px solid var(--border);
   }
   .hero::before {
-    content: '→ · ⃗v  |v|  · ×  ·  θ  ·  cos  ·  proj  ·  î  ĵ  k̂';
+    content: '→ · ⃗v  |v|  · ×  ·  θ  ·  cos  ·  proj  ·  <span class="uvec">i</span>  <span class="uvec">j</span>  <span class="uvec">k</span>';
     position: absolute;
     top: 16px; left: 0; right: 0;
     font-family: var(--mono);
@@ -439,6 +439,39 @@
     text-align: center;
     line-height: 2.2;
   }
+
+  /* Vector arrow notation - CSS-based, renders on all browsers */
+  .vec {
+    display: inline-block;
+    position: relative;
+    padding-top: 10px;
+  }
+  .vec::before {
+    content: '→';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    line-height: 1;
+    color: inherit;
+  }
+  /* Unit vector hat notation */
+  .uvec {
+    display: inline-block;
+    position: relative;
+    padding-top: 10px;
+  }
+  .uvec::before {
+    content: '^';
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    line-height: 1;
+    color: inherit;
+  }
 </style>
 </head>
 <body>
@@ -498,7 +531,7 @@
       </div>
       <div class="def-box">
         <div class="def-label">นิยาม</div>
-        เวกเตอร์ในระนาบ 2 มิติ เขียนแทนด้วย <span class="math">v⃗ = (a, b)</span> หรือ <span class="math">v⃗ = aî + bĵ</span><br>
+        เวกเตอร์ในระนาบ 2 มิติ เขียนแทนด้วย <span class="math"><span class="vec">v</span> = (a, b)</span> หรือ <span class="math"><span class="vec">v</span> = a<span class="uvec">i</span> + b<span class="uvec">j</span></span><br>
         โดย a คือองค์ประกอบแนวแกน x และ b คือองค์ประกอบแนวแกน y
       </div>
 
@@ -530,7 +563,7 @@
           <!-- Labels -->
           <text x="120" y="182" fill="#6c63ff" font-size="12">a = 3</text>
           <text x="226" y="105" fill="#6c63ff" font-size="12">b = 2</text>
-          <text x="115" y="85" fill="#00d4aa" font-size="14" font-weight="bold">v⃗ = (3,2)</text>
+          <text x="115" y="85" fill="#00d4aa" font-size="14" font-weight="bold"><span class="vec">v</span> = (3,2)</text>
           <!-- Origin dot -->
           <circle cx="40" cy="160" r="3" fill="#ffd93d"/>
           <text x="30" y="178" fill="#ffd93d" font-size="11">O</text>
@@ -539,7 +572,7 @@
 
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        เวกเตอร์ <span class="math">v⃗ = (3, 2)</span> หมายถึงเวกเตอร์ที่เริ่มจากจุดกำเนิด<br>
+        เวกเตอร์ <span class="math"><span class="vec">v</span> = (3, 2)</span> หมายถึงเวกเตอร์ที่เริ่มจากจุดกำเนิด<br>
         ไปในทิศทางที่ขยับ 3 หน่วยในแนวแกน x และ 2 หน่วยในแนวแกน y
       </div>
     </div>
@@ -548,34 +581,34 @@
       <div class="card-title"><div class="icon icon-purple">🔤</div>สัญลักษณ์และรูปแบบการเขียน</div>
       <div class="summary-grid">
         <div class="summary-item">
-          <div class="sym">v⃗</div>
+          <div class="sym"><span class="vec">v</span></div>
           <div class="sym-name">เวกเตอร์ v</div>
           <div class="sym-desc">เขียนตัวหนังสือพร้อมลูกศรด้านบน หรือตัวหนา <b>v</b></div>
         </div>
         <div class="summary-item">
-          <div class="sym">|v⃗|</div>
+          <div class="sym">|<span class="vec">v</span>|</div>
           <div class="sym-name">ขนาด (Magnitude)</div>
           <div class="sym-desc">ค่าสัมบูรณ์ของเวกเตอร์ คือความยาวของลูกศร</div>
         </div>
         <div class="summary-item">
-          <div class="sym">î, ĵ, k̂</div>
+          <div class="sym"><span class="uvec">i</span>, <span class="uvec">j</span>, <span class="uvec">k</span></div>
           <div class="sym-name">เวกเตอร์หน่วย</div>
-          <div class="sym-desc">î=(1,0,0), ĵ=(0,1,0), k̂=(0,0,1)</div>
+          <div class="sym-desc"><span class="uvec">i</span>=(1,0,0), <span class="uvec">j</span>=(0,1,0), <span class="uvec">k</span>=(0,0,1)</div>
         </div>
         <div class="summary-item">
-          <div class="sym">−v⃗</div>
+          <div class="sym">−<span class="vec">v</span></div>
           <div class="sym-name">เวกเตอร์ตรงข้าม</div>
           <div class="sym-desc">ขนาดเท่ากัน แต่ทิศทางตรงข้าม</div>
         </div>
       </div>
       <div class="math-block">
-        รูปแบบ 2 มิติ:  v⃗ = (a, b)  =  aî + bĵ<br>
-        รูปแบบ 3 มิติ:  v⃗ = (a, b, c)  =  aî + bĵ + ck̂
+        รูปแบบ 2 มิติ:  <span class="vec">v</span> = (a, b)  =  a<span class="uvec">i</span> + b<span class="uvec">j</span><br>
+        รูปแบบ 3 มิติ:  <span class="vec">v</span> = (a, b, c)  =  a<span class="uvec">i</span> + b<span class="uvec">j</span> + c<span class="uvec">k</span>
       </div>
       <div class="tip-box">
         <div class="tip-label">💡 เทคนิค A-Level</div>
-        เวกเตอร์ <span class="math">AB⃗</span> (จาก A ไป B) คือ <span class="math">B − A</span><br>
-        เช่น A = (1,2), B = (4,6) → AB⃗ = (4−1, 6−2) = (3, 4)
+        เวกเตอร์ <span class="math"><span class="vec">AB</span></span> (จาก A ไป B) คือ <span class="math">B − A</span><br>
+        เช่น A = (1,2), B = (4,6) → <span class="vec">AB</span> = (4−1, 6−2) = (3, 4)
       </div>
     </div>
 
@@ -584,13 +617,13 @@
       <div class="grid-2">
         <div class="mini-card">
           <h4>เวกเตอร์ศูนย์ (Zero Vector)</h4>
-          <p><span class="math">0⃗ = (0, 0)</span></p>
+          <p><span class="math"><span class="vec">0</span> = (0, 0)</span></p>
           <p>ขนาดเป็น 0 ไม่มีทิศทางที่แน่นอน</p>
         </div>
         <div class="mini-card">
           <h4>เวกเตอร์หน่วย (Unit Vector)</h4>
           <p>เวกเตอร์ที่มีขนาดเท่ากับ 1</p>
-          <p><span class="math">û = v⃗ / |v⃗|</span></p>
+          <p><span class="math"><span class="uvec">u</span> = <span class="vec">v</span> / |<span class="vec">v</span>|</span></p>
         </div>
         <div class="mini-card">
           <h4>เวกเตอร์เท่ากัน</h4>
@@ -598,7 +631,7 @@
         </div>
         <div class="mini-card">
           <h4>เวกเตอร์ขนาน</h4>
-          <p><span class="math">u⃗ ∥ v⃗</span> เมื่อ <span class="math">u⃗ = kv⃗</span> สำหรับบางสเกลาร์ k ≠ 0</p>
+          <p><span class="math"><span class="vec">u</span> &#x2225; <span class="vec">v</span></span> เมื่อ <span class="math"><span class="vec">u</span> = k<span class="vec">v</span></span> สำหรับบางสเกลาร์ k ≠ 0</p>
         </div>
       </div>
     </div>
@@ -612,15 +645,15 @@
       <div class="card-title"><div class="icon icon-teal">➕</div>การบวกและลบเวกเตอร์</div>
       <div class="def-box">
         <div class="def-label">สูตร</div>
-        ถ้า <span class="math">u⃗ = (a, b)</span> และ <span class="math">v⃗ = (c, d)</span> แล้ว<br>
-        <span class="math">u⃗ + v⃗ = (a+c, b+d)</span><br>
-        <span class="math">u⃗ − v⃗ = (a−c, b−d)</span>
+        ถ้า <span class="math"><span class="vec">u</span> = (a, b)</span> และ <span class="math"><span class="vec">v</span> = (c, d)</span> แล้ว<br>
+        <span class="math"><span class="vec">u</span> + <span class="vec">v</span> = (a+c, b+d)</span><br>
+        <span class="math"><span class="vec">u</span> − <span class="vec">v</span> = (a−c, b−d)</span>
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        u⃗ = (2, 3) และ v⃗ = (−1, 4)<br>
-        u⃗ + v⃗ = (2+(−1), 3+4) = (1, 7)<br>
-        u⃗ − v⃗ = (2−(−1), 3−4) = (3, −1)
+        <span class="vec">u</span> = (2, 3) และ <span class="vec">v</span> = (−1, 4)<br>
+        <span class="vec">u</span> + <span class="vec">v</span> = (2+(−1), 3+4) = (1, 7)<br>
+        <span class="vec">u</span> − <span class="vec">v</span> = (2−(−1), 3−4) = (3, −1)
       </div>
 
       <div class="vec-container">
@@ -631,15 +664,15 @@
           <!-- u vector -->
           <line x1="30" y1="165" x2="150" y2="105" stroke="#6c63ff" stroke-width="2.5"/>
           <polygon points="150,105 138,113 144,126" fill="#6c63ff"/>
-          <text x="75" y="125" fill="#6c63ff" font-size="13" font-weight="bold">u⃗</text>
+          <text x="75" y="125" fill="#6c63ff" font-size="13" font-weight="bold"><span class="vec">u</span></text>
           <!-- v vector (from tip of u) -->
           <line x1="150" y1="105" x2="90" y2="65" stroke="#ffd93d" stroke-width="2.5"/>
           <polygon points="90,65 103,77 112,64" fill="#ffd93d"/>
-          <text x="127" y="75" fill="#ffd93d" font-size="13" font-weight="bold">v⃗</text>
+          <text x="127" y="75" fill="#ffd93d" font-size="13" font-weight="bold"><span class="vec">v</span></text>
           <!-- resultant u+v -->
           <line x1="30" y1="165" x2="90" y2="65" stroke="#00d4aa" stroke-width="2.5" stroke-dasharray="6,3"/>
           <polygon points="90,65 79,79 94,78" fill="#00d4aa"/>
-          <text x="40" y="105" fill="#00d4aa" font-size="13" font-weight="bold">u⃗+v⃗</text>
+          <text x="40" y="105" fill="#00d4aa" font-size="13" font-weight="bold"><span class="vec">u</span>+<span class="vec">v</span></text>
           <!-- labels -->
           <text x="140" y="192" fill="#8892b0" font-size="12">กฎหัวต่อหาง (Head-to-tail)</text>
         </svg>
@@ -647,10 +680,10 @@
 
       <p><strong>คุณสมบัติของการบวกเวกเตอร์:</strong></p>
       <ul>
-        <li>สมบัติสลับที่: <span class="math">u⃗ + v⃗ = v⃗ + u⃗</span></li>
-        <li>สมบัติการเปลี่ยนหมู่: <span class="math">(u⃗ + v⃗) + w⃗ = u⃗ + (v⃗ + w⃗)</span></li>
-        <li>เอกลักษณ์การบวก: <span class="math">v⃗ + 0⃗ = v⃗</span></li>
-        <li>อินเวอร์สการบวก: <span class="math">v⃗ + (−v⃗) = 0⃗</span></li>
+        <li>สมบัติสลับที่: <span class="math"><span class="vec">u</span> + <span class="vec">v</span> = <span class="vec">v</span> + <span class="vec">u</span></span></li>
+        <li>สมบัติการเปลี่ยนหมู่: <span class="math">(<span class="vec">u</span> + <span class="vec">v</span>) + <span class="vec">w</span> = <span class="vec">u</span> + (<span class="vec">v</span> + <span class="vec">w</span>)</span></li>
+        <li>เอกลักษณ์การบวก: <span class="math"><span class="vec">v</span> + <span class="vec">0</span> = <span class="vec">v</span></span></li>
+        <li>อินเวอร์สการบวก: <span class="math"><span class="vec">v</span> + (−<span class="vec">v</span>) = <span class="vec">0</span></span></li>
       </ul>
     </div>
 
@@ -658,21 +691,21 @@
       <div class="card-title"><div class="icon icon-purple">✖️</div>การคูณด้วยสเกลาร์</div>
       <div class="def-box">
         <div class="def-label">สูตร</div>
-        ถ้า <span class="math">v⃗ = (a, b)</span> และ k เป็นสเกลาร์ แล้ว<br>
-        <span class="math">kv⃗ = (ka, kb)</span>
+        ถ้า <span class="math"><span class="vec">v</span> = (a, b)</span> และ k เป็นสเกลาร์ แล้ว<br>
+        <span class="math">k<span class="vec">v</span> = (ka, kb)</span>
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        v⃗ = (2, −3)<br>
-        3v⃗ = (6, −9)  → ยาวขึ้น 3 เท่า ทิศทางเดิม<br>
-        −2v⃗ = (−4, 6) → ยาวขึ้น 2 เท่า ทิศทางตรงข้าม<br>
-        ½v⃗ = (1, −1.5) → ยาวลดเหลือครึ่ง
+        <span class="vec">v</span> = (2, −3)<br>
+        3<span class="vec">v</span> = (6, −9)  → ยาวขึ้น 3 เท่า ทิศทางเดิม<br>
+        −2<span class="vec">v</span> = (−4, 6) → ยาวขึ้น 2 เท่า ทิศทางตรงข้าม<br>
+        ½<span class="vec">v</span> = (1, −1.5) → ยาวลดเหลือครึ่ง
       </div>
       <div class="warn-box">
         <div class="warn-label">⚠️ ข้อควรระวัง</div>
         ถ้า k > 0: ทิศทางเดิม<br>
         ถ้า k < 0: ทิศทางตรงข้าม<br>
-        ถ้า k = 0: ได้เวกเตอร์ศูนย์ 0⃗
+        ถ้า k = 0: ได้เวกเตอร์ศูนย์ <span class="vec">0</span>
       </div>
     </div>
   </div>
@@ -684,15 +717,15 @@
     <div class="card">
       <div class="card-title"><div class="icon icon-teal">📏</div>ขนาดของเวกเตอร์ (Magnitude)</div>
       <div class="formula-highlight">
-        |v⃗| = √(a² + b²)  (2 มิติ)<br>
-        |v⃗| = √(a² + b² + c²)  (3 มิติ)
+        |<span class="vec">v</span>| = √(a² + b²)  (2 มิติ)<br>
+        |<span class="vec">v</span>| = √(a² + b² + c²)  (3 มิติ)
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        v⃗ = (3, 4)<br>
-        |v⃗| = √(3² + 4²) = √(9 + 16) = √25 = 5<br><br>
-        u⃗ = (1, 2, 2)<br>
-        |u⃗| = √(1² + 2² + 2²) = √(1 + 4 + 4) = √9 = 3
+        <span class="vec">v</span> = (3, 4)<br>
+        |<span class="vec">v</span>| = √(3² + 4²) = √(9 + 16) = √25 = 5<br><br>
+        <span class="vec">u</span> = (1, 2, 2)<br>
+        |<span class="vec">u</span>| = √(1² + 2² + 2²) = √(1 + 4 + 4) = √9 = 3
       </div>
     </div>
 
@@ -701,16 +734,16 @@
       <div class="def-box">
         <div class="def-label">นิยาม</div>
         เวกเตอร์หน่วย คือเวกเตอร์ที่มีขนาดเท่ากับ 1 ใช้บอกทิศทางล้วน ๆ<br>
-        หาได้จาก: <span class="math">û = v⃗ / |v⃗|</span>
+        หาได้จาก: <span class="math"><span class="uvec">u</span> = <span class="vec">v</span> / |<span class="vec">v</span>|</span>
       </div>
       <div class="formula-highlight">
-        û = (a/|v⃗|, b/|v⃗|)  โดยที่ |û| = 1 เสมอ
+        <span class="uvec">u</span> = (a/|<span class="vec">v</span>|, b/|<span class="vec">v</span>|)  โดยที่ |<span class="uvec">u</span>| = 1 เสมอ
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        v⃗ = (3, 4),  |v⃗| = 5<br>
-        û = (3/5, 4/5) = (0.6, 0.8)<br>
-        ตรวจสอบ: |û| = √(0.36 + 0.64) = √1 = 1 ✓
+        <span class="vec">v</span> = (3, 4),  |<span class="vec">v</span>| = 5<br>
+        <span class="uvec">u</span> = (3/5, 4/5) = (0.6, 0.8)<br>
+        ตรวจสอบ: |<span class="uvec">u</span>| = √(0.36 + 0.64) = √1 = 1 ✓
       </div>
     </div>
 
@@ -718,19 +751,19 @@
       <div class="card-title"><div class="icon icon-yellow">📐</div>ทิศทางของเวกเตอร์ใน 2 มิติ</div>
       <div class="def-box">
         <div class="def-label">มุมของเวกเตอร์</div>
-        เวกเตอร์ <span class="math">v⃗ = (a, b)</span> ทำมุม θ กับแกน x โดย<br>
+        เวกเตอร์ <span class="math"><span class="vec">v</span> = (a, b)</span> ทำมุม θ กับแกน x โดย<br>
         <span class="math">tan θ = b/a</span>  หรือ  <span class="math">θ = arctan(b/a)</span>
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        v⃗ = (1, √3)<br>
+        <span class="vec">v</span> = (1, √3)<br>
         tan θ = √3/1 = √3<br>
         θ = arctan(√3) = 60°
       </div>
       <div class="tip-box">
         <div class="tip-label">💡 เทคนิค A-Level — ระวัง Quadrant!</div>
         arctan ให้มุมในช่วง (−90°, 90°) เท่านั้น<br>
-        ต้องพิจารณา quadrant ของเวกเตอร์ด้วย เช่น v⃗ = (−1, 1) → θ = 135° ไม่ใช่ −45°
+        ต้องพิจารณา quadrant ของเวกเตอร์ด้วย เช่น <span class="vec">v</span> = (−1, 1) → θ = 135° ไม่ใช่ −45°
       </div>
     </div>
   </div>
@@ -743,43 +776,43 @@
       <div class="card-title"><div class="icon icon-teal">•</div>นิยามผลคูณจุด</div>
       <div class="def-box">
         <div class="def-label">สูตร</div>
-        <span class="math">u⃗ · v⃗ = a₁a₂ + b₁b₂</span>  (2 มิติ)<br>
-        <span class="math">u⃗ · v⃗ = a₁a₂ + b₁b₂ + c₁c₂</span>  (3 มิติ)
+        <span class="math"><span class="vec">u</span> · <span class="vec">v</span> = a₁a₂ + b₁b₂</span>  (2 มิติ)<br>
+        <span class="math"><span class="vec">u</span> · <span class="vec">v</span> = a₁a₂ + b₁b₂ + c₁c₂</span>  (3 มิติ)
       </div>
       <div class="formula-highlight">
-        u⃗ · v⃗ = |u⃗||v⃗|cos θ<br>
+        <span class="vec">u</span> · <span class="vec">v</span> = |<span class="vec">u</span>||<span class="vec">v</span>|cos θ<br>
         (ผลคูณจุดเป็นสเกลาร์ ไม่ใช่เวกเตอร์!)
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        u⃗ = (2, 3) และ v⃗ = (4, −1)<br>
-        u⃗ · v⃗ = (2)(4) + (3)(−1) = 8 − 3 = 5
+        <span class="vec">u</span> = (2, 3) และ <span class="vec">v</span> = (4, −1)<br>
+        <span class="vec">u</span> · <span class="vec">v</span> = (2)(4) + (3)(−1) = 8 − 3 = 5
       </div>
     </div>
 
     <div class="card">
       <div class="card-title"><div class="icon icon-purple">📐</div>หามุมระหว่างเวกเตอร์</div>
       <div class="formula-highlight">
-        cos θ = (u⃗ · v⃗) / (|u⃗| × |v⃗|)<br>
-        θ = arccos[(u⃗ · v⃗) / (|u⃗||v⃗|)]
+        cos θ = (<span class="vec">u</span> · <span class="vec">v</span>) / (|<span class="vec">u</span>| × |<span class="vec">v</span>|)<br>
+        θ = arccos[(<span class="vec">u</span> · <span class="vec">v</span>) / (|<span class="vec">u</span>||<span class="vec">v</span>|)]
       </div>
       <div class="example-box">
-        <div class="ex-label">ตัวอย่าง — หามุมระหว่าง u⃗ = (1, 0) และ v⃗ = (1, 1)</div>
-        u⃗ · v⃗ = (1)(1) + (0)(1) = 1<br>
-        |u⃗| = 1,  |v⃗| = √2<br>
+        <div class="ex-label">ตัวอย่าง — หามุมระหว่าง <span class="vec">u</span> = (1, 0) และ <span class="vec">v</span> = (1, 1)</div>
+        <span class="vec">u</span> · <span class="vec">v</span> = (1)(1) + (0)(1) = 1<br>
+        |<span class="vec">u</span>| = 1,  |<span class="vec">v</span>| = √2<br>
         cos θ = 1 / (1 × √2) = 1/√2<br>
         θ = arccos(1/√2) = 45°
       </div>
       <div class="def-box">
         <div class="def-label">เวกเตอร์ตั้งฉากกัน</div>
-        <span class="math">u⃗ ⊥ v⃗  ⟺  u⃗ · v⃗ = 0</span><br>
+        <span class="math"><span class="vec">u</span> ⊥ <span class="vec">v</span>  ⟺  <span class="vec">u</span> · <span class="vec">v</span> = 0</span><br>
         ถ้าผลคูณจุดเป็น 0 แสดงว่าสองเวกเตอร์ตั้งฉากกัน (θ = 90°)
       </div>
       <div class="warn-box">
         <div class="warn-label">⚠️ ข้อควรระวัง</div>
-        ผลคูณจุด u⃗ · v⃗ > 0 → มุมแหลม (θ < 90°)<br>
-        ผลคูณจุด u⃗ · v⃗ = 0 → ตั้งฉาก (θ = 90°)<br>
-        ผลคูณจุด u⃗ · v⃗ < 0 → มุมป้าน (θ > 90°)
+        ผลคูณจุด <span class="vec">u</span> · <span class="vec">v</span> > 0 → มุมแหลม (θ < 90°)<br>
+        ผลคูณจุด <span class="vec">u</span> · <span class="vec">v</span> = 0 → ตั้งฉาก (θ = 90°)<br>
+        ผลคูณจุด <span class="vec">u</span> · <span class="vec">v</span> < 0 → มุมป้าน (θ > 90°)
       </div>
     </div>
 
@@ -787,17 +820,17 @@
       <div class="card-title"><div class="icon icon-yellow">🔽</div>การฉายเวกเตอร์ (Projection)</div>
       <div class="def-box">
         <div class="def-label">สูตรการฉาย</div>
-        การฉาย u⃗ ลงบน v⃗:<br>
-        <span class="math">proj_v⃗ u⃗ = (u⃗ · v⃗ / |v⃗|²) × v⃗</span><br>
+        การฉาย <span class="vec">u</span> ลงบน <span class="vec">v</span>:<br>
+        <span class="math">proj_<span class="vec">v</span> <span class="vec">u</span> = (<span class="vec">u</span> · <span class="vec">v</span> / |<span class="vec">v</span>|²) × <span class="vec">v</span></span><br>
         ความยาวของการฉาย (scalar projection):<br>
-        <span class="math">comp_v⃗ u⃗ = u⃗ · v⃗ / |v⃗|</span>
+        <span class="math">comp_<span class="vec">v</span> <span class="vec">u</span> = <span class="vec">u</span> · <span class="vec">v</span> / |<span class="vec">v</span>|</span>
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        u⃗ = (3, 4), v⃗ = (1, 0)<br>
-        u⃗ · v⃗ = 3,  |v⃗|² = 1<br>
-        proj_v⃗ u⃗ = (3/1)(1, 0) = (3, 0)<br>
-        (การฉาย u⃗ ลงบนแกน x ได้ (3, 0) ถูกต้อง)
+        <span class="vec">u</span> = (3, 4), <span class="vec">v</span> = (1, 0)<br>
+        <span class="vec">u</span> · <span class="vec">v</span> = 3,  |<span class="vec">v</span>|² = 1<br>
+        proj_<span class="vec">v</span> <span class="vec">u</span> = (3/1)(1, 0) = (3, 0)<br>
+        (การฉาย <span class="vec">u</span> ลงบนแกน x ได้ (3, 0) ถูกต้อง)
       </div>
     </div>
   </div>
@@ -808,28 +841,28 @@
 
     <div class="card">
       <div class="card-title"><div class="icon icon-red">✕</div>นิยามผลคูณไขว้</div>
-      <p>ผลคูณไขว้ใช้ได้เฉพาะในระบบ <strong>3 มิติ</strong> และผลลัพธ์เป็น <strong>เวกเตอร์</strong> ที่ตั้งฉากกับทั้ง u⃗ และ v⃗</p>
+      <p>ผลคูณไขว้ใช้ได้เฉพาะในระบบ <strong>3 มิติ</strong> และผลลัพธ์เป็น <strong>เวกเตอร์</strong> ที่ตั้งฉากกับทั้ง <span class="vec">u</span> และ <span class="vec">v</span></p>
       <div class="formula-highlight">
-        u⃗ × v⃗ = |u⃗||v⃗|sin θ  n̂<br>
-        โดย n̂ คือเวกเตอร์หน่วยตั้งฉากกับระนาบของ u⃗ และ v⃗
+        <span class="vec">u</span> × <span class="vec">v</span> = |<span class="vec">u</span>||<span class="vec">v</span>|sin θ  <span class="uvec">n</span><br>
+        โดย <span class="uvec">n</span> คือเวกเตอร์หน่วยตั้งฉากกับระนาบของ <span class="vec">u</span> และ <span class="vec">v</span>
       </div>
       <div class="def-box">
         <div class="def-label">สูตรคำนวณ (Determinant Form)</div>
-        ถ้า u⃗ = (a₁, b₁, c₁) และ v⃗ = (a₂, b₂, c₂) แล้ว<br>
-        <span class="math">u⃗ × v⃗ = (b₁c₂ − c₁b₂, c₁a₂ − a₁c₂, a₁b₂ − b₁a₂)</span>
+        ถ้า <span class="vec">u</span> = (a₁, b₁, c₁) และ <span class="vec">v</span> = (a₂, b₂, c₂) แล้ว<br>
+        <span class="math"><span class="vec">u</span> × <span class="vec">v</span> = (b₁c₂ − c₁b₂, c₁a₂ − a₁c₂, a₁b₂ − b₁a₂)</span>
       </div>
       <div class="math-block">
-        u⃗ × v⃗ = | î   ĵ   k̂  |
+        <span class="vec">u</span> × <span class="vec">v</span> = | <span class="uvec">i</span>   <span class="uvec">j</span>   <span class="uvec">k</span>  |
                   | a₁  b₁  c₁ |
                   | a₂  b₂  c₂ |
 
-        = î(b₁c₂ − c₁b₂) − ĵ(a₁c₂ − c₁a₂) + k̂(a₁b₂ − b₁a₂)
+        = <span class="uvec">i</span>(b₁c₂ − c₁b₂) − <span class="uvec">j</span>(a₁c₂ − c₁a₂) + <span class="uvec">k</span>(a₁b₂ − b₁a₂)
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        u⃗ = (1, 2, 3) และ v⃗ = (4, 5, 6)<br>
-        u⃗ × v⃗ = î(2×6 − 3×5) − ĵ(1×6 − 3×4) + k̂(1×5 − 2×4)<br>
-        = î(12 − 15) − ĵ(6 − 12) + k̂(5 − 8)<br>
+        <span class="vec">u</span> = (1, 2, 3) และ <span class="vec">v</span> = (4, 5, 6)<br>
+        <span class="vec">u</span> × <span class="vec">v</span> = <span class="uvec">i</span>(2×6 − 3×5) − <span class="uvec">j</span>(1×6 − 3×4) + <span class="uvec">k</span>(1×5 − 2×4)<br>
+        = <span class="uvec">i</span>(12 − 15) − <span class="uvec">j</span>(6 − 12) + <span class="uvec">k</span>(5 − 8)<br>
         = (−3, 6, −3)
       </div>
     </div>
@@ -839,15 +872,15 @@
       <table>
         <thead><tr><th>คุณสมบัติ</th><th>สูตร</th></tr></thead>
         <tbody>
-          <tr><td style="text-align:left">สลับที่</td><td>u⃗ × v⃗ = −(v⃗ × u⃗)</td></tr>
-          <tr><td style="text-align:left">เวกเตอร์ขนานกัน</td><td>u⃗ × v⃗ = 0⃗</td></tr>
-          <tr><td style="text-align:left">ขนาด = พื้นที่สี่เหลี่ยม</td><td>|u⃗ × v⃗| = |u⃗||v⃗|sin θ</td></tr>
-          <tr><td style="text-align:left">ตั้งฉากกับทั้งคู่</td><td>(u⃗ × v⃗) · u⃗ = 0, (u⃗ × v⃗) · v⃗ = 0</td></tr>
+          <tr><td style="text-align:left">สลับที่</td><td><span class="vec">u</span> × <span class="vec">v</span> = −(<span class="vec">v</span> × <span class="vec">u</span>)</td></tr>
+          <tr><td style="text-align:left">เวกเตอร์ขนานกัน</td><td><span class="vec">u</span> × <span class="vec">v</span> = <span class="vec">0</span></td></tr>
+          <tr><td style="text-align:left">ขนาด = พื้นที่สี่เหลี่ยม</td><td>|<span class="vec">u</span> × <span class="vec">v</span>| = |<span class="vec">u</span>||<span class="vec">v</span>|sin θ</td></tr>
+          <tr><td style="text-align:left">ตั้งฉากกับทั้งคู่</td><td>(<span class="vec">u</span> × <span class="vec">v</span>) · <span class="vec">u</span> = 0, (<span class="vec">u</span> × <span class="vec">v</span>) · <span class="vec">v</span> = 0</td></tr>
         </tbody>
       </table>
       <div class="tip-box">
         <div class="tip-label">💡 เทคนิค A-Level — กฎมือขวา</div>
-        ชี้นิ้วชี้ไปทาง u⃗ งอนิ้วไปทาง v⃗ นิ้วหัวแม่มือจะชี้ไปทาง u⃗ × v⃗
+        ชี้นิ้วชี้ไปทาง <span class="vec">u</span> งอนิ้วไปทาง <span class="vec">v</span> นิ้วหัวแม่มือจะชี้ไปทาง <span class="vec">u</span> × <span class="vec">v</span>
       </div>
     </div>
   </div>
@@ -874,8 +907,8 @@
       <div class="card-title"><div class="icon icon-purple">🔄</div>สมการเส้นตรงในรูปเวกเตอร์</div>
       <div class="def-box">
         <div class="def-label">สมการเส้นตรง (Vector Form)</div>
-        เส้นตรงผ่านจุด A = (x₀, y₀, z₀) ในทิศทาง d⃗ = (a, b, c):<br>
-        <span class="math">r⃗ = A + t·d⃗</span>  เมื่อ t เป็นพารามิเตอร์จริง
+        เส้นตรงผ่านจุด A = (x₀, y₀, z₀) ในทิศทาง <span class="vec">d</span> = (a, b, c):<br>
+        <span class="math"><span class="vec">r</span> = A + t·<span class="vec">d</span></span>  เมื่อ t เป็นพารามิเตอร์จริง
       </div>
       <div class="math-block">
         (x, y, z) = (x₀ + ta,  y₀ + tb,  z₀ + tc)<br><br>
@@ -884,9 +917,9 @@
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        เส้นตรงผ่าน (1, 2, 3) ในทิศทาง d⃗ = (2, −1, 4):<br>
-        r⃗ = (1, 2, 3) + t(2, −1, 4)<br>
-        r⃗ = (1 + 2t,  2 − t,  3 + 4t)
+        เส้นตรงผ่าน (1, 2, 3) ในทิศทาง <span class="vec">d</span> = (2, −1, 4):<br>
+        <span class="vec">r</span> = (1, 2, 3) + t(2, −1, 4)<br>
+        <span class="vec">r</span> = (1 + 2t,  2 − t,  3 + 4t)
       </div>
     </div>
 
@@ -894,13 +927,13 @@
       <div class="card-title"><div class="icon icon-yellow">🟦</div>สมการระนาบ</div>
       <div class="def-box">
         <div class="def-label">สมการระนาบ</div>
-        ระนาบที่มีเวกเตอร์ตั้งฉาก (Normal vector) <span class="math">n⃗ = (A, B, C)</span> และผ่านจุด (x₀, y₀, z₀):<br>
+        ระนาบที่มีเวกเตอร์ตั้งฉาก (Normal vector) <span class="math"><span class="vec">n</span> = (A, B, C)</span> และผ่านจุด (x₀, y₀, z₀):<br>
         <span class="math">A(x − x₀) + B(y − y₀) + C(z − z₀) = 0</span><br>
         หรือเขียนเป็น <span class="math">Ax + By + Cz = D</span>
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
-        ระนาบผ่าน (1, 2, 3) มี n⃗ = (2, −1, 1):<br>
+        ระนาบผ่าน (1, 2, 3) มี <span class="vec">n</span> = (2, −1, 1):<br>
         2(x − 1) + (−1)(y − 2) + 1(z − 3) = 0<br>
         2x − 2 − y + 2 + z − 3 = 0<br>
         2x − y + z = 3
@@ -917,24 +950,24 @@
       <p>เวกเตอร์ใช้ในการหาแรงลัพธ์ ความเร็ว และการกระจัด</p>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง — แรงลัพธ์</div>
-        แรง F₁⃗ = (3, 4) นิวตัน และ F₂⃗ = (−1, 2) นิวตัน<br>
-        แรงลัพธ์ F⃗ = F₁⃗ + F₂⃗ = (2, 6) นิวตัน<br>
-        ขนาดแรงลัพธ์ |F⃗| = √(4 + 36) = √40 = 2√10 นิวตัน
+        แรง <span class="vec">F&#x2081;</span> = (3, 4) นิวตัน และ <span class="vec">F&#x2082;</span> = (−1, 2) นิวตัน<br>
+        แรงลัพธ์ <span class="vec">F</span> = <span class="vec">F&#x2081;</span> + <span class="vec">F&#x2082;</span> = (2, 6) นิวตัน<br>
+        ขนาดแรงลัพธ์ |<span class="vec">F</span>| = √(4 + 36) = √40 = 2√10 นิวตัน
       </div>
     </div>
 
     <div class="card">
       <div class="card-title"><div class="icon icon-purple">📐</div>พื้นที่สามเหลี่ยมและสี่เหลี่ยมด้านขนาน</div>
       <div class="formula-highlight">
-        พื้นที่สี่เหลี่ยมด้านขนาน = |u⃗ × v⃗|<br>
-        พื้นที่สามเหลี่ยม = ½|u⃗ × v⃗|
+        พื้นที่สี่เหลี่ยมด้านขนาน = |<span class="vec">u</span> × <span class="vec">v</span>|<br>
+        พื้นที่สามเหลี่ยม = ½|<span class="vec">u</span> × <span class="vec">v</span>|
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
         สามเหลี่ยมมีจุดยอด A(0,0,0), B(1,2,0), C(0,1,3)<br>
-        u⃗ = AB⃗ = (1,2,0),  v⃗ = AC⃗ = (0,1,3)<br>
-        u⃗ × v⃗ = (2×3 − 0×1, 0×0 − 1×3, 1×1 − 2×0) = (6, −3, 1)<br>
-        |u⃗ × v⃗| = √(36 + 9 + 1) = √46<br>
+        <span class="vec">u</span> = <span class="vec">AB</span> = (1,2,0),  <span class="vec">v</span> = <span class="vec">AC</span> = (0,1,3)<br>
+        <span class="vec">u</span> × <span class="vec">v</span> = (2×3 − 0×1, 0×0 − 1×3, 1×1 − 2×0) = (6, −3, 1)<br>
+        |<span class="vec">u</span> × <span class="vec">v</span>| = √(36 + 9 + 1) = √46<br>
         พื้นที่สามเหลี่ยม = ½√46
       </div>
     </div>
@@ -944,13 +977,13 @@
       <table>
         <thead><tr><th>สูตร</th><th>ความหมาย</th></tr></thead>
         <tbody>
-          <tr><td>|v⃗| = √(a²+b²+c²)</td><td>ขนาดเวกเตอร์</td></tr>
-          <tr><td>û = v⃗/|v⃗|</td><td>เวกเตอร์หน่วย</td></tr>
-          <tr><td>u⃗·v⃗ = a₁a₂+b₁b₂+c₁c₂</td><td>ผลคูณจุด (สเกลาร์)</td></tr>
-          <tr><td>cos θ = u⃗·v⃗/(|u⃗||v⃗|)</td><td>มุมระหว่างเวกเตอร์</td></tr>
-          <tr><td>u⃗·v⃗ = 0 ⟺ u⃗ ⊥ v⃗</td><td>เงื่อนไขตั้งฉาก</td></tr>
-          <tr><td>|u⃗×v⃗| = |u⃗||v⃗|sin θ</td><td>ขนาดผลคูณไขว้</td></tr>
-          <tr><td>พื้นที่ = ½|u⃗×v⃗|</td><td>พื้นที่สามเหลี่ยม</td></tr>
+          <tr><td>|<span class="vec">v</span>| = √(a²+b²+c²)</td><td>ขนาดเวกเตอร์</td></tr>
+          <tr><td><span class="uvec">u</span> = <span class="vec">v</span>/|<span class="vec">v</span>|</td><td>เวกเตอร์หน่วย</td></tr>
+          <tr><td><span class="vec">u</span>·<span class="vec">v</span> = a₁a₂+b₁b₂+c₁c₂</td><td>ผลคูณจุด (สเกลาร์)</td></tr>
+          <tr><td>cos θ = <span class="vec">u</span>·<span class="vec">v</span>/(|<span class="vec">u</span>||<span class="vec">v</span>|)</td><td>มุมระหว่างเวกเตอร์</td></tr>
+          <tr><td><span class="vec">u</span>·<span class="vec">v</span> = 0 ⟺ <span class="vec">u</span> ⊥ <span class="vec">v</span></td><td>เงื่อนไขตั้งฉาก</td></tr>
+          <tr><td>|<span class="vec">u</span>×<span class="vec">v</span>| = |<span class="vec">u</span>||<span class="vec">v</span>|sin θ</td><td>ขนาดผลคูณไขว้</td></tr>
+          <tr><td>พื้นที่ = ½|<span class="vec">u</span>×<span class="vec">v</span>|</td><td>พื้นที่สามเหลี่ยม</td></tr>
         </tbody>
       </table>
     </div>
@@ -984,46 +1017,46 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 // Quiz data
 const questions = [
   {
-    q: "กำหนด u⃗ = (3, 4) จงหา |u⃗|",
+    q: "กำหนด <span class="vec">u</span> = (3, 4) จงหา |<span class="vec">u</span>|",
     opts: ["5", "7", "12", "√7", "25"],
     ans: 0,
-    explain: "ขั้นที่ 1: ใช้สูตร |v⃗| = √(a² + b²)\n|u⃗| = √(3² + 4²) = √(9 + 16) = √25 = 5 ✓"
+    explain: "ขั้นที่ 1: ใช้สูตร |<span class="vec">v</span>| = √(a² + b²)\n|<span class="vec">u</span>| = √(3² + 4²) = √(9 + 16) = √25 = 5 ✓"
   },
   {
-    q: "กำหนด u⃗ = (1, 2) และ v⃗ = (3, −1) จงหา u⃗ + v⃗",
+    q: "กำหนด <span class="vec">u</span> = (1, 2) และ <span class="vec">v</span> = (3, −1) จงหา <span class="vec">u</span> + <span class="vec">v</span>",
     opts: ["(4, 1)", "(2, 3)", "(−2, 3)", "(4, 3)", "(1, 4)"],
     ans: 0,
-    explain: "u⃗ + v⃗ = (1+3, 2+(−1)) = (4, 1) ✓"
+    explain: "<span class="vec">u</span> + <span class="vec">v</span> = (1+3, 2+(−1)) = (4, 1) ✓"
   },
   {
-    q: "กำหนด v⃗ = (2, 6) จงหาเวกเตอร์หน่วยในทิศทางของ v⃗",
+    q: "กำหนด <span class="vec">v</span> = (2, 6) จงหาเวกเตอร์หน่วยในทิศทางของ <span class="vec">v</span>",
     opts: ["(1/√10, 3/√10)", "(1/4, 3/4)", "(1/2, 1/6)", "(2/8, 6/8)", "(1, 3)"],
     ans: 0,
-    explain: "|v⃗| = √(4 + 36) = √40 = 2√10\nû = (2/(2√10), 6/(2√10)) = (1/√10, 3/√10) ✓"
+    explain: "|<span class="vec">v</span>| = √(4 + 36) = √40 = 2√10\n<span class="uvec">u</span> = (2/(2√10), 6/(2√10)) = (1/√10, 3/√10) ✓"
   },
   {
-    q: "กำหนด u⃗ = (2, 3) และ v⃗ = (4, −1) จงหา u⃗ · v⃗",
+    q: "กำหนด <span class="vec">u</span> = (2, 3) และ <span class="vec">v</span> = (4, −1) จงหา <span class="vec">u</span> · <span class="vec">v</span>",
     opts: ["5", "11", "−5", "7", "14"],
     ans: 0,
-    explain: "u⃗ · v⃗ = (2)(4) + (3)(−1) = 8 − 3 = 5 ✓"
+    explain: "<span class="vec">u</span> · <span class="vec">v</span> = (2)(4) + (3)(−1) = 8 − 3 = 5 ✓"
   },
   {
-    q: "เวกเตอร์ใดต่อไปนี้ตั้งฉากกับ v⃗ = (3, 4)?",
+    q: "เวกเตอร์ใดต่อไปนี้ตั้งฉากกับ <span class="vec">v</span> = (3, 4)?",
     opts: ["(4, −3)", "(3, 4)", "(−3, −4)", "(1, 1)", "(6, 8)"],
     ans: 0,
     explain: "เวกเตอร์ตั้งฉากกัน ต้องมีผลคูณจุดเป็น 0\n(4, −3) · (3, 4) = 12 + (−12) = 0 ✓\nดังนั้น (4, −3) ตั้งฉากกับ (3, 4)"
   },
   {
-    q: "กำหนด u⃗ = (1, 0, 0) และ v⃗ = (0, 1, 0) จงหา u⃗ × v⃗",
+    q: "กำหนด <span class="vec">u</span> = (1, 0, 0) และ <span class="vec">v</span> = (0, 1, 0) จงหา <span class="vec">u</span> × <span class="vec">v</span>",
     opts: ["(0, 0, 1)", "(0, 0, −1)", "(1, 1, 0)", "(0, 1, 0)", "(1, 0, 1)"],
     ans: 0,
-    explain: "u⃗ × v⃗ = î(0×0 − 0×1) − ĵ(1×0 − 0×0) + k̂(1×1 − 0×0)\n= î(0) − ĵ(0) + k̂(1) = (0, 0, 1) ✓\n(î × ĵ = k̂ ตามกฎมือขวา)"
+    explain: "<span class="vec">u</span> × <span class="vec">v</span> = <span class="uvec">i</span>(0×0 − 0×1) − <span class="uvec">j</span>(1×0 − 0×0) + <span class="uvec">k</span>(1×1 − 0×0)\n= <span class="uvec">i</span>(0) − <span class="uvec">j</span>(0) + <span class="uvec">k</span>(1) = (0, 0, 1) ✓\n(<span class="uvec">i</span> × <span class="uvec">j</span> = <span class="uvec">k</span> ตามกฎมือขวา)"
   },
   {
-    q: "มุมระหว่าง u⃗ = (1, 0) และ v⃗ = (0, 1) มีค่าเท่าไร",
+    q: "มุมระหว่าง <span class="vec">u</span> = (1, 0) และ <span class="vec">v</span> = (0, 1) มีค่าเท่าไร",
     opts: ["90°", "45°", "60°", "30°", "180°"],
     ans: 0,
-    explain: "u⃗ · v⃗ = (1)(0) + (0)(1) = 0\nเมื่อผลคูณจุดเป็น 0 แสดงว่าเวกเตอร์ตั้งฉากกัน θ = 90° ✓"
+    explain: "<span class="vec">u</span> · <span class="vec">v</span> = (1)(0) + (0)(1) = 0\nเมื่อผลคูณจุดเป็น 0 แสดงว่าเวกเตอร์ตั้งฉากกัน θ = 90° ✓"
   },
   {
     q: "กำหนด A = (1, 2, 3) และ B = (4, 6, 3) จงหาระยะห่าง AB",
@@ -1032,28 +1065,28 @@ const questions = [
     explain: "d = √[(4−1)² + (6−2)² + (3−3)²]\n= √[9 + 16 + 0] = √25 = 5 ✓"
   },
   {
-    q: "กำหนด u⃗ = (2, 1) และ v⃗ = (1, 2) จงหา cos θ ระหว่าง u⃗ และ v⃗",
+    q: "กำหนด <span class="vec">u</span> = (2, 1) และ <span class="vec">v</span> = (1, 2) จงหา cos θ ระหว่าง <span class="vec">u</span> และ <span class="vec">v</span>",
     opts: ["4/5", "2/5", "3/5", "1/5", "√5/5"],
     ans: 0,
-    explain: "u⃗ · v⃗ = 2(1) + 1(2) = 4\n|u⃗| = √5, |v⃗| = √5\ncos θ = 4/(√5 × √5) = 4/5 ✓"
+    explain: "<span class="vec">u</span> · <span class="vec">v</span> = 2(1) + 1(2) = 4\n|<span class="vec">u</span>| = √5, |<span class="vec">v</span>| = √5\ncos θ = 4/(√5 × √5) = 4/5 ✓"
   },
   {
-    q: "ถ้า u⃗ = (3, 0) และ v⃗ = (k, 4) ตั้งฉากกัน จงหา k",
+    q: "ถ้า <span class="vec">u</span> = (3, 0) และ <span class="vec">v</span> = (k, 4) ตั้งฉากกัน จงหา k",
     opts: ["0", "3", "4", "−3", "12"],
     ans: 0,
-    explain: "เงื่อนไขตั้งฉาก: u⃗ · v⃗ = 0\n(3)(k) + (0)(4) = 0\n3k = 0\nk = 0 ✓"
+    explain: "เงื่อนไขตั้งฉาก: <span class="vec">u</span> · <span class="vec">v</span> = 0\n(3)(k) + (0)(4) = 0\n3k = 0\nk = 0 ✓"
   },
   {
-    q: "กำหนด v⃗ = (1, 2, 2) จงหา |v⃗|",
+    q: "กำหนด <span class="vec">v</span> = (1, 2, 2) จงหา |<span class="vec">v</span>|",
     opts: ["3", "5", "√9", "√7", "2√2"],
     ans: 0,
-    explain: "|v⃗| = √(1² + 2² + 2²) = √(1 + 4 + 4) = √9 = 3 ✓"
+    explain: "|<span class="vec">v</span>| = √(1² + 2² + 2²) = √(1 + 4 + 4) = √9 = 3 ✓"
   },
   {
-    q: "พื้นที่ของสามเหลี่ยมที่มีด้านประกอบ u⃗ = (1, 0, 0) และ v⃗ = (0, 2, 0) มีค่าเท่าไร",
+    q: "พื้นที่ของสามเหลี่ยมที่มีด้านประกอบ <span class="vec">u</span> = (1, 0, 0) และ <span class="vec">v</span> = (0, 2, 0) มีค่าเท่าไร",
     opts: ["1", "2", "½", "√2", "4"],
     ans: 0,
-    explain: "u⃗ × v⃗ = (0×0 − 0×2, 0×0 − 1×0, 1×2 − 0×0) = (0, 0, 2)\n|u⃗ × v⃗| = 2\nพื้นที่สามเหลี่ยม = ½ × 2 = 1 ✓"
+    explain: "<span class="vec">u</span> × <span class="vec">v</span> = (0×0 − 0×2, 0×0 − 1×0, 1×2 − 0×0) = (0, 0, 2)\n|<span class="vec">u</span> × <span class="vec">v</span>| = 2\nพื้นที่สามเหลี่ยม = ½ × 2 = 1 ✓"
   },
 ];
 
@@ -1061,73 +1094,73 @@ const questions = [
 const alevelQuestions = [
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด u⃗ = (a, 3) และ v⃗ = (2, 6) โดยที่ u⃗ ∥ v⃗\nจงหาค่า a",
+    q: "กำหนด <span class="vec">u</span> = (a, 3) และ <span class="vec">v</span> = (2, 6) โดยที่ <span class="vec">u</span> &#x2225; <span class="vec">v</span>\nจงหาค่า a",
     opts: ["1", "2", "3", "4", "6"],
     ans: 0,
-    explain: "เวกเตอร์ขนานกัน: u⃗ = kv⃗ สำหรับบางสเกลาร์ k\n(a, 3) = k(2, 6)\nจาก b-component: 3 = 6k → k = ½\nจาก a-component: a = 2k = 2(½) = 1 ✓"
+    explain: "เวกเตอร์ขนานกัน: <span class="vec">u</span> = k<span class="vec">v</span> สำหรับบางสเกลาร์ k\n(a, 3) = k(2, 6)\nจาก b-component: 3 = 6k → k = ½\nจาก a-component: a = 2k = 2(½) = 1 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
     q: "กำหนด A = (2, 1), B = (5, 5), C = (8, 1)\nรูปสามเหลี่ยม ABC มีพื้นที่เท่าไร",
     opts: ["6", "12", "9", "√50", "8"],
     ans: 0,
-    explain: "หา AB⃗ = (3, 4) และ AC⃗ = (6, 0)\nพื้นที่ = ½|AB⃗ × AC⃗|\nในระนาบ 2 มิติ: |AB⃗ × AC⃗| = |a₁b₂ − a₂b₁| = |3(0) − 4(6)| = |−24| = 24\n(หรือสูตร shoelace: ½|2(5−1) + 5(1−1) + 8(1−5)| = ½|8 + 0 − 32| = ½ × 24 = 12)\nพื้นที่ = ½ × 12 = 6 ✓"
+    explain: "หา <span class="vec">AB</span> = (3, 4) และ <span class="vec">AC</span> = (6, 0)\nพื้นที่ = ½|<span class="vec">AB</span> × <span class="vec">AC</span>|\nในระนาบ 2 มิติ: |<span class="vec">AB</span> × <span class="vec">AC</span>| = |a₁b₂ − a₂b₁| = |3(0) − 4(6)| = |−24| = 24\n(หรือสูตร shoelace: ½|2(5−1) + 5(1−1) + 8(1−5)| = ½|8 + 0 − 32| = ½ × 24 = 12)\nพื้นที่ = ½ × 12 = 6 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "เวกเตอร์ u⃗ = (2, −1, 3) และ v⃗ = (1, 2, k)\nถ้า u⃗ ⊥ v⃗ จงหา k",
+    q: "เวกเตอร์ <span class="vec">u</span> = (2, −1, 3) และ <span class="vec">v</span> = (1, 2, k)\nถ้า <span class="vec">u</span> ⊥ <span class="vec">v</span> จงหา k",
     opts: ["0", "1", "−1", "4/3", "−4/3"],
     ans: 0,
-    explain: "เงื่อนไขตั้งฉาก: u⃗ · v⃗ = 0\n(2)(1) + (−1)(2) + (3)(k) = 0\n2 − 2 + 3k = 0\n3k = 0\nk = 0 ✓"
+    explain: "เงื่อนไขตั้งฉาก: <span class="vec">u</span> · <span class="vec">v</span> = 0\n(2)(1) + (−1)(2) + (3)(k) = 0\n2 − 2 + 3k = 0\n3k = 0\nk = 0 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด u⃗ = (3, 4) และ v⃗ = (4, 3)\nจงหามุม θ ระหว่าง u⃗ และ v⃗ (เป็นองศา)",
+    q: "กำหนด <span class="vec">u</span> = (3, 4) และ <span class="vec">v</span> = (4, 3)\nจงหามุม θ ระหว่าง <span class="vec">u</span> และ <span class="vec">v</span> (เป็นองศา)",
     opts: ["arccos(24/25)", "45°", "60°", "arccos(7/25)", "90°"],
     ans: 0,
-    explain: "u⃗ · v⃗ = 12 + 12 = 24\n|u⃗| = 5, |v⃗| = 5\ncos θ = 24/(5×5) = 24/25\nθ = arccos(24/25) ≈ 16.26° ✓"
+    explain: "<span class="vec">u</span> · <span class="vec">v</span> = 12 + 12 = 24\n|<span class="vec">u</span>| = 5, |<span class="vec">v</span>| = 5\ncos θ = 24/(5×5) = 24/25\nθ = arccos(24/25) ≈ 16.26° ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด u⃗ = (1, 2, 3) และ v⃗ = (2, 1, −1)\nจงหา u⃗ × v⃗",
+    q: "กำหนด <span class="vec">u</span> = (1, 2, 3) และ <span class="vec">v</span> = (2, 1, −1)\nจงหา <span class="vec">u</span> × <span class="vec">v</span>",
     opts: ["(−5, 7, −3)", "(5, −7, 3)", "(2, 2, −3)", "(3, 6, 3)", "(−2, 1, 3)"],
     ans: 0,
-    explain: "u⃗ × v⃗ = î(b₁c₂ − c₁b₂) − ĵ(a₁c₂ − c₁a₂) + k̂(a₁b₂ − b₁a₂)\n= î(2×(−1) − 3×1) − ĵ(1×(−1) − 3×2) + k̂(1×1 − 2×2)\n= î(−2 − 3) − ĵ(−1 − 6) + k̂(1 − 4)\n= (−5, 7, −3) ✓"
+    explain: "<span class="vec">u</span> × <span class="vec">v</span> = <span class="uvec">i</span>(b₁c₂ − c₁b₂) − <span class="uvec">j</span>(a₁c₂ − c₁a₂) + <span class="uvec">k</span>(a₁b₂ − b₁a₂)\n= <span class="uvec">i</span>(2×(−1) − 3×1) − <span class="uvec">j</span>(1×(−1) − 3×2) + <span class="uvec">k</span>(1×1 − 2×2)\n= <span class="uvec">i</span>(−2 − 3) − <span class="uvec">j</span>(−1 − 6) + <span class="uvec">k</span>(1 − 4)\n= (−5, 7, −3) ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "จุด P อยู่บนเส้นตรงที่ผ่าน A(1, 2, 3) ในทิศทาง d⃗ = (1, 0, −1)\nถ้า t = 2 จงหาพิกัดของ P",
+    q: "จุด P อยู่บนเส้นตรงที่ผ่าน A(1, 2, 3) ในทิศทาง <span class="vec">d</span> = (1, 0, −1)\nถ้า t = 2 จงหาพิกัดของ P",
     opts: ["(3, 2, 1)", "(2, 2, 2)", "(1, 4, 1)", "(3, 4, 1)", "(2, 4, 3)"],
     ans: 0,
-    explain: "r⃗ = A + t·d⃗ = (1, 2, 3) + 2(1, 0, −1)\n= (1 + 2, 2 + 0, 3 + (−2))\n= (3, 2, 1) ✓"
+    explain: "<span class="vec">r</span> = A + t·<span class="vec">d</span> = (1, 2, 3) + 2(1, 0, −1)\n= (1 + 2, 2 + 0, 3 + (−2))\n= (3, 2, 1) ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด u⃗ = (0, 1, 0) จงหา |3u⃗ − 2v⃗| เมื่อ v⃗ = (1, 0, 0)",
+    q: "กำหนด <span class="vec">u</span> = (0, 1, 0) จงหา |3<span class="vec">u</span> − 2<span class="vec">v</span>| เมื่อ <span class="vec">v</span> = (1, 0, 0)",
     opts: ["√13", "5", "√5", "3", "√7"],
     ans: 0,
-    explain: "3u⃗ = 3(0, 1, 0) = (0, 3, 0)\n2v⃗ = 2(1, 0, 0) = (2, 0, 0)\n3u⃗ − 2v⃗ = (0−2, 3−0, 0−0) = (−2, 3, 0)\n|3u⃗ − 2v⃗| = √(4 + 9 + 0) = √13 ✓"
+    explain: "3<span class="vec">u</span> = 3(0, 1, 0) = (0, 3, 0)\n2<span class="vec">v</span> = 2(1, 0, 0) = (2, 0, 0)\n3<span class="vec">u</span> − 2<span class="vec">v</span> = (0−2, 3−0, 0−0) = (−2, 3, 0)\n|3<span class="vec">u</span> − 2<span class="vec">v</span>| = √(4 + 9 + 0) = √13 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "ระนาบผ่านจุด (2, −1, 3) และมีเวกเตอร์ตั้งฉาก n⃗ = (1, 2, −1)\nสมการของระนาบนี้คืออะไร",
+    q: "ระนาบผ่านจุด (2, −1, 3) และมีเวกเตอร์ตั้งฉาก <span class="vec">n</span> = (1, 2, −1)\nสมการของระนาบนี้คืออะไร",
     opts: ["x + 2y − z = −3", "x + 2y − z = 3", "2x + y − z = 0", "x − 2y + z = 7", "x + 2y − z = 1"],
     ans: 0,
     explain: "สมการระนาบ: A(x − x₀) + B(y − y₀) + C(z − z₀) = 0\n1(x − 2) + 2(y + 1) + (−1)(z − 3) = 0\nx − 2 + 2y + 2 − z + 3 = 0\nx + 2y − z + 3 = 0\nx + 2y − z = −3 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด u⃗ = (a, b) และ |u⃗| = 5, u⃗ · î = 3 (î = (1,0))\nจงหา |b|",
+    q: "กำหนด <span class="vec">u</span> = (a, b) และ |<span class="vec">u</span>| = 5, <span class="vec">u</span> · <span class="uvec">i</span> = 3 (<span class="uvec">i</span> = (1,0))\nจงหา |b|",
     opts: ["4", "3", "5", "√34", "2"],
     ans: 0,
-    explain: "u⃗ · î = (a)(1) + (b)(0) = a = 3\nเนื่องจาก |u⃗| = 5: a² + b² = 25\n9 + b² = 25\nb² = 16\n|b| = 4 ✓"
+    explain: "<span class="vec">u</span> · <span class="uvec">i</span> = (a)(1) + (b)(0) = a = 3\nเนื่องจาก |<span class="vec">u</span>| = 5: a² + b² = 25\n9 + b² = 25\nb² = 16\n|b| = 4 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด u⃗ = (2, 1, 0) และ v⃗ = (1, 2, 0)\nจงหา |u⃗ × v⃗|",
+    q: "กำหนด <span class="vec">u</span> = (2, 1, 0) และ <span class="vec">v</span> = (1, 2, 0)\nจงหา |<span class="vec">u</span> × <span class="vec">v</span>|",
     opts: ["3", "5", "√5", "√10", "6"],
     ans: 0,
-    explain: "u⃗ × v⃗ = (b₁c₂ − c₁b₂, c₁a₂ − a₁c₂, a₁b₂ − b₁a₂)\n= (1×0 − 0×2, 0×1 − 2×0, 2×2 − 1×1)\n= (0, 0, 3)\n|u⃗ × v⃗| = √(0 + 0 + 9) = 3 ✓\n\n(ตรวจสอบ: |u⃗||v⃗|sin θ = √5 × √5 × sin(arccos(4/5)) = 5 × 3/5 = 3 ✓)"
+    explain: "<span class="vec">u</span> × <span class="vec">v</span> = (b₁c₂ − c₁b₂, c₁a₂ − a₁c₂, a₁b₂ − b₁a₂)\n= (1×0 − 0×2, 0×1 − 2×0, 2×2 − 1×1)\n= (0, 0, 3)\n|<span class="vec">u</span> × <span class="vec">v</span>| = √(0 + 0 + 9) = 3 ✓\n\n(ตรวจสอบ: |<span class="vec">u</span>||<span class="vec">v</span>|sin θ = √5 × √5 × sin(arccos(4/5)) = 5 × 3/5 = 3 ✓)"
   }
 ];
 
