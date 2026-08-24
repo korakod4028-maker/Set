@@ -440,38 +440,11 @@
     line-height: 2.2;
   }
 
-  /* Vector arrow notation - CSS-based, renders on all browsers */
-  .vec {
-    display: inline-block;
-    position: relative;
-    padding-top: 10px;
-  }
-  .vec::before {
-    content: '→';
-    position: absolute;
-    top: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px;
-    line-height: 1;
-    color: inherit;
-  }
-  /* Unit vector hat notation */
-  .uvec {
-    display: inline-block;
-    position: relative;
-    padding-top: 10px;
-  }
-  .uvec::before {
-    content: '^';
-    position: absolute;
-    top: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px;
-    line-height: 1;
-    color: inherit;
-  }
+  /* Vector notation: bold colored letter + arrow suffix */
+  .vec { font-style: italic; font-weight: 700; color: inherit; }
+  .vec::after { content: '→'; font-size: 0.7em; vertical-align: super; font-style: normal; font-weight: 400; }
+  .uvec { font-style: italic; font-weight: 700; color: inherit; }
+  .uvec::after { content: '^'; font-size: 0.7em; vertical-align: super; font-style: normal; font-weight: 400; }
 </style>
 </head>
 <body>
@@ -631,7 +604,7 @@
         </div>
         <div class="mini-card">
           <h4>เวกเตอร์ขนาน</h4>
-          <p><span class="math"><span class="vec">u</span> &#x2225; <span class="vec">v</span></span> เมื่อ <span class="math"><span class="vec">u</span> = k<span class="vec">v</span></span> สำหรับบางสเกลาร์ k ≠ 0</p>
+          <p><span class="math"><span class="vec">u</span> ∥ <span class="vec">v</span></span> เมื่อ <span class="math"><span class="vec">u</span> = k<span class="vec">v</span></span> สำหรับบางสเกลาร์ k ≠ 0</p>
         </div>
       </div>
     </div>
@@ -950,8 +923,8 @@
       <p>เวกเตอร์ใช้ในการหาแรงลัพธ์ ความเร็ว และการกระจัด</p>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง — แรงลัพธ์</div>
-        แรง <span class="vec">F&#x2081;</span> = (3, 4) นิวตัน และ <span class="vec">F&#x2082;</span> = (−1, 2) นิวตัน<br>
-        แรงลัพธ์ <span class="vec">F</span> = <span class="vec">F&#x2081;</span> + <span class="vec">F&#x2082;</span> = (2, 6) นิวตัน<br>
+        แรง <span class="vec">F₁</span> = (3, 4) นิวตัน และ <span class="vec">F₂</span> = (−1, 2) นิวตัน<br>
+        แรงลัพธ์ <span class="vec">F</span> = <span class="vec">F₁</span> + <span class="vec">F₂</span> = (2, 6) นิวตัน<br>
         ขนาดแรงลัพธ์ |<span class="vec">F</span>| = √(4 + 36) = √40 = 2√10 นิวตัน
       </div>
     </div>
@@ -1017,46 +990,46 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 // Quiz data
 const questions = [
   {
-    q: "กำหนด <span class="vec">u</span> = (3, 4) จงหา |<span class="vec">u</span>|",
+    q: "กำหนด u→ = (3, 4) จงหา |u→|",
     opts: ["5", "7", "12", "√7", "25"],
     ans: 0,
-    explain: "ขั้นที่ 1: ใช้สูตร |<span class="vec">v</span>| = √(a² + b²)\n|<span class="vec">u</span>| = √(3² + 4²) = √(9 + 16) = √25 = 5 ✓"
+    explain: "ขั้นที่ 1: ใช้สูตร |v→| = √(a² + b²)\n|u→| = √(3² + 4²) = √(9 + 16) = √25 = 5 ✓"
   },
   {
-    q: "กำหนด <span class="vec">u</span> = (1, 2) และ <span class="vec">v</span> = (3, −1) จงหา <span class="vec">u</span> + <span class="vec">v</span>",
+    q: "กำหนด u→ = (1, 2) และ v→ = (3, −1) จงหา u→ + v→",
     opts: ["(4, 1)", "(2, 3)", "(−2, 3)", "(4, 3)", "(1, 4)"],
     ans: 0,
-    explain: "<span class="vec">u</span> + <span class="vec">v</span> = (1+3, 2+(−1)) = (4, 1) ✓"
+    explain: "u→ + v→ = (1+3, 2+(−1)) = (4, 1) ✓"
   },
   {
-    q: "กำหนด <span class="vec">v</span> = (2, 6) จงหาเวกเตอร์หน่วยในทิศทางของ <span class="vec">v</span>",
+    q: "กำหนด v→ = (2, 6) จงหาเวกเตอร์หน่วยในทิศทางของ v→",
     opts: ["(1/√10, 3/√10)", "(1/4, 3/4)", "(1/2, 1/6)", "(2/8, 6/8)", "(1, 3)"],
     ans: 0,
-    explain: "|<span class="vec">v</span>| = √(4 + 36) = √40 = 2√10\n<span class="uvec">u</span> = (2/(2√10), 6/(2√10)) = (1/√10, 3/√10) ✓"
+    explain: "|v→| = √(4 + 36) = √40 = 2√10\nû = (2/(2√10), 6/(2√10)) = (1/√10, 3/√10) ✓"
   },
   {
-    q: "กำหนด <span class="vec">u</span> = (2, 3) และ <span class="vec">v</span> = (4, −1) จงหา <span class="vec">u</span> · <span class="vec">v</span>",
+    q: "กำหนด u→ = (2, 3) และ v→ = (4, −1) จงหา u→ · v→",
     opts: ["5", "11", "−5", "7", "14"],
     ans: 0,
-    explain: "<span class="vec">u</span> · <span class="vec">v</span> = (2)(4) + (3)(−1) = 8 − 3 = 5 ✓"
+    explain: "u→ · v→ = (2)(4) + (3)(−1) = 8 − 3 = 5 ✓"
   },
   {
-    q: "เวกเตอร์ใดต่อไปนี้ตั้งฉากกับ <span class="vec">v</span> = (3, 4)?",
+    q: "เวกเตอร์ใดต่อไปนี้ตั้งฉากกับ v→ = (3, 4)?",
     opts: ["(4, −3)", "(3, 4)", "(−3, −4)", "(1, 1)", "(6, 8)"],
     ans: 0,
     explain: "เวกเตอร์ตั้งฉากกัน ต้องมีผลคูณจุดเป็น 0\n(4, −3) · (3, 4) = 12 + (−12) = 0 ✓\nดังนั้น (4, −3) ตั้งฉากกับ (3, 4)"
   },
   {
-    q: "กำหนด <span class="vec">u</span> = (1, 0, 0) และ <span class="vec">v</span> = (0, 1, 0) จงหา <span class="vec">u</span> × <span class="vec">v</span>",
+    q: "กำหนด u→ = (1, 0, 0) และ v→ = (0, 1, 0) จงหา u→ × v→",
     opts: ["(0, 0, 1)", "(0, 0, −1)", "(1, 1, 0)", "(0, 1, 0)", "(1, 0, 1)"],
     ans: 0,
-    explain: "<span class="vec">u</span> × <span class="vec">v</span> = <span class="uvec">i</span>(0×0 − 0×1) − <span class="uvec">j</span>(1×0 − 0×0) + <span class="uvec">k</span>(1×1 − 0×0)\n= <span class="uvec">i</span>(0) − <span class="uvec">j</span>(0) + <span class="uvec">k</span>(1) = (0, 0, 1) ✓\n(<span class="uvec">i</span> × <span class="uvec">j</span> = <span class="uvec">k</span> ตามกฎมือขวา)"
+    explain: "u→ × v→ = î(0×0 − 0×1) − ĵ(1×0 − 0×0) + k̂(1×1 − 0×0)\n= î(0) − ĵ(0) + k̂(1) = (0, 0, 1) ✓\n(î × ĵ = k̂ ตามกฎมือขวา)"
   },
   {
-    q: "มุมระหว่าง <span class="vec">u</span> = (1, 0) และ <span class="vec">v</span> = (0, 1) มีค่าเท่าไร",
+    q: "มุมระหว่าง u→ = (1, 0) และ v→ = (0, 1) มีค่าเท่าไร",
     opts: ["90°", "45°", "60°", "30°", "180°"],
     ans: 0,
-    explain: "<span class="vec">u</span> · <span class="vec">v</span> = (1)(0) + (0)(1) = 0\nเมื่อผลคูณจุดเป็น 0 แสดงว่าเวกเตอร์ตั้งฉากกัน θ = 90° ✓"
+    explain: "u→ · v→ = (1)(0) + (0)(1) = 0\nเมื่อผลคูณจุดเป็น 0 แสดงว่าเวกเตอร์ตั้งฉากกัน θ = 90° ✓"
   },
   {
     q: "กำหนด A = (1, 2, 3) และ B = (4, 6, 3) จงหาระยะห่าง AB",
@@ -1065,28 +1038,28 @@ const questions = [
     explain: "d = √[(4−1)² + (6−2)² + (3−3)²]\n= √[9 + 16 + 0] = √25 = 5 ✓"
   },
   {
-    q: "กำหนด <span class="vec">u</span> = (2, 1) และ <span class="vec">v</span> = (1, 2) จงหา cos θ ระหว่าง <span class="vec">u</span> และ <span class="vec">v</span>",
+    q: "กำหนด u→ = (2, 1) และ v→ = (1, 2) จงหา cos θ ระหว่าง u→ และ v→",
     opts: ["4/5", "2/5", "3/5", "1/5", "√5/5"],
     ans: 0,
-    explain: "<span class="vec">u</span> · <span class="vec">v</span> = 2(1) + 1(2) = 4\n|<span class="vec">u</span>| = √5, |<span class="vec">v</span>| = √5\ncos θ = 4/(√5 × √5) = 4/5 ✓"
+    explain: "u→ · v→ = 2(1) + 1(2) = 4\n|u→| = √5, |v→| = √5\ncos θ = 4/(√5 × √5) = 4/5 ✓"
   },
   {
-    q: "ถ้า <span class="vec">u</span> = (3, 0) และ <span class="vec">v</span> = (k, 4) ตั้งฉากกัน จงหา k",
+    q: "ถ้า u→ = (3, 0) และ v→ = (k, 4) ตั้งฉากกัน จงหา k",
     opts: ["0", "3", "4", "−3", "12"],
     ans: 0,
-    explain: "เงื่อนไขตั้งฉาก: <span class="vec">u</span> · <span class="vec">v</span> = 0\n(3)(k) + (0)(4) = 0\n3k = 0\nk = 0 ✓"
+    explain: "เงื่อนไขตั้งฉาก: u→ · v→ = 0\n(3)(k) + (0)(4) = 0\n3k = 0\nk = 0 ✓"
   },
   {
-    q: "กำหนด <span class="vec">v</span> = (1, 2, 2) จงหา |<span class="vec">v</span>|",
+    q: "กำหนด v→ = (1, 2, 2) จงหา |v→|",
     opts: ["3", "5", "√9", "√7", "2√2"],
     ans: 0,
-    explain: "|<span class="vec">v</span>| = √(1² + 2² + 2²) = √(1 + 4 + 4) = √9 = 3 ✓"
+    explain: "|v→| = √(1² + 2² + 2²) = √(1 + 4 + 4) = √9 = 3 ✓"
   },
   {
-    q: "พื้นที่ของสามเหลี่ยมที่มีด้านประกอบ <span class="vec">u</span> = (1, 0, 0) และ <span class="vec">v</span> = (0, 2, 0) มีค่าเท่าไร",
+    q: "พื้นที่ของสามเหลี่ยมที่มีด้านประกอบ u→ = (1, 0, 0) และ v→ = (0, 2, 0) มีค่าเท่าไร",
     opts: ["1", "2", "½", "√2", "4"],
     ans: 0,
-    explain: "<span class="vec">u</span> × <span class="vec">v</span> = (0×0 − 0×2, 0×0 − 1×0, 1×2 − 0×0) = (0, 0, 2)\n|<span class="vec">u</span> × <span class="vec">v</span>| = 2\nพื้นที่สามเหลี่ยม = ½ × 2 = 1 ✓"
+    explain: "u→ × v→ = (0×0 − 0×2, 0×0 − 1×0, 1×2 − 0×0) = (0, 0, 2)\n|u→ × v→| = 2\nพื้นที่สามเหลี่ยม = ½ × 2 = 1 ✓"
   },
 ];
 
@@ -1094,73 +1067,73 @@ const questions = [
 const alevelQuestions = [
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด <span class="vec">u</span> = (a, 3) และ <span class="vec">v</span> = (2, 6) โดยที่ <span class="vec">u</span> &#x2225; <span class="vec">v</span>\nจงหาค่า a",
+    q: "กำหนด u→ = (a, 3) และ v→ = (2, 6) โดยที่ u→ ∥ v→\nจงหาค่า a",
     opts: ["1", "2", "3", "4", "6"],
     ans: 0,
-    explain: "เวกเตอร์ขนานกัน: <span class="vec">u</span> = k<span class="vec">v</span> สำหรับบางสเกลาร์ k\n(a, 3) = k(2, 6)\nจาก b-component: 3 = 6k → k = ½\nจาก a-component: a = 2k = 2(½) = 1 ✓"
+    explain: "เวกเตอร์ขนานกัน: u→ = kv→ สำหรับบางสเกลาร์ k\n(a, 3) = k(2, 6)\nจาก b-component: 3 = 6k → k = ½\nจาก a-component: a = 2k = 2(½) = 1 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
     q: "กำหนด A = (2, 1), B = (5, 5), C = (8, 1)\nรูปสามเหลี่ยม ABC มีพื้นที่เท่าไร",
     opts: ["6", "12", "9", "√50", "8"],
     ans: 0,
-    explain: "หา <span class="vec">AB</span> = (3, 4) และ <span class="vec">AC</span> = (6, 0)\nพื้นที่ = ½|<span class="vec">AB</span> × <span class="vec">AC</span>|\nในระนาบ 2 มิติ: |<span class="vec">AB</span> × <span class="vec">AC</span>| = |a₁b₂ − a₂b₁| = |3(0) − 4(6)| = |−24| = 24\n(หรือสูตร shoelace: ½|2(5−1) + 5(1−1) + 8(1−5)| = ½|8 + 0 − 32| = ½ × 24 = 12)\nพื้นที่ = ½ × 12 = 6 ✓"
+    explain: "หา AB→ = (3, 4) และ AC→ = (6, 0)\nพื้นที่ = ½|AB→ × AC→|\nในระนาบ 2 มิติ: |AB→ × AC→| = |a₁b₂ − a₂b₁| = |3(0) − 4(6)| = |−24| = 24\n(หรือสูตร shoelace: ½|2(5−1) + 5(1−1) + 8(1−5)| = ½|8 + 0 − 32| = ½ × 24 = 12)\nพื้นที่ = ½ × 12 = 6 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "เวกเตอร์ <span class="vec">u</span> = (2, −1, 3) และ <span class="vec">v</span> = (1, 2, k)\nถ้า <span class="vec">u</span> ⊥ <span class="vec">v</span> จงหา k",
+    q: "เวกเตอร์ u→ = (2, −1, 3) และ v→ = (1, 2, k)\nถ้า u→ ⊥ v→ จงหา k",
     opts: ["0", "1", "−1", "4/3", "−4/3"],
     ans: 0,
-    explain: "เงื่อนไขตั้งฉาก: <span class="vec">u</span> · <span class="vec">v</span> = 0\n(2)(1) + (−1)(2) + (3)(k) = 0\n2 − 2 + 3k = 0\n3k = 0\nk = 0 ✓"
+    explain: "เงื่อนไขตั้งฉาก: u→ · v→ = 0\n(2)(1) + (−1)(2) + (3)(k) = 0\n2 − 2 + 3k = 0\n3k = 0\nk = 0 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด <span class="vec">u</span> = (3, 4) และ <span class="vec">v</span> = (4, 3)\nจงหามุม θ ระหว่าง <span class="vec">u</span> และ <span class="vec">v</span> (เป็นองศา)",
+    q: "กำหนด u→ = (3, 4) และ v→ = (4, 3)\nจงหามุม θ ระหว่าง u→ และ v→ (เป็นองศา)",
     opts: ["arccos(24/25)", "45°", "60°", "arccos(7/25)", "90°"],
     ans: 0,
-    explain: "<span class="vec">u</span> · <span class="vec">v</span> = 12 + 12 = 24\n|<span class="vec">u</span>| = 5, |<span class="vec">v</span>| = 5\ncos θ = 24/(5×5) = 24/25\nθ = arccos(24/25) ≈ 16.26° ✓"
+    explain: "u→ · v→ = 12 + 12 = 24\n|u→| = 5, |v→| = 5\ncos θ = 24/(5×5) = 24/25\nθ = arccos(24/25) ≈ 16.26° ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด <span class="vec">u</span> = (1, 2, 3) และ <span class="vec">v</span> = (2, 1, −1)\nจงหา <span class="vec">u</span> × <span class="vec">v</span>",
+    q: "กำหนด u→ = (1, 2, 3) และ v→ = (2, 1, −1)\nจงหา u→ × v→",
     opts: ["(−5, 7, −3)", "(5, −7, 3)", "(2, 2, −3)", "(3, 6, 3)", "(−2, 1, 3)"],
     ans: 0,
-    explain: "<span class="vec">u</span> × <span class="vec">v</span> = <span class="uvec">i</span>(b₁c₂ − c₁b₂) − <span class="uvec">j</span>(a₁c₂ − c₁a₂) + <span class="uvec">k</span>(a₁b₂ − b₁a₂)\n= <span class="uvec">i</span>(2×(−1) − 3×1) − <span class="uvec">j</span>(1×(−1) − 3×2) + <span class="uvec">k</span>(1×1 − 2×2)\n= <span class="uvec">i</span>(−2 − 3) − <span class="uvec">j</span>(−1 − 6) + <span class="uvec">k</span>(1 − 4)\n= (−5, 7, −3) ✓"
+    explain: "u→ × v→ = î(b₁c₂ − c₁b₂) − ĵ(a₁c₂ − c₁a₂) + k̂(a₁b₂ − b₁a₂)\n= î(2×(−1) − 3×1) − ĵ(1×(−1) − 3×2) + k̂(1×1 − 2×2)\n= î(−2 − 3) − ĵ(−1 − 6) + k̂(1 − 4)\n= (−5, 7, −3) ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "จุด P อยู่บนเส้นตรงที่ผ่าน A(1, 2, 3) ในทิศทาง <span class="vec">d</span> = (1, 0, −1)\nถ้า t = 2 จงหาพิกัดของ P",
+    q: "จุด P อยู่บนเส้นตรงที่ผ่าน A(1, 2, 3) ในทิศทาง d→ = (1, 0, −1)\nถ้า t = 2 จงหาพิกัดของ P",
     opts: ["(3, 2, 1)", "(2, 2, 2)", "(1, 4, 1)", "(3, 4, 1)", "(2, 4, 3)"],
     ans: 0,
-    explain: "<span class="vec">r</span> = A + t·<span class="vec">d</span> = (1, 2, 3) + 2(1, 0, −1)\n= (1 + 2, 2 + 0, 3 + (−2))\n= (3, 2, 1) ✓"
+    explain: "r→ = A + t·d→ = (1, 2, 3) + 2(1, 0, −1)\n= (1 + 2, 2 + 0, 3 + (−2))\n= (3, 2, 1) ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด <span class="vec">u</span> = (0, 1, 0) จงหา |3<span class="vec">u</span> − 2<span class="vec">v</span>| เมื่อ <span class="vec">v</span> = (1, 0, 0)",
+    q: "กำหนด u→ = (0, 1, 0) จงหา |3u→ − 2v→| เมื่อ v→ = (1, 0, 0)",
     opts: ["√13", "5", "√5", "3", "√7"],
     ans: 0,
-    explain: "3<span class="vec">u</span> = 3(0, 1, 0) = (0, 3, 0)\n2<span class="vec">v</span> = 2(1, 0, 0) = (2, 0, 0)\n3<span class="vec">u</span> − 2<span class="vec">v</span> = (0−2, 3−0, 0−0) = (−2, 3, 0)\n|3<span class="vec">u</span> − 2<span class="vec">v</span>| = √(4 + 9 + 0) = √13 ✓"
+    explain: "3u→ = 3(0, 1, 0) = (0, 3, 0)\n2v→ = 2(1, 0, 0) = (2, 0, 0)\n3u→ − 2v→ = (0−2, 3−0, 0−0) = (−2, 3, 0)\n|3u→ − 2v→| = √(4 + 9 + 0) = √13 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "ระนาบผ่านจุด (2, −1, 3) และมีเวกเตอร์ตั้งฉาก <span class="vec">n</span> = (1, 2, −1)\nสมการของระนาบนี้คืออะไร",
+    q: "ระนาบผ่านจุด (2, −1, 3) และมีเวกเตอร์ตั้งฉาก n→ = (1, 2, −1)\nสมการของระนาบนี้คืออะไร",
     opts: ["x + 2y − z = −3", "x + 2y − z = 3", "2x + y − z = 0", "x − 2y + z = 7", "x + 2y − z = 1"],
     ans: 0,
     explain: "สมการระนาบ: A(x − x₀) + B(y − y₀) + C(z − z₀) = 0\n1(x − 2) + 2(y + 1) + (−1)(z − 3) = 0\nx − 2 + 2y + 2 − z + 3 = 0\nx + 2y − z + 3 = 0\nx + 2y − z = −3 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด <span class="vec">u</span> = (a, b) และ |<span class="vec">u</span>| = 5, <span class="vec">u</span> · <span class="uvec">i</span> = 3 (<span class="uvec">i</span> = (1,0))\nจงหา |b|",
+    q: "กำหนด u→ = (a, b) และ |u→| = 5, u→ · î = 3 (î = (1,0))\nจงหา |b|",
     opts: ["4", "3", "5", "√34", "2"],
     ans: 0,
-    explain: "<span class="vec">u</span> · <span class="uvec">i</span> = (a)(1) + (b)(0) = a = 3\nเนื่องจาก |<span class="vec">u</span>| = 5: a² + b² = 25\n9 + b² = 25\nb² = 16\n|b| = 4 ✓"
+    explain: "u→ · î = (a)(1) + (b)(0) = a = 3\nเนื่องจาก |u→| = 5: a² + b² = 25\n9 + b² = 25\nb² = 16\n|b| = 4 ✓"
   },
   {
     year: "ตัวอย่าง A-Level — เวกเตอร์",
-    q: "กำหนด <span class="vec">u</span> = (2, 1, 0) และ <span class="vec">v</span> = (1, 2, 0)\nจงหา |<span class="vec">u</span> × <span class="vec">v</span>|",
+    q: "กำหนด u→ = (2, 1, 0) และ v→ = (1, 2, 0)\nจงหา |u→ × v→|",
     opts: ["3", "5", "√5", "√10", "6"],
     ans: 0,
-    explain: "<span class="vec">u</span> × <span class="vec">v</span> = (b₁c₂ − c₁b₂, c₁a₂ − a₁c₂, a₁b₂ − b₁a₂)\n= (1×0 − 0×2, 0×1 − 2×0, 2×2 − 1×1)\n= (0, 0, 3)\n|<span class="vec">u</span> × <span class="vec">v</span>| = √(0 + 0 + 9) = 3 ✓\n\n(ตรวจสอบ: |<span class="vec">u</span>||<span class="vec">v</span>|sin θ = √5 × √5 × sin(arccos(4/5)) = 5 × 3/5 = 3 ✓)"
+    explain: "u→ × v→ = (b₁c₂ − c₁b₂, c₁a₂ − a₁c₂, a₁b₂ − b₁a₂)\n= (1×0 − 0×2, 0×1 − 2×0, 2×2 − 1×1)\n= (0, 0, 3)\n|u→ × v→| = √(0 + 0 + 9) = 3 ✓\n\n(ตรวจสอบ: |u→||v→|sin θ = √5 × √5 × sin(arccos(4/5)) = 5 × 3/5 = 3 ✓)"
   }
 ];
 
