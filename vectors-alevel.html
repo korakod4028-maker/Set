@@ -482,8 +482,8 @@
   <button class="tab-btn active" data-sec="vec1">1. นิยามเวกเตอร์</button>
   <button class="tab-btn" data-sec="vec2">2. การดำเนินการ</button>
   <button class="tab-btn" data-sec="vec3">3. ขนาดและทิศทาง</button>
-  <button class="tab-btn" data-sec="vec4">4. ผลคูณจุด (Dot Product)</button>
-  <button class="tab-btn" data-sec="vec5">5. ผลคูณไขว้ (Cross Product)</button>
+  <button class="tab-btn" data-sec="vec4">4. ผลคูณเชิงสเกลาร์</button>
+  <button class="tab-btn" data-sec="vec5">5. ผลคูณเชิงเวกเตอร์</button>
   <button class="tab-btn" data-sec="vec6">6. เวกเตอร์ใน 3 มิติ</button>
   <button class="tab-btn" data-sec="vec7">7. การประยุกต์</button>
   <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัดเตรียม A-Level</button>
@@ -758,12 +758,12 @@
     </div>
   </div>
 
-  <!-- ===== SECTION 4: ผลคูณจุด ===== -->
+  <!-- ===== SECTION 4: ผลคูณเชิงสเกลาร์ ===== -->
   <div class="section" id="vec4">
-    <div class="section-heading"><span>หัวข้อที่ 4</span> · ผลคูณจุด (Dot Product)</div>
+    <div class="section-heading"><span>หัวข้อที่ 4</span> · ผลคูณเชิงสเกลาร์</div>
 
     <div class="card">
-      <div class="card-title"><div class="icon icon-teal">•</div>นิยามผลคูณจุด</div>
+      <div class="card-title"><div class="icon icon-teal">•</div>นิยามผลคูณเชิงสเกลาร์</div>
       <div class="def-box">
         <div class="def-label">สูตร</div>
         <span class="math"><span class="vec">u</span> · <span class="vec">v</span> = a₁a₂ + b₁b₂</span>  (2 มิติ)<br>
@@ -771,7 +771,7 @@
       </div>
       <div class="formula-highlight">
         <span class="vec">u</span> · <span class="vec">v</span> = |<span class="vec">u</span>||<span class="vec">v</span>|cos θ<br>
-        (ผลคูณจุดเป็นสเกลาร์ ไม่ใช่เวกเตอร์!)
+        (ผลคูณเชิงสเกลาร์ เป็นสเกลาร์ ไม่ใช่เวกเตอร์!)
       </div>
       <div class="example-box">
         <div class="ex-label">ตัวอย่าง</div>
@@ -796,23 +796,23 @@
       <div class="def-box">
         <div class="def-label">เวกเตอร์ตั้งฉากกัน</div>
         <span class="math"><span class="vec">u</span> ⊥ <span class="vec">v</span>  ⟺  <span class="vec">u</span> · <span class="vec">v</span> = 0</span><br>
-        ถ้าผลคูณจุดเป็น 0 แสดงว่าสองเวกเตอร์ตั้งฉากกัน (θ = 90°)
+        ถ้าผลคูณเชิงสเกลาร์เป็น 0 แสดงว่าสองเวกเตอร์ตั้งฉากกัน (θ = 90°)
       </div>
       <div class="warn-box">
         <div class="warn-label">⚠️ ข้อควรระวัง</div>
-        ผลคูณจุด <span class="vec">u</span> · <span class="vec">v</span> > 0 → มุมแหลม (θ < 90°)<br>
-        ผลคูณจุด <span class="vec">u</span> · <span class="vec">v</span> = 0 → ตั้งฉาก (θ = 90°)<br>
-        ผลคูณจุด <span class="vec">u</span> · <span class="vec">v</span> < 0 → มุมป้าน (θ > 90°)
+        ผลคูณเชิงสเกลาร์ <span class="vec">u</span> · <span class="vec">v</span> > 0 → มุมแหลม (θ < 90°)<br>
+        ผลคูณเชิงสเกลาร์ <span class="vec">u</span> · <span class="vec">v</span> = 0 → ตั้งฉาก (θ = 90°)<br>
+        ผลคูณเชิงสเกลาร์ <span class="vec">u</span> · <span class="vec">v</span> < 0 → มุมป้าน (θ > 90°)
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title"><div class="icon icon-yellow">🔽</div>การฉายเวกเตอร์ (Projection)</div>
+      <div class="card-title"><div class="icon icon-yellow">🔽</div>การฉายเวกเตอร์</div>
       <div class="def-box">
         <div class="def-label">สูตรการฉาย</div>
         การฉาย <span class="vec">u</span> ลงบน <span class="vec">v</span>:<br>
         <span class="math">proj<sub><span class="vec">v</span></sub> <span class="vec">u</span> = (<span class="vec">u</span> · <span class="vec">v</span> / |<span class="vec">v</span>|²) × <span class="vec">v</span></span><br>
-        ความยาวของการฉาย (scalar projection):<br>
+        ขนาดของการฉาย (การฉายเชิงสเกลาร์):<br>
         <span class="math">comp<sub><span class="vec">v</span></sub> <span class="vec">u</span> = <span class="vec">u</span> · <span class="vec">v</span> / |<span class="vec">v</span>|</span>
       </div>
       <div class="example-box">
@@ -825,13 +825,13 @@
     </div>
   </div>
 
-  <!-- ===== SECTION 5: ผลคูณไขว้ ===== -->
+  <!-- ===== SECTION 5: ผลคูณเชิงเวกเตอร์ ===== -->
   <div class="section" id="vec5">
-    <div class="section-heading"><span>หัวข้อที่ 5</span> · ผลคูณไขว้ (Cross Product)</div>
+    <div class="section-heading"><span>หัวข้อที่ 5</span> · ผลคูณเชิงเวกเตอร์</div>
 
     <div class="card">
-      <div class="card-title"><div class="icon icon-red">✕</div>นิยามผลคูณไขว้</div>
-      <p>ผลคูณไขว้ใช้ได้เฉพาะในระบบ <strong>3 มิติ</strong> และผลลัพธ์เป็น <strong>เวกเตอร์</strong> ที่ตั้งฉากกับทั้ง <span class="vec">u</span> และ <span class="vec">v</span></p>
+      <div class="card-title"><div class="icon icon-red">✕</div>นิยามผลคูณเชิงเวกเตอร์</div>
+      <p>ผลคูณเชิงเวกเตอร์ใช้ได้เฉพาะในระบบ <strong>3 มิติ</strong> และผลลัพธ์เป็น <strong>เวกเตอร์</strong> ที่ตั้งฉากกับทั้ง <span class="vec">u</span> และ <span class="vec">v</span></p>
       <div class="formula-highlight">
         <span class="vec">u</span> × <span class="vec">v</span> = |<span class="vec">u</span>||<span class="vec">v</span>|sin θ  <span class="hat">n</span><br>
         โดย <span class="hat">n</span> คือเวกเตอร์หนึ่งหน่วยตั้งฉากกับระนาบของ <span class="vec">u</span> และ <span class="vec">v</span>
@@ -858,7 +858,7 @@
     </div>
 
     <div class="card">
-      <div class="card-title"><div class="icon icon-yellow">📐</div>คุณสมบัติผลคูณไขว้</div>
+      <div class="card-title"><div class="icon icon-yellow">📐</div>คุณสมบัติผลคูณเชิงเวกเตอร์</div>
       <table>
         <thead><tr><th>คุณสมบัติ</th><th>สูตร</th></tr></thead>
         <tbody>
@@ -969,10 +969,10 @@
         <tbody>
           <tr><td>|<span class="vec">v</span>| = √(a²+b²+c²)</td><td>ขนาดเวกเตอร์</td></tr>
           <tr><td><span class="hat">v</span> = <span class="vec">v</span>/|<span class="vec">v</span>|</td><td>เวกเตอร์หนึ่งหน่วย</td></tr>
-          <tr><td><span class="vec">u</span>·<span class="vec">v</span> = a₁a₂+b₁b₂+c₁c₂</td><td>ผลคูณจุด (สเกลาร์)</td></tr>
+          <tr><td><span class="vec">u</span>·<span class="vec">v</span> = a₁a₂+b₁b₂+c₁c₂</td><td>ผลคูณเชิงสเกลาร์ (สเกลาร์)</td></tr>
           <tr><td>cos θ = <span class="vec">u</span>·<span class="vec">v</span>/(|<span class="vec">u</span>||<span class="vec">v</span>|)</td><td>มุมระหว่างเวกเตอร์</td></tr>
           <tr><td><span class="vec">u</span>·<span class="vec">v</span> = 0 ⟺ <span class="vec">u</span> ⊥ <span class="vec">v</span></td><td>เงื่อนไขตั้งฉาก</td></tr>
-          <tr><td>|<span class="vec">u</span>×<span class="vec">v</span>| = |<span class="vec">u</span>||<span class="vec">v</span>|sin θ</td><td>ขนาดผลคูณไขว้</td></tr>
+          <tr><td>|<span class="vec">u</span>×<span class="vec">v</span>| = |<span class="vec">u</span>||<span class="vec">v</span>|sin θ</td><td>ขนาดผลคูณเชิงเวกเตอร์</td></tr>
           <tr><td>พื้นที่ = ½|<span class="vec">u</span>×<span class="vec">v</span>|</td><td>พื้นที่สามเหลี่ยม</td></tr>
         </tbody>
       </table>
@@ -1034,7 +1034,7 @@ const questions = [
     q: "เวกเตอร์ใดต่อไปนี้ตั้งฉากกับ v→ = (3, 4)?",
     opts: ["(4, −3)", "(3, 4)", "(−3, −4)", "(1, 1)", "(6, 8)"],
     ans: 0,
-    explain: "เวกเตอร์ตั้งฉากกัน ต้องมีผลคูณจุดเป็น 0\n(4, −3) · (3, 4) = 12 + (−12) = 0 ✓\nดังนั้น (4, −3) ตั้งฉากกับ (3, 4)"
+    explain: "เวกเตอร์ตั้งฉากกัน ต้องมีผลคูณเชิงสเกลาร์เป็น 0\n(4, −3) · (3, 4) = 12 + (−12) = 0 ✓\nดังนั้น (4, −3) ตั้งฉากกับ (3, 4)"
   },
   {
     q: "กำหนด u→ = (1, 0, 0) และ v→ = (0, 1, 0) จงหา u→ × v→",
@@ -1046,7 +1046,7 @@ const questions = [
     q: "มุมระหว่าง u→ = (1, 0) และ v→ = (0, 1) มีค่าเท่าไร",
     opts: ["90°", "45°", "60°", "30°", "180°"],
     ans: 0,
-    explain: "u→ · v→ = (1)(0) + (0)(1) = 0\nเมื่อผลคูณจุดเป็น 0 แสดงว่าเวกเตอร์ตั้งฉากกัน θ = 90° ✓"
+    explain: "u→ · v→ = (1)(0) + (0)(1) = 0\nเมื่อผลคูณเชิงสเกลาร์เป็น 0 แสดงว่าเวกเตอร์ตั้งฉากกัน θ = 90° ✓"
   },
   {
     q: "กำหนด A = (1, 2, 3) และ B = (4, 6, 3) จงหาระยะห่าง AB",
