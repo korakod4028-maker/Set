@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สรุปสอบ | วงจรอันดับหนึ่ง (First-Order Circuits)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1115;
+  --bg2:#161923;
+  --panel:#1b1f2b;
+  --panel2:#20263a;
+  --line:#2c3244;
+  --text:#e8eaf2;
+  --muted:#9aa3b8;
+  --accent:#5fd0c9;      /* teal - primary */
+  --accent2:#f2a154;     /* amber - secondary */
+  --blue:#6fa8ff;        /* definition */
+  --green:#7fd88f;       /* example */
+  --red:#ff8a8a;         /* warning */
+  --purple:#c39bff;      /* tip */
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Sarabun',sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(95,208,201,0.08), transparent),
+    radial-gradient(1000px 600px at 100% 0%, rgba(242,161,84,0.06), transparent),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.7;
+  padding-bottom:80px;
+}
+header.hero{
+  padding:38px 20px 26px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(95,208,201,0.06), transparent);
+  position:relative;
+  overflow:hidden;
+}
+header.hero::after{
+  content:"";
+  position:absolute; right:-60px; top:-60px;
+  width:220px; height:220px; border-radius:50%;
+  background:radial-gradient(circle, rgba(95,208,201,0.18), transparent 70%);
+}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.14em;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+h1.title{
+  font-size:clamp(24px,5vw,34px);
+  margin:0 0 8px;
+  font-weight:800;
+  letter-spacing:-0.01em;
+}
+.subtitle{
+  color:var(--muted);
+  font-size:15px;
+  max-width:640px;
+}
+.tau-badge{
+  display:inline-block;
+  font-family:var(--mono);
+  background:var(--panel2);
+  border:1px solid var(--line);
+  color:var(--accent2);
+  padding:3px 10px;
+  border-radius:20px;
+  font-size:12.5px;
+  margin-top:14px;
+}
+
+/* Sticky tabs */
+nav.tabs{
+  position:sticky; top:0; z-index:50;
+  display:flex; gap:6px; overflow-x:auto;
+  padding:10px 14px;
+  background:rgba(15,17,21,0.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  scrollbar-width:none;
+}
+nav.tabs::-webkit-scrollbar{display:none;}
+nav.tabs button{
+  flex:0 0 auto;
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:13.5px;
+  color:var(--muted);
+  background:transparent;
+  border:1px solid transparent;
+  padding:8px 14px;
+  border-radius:10px;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all .15s ease;
+}
+nav.tabs button:hover{ color:var(--text); border-color:var(--line); }
+nav.tabs button.active{
+  color:#0f1115;
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+main{ max-width:920px; margin:0 auto; padding:24px 16px 0; }
+section.panel{ display:none; animation:fade .25s ease; }
+section.panel.active{ display:block; }
+@keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+h2.sec-title{
+  font-size:20px;
+  font-weight:700;
+  margin:28px 0 14px;
+  display:flex; align-items:center; gap:10px;
+  color:var(--text);
+}
+h2.sec-title .tag{
+  font-family:var(--mono);
+  font-size:11px;
+  color:#0f1115;
+  background:var(--accent);
+  padding:2px 8px;
+  border-radius:6px;
+  font-weight:700;
+}
+h3.sub-title{
+  font-size:16px; font-weight:700; margin:22px 0 10px; color:var(--accent2);
+}
+p{ color:#d5d9e5; }
+
+.box{
+  border-radius:14px;
+  padding:16px 18px;
+  margin:14px 0;
+  border:1px solid var(--line);
+  background:var(--panel);
+}
+.box.def{ border-left:4px solid var(--blue); }
+.box.example{ border-left:4px solid var(--green); }
+.box.warning{ border-left:4px solid var(--red); }
+.box.tip{ border-left:4px solid var(--purple); }
+.box .box-label{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+  display:block;
+  font-weight:700;
+}
+.box.def .box-label{ color:var(--blue); }
+.box.example .box-label{ color:var(--green); }
+.box.warning .box-label{ color:var(--red); }
+.box.tip .box-label{ color:var(--purple); }
+
+.eq{
+  font-family:var(--mono);
+  background:var(--bg2);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px 16px;
+  margin:10px 0;
+  overflow-x:auto;
+  font-size:14.5px;
+  color:#fff2d6;
+}
+.eq.big{ font-size:16px; text-align:center; padding:16px; color:var(--accent); }
+.eq .lbl{ color:var(--muted); font-size:12px; display:block; margin-bottom:4px; }
+
+table{ width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+th,td{ border:1px solid var(--line); padding:8px 10px; text-align:left; }
+th{ background:var(--panel2); color:var(--accent2); font-family:var(--mono); font-size:12px; }
+td{ color:#d5d9e5; }
+
+.steps{ counter-reset:step; list-style:none; padding:0; margin:14px 0; }
+.steps li{
+  counter-increment:step;
+  position:relative;
+  padding:10px 10px 10px 44px;
+  margin-bottom:8px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+.steps li::before{
+  content:counter(step);
+  position:absolute; left:10px; top:50%; transform:translateY(-50%);
+  width:24px; height:24px; border-radius:50%;
+  background:var(--accent); color:#0f1115;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-weight:700; font-size:13px;
+}
+
+svg{ display:block; margin:16px auto; max-width:100%; height:auto; }
+.svg-wrap{ background:var(--bg2); border:1px solid var(--line); border-radius:12px; padding:14px; }
+.svg-cap{ text-align:center; font-size:12.5px; color:var(--muted); margin-top:-8px; }
+
+/* Quiz */
+.quiz-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:14px;
+  padding:16px 18px; margin:16px 0;
+}
+.quiz-q{ font-weight:600; margin-bottom:10px; }
+.quiz-opts{ display:flex; flex-direction:column; gap:8px; }
+.quiz-opts button{
+  text-align:left;
+  font-family:var(--sans);
+  background:var(--bg2);
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:14px;
+  transition:all .15s;
+}
+.quiz-opts button:hover{ border-color:var(--accent); }
+.quiz-opts button.correct{ background:rgba(127,216,143,0.15); border-color:var(--green); color:var(--green); }
+.quiz-opts button.wrong{ background:rgba(255,138,138,0.15); border-color:var(--red); color:var(--red); }
+.quiz-fb{ margin-top:10px; font-size:13.5px; color:var(--muted); display:none; }
+.quiz-fb.show{ display:block; }
+
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media(max-width:640px){ .grid2{ grid-template-columns:1fr; } }
+
+.score-bar{
+  position:sticky; bottom:0; z-index:40;
+  background:rgba(15,17,21,0.95);
+  border-top:1px solid var(--line);
+  padding:10px 16px;
+  display:none; justify-content:space-between; align-items:center;
+  font-family:var(--mono); font-size:13px; color:var(--muted);
+  backdrop-filter:blur(6px);
+}
+.score-bar.show{ display:flex; }
+.score-bar span{ color:var(--accent); font-weight:700; }
+
+.footer-note{
+  text-align:center; color:var(--muted); font-size:12.5px; padding:30px 20px 0;
+}
+mark{ background:transparent; color:var(--accent2); font-weight:700; }
+code{ font-family:var(--mono); background:var(--bg2); padding:1px 6px; border-radius:5px; color:var(--accent); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">การวิเคราะห์วงจรไฟฟ้า 1 · สรุปเตรียมสอบ</div>
+  <h1 class="title">บทที่ 5: วงจรอันดับหนึ่ง (First-Order Circuits)</h1>
+  <p class="subtitle">เน้นบทนี้เป็นหลัก เพราะบทที่ 1–3 ถูกนำไปออกสอบเก็บคะแนนไปแล้ว ส่วนบทที่ 4 (ตัวเก็บประจุ/ตัวเหนี่ยวนำ) เป็นพื้นฐานที่ต้องใช้ในบทนี้โดยตรง</p>
+  <span class="tau-badge">τ = RC หรือ τ = L/R — ตัวเลขตัวเดียวที่ตัดสินเกรดข้อสอบข้อนี้</span>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-t="method" class="active">🧭 วิธีทำ 3 ขั้นตอน</button>
+  <button data-t="rc">⚡ วงจร RC</button>
+  <button data-t="rl">🧲 วงจร RL</button>
+  <button data-t="init">🔁 เงื่อนไขเริ่มต้น</button>
+  <button data-t="worked">📘 ตัวอย่างเต็มรูปแบบ</button>
+  <button data-t="cheat">📋 สูตรโกงข้อสอบ</button>
+  <button data-t="quiz">✅ แบบฝึกหัดทบทวน</button>
+</nav>
+
+<main>
+
+<!-- ================= METHOD ================= -->
+<section class="panel active" id="method">
+  <h2 class="sec-title"><span class="tag">CORE</span> หัวใจของบทที่ 5</h2>
+  <div class="box def">
+    <span class="box-label">Definition</span>
+    วงจรอันดับหนึ่ง (First-Order Circuit) คือวงจรที่มีตัวเก็บพลังงานตัวเดียว (C หรือ L หนึ่งตัว หรือหลายตัวที่ลดรูปเป็นตัวเดียวได้) ทำให้สมการของวงจรเป็นสมการเชิงอนุพันธ์อันดับหนึ่ง คำตอบจึงอยู่ในรูป <mark>เอ็กซ์โพเนนเชียล</mark> เสมอ
+  </div>
+
+  <div class="eq big">
+    v<sub>C</sub> = [v<sub>C</sub>(0) − v<sub>oc</sub>] exp(−t/τ) + v<sub>oc</sub>
+    <br>i<sub>L</sub> = [i<sub>L</sub>(0) − i<sub>sc</sub>] exp(−t/τ) + i<sub>sc</sub>
+  </div>
+  <p>ตรงตามสูตรในหนังสือ "การวิเคราะห์วงจรไฟฟ้า 1" — สังเกตว่าค่าสุดท้าย (steady-state ที่ t→∞) ของวงจร RC เรียกว่า <mark>v<sub>oc</sub></mark> (แรงดันวงจรเปิด) และของวงจร RL เรียกว่า <mark>i<sub>sc</sub></mark> (กระแสวงจรลัด) เพราะหาได้จากการมองวงจรที่ขั้ว C หรือ L แล้วคิดเป็นแรงดัน/กระแสวงจรเปิด-ลัดของวงจรเทวินิน/นอร์ตันที่เหลือ</p>
+
+  <h3 class="sub-title">3 สิ่งที่ต้องหาให้ได้ก่อนตอบ</h3>
+  <ol class="steps">
+    <li><strong>x(0)</strong> — ค่าเริ่มต้น: วิเคราะห์วงจรที่ <code>t &lt; 0</code> (สภาวะอยู่ตัว/steady state) แทน C ด้วย<mark>วงจรเปิด</mark> และ L ด้วย<mark>วงจรลัด</mark> แล้วหาค่า v<sub>C</sub>(0) หรือ i<sub>L</sub>(0)</li>
+    <li><strong>v<sub>oc</sub> หรือ i<sub>sc</sub></strong> — ค่าสุดท้าย: วิเคราะห์วงจรที่ <code>t &gt; 0</code> เมื่อเข้าสภาวะอยู่ตัวใหม่ (นานพอ) แทน C ด้วยวงจรเปิดอีกครั้ง แล้วหาแรงดันคร่อมขั้วนั้น (คือ v<sub>oc</sub>) หรือแทน L ด้วยวงจรลัดอีกครั้ง แล้วหากระแสที่ไหลผ่าน (คือ i<sub>sc</sub>) — ถ้าไม่มีแหล่งกำเนิดอิสระเหลืออยู่ ค่านี้จะเป็น 0 (source-free)</li>
+    <li><strong>τ</strong> — ค่าคงตัวเวลา: หาความต้านทานเทวินิน R<sub>th</sub> ที่ขั้วของ C หรือ L (ปลดแหล่งอิสระออก แต่<mark>ห้ามปลดแหล่งไม่อิสระ</mark>) แล้วคำนวณ τ = R<sub>th</sub>C หรือ τ = L/R<sub>th</sub></li>
+  </ol>
+
+  <div class="box warning">
+    <span class="box-label">ระวัง — จุดที่เสียคะแนนบ่อยที่สุด</span>
+    เมื่อวงจรมีแหล่งจ่ายไม่อิสระ (dependent source) จะหา R<sub>th</sub> จากการรวมความต้านทานตรง ๆ ไม่ได้ เพราะ i<sub>sc</sub> = 0 เสมอ (ไม่มีแหล่งอิสระให้เกิดกระแสลัดวงจร) ต้อง<strong>ป้อนกระแสทดสอบ i<sub>test</sub> = 1 A</strong> เข้าไปที่ขั้ว a-b แล้วหา v<sub>test</sub> จากนั้น R<sub>th</sub> = v<sub>test</sub>/i<sub>test</sub>
+  </div>
+
+  <h3 class="sub-title">แผนภาพเปรียบเทียบ 2 วิธีหา R<sub>th</sub></h3>
+  <table>
+    <tr><th>สถานการณ์</th><th>วิธีหา R<sub>th</sub></th></tr>
+    <tr><td>มีแต่แหล่งอิสระ (independent source)</td><td>ปิดแหล่งแรงดัน (ลัดวงจร), เปิดแหล่งกระแส (วงจรเปิด) แล้วมองความต้านทานรวมจากขั้ว</td></tr>
+    <tr><td>มีแหล่งไม่อิสระ (dependent source) ปนอยู่</td><td>ปลดเฉพาะแหล่งอิสระ แล้ว<strong>ป้อนกระแสทดสอบ 1 A</strong> เข้าขั้ว a-b หา v<sub>ab</sub> แล้วคำนวณ R<sub>th</sub> = v<sub>ab</sub>/1</td></tr>
+  </table>
+
+  <div class="box tip">
+    <span class="box-label">Tip — จำสูตรเดียวใช้ได้ทั้ง RC และ RL</span>
+    สูตร v<sub>C</sub> ใช้กับวงจร RC และสูตร i<sub>L</sub> ใช้กับวงจร RL — ส่วนกระแส/แรงดันอื่น ๆ ในวงจร (เช่น i ผ่านตัวต้านทานตัวใดตัวหนึ่ง) ก็มีรูปแบบเลขชี้กำลังแบบเดียวกัน แต่ให้คำนวณค่าเริ่มต้นและค่าสุดท้ายของปริมาณนั้นจากวงจรจริง ณ เวลานั้น ๆ โดยตรง ไม่ใช่ยกค่า v<sub>oc</sub> หรือ i<sub>sc</sub> ของ C/L มาใช้ตรง ๆ
+  </div>
+</section>
+
+<!-- ================= RC ================= -->
+<section class="panel" id="rc">
+  <h2 class="sec-title"><span class="tag">5.1–5.3</span> วงจร RC</h2>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 460 180" width="100%">
+      <rect x="0" y="0" width="460" height="180" fill="none"/>
+      <line x1="30" y1="40" x2="30" y2="140" stroke="#5fd0c9" stroke-width="2"/>
+      <circle cx="30" cy="90" r="20" fill="none" stroke="#5fd0c9" stroke-width="2"/>
+      <text x="30" y="95" fill="#5fd0c9" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">ig</text>
+      <path d="M22 82 L38 82 M30 74 L30 90" stroke="#5fd0c9" stroke-width="2"/>
+      <line x1="30" y1="40" x2="150" y2="40" stroke="#e8eaf2" stroke-width="2"/>
+      <line x1="30" y1="140" x2="150" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+      <rect x="120" y="65" width="20" height="50" fill="none" stroke="#f2a154" stroke-width="2"/>
+      <text x="150" y="95" fill="#f2a154" font-family="IBM Plex Mono" font-size="12">R</text>
+      <line x1="130" y1="40" x2="130" y2="65" stroke="#e8eaf2" stroke-width="2"/>
+      <line x1="130" y1="115" x2="130" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+      <line x1="150" y1="40" x2="260" y2="40" stroke="#e8eaf2" stroke-width="2"/>
+      <line x1="150" y1="140" x2="260" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+      <line x1="235" y1="60" x2="285" y2="60" stroke="#7fd88f" stroke-width="3"/>
+      <line x1="235" y1="70" x2="285" y2="70" stroke="#7fd88f" stroke-width="3"/>
+      <line x1="260" y1="40" x2="260" y2="60" stroke="#e8eaf2" stroke-width="2"/>
+      <line x1="260" y1="70" x2="260" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+      <text x="300" y="68" fill="#7fd88f" font-family="IBM Plex Mono" font-size="13">C</text>
+      <text x="270" y="30" fill="#e8eaf2" font-family="IBM Plex Mono" font-size="13">+  vC</text>
+      <text x="270" y="155" fill="#e8eaf2" font-family="IBM Plex Mono" font-size="13">−</text>
+    </svg>
+    <div class="svg-cap">รูปทั่วไปของวงจร RC ที่มีแหล่งจ่าย — วิเคราะห์ 3 ขั้นตอนเดียวกับหลักการทั่วไป</div>
+  </div>
+
+  <h3 class="sub-title">5.1 วงจร RC ที่มีแหล่งกำเนิดไฟฟ้ากระแสตรง</h3>
+  <p>ใช้ผลตอบสนองสมบูรณ์ = ผลตอบสนองธรรมชาติ + ผลตอบสนองบังคับ ได้สูตรทั่วไป:</p>
+  <div class="eq big">v<sub>C</sub>(t) = [v<sub>C</sub>(0) − v<sub>oc</sub>] e^(−t/τ) + v<sub>oc</sub> , &nbsp; τ = R<sub>th</sub>C</div>
+
+  <h3 class="sub-title">5.2 วงจร RC ที่ไม่มีแหล่งกำเนิดอิสระ (source-free)</h3>
+  <p>เมื่อไม่มีแหล่งอิสระเหลืออยู่เลยในช่วง t &gt; 0 ตัวเก็บประจุจะคายประจุจนแรงดันเข้าสู่ 0 นั่นคือ v<sub>oc</sub> = 0 เสมอ ทำให้สูตรง่ายลงเหลือ:</p>
+  <div class="eq big">v<sub>C</sub>(t) = v<sub>C</sub>(0)·e^(−t/τ)</div>
+
+  <h3 class="sub-title">5.3 ค่าคงตัวทางเวลา τ (Time Constant)</h3>
+  <div class="box def">
+    <span class="box-label">ความหมายของ τ</span>
+    τ คือเวลาที่ทำให้ผลตอบสนองเปลี่ยนไป 63.2% ของระยะทางทั้งหมด (จากค่าเริ่มต้น (0) ไปค่าสุดท้าย v<sub>oc</sub> หรือ i<sub>sc</sub>) — ยิ่ง τ มาก วงจรยิ่งตอบสนองช้า โดยทั่วไปถือว่าวงจร "เข้าสู่สภาวะอยู่ตัว" แล้วเมื่อเวลาผ่านไป <mark>5τ</mark>
+  </div>
+  <table>
+    <tr><th>t</th><th>x(t) เทียบเป็น % ของระยะทาง</th></tr>
+    <tr><td>τ</td><td>63.2%</td></tr>
+    <tr><td>3τ</td><td>95%</td></tr>
+    <tr><td>5τ</td><td>≈ 99.3% (ถือว่าคงที่/นิ่ง)</td></tr>
+  </table>
+</section>
+
+<!-- ================= RL ================= -->
+<section class="panel" id="rl">
+  <h2 class="sec-title"><span class="tag">5.4–5.5</span> วงจร RL</h2>
+
+  <div class="svg-wrap">
+    <svg viewBox="0 0 460 180" width="100%">
+      <line x1="30" y1="40" x2="30" y2="140" stroke="#6fa8ff" stroke-width="2"/>
+      <circle cx="30" cy="90" r="20" fill="none" stroke="#6fa8ff" stroke-width="2"/>
+      <text x="30" y="95" fill="#6fa8ff" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">ig</text>
+      <path d="M22 82 L38 82 M30 74 L30 90" stroke="#6fa8ff" stroke-width="2"/>
+      <line x1="30" y1="40" x2="330" y2="40" stroke="#e8eaf2" stroke-width="2"/>
+      <line x1="30" y1="140" x2="330" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+      <rect x="120" y="65" width="20" height="50" fill="none" stroke="#f2a154" stroke-width="2"/>
+      <text x="150" y="95" fill="#f2a154" font-family="IBM Plex Mono" font-size="12">R</text>
+      <line x1="130" y1="40" x2="130" y2="65" stroke="#e8eaf2" stroke-width="2"/>
+      <line x1="130" y1="115" x2="130" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+      <line x1="290" y1="40" x2="290" y2="58" stroke="#e8eaf2" stroke-width="2"/>
+      <path d="M290 58 C 302 58 302 75 290 75 C 302 75 302 92 290 92 C 302 92 302 109 290 109 C 302 109 302 126 290 126" fill="none" stroke="#c39bff" stroke-width="2"/>
+      <line x1="290" y1="126" x2="290" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+      <text x="315" y="96" fill="#c39bff" font-family="IBM Plex Mono" font-size="13">L</text>
+      <text x="240" y="30" fill="#e8eaf2" font-family="IBM Plex Mono" font-size="13">iL ↓</text>
+    </svg>
+    <div class="svg-cap">รูปทั่วไปของวงจร RL — สมมาตรกับ RC โดยสลับบทบาท v↔i และ C↔L</div>
+  </div>
+
+  <h3 class="sub-title">5.4 วงจร RL ที่มีแหล่งกำเนิดไฟฟ้ากระแสตรง</h3>
+  <div class="eq big">i<sub>L</sub>(t) = [i<sub>L</sub>(0) − i<sub>sc</sub>] e^(−t/τ) + i<sub>sc</sub> , &nbsp; τ = L/R<sub>th</sub></div>
+
+  <h3 class="sub-title">5.5 วงจร RL ที่ไม่มีแหล่งกำเนิดอิสระ</h3>
+  <div class="eq big">i<sub>L</sub>(t) = i<sub>L</sub>(0)·e^(−t/τ)</div>
+
+  <div class="box tip">
+    <span class="box-label">Tip — ตารางเทียบ RC ↔ RL</span>
+    <table style="margin-top:6px">
+      <tr><th></th><th>RC</th><th>RL</th></tr>
+      <tr><td>ตัวแปรหลัก</td><td>v<sub>C</sub></td><td>i<sub>L</sub></td></tr>
+      <tr><td>ค่าคงตัวเวลา</td><td>τ = R<sub>th</sub>C</td><td>τ = L/R<sub>th</sub></td></tr>
+      <tr><td>สภาวะอยู่ตัว (t&lt;0)</td><td>C → วงจรเปิด</td><td>L → วงจรลัด</td></tr>
+      <tr><td>Source-free (t&gt;0)</td><td>v<sub>oc</sub>=0</td><td>i<sub>sc</sub>=0</td></tr>
+      <tr><td>ความต่อเนื่อง</td><td>v<sub>C</sub>(0⁻)=v<sub>C</sub>(0⁺)</td><td>i<sub>L</sub>(0⁻)=i<sub>L</sub>(0⁺)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= INIT ================= -->
+<section class="panel" id="init">
+  <h2 class="sec-title"><span class="tag">5.6–5.7</span> ผลตอบสนอง & เงื่อนไขเริ่มต้น</h2>
+
+  <div class="box warning">
+    <span class="box-label">กฎเหล็ก — ความต่อเนื่อง</span>
+    <strong>แรงดันตัวเก็บประจุ</strong> และ <strong>กระแสตัวเหนี่ยวนำ</strong> เปลี่ยนแปลงแบบทันทีทันใดไม่ได้ (ไม่กระโดด) ดังนั้น v<sub>C</sub>(0⁻) = v<sub>C</sub>(0⁺) และ i<sub>L</sub>(0⁻) = i<sub>L</sub>(0⁺) เสมอ — แต่ <mark>กระแสผ่าน C</mark> และ <mark>แรงดันคร่อม L</mark> กระโดดได้ตามปกติ ห้ามสับสน!
+  </div>
+
+  <h3 class="sub-title">ขั้นตอนละเอียดสำหรับหาค่าเริ่มต้น (t &lt; 0)</h3>
+  <ol class="steps">
+    <li>วาดวงจรที่ t &lt; 0 โดยสมมติว่าสวิตช์อยู่ในตำแหน่งเดิมมานานแล้ว (สภาวะอยู่ตัว/DC steady state)</li>
+    <li>แทนตัวเก็บประจุด้วย<mark>วงจรเปิด</mark> (เพราะกระแสผ่าน C ในสภาวะอยู่ตัว = 0)</li>
+    <li>แทนตัวเหนี่ยวนำด้วย<mark>วงจรลัด</mark> (เพราะแรงดันคร่อม L ในสภาวะอยู่ตัว = 0)</li>
+    <li>วิเคราะห์วงจรตัวต้านทานล้วนที่เหลือด้วย KCL/KVL/แรงดันโนด เพื่อหา v<sub>C</sub>(0⁻) หรือ i<sub>L</sub>(0⁻)</li>
+    <li>ใช้เงื่อนไขความต่อเนื่อง → ได้ v<sub>C</sub>(0⁺) = v<sub>C</sub>(0⁻) หรือ i<sub>L</sub>(0⁺) = i<sub>L</sub>(0⁻)</li>
+  </ol>
+
+  <h3 class="sub-title">5.6 ผลตอบสนองต่อสัญญาณเข้าที่มีค่าคงที่ (step input)</h3>
+  <p>เมื่อแหล่งจ่ายเป็นค่าคงที่ (DC) ทั้งก่อนและหลังสวิตช์ทำงาน ผลตอบสนองจะเป็นเลขชี้กำลังธรรมดาตามสูตรมาตรฐานด้านบน ไม่มีเทอมอื่นแทรก</p>
+
+  <h3 class="sub-title">5.8 ผลตอบสนองต่อสัญญาณเข้าที่ไม่คงที่</h3>
+  <p>หากแหล่งจ่ายเป็นฟังก์ชันของเวลา (เช่น sin, exponential) ต้องแก้สมการเชิงอนุพันธ์เต็มรูปแบบ (ผลเฉลยทั่วไป = ผลตอบสนองธรรมชาติ + ผลตอบสนองบังคับเฉพาะรูปสัญญาณ) — สำหรับข้อสอบระดับนี้ มักเจอเฉพาะ step input เป็นหลัก ให้เน้นเทคนิค 3 ขั้นตอนให้แม่นก่อน</p>
+</section>
+
+<!-- ================= WORKED ================= -->
+<section class="panel" id="worked">
+  <h2 class="sec-title"><span class="tag">ตัวอย่าง</span> โจทย์ตัวอย่างแบบเต็มขั้นตอน</h2>
+
+  <div class="box example">
+    <span class="box-label">ตัวอย่างที่ 1 — วงจร RC ที่มีแหล่งไม่อิสระ (ใช้เทวินิน)</span>
+    <p>โจทย์: i<sub>g</sub> = 1 A, R<sub>1</sub> = 12 Ω, R<sub>2</sub> = 3 Ω, R<sub>3</sub> = 6 Ω, C = 0.1 F, v<sub>g</sub> = 12 V สวิตช์เปลี่ยนสถานะที่ t = 0 หา v<sub>C</sub>(t) เมื่อ t &gt; 0</p>
+
+    <p><strong>ขั้น 1 — หา v<sub>C</sub>(0):</strong> ที่ t&lt;0 แทน C ด้วยวงจรเปิด ไม่มีกระแสผ่าน R<sub>2</sub>,R<sub>3</sub> จึงเหลือ i<sub>g</sub> ผ่าน R<sub>1</sub>//R<sub>3</sub></p>
+    <div class="eq">R<sub>eq</sub> = R<sub>1</sub>//R<sub>3</sub> = (12×6)/(12+6) = 4 Ω
+v<sub>C</sub>(0) = R<sub>eq</sub>·i<sub>g</sub> = 4×1 = 4 V</div>
+
+    <p><strong>ขั้น 2 — หา v<sub>oc</sub>:</strong> ที่ t&gt;0 ปลดแหล่งกระแส i<sub>g</sub> ออก (สวิตช์ตัดวงจรนั้นแล้ว) เหลือ v<sub>g</sub> ผ่าน R<sub>2</sub> แบ่งแรงดันให้ R<sub>3</sub></p>
+    <div class="eq">v<sub>oc</sub> = R<sub>3</sub>/(R<sub>2</sub>+R<sub>3</sub>) · v<sub>g</sub> = 6/(3+6) × 12 = 8 V</div>
+
+    <p><strong>ขั้น 3 — หา τ:</strong> ปลดแหล่ง v<sub>g</sub> ด้วยการลัดวงจร มองจากขั้ว C จะเห็น R<sub>2</sub>//R<sub>3</sub></p>
+    <div class="eq">R<sub>th</sub> = R<sub>2</sub>//R<sub>3</sub> = (3×6)/(3+6) = 2 Ω
+τ = R<sub>th</sub>C = 2 × 0.1 = 0.2 s</div>
+
+    <p><strong>สรุปคำตอบ:</strong></p>
+    <div class="eq big">v<sub>C</sub>(t) = (4 − 8)e^(−t/0.2) + 8 = 8 − 4e^(−5t) &nbsp;V</div>
+    <p style="color:var(--muted); font-size:13.5px">ตรวจสอบ: t=0 → 4V ✓ , t=5τ=1s → ≈8V ✓ (เข้าใกล้ค่าสุดท้ายตามสัดส่วน 63%/95%/99%)</p>
+  </div>
+
+  <div class="box example">
+    <span class="box-label">ตัวอย่างที่ 2 — วงจร RL ที่มีแหล่งไม่อิสระ (ใช้กระแสทดสอบหา R<sub>th</sub>)</span>
+    <p>โจทย์: i<sub>g</sub> = 1 A, R<sub>1</sub> = 3 Ω, R<sub>2</sub> = 6 Ω, L = 0.3 H, แหล่งไม่อิสระ 3i (ควบคุมโดยกระแส i ผ่าน R<sub>1</sub>) วงจรอยู่ตัวก่อน t=0 แล้วสวิตช์เปิด หา i(t) ผ่าน R<sub>2</sub> เมื่อ t&gt;0</p>
+
+    <p><strong>ขั้น 1 — หา i<sub>L</sub>(0):</strong> ก่อน t=0 สวิตช์ยังต่ออยู่ที่ตำแหน่งเดิม และ L ถูกแทนด้วยวงจรลัด ทำให้ไม่มีแรงดันคร่อม R<sub>2</sub> และไม่มีกระแสผ่าน R<sub>2</sub> (i(0)=0) จึงไม่มีกระแสผ่าน R<sub>1</sub> ด้วย (แหล่งไม่อิสระ 3i(0)=0)</p>
+    <div class="eq">i<sub>L</sub>(0) = i<sub>g</sub> = 1 A &nbsp; (กระแสทั้งหมดไหลลัดผ่าน L)</div>
+
+    <p><strong>ขั้น 2 — หา i<sub>sc</sub>:</strong> เมื่อสวิตช์เปิดแล้ว ไม่มีแหล่งอิสระเหลืออยู่ในวงจร (i<sub>g</sub> ถูกตัดออกไปแล้ว) → เป็นวงจร source-free</p>
+    <div class="eq">i<sub>sc</sub> = 0 A</div>
+
+    <p><strong>ขั้น 3 — หา R<sub>th</sub>:</strong> มีแหล่งไม่อิสระ 3i ปนอยู่ ต้องป้อนกระแสทดสอบ i<sub>th</sub> = 1 A เข้าขั้ว a-b แล้วใช้ Super Node เขียนสมการโนด v<sub>th</sub>:</p>
+    <div class="eq">(v<sub>th</sub> − 3i)/R<sub>1</sub> + v<sub>th</sub>/R<sub>2</sub> − i<sub>th</sub> = 0 , &nbsp; i = v<sub>th</sub>/R<sub>2</sub>
+แทนค่า R<sub>1</sub>=3, R<sub>2</sub>=6, i<sub>th</sub>=1 → v<sub>th</sub> = 3 V
+R<sub>th</sub> = v<sub>th</sub>/i<sub>th</sub> = 3/1 = 3 Ω</div>
+    <div class="eq">τ = L/R<sub>th</sub> = 0.3/3 = 0.1 s</div>
+
+    <p><strong>สรุปคำตอบ:</strong></p>
+    <div class="eq big">i<sub>L</sub>(t) = (1−0)e^(−t/0.1) + 0 = e^(−10t) &nbsp;A</div>
+    <p>หา v<sub>L</sub> ด้วย v<sub>L</sub> = L·di<sub>L</sub>/dt = −3e^(−10t) V จากนั้นหากระแส i ผ่าน R<sub>2</sub> (ขนานกับ L จึงมีแรงดันเท่ากัน):</p>
+    <div class="eq big">i(t) = v<sub>L</sub>/R<sub>2</sub> = −0.5e^(−10t) &nbsp;A</div>
+  </div>
+
+  <div class="box tip">
+    <span class="box-label">สังเกตแบบแผนโจทย์ในชีทของ Mix</span>
+    โจทย์แบบฝึกหัดข้อ 19–21 ในเอกสารล้วนใช้แพทเทิร์นเดียวกัน: (1) มีแหล่งไม่อิสระที่ควบคุมด้วยกระแสสาขาใดสาขาหนึ่ง (2) ต้องใช้ Super Node หรือกระแสทดสอบหา R<sub>th</sub> (3) คำตอบสุดท้ายมักมีรูป v หรือ i = ค่าคงที่ ± ค่าคงที่·exp(−t/τ) — ฝึกไล่ 3 ขั้นตอนให้คล่องจนไม่ต้องคิดว่าจะเริ่มตรงไหน
+  </div>
+</section>
+
+<!-- ================= CHEAT SHEET ================= -->
+<section class="panel" id="cheat">
+  <h2 class="sec-title"><span class="tag">CHEAT SHEET</span> สูตรทั้งหมดในหน้าเดียว</h2>
+
+  <h3 class="sub-title">สูตรพื้นฐานที่ต้องใช้ร่วมกับบทที่ 5 เสมอ</h3>
+  <div class="grid2">
+    <div class="box def">
+      <span class="box-label">กฎของโอห์ม (Ohm's Law)</span>
+      <div class="eq">v = iR &nbsp; หรือ &nbsp; i = v/R</div>
+    </div>
+    <div class="box def">
+      <span class="box-label">ตัวต้านทานอนุกรม/ขนาน</span>
+      <div class="eq">อนุกรม: R<sub>eq</sub> = R<sub>1</sub>+R<sub>2</sub>+...
+ขนาน: R<sub>eq</sub> = R<sub>1</sub>R<sub>2</sub>/(R<sub>1</sub>+R<sub>2</sub>)</div>
+    </div>
+    <div class="box def">
+      <span class="box-label">ตัวแบ่งแรงดัน (Voltage Divider)</span>
+      <div class="eq">v<sub>1</sub> = R<sub>1</sub>/(R<sub>1</sub>+R<sub>2</sub>) · v<sub>s</sub></div>
+      <p style="margin:6px 0 0; font-size:13px; color:var(--muted)">ใช้เมื่อ R<sub>1</sub>, R<sub>2</sub> ต่ออนุกรมกันคร่อมแหล่งแรงดัน v<sub>s</sub> — แรงดันตกคร่อมตัวต้านทานตัวที่สนใจ เป็นสัดส่วนกับค่าความต้านทานของตัวมันเองหารด้วยผลรวม</p>
+    </div>
+    <div class="box def">
+      <span class="box-label">ตัวแบ่งกระแส (Current Divider)</span>
+      <div class="eq">i<sub>1</sub> = R<sub>2</sub>/(R<sub>1</sub>+R<sub>2</sub>) · i<sub>s</sub></div>
+      <p style="margin:6px 0 0; font-size:13px; color:var(--muted)">ใช้เมื่อ R<sub>1</sub>, R<sub>2</sub> ต่อขนานกันรับแหล่งกระแส i<sub>s</sub> — สังเกตว่ากระแสที่ไหลผ่านตัวต้านทานตัวที่สนใจ (R<sub>1</sub>) เป็นสัดส่วนกับ<mark>ความต้านทานอีกตัวหนึ่ง</mark> (R<sub>2</sub>) ไม่ใช่ของตัวเอง (สลับกับสูตรแบ่งแรงดัน)</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="box example">
+      <span class="box-label">ตัวเก็บประจุ (Capacitor)</span>
+      <div class="eq">i<sub>C</sub> = C · dv<sub>C</sub>/dt
+v<sub>C</sub>(t) = v<sub>C</sub>(0) + (1/C)∫i<sub>C</sub> dt
+พลังงาน: w = ½Cv<sub>C</sub>²</div>
+      <p style="margin:6px 0 0; font-size:13px; color:var(--muted)">v<sub>C</sub> ต่อเนื่องเสมอ แต่ i<sub>C</sub> กระโดดได้ทันที</p>
+    </div>
+    <div class="box example">
+      <span class="box-label">ตัวเหนี่ยวนำ (Inductor)</span>
+      <div class="eq">v<sub>L</sub> = L · di<sub>L</sub>/dt
+i<sub>L</sub>(t) = i<sub>L</sub>(0) + (1/L)∫v<sub>L</sub> dt
+พลังงาน: w = ½Li<sub>L</sub>²</div>
+      <p style="margin:6px 0 0; font-size:13px; color:var(--muted)">i<sub>L</sub> ต่อเนื่องเสมอ แต่ v<sub>L</sub> กระโดดได้ทันที</p>
+    </div>
+  </div>
+
+  <div class="box tip">
+    <span class="box-label">ทริคใช้ v=L di/dt และ i=C dv/dt ในบทที่ 5</span>
+    เมื่อรู้สมการ i<sub>L</sub>(t) หรือ v<sub>C</sub>(t) แบบเอ็กซ์โพเนนเชียลแล้ว มักต้องหาปริมาณคู่กันต่อ (v<sub>L</sub> จาก i<sub>L</sub> หรือ i<sub>C</sub> จาก v<sub>C</sub>) — ให้ diff เอ็กซ์โพเนนเชียลตรง ๆ:
+    <div class="eq">ถ้า i<sub>L</sub>(t) = A·e^(−t/τ) &nbsp;⟹&nbsp; v<sub>L</sub>(t) = L·di<sub>L</sub>/dt = −(LA/τ)·e^(−t/τ)
+ถ้า v<sub>C</sub>(t) = A·e^(−t/τ) &nbsp;⟹&nbsp; i<sub>C</sub>(t) = C·dv<sub>C</sub>/dt = −(CA/τ)·e^(−t/τ)</div>
+    สังเกตว่าอนุพันธ์ของ e^(−t/τ) แค่คูณด้วย (−1/τ) เท่านั้น รูปฟังก์ชันเลขชี้กำลังไม่เปลี่ยน — จุดสังเกตนี้ช่วยตรวจคำตอบตัวเองได้ไว
+  </div>
+
+  <h3 class="sub-title">สูตรวงจรอันดับหนึ่ง (บทที่ 5)</h3>
+  <div class="grid2">
+    <div class="box def">
+      <span class="box-label">RC Circuit</span>
+      <div class="eq">v<sub>C</sub>(t) = [v<sub>C</sub>(0)−v<sub>oc</sub>]e^(−t/τ) + v<sub>oc</sub>
+τ = R<sub>th</sub>C
+t&lt;0: C → open circuit</div>
+    </div>
+    <div class="box def">
+      <span class="box-label">RL Circuit</span>
+      <div class="eq">i<sub>L</sub>(t) = [i<sub>L</sub>(0)−i<sub>sc</sub>]e^(−t/τ) + i<sub>sc</sub>
+τ = L/R<sub>th</sub>
+t&lt;0: L → short circuit</div>
+    </div>
+  </div>
+
+  <div class="box tip">
+    <span class="box-label">หา R<sub>th</sub> เมื่อมีแหล่งไม่อิสระ</span>
+    <div class="eq">1. ปลดแหล่งอิสระทั้งหมด (V→short, I→open)
+2. ป้อน i_test = 1 A เข้าขั้ว a-b (คงแหล่งไม่อิสระไว้)
+3. หา v_test ด้วย Node/Mesh (ระวัง Super Node ถ้ามีแหล่งควบคุมแรงดันคร่อมสองโนด)
+4. R_th = v_test / i_test</div>
+  </div>
+
+  <div class="box warning">
+    <span class="box-label">เช็คลิสต์ก่อนส่งกระดาษคำตอบ</span>
+    <ul>
+      <li>เขียน v<sub>C</sub>(0⁺)=v<sub>C</sub>(0⁻) หรือ i<sub>L</sub>(0⁺)=i<sub>L</sub>(0⁻) ชัดเจนในกระดาษคำตอบ (อาจารย์บางท่านให้คะแนนขั้นตอนนี้แยก)</li>
+      <li>ตรวจหน่วยของ τ ต้องเป็นวินาทีเสมอ (R×C หรือ L/R)</li>
+      <li>เช็คเครื่องหมายของกระแส/แรงดันให้ตรงกับทิศทางอ้างอิงที่กำหนดในโจทย์</li>
+      <li>แทน t=0 กลับเข้าคำตอบสุดท้าย ต้องได้ค่าเท่ากับ x(0) ที่คำนวณไว้ (self-check)</li>
+      <li>แทน t→∞ (หรือ t=5τ) ต้องได้ค่าใกล้เคียง v<sub>oc</sub> หรือ i<sub>sc</sub></li>
+      <li>อย่าสับสนสูตรแบ่งแรงดัน (ใช้ R ของตัวเอง) กับสูตรแบ่งกระแส (ใช้ R ของอีกตัว) — สลับกันบ่อยที่สุด</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section class="panel" id="quiz">
+  <h2 class="sec-title"><span class="tag">ฝึกทำ</span> แบบฝึกหัดทบทวนก่อนสอบ</h2>
+
+  <div class="quiz-card" data-qid="1">
+    <div class="quiz-q">1. วงจร RC ที่ไม่มีแหล่งกำเนิดอิสระ (source-free) ค่า v<sub>oc</sub> จะเท่ากับเท่าใดเสมอ?</div>
+    <div class="quiz-opts">
+      <button data-correct="false">เท่ากับ v<sub>C</sub>(0)</button>
+      <button data-correct="true">0 V</button>
+      <button data-correct="false">เท่ากับแรงดันแหล่งจ่ายเดิม</button>
+      <button data-correct="false">ไม่สามารถระบุได้</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-card" data-qid="2">
+    <div class="quiz-q">2. เมื่อวิเคราะห์วงจรที่ t &lt; 0 (สภาวะอยู่ตัว) ตัวเหนี่ยวนำ (L) ควรแทนด้วยอะไร?</div>
+    <div class="quiz-opts">
+      <button data-correct="false">วงจรเปิด</button>
+      <button data-correct="true">วงจรลัด (short circuit)</button>
+      <button data-correct="false">ตัวต้านทานค่า L</button>
+      <button data-correct="false">แหล่งกระแสคงที่</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-card" data-qid="3">
+    <div class="quiz-q">3. ถ้าวงจรมีแหล่งกำเนิดไม่อิสระ (dependent source) เหตุใดจึงหา R<sub>th</sub> จาก v<sub>oc</sub>/i<sub>sc</sub> โดยตรงไม่ได้?</div>
+    <div class="quiz-opts">
+      <button data-correct="false">เพราะ v<sub>oc</sub> หาไม่ได้เลย</button>
+      <button data-correct="true">เพราะ i<sub>sc</sub> = 0 เสมอ (ไม่มีแหล่งอิสระให้เกิดกระแสลัดวงจร) ทำให้ตัวหารเป็น 0</button>
+      <button data-correct="false">เพราะแหล่งไม่อิสระทำให้ R<sub>th</sub> ติดลบเสมอ</button>
+      <button data-correct="false">เพราะกฎของโอห์มใช้ไม่ได้กับแหล่งไม่อิสระ</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-card" data-qid="4">
+    <div class="quiz-q">4. วงจร RC มี v<sub>C</sub>(0)=4V, v<sub>oc</sub>=8V, τ=0.2s สมการ v<sub>C</sub>(t) คือข้อใด?</div>
+    <div class="quiz-opts">
+      <button data-correct="false">v<sub>C</sub>(t) = 4 + 8e^(−5t)</button>
+      <button data-correct="true">v<sub>C</sub>(t) = 8 − 4e^(−5t)</button>
+      <button data-correct="false">v<sub>C</sub>(t) = 8 + 4e^(−0.2t)</button>
+      <button data-correct="false">v<sub>C</sub>(t) = 4 − 8e^(−5t)</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-card" data-qid="5">
+    <div class="quiz-q">5. ปริมาณใดที่ "ต่อเนื่อง" (ห้ามกระโดดทันที) ที่ t=0?</div>
+    <div class="quiz-opts">
+      <button data-correct="false">กระแสผ่านตัวเก็บประจุ (i<sub>C</sub>)</button>
+      <button data-correct="false">แรงดันคร่อมตัวเหนี่ยวนำ (v<sub>L</sub>)</button>
+      <button data-correct="true">แรงดันตัวเก็บประจุ (v<sub>C</sub>) และกระแสตัวเหนี่ยวนำ (i<sub>L</sub>)</button>
+      <button data-correct="false">กระแสผ่านตัวต้านทานทุกตัว</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-card" data-qid="6">
+    <div class="quiz-q">6. เวลาผ่านไปกี่เท่าของ τ จึงถือว่าวงจรเข้าสู่สภาวะอยู่ตัวใหม่โดยประมาณ?</div>
+    <div class="quiz-opts">
+      <button data-correct="false">1τ</button>
+      <button data-correct="false">2τ</button>
+      <button data-correct="true">5τ</button>
+      <button data-correct="false">10τ</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-card" data-qid="7">
+    <div class="quiz-q">7. วงจร RL: i<sub>L</sub>(0)=1A, ไม่มีแหล่งอิสระเหลือหลัง t=0, R<sub>th</sub>=3Ω, L=0.3H สมการ i<sub>L</sub>(t) คือ?</div>
+    <div class="quiz-opts">
+      <button data-correct="true">i<sub>L</sub>(t) = e^(−10t) A</button>
+      <button data-correct="false">i<sub>L</sub>(t) = e^(−0.1t) A</button>
+      <button data-correct="false">i<sub>L</sub>(t) = 1 − e^(−10t) A</button>
+      <button data-correct="false">i<sub>L</sub>(t) = 3e^(−10t) A</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div class="quiz-card" data-qid="8">
+    <div class="quiz-q">8. τ = R<sub>th</sub>C ใช้กับวงจรชนิดใด และ τ = L/R<sub>th</sub> ใช้กับวงจรชนิดใด?</div>
+    <div class="quiz-opts">
+      <button data-correct="true">RC ใช้ R<sub>th</sub>C, RL ใช้ L/R<sub>th</sub></button>
+      <button data-correct="false">RC ใช้ L/R<sub>th</sub>, RL ใช้ R<sub>th</sub>C</button>
+      <button data-correct="false">ทั้งสองแบบใช้ R<sub>th</sub>C เหมือนกัน</button>
+      <button data-correct="false">ขึ้นอยู่กับค่าความต้านทานเท่านั้น</button>
+    </div>
+    <div class="quiz-fb"></div>
+  </div>
+
+  <div id="scoreSummary" style="text-align:center; margin-top:20px; color:var(--muted); font-family:var(--mono); font-size:13px;"></div>
+</section>
+
+</main>
+
+<div class="score-bar" id="scoreBar">
+  <span>แบบฝึกหัดทบทวน</span>
+  <span>คะแนนแบบฝึกหัด: <span id="scoreDisplay">0</span>/8</span>
+</div>
+
+<p class="footer-note">สรุปโดยอ้างอิงเนื้อหาบทที่ 5 วงจรอันดับหนึ่ง (First-Order Circuits) หน้า 175–219 · ทำเพื่อทบทวนก่อนสอบเท่านั้น</p>
+
+<script>
+// Tabs
+const tabs = document.querySelectorAll('nav.tabs button');
+const panels = document.querySelectorAll('section.panel');
+const scoreBar = document.getElementById('scoreBar');
+tabs.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    tabs.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    panels.forEach(p=>p.classList.remove('active'));
+    document.getElementById(btn.dataset.t).classList.add('active');
+    scoreBar.classList.toggle('show', btn.dataset.t === 'quiz');
+    window.scrollTo({top:0, behavior:'instant'});
+  });
+});
+
+// Quiz logic
+let score = 0;
+const answered = new Set();
+document.querySelectorAll('.quiz-card').forEach(card=>{
+  const qid = card.dataset.qid;
+  const fb = card.querySelector('.quiz-fb');
+  card.querySelectorAll('.quiz-opts button').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      if(answered.has(qid)) return;
+      answered.add(qid);
+      const isCorrect = opt.dataset.correct === 'true';
+      card.querySelectorAll('.quiz-opts button').forEach(b=>{
+        b.disabled = true;
+        if(b.dataset.correct === 'true') b.classList.add('correct');
+        else if(b===opt) b.classList.add('wrong');
+      });
+      fb.textContent = isCorrect ? '✅ ถูกต้อง!' : '❌ ยังไม่ถูก คำตอบที่ถูกต้องถูกไฮไลต์ไว้ให้แล้ว';
+      fb.classList.add('show');
+      if(isCorrect) score++;
+      document.getElementById('scoreDisplay').textContent = score;
+      if(answered.size === document.querySelectorAll('.quiz-card').length){
+        document.getElementById('scoreSummary').textContent =
+          `คะแนนรวม ${score}/8 — ${score>=6 ? 'พร้อมสอบแล้ว! 🎉' : 'ลองย้อนไปอ่านหัวข้อที่ยังพลาดอีกครั้งนะ 💪'}`;
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
