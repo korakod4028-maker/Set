@@ -257,13 +257,15 @@ code{ font-family:var(--mono); background:var(--bg2); padding:1px 6px; border-ra
 
 <header class="hero">
   <div class="eyebrow">การวิเคราะห์วงจรไฟฟ้า 1 · สรุปเตรียมสอบ</div>
-  <h1 class="title">บทที่ 5: วงจรอันดับหนึ่ง (First-Order Circuits)</h1>
-  <p class="subtitle">เน้นบทนี้เป็นหลัก เพราะบทที่ 1–3 ถูกนำไปออกสอบเก็บคะแนนไปแล้ว ส่วนบทที่ 4 (ตัวเก็บประจุ/ตัวเหนี่ยวนำ) เป็นพื้นฐานที่ต้องใช้ในบทนี้โดยตรง</p>
+  <h1 class="title">บทที่ 3–5: ทฤษฎีบทวงจร, C/L และวงจรอันดับหนึ่ง</h1>
+  <p class="subtitle">เน้นบทที่ 5 (วงจรอันดับหนึ่ง) เป็นหลักเพราะข้อสอบมักออกเยอะที่สุด แต่รวมบทที่ 3 (ทฤษฎีบทวงจรไฟฟ้า) และบทที่ 4 (ตัวเก็บประจุ/ตัวเหนี่ยวนำ) มาให้ด้วย เพราะเป็นเครื่องมือและพื้นฐานที่ใช้ในบทที่ 5 โดยตรง</p>
   <span class="tau-badge">τ = RC หรือ τ = L/R — ตัวเลขตัวเดียวที่ตัดสินเกรดข้อสอบข้อนี้</span>
 </header>
 
 <nav class="tabs" id="tabs">
-  <button data-t="method" class="active">🧭 วิธีทำ 3 ขั้นตอน</button>
+  <button data-t="ch3" class="active">🔀 บทที่ 3 ทฤษฎีบท</button>
+  <button data-t="ch4">🔋 บทที่ 4 C และ L</button>
+  <button data-t="method">🧭 บทที่ 5: วิธีทำ 3 ขั้นตอน</button>
   <button data-t="rc">⚡ วงจร RC</button>
   <button data-t="rl">🧲 วงจร RL</button>
   <button data-t="init">🔁 เงื่อนไขเริ่มต้น</button>
@@ -274,8 +276,114 @@ code{ font-family:var(--mono); background:var(--bg2); padding:1px 6px; border-ra
 
 <main>
 
+<!-- ================= CH3 ================= -->
+<section class="panel active" id="ch3">
+  <h2 class="sec-title"><span class="tag">บทที่ 3</span> ทฤษฎีบทวงจรไฟฟ้า (Circuit Theorems)</h2>
+  <p>บทนี้เป็นเครื่องมือหลักที่ใช้หา <mark>v<sub>C</sub>(0), v<sub>oc</sub>, i<sub>sc</sub>, R<sub>th</sub></mark> ในบทที่ 5 — ถ้าทำบทนี้ไม่แม่น จะติดขัดตอนวิเคราะห์วงจรอันดับหนึ่งทันที</p>
+
+  <h3 class="sub-title">3.1 การแปลงแหล่งกำเนิด (Source Transformation)</h3>
+  <div class="box def">
+    <span class="box-label">หลักการ</span>
+    แหล่งแรงดัน v<sub>s</sub> ต่ออนุกรมกับ R หนึ่งตัว สามารถแปลงเป็นแหล่งกระแส i<sub>s</sub> ต่อขนานกับ R ตัวเดิมได้ โดยที่วงจรภายนอกมองเห็นผลเหมือนเดิมทุกประการ
+  </div>
+  <div class="eq big">i<sub>s</sub> = v<sub>s</sub> / R &nbsp;&nbsp;⇄&nbsp;&nbsp; v<sub>s</sub> = i<sub>s</sub> · R</div>
+  <p>ใช้ลดรูปวงจรให้ง่ายก่อนวิเคราะห์ โดยเฉพาะเมื่อโจทย์ให้ผสมกันทั้งแหล่งแรงดันและแหล่งกระแส</p>
+
+  <h3 class="sub-title">3.2 การทับซ้อน (Superposition)</h3>
+  <ol class="steps">
+    <li>เปิดใช้งานแหล่งอิสระทีละตัว (ตัวอื่นปิด: แหล่งแรงดัน→ลัดวงจร, แหล่งกระแส→วงจรเปิด)</li>
+    <li>คำนวณผลตอบสนอง (v หรือ i ที่ต้องการ) จากแหล่งนั้นตัวเดียว</li>
+    <li>ทำซ้ำจนครบทุกแหล่งอิสระ</li>
+    <li>รวมผลตอบสนองทั้งหมดเข้าด้วยกัน (บวกพีชคณิต โดยระวังเครื่องหมาย)</li>
+  </ol>
+  <div class="box warning">
+    <span class="box-label">ระวัง</span>
+    Superposition ใช้ได้กับวงจรเชิงเส้น (linear) เท่านั้น และ<strong>ห้ามปิดแหล่งไม่อิสระ (dependent source)</strong> เด็ดขาด ต้องคงไว้ในทุกขั้นตอน
+  </div>
+
+  <h3 class="sub-title">3.3 ทฤษฎีบทของเทวินิน (Thevenin's Theorem)</h3>
+  <div class="box def">
+    <span class="box-label">ใจความ</span>
+    วงจรใด ๆ ที่มองจากขั้ว a-b สามารถแทนที่ด้วยแหล่งแรงดัน v<sub>th</sub> ต่ออนุกรมกับ R<sub>th</sub> ตัวเดียวได้เสมอ
+  </div>
+  <ol class="steps">
+    <li>หา v<sub>th</sub> = v<sub>oc</sub> (แรงดันวงจรเปิดที่ขั้ว a-b เมื่อปลดโหลดออก)</li>
+    <li>หา R<sub>th</sub> โดยปลดแหล่งอิสระทั้งหมดแล้วมองความต้านทานจากขั้ว a-b (หรือใช้กระแสทดสอบถ้ามีแหล่งไม่อิสระ)</li>
+  </ol>
+  <div class="eq big">v<sub>th</sub> = v<sub>oc</sub> &nbsp;,&nbsp; R<sub>th</sub> = v<sub>oc</sub>/i<sub>sc</sub></div>
+
+  <h3 class="sub-title">3.4 ทฤษฎีบทของนอร์ตัน (Norton's Theorem)</h3>
+  <div class="box def">
+    <span class="box-label">ใจความ</span>
+    วงจรเดียวกันสามารถแทนที่ด้วยแหล่งกระแส i<sub>N</sub> ต่อขนานกับ R<sub>N</sub> ได้เช่นกัน ซึ่งเป็นแค่วงจรเทวินินที่ถูกแปลงแหล่งกำเนิด (3.1) นั่นเอง
+  </div>
+  <div class="eq big">i<sub>N</sub> = i<sub>sc</sub> &nbsp;,&nbsp; R<sub>N</sub> = R<sub>th</sub> &nbsp;(ค่าเดียวกัน)</div>
+  <p>ความสัมพันธ์: <code>i<sub>N</sub> = v<sub>th</sub>/R<sub>th</sub></code> — นี่คือที่มาของตัวแปร v<sub>oc</sub> และ i<sub>sc</sub> ที่ใช้ในสูตรบทที่ 5 โดยตรง</p>
+
+  <h3 class="sub-title">3.5 การถ่ายโอนกำลังสูงสุด (Maximum Power Transfer)</h3>
+  <div class="eq big">R<sub>load</sub> = R<sub>th</sub> &nbsp;⟹&nbsp; P<sub>max</sub> = v<sub>th</sub>² / (4R<sub>th</sub>)</div>
+  <p>โหลดจะได้รับกำลังไฟฟ้าสูงสุดเมื่อค่าความต้านทานโหลดเท่ากับ R<sub>th</sub> ของวงจรที่มองเห็นจากขั้วโหลดพอดี</p>
+
+  <div class="box tip">
+    <span class="box-label">เชื่อมกับบทที่ 5</span>
+    เวลาโจทย์บทที่ 5 ให้วงจรซับซ้อน ให้ใช้เทวินิน/นอร์ตัน (3.3–3.4) ลดรูปวงจรที่เหลือ (ไม่รวม C หรือ L) ให้เป็น v<sub>th</sub>+R<sub>th</sub> ตัวเดียวก่อนเสมอ แล้วค่อยต่อ C หรือ L กลับเข้าไปวิเคราะห์ต่อ — เป็นเทคนิคที่ตัวอย่างในบทที่ 5 ใช้ซ้ำทุกข้อ
+  </div>
+</section>
+
+<!-- ================= CH4 ================= -->
+<section class="panel" id="ch4">
+  <h2 class="sec-title"><span class="tag">บทที่ 4</span> ตัวเก็บประจุและตัวเหนี่ยวนำ (Capacitors and Inductors)</h2>
+
+  <h3 class="sub-title">4.1–4.3 ตัวเก็บประจุ (Capacitor)</h3>
+  <div class="box def">
+    <span class="box-label">นิยาม</span>
+    ตัวเก็บประจุเก็บพลังงานในรูปสนามไฟฟ้า ความสัมพันธ์ระหว่างประจุกับแรงดันคือ Q = Cv
+  </div>
+  <div class="eq big">i<sub>C</sub>(t) = C · dv<sub>C</sub>/dt</div>
+  <div class="eq">v<sub>C</sub>(t) = v<sub>C</sub>(t<sub>0</sub>) + (1/C)∫<sub>t0</sub><sup>t</sup> i<sub>C</sub> dτ
+พลังงานสะสม: w<sub>C</sub> = ½ C v<sub>C</sub>²</div>
+  <table>
+    <tr><th>การต่อ</th><th>สูตร C<sub>eq</sub></th></tr>
+    <tr><td>อนุกรม</td><td>1/C<sub>eq</sub> = 1/C<sub>1</sub> + 1/C<sub>2</sub> + ... (เหมือน R ขนาน)</td></tr>
+    <tr><td>ขนาน</td><td>C<sub>eq</sub> = C<sub>1</sub> + C<sub>2</sub> + ... (เหมือน R อนุกรม)</td></tr>
+  </table>
+  <div class="box warning">
+    <span class="box-label">จำสลับกับ R ให้แม่น</span>
+    ตัวเก็บประจุ "สลับ" กับตัวต้านทาน: C อนุกรมใช้สูตรแบบ R ขนาน และ C ขนานใช้สูตรแบบ R อนุกรม เพราะปริมาณที่เก็บ (ประจุ) สะสมต่างจากกระแสที่ไหลผ่าน
+  </div>
+
+  <h3 class="sub-title">4.4–4.6 ตัวเหนี่ยวนำ (Inductor)</h3>
+  <div class="box def">
+    <span class="box-label">นิยาม</span>
+    ตัวเหนี่ยวนำเก็บพลังงานในรูปสนามแม่เหล็ก ความสัมพันธ์ระหว่างฟลักซ์กับกระแสคือ λ = Li
+  </div>
+  <div class="eq big">v<sub>L</sub>(t) = L · di<sub>L</sub>/dt</div>
+  <div class="eq">i<sub>L</sub>(t) = i<sub>L</sub>(t<sub>0</sub>) + (1/L)∫<sub>t0</sub><sup>t</sup> v<sub>L</sub> dτ
+พลังงานสะสม: w<sub>L</sub> = ½ L i<sub>L</sub>²</div>
+  <table>
+    <tr><th>การต่อ</th><th>สูตร L<sub>eq</sub></th></tr>
+    <tr><td>อนุกรม</td><td>L<sub>eq</sub> = L<sub>1</sub> + L<sub>2</sub> + ... (เหมือน R อนุกรม)</td></tr>
+    <tr><td>ขนาน</td><td>1/L<sub>eq</sub> = 1/L<sub>1</sub> + 1/L<sub>2</sub> + ... (เหมือน R ขนาน)</td></tr>
+  </table>
+  <p style="color:var(--muted); font-size:13.5px">สังเกตว่า L รวมตัวแบบเดียวกับ R (ไม่สลับเหมือน C)</p>
+
+  <h3 class="sub-title">4.7 สถานะอยู่ตัวในวงจรไฟฟ้ากระแสตรง (DC Steady State)</h3>
+  <div class="box tip">
+    <span class="box-label">หัวใจสำคัญที่สุดของบทที่ 5</span>
+    เมื่อวงจร DC อยู่ในสภาวะอยู่ตัวมานานพอ (แรงดัน/กระแสไม่เปลี่ยนแปลงตามเวลาอีกต่อไป):
+    <div class="eq">dv<sub>C</sub>/dt = 0 &nbsp;⟹&nbsp; i<sub>C</sub> = 0 &nbsp;⟹&nbsp; C ทำตัวเป็น<mark>วงจรเปิด</mark>
+di<sub>L</sub>/dt = 0 &nbsp;⟹&nbsp; v<sub>L</sub> = 0 &nbsp;⟹&nbsp; L ทำตัวเป็น<mark>วงจรลัด</mark></div>
+    นี่คือที่มาของขั้นตอนแรกในวิธีทำบทที่ 5 (การหา v<sub>C</sub>(0) และ i<sub>L</sub>(0)) โดยตรง — ไปดูต่อได้ที่แท็บ "บทที่ 5: วิธีทำ 3 ขั้นตอน"
+  </div>
+
+  <div class="box example">
+    <span class="box-label">ตัวอย่างเชื่อมโยง</span>
+    ถ้าโจทย์ให้ C = 0.1 F ต่อขนานกับ R และ i<sub>C</sub>(t) = 0.5e<sup>−5t</sup> A ที่ผ่านมันในช่วง t&gt;0 สามารถหา v<sub>C</sub>(t) กลับได้จาก v<sub>C</sub> = v<sub>C</sub>(0) + (1/C)∫i<sub>C</sub>dt หรือถ้ารู้ v<sub>C</sub>(t) อยู่แล้ว ให้ diff กลับหา i<sub>C</sub> = C·dv<sub>C</sub>/dt แทน — ใช้สลับไปมาได้เสมอ 2 ทาง
+  </div>
+</section>
+
 <!-- ================= METHOD ================= -->
-<section class="panel active" id="method">
+<section class="panel" id="method">
   <h2 class="sec-title"><span class="tag">CORE</span> หัวใจของบทที่ 5</h2>
   <div class="box def">
     <span class="box-label">Definition</span>
