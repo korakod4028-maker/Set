@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation 12 — การจัดการประวัติคำสั่ง (History)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E14;
+    --panel:#10151D;
+    --panel-2:#141B25;
+    --border:#232B37;
+    --text:#D7DDE6;
+    --muted:#8593A3;
+    --green:#6EE7A8;
+    --amber:#E8B75F;
+    --red:#F2807B;
+    --blue:#7CB8F2;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans Thai', sans-serif;
+    font-weight:400;
+    line-height:1.8;
+    font-size:16px;
+  }
+  code, .mono, .term, .kbd, table.vars td:first-child, .cmdnum{
+    font-family:'IBM Plex Mono','IBM Plex Sans Thai',monospace;
+  }
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:64px 24px 100px;
+  }
+
+  /* ---- Header / hero ---- */
+  .hero{
+    border-bottom:1px solid var(--border);
+    padding-bottom:36px;
+    margin-bottom:48px;
+  }
+  .hero .path{
+    color:var(--green);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    letter-spacing:0.3px;
+    margin-bottom:18px;
+  }
+  .hero .path::before{content:"❯ ";color:var(--muted);}
+  .hero h1{
+    font-size:34px;
+    font-weight:600;
+    line-height:1.35;
+    margin:0 0 14px;
+    color:#F0F3F7;
+  }
+  .hero p.sub{
+    color:var(--muted);
+    font-size:16px;
+    margin:0;
+    max-width:600px;
+  }
+  .hero .tags{
+    margin-top:22px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+    border:1px solid var(--border);
+    padding:4px 10px;
+    border-radius:3px;
+  }
+
+  /* ---- Section ---- */
+  section{margin-bottom:52px;}
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:18px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:10px;
+  }
+  .section-head h2{
+    font-size:20px;
+    font-weight:600;
+    margin:0;
+    color:#EDF1F6;
+  }
+  .section-head .tag-mini{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--green);
+  }
+  p{color:var(--text);}
+  .muted{color:var(--muted);}
+
+  /* ---- Terminal block ---- */
+  .terminal{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:6px;
+    overflow:hidden;
+    margin:16px 0;
+  }
+  .terminal .bar{
+    display:flex;
+    gap:6px;
+    padding:9px 12px;
+    background:var(--panel-2);
+    border-bottom:1px solid var(--border);
+  }
+  .terminal .dot{width:9px;height:9px;border-radius:50%;}
+  .dot.r{background:#F2807B;}
+  .dot.y{background:#E8B75F;}
+  .dot.g{background:#6EE7A8;}
+  .terminal .body{
+    padding:14px 16px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13.5px;
+    line-height:1.9;
+    overflow-x:auto;
+  }
+  .terminal .l{white-space:pre;}
+  .terminal .prompt{color:var(--green);}
+  .terminal .cmd{color:#F0F3F7;}
+  .terminal .out{color:var(--muted);}
+  .terminal .cmt{color:var(--blue);}
+
+  /* ---- Tables ---- */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:16px 0;
+    font-size:14.5px;
+  }
+  table.vars th, table.vars td{
+    text-align:left;
+    padding:11px 14px;
+    border-bottom:1px solid var(--border);
+    vertical-align:top;
+  }
+  table.vars th{
+    color:var(--muted);
+    font-weight:500;
+    font-size:12.5px;
+    text-transform:none;
+    border-bottom:1px solid var(--border);
+  }
+  table.vars td:first-child{
+    color:var(--amber);
+    white-space:nowrap;
+    font-size:13.5px;
+  }
+  table.vars tr:last-child td{border-bottom:none;}
+
+  /* ---- Callouts ---- */
+  .callout{
+    border-left:3px solid var(--blue);
+    background:var(--panel);
+    padding:14px 18px;
+    border-radius:0 6px 6px 0;
+    margin:18px 0;
+    font-size:14.5px;
+  }
+  .callout.warn{border-left-color:var(--amber);}
+  .callout.danger{border-left-color:var(--red);}
+  .callout .label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:0.3px;
+    color:var(--blue);
+    display:block;
+    margin-bottom:6px;
+  }
+  .callout.warn .label{color:var(--amber);}
+  .callout.danger .label{color:var(--red);}
+  .callout p{margin:0;color:var(--text);}
+  .callout p + p{margin-top:8px;}
+
+  .kbd{
+    display:inline-block;
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-bottom-width:2px;
+    padding:1px 7px;
+    border-radius:4px;
+    font-size:12.5px;
+    color:#EDF1F6;
+  }
+
+  ul.plain{margin:10px 0;padding-left:20px;}
+  ul.plain li{margin-bottom:8px;color:var(--text);}
+  ul.plain li b{color:#F0F3F7;font-weight:600;}
+
+  .badge-new{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--bg);
+    background:var(--green);
+    padding:1px 7px;
+    border-radius:3px;
+    margin-left:8px;
+    vertical-align:middle;
+    letter-spacing:0.3px;
+  }
+
+  /* ---- Exercises ---- */
+  .exwrap{
+    border:1px solid var(--border);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  details{
+    border-bottom:1px solid var(--border);
+    background:var(--panel);
+  }
+  details:last-child{border-bottom:none;}
+  summary{
+    padding:16px 18px;
+    cursor:pointer;
+    font-size:15px;
+    color:#EDF1F6;
+    list-style:none;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary .qn{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--muted);
+    flex-shrink:0;
+  }
+  summary::after{
+    content:"ดูเฉลย ↓";
+    margin-left:auto;
+    font-size:12px;
+    color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;
+    flex-shrink:0;
+    padding-left:10px;
+  }
+  details[open] summary::after{content:"ซ่อนเฉลย ↑";}
+  .answer{
+    padding:0 18px 18px 46px;
+    font-size:14.5px;
+    color:var(--muted);
+  }
+  .answer .ans-label{
+    color:var(--green);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    display:block;
+    margin-bottom:6px;
+  }
+  .answer code{
+    color:var(--amber);
+    background:var(--panel-2);
+    padding:1px 6px;
+    border-radius:3px;
+    font-size:13px;
+  }
+
+  /* ---- Practical drills ---- */
+  .drill{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:16px 18px;
+    margin-bottom:12px;
+  }
+  .drill .num{
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--green);
+    font-size:12.5px;
+    margin-bottom:6px;
+    display:block;
+  }
+  .drill p{margin:0;font-size:14.5px;}
+
+  /* ---- Cheat sheet ---- */
+  .cheat-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .cheat-item{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:12px 14px;
+  }
+  .cheat-item code{
+    color:var(--amber);
+    font-size:13.5px;
+    display:block;
+    margin-bottom:5px;
+  }
+  .cheat-item span{
+    color:var(--muted);
+    font-size:12.5px;
+  }
+  @media (max-width:560px){
+    .cheat-grid{grid-template-columns:1fr;}
+    .wrap{padding:40px 16px 80px;}
+    .hero h1{font-size:27px;}
+  }
+
+  footer{
+    margin-top:60px;
+    padding-top:24px;
+    border-top:1px solid var(--border);
+    color:var(--muted);
+    font-size:12.5px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="path">linux-foundation/lesson-12/history-management</div>
+    <h1>การจัดการประวัติคำสั่ง (History)</h1>
+    <p class="sub">สรุปเข้มฉบับเตรียมสอบ/เตรียมงานสาย Cloud Engineer — ครอบคลุมการเรียกคำสั่งเก่า การตั้งค่าใน .bashrc ตัวแปรระบบ และแนวปฏิบัติด้านความปลอดภัยที่มักถูกถามในงานจริง</p>
+    <div class="tags">
+      <span class="tag">bash</span>
+      <span class="tag">shell history</span>
+      <span class="tag">.bashrc</span>
+      <span class="tag">security</span>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <section>
+    <div class="section-head">
+      <h2>การเรียกใช้คำสั่งเก่า</h2>
+      <span class="tag-mini">recall &amp; navigate</span>
+    </div>
+    <p>คำสั่งที่พิมพ์ไปแล้วจะถูกเก็บไว้ในหน่วยความจำของ shell แบบเรียงลำดับ เราสามารถเรียกกลับมาใช้ซ้ำได้หลายวิธี โดยไม่ต้องพิมพ์ใหม่ทั้งหมด</p>
+
+    <table class="vars">
+      <tr><th style="width:38%">วิธีการ</th><th>ผลลัพธ์</th></tr>
+      <tr><td>↑ / ↓</td><td>เลื่อนดูคำสั่งก่อนหน้า/ถัดไปทีละคำสั่ง</td></tr>
+      <tr><td>history</td><td>แสดงรายการคำสั่งทั้งหมด พร้อมเลขลำดับ</td></tr>
+      <tr><td>history 3</td><td>แสดงเฉพาะ 3 คำสั่งล่าสุด</td></tr>
+      <tr><td>history | grep cat</td><td>ค้นหาคำสั่งที่เคยพิมพ์ ที่มีคำว่า "cat"</td></tr>
+      <tr><td>!number</td><td>รันคำสั่งตามเลขลำดับทันที เช่น <code>!6</code></td></tr>
+    </table>
+
+    <div class="terminal">
+      <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <div class="body">
+<div class="l"><span class="prompt">$</span> <span class="cmd">history 5</span></div>
+<div class="l out">  101  cd /var/log
+  102  ls -la
+  103  sudo systemctl status nginx
+  104  tail -f access.log
+  105  history 5</div>
+<div class="l"><span class="prompt">$</span> <span class="cmd">!103</span>  <span class="cmt"># รันคำสั่งลำดับ 103 ซ้ำ</span></div>
+      </div>
+    </div>
+
+    <p><b>ทางลัดที่มักถูกมองข้าม (เพิ่มเติม)</b> <span class="badge-new">เพิ่ม</span></p>
+    <ul class="plain">
+      <li><code>!!</code> — รันคำสั่งก่อนหน้าล่าสุดซ้ำ (ใช้บ่อยมากกับ <code>sudo !!</code> เมื่อลืมพิมพ์ sudo)</li>
+      <li><code>!$</code> — ดึง argument ตัวสุดท้ายของคำสั่งก่อนหน้ามาใช้ เช่น <code>mkdir test && cd !$</code></li>
+      <li><code>!^</code> — ดึง argument ตัวแรกของคำสั่งก่อนหน้า</li>
+      <li><code>!ls</code> — รันคำสั่งล่าสุดที่ขึ้นต้นด้วยคำว่า "ls"</li>
+      <li><code>!ls:p</code> — แสดงคำสั่งที่จะรัน โดยยังไม่รันจริง (print only) ใช้เช็กก่อนยิงคำสั่งอันตราย</li>
+    </ul>
+
+    <div class="section-head" style="margin-top:32px;">
+      <h2>ค้นหาแบบโต้ตอบด้วย Ctrl + r</h2>
+      <span class="tag-mini">reverse-i-search</span>
+    </div>
+    <ul class="plain">
+      <li>กด <span class="kbd">Ctrl</span>+<span class="kbd">r</span> แล้วพิมพ์คำค้นหา ระบบจะดึงคำสั่งล่าสุดที่ตรงกันขึ้นมาแสดง</li>
+      <li>กด <span class="kbd">Ctrl</span>+<span class="kbd">r</span> ซ้ำ เพื่อย้อนหาคำสั่งก่อนหน้าที่ตรงกันมากขึ้น</li>
+      <li>กด <span class="kbd">Enter</span> เพื่อรันคำสั่งที่เจอ</li>
+      <li>กด <span class="kbd">Esc</span> เพื่อยกเลิกการค้นหาแต่ยังคงข้อความไว้ที่ prompt</li>
+      <li><span class="badge-new">เพิ่ม</span> กด <span class="kbd">Ctrl</span>+<span class="kbd">g</span> เพื่อยกเลิกทันทีและล้าง prompt กลับเป็นค่าว่าง</li>
+    </ul>
+  </section>
+
+  <!-- 2 -->
+  <section>
+    <div class="section-head">
+      <h2>การตั้งค่าระบบใน ~/.bashrc</h2>
+      <span class="tag-mini">configuration</span>
+    </div>
+    <p>ตัวแปร shell ต่อไปนี้ควบคุมพฤติกรรมของ history โดยส่วนใหญ่นิยมตั้งค่าไว้ใน <code>~/.bashrc</code> เพื่อให้มีผลทุกครั้งที่เปิด terminal ใหม่</p>
+
+    <table class="vars">
+      <tr><th style="width:36%">ตัวแปร / คำสั่ง</th><th>หน้าที่ / ผลลัพธ์</th></tr>
+      <tr><td>HISTCONTROL=<br>ignoredups:ignorespace</td><td>ไม่บันทึกคำสั่งที่พิมพ์ซ้ำติดกัน และคำสั่งที่ขึ้นต้นด้วยช่องว่าง</td></tr>
+      <tr><td>shopt -s histappend</td><td>บันทึกประวัติแบบต่อท้ายไฟล์เสมอ ไม่เขียนทับไฟล์เดิมเมื่อเปิดหลาย terminal พร้อมกัน</td></tr>
+      <tr><td>HISTSIZE=1000</td><td>จำนวนคำสั่งสูงสุดที่เก็บใน RAM ระหว่าง session</td></tr>
+      <tr><td>HISTFILESIZE=2000</td><td>จำนวนคำสั่งสูงสุดที่เก็บลงไฟล์บนดิสก์</td></tr>
+      <tr><td class="mono">HISTCONTROL=ignoreboth <span class="badge-new">เพิ่ม</span></td><td>รวมพฤติกรรมของ ignoredups และ ignorespace ไว้ในค่าเดียว (คำสั่งย่อที่ใช้แทนกันได้)</td></tr>
+      <tr><td class="mono">HISTCONTROL=erasedups <span class="badge-new">เพิ่ม</span></td><td>ลบคำสั่งที่ซ้ำกันทุกจุดในประวัติ ไม่ใช่แค่ที่ติดกัน ทำให้ history สะอาดขึ้น</td></tr>
+      <tr><td class="mono">HISTIGNORE="ls:cd:pwd:exit" <span class="badge-new">เพิ่ม</span></td><td>ระบุ pattern คำสั่งที่ไม่ต้องการให้บันทึกเลย เหมาะกับคำสั่งที่ใช้บ่อยแต่ไม่มีค่าให้ค้นย้อนหลัง</td></tr>
+      <tr><td class="mono">HISTTIMEFORMAT="%F %T " <span class="badge-new">เพิ่ม</span></td><td>แสดงวันที่-เวลาที่รันคำสั่งไว้หน้าแต่ละบรรทัดเมื่อพิมพ์ history — สำคัญมากสำหรับงาน audit log</td></tr>
+    </table>
+
+    <div class="terminal">
+      <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <div class="body">
+<div class="l"><span class="prompt">$</span> <span class="cmd">history</span>  <span class="cmt"># หลังตั้ง HISTTIMEFORMAT</span></div>
+<div class="l out">  201  2026-09-01 14:02:11  sudo apt update
+  202  2026-09-01 14:03:47  kubectl get pods -A</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="label">หมายเหตุ</span>
+      <p>ต้องแก้ไขไฟล์แล้วรัน <code>source ~/.bashrc</code> หรือเปิด terminal ใหม่ ค่าที่ตั้งจึงจะมีผล</p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section>
+    <div class="section-head">
+      <h2>การจัดการไฟล์และตัวแปร</h2>
+      <span class="tag-mini">files &amp; variables</span>
+    </div>
+    <ul class="plain">
+      <li><b>ตำแหน่งไฟล์:</b> ปกติเก็บที่ <code>~/.bash_history</code> ระบบจะเขียนลงไฟล์เมื่อปิด session terminal</li>
+      <li><b>บันทึกลงไฟล์ทันที:</b> <code>history -a</code> — dump ประวัติในเซสชันปัจจุบันลงไฟล์ทันทีโดยไม่ต้องรอปิด terminal</li>
+      <li><b>เช็กค่าตัวแปร:</b> <code>echo $HISTSIZE</code> (ต้องมี <code>$</code> นำหน้าเสมอเพื่ออ่านค่า) หรือ <code>set | grep HIST</code> เพื่อดูตัวแปรที่เกี่ยวกับ history ทั้งหมด</li>
+      <li><b>เปลี่ยนไฟล์เก็บประวัติชั่วคราว:</b> <code>HISTFILE="/path/to/file"</code> มีผลเฉพาะ session ปัจจุบัน</li>
+      <li><span class="badge-new">เพิ่ม</span> <b>โหลดประวัติจากไฟล์กลับเข้า session:</b> <code>history -r</code> — อ่านไฟล์ history กลับเข้า memory โดยไม่ต้องเปิด terminal ใหม่</li>
+      <li><span class="badge-new">เพิ่ม</span> <b>คำสั่ง fc:</b> <code>fc -l</code> แสดงประวัติคล้าย history, <code>fc -e vim 105</code> เปิดคำสั่งลำดับ 105 ด้วย vim เพื่อแก้ไขก่อนรันซ้ำ — มีมาตั้งแต่ POSIX shell ยุคแรก</li>
+    </ul>
+
+    <div class="terminal">
+      <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <div class="body">
+<div class="l"><span class="prompt">$</span> <span class="cmd">echo $HISTSIZE</span></div>
+<div class="l out">1000</div>
+<div class="l"><span class="prompt">$</span> <span class="cmd">set | grep HIST</span></div>
+<div class="l out">HISTCONTROL=ignoreboth
+HISTFILE=/home/user/.bash_history
+HISTFILESIZE=2000
+HISTSIZE=1000</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section>
+    <div class="section-head">
+      <h2>การล้างประวัติและการปิดใช้งาน</h2>
+      <span class="tag-mini">clear &amp; disable</span>
+    </div>
+    <table class="vars">
+      <tr><th style="width:44%">คำสั่ง</th><th>ผลลัพธ์</th></tr>
+      <tr><td>history -c</td><td>ล้างประวัติใน RAM เท่านั้น — ไฟล์ .bash_history ยังคงอยู่จนกว่าจะปิด session</td></tr>
+      <tr><td>&gt; ~/.bash_history</td><td>ส่งความว่างเปล่าไปทับข้อมูลในไฟล์ ทำให้ไฟล์ว่างเปล่าทันที</td></tr>
+      <tr><td>set +o history</td><td>ปิดการบันทึกประวัติชั่วคราวสำหรับ session ปัจจุบัน</td></tr>
+      <tr><td>set -o history <span class="badge-new">เพิ่ม</span></td><td>เปิดกลับมาบันทึกประวัติอีกครั้งหลังจากสั่งปิดไว้</td></tr>
+    </table>
+    <ul class="plain">
+      <li><b>ปิดถาวรเฉพาะผู้ใช้ปัจจุบัน:</b> เพิ่ม <code>set +o history</code> ลงใน <code>~/.bashrc</code></li>
+      <li><b>ปิดถาวรทุกผู้ใช้ในระบบ:</b> เพิ่มลงใน <code>/etc/profile</code></li>
+    </ul>
+
+    <div class="callout danger">
+      <span class="label">ข้อควรระวังสำหรับสาย Cloud/DevOps</span>
+      <p><code>history -c</code> ล้างได้แค่ในหน่วยความจำ ถ้าลืมและปิด terminal ปกติ ระบบจะยัง flush คำสั่งที่รันไปก่อนหน้าลงไฟล์อยู่ดี หากต้องการปิดการบันทึกจริง ๆ ระหว่างพิมพ์คำสั่งที่มีความลับ (เช่น password, API key) ให้ตั้ง <code>HISTCONTROL=ignorespace</code> แล้วพิมพ์ช่องว่างนำหน้าคำสั่งนั้น หรือใช้ <code>export HISTFILE=/dev/null</code> ก่อนเริ่มงานที่มีความอ่อนไหว</p>
+    </div>
+
+    <div class="callout warn">
+      <span class="label">อย่าใช้ history เป็นมาตรการความปลอดภัย</span>
+      <p>คำสั่งที่รันด้วย sudo, การเข้าถึง secret, หรือ credential ต่าง ๆ ควรใช้ secret manager หรือ environment variable แทนการพิมพ์ตรง ๆ ใน shell เสมอ เพราะ history ถูกออกแบบมาเพื่อความสะดวก ไม่ใช่เพื่อความปลอดภัย — ผู้ที่มีสิทธิ์อ่านไฟล์ .bash_history จะเห็นคำสั่งย้อนหลังได้ทั้งหมด</p>
+    </div>
+  </section>
+
+  <!-- 5 : new domain-relevant section -->
+  <section>
+    <div class="section-head">
+      <h2>เกร็ดที่มักถูกถามในงานจริงสาย Cloud Engineer</h2>
+      <span class="tag-mini">on-the-job notes <span class="badge-new">เพิ่มทั้งหัวข้อ</span></span>
+    </div>
+    <ul class="plain">
+      <li><b>Bastion host / Jump server:</b> เครื่อง bastion มักถูกตั้ง <code>HISTTIMEFORMAT</code> และเก็บ log แยกไว้เพื่อ audit เพราะทุกคนต้องผ่านเครื่องนี้ก่อนเข้า production</li>
+      <li><b>ระวังตอน SSH หลุด:</b> ถ้า session ถูกตัดกลางคันโดยไม่ได้ logout ปกติ (เช่นไฟดับ, network ขาด) คำสั่งใน session นั้นอาจไม่ถูก flush ลง .bash_history เพราะการเขียนไฟล์ปกติเกิดตอนปิด session — ถ้าอยากมั่นใจว่าบันทึกแน่นอนให้ใช้ <code>history -a</code> เป็นระยะ หรือใช้ script logging เช่น <code>script</code> command</li>
+      <li><b>Container / immutable infra:</b> ใน container ที่ถูกทำลายทิ้งหลังใช้งาน (ephemeral) การพึ่งพา .bash_history ไม่มีประโยชน์สำหรับ audit ระยะยาว ควรส่ง log ไปที่ central logging (เช่น CloudTrail, Cloud Logging, ELK) แทน</li>
+      <li><b>ตั้งค่าแบบ organization-wide:</b> ในทีมงานจริงมักบังคับ HISTTIMEFORMAT และ HISTCONTROL ผ่าน <code>/etc/profile.d/*.sh</code> เพื่อให้ทุกเครื่องในองค์กรมีมาตรฐาน log เดียวกัน ไม่ปล่อยให้ผู้ใช้แต่ละคนตั้งเองใน .bashrc</li>
+    </ul>
+  </section>
+
+  <!-- Exercises -->
+  <section>
+    <div class="section-head">
+      <h2>แบบฝึกหัดทบทวน</h2>
+      <span class="tag-mini">10 ข้อ</span>
+    </div>
+    <p class="muted">กดที่คำถามเพื่อดูเฉลย ลองตอบในใจก่อนเปิดดูทุกข้อ</p>
+
+    <div class="exwrap">
+      <details>
+        <summary><span class="qn">Q1</span> คำสั่งใดใช้แสดงเฉพาะ 5 คำสั่งล่าสุดที่เคยรัน?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span><code>history 5</code></div>
+      </details>
+      <details>
+        <summary><span class="qn">Q2</span> ถ้าต้องการรันคำสั่งลำดับที่ 42 ซ้ำทันที ต้องพิมพ์อะไร?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span><code>!42</code></div>
+      </details>
+      <details>
+        <summary><span class="qn">Q3</span> ตัวแปร HISTCONTROL ค่าใดที่ทำให้คำสั่งที่ขึ้นต้นด้วยช่องว่างไม่ถูกบันทึก?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span><code>ignorespace</code> (หรือรวมอยู่ใน <code>ignoreboth</code>)</div>
+      </details>
+      <details>
+        <summary><span class="qn">Q4</span> HISTSIZE กับ HISTFILESIZE ต่างกันอย่างไร?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span>HISTSIZE จำกัดจำนวนคำสั่งที่เก็บใน RAM ระหว่าง session ปัจจุบัน ส่วน HISTFILESIZE จำกัดจำนวนคำสั่งที่เก็บอยู่ในไฟล์บนดิสก์ (<code>~/.bash_history</code>)</div>
+      </details>
+      <details>
+        <summary><span class="qn">Q5</span> ต้องการล้างประวัติทั้งใน RAM และในไฟล์ทันที ต้องทำอย่างไร?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span>ใช้ <code>history -c</code> เพื่อล้างใน RAM ร่วมกับ <code>&gt; ~/.bash_history</code> เพื่อเคลียร์ไฟล์ให้ว่างเปล่า ทำทั้งสองคำสั่งจึงจะครบทั้งสองที่</div>
+      </details>
+      <details>
+        <summary><span class="qn">Q6</span> shopt -s histappend มีประโยชน์อย่างไรเมื่อเปิด terminal หลายหน้าต่างพร้อมกัน?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span>ทำให้แต่ละ session เขียนประวัติแบบต่อท้ายไฟล์ (append) แทนที่จะเขียนทับ ป้องกันไม่ให้ประวัติจาก terminal อื่นหายไปเมื่อ session ที่ปิดทีหลังบันทึกทับ</div>
+      </details>
+      <details>
+        <summary><span class="qn">Q7</span> ต้องการดู timestamp ของแต่ละคำสั่งใน history ต้องตั้งตัวแปรใด?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span><code>HISTTIMEFORMAT="%F %T "</code></div>
+      </details>
+      <details>
+        <summary><span class="qn">Q8</span> ปิดการบันทึก history ถาวรสำหรับผู้ใช้ทุกคนในระบบ ต้องแก้ไขไฟล์ใด?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span><code>/etc/profile</code> โดยเพิ่มบรรทัด <code>set +o history</code></div>
+      </details>
+      <details>
+        <summary><span class="qn">Q9</span> ทำไม history -c เพียงอย่างเดียวจึงไม่เพียงพอต่อการซ่อนคำสั่งที่มีความลับ?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span>เพราะล้างได้แค่ใน RAM ของ session ปัจจุบัน ส่วนไฟล์ .bash_history บนดิสก์ยังมีข้อมูลเดิมอยู่ (โดยเฉพาะคำสั่งที่ถูกบันทึกไปแล้วก่อนหน้า) ต้องเคลียร์ไฟล์แยกต่างหากด้วย</div>
+      </details>
+      <details>
+        <summary><span class="qn">Q10</span> !$ กับ !^ ต่างกันอย่างไร?</summary>
+        <div class="answer"><span class="ans-label">เฉลย</span><code>!$</code> ดึง argument ตัวสุดท้ายของคำสั่งก่อนหน้า ส่วน <code>!^</code> ดึง argument ตัวแรกของคำสั่งก่อนหน้า</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- Practical drills -->
+  <section>
+    <div class="section-head">
+      <h2>โจทย์ปฏิบัติ (ลงมือทำจริงในเทอร์มินัล)</h2>
+      <span class="tag-mini">hands-on</span>
+    </div>
+
+    <div class="drill">
+      <span class="num">Drill 1</span>
+      <p>เปิด <code>~/.bashrc</code> แล้วเพิ่ม <code>HISTTIMEFORMAT="%F %T "</code>, <code>HISTCONTROL=ignoreboth</code>, และ <code>HISTIGNORE="ls:cd:pwd:clear"</code> จากนั้น <code>source ~/.bashrc</code> แล้วตรวจสอบผลด้วย <code>history</code></p>
+    </div>
+    <div class="drill">
+      <span class="num">Drill 2</span>
+      <p>ลองรันคำสั่งใด ๆ แล้วเรียกกลับมาแก้ไขด้วย <code>fc -e nano</code> ตามด้วยเลขลำดับคำสั่งนั้น</p>
+    </div>
+    <div class="drill">
+      <span class="num">Drill 3</span>
+      <p>จำลองสถานการณ์ "พิมพ์คำสั่งลับ" — ตั้ง <code>HISTCONTROL=ignorespace</code> แล้วพิมพ์คำสั่งโดยเว้นวรรคนำหน้า เช่น <code> export API_KEY=xxxx</code> แล้วตรวจสอบว่า history ไม่บันทึกคำสั่งนี้จริงหรือไม่</p>
+    </div>
+    <div class="drill">
+      <span class="num">Drill 4</span>
+      <p>ทดลอง <code>export HISTFILE=/dev/null</code> ในหนึ่ง session แล้วปิด terminal ตรวจสอบว่า .bash_history ของ session นั้นไม่ถูกบันทึกเพิ่มเลย</p>
+    </div>
+  </section>
+
+  <!-- Cheat sheet -->
+  <section>
+    <div class="section-head">
+      <h2>สรุปคำสั่งสำคัญ (Cheat Sheet)</h2>
+      <span class="tag-mini">quick reference</span>
+    </div>
+    <div class="cheat-grid">
+      <div class="cheat-item"><code>history</code><span>แสดงประวัติทั้งหมด</span></div>
+      <div class="cheat-item"><code>!n</code><span>รันคำสั่งลำดับที่ n</span></div>
+      <div class="cheat-item"><code>!!</code><span>รันคำสั่งล่าสุดซ้ำ</span></div>
+      <div class="cheat-item"><code>!$</code><span>argument สุดท้ายของคำสั่งก่อนหน้า</span></div>
+      <div class="cheat-item"><code>Ctrl+r</code><span>ค้นหาคำสั่งย้อนหลังแบบโต้ตอบ</span></div>
+      <div class="cheat-item"><code>history -a</code><span>บันทึกลงไฟล์ทันที</span></div>
+      <div class="cheat-item"><code>history -c</code><span>ล้างประวัติใน RAM</span></div>
+      <div class="cheat-item"><code>&gt; ~/.bash_history</code><span>ล้างไฟล์ประวัติให้ว่าง</span></div>
+      <div class="cheat-item"><code>set +o history</code><span>ปิดการบันทึกชั่วคราว</span></div>
+      <div class="cheat-item"><code>fc -l</code><span>แสดงประวัติแบบ POSIX</span></div>
+    </div>
+  </section>
+
+  <footer>
+    Linux Foundation 12 · History Management · ปรับปรุงและขยายเนื้อหาเพิ่มเติมสำหรับการเตรียมตัวสาย Cloud Engineer
+  </footer>
+
+</div>
+</body>
+</html>
