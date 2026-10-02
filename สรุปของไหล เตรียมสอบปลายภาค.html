@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>สรุปของไหล | เตรียมสอบปลายภาค</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f7fb; --surface: #ffffff; --surface2: #eaf0f8; --border: #cdd8e8;
+    --accent: #2f6fe4; --accent2: #0a9c82; --accent3: #d6455a; --accent4: #b88600;
+    --text: #172033; --text-dim: #4a5a78; --text-muted: #8493b0;
+    --hero1: #e3eeff; --hero2: #dff6f1; --code: #0c6f5d;
+    --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+    --sans: 'Sarabun', 'Noto Sans Thai', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1220; --surface: #121b2e; --surface2: #1a263d; --border: #2a3a5c;
+      --accent: #5b9bff; --accent2: #2fd6b4; --accent3: #ff6b7f; --accent4: #ffd93d;
+      --text: #e8eefb; --text-dim: #93a3c4; --text-muted: #56688d;
+      --hero1: #0b1220; --hero2: #0c2230; --code: #2fd6b4;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b1220; --surface: #121b2e; --surface2: #1a263d; --border: #2a3a5c;
+    --accent: #5b9bff; --accent2: #2fd6b4; --accent3: #ff6b7f; --accent4: #ffd93d;
+    --text: #e8eefb; --text-dim: #93a3c4; --text-muted: #56688d;
+    --hero1: #0b1220; --hero2: #0c2230; --code: #2fd6b4;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.7; min-height: 100vh; }
+
+  .hero { background: linear-gradient(135deg, var(--hero1), var(--hero2)); padding: 56px 24px 44px; text-align: center; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+  .hero::before { content: 'P = ρgh   ·   A₁v₁ = A₂v₂   ·   F_B = ρVg   ·   ½ρv² + ρgy + P'; position: absolute; top: 14px; left: 0; right: 0; font-family: var(--mono); font-size: 13px; color: var(--text-muted); opacity: .7; padding: 0 12px; }
+  .badge { display: inline-block; background: rgba(47,111,228,.12); border: 1px solid rgba(47,111,228,.4); color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 2px; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; }
+  .hero h1 { font-size: clamp(28px, 6vw, 52px); font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--text-dim); font-size: 17px; max-width: 560px; margin: 0 auto 28px; }
+  .hero-stats { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; }
+  .stat-num { font-family: var(--mono); font-size: 26px; font-weight: 600; color: var(--accent2); }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  .nav-tabs { display: flex; gap: 4px; padding: 14px 16px; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 100; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { white-space: nowrap; padding: 8px 16px; border-radius: 8px; border: none; background: transparent; color: var(--text-dim); font-family: var(--sans); font-size: 14px; font-weight: 500; cursor: pointer; transition: all .2s; }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active { background: var(--accent); color: #fff; font-weight: 600; }
+
+  .content { max-width: 860px; margin: 0 auto; padding: 32px 18px 80px; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-heading { font-size: 26px; font-weight: 800; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .section-heading span { color: var(--accent); }
+  .sub-heading { font-size: 18px; font-weight: 700; margin: 24px 0 12px; color: var(--accent2); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+  .card-title { font-size: 20px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .icon-blue { background: rgba(47,111,228,.16); } .icon-teal { background: rgba(10,156,130,.16); }
+  .icon-red { background: rgba(214,69,90,.16); } .icon-yellow { background: rgba(255,200,40,.2); }
+
+  .def-box, .example-box, .warn-box, .tip-box { border-left: 3px solid; border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 14px 0; }
+  .def-box { background: rgba(47,111,228,.08); border-color: var(--accent); }
+  .example-box { background: rgba(10,156,130,.08); border-color: var(--accent2); }
+  .warn-box { background: rgba(214,69,90,.08); border-color: var(--accent3); }
+  .tip-box { background: rgba(255,200,40,.1); border-color: var(--accent4); }
+  .lbl { font-size: 11px; font-weight: 700; letter-spacing: 2px; margin-bottom: 4px; }
+  .def-box .lbl { color: var(--accent); } .example-box .lbl { color: var(--accent2); }
+  .warn-box .lbl { color: var(--accent3); } .tip-box .lbl { color: var(--accent4); }
+
+  .math { font-family: var(--mono); background: var(--surface2); border: 1px solid var(--border); padding: 1px 8px; border-radius: 5px; font-size: 14px; color: var(--code); white-space: nowrap; }
+  .math-block { font-family: var(--mono); background: var(--surface2); border: 1px solid var(--border); padding: 14px 18px; border-radius: 8px; margin: 12px 0; font-size: 15px; color: var(--text); overflow-x: auto; line-height: 2; }
+  .math-block .big { color: var(--code); font-weight: 600; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  .mini-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .mini-card h4 { font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 16px 0; }
+  .summary-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .summary-item .sym { font-family: var(--mono); font-size: 18px; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+  .summary-item .sym-name { font-size: 14px; font-weight: 600; }
+  .summary-item .sym-desc { font-size: 13px; color: var(--text-dim); }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
+  th { background: var(--surface2); border: 1px solid var(--border); padding: 9px 12px; text-align: left; font-weight: 600; color: var(--accent); }
+  td { border: 1px solid var(--border); padding: 8px 12px; }
+  td.m { font-family: var(--mono); color: var(--code); }
+
+  .fig { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin: 16px 0; text-align: center; }
+  .fig svg { max-width: 100%; height: auto; }
+  .fig .cap { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
+  svg text { font-family: var(--sans); fill: var(--text); }
+  .w-fill { fill: rgba(47,111,228,.28); stroke: var(--accent); stroke-width: 2; }
+  .ln { stroke: var(--text-dim); stroke-width: 2; fill: none; }
+
+  p { margin-bottom: 10px; } ul, ol { padding-left: 22px; margin-bottom: 10px; } li { margin-bottom: 4px; }
+
+  .quiz-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 18px; }
+  .quiz-num { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-bottom: 6px; }
+  .quiz-question { font-size: 17px; font-weight: 600; margin-bottom: 14px; white-space: pre-line; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; color: var(--text); font-family: var(--sans); font-size: 15px; cursor: pointer; text-align: left; transition: all .2s; }
+  .option-btn:hover:not(:disabled) { border-color: var(--accent); }
+  .option-btn.correct { background: rgba(10,156,130,.16); border-color: var(--accent2); color: var(--accent2); }
+  .option-btn.wrong { background: rgba(214,69,90,.12); border-color: var(--accent3); color: var(--accent3); }
+  .feedback { margin-top: 12px; padding: 12px 16px; border-radius: 8px; font-size: 14px; display: none; white-space: pre-line; }
+  .feedback.show { display: block; border: 1px solid var(--border); background: var(--surface2); }
+  .score { font-family: var(--mono); font-size: 18px; margin-bottom: 18px; color: var(--accent2); }
+  .reset-btn { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 24px; font-family: var(--sans); font-size: 15px; font-weight: 600; cursor: pointer; }
+  .note { font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">ฟิสิกส์ · กลศาสตร์ของไหล · เตรียมสอบปลายภาค</div>
+  <h1>ของไหล<span>สถิต</span>และ<span>พลศาสตร์</span></h1>
+  <p>สรุปจากสไลด์ รศ.ดร.เอก จันต๊ะยอด (ม.นเรศวร) — สูตร ข้อควรระวัง ตัวอย่างที่คำนวณตรวจแล้ว และแบบฝึกหัดท้ายเล่ม</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">หัวข้อหลัก</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">ตัวอย่างจากสไลด์</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-tabs">
+  <button class="tab-btn active" data-sec="s1">1. ความดัน</button>
+  <button class="tab-btn" data-sec="s2">2. เครื่องวัดความดัน</button>
+  <button class="tab-btn" data-sec="s3">3. กาลักน้ำ</button>
+  <button class="tab-btn" data-sec="s4">4. แรงลอยตัว</button>
+  <button class="tab-btn" data-sec="s5">5. ความต่อเนื่อง</button>
+  <button class="tab-btn" data-sec="s6">6. แบร์นูลลี</button>
+  <button class="tab-btn" data-sec="s7">7. ความหนืด</button>
+  <button class="tab-btn" data-sec="formula">📐 สูตรรวม</button>
+  <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัด</button>
+</div>
+
+<div class="content">
+
+<!-- ===== 1 ===== -->
+<div class="section active" id="s1">
+  <div class="section-heading"><span>ส่วน A</span> · อุทกสถิตศาสตร์ (Hydrostatics)</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">💧</div>ของไหลและสองสาขาหลัก</div>
+    <p>ของไหล = สารที่ไหลได้ = <strong>ของเหลว + แก๊ส</strong></p>
+    <div class="grid-2">
+      <div class="mini-card"><h4>อุทกสถิตศาสตร์ (Hydrostatics)</h4><p>ศึกษาของไหลขณะ<strong>หยุดนิ่ง</strong> ความดันมีทิศ<strong>ตั้งฉาก</strong>กับผิวสัมผัสเสมอ</p></div>
+      <div class="mini-card"><h4>อุทกพลศาสตร์ (Hydrodynamics)</h4><p>ศึกษาของไหลขณะ<strong>เคลื่อนที่</strong> มีความดันในทิศ<strong>ขนาน</strong>กับผิวสัมผัสด้วย</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">⬇️</div>ความดันและความหนาแน่น</div>
+    <div class="math-block"><span class="big">P = F⊥ / A</span>      (หน่วย N/m² = Pa)<br>
+    <span class="big">ρ = m / V</span>      (kg/m³)</div>
+    <div class="def-box"><div class="lbl">หน่วยที่ต้องจำ</div>
+      1 Pa = 1 N/m² &nbsp;|&nbsp; 1 atm = 1.013 × 10⁵ Pa = 760 mmHg = 760 torr
+    </div>
+    <div class="sub-heading">ความดันจากน้ำหนักของของไหล</div>
+    <p>แท่งของไหลสูง h พื้นที่ A: &nbsp;P = mg/A = ρVg/A = ρ(hA)g/A</p>
+    <div class="math-block"><span class="big">P = ρgh</span></div>
+    <div class="tip-box"><div class="lbl">💡 สรุปให้ขึ้นใจ</div>
+      ความดันขึ้นกับ <strong>ความลึก h</strong> และ <strong>ความหนาแน่น ρ</strong> เท่านั้น — <strong>ไม่ขึ้นกับพื้นที่หน้าตัด และไม่ขึ้นกับรูปร่างภาชนะ</strong>
+    </div>
+    <div class="grid-2">
+      <div class="mini-card"><h4>ภาชนะรูปร่างต่างกัน ระดับน้ำเท่ากัน</h4><p>ความดันที่ก้นภาชนะเท่ากัน (P = ρgh) → <strong>ไม่มีการไหล</strong></p></div>
+      <div class="mini-card"><h4>ระดับน้ำต่างกัน (ท่อรูปตัว U)</h4><p>ฝั่งที่ลึกกว่าความดันมากกว่า → น้ำไหลจนระดับเท่ากัน</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">🧮</div>สมการอุทกสถิต (พิสูจน์สั้น ๆ)</div>
+    <p>ชิ้นของไหลหนา dy อยู่นิ่ง (สมดุล): &nbsp;F₂ = mg + F₁</p>
+    <div class="math-block">(P + dP)A = ρgA dy + PA<br>→ <span class="big">dP = ρg dy</span><br>
+    ของไหลความหนาแน่นสม่ำเสมอ ผิว (y=0) ความดัน P₀:<br><span class="big">P = P₀ + ρgh</span></div>
+    <div class="warn-box"><div class="lbl">⚠️ ข้อสังเกตสำคัญ</div>
+      ของไหลชนิดเดียวกันในภาชนะเดียวกัน ถ้าอยู่ที่ <strong>ระดับเดียวกัน → ความดันเท่ากัน</strong> (ใช้ตั้งสมการ U-tube / manometer)
+    </div>
+    <div class="example-box"><div class="lbl">ตัวอย่าง — นักดำน้ำมือใหม่</div>
+      อยู่ลึก L หายใจเต็มปอด ขึ้นผิวน้ำพบความดันในปอดสูงกว่าบรรยากาศ 9.3 kPa หาความลึก L<br>
+      P_lung = P₀ + ρgL → 9.3×10³ = (998)(9.8)L → <span class="math">L ≈ 0.95 m</span><br>
+      <span class="note">ความดันต่างแค่ ~9% ของบรรยากาศ ก็ทำให้ปอดฉีกได้ — อากาศเข้ากระแสเลือด/หัวใจล้มเหลว</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2 ===== -->
+<div class="section" id="s2">
+  <div class="section-heading"><span>ส่วน A</span> · ความดันเกจ บารอมิเตอร์ มาโนมิเตอร์</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">📏</div>ความดันสัมบูรณ์ vs ความดันเกจ</div>
+    <div class="math-block"><span class="big">P_total (absolute) = P_gauge + P_atm</span><br>ที่ความลึก h ในของเหลว: P_A = ρgh + P_atm &nbsp;(ρgh คือส่วนที่เป็น gauge)</div>
+    <ul>
+      <li><strong>ความดันเกจ</strong> = ความดันที่มากกว่า/น้อยกว่าบรรยากาศ (เครื่องวัดส่วนใหญ่ เช่น เครื่องวัดความดันยางอ่านค่านี้)</li>
+      <li><strong>ความดันสัมบูรณ์</strong> = รวมบรรยากาศแล้ว</li>
+      <li>ความดันเกจ <strong>ติดลบได้ แต่ไม่เกิน −1 atm</strong> ส่วนความดันสัมบูรณ์ไม่ติดลบ</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🌡️</div>บารอมิเตอร์ (Barometer) — Torricelli</div>
+    <p>หลอดแก้วคว่ำในอ่างปรอท ด้านบนเป็นสุญญากาศ (P = 0)</p>
+    <div class="math-block">ภายนอกหลอด (ผิวอ่าง): P = P₀<br>ภายในหลอด (ระดับเดียวกัน): P = 0 + ρgh<br><span class="big">P₀ = ρgh</span> &nbsp; ปรอท: h = 760 mm ที่ 1 atm</div>
+    <div class="tip-box"><div class="lbl">💡 เหตุผลที่ใช้ปรอท</div>
+      ปรอทหนาแน่นมาก คอลัมน์จึงสูงแค่ 0.76 m ถ้าใช้น้ำจะต้องสูง ≈ 10.3 m
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">🩺</div>มาโนมิเตอร์และการวัดความดันโลหิต</div>
+    <p>มาโนมิเตอร์: ความดันเกจ P ทำให้ผิวของเหลวสองฝั่งต่างกัน h → <span class="math">P = ρgh</span> (ถ้าฝั่งขวาสูงกว่า P ติดลบ)</p>
+    <div class="grid-2">
+      <div class="mini-card"><h4>วัดความดันโลหิต (ถ่ายทอดด้วยแก๊ส)</h4><p>ผ้ายางพองลมควรอยู่<strong>ระดับเดียวกับหัวใจ</strong> แก๊สหนาแน่นน้อยมาก ตำแหน่งเครื่องวัดในแนวดิ่งจึงแทบไม่สำคัญ</p></div>
+      <div class="mini-card"><h4>วัดความดันไขสันหลัง (ถ่ายทอดด้วยของเหลว)</h4><p>ตำแหน่งเครื่องวัดสำคัญมาก ต้องคิดน้ำหนักของเหลว:<br><span class="math">P_gauge = P_spine ± hρg</span> (วัดสูงกว่า −, ต่ำกว่า +)</p></div>
+    </div>
+    <div class="example-box"><div class="lbl">ถุงน้ำเกลือ</div>
+      ต้องแขวนไว้สูง เพื่อให้ ρgh เพิ่มความดันมากพอที่จะดันน้ำเกลือเข้าร่างกาย
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3 ===== -->
+<div class="section" id="s3">
+  <div class="section-heading"><span>ส่วน A</span> · กาลักน้ำ (Siphon)</div>
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">🚰</div>หลักการ</div>
+    <p>ใช้หลักว่า <strong>ความดันขึ้นกับความลึกของผิว ไม่ขึ้นกับรูปร่างภาชนะ</strong> พิจารณาที่ปลายท่อด้านล่าง ลึกกว่าผิว h:</p>
+    <div class="math-block">ภายในของไหลที่ปลายท่อ: P = P₀ + ρgh<br>ภายนอก: P₀<br>→ ความดันภายในมากกว่าภายนอก ของไหลจึงไหลออกได้</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="icon icon-red">🛑</div>ขีดจำกัดของกาลักน้ำ</div>
+    <p>ที่จุดสูงสุดของท่อสูง h จากผิว: P₀ = P + ρgh และ P ต่ำสุดได้คือ 0 (สุญญากาศ)</p>
+    <div class="math-block"><span class="big">h_max = P₀ / ρg</span><br>น้ำ: 1.01×10⁵ / (1000 × 9.8) ≈ <span class="big">10.3 m</span></div>
+    <div class="warn-box"><div class="lbl">⚠️ ออกสอบบ่อย</div>
+      กาลักน้ำ/การดูดน้ำด้วยปั๊มสุญญากาศ ยกน้ำข้ามสิ่งกีดขวางที่สูงเกิน <strong>10.3 m จากผิวน้ำไม่ได้</strong>
+    </div>
+    <div class="example-box"><div class="lbl">ตัวอย่าง — ปั๊ม 10 kW บนดาดฟ้าสูง 15 m ดูดน้ำจากบ่อบนพื้นได้ไหม</div>
+      <strong>ไม่ได้</strong> — ปั๊มดูดน้ำขึ้นได้ด้วยความดันบรรยากาศดันจากข้างล่าง สูงสุดราว 10.3 m ไม่ว่ากำลังปั๊มจะมากแค่ไหน (ต้องย้ายปั๊มลงมาไว้ใกล้ผิวน้ำ แล้วให้ปั๊ม “ดัน” น้ำขึ้นไปแทน)
+    </div>
+  </div>
+</div>
+
+<!-- ===== 4 ===== -->
+<div class="section" id="s4">
+  <div class="section-heading"><span>ส่วน A</span> · แรงลอยตัวและหลักของอาร์คีมิดีส</div>
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🛟</div>ที่มาของแรงลอยตัว</div>
+    <p>แรงลอยตัวเกิดจากความดันของไหลขึ้นกับความลึก: แรงด้านข้างหักล้างกันหมด เหลือแรงต่างของด้านล่างกับด้านบน</p>
+    <div class="math-block">F_B = F₂ − F₁ = [P₀ + ρg(h+L)]A − [P₀ + ρgh]A = ρg(L·A)<br>
+    L·A = ปริมาตรวัตถุส่วนที่จม → <span class="big">F_B = ρ_f V_จม g = m_f g</span></div>
+    <div class="def-box"><div class="lbl">หลักของอาร์คีมิดีส</div>
+      แรงลอยตัว = <strong>น้ำหนักของของไหลที่ถูกวัตถุแทนที่</strong> (m_f คือมวลของไหลที่มีปริมาตรเท่าส่วนที่จม)
+    </div>
+    <div class="tip-box"><div class="lbl">💡 สูตรลัดวัตถุลอยนิ่ง</div>
+      F_B = W → ρ_f V_จม = ρ_วัตถุ V_ทั้งก้อน → <span class="math">V_จม / V = ρ_วัตถุ / ρ_ของไหล</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">🧊</div>ตัวอย่างที่ต้องทำได้</div>
+    <div class="example-box"><div class="lbl">1) ภูเขาน้ำแข็ง</div>
+      ρ_ice = 917, ρ_sea = 1024 kg/m³<br>
+      V_u/V_ice = ρ_ice/ρ_sea → ส่วนที่พ้นน้ำ = 1 − 917/1024 ≈ 0.10 → <span class="math">ประมาณ 10%</span>
+    </div>
+    <div class="example-box"><div class="lbl">2) บอลลูนฮีเลียม</div>
+      รัศมี 12 m มวลบอลลูน+อุปกรณ์ 196 kg, ρ_He = 0.160, ρ_air = 1.25 kg/m³<br>
+      F_B = (m_balloon + m_He + M)g → M = V(ρ_air − ρ_He) − m_balloon<br>
+      = (4/3)π(12)³(1.25 − 0.160) − 196 ≈ <span class="math">7694 kg</span>
+    </div>
+    <div class="example-box"><div class="lbl">3) เรือเหล็ก (วัตถุหนาแน่นกว่าน้ำก็ลอยได้)</div>
+      ต้อง “แทนที่ปริมาตรน้ำ” มากพอ เรือ 5000 kg ปริมาตร 25 m³: ลอยได้เมื่อ m_f = M_ship + m_goods<br>
+      m_goods = 25×1000 − 5000 = <span class="math">20000 kg</span> (บรรทุกสูงสุดโดยไม่จม)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-red">🤔</div>โจทย์คิดเชิงแนวคิด (ชอบออก)</div>
+    <div class="grid-2">
+      <div class="mini-card"><h4>น้ำแข็งลอยในถ้วย ละลายหมด</h4><p>ระดับน้ำ<strong>คงเดิม</strong> เพราะ F_B = m_ice·g คือน้ำที่ถูกแทนที่มีมวลเท่าน้ำแข็ง พอละลายก็กินปริมาตรเท่าเดิมพอดี</p></div>
+      <div class="mini-card"><h4>โฟมมีเหล็กวางบน แล้วพลิกให้เหล็กอยู่ใต้น้ำ</h4><p>ระดับน้ำ<strong>เท่าเดิม</strong> (น้ำหนักรวมเท่าเดิม แรงลอยตัวรวมเท่าเดิม) แต่เหล็กจมแทนที่น้ำเอง โฟมจึงจมน้อยลง → ขีดบนโฟมจะ<strong>อยู่เหนือระดับน้ำ</strong></p></div>
+    </div>
+    <div class="warn-box"><div class="lbl">⚠️ โจทย์ลูกโป่ง CO₂ บนตาชั่ง</div>
+      ในสไลด์ติ๊กคำตอบ “เท่าเดิม” (อนุรักษ์มวล: ระบบปิด มวลรวมไม่เปลี่ยน) ถ้าคิดละเอียดขึ้น ลูกโป่งที่พองแทนที่อากาศมากขึ้น แรงลอยตัวของอากาศเพิ่มเล็กน้อย ตัวเลขอาจลดลงนิดหน่อย — ในห้องสอบให้ยึดคำเฉลยของอาจารย์
+    </div>
+    <div class="tip-box"><div class="lbl">💡 ขั้นตอนทำโจทย์ลอย/จม</div>
+      เขียน free-body: F_B ขึ้น, W ลง → ลอยนิ่ง F_B = W → แทน F_B = ρ_f V_จม g
+    </div>
+  </div>
+</div>
+
+<!-- ===== 5 ===== -->
+<div class="section" id="s5">
+  <div class="section-heading"><span>ส่วน B</span> · อุทกพลศาสตร์และสมการความต่อเนื่อง</div>
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">🌊</div>การไหลของของไหลอุดมคติ 4 ข้อ</div>
+    <div class="summary-grid">
+      <div class="summary-item"><div class="sym">Steady</div><div class="sym-name">คงตัว / ลามินาร์</div><div class="sym-desc">ความเร็ว ณ จุดใด ๆ คงที่ ไม่ขึ้นกับเวลา</div></div>
+      <div class="summary-item"><div class="sym">Incompressible</div><div class="sym-name">อัดไม่ได้</div><div class="sym-desc">ρ เท่ากันทุกที่</div></div>
+      <div class="summary-item"><div class="sym">Nonviscous</div><div class="sym-name">ไม่มีความหนืด</div><div class="sym-desc">ไม่มีแรงเสียดทานในการไหล</div></div>
+      <div class="summary-item"><div class="sym">Irrotational</div><div class="sym-name">ไม่หมุนวน</div><div class="sym-desc">ไม่มีกระแสวน</div></div>
+    </div>
+    <p><strong>สายกระแส (streamline)</strong> = เส้นทางของส่วนต่าง ๆ ในของไหล ความเร็วอยู่ในแนวเส้น<strong>สัมผัส</strong>สายกระแส สายกระแสชิดกัน → ไหลเร็ว</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🔁</div>สมการความต่อเนื่อง</div>
+    <p>ของไหลอัดไม่ได้: ปริมาตรที่ผ่าน A₁ และ A₂ ต่อหน่วยเวลาเท่ากัน (A₁Δx₁/Δt = A₂Δx₂/Δt)</p>
+    <div class="math-block"><span class="big">A₁v₁ = A₂v₂</span> &nbsp;= อัตราการไหลเชิงปริมาตร Q (m³/s)</div>
+    <p>พื้นที่เล็ก → ไหลเร็ว เช่น น้ำจากก๊อกที่ตกลงมามีลำแคบลงเรื่อย ๆ</p>
+    <div class="fig">
+      <svg viewBox="0 0 520 150" width="520" role="img" aria-label="ท่อพื้นที่หน้าตัดลดลง">
+        <path class="w-fill" d="M20,30 L200,30 Q250,30 280,55 L500,55 L500,95 L280,95 Q250,120 200,120 L20,120 Z"/>
+        <path class="ln" d="M40,75 L120,75" marker-end="url(#a)"/><path class="ln" d="M330,75 L440,75" marker-end="url(#a)"/>
+        <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="color:var(--text-dim)"/></marker></defs>
+        <text x="75" y="64" text-anchor="middle" font-size="14">v₁ (ช้า)</text><text x="385" y="68" text-anchor="middle" font-size="14">v₂ (เร็ว)</text>
+        <text x="110" y="145" text-anchor="middle" font-size="14">A₁ ใหญ่</text><text x="400" y="125" text-anchor="middle" font-size="14">A₂ เล็ก</text>
+      </svg>
+      <div class="cap">A₁v₁ = A₂v₂ → A เล็ก v มาก</div>
+    </div>
+    <div class="example-box"><div class="lbl">ตัวอย่าง — เส้นเลือดฝอย</div>
+      เอออร์ตา A = 3 cm², v = 30 cm/s; เส้นเลือดฝอย A = 3×10⁻⁷ cm², v = 0.05 cm/s<br>
+      A_o v_o = N A_c v_c → N = (3×30)/(3×10⁻⁷×0.05) = <span class="math">6 × 10⁹ เส้น</span>
+    </div>
+    <div class="example-box"><div class="lbl">ตัวอย่าง — ลำน้ำจากก๊อก</div>
+      h = 20 cm, A₁ = 1 cm², A₂ = 0.6 cm², g = 10: ใช้ v₁ = (A₂/A₁)v₂ ร่วมกับ v₂² = v₁² + 2gh<br>
+      v₂ = √[2gh / (1 − (A₂/A₁)²)] = √[4/0.64] = <span class="math">2.5 m/s</span><br>
+      Q = A₂v₂ = 0.6 × 250 = <span class="math">150 cm³/s</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 6 ===== -->
+<div class="section" id="s6">
+  <div class="section-heading"><span>ส่วน B</span> · สมการของแบร์นูลลี</div>
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">⚡</div>สมการและที่มา</div>
+    <p>จากการอนุรักษ์พลังงาน: ΔE_k + ΔE_p = ΔW (งานจากความดัน P₁A₁Δx₁ − P₂A₂Δx₂ และ V = AΔx)</p>
+    <div class="math-block"><span class="big">P + ½ρv² + ρgy = ค่าคงที่ (ตามสายกระแสเดียวกัน)</span><br>
+    P₁ + ½ρv₁² + ρgy₁ = P₂ + ½ρv₂² + ρgy₂</div>
+    <div class="warn-box"><div class="lbl">⚠️ ใช้ได้เมื่อ</div>
+      ไหลคงตัว อัดไม่ได้ ไม่มีความหนืด และอยู่บนสายกระแสเดียวกัน
+    </div>
+    <div class="tip-box"><div class="lbl">💡 ข้อสังเกตสำคัญ</div>
+      เคลื่อนที่ในแนวราบ (y คงที่): <strong>เร็วขึ้น → ความดันลดลง</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">🔧</div>การประยุกต์ที่ออกสอบ</div>
+
+    <div class="sub-heading">1) ท่อเวนทูรี (Venturi) — หาอัตราเร็วที่ A₂</div>
+    <p>ใช้ A₁v₁ = A₂v₂ แทน v₁ ในแบร์นูลลี (แนวระดับ):</p>
+    <div class="math-block">P₁ − P₂ = ½ρv₂²[1 − (A₂/A₁)²]<br>
+    <span class="big">v₂ = A₁ √[ 2(P₁ − P₂) / ρ(A₁² − A₂²) ]</span></div>
+
+    <div class="sub-heading">2) ถังน้ำเจาะรู (ทอร์ริเซลลี)</div>
+    <p>ถังเปิดฝาสูง H พื้นที่ A เจาะรูเล็ก a ลึกจากผิว h; ผิวน้ำ P₀ และรูก็ P₀ (ตัดกัน), v₀ ≈ 0 เมื่อ A ≫ a (จาก av = Av₀)</p>
+    <div class="fig">
+      <svg viewBox="0 0 460 230" width="460" role="img" aria-label="ถังน้ำเจาะรู">
+        <rect class="w-fill" x="150" y="30" width="110" height="160"/>
+        <line x1="150" y1="30" x2="150" y2="190" class="ln"/><line x1="260" y1="30" x2="260" y2="190" class="ln"/><line x1="150" y1="190" x2="260" y2="190" class="ln"/>
+        <circle cx="150" cy="95" r="4" fill="#d6455a"/>
+        <path d="M150,95 Q90,95 60,190" class="ln" stroke="#d6455a"/>
+        <line x1="40" y1="190" x2="420" y2="190" class="ln"/>
+        <line x1="285" y1="30" x2="285" y2="190" class="ln"/><text x="295" y="115" font-size="14">H</text>
+        <line x1="130" y1="30" x2="130" y2="95" class="ln"/><text x="112" y="68" font-size="14">h</text>
+        <text x="95" y="212" font-size="14">R</text><line x1="60" y1="200" x2="150" y2="200" class="ln"/>
+        <text x="40" y="120" font-size="13">v = √(2gh)</text>
+      </svg>
+      <div class="cap">ผิวน้ำถึงรู = h, รูถึงพื้น = H − h</div>
+    </div>
+    <div class="math-block"><span class="big">v = √(2gh)</span><br>
+    ระยะตกบนพื้น (โพรเจกไทล์): t = √[2(H−h)/g], R = v·t = <span class="big">2√[h(H−h)]</span><br>
+    อัตราการไหลออกจากถัง: <span class="big">Q = a·v = a√(2gh)</span> (m³/s)</div>
+    <div class="example-box"><div class="lbl">ตรวจความเข้าใจ</div>
+      R มากสุดเมื่อ h = H/2 (ได้ R = H) และรูที่ h เท่ากันกับ H − h ให้ระยะเท่ากัน — รูลึกสุดไหลเร็วสุด แต่ตกใกล้เพราะเวลาตกสั้น
+    </div>
+
+    <div class="sub-heading">3) หลอดพิโทต (Pitot tube) วัดอัตราเร็วอากาศผ่านเครื่องบิน</div>
+    <div class="math-block">P_a + ½ρv² = P_b + 0 (ที่จุด b อากาศหยุดนิ่ง)<br><span class="big">v = √[ 2(P_b − P_a) / ρ ]</span></div>
+
+    <div class="sub-heading">4) แรงยกปีกเครื่องบิน</div>
+    <p>ปีกโค้งด้านบน → อากาศบนปีกเร็วกว่า → ความดันบนต่ำกว่าใต้ปีก เกิดแรงยกขึ้น</p>
+    <div class="math-block"><span class="big">F_lift = (P_lower − P_upper)A = ½ρ(v_upper² − v_lower²)A_wing</span></div>
+
+    <div class="sub-heading">5) ปรากฏการณ์รอบตัว</div>
+    <p>เป่าเหนือกระดาษแล้วกระดาษลอยขึ้น • รถบรรทุกแล่นผ่านกันแล้วถูกดูดเข้าหากัน • ขวดสเปรย์/น้ำหอม • ลมแรงพัดหลังคาบ้านปลิว — ทั้งหมดคือ “เร็วขึ้น ความดันต่ำลง”</p>
+  </div>
+</div>
+
+<!-- ===== 7 ===== -->
+<div class="section" id="s7">
+  <div class="section-heading"><span>ส่วน C</span> · ความหนืด (Viscosity)</div>
+  <div class="card">
+    <div class="card-title"><div class="icon icon-red">🍯</div>ความต้านทานการไหลและกฎของปัวซวีลล์</div>
+    <p>ของไหลมีความหนืด η (หน่วย Pa·s) จึงมี <strong>ความต้านทานการไหล R</strong> ในท่อรัศมี r ความยาว L:</p>
+    <div class="math-block"><span class="big">R = 8ηL / (πr⁴)</span><br>
+    <span class="big">Q = ΔP / R = πΔP r⁴ / (8ηL)</span> &nbsp; (กฎของปัวซวีลล์)</div>
+    <p>Q = อัตราการไหล, ΔP = ความดันต่างระหว่างปลายท่อ</p>
+    <div class="warn-box"><div class="lbl">⚠️ จุดที่ต้องจำ: r⁴</div>
+      รัศมีลดครึ่งหนึ่ง → Q ลดเหลือ 1/16 (ถ้า ΔP, η, L เท่าเดิม) เพราะเหตุนี้หลอดเลือดตีบเล็กน้อยก็ทำให้การไหลลดลงมาก
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>ของไหล</th><th>η (Pa·s)</th></tr>
+      <tr><td>อากาศ</td><td class="m">1.8 × 10⁻⁵</td></tr>
+      <tr><td>น้ำที่ 20 °C</td><td class="m">0.001</td></tr>
+      <tr><td>เอทิลแอลกอฮอล์</td><td class="m">0.0012</td></tr>
+      <tr><td>เลือด (พลาสมา)</td><td class="m">0.0015</td></tr>
+      <tr><td>ปรอท</td><td class="m">0.0016</td></tr>
+      <tr><td>เลือดทั้งหมด</td><td class="m">0.004</td></tr>
+      <tr><td>น้ำผสมสบู่</td><td class="m">0.037</td></tr>
+      <tr><td>น้ำมัน</td><td class="m">0.1 – 0.6</td></tr>
+    </table></div>
+    <div class="tip-box"><div class="lbl">💡 เทียบ</div>
+      Poiseuille ≈ “กฎของโอห์มของของไหล”: Q ↔ I, ΔP ↔ V, R ↔ R
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">📌</div>หมายเหตุเรื่องขอบเขตเนื้อหา</div>
+    <p class="note">สไลด์ที่ส่งมาครอบคลุมอุทกสถิต แรงลอยตัว ความต่อเนื่อง แบร์นูลลี และความหนืด ส่วนหัวข้อ “ความตึงผิว” และ “การอนุรักษ์โมเมนตัมในกลศาสตร์ของของไหล” ที่อยู่ในสารบัญแรก ไม่มีเนื้อหาในไฟล์ จึงยังไม่ได้สรุปไว้ หากข้อสอบครอบคลุม ส่งสไลด์ส่วนนั้นมาเพิ่มได้</p>
+  </div>
+</div>
+
+<!-- ===== FORMULA ===== -->
+<div class="section" id="formula">
+  <div class="section-heading"><span>📐</span> สูตรรวมก่อนเข้าห้องสอบ</div>
+  <div class="card">
+    <div class="table-wrap"><table>
+      <tr><th>เรื่อง</th><th>สูตร</th><th>หมายเหตุ</th></tr>
+      <tr><td>ความดัน</td><td class="m">P = F⊥/A</td><td>Pa = N/m²</td></tr>
+      <tr><td>ความหนาแน่น</td><td class="m">ρ = m/V</td><td>kg/m³</td></tr>
+      <tr><td>ความดันตามความลึก</td><td class="m">P = P₀ + ρgh</td><td>ระดับเดียวกัน P เท่ากัน</td></tr>
+      <tr><td>สัมบูรณ์/เกจ</td><td class="m">P_abs = P_gauge + P_atm</td><td>เกจ ≥ −1 atm</td></tr>
+      <tr><td>บารอมิเตอร์</td><td class="m">P₀ = ρgh</td><td>760 mmHg = 1 atm</td></tr>
+      <tr><td>กาลักน้ำ (สูงสุด)</td><td class="m">h_max = P₀/ρg</td><td>น้ำ ≈ 10.3 m</td></tr>
+      <tr><td>แรงลอยตัว</td><td class="m">F_B = ρ_f V_จม g</td><td>= น้ำหนักของไหลที่ถูกแทนที่</td></tr>
+      <tr><td>วัตถุลอยนิ่ง</td><td class="m">V_จม/V = ρ_วัตถุ/ρ_ของไหล</td><td>ρ_วัตถุ &lt; ρ_ของไหล</td></tr>
+      <tr><td>ความต่อเนื่อง</td><td class="m">A₁v₁ = A₂v₂ = Q</td><td>ไหลอัดไม่ได้</td></tr>
+      <tr><td>แบร์นูลลี</td><td class="m">P + ½ρv² + ρgy = const</td><td>ตามสายกระแส</td></tr>
+      <tr><td>ถังเจาะรู</td><td class="m">v = √(2gh), R = 2√[h(H−h)], Q = a√(2gh)</td><td>h = ลึกจากผิว</td></tr>
+      <tr><td>เวนทูรี</td><td class="m">v₂ = A₁√[2(P₁−P₂)/ρ(A₁²−A₂²)]</td><td>ท่อแนวระดับ</td></tr>
+      <tr><td>พิโทต</td><td class="m">v = √[2(P_b−P_a)/ρ]</td><td>P_b = ความดันหยุดนิ่ง</td></tr>
+      <tr><td>แรงยกปีก</td><td class="m">F = ½ρ(v_u²−v_l²)A</td><td>บนเร็วกว่าล่าง</td></tr>
+      <tr><td>ปัวซวีลล์</td><td class="m">Q = πΔP r⁴/(8ηL)</td><td>R = 8ηL/πr⁴</td></tr>
+    </table></div>
+    <div class="tip-box"><div class="lbl">💡 เช็กลิสต์ทำโจทย์</div>
+      1) หน่วย SI ครบไหม (cm→m, g=9.8 หรือ 10 ตามโจทย์) • 2) ของไหลนิ่ง → P = P₀ + ρgh, ไหล → ความต่อเนื่อง + แบร์นูลลี • 3) ลอยนิ่ง → F_B = W • 4) ตรวจว่าความดันเป็นเกจหรือสัมบูรณ์
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="section" id="quiz">
+  <div class="section-heading"><span>🎯</span> แบบฝึกหัดเตรียมสอบ</div>
+  <div class="score" id="score">คะแนน: 0 / 10</div>
+  <div id="quiz-root"></div>
+  <button class="reset-btn" id="reset-btn">เริ่มใหม่</button>
+</div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function (s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+      var sec = document.getElementById(id);
+      if (sec) sec.classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  var Q = [
+    { q: "ที่ความลึก 5 m ในน้ำ (ρ = 1000 kg/m³, g = 9.8 m/s²) ความดันเกจเป็นเท่าใด", o: ["4.9 kPa", "49 kPa", "98 kPa", "490 kPa"], a: 1,
+      e: "P_gauge = ρgh = 1000 × 9.8 × 5 = 49,000 Pa = 49 kPa" },
+    { q: "ถ้าใช้ “น้ำ” แทนปรอทในบารอมิเตอร์ ที่ 1 atm คอลัมน์น้ำจะสูงประมาณเท่าใด", o: ["0.76 m", "1.0 m", "10.3 m", "76 m"], a: 2,
+      e: "h = P₀/ρg = 1.01×10⁵ / (1000×9.8) ≈ 10.3 m" },
+    { q: "ปั๊มกำลัง 10 kW ติดบนดาดฟ้าสูง 15 m ดูดน้ำจากบ่อบนพื้นขึ้นมาได้หรือไม่", o: ["ได้ เพราะกำลังสูงพอ", "ไม่ได้ เพราะเกินขีดจำกัด ~10.3 m", "ได้ ถ้าใช้ท่อใหญ่ขึ้น", "ได้ ถ้าเปิดฝาบ่อ"], a: 1,
+      e: "การดูดอาศัยความดันบรรยากาศดันน้ำขึ้น สูงสุด P₀/ρg ≈ 10.3 m ไม่ขึ้นกับกำลังปั๊ม" },
+    { q: "ไม้ทรงสี่เหลี่ยมความหนาแน่น 800 kg/m³ ลอยนิ่งในน้ำ (1000 kg/m³) ส่วนที่พ้นน้ำกี่เปอร์เซ็นต์ของปริมาตรทั้งหมด", o: ["10%", "20%", "80%", "100%"], a: 1,
+      e: "V_จม/V = 800/1000 = 0.8 → พ้นน้ำ 1 − 0.8 = 0.2 = 20%" },
+    { q: "น้ำแข็งลอยอยู่ในแก้วน้ำจนเต็มขอบแก้ว เมื่อน้ำแข็งละลายหมด ระดับน้ำจะ…", o: ["ล้นออกมา", "ลดต่ำกว่าขอบ", "คงเดิม", "ขึ้นกับอุณหภูมิห้องเท่านั้น"], a: 2,
+      e: "ขณะลอย F_B = m_ice·g คือน้ำที่ถูกแทนที่มีมวลเท่าน้ำแข็ง ละลายแล้วได้น้ำมวลเท่ากันพอดี จึงเต็มช่องที่เคยถูกแทนที่ ระดับคงเดิม" },
+    { q: "ท่อน้ำเส้นผ่านศูนย์กลางลดลงเหลือครึ่งหนึ่ง (ไหลคงตัว อัดไม่ได้) อัตราเร็วน้ำในส่วนที่แคบเป็นกี่เท่าของเดิม", o: ["2 เท่า", "4 เท่า", "8 เท่า", "16 เท่า"], a: 1,
+      e: "A ∝ d² → A ลดเหลือ 1/4 → v เพิ่ม 4 เท่า (A₁v₁ = A₂v₂)" },
+    { q: "ท่อแนวราบ เมื่อน้ำไหลเร็วขึ้นในช่วงท่อที่แคบลง ความดันที่ช่วงนั้นจะ…", o: ["เพิ่มขึ้น", "ลดลง", "เท่าเดิม", "เป็นศูนย์เสมอ"], a: 1,
+      e: "แบร์นูลลี แนวราบ: P + ½ρv² คงที่ v เพิ่ม → P ลด" },
+    { q: "เจาะรูที่ข้างถังน้ำเปิดฝา ลึกจากผิวน้ำ 1.8 m (g = 10 m/s²) น้ำพุ่งออกด้วยอัตราเร็วเท่าใด", o: ["3 m/s", "6 m/s", "9 m/s", "18 m/s"], a: 1,
+      e: "v = √(2gh) = √(2 × 10 × 1.8) = √36 = 6 m/s" },
+    { q: "ถังสูง H = 2 m เจาะรูลึกจากผิว h = 0.5 m น้ำพุ่งตกพื้นห่างจากถังประมาณเท่าใด", o: ["1.00 m", "1.73 m", "2.00 m", "3.00 m"], a: 1,
+      e: "R = 2√[h(H−h)] = 2√[0.5 × 1.5] = 2√0.75 ≈ 1.73 m" },
+    { q: "ท่อรัศมี r ถ้าเพิ่มรัศมีเป็น 2 เท่า โดย ΔP, η, L เท่าเดิม อัตราการไหลตามกฎของปัวซวีลล์เพิ่มกี่เท่า", o: ["2 เท่า", "4 เท่า", "8 เท่า", "16 เท่า"], a: 3,
+      e: "Q ∝ r⁴ → (2)⁴ = 16 เท่า" }
+  ];
+
+  var root = document.getElementById('quiz-root');
+  var scoreEl = document.getElementById('score');
+  var resetBtn = document.getElementById('reset-btn');
+  var score = 0, done = 0;
+
+  function render() {
+    root.innerHTML = ''; score = 0; done = 0; scoreEl.textContent = 'คะแนน: 0 / ' + Q.length;
+    Q.forEach(function (item, i) {
+      var card = document.createElement('div'); card.className = 'quiz-card';
+      var n = document.createElement('div'); n.className = 'quiz-num'; n.textContent = 'ข้อ ' + (i + 1) + ' / ' + Q.length;
+      var q = document.createElement('div'); q.className = 'quiz-question'; q.textContent = item.q;
+      var opts = document.createElement('div'); opts.className = 'quiz-options';
+      var fb = document.createElement('div'); fb.className = 'feedback';
+      item.o.forEach(function (t, j) {
+        var b = document.createElement('button'); b.className = 'option-btn'; b.textContent = t;
+        b.addEventListener('click', function () {
+          var btns = opts.querySelectorAll('.option-btn');
+          btns.forEach(function (x) { x.disabled = true; });
+          btns[item.a].classList.add('correct');
+          if (j === item.a) { score++; fb.textContent = '✓ ถูกต้อง\n' + item.e; }
+          else { b.classList.add('wrong'); fb.textContent = '✗ ยังไม่ถูก\n' + item.e; }
+          fb.classList.add('show'); done++;
+          scoreEl.textContent = 'คะแนน: ' + score + ' / ' + Q.length + (done === Q.length ? ' — ครบแล้ว!' : '');
+        });
+        opts.appendChild(b);
+      });
+      card.appendChild(n); card.appendChild(q); card.appendChild(opts); card.appendChild(fb);
+      root.appendChild(card);
+    });
+  }
+  resetBtn.addEventListener('click', function () { render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  render();
+});
+</script>
+</body>
+</html>
