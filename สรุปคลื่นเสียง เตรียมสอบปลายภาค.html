@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>สรุปคลื่นเสียง | เตรียมสอบปลายภาค</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+:root{--bg:#0d0f1a;--s:#141828;--s2:#1c2235;--bd:#2a3050;--a:#6c63ff;--a2:#00d4aa;--a3:#ff6b6b;--a4:#ffd93d;--t:#e8eaf6;--d:#8892b0;--mono:'IBM Plex Mono',monospace;--sans:'Sarabun',sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="light"]{--bg:#f5f6fb;--s:#fff;--s2:#eceffa;--bd:#d5daf0;--t:#1a1f36;--d:#566088}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f5f6fb;--s:#fff;--s2:#eceffa;--bd:#d5daf0;--t:#1a1f36;--d:#566088}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t);font-family:var(--sans);line-height:1.7}
+.hero{padding:44px 20px 28px;text-align:center;background:linear-gradient(135deg,#0d0f1a,#1a1040 55%,#0d1a2a);border-bottom:1px solid var(--bd);color:#e8eaf6}
+.hero h1{font-size:clamp(26px,6vw,44px);font-weight:800}.hero h1 span{color:var(--a)}
+.hero p{color:#8892b0;margin-top:6px}
+nav{display:flex;gap:4px;padding:12px 16px;background:var(--s);border-bottom:1px solid var(--bd);overflow-x:auto;position:sticky;top:env(safe-area-inset-top,0px);z-index:9}
+nav button{white-space:nowrap;border:0;background:none;color:var(--d);font:600 14px var(--sans);padding:8px 16px;border-radius:8px;cursor:pointer}
+nav button.on{background:var(--a);color:#fff}
+main{max-width:860px;margin:0 auto;padding:24px 16px 70px}
+.sec{display:none}.sec.on{display:block}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:16px}
+h2{font-size:20px;margin-bottom:8px}
+.f{font-family:var(--mono);font-size:17px;background:rgba(108,99,255,.1);border-left:3px solid var(--a);border-radius:0 8px 8px 0;padding:10px 16px;margin:10px 0;overflow-x:auto;white-space:nowrap}
+.ex{background:rgba(0,212,170,.07);border-left:3px solid var(--a2);border-radius:0 8px 8px 0;padding:12px 16px;margin:10px 0}
+.ex b.l{color:var(--a2);font-size:12px;letter-spacing:2px}
+.warn{background:rgba(255,107,107,.08);border-left:3px solid var(--a3);border-radius:0 8px 8px 0;padding:12px 16px;margin:10px 0}
+.warn b.l{color:var(--a3);font-size:12px;letter-spacing:2px}
+ul{padding-left:22px}li{margin:3px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}td,th{border:1px solid var(--bd);padding:7px 10px;text-align:left}th{background:var(--s2)}
+.calc{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:10px}
+.calc label{font-size:13px;color:var(--d);display:block}
+.calc input,.calc select{background:var(--s2);color:var(--t);border:1px solid var(--bd);border-radius:6px;padding:7px;width:110px;font:15px var(--mono)}
+.out{font-family:var(--mono);color:var(--a4);font-size:18px;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="hero"><h1>คลื่น<span>เสียง</span></h1><p>สรุปเตรียมสอบปลายภาค · ความเร็ว · ระดับเสียง · ท่อ · บีตส์ · ดอปเปลอร์ · คลื่นกระแทก</p></div>
+<nav id="nav"></nav>
+<main>
+
+<div class="sec on" data-n="พื้นฐาน & ความเร็ว">
+<div class="card"><h2>🔊 คลื่นเสียง</h2>
+<ul><li>เป็นคลื่นตามยาว อัตราเร็วขึ้นกับสมบัติของตัวกลาง</li>
+<li>การกระจัด: y(x,t) = A sin(kx − ωt) (ทิศการกระจัดขนานกับทิศคลื่น)</li>
+<li>มองเป็นการแปรผันความดัน: เฟสต่างจาก y หนึ่งในสี่รอบ → ที่ขณะใดๆ การกระจัดสูงสุด ณ ตำแหน่งที่ความผันผวนความดัน = 0</li></ul>
+<div class="f">p(x,t) = −B·k·A·cos(kx − ωt)<br>p_max = B·k·A</div>
+<p>B = บัลก์มอดุลัส (การเปลี่ยนปริมาตรสัมพัทธ์ต่อการเปลี่ยนความดัน) : p = −B ∂y/∂x</p></div>
+<div class="card"><h2>⚡ ความเร็วเสียง</h2>
+<div class="f">v = √(B/ρ) &nbsp;(แก๊ส/ของเหลว, 3 มิติ)<br>v = √(T/μ) &nbsp;(เชือก, 1 มิติ)<br>v = √(สมบัติยืดหยุ่น / สมบัติเฉื่อย)</div>
+<div class="f">v = 331·√(1 + T_C/273) m/s &nbsp;หรือ&nbsp; v = 331 + 0.6·t<br>v = fλ</div>
+<p>331 m/s = เสียงในอากาศที่ 0°C · ที่ 20°C ≈ 343 m/s</p>
+<div class="ex"><b class="l">EX (สไลด์ 30)</b><br>B = 1.3×10⁵ Pa, ρ = 1.2 kg/m³ → v = √(1.3×10⁵/1.2) ≈ 329 m/s<br>หน่วย: √(Pa·m³/kg) = √(m²/s²) = m/s ✓</div></div>
+<div class="card"><h2>🎻 การสั่นพ้อง</h2><p>ความถี่แรงขับ = ความถี่นอร์มอลโหมด → แอมพลิจูดบังคับสูงสุด ถ้าไม่สูญเสียพลังงานแอมพลิจูดเพิ่มไม่สิ้นสุด (เช่น แก้วแตกด้วยเสียง)</p></div>
+</div>
+
+<div class="sec" data-n="ระดับเสียง">
+<div class="card"><h2>📈 ระดับเสียง (dB)</h2>
+<div class="f">β = 10·log(I / I₀) &nbsp;&nbsp; I₀ = 1.00×10⁻¹² W/m²<br>I = P / (4πr²) &nbsp;(แหล่งกำเนิดจุด)</div>
+<ul><li>I₀ = ความเข้มน้อยที่สุดที่คนได้ยิน (0 dB)</li>
+<li>เริ่มเจ็บหู: I = 1.0 W/m² → 120 dB</li>
+<li>เกิน 90 dB ควรใส่ที่อุดหู</li>
+<li>ความเข้มเพิ่ม 10 เท่า → ระดับเสียงเพิ่ม 10 dB · เพิ่ม 2 เท่า → เพิ่มแค่ ≈ 3 dB</li></ul>
+<div class="ex"><b class="l">EX (สไลด์ 22–23) I = 2.0×10⁻⁷ W/m² ต่อเครื่อง</b><br>(a) 1 เครื่อง: 10 log(2.0×10⁵) = 53 dB<br>(b) 2 เครื่อง: I = 4.0×10⁻⁷ → 56 dB<br>(c) ดังเป็น 2 เท่า ≈ +10 dB → I₂ = 10 I₁ → ต้องใช้ 10 เครื่อง</div>
+<div class="calc"><div><label>I (W/m²)</label><input id="I" value="2e-7"></div><div><label>จำนวนแหล่งเสียง</label><input id="N" value="1"></div></div>
+<div class="out" id="dbout"></div></div>
+</div>
+
+<div class="sec" data-n="ท่อ & สั่นพ้อง">
+<div class="card"><h2>🎺 ท่อออร์แกน</h2>
+<table><tr><th></th><th>ท่อปลายเปิด (2 ข้าง)</th><th>ท่อปลายปิด (1 ข้าง)</th></tr>
+<tr><td>ปลายท่อ</td><td>เปิด = แอนตินอดการกระจัด (A)</td><td>ปิด = โหนดการกระจัด (N), เปิด = A</td></tr>
+<tr><td>λ ที่ฮาร์มอนิก n</td><td>λₙ = 2L/n</td><td>λₙ = 4L/n</td></tr>
+<tr><td>ความถี่</td><td>fₙ = n·v/(2L)</td><td>fₙ = n·v/(4L)</td></tr>
+<tr><td>n</td><td>1, 2, 3, …</td><td>1, 3, 5, … (เลขคี่เท่านั้น)</td></tr>
+<tr><td>พื้นฐาน</td><td>L = λ/2</td><td>L = λ/4</td></tr></table>
+<div class="f">fₙ = n·f₁</div>
+<div class="warn"><b class="l">จำ</b><br>ท่อปิดไม่มีฮาร์มอนิกคู่ (2f₁, 4f₁ …) · ใช้ v = fλ และ v = 331 + 0.6t หา v ก่อนเสมอ</div></div>
+</div>
+
+<div class="sec" data-n="แทรกสอด & บีตส์">
+<div class="warn"><b class="l">⚠ เช็กก่อนอ่าน</b><br>ในสไลด์หัวข้อ "การแทรกสอดของคลื่น" (หน้า 14) ถูกขีดฆ่า มีโน้ตลายมือด้วย แนะนำเช็กกับอาจารย์ว่าออกสอบไหม ส่วนบีตส์ไม่มีรอยขีดฆ่า</div>
+<div class="card"><h2>🌊 การแทรกสอด (ลำโพง 2 ตัว เฟสตรงกัน)</h2>
+<div class="f">เสริม: Δd = nλ &nbsp;&nbsp; หักล้าง: Δd = (n + ½)λ</div>
+<div class="ex"><b class="l">EX (สไลด์ 16) v = 350 m/s, Δd = 3.00 m</b><br>เสริม: f = n·v/Δd = 117n Hz<br>หักล้าง: f = (n+½)·117 Hz</div></div>
+<div class="card"><h2>🥁 บีตส์ (Beats)</h2>
+<p>คลื่น 2 ขบวน แอมพลิจูดเท่ากัน ความถี่ต่างกันเล็กน้อย → ความดังขึ้นลงเป็นจังหวะ</p>
+<div class="f">f_beat = |f_a − f_b|</div>
+<p>ที่มา: T_beat = nT_a = (n−1)T_b → f_beat = 1/T_a − 1/T_b</p></div>
+</div>
+
+<div class="sec" data-n="ดอปเปลอร์">
+<div class="card"><h2>🚓 ปรากฏการณ์ดอปเปลอร์</h2>
+<div class="f">f' = f_s · (v ± v_o) / (v ± v_s)</div>
+<table><tr><th>กรณี</th><th>เครื่องหมายบน (ตัวเศษ v_o)</th><th>ตัวส่วน v_s</th></tr>
+<tr><td>เข้าหากัน (f' มาก)</td><td>+</td><td>−</td></tr>
+<tr><td>ออกจากกัน (f' น้อย)</td><td>−</td><td>+</td></tr></table>
+<ul><li>แหล่งหยุดนิ่ง ผู้ฟังเข้าหา: f' = f(v+v_o)/v · ออกห่าง: f(v−v_o)/v</li>
+<li>ผู้ฟังหยุดนิ่ง แหล่งเข้าหา: f' = f·v/(v−v_s) · ออกห่าง: f·v/(v+v_s)</li>
+<li>λ หน้าแหล่ง = (v−v_s)/f</li></ul>
+<div class="ex"><b class="l">EX สไลด์ 27–29</b><br>f = 300 Hz, v = 340, v_s = 30 m/s<br>หน้ารถ: 300·340/(340−30) ≈ 329 Hz (λ = 310/300 ≈ 1.03 m)<br>หลังรถ: 300·340/(340+30) ≈ 276 Hz (λ ≈ 1.23 m)<br>ผู้ฟังขับออกห่างด้วย 30 m/s (แหล่งนิ่ง): 300·(340−30)/340 = 273.53 Hz</div>
+<div class="ex"><b class="l">EX 7 (สไลด์ 30) เข้าหากัน 20 m/s ทั้งคู่, f = 1000 Hz</b><br>v = 329 m/s → f' = 1000·(329+20)/(329−20) = 1000·349/309 ≈ 1129.45 Hz</div>
+<div class="calc"><div><label>f_s (Hz)</label><input id="fs" value="300"></div><div><label>v</label><input id="v" value="340"></div><div><label>v_o</label><input id="vo" value="0"></div><div><label>v_s</label><input id="vs" value="30"></div>
+<div><label>ทิศ</label><select id="dir"><option value="1">เข้าหากัน</option><option value="-1">ออกจากกัน</option></select></div></div>
+<div class="out" id="dpout"></div></div>
+</div>
+
+<div class="sec" data-n="คลื่นกระแทก">
+<div class="card"><h2>✈️ คลื่นกระแทก (Shock waves)</h2>
+<ul><li>v_s &lt; v: λ หน้าแหล่ง = (v − v_s)/f_s</li>
+<li>v_s &gt; v (เร็วกว่าเสียง): สันคลื่นวงกลมแทรกสอดเสริมกันเป็นกรวย (ซอนิกบูม)</li></ul>
+<div class="f">sin α = vt / v_s t = v / v_s = 1/M &nbsp;&nbsp; M = v_s / v (เลขมัค)</div>
+<div class="ex"><b class="l">EX (สไลด์ 34) Mach 1.75, สูง 8000 m, v = 320 m/s</b><br>sin α = 1/1.75 → α ≈ 34.8°<br>v_s = 1.75×320 = 560 m/s<br>ระยะแนวนอน x = 8000/tan α ≈ 11,490 m → t = x/v_s ≈ 20.5 วินาที หลังเครื่องบินผ่านเหนือหัว</div></div>
+</div>
+
+</main>
+<script>
+const secs=[...document.querySelectorAll('.sec')],nav=document.getElementById('nav');
+secs.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s.dataset.n;if(!i)b.className='on';
+b.onclick=()=>{secs.forEach((x,j)=>{x.classList.toggle('on',i==j);nav.children[j].classList.toggle('on',i==j)});scrollTo(0,0)};nav.appendChild(b)});
+const g=id=>parseFloat(document.getElementById(id).value);
+function db(){const r=10*Math.log10(g('I')*g('N')/1e-12);document.getElementById('dbout').textContent=isFinite(r)?'β = '+r.toFixed(2)+' dB':'ใส่ค่าให้ครบ'}
+function dp(){const d=+document.getElementById('dir').value,r=g('fs')*(g('v')+d*g('vo'))/(g('v')-d*g('vs'));document.getElementById('dpout').textContent=isFinite(r)?"f' = "+r.toFixed(2)+' Hz':'ใส่ค่าให้ครบ'}
+document.querySelectorAll('.calc input,.calc select').forEach(e=>e.oninput=()=>{db();dp()});db();dp();
+</script>
+</body>
+</html>
