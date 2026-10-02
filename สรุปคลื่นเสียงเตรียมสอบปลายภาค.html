@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>สรุปคลื่นเสียง | เตรียมสอบปลายภาค</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+:root{--bg:#0d0f1a;--s:#141828;--s2:#1c2235;--bd:#2a3050;--a:#6c63ff;--a2:#00d4aa;--a3:#ff6b6b;--a4:#ffd93d;--t:#e8eaf6;--d:#8892b0;--mono:'IBM Plex Mono',monospace;--sans:'Sarabun',sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="light"]{--bg:#f5f6fb;--s:#fff;--s2:#eceffa;--bd:#d5daf0;--t:#1a1f36;--d:#566088}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f5f6fb;--s:#fff;--s2:#eceffa;--bd:#d5daf0;--t:#1a1f36;--d:#566088}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t);font-family:var(--sans);line-height:1.7}
+.hero{padding:44px 20px 28px;text-align:center;background:linear-gradient(135deg,#0d0f1a,#1a1040 55%,#0d1a2a);border-bottom:1px solid var(--bd);color:#e8eaf6}
+.hero h1{font-size:clamp(26px,6vw,44px);font-weight:800}.hero h1 span{color:var(--a)}
+.hero p{color:#8892b0;margin-top:6px}
+nav{display:flex;gap:4px;padding:12px 16px;background:var(--s);border-bottom:1px solid var(--bd);overflow-x:auto;position:sticky;top:env(safe-area-inset-top,0px);z-index:9}
+nav button{white-space:nowrap;border:0;background:none;color:var(--d);font:600 14px var(--sans);padding:8px 16px;border-radius:8px;cursor:pointer}
+nav button.on{background:var(--a);color:#fff}
+main{max-width:860px;margin:0 auto;padding:24px 16px 70px}
+.sec{display:none}.sec.on{display:block}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:16px}
+h2{font-size:20px;margin-bottom:8px}
+.f{font-family:var(--mono);font-size:17px;background:rgba(108,99,255,.1);border-left:3px solid var(--a);border-radius:0 8px 8px 0;padding:10px 16px;margin:10px 0;overflow-x:auto;white-space:nowrap}
+.ex{background:rgba(0,212,170,.07);border-left:3px solid var(--a2);border-radius:0 8px 8px 0;padding:12px 16px;margin:10px 0}
+.ex b.l{color:var(--a2);font-size:12px;letter-spacing:2px}
+.warn{background:rgba(255,107,107,.08);border-left:3px solid var(--a3);border-radius:0 8px 8px 0;padding:12px 16px;margin:10px 0}
+.warn b.l{color:var(--a3);font-size:12px;letter-spacing:2px}
+ul{padding-left:22px}li{margin:3px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}td,th{border:1px solid var(--bd);padding:7px 10px;text-align:left}th{background:var(--s2)}
+.calc{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:10px}
+.calc label{font-size:13px;color:var(--d);display:block}
+.calc input,.calc select{background:var(--s2);color:var(--t);border:1px solid var(--bd);border-radius:6px;padding:7px;width:110px;font:15px var(--mono)}
+.out{font-family:var(--mono);color:var(--a4);font-size:18px;margin-top:10px}
+.q{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:14px}.q p{font-weight:600;margin-bottom:8px}.opt{display:block;width:100%;text-align:left;background:var(--s2);color:var(--t);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;margin:6px 0;font:15px var(--sans);cursor:pointer}.opt.ok{border-color:var(--a2);background:rgba(0,212,170,.18)}.opt.no{border-color:var(--a3);background:rgba(255,107,107,.18)}.why{display:none;margin-top:8px;font-size:14px;color:var(--d)}.score{position:sticky;top:60px;background:var(--s);border:1px solid var(--a);border-radius:10px;padding:8px 14px;margin-bottom:12px;font-weight:600;z-index:5}.score button{float:right;background:var(--a);color:#fff;border:0;border-radius:6px;padding:3px 12px;cursor:pointer;font:600 13px var(--sans)}</style>
+</head>
+<body>
+<div class="hero"><h1>คลื่น<span>เสียง</span></h1><p>สรุปเตรียมสอบปลายภาค · ความเร็ว · ระดับเสียง · ท่อ · บีตส์ · ดอปเปลอร์ · คลื่นกระแทก</p></div>
+<nav id="nav"></nav>
+<main>
+
+<div class="sec on" data-n="พื้นฐาน & ความเร็ว">
+<div class="card"><h2>🔊 คลื่นเสียง</h2>
+<ul><li>เป็นคลื่นตามยาว อัตราเร็วขึ้นกับสมบัติของตัวกลาง</li>
+<li>การกระจัด: y(x,t) = A sin(kx − ωt) (ทิศการกระจัดขนานกับทิศคลื่น)</li>
+<li>มองเป็นการแปรผันความดัน: เฟสต่างจาก y หนึ่งในสี่รอบ → ที่ขณะใดๆ การกระจัดสูงสุด ณ ตำแหน่งที่ความผันผวนความดัน = 0</li></ul>
+<div class="f">p(x,t) = −B·k·A·cos(kx − ωt)<br>p_max = B·k·A</div>
+<p>B = บัลก์มอดุลัส (การเปลี่ยนปริมาตรสัมพัทธ์ต่อการเปลี่ยนความดัน) : p = −B ∂y/∂x</p></div>
+<div class="card"><h2>⚡ ความเร็วเสียง</h2>
+<div class="f">v = √(B/ρ) &nbsp;(แก๊ส/ของเหลว, 3 มิติ)<br>v = √(T/μ) &nbsp;(เชือก, 1 มิติ)<br>v = √(สมบัติยืดหยุ่น / สมบัติเฉื่อย)</div>
+<div class="f">v = 331·√(1 + T_C/273) m/s &nbsp;หรือ&nbsp; v = 331 + 0.6·t<br>v = fλ</div>
+<p>331 m/s = เสียงในอากาศที่ 0°C · ที่ 20°C ≈ 343 m/s</p>
+<div class="ex"><b class="l">ตัวอย่างที่ 1 · หาความเร็วเสียง (สไลด์ 30)</b><br><b>โจทย์:</b> อากาศมีมอดุลัสเชิงปริมาตร B = 1.3×10⁻⁴ GPa และความหนาแน่น ρ = 1.2 kg/m³ จงหาอัตราเร็วเสียงในอากาศนี้<br><b>สูตร:</b> v = √(B/ρ)<br><b>1) แปลงหน่วย:</b> 1 GPa = 10⁹ Pa → B = 1.3×10⁻⁴ × 10⁹ = 1.3×10⁵ Pa<br><b>2) แทนค่า:</b> v = √(1.3×10⁵ / 1.2) = √(1.083×10⁵) ≈ 329 m/s<br><b>3) เช็กหน่วย:</b> Pa = kg/(m·s²) → √[kg/(m·s²) ÷ (kg/m³)] = √(m²/s²) = m/s ✓<br><b>ตอบ ≈ 329 m/s</b></div></div>
+<div class="card"><h2>🎻 การสั่นพ้อง</h2><p>ความถี่แรงขับ = ความถี่นอร์มอลโหมด → แอมพลิจูดบังคับสูงสุด ถ้าไม่สูญเสียพลังงานแอมพลิจูดเพิ่มไม่สิ้นสุด (เช่น แก้วแตกด้วยเสียง)</p></div>
+</div>
+
+<div class="sec" data-n="ระดับเสียง">
+<div class="card"><h2>📈 ระดับเสียง (dB)</h2>
+<div class="f">β = 10·log(I / I₀) &nbsp;&nbsp; I₀ = 1.00×10⁻¹² W/m²<br>I = P / (4πr²) &nbsp;(แหล่งกำเนิดจุด)</div>
+<ul><li>I₀ = ความเข้มน้อยที่สุดที่คนได้ยิน (0 dB)</li>
+<li>เริ่มเจ็บหู: I = 1.0 W/m² → 120 dB</li>
+<li>เกิน 90 dB ควรใส่ที่อุดหู</li>
+<li>ความเข้มเพิ่ม 10 เท่า → ระดับเสียงเพิ่ม 10 dB · เพิ่ม 2 เท่า → เพิ่มแค่ ≈ 3 dB</li></ul>
+<div class="ex"><b class="l">ตัวอย่างที่ 2 · ระดับเสียง (สไลด์ 22–23)</b><br><b>โจทย์:</b> เครื่องจักรเหมือนกัน 2 เครื่อง วางห่างคนงานเท่ากัน ความเข้มเสียงจากแต่ละเครื่อง ณ ตำแหน่งคนงานเท่ากับ 2.0×10⁻⁷ W/m² จงหาระดับเสียงที่คนงานได้ยิน (a) เปิด 1 เครื่อง (b) เปิด 2 เครื่อง (c) ถ้า "ความดัง" เพิ่ม 2 เท่า ≈ ระดับเสียงเพิ่ม 10 dB ต้องเปิดกี่เครื่อง<br><b>สูตร:</b> β = 10 log(I/I₀), I₀ = 1.0×10⁻¹² W/m² (ความเข้มของหลายแหล่งบวกกันได้)<br><b>(a)</b> I/I₀ = 2.0×10⁻⁷ / 10⁻¹² = 2.0×10⁵ → β = 10 log(2.0×10⁵) = 10(5.30) = <b>53 dB</b><br><b>(b)</b> I รวม = 2 × 2.0×10⁻⁷ = 4.0×10⁻⁷ → β = 10 log(4.0×10⁵) = 10(5.60) = <b>56 dB</b> (เพิ่มแค่ 3 dB)<br><b>(c)</b> β₂ − β₁ = 10 dB = 10 log(I₂/I₁) → log(I₂/I₁) = 1 → I₂ = 10 I₁ → <b>ต้องเปิด 10 เครื่อง</b></div>
+<div class="calc"><div><label>I (W/m²)</label><input id="I" value="2e-7"></div><div><label>จำนวนแหล่งเสียง</label><input id="N" value="1"></div></div>
+<div class="out" id="dbout"></div></div>
+</div>
+
+<div class="sec" data-n="ท่อ & สั่นพ้อง">
+<div class="card"><h2>🎺 ท่อออร์แกน</h2>
+<table><tr><th></th><th>ท่อปลายเปิด (2 ข้าง)</th><th>ท่อปลายปิด (1 ข้าง)</th></tr>
+<tr><td>ปลายท่อ</td><td>เปิด = แอนตินอดการกระจัด (A)</td><td>ปิด = โหนดการกระจัด (N), เปิด = A</td></tr>
+<tr><td>λ ที่ฮาร์มอนิก n</td><td>λₙ = 2L/n</td><td>λₙ = 4L/n</td></tr>
+<tr><td>ความถี่</td><td>fₙ = n·v/(2L)</td><td>fₙ = n·v/(4L)</td></tr>
+<tr><td>n</td><td>1, 2, 3, …</td><td>1, 3, 5, … (เลขคี่เท่านั้น)</td></tr>
+<tr><td>พื้นฐาน</td><td>L = λ/2</td><td>L = λ/4</td></tr></table>
+<div class="f">fₙ = n·f₁</div>
+<div class="warn"><b class="l">จำ</b><br>ท่อปิดไม่มีฮาร์มอนิกคู่ (2f₁, 4f₁ …) · ใช้ v = fλ และ v = 331 + 0.6t หา v ก่อนเสมอ</div></div>
+</div>
+
+<div class="sec" data-n="แทรกสอด & บีตส์">
+<div class="warn"><b class="l">⚠ เช็กก่อนอ่าน</b><br>ในสไลด์หัวข้อ "การแทรกสอดของคลื่น" (หน้า 14) ถูกขีดฆ่า มีโน้ตลายมือด้วย แนะนำเช็กกับอาจารย์ว่าออกสอบไหม ส่วนบีตส์ไม่มีรอยขีดฆ่า</div>
+<div class="card"><h2>🌊 การแทรกสอด (ลำโพง 2 ตัว เฟสตรงกัน)</h2>
+<div class="f">เสริม: Δd = nλ &nbsp;&nbsp; หักล้าง: Δd = (n + ½)λ</div>
+<div class="ex"><b class="l">ตัวอย่างที่ 3 · แทรกสอดลำโพง (สไลด์ 16)</b><br><b>โจทย์:</b> ลำโพงเล็ก A และ B ต่อกับแอมป์ตัวเดียวกัน ปล่อยคลื่นไซน์เฟสตรงกัน อัตราเร็วเสียง 350 m/s (a) ความถี่ใดเกิดการแทรกสอดแบบเสริมที่จุด P (b) ความถี่ใดเกิดแบบหักล้างที่ P<br><b>ข้อมูลจากรูป:</b> ผลต่างระยะทาง Δd = d_A − d_B = 3.00 m (อ่านจากรูป ถ้าสไลด์/หนังสือของคุณต่างจากนี้ ให้แทนค่า Δd ใหม่)<br><b>สูตร:</b> เสริม Δd = nλ, หักล้าง Δd = (n+½)λ, และ λ = v/f<br><b>(a)</b> 3.00 = n·350/f → f = n·350/3.00 = <b>117n Hz</b> (n = 1, 2, 3, …)<br><b>(b)</b> 3.00 = (n+½)·350/f → f = (n+½)·117 = <b>58.3, 175, 292 Hz, …</b></div></div>
+<div class="card"><h2>🥁 บีตส์ (Beats)</h2>
+<p>คลื่น 2 ขบวน แอมพลิจูดเท่ากัน ความถี่ต่างกันเล็กน้อย → ความดังขึ้นลงเป็นจังหวะ</p>
+<div class="f">f_beat = |f_a − f_b|</div>
+<p>ที่มา: T_beat = nT_a = (n−1)T_b → f_beat = 1/T_a − 1/T_b</p></div>
+</div>
+
+<div class="sec" data-n="ดอปเปลอร์">
+<div class="card"><h2>🚓 ปรากฏการณ์ดอปเปลอร์</h2>
+<div class="f">f' = f_s · (v ± v_o) / (v ± v_s)</div>
+<table><tr><th>กรณี</th><th>เครื่องหมายบน (ตัวเศษ v_o)</th><th>ตัวส่วน v_s</th></tr>
+<tr><td>เข้าหากัน (f' มาก)</td><td>+</td><td>−</td></tr>
+<tr><td>ออกจากกัน (f' น้อย)</td><td>−</td><td>+</td></tr></table>
+<ul><li>แหล่งหยุดนิ่ง ผู้ฟังเข้าหา: f' = f(v+v_o)/v · ออกห่าง: f(v−v_o)/v</li>
+<li>ผู้ฟังหยุดนิ่ง แหล่งเข้าหา: f' = f·v/(v−v_s) · ออกห่าง: f·v/(v+v_s)</li>
+<li>λ หน้าแหล่ง = (v−v_s)/f</li></ul>
+<div class="ex"><b class="l">ตัวอย่างที่ 4 · ดอปเปลอร์ + ความยาวคลื่น (สไลด์ 27–29)</b><br><b>โจทย์:</b> ไซเรนรถตำรวจปล่อยเสียงไซน์ f_s = 300 Hz เสียงเร็ว 340 m/s อากาศนิ่ง (a) หา λ ถ้าไซเรนอยู่นิ่ง (b) หา λ ด้านหน้าและด้านหลังไซเรนเมื่อรถวิ่ง 30 m/s (c) ผู้ฟังนิ่ง รถวิ่งออกห่าง 30 m/s ได้ยินความถี่เท่าใด (d) ไซเรนนิ่ง ผู้ฟังขับรถออกห่าง 30 m/s ได้ยินเท่าใด<br><b>(a)</b> λ = v/f = 340/300 ≈ <b>1.13 m</b><br><b>(b)</b> หน้า: λ = (v−v_s)/f = 310/300 ≈ <b>1.03 m</b> · หลัง: λ = (v+v_s)/f = 370/300 ≈ <b>1.23 m</b><br><b>(c)</b> f' = f_s·v/(v+v_s) = 300·340/370 ≈ <b>275.7 Hz</b> (ออกห่าง ความถี่ลด)<br><b>(d)</b> f' = f_s·(v−v_o)/v = 300·(340−30)/340 ≈ <b>273.53 Hz</b></div>
+<div class="ex"><b class="l">ตัวอย่างที่ 5 · EX 7 (สไลด์ 30)</b><br><b>โจทย์:</b> ผู้สังเกตและแหล่งกำเนิดเคลื่อนที่เข้าหากันด้วยอัตราเร็ว 20 m/s ทั้งคู่ แหล่งให้เสียงความถี่ 1,000 Hz แผ่ในอากาศที่ ρ = 1.2 kg/m³ และ B = 1.3×10⁻⁴ GPa จงหาความถี่ที่ผู้สังเกตได้ยิน<br><b>ขั้น 1 หา v:</b> v = √(B/ρ) = √(1.3×10⁵/1.2) ≈ 329 m/s (ดูตัวอย่างที่ 1)<br><b>ขั้น 2 เลือกเครื่องหมาย:</b> เข้าหากัน → ตัวเศษ +, ตัวส่วน −<br><b>ขั้น 3 แทนค่า:</b> f' = f_s(v+v_o)/(v−v_s) = 1000·(329+20)/(329−20) = 1000·349/309<br><b>ตอบ ≈ 1,129.45 Hz</b></div>
+<div class="calc"><div><label>f_s (Hz)</label><input id="fs" value="300"></div><div><label>v</label><input id="v" value="340"></div><div><label>v_o</label><input id="vo" value="0"></div><div><label>v_s</label><input id="vs" value="30"></div>
+<div><label>ทิศ</label><select id="dir"><option value="1">เข้าหากัน</option><option value="-1">ออกจากกัน</option></select></div></div>
+<div class="out" id="dpout"></div></div>
+</div>
+
+<div class="sec" data-n="คลื่นกระแทก">
+<div class="card"><h2>✈️ คลื่นกระแทก (Shock waves)</h2>
+<ul><li>v_s &lt; v: λ หน้าแหล่ง = (v − v_s)/f_s</li>
+<li>v_s &gt; v (เร็วกว่าเสียง): สันคลื่นวงกลมแทรกสอดเสริมกันเป็นกรวย (ซอนิกบูม)</li></ul>
+<div class="f">sin α = vt / v_s t = v / v_s = 1/M &nbsp;&nbsp; M = v_s / v (เลขมัค)</div>
+<div class="ex"><b class="l">ตัวอย่างที่ 6 · ซอนิกบูม (สไลด์ 34)</b><br><b>โจทย์:</b> เครื่องบินบินที่ Mach 1.75 ที่ความสูง 8000 m ซึ่งเสียงมีอัตราเร็ว 320 m/s หลังเครื่องบินบินผ่านเหนือศีรษะพอดี อีกนานเท่าใดจะได้ยินซอนิกบูม<br><b>สูตร:</b> v_s = M·v, sin α = v/v_s = 1/M, tan α = สูง/x, t = x/v_s<br><b>1)</b> v_s = 1.75 × 320 = 560 m/s<br><b>2)</b> sin α = 1/1.75 = 0.571 → α ≈ 34.8°<br><b>3)</b> เสียงกระแทกถึงพื้นเมื่อเครื่องบินอยู่ห่างไปแล้ว x: tan α = 8000/x → x = 8000/0.696 ≈ 11,490 m<br><b>4)</b> t = x/v_s = 11,490/560 ≈ <b>20.5 s</b> (สไลด์ไม่มีเฉลย นี่คือที่ผมคำนวณ)</div></div>
+</div>
+
+<div class="sec" data-n="ควิซ ✍️"><div class="score"><button onclick="quiz()">ทำใหม่</button><span id="sc"></span></div><div id="qz"></div></div>
+</main>
+<script>
+const secs=[...document.querySelectorAll('.sec')],nav=document.getElementById('nav');
+secs.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s.dataset.n;if(!i)b.className='on';
+b.onclick=()=>{secs.forEach((x,j)=>{x.classList.toggle('on',i==j);nav.children[j].classList.toggle('on',i==j)});scrollTo(0,0)};nav.appendChild(b)});
+const g=id=>parseFloat(document.getElementById(id).value);
+function db(){const r=10*Math.log10(g('I')*g('N')/1e-12);document.getElementById('dbout').textContent=isFinite(r)?'β = '+r.toFixed(2)+' dB':'ใส่ค่าให้ครบ'}
+function dp(){const d=+document.getElementById('dir').value,r=g('fs')*(g('v')+d*g('vo'))/(g('v')-d*g('vs'));document.getElementById('dpout').textContent=isFinite(r)?"f' = "+r.toFixed(2)+' Hz':'ใส่ค่าให้ครบ'}
+document.querySelectorAll('.calc input,.calc select').forEach(e=>e.oninput=()=>{db();dp()});db();dp();
+
+const Q=[
+["ความเข้มเสียง I = 1.0×10⁻⁶ W/m² ระดับเสียงเท่าใด?",["6 dB","60 dB","120 dB","600 dB"],1,"β = 10 log(10⁻⁶/10⁻¹²) = 10 log(10⁶) = 60 dB"],
+["ความเข้มเสียงเพิ่มขึ้น 100 เท่า ระดับเสียงเพิ่มกี่ dB?",["2 dB","20 dB","100 dB","200 dB"],1,"Δβ = 10 log(100) = 20 dB"],
+["เสียง 440 Hz และ 436 Hz ดังพร้อมกัน ได้ยินบีตส์กี่ครั้งต่อวินาที?",["2","438","4","876"],2,"f_beat = |f_a − f_b| = |440 − 436| = 4 Hz"],
+["ท่อปลายเปิดยาว 0.50 m, v = 340 m/s ความถี่มูลฐานเท่าใด?",["170 Hz","85 Hz","680 Hz","340 Hz"],3,"f₁ = v/(2L) = 340/(2×0.50) = 340 Hz"],
+["ท่อปลายปิดยาว 0.85 m, v = 340 m/s ฮาร์มอนิกที่ 3 (n = 3) มีความถี่เท่าใด?",["200 Hz","300 Hz","400 Hz","500 Hz"],1,"f₁ = v/(4L) = 340/(4×0.85) = 100 Hz → f₃ = 3f₁ = 300 Hz"],
+["ท่อปลายปิดมี f₁ = 100 Hz ความถี่ใดที่ท่อนี้สั่นพ้องไม่ได้?",["300 Hz","500 Hz","700 Hz","200 Hz"],3,"ท่อปิดมีเฉพาะ n เป็นเลขคี่: 100, 300, 500, 700 … ไม่มี 200 Hz"],
+["แหล่ง 500 Hz อยู่นิ่ง ผู้ฟังวิ่งเข้าหา 17 m/s, v = 340 m/s ได้ยินความถี่เท่าใด?",["475 Hz","500 Hz","525 Hz","550 Hz"],2,"f' = f(v+v_o)/v = 500(340+17)/340 = 525 Hz (เข้าหา ความถี่เพิ่ม)"],
+["แหล่ง 1000 Hz วิ่งออกห่างผู้ฟังที่นิ่งด้วย 34 m/s, v = 340 m/s ได้ยินความถี่เท่าใด?",["1000 Hz","1111 Hz","1100 Hz","909 Hz"],3,"f' = f·v/(v+v_s) = 1000·340/374 ≈ 909 Hz (ออกห่าง ความถี่ลด)"],
+["ใช้ v = 331 + 0.6t ที่ 20°C อัตราเร็วเสียงในอากาศเท่าใด?",["331 m/s","337 m/s","343 m/s","352 m/s"],2,"v = 331 + 0.6(20) = 343 m/s"],
+["เครื่องบินบินที่ Mach 2 มุม α ของกรวยคลื่นกระแทกเท่าใด?",["45°","30°","60°","90°"],1,"sin α = v/v_s = 1/M = 1/2 → α = 30°"],
+["น้ำมี B = 2.0×10⁹ Pa, ρ = 1000 kg/m³ เสียงเร็วประมาณเท่าใด?",["141 m/s","2000 m/s","1414 m/s","20000 m/s"],2,"v = √(B/ρ) = √(2.0×10⁹/1000) = √(2×10⁶) ≈ 1414 m/s"],
+["ลำโพง 2 ตัวเฟสตรงกัน ผลต่างระยะทางถึงจุดหนึ่ง = 1.5λ เกิดอะไร?",["เสริมกัน","หักล้างกัน","ไม่เกิดการแทรกสอด","เสริมเฉพาะ n = 1"],1,"Δd = (n+½)λ ที่ n = 1 → 1.5λ จึงหักล้างกัน (เสริมต้องเป็นจำนวนเต็มเท่าของ λ)"]];
+let sc=0,dn=0;
+function quiz(){sc=0;dn=0;const z=document.getElementById('qz');z.innerHTML='';
+Q.forEach((q,i)=>{const d=document.createElement('div');d.className='q';d.innerHTML='<p>'+(i+1)+'. '+q[0]+'</p>';
+q[1].forEach((o,j)=>{const b=document.createElement('button');b.className='opt';b.textContent=o;
+b.onclick=()=>{if(d.dataset.d)return;d.dataset.d=1;dn++;const bs=d.querySelectorAll('.opt');bs[q[2]].classList.add('ok');if(j==q[2])sc++;else b.classList.add('no');w.style.display='block';upd()};d.appendChild(b)});
+const w=document.createElement('div');w.className='why';w.textContent='วิธีทำ: '+q[3];d.appendChild(w);z.appendChild(d)});upd()}
+function upd(){document.getElementById('sc').textContent='คะแนน '+sc+' / '+Q.length+' (ทำแล้ว '+dn+')'}
+quiz();
+</script>
+</body>
+</html>
