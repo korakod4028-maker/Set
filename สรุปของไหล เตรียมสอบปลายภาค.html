@@ -127,7 +127,7 @@
   <p>สรุปจากสไลด์ รศ.ดร.เอก จันต๊ะยอด (ม.นเรศวร) — สูตร ข้อควรระวัง ตัวอย่างที่คำนวณตรวจแล้ว และแบบฝึกหัดท้ายเล่ม</p>
   <div class="hero-stats">
     <div class="stat"><div class="stat-num">6</div><div class="stat-label">หัวข้อหลัก</div></div>
-    <div class="stat"><div class="stat-num">10</div><div class="stat-label">ตัวอย่างจากสไลด์</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">โจทย์วิธีทำเต็ม</div></div>
     <div class="stat"><div class="stat-num">10</div><div class="stat-label">แบบฝึกหัด</div></div>
   </div>
 </div>
@@ -140,6 +140,7 @@
   <button class="tab-btn" data-sec="s5">5. ความต่อเนื่อง</button>
   <button class="tab-btn" data-sec="s6">6. แบร์นูลลี</button>
   <button class="tab-btn" data-sec="s7">7. ความหนืด</button>
+  <button class="tab-btn" data-sec="ex">✍️ โจทย์ตัวอย่าง</button>
   <button class="tab-btn" data-sec="formula">📐 สูตรรวม</button>
   <button class="tab-btn" data-sec="quiz">🎯 ฝึกหัด</button>
 </div>
@@ -432,6 +433,89 @@
   </div>
 </div>
 
+
+<!-- ===== EXAMPLES ===== -->
+<div class="section" id="ex">
+  <div class="section-heading"><span>✍️</span> โจทย์ตัวอย่างพร้อมวิธีทำ</div>
+  <div class="tip-box"><div class="lbl">💡 วิธีใช้</div>ลองทำเองก่อนแล้วค่อยดูวิธีทำ — ทุกข้อใช้สูตรจากแท็บ 5–6 และ 4</div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">1</div>อัตราการไหลของน้ำมันในท่อ</div>
+    <div class="def-box"><div class="lbl">โจทย์</div>น้ำมันไหลผ่านท่อเส้นผ่านศูนย์กลาง 100 mm ความเร็วเฉลี่ย 3.0 m/s จงหาอัตราการไหล</div>
+    <div class="math-block">Q = Av = (π/4)d² · v<br>
+    = (π/4)(0.100)²(3.0)<br>
+    <span class="big">Q ≈ 0.0236 m³/s ≈ 23.6 ลิตร/s</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">2</div>ก๊าซไหลผ่านท่อสี่เหลี่ยม (ความต่อเนื่อง + แบร์นูลลี)</div>
+    <div class="def-box"><div class="lbl">โจทย์</div>ก๊าซ ρ = 1.09 kg/m³ ไหลผ่านท่อสี่เหลี่ยมด้านละ 0.10 m ด้วย 7.55 m/s แล้วไหลต่อไปยังจุดที่ท่อกว้างด้านละ 0.25 m จงหาความเร็วและความดันที่จุดหลัง</div>
+    <div class="math-block"><b>ความเร็ว (ความต่อเนื่อง)</b><br>
+    A₁ = 0.10² = 0.0100 m², A₂ = 0.25² = 0.0625 m²<br>
+    v₂ = A₁v₁/A₂ = (0.0100 × 7.55)/0.0625 = <span class="big">1.21 m/s</span><br><br>
+    <b>ความดัน (แบร์นูลลี ท่อแนวระดับ)</b><br>
+    P₂ − P₁ = ½ρ(v₁² − v₂²) = ½(1.09)(7.55² − 1.208²)<br>
+    = 0.545 × (57.00 − 1.46) = <span class="big">≈ +30.3 Pa</span></div>
+    <div class="warn-box"><div class="lbl">⚠️ หมายเหตุ</div>โจทย์ไม่ได้ให้ P₁ มา จึงตอบได้เฉพาะ <strong>ความดันต่าง</strong>: ความดันที่จุดกว้างสูงกว่าจุดแคบ 30.3 Pa (P₂ = P₁ + 30.3) ถ้าโจทย์ฉบับเต็มมีค่า P₁ ให้บวกเข้าไปได้เลย</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-yellow">3</div>กาลักน้ำ (Siphon) — White E3.14</div>
+    <div class="def-box"><div class="lbl">โจทย์</div>กาลักน้ำตามรูป สมมติสมการแบร์นูลลีใช้ได้ (ก) หานิพจน์ความเร็ว V₂ ที่ปลายท่อ (ข) ท่อ ∅ 1 cm, z₁ = 60 cm (ผิวน้ำ), z₂ = −25 cm (ปลายท่อออก), z₃ = 90 cm (จุดสูงสุดของท่อ), z₄ = 35 cm (ปลายท่อด้านดูด) จงประมาณอัตราการไหลเป็น cm³/s</div>
+    <div class="math-block"><b>(ก)</b> แบร์นูลลีจากผิวน้ำ (1) ถึงปลายท่อ (2): P ทั้งสองจุด = P_atm, v₁ ≈ 0<br>
+    ρg z₁ = ½ρV₂² + ρg z₂<br>
+    <span class="big">V₂ = √[ 2g (z₁ − z₂) ]</span><br><br>
+    <b>(ข)</b> z₁ − z₂ = 0.60 − (−0.25) = 0.85 m<br>
+    V₂ = √(2 × 9.81 × 0.85) ≈ 4.08 m/s<br>
+    A = π(0.005)² = 7.85×10⁻⁵ m²<br>
+    Q = AV₂ = 3.21×10⁻⁴ m³/s <span class="big">≈ 321 cm³/s</span></div>
+    <div class="tip-box"><div class="lbl">💡 ทำไมไม่ใช้ z₃ และ z₄</div>
+      อัตราการไหลขึ้นกับ “ผิวน้ำสูงกว่าปลายท่อออกเท่าไร” เท่านั้น (z₁ − z₂) ค่า z₃ ใช้ตรวจว่าท่อไม่ดูดจนความดันต่ำเกินไป: ที่จุดสูงสุด (ท่อขนาดเดิม V₃ = V₂)<br>
+      P₃ = P_atm − ρg(z₃ − z₁) − ½ρV₂² = P_atm − 2.9 kPa − 8.3 kPa ≈ <span class="math">P_atm − 11.3 kPa</span> ยังเป็นบวก (สัมบูรณ์) จึงใช้งานได้
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-red">4</div>แรงยกปีกเครื่องบิน</div>
+    <div class="def-box"><div class="lbl">โจทย์</div>อากาศมีความถ่วงจำเพาะ 1.23 × 10⁻³ อัตราเร็วอากาศบนปีก 350 m/s ใต้ปีก 325 m/s จงหาแรงยกต่อหน่วยพื้นที่</div>
+    <div class="math-block">ความถ่วงจำเพาะ 1.23×10⁻³ → ρ_air = 1.23×10⁻³ × 1000 = 1.23 kg/m³<br>
+    F/A = ½ρ(v_upper² − v_lower²)<br>
+    = ½(1.23)(350² − 325²) = 0.615 × (122,500 − 105,625)<br>
+    <span class="big">F/A ≈ 1.04 × 10⁴ N/m²</span></div>
+    <div class="tip-box"><div class="lbl">💡 กับดัก</div>“ความถ่วงจำเพาะ” (specific gravity) เป็นอัตราส่วนกับน้ำ ต้องคูณ 1000 kg/m³ ก่อนจะได้ความหนาแน่น</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-blue">5</div>อัตราเร็วไหลออกของน้ำจากถังที่มีความดันอากาศเหนือผิว</div>
+    <div class="def-box"><div class="lbl">โจทย์</div>ถังพื้นที่หน้าตัด A₁ มีน้ำสูง h อากาศเหนือน้ำความดัน P₀ น้ำไหลออกทางท่อสั้นด้านล่างพื้นที่ A₂ (ออกสู่ P_atm) จงหาสมการอัตราเร็วในท่อและอัตราการไหลเชิงปริมาตร</div>
+    <div class="math-block">แบร์นูลลี ผิวน้ำ (1) → ปลายท่อ (2) (ตั้งระดับอ้างอิงที่ปลายท่อ):<br>
+    P₀ + ½ρv₁² + ρgh = P_atm + ½ρv₂²<br>
+    ความต่อเนื่อง: v₁ = (A₂/A₁)v₂<br>
+    ½ρv₂²[1 − (A₂/A₁)²] = (P₀ − P_atm) + ρgh<br><br>
+    <span class="big">v₂ = √{ [ 2(P₀ − P_atm)/ρ + 2gh ] / [ 1 − (A₂/A₁)² ] }</span><br>
+    <span class="big">Q = A₂v₂</span><br><br>
+    ถ้า A₁ ≫ A₂: v₂ ≈ √[ 2(P₀ − P_atm)/ρ + 2gh ]</div>
+    <div class="tip-box"><div class="lbl">💡 เช็กกรณีพิเศษ</div>
+      ถ้า P₀ = P_atm (ถังเปิด) จะได้ v₂ = √(2gh) — สูตรทอร์ริเซลลีเดิม ส่วน P₀ &gt; P_atm เปรียบเสมือนมีน้ำสูงเพิ่มอีก (P₀ − P_atm)/ρg
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon icon-teal">6</div>กล่องไม้ลอยระหว่างน้ำกับน้ำมัน (H.W.)</div>
+    <div class="def-box"><div class="lbl">โจทย์</div>กล่องลูกบาศก์ไม้ ขนาด 5 cm ลอยระหว่างผิวน้ำกับน้ำมัน ผิวล่างของกล่องต่ำกว่ารอยต่อน้ำ–น้ำมัน 1 cm (ส่วนที่เหลือ 4 cm อยู่ในน้ำมัน) น้ำมัน ρ = 750 kg/m³ จงหามวลกล่อง</div>
+    <div class="math-block">A = (0.05)² = 25×10⁻⁴ m²<br>
+    V_น้ำ = A·(0.01) = 25×10⁻⁶ m³ &nbsp;&nbsp; V_น้ำมัน = A·(0.04) = 100×10⁻⁶ m³<br><br>
+    ลอยนิ่ง: ΣF = 0 → F_B(น้ำ) + F_B(น้ำมัน) = mg<br>
+    m = ρ_น้ำ V_น้ำ + ρ_น้ำมัน V_น้ำมัน<br>
+    = (1000)(25×10⁻⁶) + (750)(100×10⁻⁶) = 0.025 + 0.075<br>
+    <span class="big">m = 0.10 kg = 100 g</span></div>
+    <div class="tip-box"><div class="lbl">💡 เช็กคำตอบ</div>
+      ความหนาแน่นไม้ = 0.100 kg / (5 cm)³ = 0.100 / 1.25×10⁻⁴ = 800 kg/m³ อยู่ระหว่างน้ำมัน (750) กับน้ำ (1000) จึงลอยอยู่ตรงรอยต่อได้สมเหตุสมผล<br>
+      หลักคิด: <strong>แรงลอยตัวรวม = ผลบวกแรงลอยตัวจากของไหลแต่ละชั้น</strong> (แต่ละชั้นใช้ปริมาตรส่วนที่จมในชั้นนั้น)
+    </div>
+  </div>
+</div>
+
 <!-- ===== FORMULA ===== -->
 <div class="section" id="formula">
   <div class="section-heading"><span>📐</span> สูตรรวมก่อนเข้าห้องสอบ</div>
@@ -445,9 +529,11 @@
       <tr><td>บารอมิเตอร์</td><td class="m">P₀ = ρgh</td><td>760 mmHg = 1 atm</td></tr>
       <tr><td>กาลักน้ำ (สูงสุด)</td><td class="m">h_max = P₀/ρg</td><td>น้ำ ≈ 10.3 m</td></tr>
       <tr><td>แรงลอยตัว</td><td class="m">F_B = ρ_f V_จม g</td><td>= น้ำหนักของไหลที่ถูกแทนที่</td></tr>
+      <tr><td>ลอยในของไหลหลายชั้น</td><td class="m">mg = Σ ρᵢVᵢg</td><td>Vᵢ = ส่วนที่จมในชั้น i</td></tr>
       <tr><td>วัตถุลอยนิ่ง</td><td class="m">V_จม/V = ρ_วัตถุ/ρ_ของไหล</td><td>ρ_วัตถุ &lt; ρ_ของไหล</td></tr>
       <tr><td>ความต่อเนื่อง</td><td class="m">A₁v₁ = A₂v₂ = Q</td><td>ไหลอัดไม่ได้</td></tr>
       <tr><td>แบร์นูลลี</td><td class="m">P + ½ρv² + ρgy = const</td><td>ตามสายกระแส</td></tr>
+      <tr><td>ถังปิด P₀ เหนือผิว</td><td class="m">v₂ ≈ √[2(P₀−P_atm)/ρ + 2gh]</td><td>A₁ ≫ A₂</td></tr>
       <tr><td>ถังเจาะรู</td><td class="m">v = √(2gh), R = 2√[h(H−h)], Q = a√(2gh)</td><td>h = ลึกจากผิว</td></tr>
       <tr><td>เวนทูรี</td><td class="m">v₂ = A₁√[2(P₁−P₂)/ρ(A₁²−A₂²)]</td><td>ท่อแนวระดับ</td></tr>
       <tr><td>พิโทต</td><td class="m">v = √[2(P_b−P_a)/ρ]</td><td>P_b = ความดันหยุดนิ่ง</td></tr>
