@@ -33,144 +33,99 @@ td.f{font-family:var(--mono);color:var(--a2);white-space:nowrap}
 .o{display:block;width:100%;text-align:left;margin-top:8px;padding:10px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--s2);color:var(--t);font:15px var(--sans);cursor:pointer}
 .o.ok{border-color:var(--a2);color:var(--a2)}.o.no{border-color:var(--a3);color:var(--a3)}
 .fb{display:none;margin-top:10px;padding:10px 14px;border-radius:8px;background:var(--s2);font-size:14px}
+.st{display:flex;gap:10px;margin:10px 0}.st>i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--a);color:#fff;font:600 12px/24px var(--mono);text-align:center;font-style:normal}.st>div{min-width:0;flex:1}.st .m{margin:4px 0 0}.ans{border:1px solid var(--a2);border-radius:8px;padding:8px 14px;margin-top:10px;color:var(--a2);font-family:var(--mono);overflow-x:auto;white-space:pre}.ext{border-top:1px dashed var(--bd);margin-top:22px;padding-top:6px}.ext h3{color:var(--a4)}
 </style></head><body>
-<div class="hero"><h1>เทคนิค<span>การอินทิเกรต</span></h1><p>Technique of Integration · สรุปจากสไลด์ พร้อมเฉลยตัวอย่างที่ในสไลด์เว้นว่างไว้</p></div>
-<div class="nav" id="nav">
-<button class="on" data-s="s1">1. By Parts</button><button data-s="s2">2. sin–cos</button><button data-s="s3">3. tan–sec</button><button data-s="s4">4. แทนด้วยตรีโกณฯ</button><button data-s="s5">5. เศษส่วนย่อย</button><button data-s="s6">🎯 ฝึกหัด</button></div>
-<div class="wrap">
+<div class="hero"><h1>เทคนิค<span>การอินทิเกรต</span></h1><p>สรุปจากสไลด์ · วิธีทำทีละขั้น พร้อมเหตุผลว่าทำไมถึงทำแบบนี้</p></div>
+<div class="nav" id="nav"></div><div class="wrap" id="app"></div>
+<script>
+var E=function(t,steps,ans){return{t:t,s:steps,a:ans}};
+var S=[
+{id:'s1',tab:'1. By Parts',h:'<span>5.1</span> · อินทิเกรตทีละส่วน',intro:`<div class="box def"><b class="l">สูตร</b><div class="m">∫ u dv = uv − ∫ v du</div></div>
+<div class="box tip"><b class="l">💡 เลือก u ตามลำดับ L-I-A-T-E</b>ลอการิทึม → ตรีโกณผกผัน → พีชคณิต (xⁿ) → ตรีโกณ → เอกซ์โพเนนเชียล ตัวที่มาก่อนให้เป็น u (เพราะดิฟแล้วง่ายขึ้น) ที่เหลือเป็น dv (ต้องอินทิเกรตได้)</div>
+<p><b>ขั้นตอนทุกข้อ:</b> ① เลือก u, dv ② หา du (ดิฟ) และ v (อินทิเกรต) ③ แทนสูตร ④ อินทิเกรตตัวที่เหลือ ถ้ายากกว่าเดิมแปลว่าเลือก u ผิด</p>`,ex:[
+E('∫ x ln x dx',[['ln x อินทิเกรตตรง ๆ ยาก แต่ดิฟง่าย จึงให้ u = ln x ส่วน x dx อินทิเกรตง่าย','u = ln x , dv = x dx'],['ดิฟ u และอินทิเกรต dv','du = (1/x) dx\nv = ∫x dx = x²/2'],['แทนสูตร uv − ∫v du','= (x²/2)ln x − ∫ (x²/2)(1/x) dx'],['ตัดทอน (x²/2)(1/x) = x/2 แล้วดึง ½ ออก','= (x²/2)ln x − ½∫ x dx\n= (x²/2)ln x − ½·(x²/2)']],'= (x²/2) ln x − x²/4 + C'),
+E('∫ x sin2x dx',[['x ดิฟแล้วเหลือ 1 (ง่ายขึ้น) จึงให้เป็น u','u = x , dv = sin2x dx'],['v ต้องหารด้วย 2 เพราะมี 2x ข้างใน (ย้อน chain rule)','du = dx\nv = ∫sin2x dx = −½cos2x'],['แทนสูตร','= x(−½cos2x) − ∫(−½cos2x) dx\n= −(x/2)cos2x + ½∫cos2x dx'],['∫cos2x dx = ½sin2x จึงได้ ½·½ = ¼','= −(x/2)cos2x + ¼ sin2x']],'= −(x/2)cos2x + (1/4)sin2x + C'),
+E('∫ x²e²ˣ dx  (ทำ 2 รอบ)',[['รอบที่ 1: x² เป็นพีชคณิต อยู่ก่อน e จึงเป็น u','u = x² , dv = e²ˣdx\ndu = 2x dx , v = e²ˣ/2'],['แทนสูตร (2x ที่ได้จาก du ตัดกับ ½ ของ v)','= x²e²ˣ/2 − ∫(e²ˣ/2)(2x) dx\n= x²e²ˣ/2 − ∫ x e²ˣ dx   ← ยังเหลือ x อยู่ ทำซ้ำอีกรอบ'],['รอบที่ 2: เฉพาะ ∫x e²ˣ dx','u = x , dv = e²ˣdx → du = dx , v = e²ˣ/2\n∫x e²ˣ dx = x e²ˣ/2 − ∫e²ˣ/2 dx = x e²ˣ/2 − e²ˣ/4'],['แทนกลับ ระวังเครื่องหมายลบหน้าวงเล็บ','= x²e²ˣ/2 − ( x e²ˣ/2 − e²ˣ/4 )\n= x²e²ˣ/2 − x e²ˣ/2 + e²ˣ/4'],['ดึง e²ˣ ออกมาเป็นตัวร่วม','']],'= e²ˣ ( x²/2 − x/2 + 1/4 ) + C'),
+E('I = ∫ eᵃˣ sin bx dx  (วนกลับมาเป็นตัวเดิม)',[['รอบ 1: ให้ u เป็นฟังก์ชันตรีโกณ','u = sin bx , dv = eᵃˣdx\ndu = b cos bx dx , v = eᵃˣ/a\nI = eᵃˣ sin bx / a − (b/a)∫eᵃˣ cos bx dx   …(1)'],['รอบ 2: กับ ∫eᵃˣcos bx dx ต้องเลือก u เป็นตรีโกณอีกครั้ง (กลุ่มเดิม ไม่งั้นจะวนกลับไปที่เดิม)','u = cos bx , dv = eᵃˣdx\ndu = −b sin bx dx , v = eᵃˣ/a\n∫eᵃˣcos bx dx = eᵃˣcos bx / a + (b/a)·I'],['แทนลงใน (1) จะเห็น I โผล่อีกข้าง','I = eᵃˣ sin bx / a − (b/a)[ eᵃˣcos bx / a + (b/a)I ]\nI = eᵃˣ sin bx / a − b eᵃˣcos bx / a² − (b²/a²) I'],['ย้าย I มารวมข้างซ้าย','I ( 1 + b²/a² ) = eᵃˣ( a sin bx − b cos bx ) / a²\nI · (a²+b²)/a² = eᵃˣ( a sin bx − b cos bx ) / a²']],'I = eᵃˣ ( a sin bx − b cos bx ) / (a²+b²) + C'),
+E('J = ∫ e²ˣ cos3x dx',[['ทำแบบเดียวกัน (a = 2, b = 3) รอบ 1','u = cos3x , dv = e²ˣdx → du = −3 sin3x dx , v = e²ˣ/2\nJ = e²ˣcos3x/2 + (3/2)∫e²ˣ sin3x dx'],['รอบ 2 กับ ∫e²ˣ sin3x dx','u = sin3x → du = 3cos3x dx , v = e²ˣ/2\n∫e²ˣ sin3x dx = e²ˣ sin3x/2 − (3/2)J'],['แทนกลับ','J = e²ˣcos3x/2 + (3/2)[ e²ˣ sin3x/2 − (3/2)J ]\nJ = e²ˣcos3x/2 + 3e²ˣ sin3x/4 − (9/4)J'],['ย้าย J: (1 + 9/4) = 13/4','(13/4) J = e²ˣ( 2cos3x + 3sin3x ) / 4']],'J = e²ˣ ( 2cos3x + 3sin3x ) / 13 + C')]},
 
-<div class="sec on" id="s1"><h2><span>5.1</span> · อินทิเกรตทีละส่วน (By Parts)</h2>
-<div class="card"><div class="box def"><b class="l">สูตร</b><div class="m">∫ u dv = uv − ∫ v du</div></div>
-<div class="box tip"><b class="l">💡 เลือก u อย่างไร</b>ไล่ลำดับ <b>L-I-A-T-E</b> : ลอการิทึม → ตรีโกณผกผัน → พีชคณิต (xⁿ) → ตรีโกณ → เอกซ์โพเนนเชียล ตัวไหนมาก่อนให้เป็น u ส่วนที่เหลือเป็น dv</div>
-<h3>ตัวอย่าง 1: ∫ x ln x dx</h3>
-<div class="m">u = ln x , dv = x dx → du = dx/x , v = x²/2
-∫ x ln x dx = (x²/2) ln x − ½∫ x dx
-           = (x²/2) ln x − x²/4 + C</div>
-<h3>ตัวอย่าง 2: ∫ x sin2x dx</h3>
-<div class="m">u = x , dv = sin2x dx → du = dx , v = −½cos2x
-∫ x sin2x dx = −(x/2)cos2x + ½∫cos2x dx
-             = −(x/2)cos2x + ¼ sin2x + C</div>
-<h3>ตัวอย่าง 3: ∫ x²e²ˣ dx (ทำซ้ำ 2 รอบ)</h3>
-<div class="m">รอบ 1: u = x², dv = e²ˣdx → x²e²ˣ/2 − ∫ x e²ˣ dx
-รอบ 2: ∫ x e²ˣ dx = x e²ˣ/2 − e²ˣ/4
-∴ ∫ x²e²ˣ dx = e²ˣ ( x²/2 − x/2 + 1/4 ) + C</div>
-<h3>ตัวอย่าง 4: ∫ eᵃˣ sin bx dx , ∫ e²ˣ cos3x dx (วนกลับมาเป็นตัวเดิม)</h3>
-<div class="box warn"><b class="l">⚠️ เทคนิค</b>ทำ by parts 2 รอบ จะได้ I กลับมาปรากฏอีกข้างของสมการ → ย้ายข้างแล้วแก้หา I (อย่าลืมสลับ u,dv ให้เป็นกลุ่มเดิมทั้ง 2 รอบ)</div>
-<div class="m">∫ eᵃˣ sin bx dx = eᵃˣ( a sin bx − b cos bx )/(a²+b²) + C
-∫ e²ˣ cos3x dx  = e²ˣ( 2cos3x + 3sin3x )/13 + C</div></div></div>
-
-<div class="sec" id="s2"><h2><span>5.2.1</span> · ฟังก์ชันตรีโกณมิติ sin–cos</h2>
-<div class="card"><table><tr><th>รูปแบบ</th><th>เงื่อนไข</th><th>วิธี</th></tr>
-<tr><td class="f">∫ sinⁿx cosᵐx dx</td><td>m หรือ n เป็นเลขคี่บวก</td><td>แยกตัวที่เป็นคี่ออก 1 ตัว (เหลือเป็น du) ที่เหลือแปลงด้วย sin²+cos²=1</td></tr>
-<tr><td class="f">∫ sinⁿx cosᵐx dx</td><td>m, n เป็นเลขคู่บวก</td><td>ใช้ sin²x=(1−cos2x)/2 , cos²x=(1+cos2x)/2</td></tr>
-<tr><td class="f">∫ sin mx cos nx , cos mx cos nx , sin mx sin nx</td><td>m ≠ n</td><td>แปลงผลคูณเป็นผลบวก (ด้านล่าง)</td></tr></table>
+{id:'s2',tab:'2. sin–cos',h:'<span>5.2.1</span> · ฟังก์ชัน sin–cos',intro:`<table><tr><th>รูปแบบ</th><th>เงื่อนไข</th><th>วิธี</th></tr>
+<tr><td class="f">∫ sinⁿx cosᵐx dx</td><td>m หรือ n คี่</td><td>เก็บตัวที่เป็นคี่ไว้ 1 ตัวให้เป็น du ที่เหลือแปลงด้วย sin²x + cos²x = 1</td></tr>
+<tr><td class="f">∫ sinⁿx cosᵐx dx</td><td>m, n คู่</td><td>sin²x = (1−cos2x)/2 , cos²x = (1+cos2x)/2</td></tr>
+<tr><td class="f">sin mx cos nx ฯลฯ</td><td>มุมต่างกัน</td><td>แปลงผลคูณเป็นผลบวก</td></tr></table>
 <div class="m">sin mx cos nx = ½[ sin(m+n)x + sin(m−n)x ]
 cos mx cos nx = ½[ cos(m+n)x + cos(m−n)x ]
-sin mx sin nx = ½[ cos(m−n)x − cos(m+n)x ]</div>
-<h3>∫ cos³x dx (คี่)</h3>
-<div class="m">u = sin x , du = cos x dx
-∫ (1 − sin²x) cos x dx = ∫ (1 − u²) du = sin x − sin³x/3 + C</div>
-<h3>∫ sin³2x cos⁴2x dx (คี่)</h3>
-<div class="m">u = cos2x , du = −2 sin2x dx
-= −½∫ (1−u²)u⁴ du = −½( u⁵/5 − u⁷/7 )
-= cos⁷2x/14 − cos⁵2x/10 + C</div>
-<h3>∫ sin²3x dx (คู่)</h3>
-<div class="m">= ∫ (1 − cos6x)/2 dx = ½[ x − sin6x/6 ] + C = x/2 − sin6x/12 + C</div>
-<h3>∫ sin²x cos⁴x dx (คู่ — เฉลยเพิ่ม)</h3>
-<div class="m">sin²x cos²x = ¼ sin²2x  →  integrand = ⅛ sin²2x (1 + cos2x)
-= ⅛·(1−cos4x)/2 + ⅛ sin²2x cos2x
-∫ = x/16 − sin4x/64 + sin³2x/48 + C</div>
-<h3>∫ sin3x cos2x dx (ผลคูณ→ผลบวก — เฉลยเพิ่ม)</h3>
-<div class="m">= ½∫ ( sin5x + sin x ) dx = −cos5x/10 − ½cos x + C</div></div></div>
+sin mx sin nx = ½[ cos(m−n)x − cos(m+n)x ]</div>`,ex:[
+E('∫ cos³x dx  (กำลังคี่)',[['cos กำลัง 3 เป็นคี่ → แยก cos x ไว้ 1 ตัว (ไว้เป็น du)','cos³x = cos²x · cos x'],['แปลง cos²x = 1 − sin²x','∫ (1 − sin²x) cos x dx'],['ตั้ง u = sin x จะได้ du = cos x dx พอดี','u = sin x , du = cos x dx\n= ∫ (1 − u²) du'],['อินทิเกรตแล้วแทน u กลับ','= u − u³/3 = sin x − sin³x/3']],'= sin x − sin³x/3 + C'),
+E('∫ sin³2x cos⁴2x dx  (sin คี่)',[['sin กำลัง 3 → แยก sin2x ไว้ 1 ตัว','= ∫ sin²2x · cos⁴2x · sin2x dx'],['sin²2x = 1 − cos²2x','= ∫ (1 − cos²2x) cos⁴2x · sin2x dx'],['ตั้ง u = cos2x ดิฟแล้วมี 2 ติดมาด้วย จึงต้องหาร (−2)','u = cos2x , du = −2 sin2x dx\n→ sin2x dx = du/(−2)'],['แทนค่า ดึง −½ ออกมา','= −½ ∫ (1 − u²) u⁴ du = −½ ∫ (u⁴ − u⁶) du'],['อินทิเกรต','= −½ ( u⁵/5 − u⁷/7 ) = −u⁵/10 + u⁷/14']],'= cos⁷2x/14 − cos⁵2x/10 + C'),
+E('∫ sin²3x dx  (กำลังคู่)',[['กำลังคู่ → ใช้สูตรมุมครึ่ง sin²θ = (1 − cos2θ)/2 โดย θ = 3x ดังนั้น 2θ = 6x','sin²3x = (1 − cos6x)/2'],['อินทิเกรตทีละเทอม ∫cos6x dx = sin6x/6','∫ (1 − cos6x)/2 dx = ½ [ x − sin6x/6 ]']],'= x/2 − sin6x/12 + C'),
+E('∫ sin²x cos⁴x dx  (คู่ทั้งคู่)',[['ใช้ sin x cos x = ½sin2x จะได้ sin²x cos²x = ¼sin²2x','sin²x cos⁴x = (sin²x cos²x)·cos²x = (¼ sin²2x)·cos²x'],['แทน cos²x = (1+cos2x)/2','= ⅛ sin²2x (1 + cos2x) = ⅛ sin²2x + ⅛ sin²2x cos2x'],['เทอมแรก ใช้มุมครึ่งอีกรอบ sin²2x = (1−cos4x)/2','∫ ⅛ sin²2x dx = (1/16)∫(1 − cos4x) dx = x/16 − sin4x/64'],['เทอมสอง u = sin2x , du = 2cos2x dx','∫ ⅛ sin²2x cos2x dx = ⅛·½ ∫u² du = (1/16)(u³/3) = sin³2x/48'],['รวมสองเทอม','']],'= x/16 − sin4x/64 + sin³2x/48 + C'),
+E('∫ sin3x cos2x dx  (ผลคูณ → ผลบวก)',[['ใช้สูตร sin mx cos nx โดย m = 3, n = 2 → m+n = 5 , m−n = 1','sin3x cos2x = ½[ sin5x + sin x ]'],['∫sin5x dx = −cos5x/5 , ∫sin x dx = −cos x','∫ = ½[ −cos5x/5 − cos x ]']],'= −cos5x/10 − cos x/2 + C')]},
 
-<div class="sec" id="s3"><h2><span>5.2.2</span> · tan, cot, sec, csc</h2>
-<div class="card"><table><tr><th>กรณี</th><th>รูปแบบ</th><th>วิธี</th></tr>
-<tr><td>1</td><td class="f">tanᵐx , cotᵐx</td><td>แยก tan²x = sec²x−1 (cot²x = csc²x−1) แล้ว u = tan x (หรือ cot x)</td></tr>
-<tr><td>2</td><td class="f">secⁿx , cscⁿx (n คู่)</td><td>แยก sec²x ออก 1 ตัว ที่เหลือ sec² = 1+tan² ; u = tan x</td></tr>
+{id:'s3',tab:'3. tan–sec',h:'<span>5.2.2</span> · tan, cot, sec, csc',intro:`<table><tr><th>กรณี</th><th>รูปแบบ</th><th>วิธี</th></tr>
+<tr><td>1</td><td class="f">tanᵐx , cotᵐx</td><td>แยก tan²x = sec²x−1 (cot²x = csc²x−1) ; u = tan x</td></tr>
+<tr><td>2</td><td class="f">secⁿx , cscⁿx (n คู่)</td><td>เก็บ sec²x ไว้ 1 ตัว ที่เหลือ sec² = 1+tan² ; u = tan x</td></tr>
 <tr><td>3</td><td class="f">tanᵐ secⁿ (n คู่)</td><td>เหมือนกรณี 2</td></tr>
-<tr><td>4</td><td class="f">tanᵐ secⁿ (m คี่)</td><td>แยก sec x tan x ออก ที่เหลือ tan² = sec²−1 ; u = sec x</td></tr>
+<tr><td>4</td><td class="f">tanᵐ secⁿ (m คี่)</td><td>เก็บ sec x tan x ไว้ ที่เหลือ tan² = sec²−1 ; u = sec x</td></tr>
 <tr><td>5</td><td class="f">secⁿx (n คี่)</td><td>by parts</td></tr>
-<tr><td>6</td><td class="f">tanᵐ secⁿ (m คู่, n คี่)</td><td>แปลงเป็น secᵏ แล้ว by parts แบบกรณี 5</td></tr></table>
-<h3>∫ tan³x dx</h3>
-<div class="m">= ∫ tan x (sec²x − 1) dx = ∫ tan x d(tan x) − ∫ tan x dx
-= ½tan²x − ln|sec x| + C</div>
-<h3>∫ cot⁴3x dx (เฉลยเพิ่ม)</h3>
-<div class="m">cot⁴ = cot²·csc² − csc² + 1
-∫ = −cot³3x/9 + cot3x/3 + x + C</div>
-<h3>∫ csc⁶x dx (เฉลยเพิ่ม)</h3>
-<div class="m">csc⁶ = (1+cot²x)² csc²x , u = cot x , du = −csc²x dx
-∫ = −( cot x + 2cot³x/3 + cot⁵x/5 ) + C</div>
-<h3>∫ tan⁵(x/2) sec⁴(x/2) dx</h3>
-<div class="m">u = tan(x/2) , du = ½ sec²(x/2) dx
-= 2∫ u⁵(1+u²) du = tan⁶(x/2)/3 + tan⁸(x/2)/4 + C</div>
-<h3>∫ tan⁵x sec⁷x dx</h3>
-<div class="m">u = sec x , du = sec x tan x dx , tan⁴ = (u²−1)²
-= ∫ (u²−1)² u⁶ du = sec¹¹x/11 − 2sec⁹x/9 + sec⁷x/7 + C</div>
-<h3>∫ sec³x dx และ ∫ tan²x sec³x dx</h3>
-<div class="m">∫ sec³x dx = ½ sec x tan x + ½ ln|sec x + tan x| + C
-สูตรลดกำลัง: ∫ secⁿx dx = secⁿ⁻²x tan x/(n−1) + (n−2)/(n−1) ∫ secⁿ⁻²x dx
-tan²x sec³x = sec⁵x − sec³x
-∫ = ¼sec³x tan x − ⅛ sec x tan x − ⅛ ln|sec x + tan x| + C</div></div></div>
+<tr><td>6</td><td class="f">tanᵐ secⁿ (m คู่, n คี่)</td><td>แปลงเป็น secᵏ ทั้งหมดแล้ว by parts</td></tr></table>
+<div class="box tip"><b class="l">💡 ที่มา</b>d(tan x) = sec²x dx , d(sec x) = sec x tan x dx , d(cot x) = −csc²x dx</div>`,ex:[
+E('∫ tan³x dx  (กรณี 1)',[['แยก tan² ออก 1 ชุด','tan³x = tan x · tan²x'],['แทน tan²x = sec²x − 1','∫ tan x (sec²x − 1) dx = ∫ tan x sec²x dx − ∫ tan x dx'],['ก้อนแรก u = tan x , du = sec²x dx','∫ tan x sec²x dx = ∫ u du = tan²x/2'],['ก้อนสอง ∫tan x dx = −ln|cos x| = ln|sec x|','∫ tan x dx = ln|sec x|']],'= ½tan²x − ln|sec x| + C'),
+E('∫ cot⁴3x dx',[['แยก cot² ออก 1 ชุด แล้วแทน cot² = csc² − 1','cot⁴3x = cot²3x (csc²3x − 1) = cot²3x csc²3x − cot²3x'],['ก้อนแรก u = cot3x , du = −3csc²3x dx','∫cot²3x csc²3x dx = −⅓∫u² du = −cot³3x/9'],['ก้อนสอง แทน cot² = csc²−1 อีกรอบ แล้วใส่ลบหน้า','−∫cot²3x dx = −∫(csc²3x − 1) dx = −( −cot3x/3 − x ) = cot3x/3 + x']],'= −cot³3x/9 + cot3x/3 + x + C'),
+E('∫ csc⁶x dx  (กรณี 2)',[['n = 6 คู่ → เก็บ csc²x ไว้ 1 ตัว','csc⁶x = csc⁴x · csc²x'],['csc²x = 1 + cot²x','= (1 + cot²x)² csc²x'],['u = cot x , du = −csc²x dx','∫ = −∫ (1 + u²)² du = −∫ (1 + 2u² + u⁴) du'],['อินทิเกรตแล้วแทนกลับ','= −( u + 2u³/3 + u⁵/5 )']],'= −cot x − (2/3)cot³x − (1/5)cot⁵x + C'),
+E('∫ tan⁵(x/2) sec⁴(x/2) dx  (กรณี 3)',[['sec⁴ มี sec² เก็บไว้ 1 ตัว ที่เหลือ sec² = 1 + tan²','sec⁴(x/2) = (1 + tan²(x/2)) sec²(x/2)'],['u = tan(x/2) → du = ½ sec²(x/2) dx ดังนั้น sec²(x/2) dx = 2 du','∫ u⁵ (1 + u²) · 2 du'],['กระจายแล้วอินทิเกรต','= 2∫ (u⁵ + u⁷) du = 2( u⁶/6 + u⁸/8 )']],'= tan⁶(x/2)/3 + tan⁸(x/2)/4 + C'),
+E('∫ tan⁵x sec⁷x dx  (กรณี 4 : tan คี่)',[['เก็บ sec x tan x ไว้ 1 ชุด (คือ d(sec x))','tan⁵x sec⁷x = tan⁴x · sec⁶x · (sec x tan x)'],['tan⁴x = (tan²x)² = (sec²x − 1)² ตั้ง u = sec x','= ∫ (u² − 1)² u⁶ du'],['กระจาย (u²−1)² = u⁴ − 2u² + 1 แล้วคูณ u⁶','= ∫ ( u¹⁰ − 2u⁸ + u⁶ ) du']],'= sec¹¹x/11 − 2sec⁹x/9 + sec⁷x/7 + C'),
+E('∫ sec³x dx  (กรณี 5 : by parts)',[['u = sec x , dv = sec²x dx','du = sec x tan x dx , v = tan x'],['แทนสูตร แล้วแทน tan² = sec² − 1','I = sec x tan x − ∫ sec x tan²x dx\n  = sec x tan x − ∫ sec x (sec²x − 1) dx\n  = sec x tan x − I + ∫ sec x dx'],['I โผล่อีกข้าง ย้ายมารวม และ ∫sec x dx = ln|sec x + tan x|','2I = sec x tan x + ln|sec x + tan x|']],'I = ½ sec x tan x + ½ ln|sec x + tan x| + C'),
+E('∫ tan²x sec³x dx  (กรณี 6)',[['แปลง tan² = sec² − 1 ให้เหลือ sec ล้วน','= ∫ (sec⁵x − sec³x) dx'],['หา K = ∫sec⁵x dx ด้วย by parts: u = sec³x , dv = sec²x dx','du = 3sec³x tan x dx , v = tan x\nK = sec³x tan x − 3∫ sec³x tan²x dx = sec³x tan x − 3(K − ∫sec³x dx)'],['แก้หา K','4K = sec³x tan x + 3∫sec³x dx\nK = ¼ sec³x tan x + ¾ ∫sec³x dx'],['แทนใน ∫(sec⁵ − sec³) = K − ∫sec³','= ¼ sec³x tan x − ¼ ∫sec³x dx'],['แทนค่า ∫sec³x จากข้อก่อน (ใส่ ¼ หน้า)','']],'= ¼ sec³x tan x − ⅛ sec x tan x − ⅛ ln|sec x + tan x| + C')]},
 
-<div class="sec" id="s4"><h2><span>5.3</span> · แทนด้วยฟังก์ชันตรีโกณมิติ</h2>
-<div class="card"><table><tr><th>มีรากแบบ</th><th>แทน</th><th>สามเหลี่ยม</th></tr>
-<tr><td class="f">√(a²−x²)</td><td class="f">x = a sinθ</td><td>ด้านตรงข้าม x , ด้านเอียง a , ชิด √(a²−x²)</td></tr>
-<tr><td class="f">√(a²+x²)</td><td class="f">x = a tanθ</td><td>ตรงข้าม x , ชิด a , ด้านเอียง √(a²+x²)</td></tr>
-<tr><td class="f">√(x²−a²)</td><td class="f">x = a secθ</td><td>ด้านเอียง x , ชิด a , ตรงข้าม √(x²−a²)</td></tr></table>
-<div class="box tip"><b class="l">💡 ขั้นตอน</b>แทน x → อินทิเกรตเป็นฟังก์ชันของ θ → วาดสามเหลี่ยมเพื่อแปลงกลับเป็น x (ใช้ sin2θ = 2sinθcosθ เมื่อเจอมุมสองเท่า)</div>
-<h3>① ∫ dx/√(4+x²)</h3>
-<div class="m">x = 2tanθ , dx = 2sec²θ dθ , √(4+x²) = 2secθ
-= ∫ secθ dθ = ln|secθ + tanθ| + C = ln|√(4+x²) + x| + C'</div>
-<h3>② ∫ x²/√(9−x²) dx</h3>
-<div class="m">x = 3sinθ , dx = 3cosθ dθ → 9∫ sin²θ dθ = (9/2)(θ − sinθ cosθ)
-= (9/2) sin⁻¹(x/3) − (x/2)√(9−x²) + C</div>
-<h3>③ ∫ dx/√(2x−x²) (เติมกำลังสอง)</h3>
-<div class="m">2x − x² = 1 − (x−1)²  →  u = x−1 :  ∫ du/√(1−u²) = sin⁻¹(x−1) + C</div>
-<h3>④ ∫ dx/(4x²+4x+2)</h3>
-<div class="m">4x²+4x+2 = (2x+1)² + 1 , u = 2x+1 , du = 2dx
-= ½∫ du/(u²+1) = ½ tan⁻¹(2x+1) + C</div>
-<div class="box def"><b class="l">สูตรลัด (ไม่ใช่เรื่องใหม่)</b><div class="m">∫ du/(u²+a²) = (1/a) tan⁻¹(u/a) + C
-∫ du/√(a²−u²) = sin⁻¹(u/a) + C</div></div></div></div>
+{id:'s4',tab:'4. แทนตรีโกณฯ',h:'<span>5.3</span> · แทนด้วยฟังก์ชันตรีโกณมิติ',intro:`<table><tr><th>มีรากแบบ</th><th>แทน</th><th>สามเหลี่ยม (เพื่อแปลงกลับ)</th></tr>
+<tr><td class="f">√(a²−x²)</td><td class="f">x = a sinθ</td><td>ตรงข้าม x · เอียง a · ชิด √(a²−x²)</td></tr>
+<tr><td class="f">√(a²+x²)</td><td class="f">x = a tanθ</td><td>ตรงข้าม x · ชิด a · เอียง √(a²+x²)</td></tr>
+<tr><td class="f">√(x²−a²)</td><td class="f">x = a secθ</td><td>เอียง x · ชิด a · ตรงข้าม √(x²−a²)</td></tr></table>
+<div class="box tip"><b class="l">💡 5 ขั้นตอน</b>แทน x และ dx → รากกลายเป็นฟังก์ชันตรีโกณ → อินทิเกรตหา θ → วาดสามเหลี่ยม → แปลงกลับเป็น x</div>`,ex:[
+E('① ∫ dx/√(4+x²)',[['รูป √(a²+x²) โดย a = 2 จึงแทน x = 2tanθ','x = 2tanθ , dx = 2sec²θ dθ'],['จัดรูปราก ใช้ 1 + tan²θ = sec²θ','√(4+x²) = √(4 + 4tan²θ) = 2√(1+tan²θ) = 2secθ'],['แทนค่า 2 ตัดกัน secθ ตัดกัน','∫ 2sec²θ / (2secθ) dθ = ∫ secθ dθ = ln|secθ + tanθ|'],['วาดสามเหลี่ยม: tanθ = x/2 → ตรงข้าม x ชิด 2 เอียง √(4+x²) ดังนั้น secθ = √(4+x²)/2','ln| √(4+x²)/2 + x/2 | = ln|√(4+x²) + x| − ln2'],['−ln2 เป็นค่าคงที่ รวมเข้า C']],'= ln| √(4+x²) + x | + C'),
+E('② ∫ x²/√(9−x²) dx',[['รูป √(a²−x²) โดย a = 3','x = 3sinθ , dx = 3cosθ dθ\n√(9−x²) = √(9 − 9sin²θ) = 3cosθ'],['แทนค่า 3cosθ ตัดกัน','∫ 9sin²θ · 3cosθ / (3cosθ) dθ = 9∫ sin²θ dθ'],['มุมครึ่ง sin²θ = (1 − cos2θ)/2','= (9/2) ∫ (1 − cos2θ) dθ = (9/2)( θ − ½ sin2θ )'],['sin2θ = 2sinθ cosθ (double angle)','= (9/2)θ − (9/2) sinθ cosθ'],['สามเหลี่ยม: sinθ = x/3 , cosθ = √(9−x²)/3 , θ = sin⁻¹(x/3)','(9/2) sin⁻¹(x/3) − (9/2)(x/3)(√(9−x²)/3)']],'= (9/2) sin⁻¹(x/3) − (x/2)√(9−x²) + C'),
+E('③ ∫ dx/√(2x−x²)  (เติมกำลังสอง)',[['เติมกำลังสองสมบูรณ์ให้ใต้รากเป็นรูป 1 − (…)²','2x − x² = −(x² − 2x) = −(x² − 2x + 1) + 1 = 1 − (x−1)²'],['ตั้ง u = x − 1 , du = dx','∫ du/√(1 − u²)'],['u = sinθ , du = cosθ dθ , √(1−u²) = cosθ','∫ cosθ/cosθ dθ = θ = sin⁻¹u']],'= sin⁻¹(x−1) + C'),
+E('④ ∫ dx/(4x²+4x+2)',[['เติมกำลังสอง','4x²+4x+2 = (4x²+4x+1) + 1 = (2x+1)² + 1'],['u = 2x+1 , du = 2dx → dx = ½du','= ½ ∫ du/(u² + 1)'],['u = tanθ , du = sec²θ dθ , u²+1 = sec²θ','½ ∫ sec²θ/sec²θ dθ = ½θ = ½ tan⁻¹u']],'= ½ tan⁻¹(2x+1) + C')],
+tail:`<div class="box def"><b class="l">สูตรลัด (ผลจากการแทนตรีโกณฯ)</b><div class="m">∫ du/(u²+a²) = (1/a) tan⁻¹(u/a) + C
+∫ du/√(a²−u²) = sin⁻¹(u/a) + C</div></div>`},
 
-<div class="sec" id="s5"><h2><span>5.4</span> · แยกเศษส่วนย่อย (Partial Fractions)</h2>
-<div class="card"><div class="box warn"><b class="l">⚠️ ก่อนแยก</b>ต้องให้ดีกรีของเศษ <b>น้อยกว่า</b> ส่วน ถ้าเท่ากันหรือมากกว่าให้ <b>หารยาวก่อน</b> เช่น (x⁴−10x²+3x+1)/(x²−4) = x²−6 + (3x−23)/(x²−4)</div>
+{id:'s5',tab:'5. เศษส่วนย่อย',h:'<span>5.4</span> · แยกเศษส่วนย่อย',intro:`<div class="box warn"><b class="l">⚠️ ข้อแรกสุด</b>ดีกรีเศษต้อง <b>น้อยกว่า</b> ส่วน ถ้าเท่ากันหรือมากกว่า ให้หารยาวก่อน เช่น (x⁴−10x²+3x+1)/(x²−4) = x² − 6 + (3x−23)/(x²−4)</div>
 <table><tr><th>กรณี</th><th>ตัวประกอบของ Q(x)</th><th>รูปที่แยก</th></tr>
-<tr><td>1</td><td>เชิงเส้นไม่ซ้ำ (ax+b)</td><td class="f">A/(ax+b)</td></tr>
+<tr><td>1</td><td>เชิงเส้นไม่ซ้ำ</td><td class="f">A/(ax+b)</td></tr>
 <tr><td>2</td><td>เชิงเส้นซ้ำ (ax+b)ᵖ</td><td class="f">A₁/(ax+b) + A₂/(ax+b)² + … + Aₚ/(ax+b)ᵖ</td></tr>
-<tr><td>3</td><td>กำลังสองแยกต่อไม่ได้ x²+px+q</td><td class="f">(Ax+B)/(x²+px+q)</td></tr></table>
-<div class="box tip"><b class="l">💡 หาค่าคงที่</b>(1) แทนค่า x ที่ทำให้ตัวประกอบเป็น 0 (2) เทียบสัมประสิทธิ์ ใช้ผสมกันได้</div>
-<h3>กรณี 1: ∫ (x+7)/(x²+8x+15) dx</h3>
-<div class="m">(x+7)/((x+3)(x+5)) = A/(x+3) + B/(x+5)  →  x+7 = A(x+5)+B(x+3)
-x=−5 : 2 = −2B → B = −1 ; x=−3 : 4 = 2A → A = 2
-∫ = 2ln|x+3| − ln|x+5| + C</div>
-<h3>กรณี 2: ∫ (x³−1)/(x²(x−2)³) dx</h3>
-<div class="m">= A/x + B/x² + C/(x−2) + D/(x−2)² + E/(x−2)³
-A=3/16 , B=1/8 , C=−3/16 , D=5/4 , E=7/4
-∫ = (3/16)ln|x| − 1/(8x) − (3/16)ln|x−2| − 5/(4(x−2)) − 7/(8(x−2)²) + C</div>
-<h3>กรณี 3: ∫ (x²−2x−3)/((x−1)(x²+2x+2)) dx (เฉลยเพิ่ม)</h3>
-<div class="m">= A/(x−1) + (Bx+C)/(x²+2x+2) → A = −4/5 , B = 9/5 , C = 7/5
-(9x+7)/5 = (9/10)(2x+2) − 2/5  แล้ว x²+2x+2 = (x+1)²+1
-∫ = −(4/5)ln|x−1| + (9/10)ln(x²+2x+2) − (2/5)tan⁻¹(x+1) + C</div>
-<div class="box warn"><b class="l">ข้อสุดท้ายในสไลด์</b>∫ (x−2)/(x(x²−4x+5)²) dx ใช้รูป A/x + (Bx+C)/(x²−4x+5) + (Dx+E)/(x²−4x+5)² (ตัวประกอบกำลังสองที่ซ้ำ ต้องมีเศษเป็น Ax+B ทุกเทอม)</div></div></div>
-
-<div class="sec" id="s6"><h2><span>🎯</span> ฝึกหัด</h2><div id="qs"></div></div>
-</div>
-<script>
-document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener('click',function(){
-document.querySelectorAll('.sec,#nav button').forEach(function(e){e.classList.remove('on')});
-document.getElementById(b.dataset.s).classList.add('on');b.classList.add('on');window.scrollTo({top:0,behavior:'smooth'})})});
+<tr><td>3</td><td>กำลังสองแยกต่อไม่ได้</td><td class="f">(Ax+B)/(x²+px+q)</td></tr></table>
+<div class="box tip"><b class="l">💡 หาค่าคงที่ 2 วิธี</b>(1) แทน x ที่ทำให้ตัวประกอบเป็น 0 (ได้ค่าเดียวเร็วมาก) (2) เทียบสัมประสิทธิ์ของ x แต่ละกำลัง ใช้ผสมกัน</div>`,ex:[
+E('∫ (x+7)/(x²+8x+15) dx  (กรณี 1)',[['ดีกรีเศษ 1 < ส่วน 2 ใช้ได้เลย แยกตัวประกอบส่วน','x²+8x+15 = (x+3)(x+5)'],['ตั้งรูปเศษส่วนย่อย','(x+7)/((x+3)(x+5)) = A/(x+3) + B/(x+5)'],['คูณทั้งสองข้างด้วย (x+3)(x+5)','x + 7 = A(x+5) + B(x+3)   …(2)'],['แทน x = −5 (ทำให้เทอม A หายไป)','2 = B(−2) → B = −1'],['แทน x = −3 (ทำให้เทอม B หายไป)','4 = A(2) → A = 2'],['อินทิเกรตทีละเทอม','∫ [ 2/(x+3) − 1/(x+5) ] dx']],'= 2ln|x+3| − ln|x+5| + C'),
+E('∫ (x³−1)/(x²(x−2)³) dx  (กรณี 2)',[['ดีกรีเศษ 3 < ส่วน 5 ตัวประกอบซ้ำ ต้องเขียนครบทุกกำลังตั้งแต่ 1 ถึงกำลังสูงสุด','= A/x + B/x² + C/(x−2) + D/(x−2)² + E/(x−2)³'],['คูณด้วย x²(x−2)³','x³ − 1 = A x(x−2)³ + B(x−2)³ + C x²(x−2)² + D x²(x−2) + E x²   …(1)'],['แทน x = 0 (เหลือแต่ B)','−1 = B(−8) → B = 1/8'],['แทน x = 2 (เหลือแต่ E)','7 = E(4) → E = 7/4'],['เหลือ A, C, D เทียบสัมประสิทธิ์ ขยาย (1) แล้วเทียบ x⁴, x¹ ก่อนเพราะสั้นสุด','x⁴ : A + C = 0\nx¹ : −8A + 12B = 0 → A = 12(1/8)/8 = 3/16\nดังนั้น C = −3/16'],['เทียบ x³ เพื่อหา D','x³ : −6A + B − 4C + D = 1\nD = 1 + 6(3/16) − 1/8 + 4(−3/16) = 20/16 = 5/4'],['อินทิเกรต: 1/x → ln , 1/x² และ 1/(x−2)ᵏ ใช้กฎกำลัง','∫ (3/16)/x = (3/16)ln|x|\n∫ (1/8)x⁻² = −1/(8x)\n∫ (−3/16)/(x−2) = −(3/16)ln|x−2|\n∫ (5/4)(x−2)⁻² = −5/(4(x−2))\n∫ (7/4)(x−2)⁻³ = −7/(8(x−2)²)']],'= (3/16)ln|x| − 1/(8x) − (3/16)ln|x−2| − 5/(4(x−2)) − 7/(8(x−2)²) + C'),
+E('∫ (x²−2x−3)/((x−1)(x²+2x+2)) dx  (กรณี 3)',[['x²+2x+2 มี discriminant 4−8 < 0 แยกต่อไม่ได้ เศษต้องเป็น Bx+C','= A/(x−1) + (Bx+C)/(x²+2x+2)'],['คูณทั้งสองข้าง','x²−2x−3 = A(x²+2x+2) + (Bx+C)(x−1)'],['x = 1','−4 = 5A → A = −4/5'],['เทียบ x² และค่าคงที่','x² : 1 = A + B → B = 9/5\nค่าคงที่ : −3 = 2A − C → C = 2A + 3 = 7/5'],['เทอมที่สอง (9x+7)/5 ให้เขียนเป็นอนุพันธ์ของส่วน (2x+2) กับค่าคงที่','9x + 7 = (9/2)(2x+2) − 2'],['แยกอินทิเกรต: ก้อน (2x+2)/(…) ได้ ln , ก้อนค่าคงที่เติมกำลังสอง x²+2x+2 = (x+1)²+1 ได้ tan⁻¹','∫ (1/5)(9/2)(2x+2)/(x²+2x+2) = (9/10)ln(x²+2x+2)\n∫ (−2/5)/((x+1)²+1) = −(2/5)tan⁻¹(x+1)']],'= −(4/5)ln|x−1| + (9/10)ln(x²+2x+2) − (2/5)tan⁻¹(x+1) + C'),
+E('∫ (x−2)/(x(x²−4x+5)²) dx  (ข้อสุดท้ายในสไลด์)',[['ให้ Q = x²−4x+5 (discriminant < 0) ตัวประกอบกำลังสองซ้ำ ต้องมี (Dx+E)/Q² ด้วย','= A/x + (Bx+C)/Q + (Dx+E)/Q²'],['คูณด้วย xQ²','x − 2 = A Q² + (Bx+C) x Q + (Dx+E) x'],['x = 0 ตัวอื่นหาย (Q(0) = 5)','−2 = 25A → A = −2/25'],['เทียบ x⁴ , x³ , x² , x¹ (Q² = x⁴ −8x³ +26x² −40x +25)','x⁴ : A + B = 0 → B = 2/25\nx³ : −8A + C − 4B = 0 → C = −8/25\nx² : 26A + 5B − 4C + D = 0 → D = 2/5\nx¹ : −40A + 5C + E = 1 → E = −3/5'],['ก้อน (2/25)(x−4)/Q : เขียน x−4 = ½(2x−4) − 2 โดย Q\' = 2x−4','(1/25)ln Q − (4/25)tan⁻¹(x−2)    (Q = (x−2)²+1)'],['ก้อน (2x−3)/(5Q²) : เขียน 2x−3 = (2x−4) + 1','(1/5)∫(2x−4)/Q² = −1/(5Q)\n(1/5)∫dx/Q² = (1/5)[ (x−2)/(2Q) + ½tan⁻¹(x−2) ]'],['รวมทุกก้อน: tan⁻¹ ได้ −4/25 + 1/10 = −3/50 ; ส่วนตรรกยะ −1/(5Q) + (x−2)/(10Q) = (x−4)/(10Q)','']],'= −(2/25)ln|x| + (1/25)ln(x²−4x+5) − (3/50)tan⁻¹(x−2) + (x−4)/(10(x²−4x+5)) + C')]}
+];
+var nav=document.getElementById('nav'),app=document.getElementById('app');
+function mk(tag,cls,html){var d=document.createElement(tag);if(cls)d.className=cls;if(html!==undefined)d.innerHTML=html;return d}
+S.forEach(function(s,i){
+ var b=mk('button',i?'':'on',s.tab);b.dataset.s=s.id;nav.appendChild(b);
+ var sec=mk('div','sec'+(i?'':' on'));sec.id=s.id;sec.appendChild(mk('h2','',s.h));
+ var c=mk('div','card',s.intro);sec.appendChild(c);
+ s.ex.forEach(function(e){var w=mk('div','ext');w.appendChild(mk('h3','',e.t));
+  e.s.forEach(function(st,k){var r=mk('div','st');r.appendChild(mk('i','',k+1));var d=mk('div','',st[0]);
+   if(st[1]){var m=mk('div','m');m.textContent=st[1];d.appendChild(m)}r.appendChild(d);w.appendChild(r)});
+  var a=mk('div','ans');a.textContent='ตอบ  '+e.a;w.appendChild(a);c.appendChild(w)});
+ if(s.tail)c.appendChild(mk('div','',s.tail));
+ app.appendChild(sec)});
+var qb=mk('button','','🎯 ฝึกหัด');qb.dataset.s='s6';nav.appendChild(qb);
+var qs=mk('div','sec');qs.id='s6';qs.appendChild(mk('h2','','<span>🎯</span> ฝึกหัด'));app.appendChild(qs);
+nav.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){
+ document.querySelectorAll('.sec,#nav button').forEach(function(e){e.classList.remove('on')});
+ document.getElementById(b.dataset.s).classList.add('on');b.classList.add('on');window.scrollTo({top:0,behavior:'smooth'})})});
 var Q=[
-{q:"ตำแหน่งของโดรนเปลี่ยนตามความเร็ว v(t) = t·eᵗ เมตร/วินาที จงหา s(t) = ∫ t eᵗ dt",o:["eᵗ(t − 1) + C","eᵗ(t + 1) + C","t²eᵗ/2 + C","t eᵗ − t + C"],a:0,e:"u = t, dv = eᵗdt → t eᵗ − ∫eᵗdt = t eᵗ − eᵗ = eᵗ(t−1) + C"},
-{q:"กำลังไฟฟ้าชั่วขณะของสัญญาณมีรูป cos²x จงหา ∫ cos²x dx",o:["x/2 + sin2x/4 + C","x/2 − sin2x/4 + C","sin³x/3 + C","cos³x/3 + C"],a:0,e:"กำลังคู่ → cos²x = (1+cos2x)/2 → x/2 + sin2x/4 + C"},
-{q:"จงหา ∫ sin³x cos²x dx",o:["cos³x/3 − cos⁵x/5 + C","−cos³x/3 + cos⁵x/5 + C","sin⁴x/4 + C","−cos³x/3 − cos⁵x/5 + C"],a:1,e:"sin เป็นคี่ → u = cos x, du = −sin x dx\n= −∫(1−u²)u²du = −u³/3 + u⁵/5"},
-{q:"จงหา ∫ dx/(x²−1)",o:["½ ln|(x+1)/(x−1)| + C","½ ln|(x−1)/(x+1)| + C","ln|x²−1| + C","tan⁻¹x + C"],a:1,e:"1/(x²−1) = ½[1/(x−1) − 1/(x+1)] → ½ln|x−1| − ½ln|x+1|"},
-{q:"จงหา ∫ dx/√(x²+9)",o:["sin⁻¹(x/3) + C","ln|√(x²+9) + x| + C","(1/3)tan⁻¹(x/3) + C","ln|x²+9| + C"],a:1,e:"รูป √(a²+x²) → x = 3tanθ → ∫secθ dθ = ln|secθ+tanθ| = ln|√(x²+9)+x| + C'"}];
-var c=document.getElementById('qs');
-Q.forEach(function(q,i){var d=document.createElement('div');d.className='q';
-d.innerHTML='<small>ข้อ '+(i+1)+'/'+Q.length+'</small><p>'+q.q+'</p>'+q.o.map(function(t,j){return '<button class="o" data-j="'+j+'">'+'ABCD'[j]+'. '+t+'</button>'}).join('')+'<div class="fb"></div>';
-d.querySelectorAll('.o').forEach(function(b){b.addEventListener('click',function(){
-var j=+b.dataset.j,bs=d.querySelectorAll('.o'),f=d.querySelector('.fb');
-bs.forEach(function(x){x.disabled=true});bs[q.a].classList.add('ok');if(j!==q.a)b.classList.add('no');
-f.style.display='block';f.innerHTML=(j===q.a?'✅ ถูกต้อง<br>':'❌ คำตอบคือ '+'ABCD'[q.a]+'<br>')+q.e.replace(/\n/g,'<br>')})});
-c.appendChild(d)});
+{q:"ความเร็วของโดรน v(t) = t·eᵗ เมตร/วินาที จงหาตำแหน่ง s(t) = ∫ t eᵗ dt",o:["eᵗ(t − 1) + C","eᵗ(t + 1) + C","t²eᵗ/2 + C","t eᵗ − t + C"],a:0,e:"u = t, dv = eᵗdt → du = dt, v = eᵗ\nt eᵗ − ∫eᵗdt = t eᵗ − eᵗ = eᵗ(t−1) + C"},
+{q:"กำลังไฟฟ้าชั่วขณะของสัญญาณมีรูป cos²x จงหา ∫ cos²x dx",o:["x/2 + sin2x/4 + C","x/2 − sin2x/4 + C","sin³x/3 + C","cos³x/3 + C"],a:0,e:"กำลังคู่ → cos²x = (1+cos2x)/2\n∫ = x/2 + sin2x/4 + C"},
+{q:"จงหา ∫ sin³x cos²x dx",o:["cos³x/3 − cos⁵x/5 + C","−cos³x/3 + cos⁵x/5 + C","sin⁴x/4 + C","−cos³x/3 − cos⁵x/5 + C"],a:1,e:"sin คี่ → เก็บ sin x ไว้ u = cos x, du = −sin x dx\n= −∫(1−u²)u² du = −u³/3 + u⁵/5"},
+{q:"จงหา ∫ dx/(x²−1)",o:["½ ln|(x+1)/(x−1)| + C","½ ln|(x−1)/(x+1)| + C","ln|x²−1| + C","tan⁻¹x + C"],a:1,e:"1/(x²−1) = ½[1/(x−1) − 1/(x+1)]\n→ ½ln|x−1| − ½ln|x+1|"},
+{q:"จงหา ∫ dx/√(x²+9)",o:["sin⁻¹(x/3) + C","ln|√(x²+9) + x| + C","(1/3)tan⁻¹(x/3) + C","ln|x²+9| + C"],a:1,e:"รูป √(a²+x²) → x = 3tanθ → ∫secθ dθ = ln|secθ+tanθ|\n= ln|√(x²+9)+x| + C'"}];
+Q.forEach(function(q,i){var d=mk('div','q','<small>ข้อ '+(i+1)+'/'+Q.length+'</small><p></p><div class="fb"></div>');d.querySelector('p').textContent=q.q;
+ var f=d.querySelector('.fb');q.o.forEach(function(t,j){var b=mk('button','o');b.textContent='ABCD'[j]+'. '+t;d.insertBefore(b,f);
+  b.addEventListener('click',function(){var bs=d.querySelectorAll('.o');bs.forEach(function(x){x.disabled=true});bs[q.a].classList.add('ok');if(j!==q.a)b.classList.add('no');
+  f.style.display='block';f.textContent=(j===q.a?'✅ ถูกต้อง\n':'❌ คำตอบคือ '+'ABCD'[q.a]+'\n')+q.e;f.style.whiteSpace='pre-line'})});qs.appendChild(d)});
 </script></body></html>
