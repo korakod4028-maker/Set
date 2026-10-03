@@ -34,11 +34,14 @@ td.f{font-family:var(--mono);color:var(--a2);white-space:nowrap}
 .o.ok{border-color:var(--a2);color:var(--a2)}.o.no{border-color:var(--a3);color:var(--a3)}
 .fb{display:none;margin-top:10px;padding:10px 14px;border-radius:8px;background:var(--s2);font-size:14px}
 .st{display:flex;gap:10px;margin:10px 0}.st>i{flex:none;width:24px;height:24px;border-radius:50%;background:var(--a);color:#fff;font:600 12px/24px var(--mono);text-align:center;font-style:normal}.st>div{min-width:0;flex:1}.st .m{margin:4px 0 0}.ans{border:1px solid var(--a2);border-radius:8px;padding:8px 14px;margin-top:10px;color:var(--a2);font-family:var(--mono);overflow-x:auto;white-space:pre}.ext{border-top:1px dashed var(--bd);margin-top:22px;padding-top:6px}.ext h3{color:var(--a4)}
+.fig{display:inline-block;text-align:center;margin:8px 10px 4px 0;vertical-align:top}.fig svg{width:230px;max-width:100%;height:auto}.fig small{display:block;color:var(--td);font:12px var(--mono);margin-top:2px}.figs{margin:10px 0 0}
 </style></head><body>
 <div class="hero"><h1>เทคนิค<span>การอินทิเกรต</span></h1><p>สรุปจากสไลด์ · วิธีทำทีละขั้น พร้อมเหตุผลว่าทำไมถึงทำแบบนี้</p></div>
 <div class="nav" id="nav"></div><div class="wrap" id="app"></div>
 <script>
-var E=function(t,steps,ans){return{t:t,s:steps,a:ans}};
+var tri=function(o,a,h,cap){var T=function(x,y,t,an){return '<text x="'+x+'" y="'+y+'" text-anchor="'+an+'" font-size="15" fill="var(--t)" font-family="IBM Plex Mono,monospace">'+t+'</text>'};
+return '<div class="fig"><svg viewBox="0 0 300 145"><polygon points="50,115 200,115 200,25" fill="var(--s2)" stroke="var(--a)" stroke-width="2.5"/><polyline points="188,115 188,103 200,103" fill="none" stroke="var(--a)" stroke-width="1.5"/><path d="M80,115 A30,30 0 0 0 73,98" fill="none" stroke="var(--a4)" stroke-width="2"/>'+T(88,110,'θ','start').replace('fill="var(--t)"','fill="var(--a4)"')+T(125,134,a,'middle')+T(208,76,o,'start')+T(112,62,h,'end').replace('fill="var(--t)"','fill="var(--a2)"')+'</svg>'+(cap?'<small>'+cap+'</small>':'')+'</div>'};
+var E=function(t,steps,ans,tr){return{t:t,s:steps,a:ans,tr:tr}};
 var S=[
 {id:'s1',tab:'1. By Parts',h:'<span>5.1</span> · อินทิเกรตทีละส่วน',intro:`<div class="box def"><b class="l">สูตร</b><div class="m">∫ u dv = uv − ∫ v du</div></div>
 <div class="box tip"><b class="l">💡 เลือก u ตามลำดับ L-I-A-T-E</b>ลอการิทึม → ตรีโกณผกผัน → พีชคณิต (xⁿ) → ตรีโกณ → เอกซ์โพเนนเชียล ตัวที่มาก่อนให้เป็น u (เพราะดิฟแล้วง่ายขึ้น) ที่เหลือเป็น dv (ต้องอินทิเกรตได้)</div>
@@ -82,11 +85,13 @@ E('∫ tan²x sec³x dx  (กรณี 6)',[['แปลง tan² = sec² − 1 �
 <tr><td class="f">√(a²−x²)</td><td class="f">x = a sinθ</td><td>ตรงข้าม x · เอียง a · ชิด √(a²−x²)</td></tr>
 <tr><td class="f">√(a²+x²)</td><td class="f">x = a tanθ</td><td>ตรงข้าม x · ชิด a · เอียง √(a²+x²)</td></tr>
 <tr><td class="f">√(x²−a²)</td><td class="f">x = a secθ</td><td>เอียง x · ชิด a · ตรงข้าม √(x²−a²)</td></tr></table>
+<div class="figs">${tri('x','√(a²−x²)','a','√(a²−x²) → x = a sinθ')}${tri('x','a','√(a²+x²)','√(a²+x²) → x = a tanθ')}${tri('√(x²−a²)','a','x','√(x²−a²) → x = a secθ')}</div>
+<p style="color:var(--td);font-size:14px">อ่านรูป: ด้านข้างมุม θ ที่ <b>ล่าง</b> = ชิดมุม , ด้าน <b>ขวา</b> = ตรงข้ามมุม , เส้นเฉียง (สีเขียว) = ด้านตรงข้ามมุมฉาก ส่วนตัวที่เป็นราก ให้ไปอยู่ด้านที่เหลือ</p>
 <div class="box tip"><b class="l">💡 5 ขั้นตอน</b>แทน x และ dx → รากกลายเป็นฟังก์ชันตรีโกณ → อินทิเกรตหา θ → วาดสามเหลี่ยม → แปลงกลับเป็น x</div>`,ex:[
-E('① ∫ dx/√(4+x²)',[['รูป √(a²+x²) โดย a = 2 จึงแทน x = 2tanθ','x = 2tanθ , dx = 2sec²θ dθ'],['จัดรูปราก ใช้ 1 + tan²θ = sec²θ','√(4+x²) = √(4 + 4tan²θ) = 2√(1+tan²θ) = 2secθ'],['แทนค่า 2 ตัดกัน secθ ตัดกัน','∫ 2sec²θ / (2secθ) dθ = ∫ secθ dθ = ln|secθ + tanθ|'],['วาดสามเหลี่ยม: tanθ = x/2 → ตรงข้าม x ชิด 2 เอียง √(4+x²) ดังนั้น secθ = √(4+x²)/2','ln| √(4+x²)/2 + x/2 | = ln|√(4+x²) + x| − ln2'],['−ln2 เป็นค่าคงที่ รวมเข้า C']],'= ln| √(4+x²) + x | + C'),
-E('② ∫ x²/√(9−x²) dx',[['รูป √(a²−x²) โดย a = 3','x = 3sinθ , dx = 3cosθ dθ\n√(9−x²) = √(9 − 9sin²θ) = 3cosθ'],['แทนค่า 3cosθ ตัดกัน','∫ 9sin²θ · 3cosθ / (3cosθ) dθ = 9∫ sin²θ dθ'],['มุมครึ่ง sin²θ = (1 − cos2θ)/2','= (9/2) ∫ (1 − cos2θ) dθ = (9/2)( θ − ½ sin2θ )'],['sin2θ = 2sinθ cosθ (double angle)','= (9/2)θ − (9/2) sinθ cosθ'],['สามเหลี่ยม: sinθ = x/3 , cosθ = √(9−x²)/3 , θ = sin⁻¹(x/3)','(9/2) sin⁻¹(x/3) − (9/2)(x/3)(√(9−x²)/3)']],'= (9/2) sin⁻¹(x/3) − (x/2)√(9−x²) + C'),
-E('③ ∫ dx/√(2x−x²)  (เติมกำลังสอง)',[['เติมกำลังสองสมบูรณ์ให้ใต้รากเป็นรูป 1 − (…)²','2x − x² = −(x² − 2x) = −(x² − 2x + 1) + 1 = 1 − (x−1)²'],['ตั้ง u = x − 1 , du = dx','∫ du/√(1 − u²)'],['u = sinθ , du = cosθ dθ , √(1−u²) = cosθ','∫ cosθ/cosθ dθ = θ = sin⁻¹u']],'= sin⁻¹(x−1) + C'),
-E('④ ∫ dx/(4x²+4x+2)',[['เติมกำลังสอง','4x²+4x+2 = (4x²+4x+1) + 1 = (2x+1)² + 1'],['u = 2x+1 , du = 2dx → dx = ½du','= ½ ∫ du/(u² + 1)'],['u = tanθ , du = sec²θ dθ , u²+1 = sec²θ','½ ∫ sec²θ/sec²θ dθ = ½θ = ½ tan⁻¹u']],'= ½ tan⁻¹(2x+1) + C')],
+E('① ∫ dx/√(4+x²)',[['รูป √(a²+x²) โดย a = 2 จึงแทน x = 2tanθ','x = 2tanθ , dx = 2sec²θ dθ'],['จัดรูปราก ใช้ 1 + tan²θ = sec²θ','√(4+x²) = √(4 + 4tan²θ) = 2√(1+tan²θ) = 2secθ'],['แทนค่า 2 ตัดกัน secθ ตัดกัน','∫ 2sec²θ / (2secθ) dθ = ∫ secθ dθ = ln|secθ + tanθ|'],['วาดสามเหลี่ยม: tanθ = x/2 → ตรงข้าม x ชิด 2 เอียง √(4+x²) ดังนั้น secθ = √(4+x²)/2','ln| √(4+x²)/2 + x/2 | = ln|√(4+x²) + x| − ln2'],['−ln2 เป็นค่าคงที่ รวมเข้า C']],'= ln| √(4+x²) + x | + C',['x','2','√(4+x²)','tanθ = x/2 , secθ = √(4+x²)/2']),
+E('② ∫ x²/√(9−x²) dx',[['รูป √(a²−x²) โดย a = 3','x = 3sinθ , dx = 3cosθ dθ\n√(9−x²) = √(9 − 9sin²θ) = 3cosθ'],['แทนค่า 3cosθ ตัดกัน','∫ 9sin²θ · 3cosθ / (3cosθ) dθ = 9∫ sin²θ dθ'],['มุมครึ่ง sin²θ = (1 − cos2θ)/2','= (9/2) ∫ (1 − cos2θ) dθ = (9/2)( θ − ½ sin2θ )'],['sin2θ = 2sinθ cosθ (double angle)','= (9/2)θ − (9/2) sinθ cosθ'],['สามเหลี่ยม: sinθ = x/3 , cosθ = √(9−x²)/3 , θ = sin⁻¹(x/3)','(9/2) sin⁻¹(x/3) − (9/2)(x/3)(√(9−x²)/3)']],'= (9/2) sin⁻¹(x/3) − (x/2)√(9−x²) + C',['x','√(9−x²)','3','sinθ = x/3 , cosθ = √(9−x²)/3']),
+E('③ ∫ dx/√(2x−x²)  (เติมกำลังสอง)',[['เติมกำลังสองสมบูรณ์ให้ใต้รากเป็นรูป 1 − (…)²','2x − x² = −(x² − 2x) = −(x² − 2x + 1) + 1 = 1 − (x−1)²'],['ตั้ง u = x − 1 , du = dx','∫ du/√(1 − u²)'],['u = sinθ , du = cosθ dθ , √(1−u²) = cosθ','∫ cosθ/cosθ dθ = θ = sin⁻¹u']],'= sin⁻¹(x−1) + C',['x−1','√(1−(x−1)²)','1','sinθ = u = x−1 , cosθ = √(1−u²)']),
+E('④ ∫ dx/(4x²+4x+2)',[['เติมกำลังสอง','4x²+4x+2 = (4x²+4x+1) + 1 = (2x+1)² + 1'],['u = 2x+1 , du = 2dx → dx = ½du','= ½ ∫ du/(u² + 1)'],['u = tanθ , du = sec²θ dθ , u²+1 = sec²θ','½ ∫ sec²θ/sec²θ dθ = ½θ = ½ tan⁻¹u']],'= ½ tan⁻¹(2x+1) + C',['2x+1','1','√((2x+1)²+1)','tanθ = u = 2x+1 , secθ = √(u²+1)'])],
 tail:`<div class="box def"><b class="l">สูตรลัด (ผลจากการแทนตรีโกณฯ)</b><div class="m">∫ du/(u²+a²) = (1/a) tan⁻¹(u/a) + C
 ∫ du/√(a²−u²) = sin⁻¹(u/a) + C</div></div>`},
 
@@ -110,7 +115,7 @@ S.forEach(function(s,i){
  s.ex.forEach(function(e){var w=mk('div','ext');w.appendChild(mk('h3','',e.t));
   e.s.forEach(function(st,k){var r=mk('div','st');r.appendChild(mk('i','',k+1));var d=mk('div','',st[0]);
    if(st[1]){var m=mk('div','m');m.textContent=st[1];d.appendChild(m)}r.appendChild(d);w.appendChild(r)});
-  var a=mk('div','ans');a.textContent='ตอบ  '+e.a;w.appendChild(a);c.appendChild(w)});
+  if(e.tr){var g=mk('div','figs',tri.apply(null,e.tr));w.appendChild(g)}var a=mk('div','ans');a.textContent='ตอบ  '+e.a;w.appendChild(a);c.appendChild(w)});
  if(s.tail)c.appendChild(mk('div','',s.tail));
  app.appendChild(sec)});
 var qb=mk('button','','🎯 ฝึกหัด');qb.dataset.s='s6';nav.appendChild(qb);
