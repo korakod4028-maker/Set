@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>การประยุกต์การอินทิเกรต | แคลคูลัส สรุปเตรียมสอบปลายภาค</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#f6f5fb;--surface:#ffffff;--surface2:#efedf9;--border:#d6d2ec;
+  --accent:#5a4fe3;--accent2:#007f66;--accent3:#d93f3f;--accent4:#9a6b00;
+  --text:#1b1e33;--text-dim:#525c7b;--text-muted:#8a92b0;
+  --hero1:#eceafd;--hero2:#e3f4f0;--mathtxt:#2a2f55;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Sarabun',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d0f1a;--surface:#141828;--surface2:#1c2235;--border:#2a3050;
+    --accent:#7d75ff;--accent2:#00d4aa;--accent3:#ff6b6b;--accent4:#ffd93d;
+    --text:#e8eaf6;--text-dim:#8892b0;--text-muted:#4a5580;
+    --hero1:#1a1040;--hero2:#0d1a2a;--mathtxt:#c9d1f5;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d0f1a;--surface:#141828;--surface2:#1c2235;--border:#2a3050;
+  --accent:#7d75ff;--accent2:#00d4aa;--accent3:#ff6b6b;--accent4:#ffd93d;
+  --text:#e8eaf6;--text-dim:#8892b0;--text-muted:#4a5580;
+  --hero1:#1a1040;--hero2:#0d1a2a;--mathtxt:#c9d1f5;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.75;min-height:100vh}
+.hero{background:linear-gradient(135deg,var(--bg) 0%,var(--hero1) 50%,var(--hero2) 100%);padding:56px 20px 44px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hero::before{content:'∫  Σ  π  √  dx  dy  ∞  lim';position:absolute;top:14px;left:0;right:0;font-family:var(--mono);font-size:14px;color:var(--text-muted);letter-spacing:6px;opacity:.7;white-space:nowrap;overflow:hidden}
+.badge{display:inline-block;background:rgba(108,99,255,.14);border:1px solid rgba(108,99,255,.4);color:var(--accent);font-size:12px;font-weight:600;letter-spacing:2px;padding:4px 14px;border-radius:20px;margin-bottom:16px}
+.hero h1{font-size:clamp(28px,6vw,50px);font-weight:800;line-height:1.2;margin-bottom:12px}
+.hero h1 span{color:var(--accent)}
+.hero p{color:var(--text-dim);font-size:17px;max-width:540px;margin:0 auto 28px}
+.hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap}
+.stat-num{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--accent2)}
+.stat-label{font-size:13px;color:var(--text-dim)}
+.nav-tabs{display:flex;gap:4px;padding:14px 16px;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;position:sticky;top:env(safe-area-inset-top,0px);z-index:100;align-items:center}
+.nav-tabs::-webkit-scrollbar{display:none}
+.tab-btn{white-space:nowrap;padding:8px 16px;border-radius:8px;border:none;background:transparent;color:var(--text-dim);font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s}
+.tab-btn:hover{background:var(--surface2);color:var(--text)}
+.tab-btn.active{background:var(--accent);color:#fff;font-weight:600}
+.theme-btn{margin-left:auto;flex-shrink:0;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:14px}
+.content{max-width:860px;margin:0 auto;padding:28px 18px 80px}
+.section{display:none}.section.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px}
+.card-title{font-size:20px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.icon-purple{background:rgba(108,99,255,.18)}.icon-teal{background:rgba(0,212,170,.16)}.icon-red{background:rgba(255,107,107,.16)}.icon-yellow{background:rgba(255,217,61,.2)}
+.def-box,.example-box,.warn-box,.tip-box{border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;border-left:3px solid}
+.def-box{background:rgba(108,99,255,.09);border-color:var(--accent)}
+.example-box{background:rgba(0,180,150,.08);border-color:var(--accent2)}
+.warn-box{background:rgba(255,90,90,.08);border-color:var(--accent3)}
+.tip-box{background:rgba(255,200,40,.09);border-color:var(--accent4)}
+.lbl{font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.def-box .lbl{color:var(--accent)}.example-box .lbl{color:var(--accent2)}.warn-box .lbl{color:var(--accent3)}.tip-box .lbl{color:var(--accent4)}
+.math{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:2px 8px;border-radius:5px;font-size:14px;color:var(--accent2)}
+.math-block{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:14px 18px;border-radius:8px;margin:12px 0;font-size:15px;color:var(--mathtxt);overflow-x:auto;line-height:2.1}
+.math-block.big{font-size:18px;text-align:center}
+.int{display:inline-flex;align-items:center;vertical-align:middle;margin:0 2px}
+.isym{font-size:1.9em;line-height:1;font-weight:300}
+.ilim{display:inline-flex;flex-direction:column;justify-content:space-between;font-size:.7em;line-height:1.1;height:2.3em;margin-left:1px;text-align:left}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.25;margin:0 3px;font-size:.92em}
+.fr>span:first-child{border-bottom:1px solid currentColor;padding:0 4px}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+th{background:var(--surface2);border:1px solid var(--border);padding:9px 12px;text-align:center;font-weight:600;color:var(--accent)}
+td{border:1px solid var(--border);padding:8px 12px;text-align:center;font-family:var(--mono);font-size:14px}
+td.l{text-align:left;font-family:var(--sans)}
+.tablewrap{overflow-x:auto}
+.section-heading{font-size:26px;font-weight:800;margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.section-heading span{color:var(--accent)}
+.sub-heading{font-size:18px;font-weight:700;margin:22px 0 10px;color:var(--accent2)}
+p{margin-bottom:10px}ul,ol{padding-left:22px;margin-bottom:10px}li{margin-bottom:4px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media (max-width:640px){.grid-2{grid-template-columns:1fr}}
+.mini-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;min-width:0}
+.mini-card h4{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:6px}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding-left:40px;margin-bottom:10px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px}
+.score{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;color:var(--text-dim);font-size:14px;flex-wrap:wrap;gap:8px}
+.quiz-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px}
+.q-level{font-size:12px;font-weight:700;color:var(--accent4);letter-spacing:1px;margin-bottom:6px}
+.quiz-question{font-size:17px;font-weight:600;margin-bottom:14px;line-height:1.6}
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.option-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px 16px;color:var(--text);font-family:var(--mono);font-size:15px;cursor:pointer;text-align:left;transition:all .2s}
+.option-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(108,99,255,.1)}
+.option-btn:disabled{cursor:default}
+.option-btn.correct{background:rgba(0,200,160,.15);border-color:var(--accent2);color:var(--accent2)}
+.option-btn.wrong{background:rgba(255,90,90,.1);border-color:var(--accent3);color:var(--accent3)}
+.feedback{margin-top:12px;padding:12px 16px;border-radius:8px;font-size:14.5px;display:none;line-height:1.8}
+.feedback.show{display:block}
+.feedback.ok{background:rgba(0,200,160,.1);border:1px solid rgba(0,200,160,.35)}
+.feedback.no{background:rgba(255,90,90,.08);border:1px solid rgba(255,90,90,.3)}
+.reset-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">แคลคูลัส · สรุปเตรียมสอบปลายภาค</div>
+  <h1>การประยุกต์<span>การอินทิเกรต</span></h1>
+  <p>พื้นที่ ปริมาตรจากการหมุน (จาน วงแหวน เปลือกทรงกระบอก) พร้อมตัวอย่างและแบบฝึกหัด</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">หัวข้อ</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">วิธีหาปริมาตร</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">แบบฝึกหัด</div></div>
+  </div>
+</div>
+<div class="nav-tabs" id="nav-tabs">
+<button class="tab-btn active" data-sec="s1">1. อินทิกรัลจำกัดเขต</button><button class="tab-btn" data-sec="s2">2. พื้นที่</button><button class="tab-btn" data-sec="s3">3. วิธีแบบจาน</button><button class="tab-btn" data-sec="s4">4. วิธีแบบวงแหวน</button><button class="tab-btn" data-sec="s5">5. วิธีเปลือกทรงกระบอก</button><button class="tab-btn" data-sec="s6">6. เลือกวิธี & เทคนิค</button><button class="tab-btn" data-sec="s7">🎯 แบบฝึกหัด</button>
+<button class="theme-btn" id="theme-btn" aria-label="สลับธีม">◐</button>
+</div>
+<div class="content">
+<div class="section active" id="s1">
+<div class="section-heading"><span>หัวข้อ 1</span> · อินทิกรัลจำกัดเขต</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-purple">📐</div>ทฤษฎีบทหลักของแคลคูลัส</div>
+  <p>ถ้า f ต่อเนื่องบนช่วง [a, b] และ F เป็นปฏิยานุพันธ์ของ f (นั่นคือ F′(x) = f(x)) แล้ว</p>
+  <div class="math-block big"><span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> f(x) dx = F(b) − F(a)</div>
+  <div class="example-box"><div class="lbl">ตัวอย่าง</div><span class="int"><span class="isym">∫</span><span class="ilim"><span>3</span><span>1</span></span></span> 2x dx = [x²] จาก 1 ถึง 3 = 3² − 1² = <strong>8</strong></div>
+</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-teal">📋</div>คุณสมบัติที่ต้องจำ</div>
+  <div class="tablewrap"><table>
+    <tr><th>คุณสมบัติ</th><th>สูตร</th></tr>
+    <tr><td class="l">ค่าคงที่ 1</td><td><span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> 1 dx = b − a</td></tr>
+    <tr><td class="l">ดึงค่าคงที่ออก</td><td><span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> k·f(x) dx = k <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> f(x) dx</td></tr>
+    <tr><td class="l">บวก / ลบ</td><td><span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> [f(x) ± g(x)] dx = <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> f dx ± <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> g dx</td></tr>
+    <tr><td class="l">แยกช่วง</td><td><span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> f dx = <span class="int"><span class="isym">∫</span><span class="ilim"><span>c</span><span>a</span></span></span> f dx + <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>c</span></span></span> f dx</td></tr>
+    <tr><td class="l">ขอบเขตเท่ากัน</td><td><span class="int"><span class="isym">∫</span><span class="ilim"><span>a</span><span>a</span></span></span> f(x) dx = 0</td></tr>
+    <tr><td class="l">สลับขอบเขต</td><td><span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> f dx = − <span class="int"><span class="isym">∫</span><span class="ilim"><span>a</span><span>b</span></span></span> f dx</td></tr>
+  </table></div>
+  <div class="tip-box"><div class="lbl">💡 เทคนิค</div>ถ้า f เป็นฟังก์ชันคู่: <span class="int"><span class="isym">∫</span><span class="ilim"><span>a</span><span>−a</span></span></span> f dx = 2 <span class="int"><span class="isym">∫</span><span class="ilim"><span>a</span><span>0</span></span></span> f dx<br>ถ้า f เป็นฟังก์ชันคี่: <span class="int"><span class="isym">∫</span><span class="ilim"><span>a</span><span>−a</span></span></span> f dx = 0</div><div class="warn-box"><div class="lbl">⚠️ ระวัง</div><span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> f(x)·g(x) dx <strong>ไม่เท่ากับ</strong> (<span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> f dx)(<span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> g dx) — คุณสมบัติบวก/ลบใช้ได้ แต่ไม่มีสมบัติคูณแบบนี้</div>
+</div>
+</div><div class="section" id="s2">
+<div class="section-heading"><span>หัวข้อ 2</span> · การหาพื้นที่</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-teal">📈</div>พื้นที่ระหว่างเส้นโค้งกับแกน X</div>
+  <div class="def-box"><div class="lbl">สูตร</div>ถ้า y = f(x) ≥ 0 บนช่วง [a, b]<div class="math-block big">A = <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> f(x) dx</div></div>
+  <p>ถ้า f(x) ติดลบบางช่วง พื้นที่จริงต้องเป็นบวก ให้แยกช่วงที่ f ≥ 0 กับ f ≤ 0 แล้วอินทิเกรต |f(x)| ทีละช่วง</p>
+  <div class="example-box"><div class="lbl">ตัวอย่าง: พื้นที่ใต้ y = x² จาก x = 0 ถึง 3</div>A = <span class="int"><span class="isym">∫</span><span class="ilim"><span>3</span><span>0</span></span></span> x² dx = [x³/3] จาก 0 ถึง 3 = 27/3 = <strong>9</strong> ตารางหน่วย</div>
+</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-purple">🔀</div>พื้นที่ระหว่างเส้นโค้งสองเส้น</div>
+  <div class="def-box"><div class="lbl">สูตร</div>ถ้า f(x) ≥ g(x) บนช่วง [a, b]<div class="math-block big">A = <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> [f(x) − g(x)] dx</div></div>
+  <ol class="steps">
+    <li>วาดกราฟทั้งสองเส้น แล้วระบายบริเวณที่โจทย์ถาม</li>
+    <li>หาจุดตัด (ให้ f(x) = g(x)) เพื่อได้ขอบเขต a, b</li>
+    <li>ดูว่าในช่วงนั้นเส้นไหนอยู่ <strong>บน</strong> เส้นไหนอยู่ <strong>ล่าง</strong></li>
+    <li>ตั้ง A = ∫ (บน − ล่าง) dx แล้วคำนวณ</li>
+  </ol>
+  <div class="example-box"><div class="lbl">ตัวอย่าง: พื้นที่ปิดล้อมด้วย y = x และ y = x²</div>จุดตัด: x = x² → x = 0 หรือ x = 1<br>ในช่วง (0, 1) เส้น y = x อยู่บน y = x²<br>A = <span class="int"><span class="isym">∫</span><span class="ilim"><span>1</span><span>0</span></span></span> (x − x²) dx = [x²/2 − x³/3] จาก 0 ถึง 1 = 1/2 − 1/3 = <strong>1/6</strong></div><div class="warn-box"><div class="lbl">⚠️ ระวัง</div>ถ้าเส้นโค้ง<strong>ตัดกันกลางช่วง</strong> เส้นบน/ล่างจะสลับกัน ต้องแยกอินทิกรัลเป็นช่วงๆ ไม่งั้นส่วนที่ติดลบจะหักล้างกัน</div>
+</div>
+</div><div class="section" id="s3">
+<div class="section-heading"><span>หัวข้อ 3</span> · ปริมาตรทรงตัน: วิธีแบบจาน (Disk)</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-yellow">💿</div>หลักการ</div>
+  <p>หมุนพื้นที่รอบแกน แล้วหั่นทรงตันเป็นแผ่นบางๆ <strong>ตั้งฉากกับแกนหมุน</strong> แต่ละแผ่นเป็นจาน (วงกลมตัน) ปริมาตรจานหนึ่งแผ่น = π × (รัศมี)² × ความหนา</p>
+  <div class="grid-2">
+    <div class="mini-card"><h4>หมุนรอบแกน x</h4><div class="math-block">V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> [f(x)]² dx</div></div>
+    <div class="mini-card"><h4>หมุนรอบแกน y</h4><div class="math-block">V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> [f(y)]² dy</div></div>
+  </div>
+  <div class="def-box"><div class="lbl">เมื่อไหร่ใช้จาน</div>พื้นที่ที่หมุน<strong>ติดแกนหมุนตลอดช่วง</strong> ทรงตันที่ได้ไม่มีรูตรงกลาง</div>
+</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-teal">✏️</div>ตัวอย่างจากสไลด์</div>
+  <div class="example-box"><div class="lbl">ตัวอย่าง 1: y = 0 และ y = 16 − x² หมุนรอบแกน x</div>จุดตัด: 16 − x² = 0 → x = ±4 รัศมี = 16 − x²<br><br>V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>4</span><span>−4</span></span></span> (16 − x²)² dx = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>4</span><span>−4</span></span></span> (256 − 32x² + x⁴) dx<br>= 2π [256x − 32x³/3 + x⁵/5] จาก 0 ถึง 4<br>= 2π (1024 − 2048/3 + 1024/5) = <strong>16384π/15</strong></div><div class="warn-box"><div class="lbl">⚠️ สไลด์เฉลยผิด</div>สไลด์เขียนเฉลยเป็น 256π/3 ซึ่งมาจากการอินทิเกรต (16 − x²) โดย<strong>ไม่ยกกำลังสอง</strong> สูตรจานต้องยกกำลังสองรัศมีเสมอ คำตอบที่ถูกคือ 16384π/15 ≈ 1092.3 (ถ้าอาจารย์เฉลยในห้องต่างจากนี้ ให้ถามอาจารย์อีกที)</div><div class="example-box"><div class="lbl">ตัวอย่าง 2: y = 2√x, y = 0, x = 9</div><strong>(a) หมุนรอบแกน x</strong><br>รัศมี = 2√x → V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>9</span><span>0</span></span></span> (2√x)² dx = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>9</span><span>0</span></span></span> 4x dx = π[2x²] จาก 0 ถึง 9 = <strong>162π</strong><br><br><strong>(b) หมุนรอบเส้น x = 9</strong><br>เปลี่ยนเป็น x = y²/4 ช่วง y จาก 0 ถึง 6 รัศมี = 9 − y²/4 (วัดจากเส้นหมุนมาถึงขอบพื้นที่)<br>V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>6</span><span>0</span></span></span> (9 − y²/4)² dy = π [81y − 3y³/2 + y⁵/80] จาก 0 ถึง 6 = <strong>259.2π</strong> = 1296π/5</div>
+  <p><strong>หลักคิด:</strong> ถ้าเส้นหมุนไม่ใช่แกน ให้วัดรัศมีเป็น <em>ระยะจากเส้นหมุนถึงขอบพื้นที่</em> เช่น 9 − y²/4 ไม่ใช่ y²/4</p>
+</div>
+</div><div class="section" id="s4">
+<div class="section-heading"><span>หัวข้อ 4</span> · ปริมาตรทรงตัน: วิธีแบบวงแหวน (Washer / Ring)</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-yellow">🍩</div>หลักการ</div>
+  <p>เหมือนวิธีจาน แต่พื้นที่<strong>ไม่ติดแกนหมุน</strong> ทำให้มีรูตรงกลาง แต่ละแผ่นเป็นวงแหวน ปริมาตร = ปริมาตรวงกลมใหญ่ − ปริมาตรวงกลมเล็ก</p>
+  <div class="grid-2">
+    <div class="mini-card"><h4>หมุนรอบแกน x</h4><div class="math-block">V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> ([R(x)]² − [r(x)]²) dx</div></div>
+    <div class="mini-card"><h4>หมุนรอบแกน y</h4><div class="math-block">V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> ([R(y)]² − [r(y)]²) dy</div></div>
+  </div>
+  <div class="def-box"><div class="lbl">R และ r</div><strong>R</strong> = รัศมีนอก (ขอบพื้นที่ที่<em>ไกล</em>จากแกนหมุน)<br><strong>r</strong> = รัศมีใน (ขอบพื้นที่ที่<em>ใกล้</em>แกนหมุน)</div><div class="warn-box"><div class="lbl">⚠️ จำให้ขึ้นใจ</div>ต้องยกกำลังสอง <strong>แต่ละรัศมีก่อน</strong> แล้วค่อยลบ: R² − r² ไม่ใช่ (R − r)²</div>
+</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-teal">✏️</div>ตัวอย่างจากสไลด์</div>
+  <div class="example-box"><div class="lbl">ตัวอย่าง 1: y = 1 และ y = 3 − x²/2 หมุนรอบแกน x</div>จุดตัด: 1 = 3 − x²/2 → x² = 4 → x = ±2<br>R = 3 − x²/2 (ไกลแกน x), r = 1<br><br>V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>2</span><span>−2</span></span></span> [(3 − x²/2)² − 1²] dx<br>= π <span class="int"><span class="isym">∫</span><span class="ilim"><span>2</span><span>−2</span></span></span> (8 − 3x² + x⁴/4) dx<br>= π [8x − x³ + x⁵/20] จาก −2 ถึง 2<br>= π(9.6 + 9.6) = <strong>19.2π</strong> = 96π/5</div><div class="example-box"><div class="lbl">ตัวอย่าง 2: y = x, y = 4, x = 1</div><strong>(a) หมุนรอบเส้น y = 5</strong><br>R = 5 − x (ขอบ y = x ไกลกว่า), r = 5 − 4 = 1<br>V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>4</span><span>1</span></span></span> [(5 − x)² − 1²] dx = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>4</span><span>1</span></span></span> (24 − 10x + x²) dx = π [24x − 5x² + x³/3] จาก 1 ถึง 4 = <strong>18π</strong><br><br><strong>(b) หมุนรอบแกน y</strong><br>เขียนใหม่ในรูป y: R = y, r = 1, y จาก 1 ถึง 4<br>V = π <span class="int"><span class="isym">∫</span><span class="ilim"><span>4</span><span>1</span></span></span> (y² − 1) dy = π [y³/3 − y] จาก 1 ถึง 4 = <strong>21π</strong></div>
+</div>
+</div><div class="section" id="s5">
+<div class="section-heading"><span>หัวข้อ 5</span> · ปริมาตรทรงตัน: วิธีเปลือกทรงกระบอก (Shell)</div>
+<div class="tip-box"><div class="lbl">📝 หมายเหตุ</div>หน้าสไลด์ของอาจารย์ในหัวข้อนี้ยังว่างอยู่ เนื้อหาด้านล่างจึงเติมตามหลักทั่วไป ให้เทียบกับที่อาจารย์สอนในห้องอีกครั้ง</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-yellow">🥫</div>หลักการ</div>
+  <p>หั่นพื้นที่เป็นแถบบางๆ <strong>ขนานกับแกนหมุน</strong> เมื่อหมุนแถบหนึ่งแถบจะได้เปลือกทรงกระบอก ปริมาตร ≈ (เส้นรอบวง) × (ความสูง) × (ความหนา)</p>
+  <div class="math-block big">V = 2π <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> (รัศมีเปลือก) × (ความสูงเปลือก) d(ตัวแปร)</div>
+  <div class="grid-2">
+    <div class="mini-card"><h4>หมุนรอบแกน y</h4><div class="math-block">V = 2π <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> x·f(x) dx</div><p>ระหว่างสองเส้น: ความสูง = f(x) − g(x)</p></div>
+    <div class="mini-card"><h4>หมุนรอบแกน x</h4><div class="math-block">V = 2π <span class="int"><span class="isym">∫</span><span class="ilim"><span>b</span><span>a</span></span></span> y·f(y) dy</div><p>ความสูงวัดตามแนวนอน</p></div>
+  </div>
+  <div class="tip-box"><div class="lbl">💡 หมุนรอบเส้น x = k</div>รัศมีเปลือก = |x − k| (ระยะจากเส้นหมุนถึงแถบ)</div>
+</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-teal">✏️</div>ตัวอย่าง</div>
+  <div class="example-box"><div class="lbl">ตัวอย่าง 1: y = x², y = 0, 0 ≤ x ≤ 2 หมุนรอบแกน y</div>รัศมีเปลือก = x, ความสูง = x²<br>V = 2π <span class="int"><span class="isym">∫</span><span class="ilim"><span>2</span><span>0</span></span></span> x·x² dx = 2π [x⁴/4] จาก 0 ถึง 2 = 2π(4) = <strong>8π</strong></div><div class="example-box"><div class="lbl">ตัวอย่าง 2: ระหว่าง y = x และ y = x² หมุนรอบแกน y</div>ความสูง = x − x²<br>V = 2π <span class="int"><span class="isym">∫</span><span class="ilim"><span>1</span><span>0</span></span></span> x(x − x²) dx = 2π [x³/3 − x⁴/4] จาก 0 ถึง 1 = 2π(1/12) = <strong>π/6</strong></div><div class="example-box"><div class="lbl">ตัวอย่าง 3: พื้นที่เดิมของตัวอย่าง 1 หมุนรอบเส้น x = 3</div>รัศมีเปลือก = 3 − x<br>V = 2π <span class="int"><span class="isym">∫</span><span class="ilim"><span>2</span><span>0</span></span></span> (3 − x)x² dx = 2π [x³ − x⁴/4] จาก 0 ถึง 2 = 2π(4) = <strong>8π</strong></div>
+</div>
+</div><div class="section" id="s6">
+<div class="section-heading"><span>หัวข้อ 6</span> · เลือกวิธีให้ถูก & เทคนิคทำข้อสอบ</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-purple">🧭</div>สรุปเปรียบเทียบสามวิธี</div>
+  <div class="tablewrap"><table>
+    <tr><th>วิธี</th><th>แถบที่หั่น</th><th>ใช้เมื่อ</th><th>สูตรหลัก (รอบแกน x)</th></tr>
+    <tr><td>จาน</td><td>ตั้งฉากแกนหมุน</td><td class="l">ติดแกนหมุน ไม่มีรู</td><td>π∫ R² dx</td></tr>
+    <tr><td>วงแหวน</td><td>ตั้งฉากแกนหมุน</td><td class="l">ไม่ติดแกน มีรู</td><td>π∫ (R² − r²) dx</td></tr>
+    <tr><td>เปลือก</td><td>ขนานแกนหมุน</td><td class="l">ฟังก์ชันกลับยาก หรือหมุนรอบแกนตั้งฉากกับตัวแปร</td><td>2π∫ y·h dy</td></tr>
+  </table></div>
+  <p>ถ้าหมุนรอบแกน y ตัวแปรจะสลับกัน: จาน/วงแหวนใช้ dy ส่วนเปลือกใช้ dx เลือกวิธีที่เขียนฟังก์ชันได้ง่าย ไม่ต้องกลับฟังก์ชัน</p>
+</div>
+<div class="card">
+  <div class="card-title"><div class="icon icon-yellow">✅</div>เช็กลิสต์ทำข้อสอบ</div>
+  <ol class="steps">
+    <li><strong>วาดกราฟก่อนเสมอ</strong> ระบายพื้นที่ แล้วขีดเส้นแกนหมุน</li>
+    <li>หาจุดตัด เพื่อได้ขอบเขตการอินทิเกรต</li>
+    <li>ถามตัวเองว่า &quot;มีรูตรงกลางไหม&quot; มี = วงแหวน ไม่มี = จาน</li>
+    <li>รัศมี = ระยะจาก<strong>เส้นหมุน</strong>ถึงขอบพื้นที่ (ถ้าไม่ใช่แกน ต้องลบหรือบวกค่าคงที่)</li>
+    <li><strong>ยกกำลังสองรัศมี</strong> และอย่าลืม π (หรือ 2π ในวิธีเปลือก)</li>
+    <li>ใช้สมมาตรช่วยลดงาน และตรวจว่าคำตอบเป็นบวก</li>
+  </ol>
+</div>
+</div><div class="section" id="s7">
+<div class="section-heading"><span>แบบฝึกหัด</span> · ทดสอบความเข้าใจ</div>
+<div class="score"><span id="score-text">ตอบแล้ว 0 / 7 ข้อ · ถูก 0 ข้อ</span><button class="reset-btn" id="reset-btn">ทำใหม่</button></div>
+<div id="quiz-root"></div>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-sec');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.getElementById(id).classList.add('active');
+      this.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+  var tb = document.getElementById('theme-btn');
+  tb.addEventListener('click', function() {
+    var root = document.documentElement;
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+  });
+
+  var Q = [["⭐ ระดับ 1 — คุณสมบัติ", "กำหนด ∫₀⁴ f(x) dx = 5 และ ∫₂⁴ f(x) dx = 2 จงหา ∫₀² f(x) dx", ["3", "7", "−3", "10"], 0, "ใช้สมบัติแยกช่วง: ∫₀⁴ f = ∫₀² f + ∫₂⁴ f<br>5 = ∫₀² f + 2 ดังนั้น ∫₀² f = 3"], ["⭐ ระดับ 1 — พื้นที่", "พื้นที่ปิดล้อมด้วย y = 4 − x² และแกน x เท่ากับเท่าใด", ["16/3", "32/3", "8", "16"], 1, "จุดตัดแกน x: 4 − x² = 0 → x = ±2<br>A = ∫₋₂² (4 − x²) dx = 2[4x − x³/3] จาก 0 ถึง 2 = 2(8 − 8/3) = 32/3"], ["⭐⭐ ระดับ 2 — พื้นที่ระหว่างเส้น", "พื้นที่ระหว่าง y = x และ y = x² เท่ากับเท่าใด", ["1/2", "1/3", "1/6", "1/12"], 2, "จุดตัด x = 0, 1 และ y = x อยู่บน<br>A = ∫₀¹ (x − x²) dx = 1/2 − 1/3 = 1/6"], ["⭐⭐ ระดับ 2 — วิธีจาน", "พื้นที่ใต้ y = √x จาก x = 0 ถึง 4 หมุนรอบแกน x ได้ปริมาตรเท่าใด", ["4π", "8π", "16π", "2π"], 1, "รัศมี = √x ยกกำลังสองได้ x<br>V = π ∫₀⁴ x dx = π [x²/2] จาก 0 ถึง 4 = 8π"], ["⭐⭐ ระดับ 2 — วงแหวน", "พื้นที่ระหว่าง y = x และ y = x² หมุนรอบแกน x ได้ปริมาตรเท่าใด", ["π/6", "2π/15", "π/3", "8π/15"], 1, "ในช่วง 0 ถึง 1 เส้น y = x ไกลแกน x กว่า: R = x, r = x²<br>V = π ∫₀¹ (x² − x⁴) dx = π(1/3 − 1/5) = 2π/15<br>(ข้อผิดที่พบบ่อย: ยกกำลังสองหลังลบ ได้ (x − x²)² ซึ่งผิด)"], ["⭐⭐⭐ ระดับ 3 — รัศมีรอบเส้นอื่น", "พื้นที่ระหว่าง y = x, y = 4, x = 1 หมุนรอบเส้น y = 5 รัศมีนอก R(x) ของวงแหวนคือข้อใด", ["x", "5 − x", "x − 5", "4 − x"], 1, "เส้นหมุน y = 5 อยู่เหนือพื้นที่ ขอบที่ไกลสุดคือ y = x<br>ระยะจากเส้นหมุนถึง y = x คือ 5 − x (ส่วนรัศมีในคือ 5 − 4 = 1)"], ["⭐⭐⭐ ระดับ 3 — เปลือกทรงกระบอก", "พื้นที่ใต้ y = x² จาก x = 0 ถึง 2 หมุนรอบแกน y ได้ปริมาตรเท่าใด", ["4π", "8π", "16π", "32π/5"], 1, "วิธีเปลือก: รัศมี = x, ความสูง = x²<br>V = 2π ∫₀² x³ dx = 2π [x⁴/4] จาก 0 ถึง 2 = 8π<br>(32π/5 คือคำตอบถ้าหมุนรอบแกน x ด้วยวิธีจาน)"]];
+  var root = document.getElementById('quiz-root');
+  var answered = 0, correct = 0, done = {};
+  function upd() {
+    document.getElementById('score-text').textContent = 'ตอบแล้ว ' + answered + ' / ' + Q.length + ' ข้อ · ถูก ' + correct + ' ข้อ';
+  }
+  function render() {
+    root.innerHTML = '';
+    answered = 0; correct = 0; done = {};
+    Q.forEach(function(q, qi) {
+      var card = document.createElement('div');
+      card.className = 'quiz-card';
+      var lv = document.createElement('div'); lv.className = 'q-level'; lv.textContent = 'ข้อ ' + (qi+1) + ' · ' + q[0];
+      var qq = document.createElement('div'); qq.className = 'quiz-question'; qq.textContent = q[1];
+      var opts = document.createElement('div'); opts.className = 'quiz-options';
+      var fb = document.createElement('div'); fb.className = 'feedback';
+      q[2].forEach(function(o, oi) {
+        var b = document.createElement('button');
+        b.className = 'option-btn'; b.textContent = String.fromCharCode(0x0E01 + oi) + '.  ' + o;
+        b.addEventListener('click', function() {
+          if (done[qi]) return;
+          done[qi] = true; answered++;
+          var btns = opts.querySelectorAll('button');
+          btns.forEach(function(x) { x.disabled = true; });
+          btns[q[3]].classList.add('correct');
+          if (oi === q[3]) { correct++; fb.className = 'feedback show ok'; fb.innerHTML = '<strong>ถูกต้อง ✓</strong><br>' + q[4]; }
+          else { b.classList.add('wrong'); fb.className = 'feedback show no'; fb.innerHTML = '<strong>ยังไม่ถูก</strong><br>' + q[4]; }
+          upd();
+        });
+        opts.appendChild(b);
+      });
+      card.appendChild(lv); card.appendChild(qq); card.appendChild(opts); card.appendChild(fb);
+      root.appendChild(card);
+    });
+    upd();
+  }
+  document.getElementById('reset-btn').addEventListener('click', render);
+  render();
+});
+</script>
+</body>
+</html>

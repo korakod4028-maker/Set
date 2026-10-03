@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>เทคนิคการอินทิเกรต | แคลคูลัส</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+:root{--bg:#0d0f1a;--s:#141828;--s2:#1c2235;--bd:#2a3050;--a:#6c63ff;--a2:#00d4aa;--a3:#ff6b6b;--a4:#ffd93d;--t:#e8eaf6;--td:#8892b0;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Sarabun',system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f5f6fb;--s:#fff;--s2:#eef0f8;--bd:#d5d9ea;--t:#1a1d33;--td:#555c7a;--a2:#00796a;--a4:#8a6500;--a3:#c93a3a}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t);font:16px/1.7 var(--sans)}
+.hero{text-align:center;padding:44px 20px 30px;background:linear-gradient(135deg,rgba(108,99,255,.25),transparent);border-bottom:1px solid var(--bd)}
+.hero h1{font-size:clamp(26px,6vw,46px);font-weight:800;line-height:1.2}.hero h1 span{color:var(--a)}
+.hero p{color:var(--td);margin-top:8px}
+.nav{display:flex;gap:4px;padding:12px 16px;background:var(--s);border-bottom:1px solid var(--bd);overflow-x:auto;position:sticky;top:env(safe-area-inset-top,0px);z-index:9}
+.nav button{white-space:nowrap;padding:8px 14px;border:0;border-radius:8px;background:none;color:var(--td);font:600 14px var(--sans);cursor:pointer}
+.nav button.on{background:var(--a);color:#fff}
+.wrap{max-width:860px;margin:0 auto;padding:26px 16px 70px}
+.sec{display:none}.sec.on{display:block}
+h2{font-size:24px;font-weight:800;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--bd)}h2 span{color:var(--a)}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:18px}
+h3{font-size:18px;margin-bottom:8px}
+.box{border-left:3px solid var(--c);background:var(--s2);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0}
+.box b.l{display:block;font-size:11px;letter-spacing:2px;color:var(--c)}
+.def{--c:var(--a)}.ex{--c:var(--a2)}.warn{--c:var(--a3)}.tip{--c:var(--a4)}
+.m{font-family:var(--mono);background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:14px;color:var(--a2);overflow-x:auto;white-space:pre;line-height:1.9}
+.box .m{background:var(--s)}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:8px 10px;text-align:left;vertical-align:top}th{background:var(--s2);color:var(--a)}
+td.f{font-family:var(--mono);color:var(--a2);white-space:nowrap}
+.q{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:16px}
+.q p{font-weight:600}
+.o{display:block;width:100%;text-align:left;margin-top:8px;padding:10px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--s2);color:var(--t);font:15px var(--sans);cursor:pointer}
+.o.ok{border-color:var(--a2);color:var(--a2)}.o.no{border-color:var(--a3);color:var(--a3)}
+.fb{display:none;margin-top:10px;padding:10px 14px;border-radius:8px;background:var(--s2);font-size:14px}
+</style></head><body>
+<div class="hero"><h1>เทคนิค<span>การอินทิเกรต</span></h1><p>Technique of Integration · สรุปจากสไลด์ พร้อมเฉลยตัวอย่างที่ในสไลด์เว้นว่างไว้</p></div>
+<div class="nav" id="nav">
+<button class="on" data-s="s1">1. By Parts</button><button data-s="s2">2. sin–cos</button><button data-s="s3">3. tan–sec</button><button data-s="s4">4. แทนด้วยตรีโกณฯ</button><button data-s="s5">5. เศษส่วนย่อย</button><button data-s="s6">🎯 ฝึกหัด</button></div>
+<div class="wrap">
+
+<div class="sec on" id="s1"><h2><span>5.1</span> · อินทิเกรตทีละส่วน (By Parts)</h2>
+<div class="card"><div class="box def"><b class="l">สูตร</b><div class="m">∫ u dv = uv − ∫ v du</div></div>
+<div class="box tip"><b class="l">💡 เลือก u อย่างไร</b>ไล่ลำดับ <b>L-I-A-T-E</b> : ลอการิทึม → ตรีโกณผกผัน → พีชคณิต (xⁿ) → ตรีโกณ → เอกซ์โพเนนเชียล ตัวไหนมาก่อนให้เป็น u ส่วนที่เหลือเป็น dv</div>
+<h3>ตัวอย่าง 1: ∫ x ln x dx</h3>
+<div class="m">u = ln x , dv = x dx → du = dx/x , v = x²/2
+∫ x ln x dx = (x²/2) ln x − ½∫ x dx
+           = (x²/2) ln x − x²/4 + C</div>
+<h3>ตัวอย่าง 2: ∫ x sin2x dx</h3>
+<div class="m">u = x , dv = sin2x dx → du = dx , v = −½cos2x
+∫ x sin2x dx = −(x/2)cos2x + ½∫cos2x dx
+             = −(x/2)cos2x + ¼ sin2x + C</div>
+<h3>ตัวอย่าง 3: ∫ x²e²ˣ dx (ทำซ้ำ 2 รอบ)</h3>
+<div class="m">รอบ 1: u = x², dv = e²ˣdx → x²e²ˣ/2 − ∫ x e²ˣ dx
+รอบ 2: ∫ x e²ˣ dx = x e²ˣ/2 − e²ˣ/4
+∴ ∫ x²e²ˣ dx = e²ˣ ( x²/2 − x/2 + 1/4 ) + C</div>
+<h3>ตัวอย่าง 4: ∫ eᵃˣ sin bx dx , ∫ e²ˣ cos3x dx (วนกลับมาเป็นตัวเดิม)</h3>
+<div class="box warn"><b class="l">⚠️ เทคนิค</b>ทำ by parts 2 รอบ จะได้ I กลับมาปรากฏอีกข้างของสมการ → ย้ายข้างแล้วแก้หา I (อย่าลืมสลับ u,dv ให้เป็นกลุ่มเดิมทั้ง 2 รอบ)</div>
+<div class="m">∫ eᵃˣ sin bx dx = eᵃˣ( a sin bx − b cos bx )/(a²+b²) + C
+∫ e²ˣ cos3x dx  = e²ˣ( 2cos3x + 3sin3x )/13 + C</div></div></div>
+
+<div class="sec" id="s2"><h2><span>5.2.1</span> · ฟังก์ชันตรีโกณมิติ sin–cos</h2>
+<div class="card"><table><tr><th>รูปแบบ</th><th>เงื่อนไข</th><th>วิธี</th></tr>
+<tr><td class="f">∫ sinⁿx cosᵐx dx</td><td>m หรือ n เป็นเลขคี่บวก</td><td>แยกตัวที่เป็นคี่ออก 1 ตัว (เหลือเป็น du) ที่เหลือแปลงด้วย sin²+cos²=1</td></tr>
+<tr><td class="f">∫ sinⁿx cosᵐx dx</td><td>m, n เป็นเลขคู่บวก</td><td>ใช้ sin²x=(1−cos2x)/2 , cos²x=(1+cos2x)/2</td></tr>
+<tr><td class="f">∫ sin mx cos nx , cos mx cos nx , sin mx sin nx</td><td>m ≠ n</td><td>แปลงผลคูณเป็นผลบวก (ด้านล่าง)</td></tr></table>
+<div class="m">sin mx cos nx = ½[ sin(m+n)x + sin(m−n)x ]
+cos mx cos nx = ½[ cos(m+n)x + cos(m−n)x ]
+sin mx sin nx = ½[ cos(m−n)x − cos(m+n)x ]</div>
+<h3>∫ cos³x dx (คี่)</h3>
+<div class="m">u = sin x , du = cos x dx
+∫ (1 − sin²x) cos x dx = ∫ (1 − u²) du = sin x − sin³x/3 + C</div>
+<h3>∫ sin³2x cos⁴2x dx (คี่)</h3>
+<div class="m">u = cos2x , du = −2 sin2x dx
+= −½∫ (1−u²)u⁴ du = −½( u⁵/5 − u⁷/7 )
+= cos⁷2x/14 − cos⁵2x/10 + C</div>
+<h3>∫ sin²3x dx (คู่)</h3>
+<div class="m">= ∫ (1 − cos6x)/2 dx = ½[ x − sin6x/6 ] + C = x/2 − sin6x/12 + C</div>
+<h3>∫ sin²x cos⁴x dx (คู่ — เฉลยเพิ่ม)</h3>
+<div class="m">sin²x cos²x = ¼ sin²2x  →  integrand = ⅛ sin²2x (1 + cos2x)
+= ⅛·(1−cos4x)/2 + ⅛ sin²2x cos2x
+∫ = x/16 − sin4x/64 + sin³2x/48 + C</div>
+<h3>∫ sin3x cos2x dx (ผลคูณ→ผลบวก — เฉลยเพิ่ม)</h3>
+<div class="m">= ½∫ ( sin5x + sin x ) dx = −cos5x/10 − ½cos x + C</div></div></div>
+
+<div class="sec" id="s3"><h2><span>5.2.2</span> · tan, cot, sec, csc</h2>
+<div class="card"><table><tr><th>กรณี</th><th>รูปแบบ</th><th>วิธี</th></tr>
+<tr><td>1</td><td class="f">tanᵐx , cotᵐx</td><td>แยก tan²x = sec²x−1 (cot²x = csc²x−1) แล้ว u = tan x (หรือ cot x)</td></tr>
+<tr><td>2</td><td class="f">secⁿx , cscⁿx (n คู่)</td><td>แยก sec²x ออก 1 ตัว ที่เหลือ sec² = 1+tan² ; u = tan x</td></tr>
+<tr><td>3</td><td class="f">tanᵐ secⁿ (n คู่)</td><td>เหมือนกรณี 2</td></tr>
+<tr><td>4</td><td class="f">tanᵐ secⁿ (m คี่)</td><td>แยก sec x tan x ออก ที่เหลือ tan² = sec²−1 ; u = sec x</td></tr>
+<tr><td>5</td><td class="f">secⁿx (n คี่)</td><td>by parts</td></tr>
+<tr><td>6</td><td class="f">tanᵐ secⁿ (m คู่, n คี่)</td><td>แปลงเป็น secᵏ แล้ว by parts แบบกรณี 5</td></tr></table>
+<h3>∫ tan³x dx</h3>
+<div class="m">= ∫ tan x (sec²x − 1) dx = ∫ tan x d(tan x) − ∫ tan x dx
+= ½tan²x − ln|sec x| + C</div>
+<h3>∫ cot⁴3x dx (เฉลยเพิ่ม)</h3>
+<div class="m">cot⁴ = cot²·csc² − csc² + 1
+∫ = −cot³3x/9 + cot3x/3 + x + C</div>
+<h3>∫ csc⁶x dx (เฉลยเพิ่ม)</h3>
+<div class="m">csc⁶ = (1+cot²x)² csc²x , u = cot x , du = −csc²x dx
+∫ = −( cot x + 2cot³x/3 + cot⁵x/5 ) + C</div>
+<h3>∫ tan⁵(x/2) sec⁴(x/2) dx</h3>
+<div class="m">u = tan(x/2) , du = ½ sec²(x/2) dx
+= 2∫ u⁵(1+u²) du = tan⁶(x/2)/3 + tan⁸(x/2)/4 + C</div>
+<h3>∫ tan⁵x sec⁷x dx</h3>
+<div class="m">u = sec x , du = sec x tan x dx , tan⁴ = (u²−1)²
+= ∫ (u²−1)² u⁶ du = sec¹¹x/11 − 2sec⁹x/9 + sec⁷x/7 + C</div>
+<h3>∫ sec³x dx และ ∫ tan²x sec³x dx</h3>
+<div class="m">∫ sec³x dx = ½ sec x tan x + ½ ln|sec x + tan x| + C
+สูตรลดกำลัง: ∫ secⁿx dx = secⁿ⁻²x tan x/(n−1) + (n−2)/(n−1) ∫ secⁿ⁻²x dx
+tan²x sec³x = sec⁵x − sec³x
+∫ = ¼sec³x tan x − ⅛ sec x tan x − ⅛ ln|sec x + tan x| + C</div></div></div>
+
+<div class="sec" id="s4"><h2><span>5.3</span> · แทนด้วยฟังก์ชันตรีโกณมิติ</h2>
+<div class="card"><table><tr><th>มีรากแบบ</th><th>แทน</th><th>สามเหลี่ยม</th></tr>
+<tr><td class="f">√(a²−x²)</td><td class="f">x = a sinθ</td><td>ด้านตรงข้าม x , ด้านเอียง a , ชิด √(a²−x²)</td></tr>
+<tr><td class="f">√(a²+x²)</td><td class="f">x = a tanθ</td><td>ตรงข้าม x , ชิด a , ด้านเอียง √(a²+x²)</td></tr>
+<tr><td class="f">√(x²−a²)</td><td class="f">x = a secθ</td><td>ด้านเอียง x , ชิด a , ตรงข้าม √(x²−a²)</td></tr></table>
+<div class="box tip"><b class="l">💡 ขั้นตอน</b>แทน x → อินทิเกรตเป็นฟังก์ชันของ θ → วาดสามเหลี่ยมเพื่อแปลงกลับเป็น x (ใช้ sin2θ = 2sinθcosθ เมื่อเจอมุมสองเท่า)</div>
+<h3>① ∫ dx/√(4+x²)</h3>
+<div class="m">x = 2tanθ , dx = 2sec²θ dθ , √(4+x²) = 2secθ
+= ∫ secθ dθ = ln|secθ + tanθ| + C = ln|√(4+x²) + x| + C'</div>
+<h3>② ∫ x²/√(9−x²) dx</h3>
+<div class="m">x = 3sinθ , dx = 3cosθ dθ → 9∫ sin²θ dθ = (9/2)(θ − sinθ cosθ)
+= (9/2) sin⁻¹(x/3) − (x/2)√(9−x²) + C</div>
+<h3>③ ∫ dx/√(2x−x²) (เติมกำลังสอง)</h3>
+<div class="m">2x − x² = 1 − (x−1)²  →  u = x−1 :  ∫ du/√(1−u²) = sin⁻¹(x−1) + C</div>
+<h3>④ ∫ dx/(4x²+4x+2)</h3>
+<div class="m">4x²+4x+2 = (2x+1)² + 1 , u = 2x+1 , du = 2dx
+= ½∫ du/(u²+1) = ½ tan⁻¹(2x+1) + C</div>
+<div class="box def"><b class="l">สูตรลัด (ไม่ใช่เรื่องใหม่)</b><div class="m">∫ du/(u²+a²) = (1/a) tan⁻¹(u/a) + C
+∫ du/√(a²−u²) = sin⁻¹(u/a) + C</div></div></div></div>
+
+<div class="sec" id="s5"><h2><span>5.4</span> · แยกเศษส่วนย่อย (Partial Fractions)</h2>
+<div class="card"><div class="box warn"><b class="l">⚠️ ก่อนแยก</b>ต้องให้ดีกรีของเศษ <b>น้อยกว่า</b> ส่วน ถ้าเท่ากันหรือมากกว่าให้ <b>หารยาวก่อน</b> เช่น (x⁴−10x²+3x+1)/(x²−4) = x²−6 + (3x−23)/(x²−4)</div>
+<table><tr><th>กรณี</th><th>ตัวประกอบของ Q(x)</th><th>รูปที่แยก</th></tr>
+<tr><td>1</td><td>เชิงเส้นไม่ซ้ำ (ax+b)</td><td class="f">A/(ax+b)</td></tr>
+<tr><td>2</td><td>เชิงเส้นซ้ำ (ax+b)ᵖ</td><td class="f">A₁/(ax+b) + A₂/(ax+b)² + … + Aₚ/(ax+b)ᵖ</td></tr>
+<tr><td>3</td><td>กำลังสองแยกต่อไม่ได้ x²+px+q</td><td class="f">(Ax+B)/(x²+px+q)</td></tr></table>
+<div class="box tip"><b class="l">💡 หาค่าคงที่</b>(1) แทนค่า x ที่ทำให้ตัวประกอบเป็น 0 (2) เทียบสัมประสิทธิ์ ใช้ผสมกันได้</div>
+<h3>กรณี 1: ∫ (x+7)/(x²+8x+15) dx</h3>
+<div class="m">(x+7)/((x+3)(x+5)) = A/(x+3) + B/(x+5)  →  x+7 = A(x+5)+B(x+3)
+x=−5 : 2 = −2B → B = −1 ; x=−3 : 4 = 2A → A = 2
+∫ = 2ln|x+3| − ln|x+5| + C</div>
+<h3>กรณี 2: ∫ (x³−1)/(x²(x−2)³) dx</h3>
+<div class="m">= A/x + B/x² + C/(x−2) + D/(x−2)² + E/(x−2)³
+A=3/16 , B=1/8 , C=−3/16 , D=5/4 , E=7/4
+∫ = (3/16)ln|x| − 1/(8x) − (3/16)ln|x−2| − 5/(4(x−2)) − 7/(8(x−2)²) + C</div>
+<h3>กรณี 3: ∫ (x²−2x−3)/((x−1)(x²+2x+2)) dx (เฉลยเพิ่ม)</h3>
+<div class="m">= A/(x−1) + (Bx+C)/(x²+2x+2) → A = −4/5 , B = 9/5 , C = 7/5
+(9x+7)/5 = (9/10)(2x+2) − 2/5  แล้ว x²+2x+2 = (x+1)²+1
+∫ = −(4/5)ln|x−1| + (9/10)ln(x²+2x+2) − (2/5)tan⁻¹(x+1) + C</div>
+<div class="box warn"><b class="l">ข้อสุดท้ายในสไลด์</b>∫ (x−2)/(x(x²−4x+5)²) dx ใช้รูป A/x + (Bx+C)/(x²−4x+5) + (Dx+E)/(x²−4x+5)² (ตัวประกอบกำลังสองที่ซ้ำ ต้องมีเศษเป็น Ax+B ทุกเทอม)</div></div></div>
+
+<div class="sec" id="s6"><h2><span>🎯</span> ฝึกหัด</h2><div id="qs"></div></div>
+</div>
+<script>
+document.querySelectorAll('#nav button').forEach(function(b){b.addEventListener('click',function(){
+document.querySelectorAll('.sec,#nav button').forEach(function(e){e.classList.remove('on')});
+document.getElementById(b.dataset.s).classList.add('on');b.classList.add('on');window.scrollTo({top:0,behavior:'smooth'})})});
+var Q=[
+{q:"ตำแหน่งของโดรนเปลี่ยนตามความเร็ว v(t) = t·eᵗ เมตร/วินาที จงหา s(t) = ∫ t eᵗ dt",o:["eᵗ(t − 1) + C","eᵗ(t + 1) + C","t²eᵗ/2 + C","t eᵗ − t + C"],a:0,e:"u = t, dv = eᵗdt → t eᵗ − ∫eᵗdt = t eᵗ − eᵗ = eᵗ(t−1) + C"},
+{q:"กำลังไฟฟ้าชั่วขณะของสัญญาณมีรูป cos²x จงหา ∫ cos²x dx",o:["x/2 + sin2x/4 + C","x/2 − sin2x/4 + C","sin³x/3 + C","cos³x/3 + C"],a:0,e:"กำลังคู่ → cos²x = (1+cos2x)/2 → x/2 + sin2x/4 + C"},
+{q:"จงหา ∫ sin³x cos²x dx",o:["cos³x/3 − cos⁵x/5 + C","−cos³x/3 + cos⁵x/5 + C","sin⁴x/4 + C","−cos³x/3 − cos⁵x/5 + C"],a:1,e:"sin เป็นคี่ → u = cos x, du = −sin x dx\n= −∫(1−u²)u²du = −u³/3 + u⁵/5"},
+{q:"จงหา ∫ dx/(x²−1)",o:["½ ln|(x+1)/(x−1)| + C","½ ln|(x−1)/(x+1)| + C","ln|x²−1| + C","tan⁻¹x + C"],a:1,e:"1/(x²−1) = ½[1/(x−1) − 1/(x+1)] → ½ln|x−1| − ½ln|x+1|"},
+{q:"จงหา ∫ dx/√(x²+9)",o:["sin⁻¹(x/3) + C","ln|√(x²+9) + x| + C","(1/3)tan⁻¹(x/3) + C","ln|x²+9| + C"],a:1,e:"รูป √(a²+x²) → x = 3tanθ → ∫secθ dθ = ln|secθ+tanθ| = ln|√(x²+9)+x| + C'"}];
+var c=document.getElementById('qs');
+Q.forEach(function(q,i){var d=document.createElement('div');d.className='q';
+d.innerHTML='<small>ข้อ '+(i+1)+'/'+Q.length+'</small><p>'+q.q+'</p>'+q.o.map(function(t,j){return '<button class="o" data-j="'+j+'">'+'ABCD'[j]+'. '+t+'</button>'}).join('')+'<div class="fb"></div>';
+d.querySelectorAll('.o').forEach(function(b){b.addEventListener('click',function(){
+var j=+b.dataset.j,bs=d.querySelectorAll('.o'),f=d.querySelector('.fb');
+bs.forEach(function(x){x.disabled=true});bs[q.a].classList.add('ok');if(j!==q.a)b.classList.add('no');
+f.style.display='block';f.innerHTML=(j===q.a?'✅ ถูกต้อง<br>':'❌ คำตอบคือ '+'ABCD'[q.a]+'<br>')+q.e.replace(/\n/g,'<br>')})});
+c.appendChild(d)});
+</script></body></html>

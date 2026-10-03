@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>สรุปการอินทิเกรต | เตรียมสอบปลายภาค</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#0d0f1a;--surface:#141828;--surface2:#1c2235;--border:#2a3050;--accent:#6c63ff;--accent2:#00d4aa;--accent3:#ff6b6b;--accent4:#ffd93d;--text:#e8eaf6;--dim:#8892b0;--mono:'IBM Plex Mono',monospace;--sans:'Sarabun',sans-serif}
+:root[data-theme="light"]{--bg:#f4f5fb;--surface:#fff;--surface2:#eceefa;--border:#d5d9ee;--text:#1b2040;--dim:#555d80}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f4f5fb;--surface:#fff;--surface2:#eceefa;--border:#d5d9ee;--text:#1b2040;--dim:#555d80}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--text);font-family:var(--sans),sans-serif;line-height:1.7;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.hero{background:linear-gradient(135deg,#0d0f1a,#1a1040 50%,#0d1a2a);padding:48px 20px 36px;text-align:center;border-bottom:1px solid var(--border);color:#e8eaf6}
+.hero::before{content:'∫  Σ  lim  dx  F′(x)  C';display:block;font-family:var(--mono);font-size:13px;letter-spacing:6px;opacity:.5;margin-bottom:14px}
+.badge{display:inline-block;background:rgba(108,99,255,.2);border:1px solid rgba(108,99,255,.5);color:#b9b3ff;font-size:12px;font-weight:600;letter-spacing:2px;padding:4px 14px;border-radius:20px;margin-bottom:12px}
+.hero h1{font-size:clamp(26px,6vw,44px);font-weight:800;line-height:1.2}.hero h1 span{color:#8f88ff}
+.hero p{color:#9aa4c4;max-width:520px;margin:10px auto 0}
+nav{display:flex;gap:4px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:env(safe-area-inset-top,0px);z-index:10}
+nav button{white-space:nowrap;padding:8px 16px;border-radius:8px;border:0;background:transparent;color:var(--dim);font:500 14px var(--sans),sans-serif;cursor:pointer}
+nav button:hover{background:var(--surface2);color:var(--text)}
+nav button.on{background:var(--accent);color:#fff;font-weight:600}
+main{max-width:860px;margin:0 auto;padding:28px 18px 80px}
+.sec{display:none}.sec.on{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px}
+h2{font-size:20px;font-weight:700;margin-bottom:10px}
+h3{font-size:15px;color:var(--accent4);margin:14px 0 6px}
+.box{border-left:3px solid var(--accent);background:rgba(108,99,255,.09);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0}
+.box.ex{border-color:var(--accent2);background:rgba(0,212,170,.08)}
+.box.warn{border-color:var(--accent3);background:rgba(255,107,107,.09)}
+.lb{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--accent);margin-bottom:3px}
+.ex .lb{color:var(--accent2)}.warn .lb{color:var(--accent3)}
+.m{font-family:var(--mono);font-size:15px;background:var(--surface2);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.mb{font-family:var(--mono);font-size:15px;background:var(--surface2);border-radius:8px;padding:12px 16px;margin:8px 0;overflow-x:auto;line-height:1.9}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:8px 12px;border-bottom:1px solid var(--border);text-align:left}
+th{color:var(--accent2);font-size:13px}
+td:first-child{color:var(--dim);width:42px}
+td:nth-child(2){font-family:var(--mono)}
+td:nth-child(3){font-family:var(--mono);color:var(--accent4)}
+.q{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.qn{font:12px var(--mono);color:var(--dim);margin-bottom:6px}
+.qq{font-weight:600;margin-bottom:12px;font-family:var(--mono);font-size:15px}
+.op{display:block;width:100%;text-align:left;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 14px;margin-bottom:8px;font:15px var(--mono),monospace;cursor:pointer}
+.op:hover:not(:disabled){border-color:var(--accent)}
+.op.ok{background:rgba(0,212,170,.18);border-color:var(--accent2)}
+.op.no{background:rgba(255,107,107,.18);border-color:var(--accent3)}
+.fb{display:none;margin-top:10px;font-size:14.5px;white-space:pre-line}.fb.show{display:block}
+#score{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));background:var(--accent);color:#fff;text-align:center;border-radius:20px;padding:6px;font-weight:600;max-width:240px;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">CALCULUS · INTEGRATION</div>
+  <h1>สรุป<span>การอินทิเกรต</span></h1>
+  <p>ปฏิยานุพันธ์ · สูตร · การแทนค่า · ปริพันธ์จำกัดเขต · ทฤษฎีบทหลักมูลแคลคูลัส</p>
+</div>
+<nav id="nav"></nav>
+<main>
+
+<section class="sec on" id="s0">
+<div class="card"><h2>🧭 ภาพรวม</h2>
+  <div class="box"><div class="lb">นิยาม — ปฏิยานุพันธ์</div>F เป็นปฏิยานุพันธ์ของ f ถ้า <span class="m">F′(x) = f(x)</span> ทุก x ในโดเมน</div>
+  <div class="mb">∫ f(x) dx = F(x) + C   (ปริพันธ์ไม่จำกัดเขต)</div>
+  <p>∫ = เครื่องหมายปริพันธ์ · f(x) = ตัวถูกปริพันธ์ (integrand) · dx = ตัวแปรที่ปริพันธ์ · C = ค่าคงตัว</p>
+  <h3>ปริพันธ์จำกัดเขต = พื้นที่ใต้กราฟ</h3>
+  <p>แบ่งช่วง [a, b] เป็นแท่งสี่เหลี่ยมกว้าง Δx สูง y<sub>k</sub> แล้วรวมพื้นที่ เมื่อ Δx → 0 ได้ปริพันธ์จำกัดเขต</p>
+  <div class="mb">A ≈ Σ y<sub>k</sub>·Δx<br>∫<sub>a</sub><sup>b</sup> f(x) dx = lim<sub>Δx→0</sub> Σ f(x<sub>k</sub>)·Δx</div>
+  <div class="box warn"><div class="lb">ต่างกันตรงไหน</div>ไม่จำกัดเขต → ได้ <b>ฟังก์ชัน</b> + C &nbsp;|&nbsp; จำกัดเขต → ได้ <b>ตัวเลข</b> (ไม่มี C)</div>
+</div></section>
+
+<section class="sec" id="s1">
+<div class="card"><h2>📐 สูตรปริพันธ์ไม่จำกัดเขต</h2>
+<div class="tw"><table>
+<tr><th>#</th><th>∫ ... dx</th><th>ผลลัพธ์ (+ C)</th></tr>
+<tr><td>1</td><td>0</td><td>C</td></tr>
+<tr><td>2</td><td>1</td><td>x</td></tr>
+<tr><td>3</td><td>xⁿ (n ≠ −1)</td><td>xⁿ⁺¹ / (n+1)</td></tr>
+<tr><td>4</td><td>1/x</td><td>ln|x|</td></tr>
+<tr><td>5</td><td>eˣ</td><td>eˣ</td></tr>
+<tr><td>6</td><td>aˣ</td><td>aˣ / ln a</td></tr>
+<tr><td>7</td><td>sin x</td><td>−cos x</td></tr>
+<tr><td>8</td><td>cos x</td><td>sin x</td></tr>
+<tr><td>9</td><td>sec²x</td><td>tan x</td></tr>
+<tr><td>10</td><td>csc²x</td><td>−cot x</td></tr>
+<tr><td>11</td><td>sec x tan x</td><td>sec x</td></tr>
+<tr><td>12</td><td>csc x cot x</td><td>−csc x</td></tr>
+<tr><td>13</td><td>1/√(1−x²)</td><td>sin⁻¹x</td></tr>
+<tr><td>14</td><td>1/(1+x²)</td><td>tan⁻¹x</td></tr>
+<tr><td>15</td><td>1/(x√(x²−1))</td><td>sec⁻¹|x|</td></tr>
+</table></div>
+<div class="box"><div class="lb">ทฤษฎีบท (เชิงเส้น)</div>
+∫ k·f(x) dx = k ∫ f(x) dx   (k คงตัว)<br>
+∫ [f(x) ± g(x)] dx = ∫ f(x) dx ± ∫ g(x) dx</div>
+<div class="box warn"><div class="lb">ระวัง</div>สูตร 3 ใช้ไม่ได้เมื่อ n = −1 (ต้องใช้ ln|x|) · อย่าลืม + C · แจกกำลังสอง/หารก่อนอินทิเกรต (ไม่มีสูตรอินทิเกรตผลคูณ/ผลหารตรง ๆ)</div>
+</div>
+<div class="card"><h2>✏️ ตัวอย่างพื้นฐาน</h2>
+<div class="box ex"><div class="lb">ตัวอย่าง 1</div>∫(3x⁴ − 5√x + 2/x⁴ − 9) dx
+<div class="mb">= 3·x⁵/5 − 5·x^(3/2)/(3/2) + 2·x⁻³/(−3) − 9x + C<br>= (3/5)x⁵ − (10/3)x^(3/2) − 2/(3x³) − 9x + C</div></div>
+<div class="box ex"><div class="lb">ตัวอย่าง 2 — กระจายก่อน</div>∫ (√x + 3)² / √x dx
+<div class="mb">= ∫ (x + 6√x + 9)/√x dx = ∫ (x^(1/2) + 6 + 9x^(−1/2)) dx<br>= (2/3)x^(3/2) + 6x + 18√x + C</div></div>
+</div></section>
+
+<section class="sec" id="s2">
+<div class="card"><h2>🔁 การแทนค่า (u-substitution)</h2>
+<div class="box"><div class="lb">ขั้นตอน</div>
+1) เลือก u = ส่วน "ข้างใน" (ในราก/ในวงเล็บ/ตัวส่วน) ที่อนุพันธ์ของมันปรากฏอยู่ด้วย<br>
+2) หา du = u′ dx<br>
+3) เขียนอินทิกรัลใหม่เป็น ∫ … du แล้วอินทิเกรต<br>
+4) แทน u กลับเป็น x</div>
+<div class="box ex"><div class="lb">ตัวอย่าง 3</div>∫ x²√(x³ − 4) dx
+<div class="mb">ให้ u = x³ − 4 → du = 3x² dx → x² dx = du/3<br>= (1/3) ∫ u^(1/2) du = (1/3)(2/3)u^(3/2) + C<br>= (2/9)(x³ − 4)^(3/2) + C</div></div>
+<div class="box ex"><div class="lb">ตัวอย่าง 4</div>∫ 2x sin(x² − 1) dx
+<div class="mb">ให้ u = x² − 1 → du = 2x dx<br>= ∫ sin u du = −cos u + C = −cos(x² − 1) + C</div></div>
+<div class="box ex"><div class="lb">ตัวอย่าง 5 — ได้ ln</div>∫ (3x² + x)/(3 − x² − 2x³) dx
+<div class="mb">ให้ u = 3 − x² − 2x³ → du = −(2x + 6x²) dx = −2(3x² + x) dx<br>= −(1/2) ∫ du/u = −(1/2) ln|3 − x² − 2x³| + C</div></div>
+<div class="box warn"><div class="lb">เทคนิค</div>ถ้าตัวหน้า du ขาดค่าคงตัว ให้คูณ/หารชดเชย เช่น x² dx = du/3 · ถ้า "ตัวเศษ = อนุพันธ์ของตัวส่วน" ผลคือ ln|ตัวส่วน|</div>
+</div></section>
+
+<section class="sec" id="s3">
+<div class="card"><h2>📏 ปริพันธ์จำกัดเขต</h2>
+<div class="box"><div class="lb">นิยาม</div>∫<sub>a</sub><sup>b</sup> f(x) dx = lim Σ f(x<sub>k</sub>)Δx<sub>k</sub> เมื่อลิมิตหาค่าได้และไม่ขึ้นกับวิธีแบ่ง/การเลือกจุด (a = ลิมิตล่าง, b = ลิมิตบน)</div>
+<div class="box"><div class="lb">แทนค่าแล้ว "เปลี่ยนลิมิต" ด้วย</div>เมื่อใช้ u = g(x) ให้เปลี่ยนลิมิตเป็น u = g(a) ถึง u = g(b) แล้วไม่ต้องแทนกลับเป็น x</div>
+<div class="box ex"><div class="lb">ตัวอย่าง 6</div>∫<sub>−1</sub><sup>2</sup> 2x√(x²+1) dx
+<div class="mb">u = x² + 1, du = 2x dx<br>x = −1 → u = 2 ; x = 2 → u = 5<br>= ∫<sub>2</sub><sup>5</sup> u^(1/2) du = [(2/3)u^(3/2)]<sub>2</sub><sup>5</sup><br>= (2/3)(5√5 − 2√2)</div></div>
+<div class="box ex"><div class="lb">ตัวอย่าง 7</div>∫<sub>1</sub><sup>2</sup> (3x²+2)/√(x³+2x+1) dx
+<div class="mb">u = x³ + 2x + 1, du = (3x² + 2) dx<br>x = 1 → u = 4 ; x = 2 → u = 13<br>= ∫<sub>4</sub><sup>13</sup> u^(−1/2) du = [2√u]<sub>4</sub><sup>13</sup> = 2(√13 − 2)</div></div>
+<div class="box warn"><div class="lb">พลาดบ่อย</div>เปลี่ยนตัวแปรแล้วลืมเปลี่ยนลิมิต · สลับลิมิตแล้วลืมเครื่องหมาย: ∫<sub>a</sub><sup>b</sup> = −∫<sub>b</sub><sup>a</sup></div>
+</div></section>
+
+<section class="sec" id="s4">
+<div class="card"><h2>🏛️ ทฤษฎีบทหลักมูลของแคลคูลัส (FTC)</h2>
+<div class="box"><div class="lb">บทที่ 1 — อนุพันธ์ของปริพันธ์</div>
+f ต่อเนื่องบน [a, b], c ∈ [a, b], F(x) = ∫<sub>c</sub><sup>x</sup> f(t) dt  ⇒  F′(x) = f(x)
+<div class="mb">d/dx ∫<sub>c</sub><sup>x</sup> f(t) dt = f(x)</div></div>
+<div class="box"><div class="lb">บทที่ 2 — คำนวณปริพันธ์จำกัดเขต</div>
+ถ้า F′(x) = f(x) บน [a, b]
+<div class="mb">∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a)</div></div>
+<h3>3 รูปแบบของการหา d/dx ของปริพันธ์</h3>
+<div class="tw"><table>
+<tr><th>#</th><th>โจทย์</th><th>ผลลัพธ์</th></tr>
+<tr><td>1</td><td>d/dx ∫<sub>a</sub><sup>x</sup> f(t)dt</td><td>f(x)</td></tr>
+<tr><td>2</td><td>d/dx ∫<sub>x</sub><sup>b</sup> f(t)dt</td><td>−f(x)</td></tr>
+<tr><td>3</td><td>d/dx ∫<sub>g(x)</sub><sup>h(x)</sup> f(t)dt</td><td>f(h)·h′ − f(g)·g′</td></tr>
+</table></div>
+<p style="font-size:14px;color:var(--dim);margin-top:8px">รูปแบบ 1–2: ลิมิตเป็นตัวเลข + ลิมิตอีกข้าง = x → แทน t ด้วยลิมิตที่เป็น x ได้เลย (ถ้าลิมิตบนเป็น x ไม่ต้องคูณอะไร) · รูปแบบ 3: เหมือน chain rule คือ "แทนลิมิต แล้วคูณอนุพันธ์ของลิมิต"</p>
+<div class="box ex"><div class="lb">ตัวอย่าง 8</div>d/dx ∫<sub>3</sub><sup>x²</sup> (t³ + 8) dt
+<div class="mb">= ((x²)³ + 8) · 2x = 2x(x⁶ + 8)</div></div>
+<div class="box ex"><div class="lb">ตัวอย่าง 9</div>∫<sub>1</sub><sup>2</sup> (x³ + 1) dx
+<div class="mb">= [x⁴/4 + x]<sub>1</sub><sup>2</sup> = (4 + 2) − (1/4 + 1) = 19/4</div></div>
+</div></section>
+
+<section class="sec" id="s5">
+<div id="qs"></div><div id="score">คะแนน 0 / 0</div>
+</section>
+
+</main>
+<script>
+var tabs=['ภาพรวม','สูตร','แทนค่า u','จำกัดเขต','FTC','ฝึกทำ'];
+var nav=document.getElementById('nav');
+tabs.forEach(function(t,i){var b=document.createElement('button');b.textContent=t;if(!i)b.className='on';b.onclick=function(){
+  document.querySelectorAll('.sec').forEach(function(s,j){s.classList.toggle('on',i===j)});
+  nav.querySelectorAll('button').forEach(function(x,j){x.classList.toggle('on',i===j)});window.scrollTo(0,0)};nav.appendChild(b)});
+
+var Q=[
+{q:'∫ (6x² − 4x + 3) dx = ?',o:['2x³ − 2x² + 3x + C','12x − 4 + C','6x³ − 4x² + 3x + C','2x³ − 4x² + 3x + C'],a:0,e:'อินทิเกรตทีละพจน์: 6x² → 2x³, −4x → −2x², 3 → 3x'},
+{q:'∫ 2x/(x² + 4) dx = ?',o:['ln(x² + 4) + C','2 ln|x| + C','1/(x² + 4) + C','x²/(x² + 4) + C'],a:0,e:'ให้ u = x² + 4, du = 2x dx → ∫du/u = ln|u| + C (x²+4 > 0 จึงไม่ต้องใส่ค่าสัมบูรณ์)'},
+{q:'∫₀^π sin x dx = ?',o:['0','1','2','−2'],a:2,e:'[−cos x]₀^π = −cos π − (−cos 0) = 1 + 1 = 2'},
+{q:'∫₀¹ x·e^(x²) dx = ?',o:['e − 1','(e − 1)/2','e/2','2(e − 1)'],a:1,e:'u = x², du = 2x dx → x dx = du/2 ; ลิมิต 0→0, 1→1\n= (1/2)∫₀¹ eᵘ du = (e − 1)/2'},
+{q:'d/dx ∫₂^x √(t² + 1) dt = ?',o:['√(x² + 1)','−√(x² + 1)','x/√(x² + 1)','√5'],a:0,e:'FTC บทที่ 1: ลิมิตล่างเป็นค่าคงตัว ลิมิตบนเป็น x → แทน t = x'},
+{q:'d/dx ∫ₓ³ (t² + 8) dt = ?',o:['x² + 8','−(x² + 8)','17','2x'],a:1,e:'ลิมิตล่างเป็น x → สลับลิมิตได้เครื่องหมายลบ: −∫₃ˣ … = −(x² + 8)'},
+{q:'∫ 5x^(−1) dx ที่ x > 0 = ?',o:['−5x⁻² + C','5 ln x + C','5x⁰ + C','ln 5x + C'],a:1,e:'n = −1 ใช้สูตร xⁿ ไม่ได้ → ∫ 1/x dx = ln|x| ; ดึงค่าคงตัว 5 ออกมา'}
+];
+var done=0,right=0;
+var qs=document.getElementById('qs');
+Q.forEach(function(q,i){
+  var d=document.createElement('div');d.className='q';
+  d.innerHTML='<div class="qn">ข้อ '+(i+1)+' / '+Q.length+'</div><div class="qq"></div><div class="ops"></div><div class="fb"></div>';
+  d.querySelector('.qq').textContent=q.q;
+  q.o.forEach(function(t,j){
+    var b=document.createElement('button');b.className='op';b.textContent=String.fromCharCode(65+j)+'. '+t;
+    b.onclick=function(){
+      var all=d.querySelectorAll('.op');all.forEach(function(x){x.disabled=true});
+      var f=d.querySelector('.fb');
+      done++;
+      if(j===q.a){b.classList.add('ok');right++;f.textContent='✅ ถูกต้อง!\n'+q.e}
+      else{b.classList.add('no');all[q.a].classList.add('ok');f.textContent='❌ คำตอบคือ '+String.fromCharCode(65+q.a)+'\n💡 '+q.e}
+      f.classList.add('show');
+      document.getElementById('score').textContent='คะแนน '+right+' / '+done;
+    };
+    d.querySelector('.ops').appendChild(b);
+  });
+  qs.appendChild(d);
+});
+</script>
+</body>
+</html>
