@@ -34,7 +34,7 @@ table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
 th,td{border:1px solid var(--border);padding:8px 10px;text-align:left}th{background:var(--surface2);color:var(--accent2)}
 td.m{font-family:var(--mono);font-size:13px}
 ul{padding-left:20px}li{margin:3px 0}b{color:#fff}
-.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:10px 0}
+.v{font-size:13.5px;color:var(--dim);background:rgba(255,255,255,.03);border-left:2px solid var(--border);padding:6px 12px;margin:-2px 0 10px;border-radius:0 6px 6px 0}.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:10px 0}
 .g2 div{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px}
 .g2 svg{width:100%;height:auto;display:block;margin-bottom:6px}
 .q{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
@@ -72,12 +72,14 @@ ul{padding-left:20px}li{margin:3px 0}b{color:#fff}
   <ul><li><b>Isothermal</b> = T คงที่ · <b>Isobaric</b> = P คงที่ · <b>Isochoric</b> = V คงที่ · <b>Adiabatic</b> = Q = 0</li><li>สถานะ = ชุดของสมบัติ ถ้าสมบัติใดเปลี่ยนแม้ตัวเดียว = เปลี่ยนสถานะ</li></ul></div>
 </div>
 
+<div class="sec" id="sv"><div class="card"><h2>📖 ตารางตัวแปรและหน่วย</h2><div class="box warn"><div class="lb">ก่อนแทนค่าทุกครั้ง</div>แปลงให้เป็น SI: T → K, V → m³, P → Pa, ความร้อน cal → J</div><div class="tw"><table><tr><th>ตัวแปร</th><th>ความหมาย</th><th>หน่วย</th></tr><tr><td class="m">P</td><td>ความดัน</td><td>Pa = N/m² (1 atm = 1.013×10⁵ Pa)</td></tr><tr><td class="m">V</td><td>ปริมาตร</td><td>m³ (1 L = 10⁻³ m³)</td></tr><tr><td class="m">T</td><td>อุณหภูมิ</td><td>K (K = °C + 273) ใช้ K ในสูตรแก๊ส</td></tr><tr><td class="m">ΔT</td><td>อุณหภูมิที่เปลี่ยน</td><td>°C หรือ K (ขนาดเท่ากัน)</td></tr><tr><td class="m">n</td><td>จำนวนโมล</td><td>mol</td></tr><tr><td class="m">m</td><td>มวล</td><td>kg (หรือ g ตามหน่วย c และ L)</td></tr><tr><td class="m">R</td><td>ค่าคงที่แก๊ส</td><td>8.314 J/mol·K</td></tr><tr><td class="m">Q</td><td>ความร้อน</td><td>J (1 cal = 4.186 J)</td></tr><tr><td class="m">W</td><td>งาน</td><td>J (1 atm·m³ = 1.013×10⁵ J)</td></tr><tr><td class="m">U, ΔU</td><td>พลังงานภายใน / ที่เปลี่ยน</td><td>J</td></tr><tr><td class="m">c</td><td>ความจุความร้อนจำเพาะ</td><td>J/kg·°C หรือ cal/g·°C</td></tr><tr><td class="m">L</td><td>ความร้อนแฝง</td><td>J/kg หรือ cal/g</td></tr><tr><td class="m">C<sub>V</sub>, C<sub>P</sub></td><td>ความจุความร้อนโมลาร์</td><td>J/mol·K</td></tr><tr><td class="m">γ</td><td>C<sub>P</sub>/C<sub>V</sub></td><td>ไม่มีหน่วย</td></tr><tr><td class="m">α, δ, β</td><td>สัมประสิทธิ์ขยายตัว เส้น/พื้นที่/ปริมาตร</td><td>°C⁻¹</td></tr><tr><td class="m">L<sub>i</sub>, A<sub>i</sub>, V<sub>i</sub></td><td>ค่าเริ่มต้น ความยาว/พื้นที่/ปริมาตร</td><td>m, m², m³</td></tr><tr><td class="m">σ, Y</td><td>ความเค้น / มอดูลัสของยัง</td><td>N/m²</td></tr></table></div></div></div>
+
 <div class="sec" id="s1">
  <div class="card"><h2>📏 การขยายตัวเชิงความร้อน</h2>
-  <div class="f">ΔL = α·Lᵢ·ΔT</div><div class="f">ΔA = δ·Aᵢ·ΔT , δ = 2α</div><div class="f">ΔV = β·Vᵢ·ΔT , β = 3α</div>
+  <div class="f">ΔL = α·Lᵢ·ΔT</div><div class="v"><b>ΔL</b> ความยาวที่เปลี่ยน (m) · <b>α</b> สัมประสิทธิ์ขยายตัวเชิงเส้น (°C⁻¹) · <b>Lᵢ</b> ความยาวเริ่มต้น (m) · <b>ΔT</b> = T<sub>f</sub>−T<sub>i</sub> อุณหภูมิที่เปลี่ยน (°C)</div><div class="f">ΔA = δ·Aᵢ·ΔT , δ = 2α</div><div class="v"><b>ΔA</b> พื้นที่ที่เปลี่ยน (m²) · <b>δ</b> สัมประสิทธิ์ขยายตัวเชิงพื้นที่ (°C⁻¹) · <b>Aᵢ</b> พื้นที่เริ่มต้น (m²)</div><div class="f">ΔV = β·Vᵢ·ΔT , β = 3α</div><div class="v"><b>ΔV</b> ปริมาตรที่เปลี่ยน (m³) · <b>β</b> สัมประสิทธิ์ขยายตัวเชิงปริมาตร (°C⁻¹) · <b>Vᵢ</b> ปริมาตรเริ่มต้น (m³)</div>
   <div class="box ex"><div class="lb">ตัวอย่าง (สไลด์)</div>รางเหล็ก 30.000 m, α = 11×10⁻⁶ /°C, ΔT = 40 °C<br>ΔL = (11×10⁻⁶)(30)(40) = <b>0.013 m</b> → L<sub>f</sub> = 30.013 m<br>ถ้าปลายยึดแน่น: σ = Y·ΔL/L₀ = (20×10¹⁰)(0.013/30) = <b>8.7×10⁷ N/m²</b><br>ลดอุณหภูมิ 40 °C → ΔL = −0.013 m (ขนาดเท่ากัน หดแทนขยาย)</div></div>
  <div class="card"><h2>🔥 ความร้อน Q</h2>
-  <div class="f">ความร้อนจำเพาะ (T เปลี่ยน): Q = mcΔT = ncΔT</div><div class="f">ความร้อนแฝง (สถานะเปลี่ยน, T คงที่): Q = mL</div>
+  <div class="f">ความร้อนจำเพาะ (T เปลี่ยน): Q = mcΔT = ncΔT</div><div class="v"><b>Q</b> ความร้อน (J หรือ cal) · <b>m</b> มวล (kg หรือ g) · <b>c</b> ความจุความร้อนจำเพาะ (J/kg·°C หรือ cal/g·°C) · <b>n</b> จำนวนโมล (mol) แล้ว c ต้องเป็นแบบต่อโมล (J/mol·K) · <b>ΔT</b> (°C หรือ K)</div><div class="f">ความร้อนแฝง (สถานะเปลี่ยน, T คงที่): Q = mL</div><div class="v"><b>Q</b> ความร้อน (J หรือ cal) · <b>m</b> มวล (kg หรือ g) · <b>L</b> ความร้อนแฝง (J/kg หรือ cal/g) · หน่วย m กับ L ต้องใช้ระบบเดียวกัน</div>
   <div class="box ex"><div class="lb">ตัวอย่าง: น้ำแข็ง 100 g, −30 °C → ไอน้ำ 120 °C</div>c<sub>น้ำแข็ง</sub>=0.5, c<sub>น้ำ</sub>=1, c<sub>ไอ</sub>=0.5 cal/g·°C · L<sub>ละลาย</sub>=80, L<sub>กลายเป็นไอ</sub>=540 cal/g
    <div class="tw"><table><tr><th>ช่วง</th><th>สูตร</th><th>Q (cal)</th></tr>
    <tr><td>A: −30→0 °C</td><td class="m">mcΔT</td><td class="m">1,500</td></tr><tr><td>B: ละลาย</td><td class="m">mL</td><td class="m">8,000</td></tr>
@@ -85,18 +87,18 @@ ul{padding-left:20px}li{margin:3px 0}b{color:#fff}
    <tr><td>E: 100→120 °C</td><td class="m">mcΔT</td><td class="m">6,000</td></tr><tr><td><b>รวม</b></td><td></td><td class="m"><b>79,500</b></td></tr></table></div></div>
   <div class="box warn"><div class="lb">ระวัง</div>ช่วง E ในสไลด์คิด 0.5×120 = 6,000 แต่ ΔT ของไอน้ำจริงคือ 100→120 = <b>20 °C</b> (จะได้ 1,000 cal และรวม 74,500 cal) อาจารย์อาจเฉลยตามสไลด์ ถามอาจารย์ให้ชัวร์ก่อนสอบ</div></div>
  <div class="card"><h2>⚛️ พลังงานภายใน U</h2>
-  <div class="f">อะตอมเดี่ยว: U = (3/2)nRT · อะตอมคู่: U = (5/2)nRT</div>
+  <div class="f">อะตอมเดี่ยว: U = (3/2)nRT · อะตอมคู่: U = (5/2)nRT</div><div class="v"><b>U</b> พลังงานภายใน (J) · <b>n</b> จำนวนโมล (mol) · <b>R</b> ค่าคงที่แก๊ส = 8.314 J/mol·K · <b>T</b> อุณหภูมิสัมบูรณ์ (<b>K</b> เท่านั้น! K = °C + 273)</div>
   <div class="box"><div class="lb">หัวใจ</div>U ของแก๊สอุดมคติขึ้นกับ <b>T อย่างเดียว</b> → ΔU = nC<sub>V</sub>ΔT ใช้ได้ <b>ทุกกระบวนการ</b></div></div>
 </div>
 
 <div class="sec" id="s2">
  <div class="card"><h2>🧮 งาน W และกฎข้อที่ 1</h2>
-  <div class="f">W = −∫P dV (งานที่กระทำ "ต่อ" ระบบ)</div><div class="f">ΔU = Q + W</div>
+  <div class="f">W = −∫P dV (งานที่กระทำ "ต่อ" ระบบ)</div><div class="v"><b>W</b> งาน (J) · <b>P</b> ความดัน (Pa = N/m²) · <b>V</b> ปริมาตร (m³) · <b>V<sub>i</sub>, V<sub>f</sub></b> ปริมาตรเริ่ม/สุดท้าย (m³) · ถ้า P คงที่ W = −P(V<sub>f</sub>−V<sub>i</sub>)</div><div class="f">ΔU = Q + W</div><div class="v"><b>ΔU</b> = U<sub>2</sub>−U<sub>1</sub> พลังงานภายในที่เปลี่ยน (J) · <b>Q</b> ความร้อนที่เข้าระบบ (J) · <b>W</b> งานที่กระทำต่อระบบ (J)</div>
   <div class="tw"><table><tr><th>กรณี</th><th>dV</th><th>W</th></tr><tr><td>อัดแก๊ส (V<sub>f</sub> &lt; V<sub>i</sub>)</td><td>−</td><td>+ (งานทำต่อระบบ)</td></tr><tr><td>V คงที่</td><td>0</td><td>0</td></tr><tr><td>ขยายตัว (V<sub>f</sub> &gt; V<sub>i</sub>)</td><td>+</td><td>− (ระบบทำงาน)</td></tr></table></div>
   <div class="g2"><div><b>Q &gt; 0</b> ความร้อนเข้าระบบ<br><b>W &gt; 0</b> งานกระทำต่อระบบ<br><span style="color:var(--dim)">(Energy in)</span></div><div><b>Q &lt; 0</b> ความร้อนออก<br><b>W &lt; 0</b> ระบบทำงาน<br><span style="color:var(--dim)">(Energy out)</span></div></div>
   <div class="box warn"><div class="lb">งานขึ้นกับเส้นทาง</div>W = พื้นที่ใต้กราฟ PV จุดเริ่ม/จุดจบเดียวกัน แต่คนละเส้นทาง W ไม่เท่ากัน (สไลด์หน้า 31: W<sub>b</sub> &gt; W<sub>c</sub> &gt; W<sub>a</sub>)</div></div>
  <div class="card"><h2>🔧 ความจุความร้อนโมลาร์</h2>
-  <div class="f">C<sub>P</sub> = C<sub>V</sub> + R</div><div class="f">อะตอมเดี่ยว: C<sub>V</sub>=(3/2)R≈12.5 · C<sub>P</sub>=(5/2)R≈20.8 J/mol·K</div><div class="f">γ = C<sub>P</sub>/C<sub>V</sub> = 1.67 (อะตอมเดี่ยว) ≈ 1.40 (อะตอมคู่)</div>
+  <div class="f">C<sub>P</sub> = C<sub>V</sub> + R</div><div class="v"><b>C<sub>P</sub></b> ความจุความร้อนต่อโมลที่ P คงที่ · <b>C<sub>V</sub></b> ที่ V คงที่ (ทั้งคู่หน่วย J/mol·K) · <b>R</b> = 8.314 J/mol·K</div><div class="f">อะตอมเดี่ยว: C<sub>V</sub>=(3/2)R≈12.5 · C<sub>P</sub>=(5/2)R≈20.8 J/mol·K</div><div class="f">γ = C<sub>P</sub>/C<sub>V</sub> = 1.67 (อะตอมเดี่ยว) ≈ 1.40 (อะตอมคู่)</div><div class="v"><b>γ</b> (แกมมา) อัตราส่วน C<sub>P</sub>/C<sub>V</sub> <b>ไม่มีหน่วย</b></div>
   <div class="box">ที่ความดันคงที่ ความร้อนส่วนหนึ่งกลายเป็นงานขยายตัว จึงต้องใช้ความร้อนมากกว่า C<sub>P</sub> &gt; C<sub>V</sub> อยู่ R</div></div>
 </div>
 
@@ -112,9 +114,9 @@ ul{padding-left:20px}li{margin:3px 0}b{color:#fff}
   <tr><td><b>Isochoric</b></td><td>V คงที่</td><td class="m">0</td><td class="m">nC<sub>V</sub>ΔT</td><td class="m">= Q</td></tr>
   <tr><td><b>Isobaric</b></td><td>P คงที่</td><td class="m">−PΔV = −nRΔT</td><td class="m">nC<sub>P</sub>ΔT</td><td class="m">nC<sub>V</sub>ΔT</td></tr>
   <tr><td><b>Isothermal</b></td><td>T คงที่</td><td class="m">−nRT ln(V<sub>f</sub>/V<sub>i</sub>)</td><td class="m">= −W</td><td class="m">0</td></tr>
-  <tr><td><b>Adiabatic</b></td><td>Q = 0</td><td class="m">= ΔU</td><td class="m">0</td><td class="m">nC<sub>V</sub>ΔT = W</td></tr></table></div></div>
+  <tr><td><b>Adiabatic</b></td><td>Q = 0</td><td class="m">= ΔU</td><td class="m">0</td><td class="m">nC<sub>V</sub>ΔT = W</td></tr></table></div><div class="v"><b>n</b> mol · <b>C<sub>V</sub>, C<sub>P</sub></b> J/mol·K · <b>R</b> 8.314 J/mol·K · <b>T</b> K · <b>V</b> m³ · <b>P</b> Pa · <b>W, Q, ΔU</b> J</div></div>
  <div class="card"><h2>🌀 Adiabatic: สูตรสำคัญ</h2>
-  <div class="f">PV<sup>γ</sup> = ค่าคงที่ → P₀V₀<sup>γ</sup> = P₁V₁<sup>γ</sup></div><div class="f">TV<sup>γ−1</sup> = ค่าคงที่ → T₀V₀<sup>γ−1</sup> = T₁V₁<sup>γ−1</sup> (T เป็น K)</div>
+  <div class="f">PV<sup>γ</sup> = ค่าคงที่ → P₀V₀<sup>γ</sup> = P₁V₁<sup>γ</sup></div><div class="v"><b>P₀, P₁</b> ความดันก่อน/หลัง (Pa หรือ atm ก็ได้ ขอแค่เหมือนกัน) · <b>V₀, V₁</b> ปริมาตรก่อน/หลัง (m³ หรือ L เหมือนกัน) · <b>γ</b> ไม่มีหน่วย</div><div class="f">TV<sup>γ−1</sup> = ค่าคงที่ → T₀V₀<sup>γ−1</sup> = T₁V₁<sup>γ−1</sup> (T เป็น K)</div><div class="v"><b>T₀, T₁</b> อุณหภูมิก่อน/หลัง (<b>K</b> เท่านั้น) · <b>V₀, V₁</b> ปริมาตรก่อน/หลัง (หน่วยเหมือนกัน) · <b>γ</b> ไม่มีหน่วย</div>
   <div class="g2"><div><b>อัด</b> (เช่น สูบลมจักรยาน)<br>W&gt;0, ΔU&gt;0 → <b style="color:var(--accent3)">T สูงขึ้น</b></div><div><b>ขยาย</b><br>W&lt;0, ΔU&lt;0 → <b style="color:var(--accent2)">T ลดลง</b></div></div>
   <div class="box warn"><div class="lb">ระวังสไลด์</div>สไลด์เขียน W = nRT ln(V<sub>i</sub>/V<sub>f</sub>) ซึ่งเท่ากับ <b>−nRT ln(V<sub>f</sub>/V<sub>i</sub>)</b> (ถูกต้อง) แต่ลายมือในตย.5 เขียน −nRT ln(V<sub>i</sub>/V<sub>f</sub>) ซึ่งเครื่องหมายสลับ ตอนแทนเลขใช้ ln(10/3) ถูกแล้ว จำแบบ "ขยาย → W ติดลบ" ไว้</div></div>
 </div>
@@ -138,7 +140,7 @@ ul{padding-left:20px}li{margin:3px 0}b{color:#fff}
 </div>
 
 <script>
-const names=['🧱 พื้นฐาน','🔥 ความร้อน','🧮 งาน & กฎข้อ 1','🎯 4 กระบวนการ','📝 ตัวอย่าง','🧪 ควิซ'];
+const names=['🧱 พื้นฐาน','📖 ตัวแปร','🔥 ความร้อน','🧮 งาน & กฎข้อ 1','🎯 4 กระบวนการ','📝 ตัวอย่าง','🧪 ควิซ'];
 const tabs=document.getElementById('tabs');
 names.forEach((n,i)=>{const b=document.createElement('button');b.className='tab'+(i?'':' on');b.textContent=n;b.onclick=()=>{document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('on',i===j));document.querySelectorAll('.sec').forEach((s,j)=>s.classList.toggle('on',i===j));scrollTo(0,0)};tabs.appendChild(b)});
 const Q=[
