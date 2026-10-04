@@ -40,6 +40,7 @@ details{background:var(--s2);border:1px solid var(--bd);border-radius:10px;margi
 summary{cursor:pointer;font-weight:600}
 details .f{white-space:normal}
 .q{color:var(--ac4);font-weight:700}
+.lg{font-size:13.5px;color:var(--dim);margin:4px 0 12px;padding:8px 12px;border:1px dashed var(--bd);border-radius:8px;line-height:1.8}
 .qc{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:16px}
 .qn{font-size:12px;color:var(--ac);font-weight:700;letter-spacing:1px}
 .ob{display:block;width:100%;text-align:left;background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;margin:6px 0;font:15px var(--sans);cursor:pointer}
@@ -66,6 +67,25 @@ details .f{white-space:normal}
 <div class="wrap">
 
 <div class="sec on" id="s1">
+<div class="card"><h2>ตารางสัญลักษณ์ (ดูเมื่อลืมว่าตัวแปรคืออะไร)</h2>
+<table><tr><th>สัญลักษณ์</th><th>ความหมาย</th><th>หน่วย</th></tr>
+<tr><td>P</td><td>ความดัน (แรงตั้งฉากต่อพื้นที่)</td><td>Pa, atm</td></tr>
+<tr><td>V</td><td>ปริมาตร</td><td>m³, L</td></tr>
+<tr><td>T</td><td>อุณหภูมิสัมบูรณ์ (ต้องเป็นเคลวิน)</td><td>K</td></tr>
+<tr><td>n</td><td>จำนวนโมล</td><td>mol</td></tr>
+<tr><td>m</td><td>มวลสาร (ใน n = m/M) หรือมวลโมเลกุล 1 ตัว (ในทฤษฎีจลน์)</td><td>g หรือ kg</td></tr>
+<tr><td>M</td><td>มวลโมเลกุล = มวลต่อ 1 โมล</td><td>g/mol (ใน v_rms ใช้ kg/mol)</td></tr>
+<tr><td>N</td><td>จำนวนโมเลกุลทั้งหมด</td><td>ตัว</td></tr>
+<tr><td>N_A</td><td>เลขอโวกาโดร = จำนวนโมเลกุลใน 1 โมล (6.02×10²³)</td><td>1/mol</td></tr>
+<tr><td>R</td><td>ค่าคงที่ของแก๊ส (8.314 หรือ 0.082)</td><td>J/(mol·K) หรือ L·atm/(mol·K)</td></tr>
+<tr><td>k_B</td><td>ค่าคงที่โบลซ์มานน์ = R/N_A (1.38×10⁻²³)</td><td>J/K</td></tr>
+<tr><td>v̄²</td><td>ค่าเฉลี่ยของความเร็วกำลังสองของโมเลกุล</td><td>m²/s²</td></tr>
+<tr><td>v_rms</td><td>อัตราเร็ว rms = รากที่สองของ v̄²</td><td>m/s</td></tr>
+<tr><td>E_k</td><td>พลังงานจลน์เฉลี่ยต่อ 1 โมเลกุล</td><td>J</td></tr>
+<tr><td>U</td><td>พลังงานภายในของแก๊สทั้งหมด</td><td>J</td></tr>
+<tr><td>a, b</td><td>ค่าคงที่แวนเดอร์วาลส์ (a: แรงดึงดูด, b: ปริมาตรโมเลกุลต่อโมล)</td><td>ดูแต่ละแก๊ส</td></tr>
+<tr><td>ตัวห้อย 1, 2</td><td>สถานะก่อน / หลัง (บางที่ใช้ i / f = initial / final)</td><td></td></tr></table></div>
+
 <div class="card"><h2>แก๊สอุดมคติ vs แก๊สจริง</h2>
 <table><tr><th></th><th>อุดมคติ</th><th>จริง</th></tr>
 <tr><td>อันตรกิริยาระหว่างอนุภาค</td><td>ไม่มี</td><td>มี</td></tr>
@@ -74,14 +94,14 @@ details .f{white-space:normal}
 <div class="def"><div class="lb">สมการสถานะ</div>V = V(P, T, n) — ปริมาตรแก๊สขึ้นกับภาชนะ บีบอัดได้</div></div>
 
 <div class="card"><h2>ตัวแปร P, V, T, n และหน่วย</h2>
-<h3>ความดัน P = F/A</h3>
+<h3>ความดัน P = F/A</h3><div class="lg"><b>เมื่อ</b> P = ความดัน (Pa) · F = แรงที่กระทำตั้งฉากกับพื้นผิว (N) · A = พื้นที่ผิว (m²)</div>
 <div class="f">1 atm = 760 mmHg = 760 torr = 1.013×10⁵ Pa = 1.013 bar<br>1 bar = 10⁵ Pa · 1 Pa = 1 N/m² · 1 kPa = 10³ Pa</div>
 <h3>ปริมาตร V</h3>
 <div class="f">1 L = 1 dm³ = 10⁻³ m³ · 1 mL = 1 cm³ = 10⁻⁶ m³<br>1 m³ = 10³ dm³ = 10⁶ cm³</div>
 <h3>อุณหภูมิ T (ต้องใช้ เคลวิน)</h3>
-<div class="f">K = °C + 273.15</div>
+<div class="f">K = °C + 273.15</div><div class="lg"><b>เมื่อ</b> K = อุณหภูมิเคลวิน · °C = อุณหภูมิเซลเซียส</div>
 <h3>โมล n</h3>
-<div class="f">n = m/M (m: g, M: g/mol) &nbsp; n = N/N_A &nbsp; N_A = 6.02×10²³</div>
+<div class="f">n = m/M (m: g, M: g/mol) &nbsp; n = N/N_A &nbsp; N_A = 6.02×10²³</div><div class="lg"><b>เมื่อ</b> n = จำนวนโมล (mol) · m = มวลสาร (g) · M = มวลโมเลกุล หรือมวล 1 โมล (g/mol) · N = จำนวนโมเลกุลทั้งหมด · N_A = เลขอโวกาโดร (โมเลกุลต่อ 1 โมล)</div>
 <div class="warn"><div class="lb">ระวัง</div>แก๊สใดๆ 1 mol ที่ STP (273 K, 1.013×10⁵ Pa) มี V = 22.4 L = 22.4×10⁻³ m³ · เปลี่ยนหน่วยให้ตรงกับค่า R ก่อนแทนเสมอ</div></div>
 </div>
 
@@ -91,11 +111,11 @@ details .f{white-space:normal}
 <tr><td>บอยล์</td><td>T</td><td>V ∝ 1/P → P₁V₁ = P₂V₂</td></tr>
 <tr><td>ชาร์ล</td><td>P</td><td>V ∝ T → V₁/T₁ = V₂/T₂</td></tr>
 <tr><td>เกย์-ลูสแซก</td><td>V</td><td>P ∝ T → P₁/T₁ = P₂/T₂</td></tr></table>
-<h3>รวมกฎ → สมการสถานะแก๊สอุดมคติ</h3>
-<div class="f">PV/T = k → PV = nRT</div>
-<div class="f">R = 8.314 J/(mol·K) = 0.082 L·atm/(mol·K)</div>
+<div class="lg"><b>เมื่อ</b> P = ความดัน · V = ปริมาตร · T = อุณหภูมิ (K) · ตัวห้อย 1 = สถานะก่อน, 2 = สถานะหลัง · "∝" อ่านว่า แปรผันตรงกับ (V ∝ 1/P คือ แปรผกผัน)</div><h3>รวมกฎ → สมการสถานะแก๊สอุดมคติ</h3>
+<div class="f">PV/T = k → PV = nRT</div><div class="lg"><b>เมื่อ</b> k = ค่าคงที่ (ขึ้นกับปริมาณแก๊ส, k = nR) · n = จำนวนโมล · R = ค่าคงที่สากลของแก๊ส</div>
+<div class="f">R = 8.314 J/(mol·K) = 0.082 L·atm/(mol·K)</div><div class="lg"><b>เมื่อ</b> R มีสองค่า เลือกตามหน่วย: 8.314 เมื่อ P เป็น Pa และ V เป็น m³ · 0.082 เมื่อ P เป็น atm และ V เป็น L</div>
 <div class="f">เทียบสถานะ (n ไม่เปลี่ยน): P₁V₁/T₁ = P₂V₂/T₂<br>เทียบสถานะ (n เปลี่ยน): P₁V₁/(n₁T₁) = P₂V₂/(n₂T₂)</div>
-<div class="f">PV = N·k_B·T &nbsp; k_B = R/N_A = 1.38×10⁻²³ J/K</div>
+<div class="f">PV = N·k_B·T &nbsp; k_B = R/N_A = 1.38×10⁻²³ J/K</div><div class="lg"><b>เมื่อ</b> N = จำนวนโมเลกุลทั้งหมด (ไม่ใช่จำนวนโมล) · k_B = ค่าคงที่โบลซ์มานน์ = R หารด้วย N_A คือ "ค่า R ต่อ 1 โมเลกุล"</div>
 <div class="warn"><div class="lb">ระวัง</div>ใช้ R = 8.314 → P เป็น Pa, V เป็น m³ · ใช้ R = 0.082 → P เป็น atm, V เป็น L · T เป็น K เสมอ</div></div>
 </div>
 
@@ -104,23 +124,23 @@ details .f{white-space:normal}
 <ul><li>โมเลกุลเล็ก จำนวนมาก ระยะห่างมากเมื่อเทียบกับขนาด</li><li>เคลื่อนที่ตามกฎของนิวตัน</li><li>ชนกัน/ชนผนังแบบ<b>ยืดหยุ่น</b></li><li><b>ไม่มีแรงดึงดูด</b>ระหว่างโมเลกุล</li><li>เป็นแก๊สบริสุทธิ์ (ทุกโมเลกุลเหมือนกัน)</li></ul></div>
 
 <div class="card"><h2>ที่มาของความดัน (ลูกบาศก์ด้าน d)</h2>
-<ul><li>ชนผนัง: Δp_x = −2mv_xi → ไปกลับ ใช้เวลา Δt = 2d/v_xi</li>
+<div class="lg"><b>เมื่อ</b> m = มวลโมเลกุล 1 ตัว (kg) · v_xi = ความเร็วแนวแกน x ของโมเลกุลตัวที่ i · Δp_x = การเปลี่ยนโมเมนตัมแกน x · Δt = เวลาที่ใช้ไปกลับจนชนผนังเดิมซ้ำ · d = ความยาวด้านของลูกบาศก์ (V = d³) · F = แรงเฉลี่ยรวมที่ผนัง</div><ul><li>ชนผนัง: Δp_x = −2mv_xi → ไปกลับ ใช้เวลา Δt = 2d/v_xi</li>
 <li>แรงเฉลี่ยของโมเลกุลต่อผนัง = m·v_xi²/d → รวม N โมเลกุล: F = (m/d)·N·v̄ₓ²</li>
 <li>3 ทิศเท่ากัน: v̄ₓ² = v̄ᵧ² = v̄_z² = ⅓ v̄²</li></ul>
 <div class="f">P = ⅔ (N/V) (½ m v̄²)</div>
-<p>ความดันแปรผันตรงกับ <b>จำนวนโมเลกุลต่อปริมาตร</b> และ <b>พลังงานจลน์เฉลี่ย</b></p></div>
+<div class="lg"><b>เมื่อ</b> N/V = จำนวนโมเลกุลต่อปริมาตร · ½ m v̄² = พลังงานจลน์เฉลี่ยของโมเลกุล 1 ตัว · v̄² = ค่าเฉลี่ยของ v² ของทุกโมเลกุล</div><p>ความดันแปรผันตรงกับ <b>จำนวนโมเลกุลต่อปริมาตร</b> และ <b>พลังงานจลน์เฉลี่ย</b></p></div>
 
 <div class="card"><h2>อุณหภูมิ & พลังงาน</h2>
-<div class="f">½ m v̄² = (3/2) k_B T &nbsp; (พลังงานจลน์เฉลี่ย/โมเลกุล)</div>
+<div class="f">½ m v̄² = (3/2) k_B T &nbsp; (พลังงานจลน์เฉลี่ย/โมเลกุล)</div><div class="lg"><b>เมื่อ</b> ซ้ายมือ = พลังงานจลน์เฉลี่ยต่อ 1 โมเลกุล (E_k) · T = อุณหภูมิ (K) · k_B = ค่าคงที่โบลซ์มานน์ → อุณหภูมิวัดความรุนแรงของการเคลื่อนที่ของโมเลกุล</div>
 <div class="def"><div class="lb">ทฤษฎีบทแบ่งเท่ากันของพลังงาน</div>แต่ละองศาอิสระให้พลังงาน ½ k_B T (แต่ละแกน x, y, z ได้ ½ k_B T)</div>
-<h3>พลังงานภายใน U</h3>
+<h3>พลังงานภายใน U</h3><div class="lg"><b>เมื่อ</b> U = พลังงานภายใน (J) = พลังงานรวมของทุกโมเลกุลในแก๊ส (ของแก๊สอุดมคติมีแต่พลังงานจลน์) · <b>องศาอิสระ</b> = จำนวนวิธีอิสระที่โมเลกุลเก็บพลังงานได้ (เลื่อนที่ 3 แกน, หมุน, สั่น) · แต่ละองศาอิสระได้ ½ k_B T ต่อโมเลกุล หรือ ½ RT ต่อโมล</div>
 <table><tr><th>ชนิดแก๊ส</th><th>องศาอิสระ (เลื่อน+หมุน)</th><th>U</th></tr>
 <tr><td>อะตอมเดี่ยว (He, Ne, Ar)</td><td>3 + 0</td><td>(3/2) nRT = (3/2) N k_B T</td></tr>
 <tr><td>อะตอมคู่ (N₂, O₂)</td><td>3 + 2</td><td>(5/2) nRT</td></tr>
 <tr><td>หลายอะตอม (CO₂, H₂O)</td><td>3 + 3</td><td>3 nRT</td></tr></table>
 <p>U ของแก๊สอุดมคติขึ้นกับ <b>อุณหภูมิอย่างเดียว</b></p>
 <h3>อัตราเร็ว rms</h3>
-<div class="f">v_rms = √(v̄²) = √(3k_BT/m) = √(3RT/M)</div>
+<div class="f">v_rms = √(v̄²) = √(3k_BT/m) = √(3RT/M)</div><div class="lg"><b>เมื่อ</b> v_rms = อัตราเร็วรากที่สองของค่าเฉลี่ยกำลังสอง (m/s) · m = มวล 1 โมเลกุล (kg) ใช้คู่กับ k_B · M = มวล 1 โมล (<b>kg/mol</b>) ใช้คู่กับ R</div>
 <div class="warn"><div class="lb">ระวัง</div>สูตร √(3RT/M) ต้องใช้ <b>M เป็น kg/mol</b> (He = 0.004 kg/mol) · สูตร k_B ใช้ m เป็น kg ต่ออะตอม<br>M น้อย → v_rms มาก · T สูง → v มาก (กราฟกระจายออก)</div></div>
 </div>
 
@@ -129,7 +149,7 @@ details .f{white-space:normal}
 <p>แก๊สจริงเบี่ยงเบนจากอุดมคติ 2 เหตุผล:</p>
 <ul><li><b>ปริมาตรโมเลกุล</b>: ปริมาตรเคลื่อนที่จริง = V − nb</li>
 <li><b>แรงดึงดูด</b>: ความดันลดลง (แรงต่อการชน ∝ n/V และความถี่ชน ∝ n/V) จึงบวก a·n²/V² กลับ</li></ul>
-<div class="f">(P + a·n²/V²)(V − nb) = nRT</div>
+<div class="f">(P + a·n²/V²)(V − nb) = nRT</div><div class="lg"><b>เมื่อ</b> P = ความดันที่วัดได้ · V = ปริมาตรภาชนะ · n = จำนวนโมล · a = ค่าคงที่แรงดึงดูดระหว่างโมเลกุล (ทำให้ P ต่ำลง จึงบวกกลับ) · b = ปริมาตรที่โมเลกุล 1 โมลครอบครอง (nb = ปริมาตรที่ใช้เคลื่อนที่ไม่ได้ จึงหักออก)</div>
 <p>a, b = ค่าคงที่แวนเดอร์วาลส์ (a: atm·L²/mol² หรือ N·m⁴/mol², b: L/mol หรือ m³/mol)</p>
 <div class="warn"><div class="lb">ระวัง</div>สไลด์ระบุว่าหัวข้อนี้ไม่ออกสอบ ออกแค่ตัวสมการ/แนวคิด (ตามที่ครูเขียนไว้ในสไลด์ 55) · ตรวจกับอาจารย์อีกที</div></div>
 </div>
@@ -141,7 +161,7 @@ details .f{white-space:normal}
 <details><summary>Ex.1 สร้อยทองคำ 14 g — หาจำนวนโมลและจำนวนโมเลกุล</summary>
 <p><b class="q">กำหนด:</b> m = 14 g, M = 197 g/mol, N_A = 6.02×10²³ /mol</p>
 <p><b class="q">ต้องการ:</b> (ก) n (ข) N</p>
-<p><b class="q">สูตร:</b> n = m/M และ N = n·N_A</p>
+<p><b class="q">สูตร:</b> n = m/M และ N = n·N_A</p><div class="lg"><b>เมื่อ</b> n = จำนวนโมล · m = มวล · M = มวล 1 โมล · N = จำนวนโมเลกุลทั้งหมด · N_A = โมเลกุลต่อ 1 โมล</div>
 <p><b class="q">ขั้นที่ 1 (ก)</b> หน่วยของ m เป็น g และ M เป็น g/mol → ตัดกันเหลือ mol พอดี ไม่ต้องแปลงหน่วย</p>
 <div class="f">n = 14 / 197 = 0.0711 mol</div>
 <p><b class="q">ขั้นที่ 2 (ข)</b> จำนวนโมเลกุล = จำนวนโมล × จำนวนโมเลกุลต่อ 1 โมล</p>
@@ -152,7 +172,7 @@ details .f{white-space:normal}
 <details><summary>Ex.2 ก๊าซ 100 cm³ ที่ 20°C, 100 Pa — หา n</summary>
 <p><b class="q">กำหนด:</b> V = 100 cm³, T = 20°C, P = 100 Pa</p>
 <p><b class="q">ต้องการ:</b> n (จำนวนโมล)</p>
-<p><b class="q">สูตร:</b> PV = nRT → n = PV/(RT) ใช้ R = 8.314 J/(mol·K) จึงต้องมี P เป็น Pa, V เป็น m³, T เป็น K</p>
+<p><b class="q">สูตร:</b> PV = nRT → n = PV/(RT) ใช้ R = 8.314 J/(mol·K) จึงต้องมี P เป็น Pa, V เป็น m³, T เป็น K</p><div class="lg"><b>เมื่อ</b> P = ความดัน · V = ปริมาตร · n = จำนวนโมล · R = ค่าคงที่ของแก๊ส · T = อุณหภูมิ (K)</div>
 <p><b class="q">ขั้นที่ 1</b> แปลงปริมาตร (1 cm³ = 10⁻⁶ m³)</p>
 <div class="f">V = 100 × 10⁻⁶ = 1.00×10⁻⁴ m³</div>
 <p><b class="q">ขั้นที่ 2</b> แปลงอุณหภูมิเป็นเคลวิน</p>
@@ -167,7 +187,7 @@ details .f{white-space:normal}
 <details><summary>Ex.3 ฮีเลียม — หา T₂ (เฉลยสไลด์ 420 K)</summary>
 <p><b class="q">กำหนด:</b> V₁ = 15.0×10⁻³ m³, P₁ = 200 kPa, T₁ = 300 K · V₂ = 12.0×10⁻³ m³, P₂ = 350 kPa</p>
 <p><b class="q">ต้องการ:</b> T₂ (ฮีเลียมในถังเดียวกัน n ไม่เปลี่ยน)</p>
-<p><b class="q">สูตร:</b> P₁V₁/T₁ = P₂V₂/T₂ (สมการ 4)</p>
+<p><b class="q">สูตร:</b> P₁V₁/T₁ = P₂V₂/T₂ (สมการ 4)</p><div class="lg"><b>เมื่อ</b> P = ความดัน · V = ปริมาตร · T = อุณหภูมิ (K) · เลข 1 = สถานะก่อน เลข 2 = สถานะหลัง</div>
 <p><b class="q">ขั้นที่ 1</b> จัดรูปให้ T₂ อยู่ซ้ายมือ</p>
 <div class="f">T₂ = T₁ × (P₂V₂)/(P₁V₁)</div>
 <p><b class="q">ขั้นที่ 2</b> หน่วยของ P (kPa) และ V (m³) ของสองสถานะเหมือนกัน จึงตัดกันในอัตราส่วนได้ ไม่ต้องแปลงเป็น Pa</p>
@@ -206,9 +226,9 @@ details .f{white-space:normal}
 
 <details><summary>Ex.6 ฮีเลียม 2 mol, 3.00 m³, 20°C — U, E_k, v_rms</summary>
 <p><b class="q">กำหนด:</b> n = 2 mol, V = 3.00 m³ (ไม่ใช้ในข้อนี้), T = 293.15 K, M(He) = 4 g/mol = 0.004 kg/mol</p>
-<p><b class="q">ขั้นที่ 1 (ก)</b> He เป็นอะตอมเดี่ยว มีแค่การเลื่อนตำแหน่ง 3 องศาอิสระ → U = (3/2)nRT</p>
+<p><b class="q">ขั้นที่ 1 (ก)</b> He เป็นอะตอมเดี่ยว มีแค่การเลื่อนตำแหน่ง 3 องศาอิสระ → U = (3/2)nRT</p><div class="lg"><b>เมื่อ</b> U = พลังงานภายในของแก๊สทั้งหมด (J) · n = จำนวนโมล · R, T = ค่าคงที่แก๊ส และอุณหภูมิ (K) · ตัวเลข 3/2 มาจาก 3 องศาอิสระ × ½</div>
 <div class="f">RT = 8.314 × 293.15 = 2437 J/mol<br>U = 1.5 × 2 × 2437 = 7,312 J ≈ 7.31 kJ</div>
-<p><b class="q">ขั้นที่ 2 (ข)</b> พลังงานจลน์เฉลี่ยต่อ 1 โมเลกุล = (3/2)k_BT</p>
+<p><b class="q">ขั้นที่ 2 (ข)</b> พลังงานจลน์เฉลี่ยต่อ 1 โมเลกุล = (3/2)k_BT</p><div class="lg"><b>เมื่อ</b> E_k = พลังงานจลน์เฉลี่ย 1 โมเลกุล · k_B = ค่าคงที่โบลซ์มานน์ (1.38×10⁻²³ J/K)</div>
 <div class="f">E_k = 1.5 × 1.38×10⁻²³ × 293.15 = 6.07×10⁻²¹ J</div>
 <p><b class="q">เช็ก (ข):</b> U/N = 7312/(2 × 6.02×10²³) = 6.07×10⁻²¹ J ✓</p>
 <p><b class="q">ขั้นที่ 3 (ค)</b> ใช้สูตร v_rms = √(3RT/M) ต้องใช้ M เป็น <b>kg/mol</b></p>
