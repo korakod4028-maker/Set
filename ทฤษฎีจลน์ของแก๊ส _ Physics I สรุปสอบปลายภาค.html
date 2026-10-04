@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ทฤษฎีจลน์ของแก๊ส | Physics I สรุปสอบปลายภาค</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+:root{--bg:#0d0f1a;--s:#141828;--s2:#1c2235;--bd:#2a3050;--ac:#6c63ff;--ac2:#00d4aa;--ac3:#ff6b6b;--ac4:#ffd93d;--tx:#e8eaf6;--dim:#8892b0;--mono:'IBM Plex Mono',monospace;--sans:'Sarabun',system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f5f6fb;--s:#fff;--s2:#eceffa;--bd:#d5daee;--tx:#1b2038;--dim:#56608a}}
+:root[data-theme="dark"]{--bg:#0d0f1a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:16px;line-height:1.7}
+.hero{background:linear-gradient(135deg,#0d0f1a,#1a1040 50%,#0d1a2a);padding:48px 20px 36px;text-align:center;border-bottom:1px solid var(--bd);color:#e8eaf6}
+.badge{display:inline-block;background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.4);color:#a89fff;font-size:12px;font-weight:600;letter-spacing:2px;padding:4px 14px;border-radius:20px;margin-bottom:14px}
+.hero h1{font-size:clamp(26px,6vw,46px);font-weight:800;line-height:1.2}
+.hero h1 span{color:var(--ac)}
+.hero p{color:#8892b0;margin-top:8px}
+.tabs{display:flex;gap:4px;padding:12px 16px;background:var(--s);border-bottom:1px solid var(--bd);overflow-x:auto;position:sticky;top:env(safe-area-inset-top,0px);z-index:9}
+.tabs button{white-space:nowrap;padding:8px 18px;border-radius:8px;border:0;background:transparent;color:var(--dim);font:500 14px var(--sans);cursor:pointer}
+.tabs button.on{background:var(--ac);color:#fff;font-weight:600}
+.wrap{max-width:860px;margin:0 auto;padding:28px 16px 80px}
+.sec{display:none}.sec.on{display:block}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:22px;margin-bottom:18px}
+h2{font-size:20px;font-weight:700;margin-bottom:8px}
+h3{font-size:15px;color:var(--ac4);margin:14px 0 4px}
+.f{font-family:var(--mono);background:var(--s2);border-radius:8px;padding:10px 14px;margin:8px 0;overflow-x:auto;white-space:nowrap;color:var(--ac2);font-size:15px}
+.def,.ex,.warn{border-left:3px solid;border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0}
+.def{background:rgba(108,99,255,.09);border-color:var(--ac)}
+.ex{background:rgba(0,212,170,.07);border-color:var(--ac2)}
+.warn{background:rgba(255,107,107,.08);border-color:var(--ac3)}
+.lb{font-size:11px;font-weight:700;letter-spacing:2px;margin-bottom:2px}
+.def .lb{color:var(--ac)}.ex .lb{color:var(--ac2)}.warn .lb{color:var(--ac3)}
+table{width:100%;border-collapse:collapse;font-size:14px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:8px 10px;text-align:left}
+th{background:var(--s2)}
+ul{padding-left:20px}
+details{background:var(--s2);border:1px solid var(--bd);border-radius:10px;margin:10px 0;padding:12px 16px}
+summary{cursor:pointer;font-weight:600}
+details .f{white-space:normal}
+.q{color:var(--ac4);font-weight:700}
+.qc{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:16px}
+.qn{font-size:12px;color:var(--ac);font-weight:700;letter-spacing:1px}
+.ob{display:block;width:100%;text-align:left;background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;margin:6px 0;font:15px var(--sans);cursor:pointer}
+.ob.ok{border-color:var(--ac2);background:rgba(0,212,170,.15)}
+.ob.no{border-color:var(--ac3);background:rgba(255,107,107,.15)}
+.fb{display:none;margin-top:10px;padding:12px 16px;border-left:3px solid var(--ac4);background:rgba(255,217,61,.08);border-radius:0 8px 8px 0}
+.fb.on{display:block}
+</style>
+</head>
+<body>
+<div class="hero">
+<div class="badge">PHYSICS I · สรุปสอบปลายภาค</div>
+<h1>ทฤษฎีจลน์ของ<span>แก๊ส</span></h1>
+<p>สรุปเนื้อหา + ตัวอย่างพร้อมวิธีทำ</p>
+</div>
+<div class="tabs">
+<button class="on" data-t="s1">① สมบัติ & ตัวแปร</button>
+<button data-t="s2">② กฎแก๊ส</button>
+<button data-t="s3">③ ทฤษฎีจลน์</button>
+<button data-t="s4">④ แวนเดอร์วาลส์</button>
+<button data-t="s5">⑤ ตัวอย่าง</button>
+<button data-t="s6">⑥ โจทย์ฝึก</button>
+</div>
+<div class="wrap">
+
+<div class="sec on" id="s1">
+<div class="card"><h2>แก๊สอุดมคติ vs แก๊สจริง</h2>
+<table><tr><th></th><th>อุดมคติ</th><th>จริง</th></tr>
+<tr><td>อันตรกิริยาระหว่างอนุภาค</td><td>ไม่มี</td><td>มี</td></tr>
+<tr><td>ขนาดอนุภาค เทียบกับระยะห่าง</td><td>เล็กมาก</td><td>มีนัยสำคัญ</td></tr>
+<tr><td>สภาวะที่ใกล้เคียงอุดมคติ</td><td colspan="2"><b>อุณหภูมิสูง + ความดันต่ำ</b> (ข้อ ง. ในสไลด์)</td></tr></table>
+<div class="def"><div class="lb">สมการสถานะ</div>V = V(P, T, n) — ปริมาตรแก๊สขึ้นกับภาชนะ บีบอัดได้</div></div>
+
+<div class="card"><h2>ตัวแปร P, V, T, n และหน่วย</h2>
+<h3>ความดัน P = F/A</h3>
+<div class="f">1 atm = 760 mmHg = 760 torr = 1.013×10⁵ Pa = 1.013 bar<br>1 bar = 10⁵ Pa · 1 Pa = 1 N/m² · 1 kPa = 10³ Pa</div>
+<h3>ปริมาตร V</h3>
+<div class="f">1 L = 1 dm³ = 10⁻³ m³ · 1 mL = 1 cm³ = 10⁻⁶ m³<br>1 m³ = 10³ dm³ = 10⁶ cm³</div>
+<h3>อุณหภูมิ T (ต้องใช้ เคลวิน)</h3>
+<div class="f">K = °C + 273.15</div>
+<h3>โมล n</h3>
+<div class="f">n = m/M (m: g, M: g/mol) &nbsp; n = N/N_A &nbsp; N_A = 6.02×10²³</div>
+<div class="warn"><div class="lb">ระวัง</div>แก๊สใดๆ 1 mol ที่ STP (273 K, 1.013×10⁵ Pa) มี V = 22.4 L = 22.4×10⁻³ m³ · เปลี่ยนหน่วยให้ตรงกับค่า R ก่อนแทนเสมอ</div></div>
+</div>
+
+<div class="sec" id="s2">
+<div class="card"><h2>กฎของแก๊ส</h2>
+<table><tr><th>กฎ</th><th>คงที่</th><th>ความสัมพันธ์</th></tr>
+<tr><td>บอยล์</td><td>T</td><td>V ∝ 1/P → P₁V₁ = P₂V₂</td></tr>
+<tr><td>ชาร์ล</td><td>P</td><td>V ∝ T → V₁/T₁ = V₂/T₂</td></tr>
+<tr><td>เกย์-ลูสแซก</td><td>V</td><td>P ∝ T → P₁/T₁ = P₂/T₂</td></tr></table>
+<h3>รวมกฎ → สมการสถานะแก๊สอุดมคติ</h3>
+<div class="f">PV/T = k → PV = nRT</div>
+<div class="f">R = 8.314 J/(mol·K) = 0.082 L·atm/(mol·K)</div>
+<div class="f">เทียบสถานะ (n ไม่เปลี่ยน): P₁V₁/T₁ = P₂V₂/T₂<br>เทียบสถานะ (n เปลี่ยน): P₁V₁/(n₁T₁) = P₂V₂/(n₂T₂)</div>
+<div class="f">PV = N·k_B·T &nbsp; k_B = R/N_A = 1.38×10⁻²³ J/K</div>
+<div class="warn"><div class="lb">ระวัง</div>ใช้ R = 8.314 → P เป็น Pa, V เป็น m³ · ใช้ R = 0.082 → P เป็น atm, V เป็น L · T เป็น K เสมอ</div></div>
+</div>
+
+<div class="sec" id="s3">
+<div class="card"><h2>สมมติฐานแก๊สอุดมคติ (5 ข้อ)</h2>
+<ul><li>โมเลกุลเล็ก จำนวนมาก ระยะห่างมากเมื่อเทียบกับขนาด</li><li>เคลื่อนที่ตามกฎของนิวตัน</li><li>ชนกัน/ชนผนังแบบ<b>ยืดหยุ่น</b></li><li><b>ไม่มีแรงดึงดูด</b>ระหว่างโมเลกุล</li><li>เป็นแก๊สบริสุทธิ์ (ทุกโมเลกุลเหมือนกัน)</li></ul></div>
+
+<div class="card"><h2>ที่มาของความดัน (ลูกบาศก์ด้าน d)</h2>
+<ul><li>ชนผนัง: Δp_x = −2mv_xi → ไปกลับ ใช้เวลา Δt = 2d/v_xi</li>
+<li>แรงเฉลี่ยของโมเลกุลต่อผนัง = m·v_xi²/d → รวม N โมเลกุล: F = (m/d)·N·v̄ₓ²</li>
+<li>3 ทิศเท่ากัน: v̄ₓ² = v̄ᵧ² = v̄_z² = ⅓ v̄²</li></ul>
+<div class="f">P = ⅔ (N/V) (½ m v̄²)</div>
+<p>ความดันแปรผันตรงกับ <b>จำนวนโมเลกุลต่อปริมาตร</b> และ <b>พลังงานจลน์เฉลี่ย</b></p></div>
+
+<div class="card"><h2>อุณหภูมิ & พลังงาน</h2>
+<div class="f">½ m v̄² = (3/2) k_B T &nbsp; (พลังงานจลน์เฉลี่ย/โมเลกุล)</div>
+<div class="def"><div class="lb">ทฤษฎีบทแบ่งเท่ากันของพลังงาน</div>แต่ละองศาอิสระให้พลังงาน ½ k_B T (แต่ละแกน x, y, z ได้ ½ k_B T)</div>
+<h3>พลังงานภายใน U</h3>
+<table><tr><th>ชนิดแก๊ส</th><th>องศาอิสระ (เลื่อน+หมุน)</th><th>U</th></tr>
+<tr><td>อะตอมเดี่ยว (He, Ne, Ar)</td><td>3 + 0</td><td>(3/2) nRT = (3/2) N k_B T</td></tr>
+<tr><td>อะตอมคู่ (N₂, O₂)</td><td>3 + 2</td><td>(5/2) nRT</td></tr>
+<tr><td>หลายอะตอม (CO₂, H₂O)</td><td>3 + 3</td><td>3 nRT</td></tr></table>
+<p>U ของแก๊สอุดมคติขึ้นกับ <b>อุณหภูมิอย่างเดียว</b></p>
+<h3>อัตราเร็ว rms</h3>
+<div class="f">v_rms = √(v̄²) = √(3k_BT/m) = √(3RT/M)</div>
+<div class="warn"><div class="lb">ระวัง</div>สูตร √(3RT/M) ต้องใช้ <b>M เป็น kg/mol</b> (He = 0.004 kg/mol) · สูตร k_B ใช้ m เป็น kg ต่ออะตอม<br>M น้อย → v_rms มาก · T สูง → v มาก (กราฟกระจายออก)</div></div>
+</div>
+
+<div class="sec" id="s4">
+<div class="card"><h2>แก๊สจริง: แวนเดอร์วาลส์</h2>
+<p>แก๊สจริงเบี่ยงเบนจากอุดมคติ 2 เหตุผล:</p>
+<ul><li><b>ปริมาตรโมเลกุล</b>: ปริมาตรเคลื่อนที่จริง = V − nb</li>
+<li><b>แรงดึงดูด</b>: ความดันลดลง (แรงต่อการชน ∝ n/V และความถี่ชน ∝ n/V) จึงบวก a·n²/V² กลับ</li></ul>
+<div class="f">(P + a·n²/V²)(V − nb) = nRT</div>
+<p>a, b = ค่าคงที่แวนเดอร์วาลส์ (a: atm·L²/mol² หรือ N·m⁴/mol², b: L/mol หรือ m³/mol)</p>
+<div class="warn"><div class="lb">ระวัง</div>สไลด์ระบุว่าหัวข้อนี้ไม่ออกสอบ ออกแค่ตัวสมการ/แนวคิด (ตามที่ครูเขียนไว้ในสไลด์ 55) · ตรวจกับอาจารย์อีกที</div></div>
+</div>
+
+<div class="sec" id="s5">
+<div class="card"><h2>ตัวอย่างจากสไลด์ — วิธีทำละเอียด (กดเปิดทีละข้อ)</h2>
+<p style="color:var(--dim)">ทุกข้อทำตามลำดับ: <b class="q">กำหนด → ต้องการหา → สูตร → วิธีทำทีละขั้น → ตอบ → เช็ก</b> · ใช้ T(K) = °C + 273.15 · ข้อที่สไลด์ไม่มีเฉลย คำนวณใหม่ให้</p>
+
+<details><summary>Ex.1 สร้อยทองคำ 14 g — หาจำนวนโมลและจำนวนโมเลกุล</summary>
+<p><b class="q">กำหนด:</b> m = 14 g, M = 197 g/mol, N_A = 6.02×10²³ /mol</p>
+<p><b class="q">ต้องการ:</b> (ก) n (ข) N</p>
+<p><b class="q">สูตร:</b> n = m/M และ N = n·N_A</p>
+<p><b class="q">ขั้นที่ 1 (ก)</b> หน่วยของ m เป็น g และ M เป็น g/mol → ตัดกันเหลือ mol พอดี ไม่ต้องแปลงหน่วย</p>
+<div class="f">n = 14 / 197 = 0.0711 mol</div>
+<p><b class="q">ขั้นที่ 2 (ข)</b> จำนวนโมเลกุล = จำนวนโมล × จำนวนโมเลกุลต่อ 1 โมล</p>
+<div class="f">N = 0.0711 × 6.02×10²³ = 4.28×10²² โมเลกุล</div>
+<p><b class="q">ตอบ:</b> (ก) ≈ 0.07 mol (ข) ≈ 4.28×10²² โมเลกุล</p>
+<p><b class="q">เช็ก:</b> สไลด์ใช้ n ≈ 0.07 จึงได้ 4.22×10²² ความต่างมาจากการปัดเลขเท่านั้น (ข้อสอบมักให้ปัดทศนิยมตามโจทย์)</p></details>
+
+<details><summary>Ex.2 ก๊าซ 100 cm³ ที่ 20°C, 100 Pa — หา n</summary>
+<p><b class="q">กำหนด:</b> V = 100 cm³, T = 20°C, P = 100 Pa</p>
+<p><b class="q">ต้องการ:</b> n (จำนวนโมล)</p>
+<p><b class="q">สูตร:</b> PV = nRT → n = PV/(RT) ใช้ R = 8.314 J/(mol·K) จึงต้องมี P เป็น Pa, V เป็น m³, T เป็น K</p>
+<p><b class="q">ขั้นที่ 1</b> แปลงปริมาตร (1 cm³ = 10⁻⁶ m³)</p>
+<div class="f">V = 100 × 10⁻⁶ = 1.00×10⁻⁴ m³</div>
+<p><b class="q">ขั้นที่ 2</b> แปลงอุณหภูมิเป็นเคลวิน</p>
+<div class="f">T = 20 + 273.15 = 293.15 K</div>
+<p><b class="q">ขั้นที่ 3</b> หา PV และ RT แยกกันก่อน</p>
+<div class="f">PV = 100 × 1.00×10⁻⁴ = 1.00×10⁻² J<br>RT = 8.314 × 293.15 = 2437 J/mol</div>
+<p><b class="q">ขั้นที่ 4</b> แทนค่า</p>
+<div class="f">n = 1.00×10⁻² / 2437 = 4.10×10⁻⁶ mol</div>
+<p><b class="q">ตอบ:</b> ≈ 4.1×10⁻⁶ mol</p>
+<p><b class="q">เช็ก:</b> ความดัน 100 Pa ต่ำมาก (≈ 10⁻³ atm) และปริมาตรเล็ก ผลจึงเป็นโมลน้อยมาก สมเหตุสมผล</p></details>
+
+<details><summary>Ex.3 ฮีเลียม — หา T₂ (เฉลยสไลด์ 420 K)</summary>
+<p><b class="q">กำหนด:</b> V₁ = 15.0×10⁻³ m³, P₁ = 200 kPa, T₁ = 300 K · V₂ = 12.0×10⁻³ m³, P₂ = 350 kPa</p>
+<p><b class="q">ต้องการ:</b> T₂ (ฮีเลียมในถังเดียวกัน n ไม่เปลี่ยน)</p>
+<p><b class="q">สูตร:</b> P₁V₁/T₁ = P₂V₂/T₂ (สมการ 4)</p>
+<p><b class="q">ขั้นที่ 1</b> จัดรูปให้ T₂ อยู่ซ้ายมือ</p>
+<div class="f">T₂ = T₁ × (P₂V₂)/(P₁V₁)</div>
+<p><b class="q">ขั้นที่ 2</b> หน่วยของ P (kPa) และ V (m³) ของสองสถานะเหมือนกัน จึงตัดกันในอัตราส่วนได้ ไม่ต้องแปลงเป็น Pa</p>
+<div class="f">P₂V₂ = 350 × 12.0 = 4200<br>P₁V₁ = 200 × 15.0 = 3000</div>
+<p><b class="q">ขั้นที่ 3</b> แทนค่า</p>
+<div class="f">T₂ = 300 × 4200/3000 = 300 × 1.4 = 420 K</div>
+<p><b class="q">ตอบ:</b> 420 K (= 147°C) ตรงกับเฉลย</p>
+<p><b class="q">เช็ก:</b> P₁V₁/T₁ = 3000/300 = 10 และ P₂V₂/T₂ = 4200/420 = 10 ✓ ค่าเท่ากัน</p></details>
+
+<details><summary>Ex.4 ฮีเลียม 0.4 g ในถัง 10 L ที่ −20°C — หา P</summary>
+<p><b class="q">กำหนด:</b> m = 0.4 g, M = 4 g/mol, V = 10 L, T = −20°C</p>
+<p><b class="q">ต้องการ:</b> P (หน่วย atm)</p>
+<p><b class="q">สูตร:</b> n = m/M และ PV = nRT → P = nRT/V โดยใช้ R = 0.082 L·atm/(mol·K) เพราะต้องการ P เป็น atm และ V เป็น L</p>
+<p><b class="q">ขั้นที่ 1</b> หาจำนวนโมล</p>
+<div class="f">n = 0.4/4 = 0.1 mol</div>
+<p><b class="q">ขั้นที่ 2</b> แปลงอุณหภูมิ (ระวังเครื่องหมายลบ)</p>
+<div class="f">T = −20 + 273.15 = 253.15 K</div>
+<p><b class="q">ขั้นที่ 3</b> แทนค่า</p>
+<div class="f">P = (0.1)(0.082)(253.15)/10 = 2.076/10 = 0.208 atm</div>
+<p><b class="q">ตอบ:</b> ≈ 0.21 atm</p>
+<p><b class="q">เช็กด้วยหน่วย SI:</b> P = (0.1)(8.314)(253.15)/(0.010 m³) = 2.10×10⁴ Pa ÷ 1.013×10⁵ = 0.208 atm ✓</p>
+<div class="warn"><div class="lb">เฉลยสไลด์ไม่ตรง</div>สไลด์ระบุ 0.021 atm ซึ่งน้อยกว่า 10 เท่า ค่านี้จะได้ก็ต่อเมื่อ n = 0.01 mol (m = 0.04 g) หรือ V = 100 L ตรวจแล้วว่าตามโจทย์ที่พิมพ์ในสไลด์ต้องได้ 0.21 atm สอบถามอาจารย์เพื่อยืนยัน</div></details>
+
+<details><summary>Ex.5 แทงก์ออกซิเจน 0.5 m³, 1.5×10⁶ Pa, 20°C</summary>
+<p><b class="q">กำหนด:</b> V = 0.5 m³, P₁ = 1.5×10⁶ Pa, T₁ = 20°C, M(O₂) = 32 g/mol</p>
+<p><b class="q">ต้องการ:</b> (ก) n เป็น kmol (ข) มวล kg (ค) ความดันเมื่อ T₂ = 500°C</p>
+<p><b class="q">ขั้นที่ 1</b> แปลง T₁ = 20 + 273.15 = 293.15 K</p>
+<p><b class="q">ขั้นที่ 2 (ก)</b> ทุกตัวแปรอยู่ใน SI แล้ว ใช้ R = 8.314</p>
+<div class="f">n = PV/(RT) = (1.5×10⁶)(0.5)/(8.314 × 293.15)<br>= 7.5×10⁵ / 2437 = 307.7 mol = 0.308 kmol</div>
+<p><b class="q">ขั้นที่ 3 (ข)</b> m = n·M ระวังหน่วย: ใช้ M = 32 g/mol ได้เป็นกรัม แล้วแปลงเป็น kg</p>
+<div class="f">m = 307.7 × 32 = 9,847 g = 9.85 kg</div>
+<p><b class="q">ขั้นที่ 4 (ค)</b> ถังเดิม V และ n คงที่ → เกย์-ลูสแซก P₂/T₂ = P₁/T₁</p>
+<div class="f">T₂ = 500 + 273.15 = 773.15 K<br>P₂ = P₁ × T₂/T₁ = 1.5×10⁶ × 773.15/293.15 = 1.5×10⁶ × 2.637 = 3.96×10⁶ Pa</div>
+<p><b class="q">ตอบ:</b> (ก) 0.308 kmol (ข) 9.85 kg (ค) P₂ ≈ 3.96×10⁶ Pa คือเพิ่มขึ้น ≈ 2.46×10⁶ Pa</p>
+<p><b class="q">เช็ก:</b> โจทย์ถามว่า "ความดันที่เปลี่ยนไป" ให้ตอบทั้งค่าใหม่ (3.96×10⁶) และส่วนที่เพิ่ม (2.46×10⁶) กันเข้าใจผิด · ห้ามใช้ °C ในอัตราส่วน (500/20 ผิด)</p></details>
+
+<details><summary>Ex.6 ฮีเลียม 2 mol, 3.00 m³, 20°C — U, E_k, v_rms</summary>
+<p><b class="q">กำหนด:</b> n = 2 mol, V = 3.00 m³ (ไม่ใช้ในข้อนี้), T = 293.15 K, M(He) = 4 g/mol = 0.004 kg/mol</p>
+<p><b class="q">ขั้นที่ 1 (ก)</b> He เป็นอะตอมเดี่ยว มีแค่การเลื่อนตำแหน่ง 3 องศาอิสระ → U = (3/2)nRT</p>
+<div class="f">RT = 8.314 × 293.15 = 2437 J/mol<br>U = 1.5 × 2 × 2437 = 7,312 J ≈ 7.31 kJ</div>
+<p><b class="q">ขั้นที่ 2 (ข)</b> พลังงานจลน์เฉลี่ยต่อ 1 โมเลกุล = (3/2)k_BT</p>
+<div class="f">E_k = 1.5 × 1.38×10⁻²³ × 293.15 = 6.07×10⁻²¹ J</div>
+<p><b class="q">เช็ก (ข):</b> U/N = 7312/(2 × 6.02×10²³) = 6.07×10⁻²¹ J ✓</p>
+<p><b class="q">ขั้นที่ 3 (ค)</b> ใช้สูตร v_rms = √(3RT/M) ต้องใช้ M เป็น <b>kg/mol</b></p>
+<div class="f">3RT = 3 × 2437 = 7,312<br>v_rms = √(7312/0.004) = √(1.828×10⁶) = 1,352 m/s</div>
+<p><b class="q">ตอบ:</b> (ก) 7.31×10³ J (ข) 6.07×10⁻²¹ J (ค) ≈ 1,352 m/s</p>
+<p><b class="q">เช็ก (ค):</b> ตรงกับตารางสไลด์ 47 (He ที่ 20°C = 1,352 m/s) · ถ้าใช้ M = 4 g/mol จะได้ 42.8 m/s ผิด</p></details>
+
+<details><summary>Ex.7 ฮีเลียม 2 mol, 300 cm³, 27°C (R = 8.3)</summary>
+<p><b class="q">กำหนด:</b> n = 2 mol, V = 300 cm³ = 3.00×10⁻⁴ m³, T₁ = 27°C = 300 K, R = 8.3, M(He) = 0.004 kg/mol</p>
+<p><b class="q">ขั้นที่ 1 (ก)</b> V และ n คงที่ T₂ = 127 + 273 = 400 K · ใช้ P = nRT/V ที่ T₂ ตรงๆ</p>
+<div class="f">P₂ = (2)(8.3)(400)/(3.00×10⁻⁴) = 6,640/3.00×10⁻⁴ = 2.21×10⁷ Pa</div>
+<p><b class="q">เช็ก (ก):</b> P₁ = (2)(8.3)(300)/3×10⁻⁴ = 1.66×10⁷ Pa แล้ว P₂ = P₁ × 400/300 = 2.21×10⁷ ✓</p>
+<p><b class="q">ขั้นที่ 2 (ข)</b> v_rms ของสถานะเริ่มต้น (300 K)</p>
+<div class="f">v_rms = √(3 × 8.3 × 300/0.004) = √(1.8675×10⁶) = 1,367 m/s</div>
+<p>(ถ้าอาจารย์ให้คิดที่ 127°C: √(3×8.3×400/0.004) = 1,578 m/s)</p>
+<p><b class="q">ขั้นที่ 3 (ค)</b> อะตอมเดี่ยว U = (3/2)nRT</p>
+<div class="f">U = 1.5 × 2 × 8.3 × 300 = 7,470 J (ที่ 400 K = 9,960 J)</div>
+<p><b class="q">ขั้นที่ 4 (ง)</b> เปลี่ยนเป็น N₂ อะตอมคู่: องศาอิสระ 3 เลื่อน + 2 หมุน = 5 → U = (5/2)nRT</p>
+<div class="f">U = 2.5 × 2 × 8.3 × 300 = 12,450 J</div>
+<p><b class="q">ตอบ:</b> (ก) 2.21×10⁷ Pa (ข) ≈ 1.37×10³ m/s (ค) 7,470 J (ง) 12,450 J</p>
+<p><b class="q">เช็ก:</b> อัตราส่วน U(N₂)/U(He) = 5/3 → 12,450/7,470 = 1.667 ✓ · ข้อ (ข)–(ง) ผมคิดที่ 27°C ตามสถานะเริ่มต้น</p></details>
+
+<details><summary>Ex.8 CO₂ 50 g, 20 L, 27°C — อุดมคติ vs แวนเดอร์วาลส์</summary>
+<p><b class="q">กำหนด:</b> m = 50 g, M = 44 g/mol, V = 20 L = 0.020 m³, T = 300 K, a = 0.366 N·m⁴/mol², b = 4.29×10⁻⁵ m³/mol</p>
+<p><b class="q">ขั้นที่ 1</b> หาโมลและแปลงหน่วย</p>
+<div class="f">n = 50/44 = 1.136 mol · V = 20×10⁻³ = 0.020 m³<br>nRT = 1.136 × 8.314 × 300 = 2,834 J</div>
+<p><b class="q">ขั้นที่ 2 (ก) อุดมคติ</b> P = nRT/V</p>
+<div class="f">P = 2,834/0.020 = 1.417×10⁵ Pa</div>
+<p><b class="q">ขั้นที่ 3 (ข) แวนเดอร์วาลส์</b> จัดสมการ (P + a n²/V²)(V − nb) = nRT ให้ P อยู่ซ้าย</p>
+<div class="f">P = nRT/(V − nb) − a·n²/V²</div>
+<p>3.1 ปริมาตรที่แก๊สเคลื่อนที่ได้จริง</p>
+<div class="f">nb = 1.136 × 4.29×10⁻⁵ = 4.87×10⁻⁵ m³<br>V − nb = 0.020 − 0.0000487 = 0.019951 m³</div>
+<p>3.2 พจน์แรก (แก้ปริมาตร)</p>
+<div class="f">nRT/(V−nb) = 2,834/0.019951 = 1.4206×10⁵ Pa</div>
+<p>3.3 พจน์ที่สอง (แก้แรงดึงดูด)</p>
+<div class="f">a·n²/V² = 0.366 × (1.136)²/(0.020)² = 0.366 × 1.291/4.0×10⁻⁴ = 1.18×10³ Pa</div>
+<p>3.4 รวม</p>
+<div class="f">P = 1.4206×10⁵ − 0.0118×10⁵ = 1.409×10⁵ Pa</div>
+<p><b class="q">ตอบ:</b> (ก) 1.42×10⁵ Pa (ข) 1.41×10⁵ Pa</p>
+<p><b class="q">เช็ก:</b> แก๊สจริงมีแรงดึงดูด → ความดันต่ำกว่าอุดมคติ (ต่างราว 0.6%) ✓ เพราะพจน์แรงดึงดูด (−1.18 kPa) มีผลมากกว่าพจน์ปริมาตร (+0.35 kPa)</p></details>
+</div>
+</div>
+
+<div class="sec" id="s6">
+<div class="card"><h2>โจทย์ฝึก 8 ข้อ (วิธีทำละเอียดทีละขั้น)</h2>
+<p style="color:var(--dim)">เลือกคำตอบก่อน แล้วจะแสดงวิธีทำ · ตัวเลือกผิดส่วนใหญ่คือกับดักที่พบบ่อย (หน่วย °C/K, ค่า R, สูตรองศาอิสระ)</p></div>
+<div id="pq"></div>
+</div>
+
+</div>
+<script>
+document.querySelectorAll('.tabs button').forEach(function(b){b.addEventListener('click',function(){
+document.querySelectorAll('.tabs button').forEach(function(x){x.classList.remove('on')});
+document.querySelectorAll('.sec').forEach(function(x){x.classList.remove('on')});
+b.classList.add('on');document.getElementById(b.dataset.t).classList.add('on');window.scrollTo(0,0)})});
+var P=[
+{q:'ก๊าซ 6.0 L ที่ 2.0 atm อยู่ในกระบอกสูบ ถูกอัดช้าๆ (T คงที่) จนเหลือ 1.5 L ความดันใหม่เป็นเท่าใด',o:['0.5 atm','4.0 atm','8.0 atm','12 atm'],a:2,e:'ขั้น 1: T คงที่ → กฎบอยล์ P₁V₁ = P₂V₂\nขั้น 2: แทนค่า 2.0 × 6.0 = P₂ × 1.5\nขั้น 3: P₂ = 12/1.5 = 8.0 atm ✓\nเช็ก: ปริมาตรลดเหลือ ¼ → ความดันต้องเป็น 4 เท่า (2 → 8)'},
+{q:'ก๊าซอุดมคติ 2.0 mol ที่ 27°C ความดัน 2.0 atm มีปริมาตรกี่ลิตร',o:['12.3 L','24.6 L','49.2 L','98.4 L'],a:1,e:'ขั้น 1: T = 27 + 273.15 ≈ 300 K\nขั้น 2: P เป็น atm และต้องการ V เป็น L → ใช้ R = 0.082 L·atm/(mol·K)\nขั้น 3: V = nRT/P = (2.0)(0.082)(300)/2.0 = 24.6 L ✓\nกับดัก: ถ้าใช้ R = 8.314 ต้องแปลง P เป็น Pa ก่อน และคำตอบจะออกมาเป็น m³ (0.0246 m³)'},
+{q:'ถังปิด 10 L มีก๊าซ 300 K ความดัน 3.0 atm ปล่อยก๊าซออกครึ่งหนึ่ง (โดยจำนวนโมล) แล้วให้ความร้อนจนเป็น 600 K ความดันสุดท้ายเป็นเท่าใด',o:['1.5 atm','6.0 atm','3.0 atm','0.75 atm'],a:2,e:'ขั้น 1: V คงที่ n₂ = ½n₁ T₂ = 2T₁ → ใช้ P₁V/(n₁T₁) = P₂V/(n₂T₂)\nขั้น 2: ตัด V ได้ P₂ = P₁ (n₂/n₁)(T₂/T₁)\nขั้น 3: P₂ = 3.0 × ½ × 2 = 3.0 atm ✓\nสังเกต: n ลดครึ่งกับ T เพิ่ม 2 เท่าหักล้างกันพอดี'},
+{q:'ที่ STP (273 K, 1.013×10⁵ Pa) ก๊าซอุดมคติปริมาตร 1 m³ มีโมเลกุลประมาณกี่ตัว (k_B = 1.38×10⁻²³ J/K)',o:['6.02×10²³','2.69×10²²','2.69×10²⁸','2.69×10²⁵'],a:3,e:'ขั้น 1: ใช้ PV = N k_B T → N = PV/(k_B T)\nขั้น 2: N = (1.013×10⁵)(1)/(1.38×10⁻²³ × 273) = 1.013×10⁵ / 3.77×10⁻²¹\nขั้น 3: N ≈ 2.69×10²⁵ ตัว ✓\nเช็กด้วยโมล: n = PV/RT ≈ 44.6 mol → N = 44.6 × 6.02×10²³ ≈ 2.69×10²⁵ ตรงกัน'},
+{q:'ที่อุณหภูมิเท่ากัน H₂ (M = 2 g/mol) มี v_rms เป็นกี่เท่าของ O₂ (M = 32 g/mol)',o:['2 เท่า','4 เท่า','8 เท่า','16 เท่า'],a:1,e:'ขั้น 1: v_rms = √(3RT/M) → ที่ T เท่ากัน v ∝ 1/√M\nขั้น 2: v_H₂/v_O₂ = √(M_O₂/M_H₂) = √(32/2) = √16\nขั้น 3: = 4 เท่า ✓\nกับดัก: มวลต่างกัน 16 เท่า แต่ความเร็วต่างกันแค่ √16 = 4 เท่า'},
+{q:'โมเลกุลแก๊สชนิดหนึ่งมี v_rms = 500 m/s ที่ 27°C ถ้าเพิ่มอุณหภูมิเป็น 327°C v_rms จะเป็นเท่าใด',o:['707 m/s','500 m/s','1000 m/s','1414 m/s'],a:0,e:'ขั้น 1: แปลงเป็นเคลวิน T₁ = 300 K, T₂ = 327 + 273 = 600 K\nขั้น 2: v ∝ √T → v₂ = v₁ √(T₂/T₁) = 500 × √2\nขั้น 3: v₂ ≈ 707 m/s ✓\nกับดัก: ถ้าใช้ °C ตรงๆ (327/27 ≈ 12) จะได้คำตอบผิด · T เพิ่ม 2 เท่า แต่ v เพิ่มแค่ √2 เท่า'},
+{q:'ไนโตรเจน (N₂) 0.5 mol ที่ 27°C มีพลังงานภายใน U เท่าใด (R = 8.314 J/mol·K)',o:['1.87 kJ','3.12 kJ','3.74 kJ','6.24 kJ'],a:1,e:'ขั้น 1: N₂ เป็นอะตอมคู่ → องศาอิสระเลื่อน 3 + หมุน 2 = 5\nขั้น 2: ทฤษฎีบทแบ่งเท่ากัน U = (5/2) nRT\nขั้น 3: U = 2.5 × 0.5 × 8.314 × 300 ≈ 3,118 J ≈ 3.12 kJ ✓\nตัวเลือกอื่น: 1.87 kJ คือ (3/2)nRT (อะตอมเดี่ยว) · 3.74 kJ คือ 3nRT (หลายอะตอม)'},
+{q:'ถ้าอัตราเร็วเฉลี่ยของโมเลกุลเพิ่มเป็น 2 เท่า โดย N, V และมวลโมเลกุลคงที่ ความดันของแก๊สเป็นกี่เท่า',o:['2 เท่า','√2 เท่า','4 เท่า','8 เท่า'],a:2,e:'ขั้น 1: จากทฤษฎีจลน์ P = ⅔ (N/V)(½ m v̄²) → P ∝ v̄² เมื่อ N, V, m คงที่\nขั้น 2: v เพิ่ม 2 เท่า → v² เพิ่ม 2² = 4 เท่า\nขั้น 3: P เป็น 4 เท่า ✓\nสอดคล้องกับ ½ m v̄² = (3/2)k_BT: พลังงานจลน์เป็น 4 เท่า → T เป็น 4 เท่า และ P ∝ T (เกย์-ลูสแซก, V คงที่)'}
+];
+var pq=document.getElementById('pq');
+P.forEach(function(p,i){
+var d=document.createElement('div');d.className='qc';
+d.innerHTML='<div class="qn">ข้อ '+(i+1)+' / '+P.length+'</div><p style="margin:6px 0">'+p.q+'</p>'+p.o.map(function(t,j){return '<button class="ob" data-j="'+j+'">'+'ก ข ค ง'.split(' ')[j]+'. '+t+'</button>'}).join('')+'<div class="fb"></div>';
+d.querySelectorAll('.ob').forEach(function(b){b.addEventListener('click',function(){
+var bs=d.querySelectorAll('.ob'),j=+b.dataset.j;
+bs.forEach(function(x){x.disabled=true});
+bs[p.a].classList.add('ok');
+if(j!==p.a)b.classList.add('no');
+var f=d.querySelector('.fb');
+f.innerHTML=(j===p.a?'✅ <b>ถูกต้อง</b>':'❌ <b>ยังไม่ถูก</b> คำตอบคือข้อ '+'ก ข ค ง'.split(' ')[p.a])+'<br><br>'+p.e.replace(/\n/g,'<br>');
+f.classList.add('on')})});
+pq.appendChild(d)});
+</script>
+</body>
+</html>

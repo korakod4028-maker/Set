@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>อุณหพลศาสตร์ | สรุปเตรียมสอบปลายภาค</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#0d0f1a;--surface:#141828;--surface2:#1c2235;--border:#2a3050;--accent:#6c63ff;--accent2:#00d4aa;--accent3:#ff6b6b;--accent4:#ffd93d;--text:#e8eaf6;--dim:#8892b0;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Sarabun',system-ui,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.7;min-height:100vh}
+.hero{background:linear-gradient(135deg,#0d0f1a,#1a1040 50%,#0d1a2a);padding:56px 24px 40px;text-align:center;border-bottom:1px solid var(--border);position:relative}
+.hero::before{content:'Q  W  ΔU  P  V  T  γ  R';position:absolute;top:14px;left:0;right:0;font-family:var(--mono);font-size:14px;color:#4a5580;letter-spacing:8px}
+.badge{display:inline-block;background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.4);color:#a89fff;font-size:12px;font-weight:600;letter-spacing:2px;padding:4px 14px;border-radius:20px;margin-bottom:14px}
+.hero h1{font-size:clamp(28px,6vw,50px);font-weight:800;line-height:1.15;margin-bottom:10px}.hero h1 span{color:var(--accent)}
+.hero p{color:var(--dim);max-width:520px;margin:0 auto 24px}
+.stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap}
+.sn{font-family:var(--mono);font-size:26px;font-weight:600;color:var(--accent2)}.sl{font-size:13px;color:var(--dim)}
+.tabs{display:flex;gap:4px;padding:14px 16px;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:50;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;padding:8px 16px;border-radius:8px;border:0;background:transparent;color:var(--dim);font:500 14px var(--sans);cursor:pointer}
+.tab:hover{background:var(--surface2);color:var(--text)}.tab.on{background:var(--accent);color:#fff;font-weight:600}
+.content{max-width:860px;margin:0 auto;padding:28px 18px 80px}
+.sec{display:none}.sec.on{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px}
+.card h2{font-size:20px;font-weight:700;margin-bottom:8px}
+.box{border-left:3px solid var(--accent);background:rgba(108,99,255,.08);border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0}
+.box.ex{border-color:var(--accent2);background:rgba(0,212,170,.06)}.box.warn{border-color:var(--accent3);background:rgba(255,107,107,.07)}
+.lb{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--accent);margin-bottom:3px}.ex .lb{color:var(--accent2)}.warn .lb{color:var(--accent3)}
+.f{font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin:8px 0;color:var(--accent4);overflow-x:auto;white-space:nowrap}
+.tw{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+th,td{border:1px solid var(--border);padding:8px 10px;text-align:left}th{background:var(--surface2);color:var(--accent2)}
+td.m{font-family:var(--mono);font-size:13px}
+ul{padding-left:20px}li{margin:3px 0}b{color:#fff}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:10px 0}
+.g2 div{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:14px}
+.g2 svg{width:100%;height:auto;display:block;margin-bottom:6px}
+.q{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.qn{font:600 12px var(--mono);color:var(--accent);margin-bottom:6px}
+.opt{display:block;width:100%;text-align:left;margin-top:8px;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font:15px var(--sans);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--accent)}.opt.c{background:rgba(0,212,170,.18);border-color:var(--accent2)}.opt.w{background:rgba(255,107,107,.18);border-color:var(--accent3)}
+.fb{display:none;margin-top:12px;padding:12px 14px;border-radius:8px;background:var(--surface2);font-size:14px}.fb.show{display:block}
+#score{position:sticky;bottom:12px;margin-top:10px;text-align:center;font:600 14px var(--mono);color:var(--accent4)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#0d0f1a}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="badge">THERMODYNAMICS · FINAL EXAM</div>
+  <h1>อุณห<span>พลศาสตร์</span></h1>
+  <p>สรุปจากสไลด์ มหาวิทยาลัยนเรศวร พร้อมสูตร ตารางเทียบ และควิซพร้อมเฉลย</p>
+  <div class="stats"><div><div class="sn">4</div><div class="sl">กระบวนการหลัก</div></div><div><div class="sn">ΔU=Q+W</div><div class="sl">กฎข้อที่ 1</div></div><div><div class="sn">8</div><div class="sl">ข้อควิซ</div></div></div>
+</div>
+<div class="tabs" id="tabs"></div>
+<div class="content">
+
+<div class="sec on" id="s0">
+ <div class="card"><h2>🧱 ระบบ สิ่งแวดล้อม ขอบเขต</h2>
+  <div class="g2">
+   <div><b>ระบบเปิด</b><br>แลกเปลี่ยน <b>มวล + พลังงาน</b> (เช่น หัวฉีด, ปั๊ม)</div>
+   <div><b>ระบบปิด</b><br>แลกเปลี่ยนแค่ <b>พลังงาน</b> m = คงที่ (เช่น แก๊สในกระบอกสูบ)</div>
+   <div><b>ระบบโดดเดี่ยว</b><br><b>ไม่แลกเปลี่ยนอะไรเลย</b></div>
+  </div>
+  <div class="f">Universe = System + Surroundings</div></div>
+ <div class="card"><h2>⚖️ สมบัติ Extensive vs Intensive</h2>
+  <div class="box"><div class="lb">วิธีทดสอบ</div>แบ่งระบบเป็นสองส่วน ถ้าค่า <b>ไม่เท่าเดิม → Extensive</b> ถ้า <b>เท่าเดิม → Intensive</b></div>
+  <div class="g2"><div><b style="color:var(--accent2)">Extensive</b><br>มวล m, ปริมาตร V, จำนวนโมล n, น้ำหนัก W</div><div><b style="color:var(--accent4)">Intensive</b><br>อุณหภูมิ T, ความดัน P, ความหนาแน่น ρ</div></div></div>
+ <div class="card"><h2>🌡️ กฎข้อที่ศูนย์ และชื่อกระบวนการ</h2>
+  <div class="box"><div class="lb">กฎข้อที่ศูนย์</div>ถ้า A และ B สมดุลความร้อนกับ C แล้ว <b>A และ B สมดุลกัน</b> (อุณหภูมิเท่ากัน) → หลักการของเทอร์โมมิเตอร์</div>
+  <ul><li><b>Isothermal</b> = T คงที่ · <b>Isobaric</b> = P คงที่ · <b>Isochoric</b> = V คงที่ · <b>Adiabatic</b> = Q = 0</li><li>สถานะ = ชุดของสมบัติ ถ้าสมบัติใดเปลี่ยนแม้ตัวเดียว = เปลี่ยนสถานะ</li></ul></div>
+</div>
+
+<div class="sec" id="s1">
+ <div class="card"><h2>📏 การขยายตัวเชิงความร้อน</h2>
+  <div class="f">ΔL = α·Lᵢ·ΔT</div><div class="f">ΔA = δ·Aᵢ·ΔT , δ = 2α</div><div class="f">ΔV = β·Vᵢ·ΔT , β = 3α</div>
+  <div class="box ex"><div class="lb">ตัวอย่าง (สไลด์)</div>รางเหล็ก 30.000 m, α = 11×10⁻⁶ /°C, ΔT = 40 °C<br>ΔL = (11×10⁻⁶)(30)(40) = <b>0.013 m</b> → L<sub>f</sub> = 30.013 m<br>ถ้าปลายยึดแน่น: σ = Y·ΔL/L₀ = (20×10¹⁰)(0.013/30) = <b>8.7×10⁷ N/m²</b><br>ลดอุณหภูมิ 40 °C → ΔL = −0.013 m (ขนาดเท่ากัน หดแทนขยาย)</div></div>
+ <div class="card"><h2>🔥 ความร้อน Q</h2>
+  <div class="f">ความร้อนจำเพาะ (T เปลี่ยน): Q = mcΔT = ncΔT</div><div class="f">ความร้อนแฝง (สถานะเปลี่ยน, T คงที่): Q = mL</div>
+  <div class="box ex"><div class="lb">ตัวอย่าง: น้ำแข็ง 100 g, −30 °C → ไอน้ำ 120 °C</div>c<sub>น้ำแข็ง</sub>=0.5, c<sub>น้ำ</sub>=1, c<sub>ไอ</sub>=0.5 cal/g·°C · L<sub>ละลาย</sub>=80, L<sub>กลายเป็นไอ</sub>=540 cal/g
+   <div class="tw"><table><tr><th>ช่วง</th><th>สูตร</th><th>Q (cal)</th></tr>
+   <tr><td>A: −30→0 °C</td><td class="m">mcΔT</td><td class="m">1,500</td></tr><tr><td>B: ละลาย</td><td class="m">mL</td><td class="m">8,000</td></tr>
+   <tr><td>C: 0→100 °C</td><td class="m">mcΔT</td><td class="m">10,000</td></tr><tr><td>D: กลายเป็นไอ</td><td class="m">mL</td><td class="m">54,000</td></tr>
+   <tr><td>E: 100→120 °C</td><td class="m">mcΔT</td><td class="m">6,000</td></tr><tr><td><b>รวม</b></td><td></td><td class="m"><b>79,500</b></td></tr></table></div></div>
+  <div class="box warn"><div class="lb">ระวัง</div>ช่วง E ในสไลด์คิด 0.5×120 = 6,000 แต่ ΔT ของไอน้ำจริงคือ 100→120 = <b>20 °C</b> (จะได้ 1,000 cal และรวม 74,500 cal) อาจารย์อาจเฉลยตามสไลด์ ถามอาจารย์ให้ชัวร์ก่อนสอบ</div></div>
+ <div class="card"><h2>⚛️ พลังงานภายใน U</h2>
+  <div class="f">อะตอมเดี่ยว: U = (3/2)nRT · อะตอมคู่: U = (5/2)nRT</div>
+  <div class="box"><div class="lb">หัวใจ</div>U ของแก๊สอุดมคติขึ้นกับ <b>T อย่างเดียว</b> → ΔU = nC<sub>V</sub>ΔT ใช้ได้ <b>ทุกกระบวนการ</b></div></div>
+</div>
+
+<div class="sec" id="s2">
+ <div class="card"><h2>🧮 งาน W และกฎข้อที่ 1</h2>
+  <div class="f">W = −∫P dV (งานที่กระทำ "ต่อ" ระบบ)</div><div class="f">ΔU = Q + W</div>
+  <div class="tw"><table><tr><th>กรณี</th><th>dV</th><th>W</th></tr><tr><td>อัดแก๊ส (V<sub>f</sub> &lt; V<sub>i</sub>)</td><td>−</td><td>+ (งานทำต่อระบบ)</td></tr><tr><td>V คงที่</td><td>0</td><td>0</td></tr><tr><td>ขยายตัว (V<sub>f</sub> &gt; V<sub>i</sub>)</td><td>+</td><td>− (ระบบทำงาน)</td></tr></table></div>
+  <div class="g2"><div><b>Q &gt; 0</b> ความร้อนเข้าระบบ<br><b>W &gt; 0</b> งานกระทำต่อระบบ<br><span style="color:var(--dim)">(Energy in)</span></div><div><b>Q &lt; 0</b> ความร้อนออก<br><b>W &lt; 0</b> ระบบทำงาน<br><span style="color:var(--dim)">(Energy out)</span></div></div>
+  <div class="box warn"><div class="lb">งานขึ้นกับเส้นทาง</div>W = พื้นที่ใต้กราฟ PV จุดเริ่ม/จุดจบเดียวกัน แต่คนละเส้นทาง W ไม่เท่ากัน (สไลด์หน้า 31: W<sub>b</sub> &gt; W<sub>c</sub> &gt; W<sub>a</sub>)</div></div>
+ <div class="card"><h2>🔧 ความจุความร้อนโมลาร์</h2>
+  <div class="f">C<sub>P</sub> = C<sub>V</sub> + R</div><div class="f">อะตอมเดี่ยว: C<sub>V</sub>=(3/2)R≈12.5 · C<sub>P</sub>=(5/2)R≈20.8 J/mol·K</div><div class="f">γ = C<sub>P</sub>/C<sub>V</sub> = 1.67 (อะตอมเดี่ยว) ≈ 1.40 (อะตอมคู่)</div>
+  <div class="box">ที่ความดันคงที่ ความร้อนส่วนหนึ่งกลายเป็นงานขยายตัว จึงต้องใช้ความร้อนมากกว่า C<sub>P</sub> &gt; C<sub>V</sub> อยู่ R</div></div>
+</div>
+
+<div class="sec" id="s3">
+ <div class="card"><h2>🎯 ตารางเทียบ 4 กระบวนการ (ออกสอบแน่ ๆ)</h2>
+  <div class="g2">
+   <div><svg viewBox="0 0 120 80"><path d="M10 70V8M10 70H112" stroke="#8892b0" fill="none"/><path d="M25 18Q45 55 105 62" stroke="#ffd93d" fill="none" stroke-width="2.5"/></svg><b>Isothermal</b></div>
+   <div><svg viewBox="0 0 120 80"><path d="M10 70V8M10 70H112" stroke="#8892b0" fill="none"/><path d="M60 62V18" stroke="#00d4aa" stroke-width="2.5"/></svg><b>Isochoric</b></div>
+   <div><svg viewBox="0 0 120 80"><path d="M10 70V8M10 70H112" stroke="#8892b0" fill="none"/><path d="M30 35H95" stroke="#6c63ff" stroke-width="2.5"/></svg><b>Isobaric</b></div>
+   <div><svg viewBox="0 0 120 80"><path d="M10 70V8M10 70H112" stroke="#8892b0" fill="none"/><path d="M25 12Q40 52 105 64" stroke="#ff6b6b" fill="none" stroke-width="2.5"/></svg><b>Adiabatic</b> (ชันกว่า isotherm)</div>
+  </div>
+  <div class="tw"><table><tr><th>กระบวนการ</th><th>เงื่อนไข</th><th>W</th><th>Q</th><th>ΔU</th></tr>
+  <tr><td><b>Isochoric</b></td><td>V คงที่</td><td class="m">0</td><td class="m">nC<sub>V</sub>ΔT</td><td class="m">= Q</td></tr>
+  <tr><td><b>Isobaric</b></td><td>P คงที่</td><td class="m">−PΔV = −nRΔT</td><td class="m">nC<sub>P</sub>ΔT</td><td class="m">nC<sub>V</sub>ΔT</td></tr>
+  <tr><td><b>Isothermal</b></td><td>T คงที่</td><td class="m">−nRT ln(V<sub>f</sub>/V<sub>i</sub>)</td><td class="m">= −W</td><td class="m">0</td></tr>
+  <tr><td><b>Adiabatic</b></td><td>Q = 0</td><td class="m">= ΔU</td><td class="m">0</td><td class="m">nC<sub>V</sub>ΔT = W</td></tr></table></div></div>
+ <div class="card"><h2>🌀 Adiabatic: สูตรสำคัญ</h2>
+  <div class="f">PV<sup>γ</sup> = ค่าคงที่ → P₀V₀<sup>γ</sup> = P₁V₁<sup>γ</sup></div><div class="f">TV<sup>γ−1</sup> = ค่าคงที่ → T₀V₀<sup>γ−1</sup> = T₁V₁<sup>γ−1</sup> (T เป็น K)</div>
+  <div class="g2"><div><b>อัด</b> (เช่น สูบลมจักรยาน)<br>W&gt;0, ΔU&gt;0 → <b style="color:var(--accent3)">T สูงขึ้น</b></div><div><b>ขยาย</b><br>W&lt;0, ΔU&lt;0 → <b style="color:var(--accent2)">T ลดลง</b></div></div>
+  <div class="box warn"><div class="lb">ระวังสไลด์</div>สไลด์เขียน W = nRT ln(V<sub>i</sub>/V<sub>f</sub>) ซึ่งเท่ากับ <b>−nRT ln(V<sub>f</sub>/V<sub>i</sub>)</b> (ถูกต้อง) แต่ลายมือในตย.5 เขียน −nRT ln(V<sub>i</sub>/V<sub>f</sub>) ซึ่งเครื่องหมายสลับ ตอนแทนเลขใช้ ln(10/3) ถูกแล้ว จำแบบ "ขยาย → W ติดลบ" ไว้</div></div>
+</div>
+
+<div class="sec" id="s4">
+ <div class="card"><h2>📝 ตย.4: อัดแก๊สที่ P คงที่</h2>
+  <div class="box ex"><div class="lb">โจทย์</div>อัดแก๊สที่ 0.800 atm จาก 9.00 L → 2.00 L มีพลังงาน 400 J ออกเป็นความร้อน<br>
+  W = −P(V<sub>f</sub>−V<sub>i</sub>) = −(0.8×1.0×10⁵)(2−9)×10⁻³ ≈ <b>+560 J</b><br>ΔU = Q + W = −400 + 560 = <b>160 J</b> (สไลด์พิมพ์ 540 ตอนบวก ที่ถูกคือ 560)<br>หมายเหตุ: ถ้าใช้ 1 atm = 1.013×10⁵ Pa จะได้ W ≈ 567 J</div></div>
+ <div class="card"><h2>📝 ตย.5: Isothermal 1 mol, 273 K, 3→10 L</h2>
+  <div class="box ex">W = −nRT ln(V<sub>f</sub>/V<sub>i</sub>) = −(1)(8.314)(273) ln(10/3) ≈ <b>−2,733 J</b> (ระบบทำงาน)<br>ΔU = 0 → Q = −W = <b>+2,733 J</b> (ความร้อนเข้าเท่ากับงานที่ออก)</div></div>
+ <div class="card"><h2>📝 โจทย์ท้ายสไลด์ ข้อ 1: P = αV²</h2>
+  <div class="box ex">α = 5 atm/m⁶ , V: 1→2 m³<br>W = −∫αV²dV = −α(V<sub>f</sub>³−V<sub>i</sub>³)/3 = −5(8−1)/3 = <b>−11.7 atm·m³</b><br>×1.013×10⁵ → <b>W ≈ −1.18×10⁶ J</b> (ระบบขยายตัว จึงทำงานออกไป)</div></div>
+ <div class="card"><h2>📝 โจทย์ท้ายสไลด์ ข้อ 2: ฮีเลียม 2 mol</h2>
+  <div class="box ex">T₁=300 K, P: 0.400→1.20 atm (สมมติปริมาตรคงที่ ถ้าโจทย์จริงระบุกระบวนการอื่นให้เปลี่ยนตาม)<br>
+  ก) V = nRT/P = (2)(8.314)(300)/(0.4×1.013×10⁵) ≈ <b>0.123 m³ (123 L)</b><br>
+  ข) V คงที่ → <b>W = 0</b><br>
+  ค) T₂ = 300×(1.2/0.4) = 900 K → Q = ΔU = nC<sub>V</sub>ΔT = (2)(12.5)(600) = <b>15,000 J</b></div></div>
+</div>
+
+<div class="sec" id="s5"><div id="quiz"></div><div id="score"></div></div>
+</div>
+
+<script>
+const names=['🧱 พื้นฐาน','🔥 ความร้อน','🧮 งาน & กฎข้อ 1','🎯 4 กระบวนการ','📝 ตัวอย่าง','🧪 ควิซ'];
+const tabs=document.getElementById('tabs');
+names.forEach((n,i)=>{const b=document.createElement('button');b.className='tab'+(i?'':' on');b.textContent=n;b.onclick=()=>{document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('on',i===j));document.querySelectorAll('.sec').forEach((s,j)=>s.classList.toggle('on',i===j));scrollTo(0,0)};tabs.appendChild(b)});
+const Q=[
+{q:"น้ำพุร้อนแห่งหนึ่ง คุณตักน้ำ 1 ถังมาวัด แล้วแบ่งน้ำครึ่งหนึ่งใส่อีกถัง ข้อใดมีค่า 'เท่าเดิม' ในถังที่แบ่งออกมา",o:["มวล","ปริมาตร","อุณหภูมิ","จำนวนโมล"],a:2,e:"แบ่งแล้วค่าเท่าเดิม = Intensive ได้แก่ T, P, ρ ส่วน m, V, n เป็น Extensive จะเหลือครึ่งเดียว"},
+{q:"ช่างติดตั้งแผ่นอะลูมิเนียมสี่เหลี่ยมบนหลังคา ถ้า α = 24×10⁻⁶ /°C สัมประสิทธิ์การขยายตัวเชิงปริมาตร β ของอะลูมิเนียมนี้เท่าไร",o:["24×10⁻⁶","48×10⁻⁶","72×10⁻⁶","144×10⁻⁶"],a:2,e:"β = 3α = 3×24×10⁻⁶ = 72×10⁻⁶ /°C (δ = 2α ใช้กับพื้นที่)"},
+{q:"นักเรียนต้มน้ำ 200 g จาก 20 °C เป็น 70 °C โดยน้ำไม่เดือด (c = 1 cal/g·°C) ต้องใช้ความร้อนกี่ cal",o:["4,000","10,000","14,000","16,000"],a:1,e:"Q = mcΔT = 200×1×(70−20) = 10,000 cal ยังไม่เปลี่ยนสถานะ จึงไม่ต้องใช้ความร้อนแฝง"},
+{q:"คุณสูบลมยางจักรยานเร็ว ๆ จนปลายกระบอกสูบอุ่นขึ้น ถือเป็นกระบวนการ adiabatic ข้อใดถูก",o:["W > 0, ΔU > 0, T สูงขึ้น","W < 0, ΔU < 0, T ลดลง","W > 0, ΔU = 0","Q > 0, W = 0"],a:0,e:"Adiabatic: Q=0 → ΔU = W อัดแก๊ส งานทำต่อระบบ W>0 จึง ΔU>0 และ T สูงขึ้น"},
+{q:"ลูกสูบอัดแก๊สในเครื่องยนต์ ทำงานต่อแก๊ส 560 J ขณะเดียวกันความร้อนไหลออก 400 J ΔU ของแก๊สเท่าไร",o:["−160 J","+160 J","+960 J","−960 J"],a:1,e:"ΔU = Q + W = (−400) + (+560) = +160 J ความร้อนออก Q เป็นลบ งานทำต่อระบบ W เป็นบวก"},
+{q:"แก๊สอุดมคติในกระบอกสูบขยายตัวที่อุณหภูมิคงที่ และทำงานให้สิ่งแวดล้อม 500 J ความร้อน Q ของระบบเท่าไร",o:["−500 J","0","+500 J","+1000 J"],a:2,e:"Isothermal: ΔU = 0 → Q = −W W = −500 J (ระบบทำงาน) ดังนั้น Q = +500 J ความร้อนต้องไหลเข้าชดเชย"},
+{q:"ฮีเลียม 2 mol ถูกให้ความร้อนที่ความดันคงที่ จน T เพิ่ม 10 K (C_P = 20.8 J/mol·K) ความร้อนที่ต้องให้เท่าไร",o:["250 J","166 J","416 J","83 J"],a:2,e:"Q_P = nC_PΔT = 2×20.8×10 ≈ 416 J ตรวจสอบ: ΔU = 250 J, W = −nRΔT = −166 J, Q = ΔU − W = 416 J ✓"},
+{q:"ฮีเลียมอุณหภูมิ 300 K ถูกอัดแบบ adiabatic จนปริมาตรเหลือครึ่งหนึ่ง (γ = 1.67) อุณหภูมิปลายทางประมาณเท่าไร",o:["300 K","477 K","600 K","150 K"],a:1,e:"T₀V₀^(γ−1) = T₁V₁^(γ−1) → T₁ = 300×2^0.67 ≈ 300×1.59 ≈ 477 K (ต่ำกว่า 600 K ที่ได้จากการอัดเพิ่ม 2 เท่าแบบ isobaric)"}
+];
+const qz=document.getElementById('quiz');let sc=0,done=0;
+Q.forEach((q,i)=>{const d=document.createElement('div');d.className='q';d.innerHTML=`<div class="qn">ข้อ ${i+1} / ${Q.length}</div><div>${q.q}</div>`;
+ const fb=document.createElement('div');fb.className='fb';
+ q.o.forEach((t,j)=>{const b=document.createElement('button');b.className='opt';b.textContent=String.fromCharCode(65+j)+'. '+t;
+  b.onclick=()=>{const bs=d.querySelectorAll('.opt');bs.forEach(x=>x.disabled=true);bs[q.a].classList.add('c');done++;
+   if(j===q.a){sc++;fb.innerHTML='✅ <b>ถูกต้อง!</b><br>'+q.e}else{b.classList.add('w');fb.innerHTML='❌ <b>ไม่ถูก</b> คำตอบคือ '+String.fromCharCode(65+q.a)+'<br>💡 '+q.e}
+   fb.classList.add('show');document.getElementById('score').textContent='คะแนน '+sc+' / '+done+' (ทั้งหมด '+Q.length+' ข้อ)'};d.appendChild(b)});
+ d.appendChild(fb);qz.appendChild(d)});
+</script>
+</body>
+</html>
