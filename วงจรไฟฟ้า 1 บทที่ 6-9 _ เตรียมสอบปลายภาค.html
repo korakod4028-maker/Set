@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>วงจรไฟฟ้า 1 บทที่ 6-9 | เตรียมสอบปลายภาค</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+:root{--bg:#0d0f1a;--s:#141828;--s2:#1c2235;--bd:#2a3050;--ac:#6c63ff;--ac2:#00d4aa;--ac3:#ff6b6b;--ac4:#ffd93d;--tx:#e8eaf6;--dim:#8892b0;--mono:'IBM Plex Mono',monospace;--sans:'Sarabun',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:16px/1.7 var(--sans);min-height:100vh}
+.hero{background:linear-gradient(135deg,#0d0f1a,#1a1040 50%,#0d1a2a);padding:52px 20px 40px;text-align:center;border-bottom:1px solid var(--bd)}
+.badge{display:inline-block;background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.4);color:#a89fff;font-size:12px;font-weight:600;letter-spacing:2px;padding:4px 14px;border-radius:20px;margin-bottom:14px}
+.hero h1{font-size:clamp(26px,6vw,46px);font-weight:800;line-height:1.2;margin-bottom:10px}.hero h1 span{color:var(--ac)}
+.hero p{color:var(--dim);max-width:520px;margin:0 auto 22px}
+.stats{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
+.sn{font:600 24px var(--mono);color:var(--ac2)}.sl{font-size:13px;color:var(--dim)}
+.tabs{display:flex;gap:4px;padding:14px 16px;background:var(--s);border-bottom:1px solid var(--bd);overflow-x:auto;position:sticky;top:0;z-index:9}
+.tab{white-space:nowrap;padding:8px 16px;border:0;border-radius:8px;background:none;color:var(--dim);font:500 14px var(--sans);cursor:pointer}
+.tab:hover{background:var(--s2);color:var(--tx)}.tab.on{background:var(--ac);color:#fff;font-weight:600}
+.content{max-width:860px;margin:0 auto;padding:28px 18px 80px}
+.sec{display:none}.sec.on{display:block}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:22px;margin-bottom:18px;overflow-x:auto}
+h2{font-size:20px;font-weight:700;margin-bottom:8px}
+h3{font-size:12px;letter-spacing:2px;color:var(--ac4);margin:14px 0 6px}
+.f{font:600 15px var(--mono);background:var(--s2);border-radius:8px;padding:10px 14px;margin:8px 0;color:var(--ac2);overflow-x:auto}
+.box{border-left:3px solid;border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0}
+.box b.l{display:block;font-size:11px;letter-spacing:2px;margin-bottom:3px}
+.def{background:rgba(108,99,255,.08);border-color:var(--ac)}.def b.l{color:var(--ac)}
+.ex{background:rgba(0,212,170,.06);border-color:var(--ac2)}.ex b.l{color:var(--ac2)}
+.warn{background:rgba(255,107,107,.07);border-color:var(--ac3)}.warn b.l{color:var(--ac3)}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:14.5px}
+th,td{border:1px solid var(--bd);padding:8px 10px;text-align:left}th{background:var(--s2);color:var(--ac4)}
+td.m{font-family:var(--mono);font-size:13.5px}
+.q{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:16px}
+.qn{font-size:12px;color:var(--ac);letter-spacing:1px;margin-bottom:6px}
+.opt{display:block;width:100%;text-align:left;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:9px 14px;margin-top:8px;border-radius:8px;font:15px var(--sans);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ac)}.opt.ok{border-color:var(--ac2);background:rgba(0,212,170,.15)}.opt.no{border-color:var(--ac3);background:rgba(255,107,107,.15)}
+.fb{display:none;margin-top:12px;padding:12px 14px;border-radius:8px;background:var(--s2);font-size:14.5px}.fb.show{display:block}
+.calc input{width:80px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px 8px;border-radius:6px;font:15px var(--mono);margin:0 6px 6px 2px}
+svg.ck{width:100%;max-width:400px;display:block;margin:10px auto;background:var(--s2);border-radius:10px}
+svg.ck path,svg.ck rect,svg.ck circle,svg.ck polygon{stroke:var(--tx);stroke-width:2;fill:none}
+svg.ck text{fill:var(--ac4);font:13px var(--mono)}
+details{background:var(--s2);border-radius:8px;padding:10px 14px;margin-top:10px;font-size:14.5px}
+summary{cursor:pointer;color:var(--ac2);font-weight:600}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+</style>
+</head>
+<body>
+<div class="hero">
+<div class="badge">CIRCUIT 1 · FINAL EXAM</div>
+<h1>วงจรไฟฟ้า 1 <span>บทที่ 6-9</span></h1>
+<p>สรุปอันดับสอง · สถานะอยู่ตัวไซน์ · กำลัง · สามเฟส (ไม่ใช้ลาปลาซ)</p>
+<div class="stats"><div><div class="sn">4</div><div class="sl">บท</div></div><div><div class="sn">11</div><div class="sl">ข้อฝึก</div></div><div><div class="sn">1</div><div class="sl">ตัวอย่างเต็มข้อ 20</div></div></div>
+</div>
+<div class="tabs" id="tabs"></div>
+<div class="content">
+
+<div class="sec on" id="s0">
+<div class="card"><h2>⚡ บทที่ 6 วงจรอันดับสอง</h2>
+<div class="f">a₂x″ + a₁x′ + a₀x = f(t) &nbsp;→&nbsp; x = xₙ + x_f</div>
+<h3>ผลตอบสนองธรรมชาติ xₙ (ให้ f(t)=0)</h3>
+<div class="f">a₂s² + a₁s + a₀ = 0 &nbsp; s = (−a₁ ± √(a₁²−4a₂a₀)) / 2a₂</div>
+<table><tr><th>ราก</th><th>ชนิด</th><th>xₙ</th></tr>
+<tr><td>จริง ไม่เท่ากัน</td><td>หน่วงเกิน</td><td class="m">A₁e^(s₁t) + A₂e^(s₂t)</td></tr>
+<tr><td>จริง เท่ากัน</td><td>หน่วงวิกฤติ</td><td class="m">(A₁ + A₂t)e^(kt)</td></tr>
+<tr><td>เชิงซ้อนสังยุค −α ± jω_d</td><td>หน่วงขาด</td><td class="m">e^(−αt)(A₁cos ω_d t + A₂sin ω_d t)</td></tr></table>
+<div class="def"><b class="l">ω_d</b>ω_d = √(ω₀² − α²)</div>
+<h3>ผลตอบสนองบังคับ x_f (ตาราง 6.1)</h3>
+<table><tr><th>f(t)</th><th>x_f</th></tr>
+<tr><td class="m">k</td><td class="m">A</td></tr><tr><td class="m">k·t</td><td class="m">At + B</td></tr><tr><td class="m">k·t²</td><td class="m">At² + Bt + C</td></tr>
+<tr><td class="m">k·e^(at)</td><td class="m">A·e^(at)</td></tr><tr><td class="m">k cos bt, k sin bt</td><td class="m">A cos bt + B sin bt</td></tr>
+<tr><td class="m">k·e^(at) cos bt</td><td class="m">e^(at)(A cos bt + B sin bt)</td></tr></table>
+<div class="warn"><b class="l">ระวัง</b>sin และ cos ต้องมีครบทั้งคู่ใน x_f เสมอ แม้ f(t) มีแค่ตัวเดียว</div>
+</div>
+<div class="card"><h2>📖 6.1-6.2 สมการอันดับสองและผลเฉลย</h2>
+<div class="def"><b class="l">6.1 ที่มา</b>วงจรที่มีตัวสะสมพลังงาน 2 ตัว (L+C) เขียน KVL/KCL ได้สมการอันดับสอง</div>
+<div class="f">RLC อนุกรม: L·di/dt + Ri + (1/C)∫i dt = v_s<br>RLC ขนาน: C·dv/dt + v/R + (1/L)∫v dt = i_s<br>(ดิฟอีกครั้งเพื่อกำจัดอินทิกรัล)</div>
+<div class="def"><b class="l">6.2 ผลเฉลย</b>x = xₙ (ตอบสนองธรรมชาติ แก้สมการเมื่อ f=0) + x_f (ตอบสนองบังคับ ตามรูป f(t)) · ค่าคงที่ A₁, A₂ ได้จาก x(0) และ x′(0)</div>
+<h3>6.4 เทียบ α กับ ω₀</h3>
+<div class="f">อนุกรม α = R/2L · ขนาน α = 1/2RC · ω₀ = 1/√(LC)<br>α &gt; ω₀ หน่วงเกิน · α = ω₀ วิกฤติ · α &lt; ω₀ หน่วงขาด<br>s = −α ± √(α² − ω₀²)</div>
+</div>
+<div class="card"><h2>📋 ขั้นตอน 5 ข้อ</h2>
+<div class="box def"><b class="l">t = 0⁻ (ยังไม่มี L, C ที่ต้องแก้สมการ)</b>1) หาเงื่อนไขเริ่มต้น v_C(0), i_L(0), dx/dt</div>
+<div class="box ex"><b class="l">t &gt; 0</b>2) เขียนสมการเชิงอนุพันธ์อันดับสอง<br>3) หา xₙ (A₁, A₂ ยังไม่รู้)<br>4) หา x_f จากตาราง 6.1 แล้วแทนกลับหา A, B, C<br>5) ใช้เงื่อนไขเริ่มต้นหา A₁, A₂ จาก x(0) และ x′(0)</div>
+<div class="warn"><b class="l">จำ</b>v_C และ i_L ต่อเนื่อง: ค่าที่ 0⁻ = ค่าที่ 0⁺ &nbsp;(ที่ t=0⁻ ให้ C เป็นวงจรเปิด, L เป็นลัดวงจร)<br>dv/dt(0⁺) = i_C(0⁺)/C &nbsp; di/dt(0⁺) = v_L(0⁺)/L</div>
+</div>
+<div class="card"><h2>✍️ ตัวอย่างเต็ม: แบบฝึกหัด 6 ข้อ 20 (รูป 6.38)</h2>
+<div class="box def"><b class="l">ขั้น 1 · t=0⁻ (สวิตช์ปิด)</b>โนดแรงดัน: −2 + v/6 + v/6 + (v−8)/2 = 0 → 5v/6 = 6 → <b>v(0)=7.2 V</b><br>i_L(0) = 2 − 7.2/6 = <b>0.8 A</b></div>
+<div class="box ex"><b class="l">ขั้น 2 · t&gt;0 (สวิตช์เปิด)</b>เทเวนินฝั่งซ้าย: 2A ∥ 6Ω → 12 V อนุกรม 6Ω → วงจร RLC อนุกรม<br>
+<span style="font-family:var(--mono);font-size:14px">s² + (R/L)s + 1/(LC) = s² + 120s + 2000 = 0 → s = −20, −100</span><br>(หน่วงเกิน) &nbsp;x_f = 12 V (L ลัดวงจร, C เปิด) &nbsp;→ v = 12 + A₁e^(−20t) + A₂e^(−100t)</div>
+<div class="box warn"><b class="l">ขั้น 5 · หา A₁, A₂</b>v(0)=7.2: A₁ + A₂ = −4.8<br>v′(0) = i_L(0)/C = 0.8/0.01 = 80: −20A₁ − 100A₂ = 80<br>→ A₂ = 0.2, A₁ = −5<br><b>v = 12 − 5e^(−20t) + 0.2e^(−100t) V</b> ✓ ตรงเฉลย</div>
+</div>
+<div class="card calc"><h2>🧮 ตัวจำแนกชนิดการหน่วง</h2>
+a₂ <input id="c2" type="number" value="1"> a₁ <input id="c1" type="number" value="6"> a₀ <input id="c0" type="number" value="9">
+<div class="f" id="cres"></div></div>
+</div>
+
+<div class="sec" id="s1">
+<div class="card"><h2>🌊 บทที่ 7 สถานะอยู่ตัวของสัญญาณไซน์</h2>
+<div class="f">v(t) = V_m sin(ωt + θ_v) &nbsp; i(t) = I_m sin(ωt + θ_i)<br>v นำ i อยู่ θ_v − θ_i</div>
+<div class="def"><b class="l">หลักการ</b>ω ของผลตอบสนอง = ω ของแหล่งกำเนิด (ต่างกันแค่ขนาดและเฟส) → ใช้เฟสเซอร์แปลงโดเมนเวลาเป็นโดเมนความถี่</div>
+<div class="def"><b class="l">เฟสเซอร์ = จำนวนเชิงซ้อน 3 รูป</b>เชิงขั้ว (V∠θ) · เลขชี้กำลัง (Ve^(jθ)) · พิกัดฉาก (a + jb)</div>
+<h3>อิมพีแดนซ์ Z = V/I (Ω)</h3>
+<table><tr><th>ตัวองค์ประกอบ</th><th>Z</th><th>กระแสเทียบแรงดัน</th></tr>
+<tr><td>R</td><td class="m">R</td><td>เฟสเดียวกัน</td></tr>
+<tr><td>L</td><td class="m">jωL</td><td>ล้าหลัง 90°</td></tr>
+<tr><td>C</td><td class="m">−j/ωC</td><td>ล้ำหน้า 90°</td></tr></table>
+<div class="warn"><b class="l">จำ</b>"ซี-ไอ" : C กระแสนำ · L กระแสตาม &nbsp;|&nbsp; Z_L ∝ ω, Z_C ∝ 1/ω</div>
+<div class="ex"><b class="l">วิธีวิเคราะห์</b>แปลง v, i เป็นเฟสเซอร์ และแทน R, L, C ด้วย Z แล้วใช้ KVL/KCL, โนด/เมช, เทเวนิน/นอร์ตัน, ทับซ้อน เหมือนวงจรตัวต้านทาน</div>
+<div class="ex"><b class="l">ตัวอย่าง</b>R = 3 Ω, ωL = 4 Ω อนุกรม: Z = 3 + j4 = 5∠53.1° Ω (ล้าหลัง เพราะส่วนจินตภาพบวก)</div>
+</div>
+<div class="card"><h2>🔧 7.4 KVL/KCL และการต่ออิมพีแดนซ์</h2>
+<div class="f">ΣV = 0 · ΣI = 0 (เฟสเซอร์)<br>อนุกรม Z_eq = Z₁+Z₂+… · ขนาน 1/Z_eq = 1/Z₁+1/Z₂+…<br>ตัวแบ่งแรงดัน V_k = V·Z_k/ΣZ · ตัวแบ่งกระแส (2 กิ่ง) I₁ = I·Z₂/(Z₁+Z₂)</div></div>
+<div class="card"><h2>🔧 7.5 แรงดันโนดและกระแสเมช</h2>
+<div class="ex"><b class="l">โนด</b>KCL ที่โนด: Σ(V_k − V_m)/Z = 0 (กิ่งแหล่งกระแสใส่ตรง ๆ, แหล่งแรงดันลอยใช้ซูเปอร์โนด)</div>
+<div class="ex"><b class="l">เมช</b>KVL รอบเมช: ΣZ·I = ΣV_s (ผลต่างกระแสเมชข้างเคียงในกิ่งร่วม, แหล่งกระแสร่วมใช้ซูเปอร์เมช) ผลลัพธ์เป็นจำนวนเชิงซ้อน แก้สมการเหมือนบทที่ 2</div></div>
+<div class="card"><h2>🔧 7.6 การแปลงแหล่งกำเนิดและการทับซ้อน</h2>
+<div class="f">V_s = I_s·Z, Z ต่ออนุกรมกับแหล่งแรงดัน ⇄ Z ต่อขนานกับแหล่งกระแส<br>(ใช้ Z เดิม ทิศทางลูกศรชี้ไปทางขั้วบวก)</div>
+<div class="warn"><b class="l">ระวัง</b>ทับซ้อน: ถ้าแหล่งความถี่ต่างกัน ต้องรวมผลในโดเมนเวลา (แปลงกลับเป็น v(t) ก่อนบวก) ห้ามบวกเฟสเซอร์ข้ามความถี่</div></div>
+<div class="card"><h2>🔧 7.7 เทเวนินและนอร์ตัน</h2>
+<div class="f">V_th = V_oc (วงจรเปิดที่ขั้ว) · Z_th = Z มองจากขั้วเมื่อปิดแหล่งอิสระ = V_oc/I_sc<br>I_N = V_th/Z_th = I_sc · Z_N = Z_th</div></div>
+<div class="card"><h2>📐 7.8 แผนภาพเฟสเซอร์</h2>
+<div class="def"><b class="l">หลักการ</b>วาดเฟสเซอร์เป็นลูกศรบนระนาบเชิงซ้อน (มุมบวกทวนเข็ม) แล้วบวกแบบเวกเตอร์ · ใช้ i เป็นแกนอ้างอิงในวงจรอนุกรม, v ในวงจรขนาน</div>
+<div class="f">RLC อนุกรม: V_R เฟสเดียวกับ I · V_L นำ I 90° · V_C ตาม I 90°<br>V_L กับ V_C ทิศตรงข้ามกัน → |V_s| = √(V_R² + (V_L − V_C)²)</div></div></div>
+
+<div class="sec" id="s2">
+<div class="card"><h2>🔌 บทที่ 8 กำลังในสถานะอยู่ตัว</h2>
+<div class="def"><b class="l">RMS</b>V = V_m/√2, I = I_m/√2 (ให้กำลังความร้อนเท่ากับไฟตรงค่านั้น)</div>
+<table><tr><th>ปริมาณ</th><th>สูตร</th><th>หน่วย</th></tr>
+<tr><td>กำลังจริง P</td><td class="m">VI cosθ</td><td>W</td></tr>
+<tr><td>กำลังจินตภาพ Q</td><td class="m">VI sinθ = P tanθ</td><td>var</td></tr>
+<tr><td>กำลังเชิงซ้อน S</td><td class="m">VI* = P + jQ</td><td>VA</td></tr>
+<tr><td>กำลังปรากฏ |S|</td><td class="m">√(P²+Q²) = VI</td><td>VA</td></tr>
+<tr><td>ตัวประกอบกำลัง PF</td><td class="m">P/S = cosθ</td><td>-</td></tr></table>
+<div class="warn"><b class="l">ระวัง</b>θ = มุมระหว่างแรงดันกับกระแส (θ_v − θ_i) และต้องบอก "ล้ำหน้า/ล้าหลัง" ทุกครั้ง · ในสูตร S = VI* มี conjugate ของกระแส</div>
+<h3>ปรับปรุง PF ด้วยตัวเก็บประจุขนาน</h3>
+<div class="f">Q_C = P(tanθ₁ − tanθ₂) &nbsp; C = Q_C / (ωV²)</div>
+<div class="ex"><b class="l">ตัวอย่างในหนังสือ</b>C = 15.8/(100×50²) = 63.2 µF</div>
+</div>
+<div class="card"><h2>📖 8.1-8.3 กำลังขณะหนึ่ง กำลังเฉลี่ย RMS</h2>
+<div class="def"><b class="l">8.1 กำลังขณะหนึ่ง</b>p(t) = v(t)·i(t) = ½V_mI_m cosθ + ½V_mI_m cos(2ωt + θ_v + θ_i)<br>เทอมที่สองแกว่งที่ความถี่ 2ω ค่าเฉลี่ยเป็น 0</div>
+<div class="def"><b class="l">8.2 กำลังเฉลี่ย</b>P = (1/T)∫₀ᵀ p dt = ½V_mI_m cosθ = VI cosθ<br>R: P = I²R = V²/R · L, C: P = 0 (พลังงานแลกเปลี่ยนไปมา ไม่สูญเสีย)</div>
+<div class="def"><b class="l">8.3 RMS ของสัญญาณคาบ</b>X_rms = √((1/T)∫₀ᵀ x² dt)</div>
+<table><tr><th>รูปคลื่น</th><th>RMS</th></tr><tr><td>ไซน์ ยอด A</td><td class="m">A/√2</td></tr><tr><td>สี่เหลี่ยม ±A</td><td class="m">A</td></tr><tr><td>สามเหลี่ยม ยอด A</td><td class="m">A/√3</td></tr><tr><td>ไฟตรง</td><td class="m">ค่าเดิม</td></tr></table></div>
+<div class="card"><h2>📖 8.4-8.6 กำลังเชิงซ้อน สามเหลี่ยม PF</h2>
+<div class="f">S = VI* = I²Z = V²/Z* = P + jQ<br>R: Q=0 · L: Q = +I²X_L (กินวาร์) · C: Q = −I²X_C (จ่ายวาร์)</div>
+<div class="def"><b class="l">8.5 สามเหลี่ยม</b>แรงดัน (V_R, V_X, V) · อิมพีแดนซ์ (R, X, Z) · กำลัง (P, Q, S) เป็นสามเหลี่ยมคล้ายกัน มีมุม θ เดียวกัน<br>PF = cosθ = R/|Z| = P/S · tanθ = Q/P = X/R</div>
+<div class="def"><b class="l">8.6 PF</b>ล้าหลัง = โหลดเหนี่ยวนำ (Q &gt; 0, กระแสตามหลัง) · ล้ำหน้า = โหลดเก็บประจุ (Q &lt; 0) · PF ต่ำ → กระแสสูงที่ P เท่าเดิม จึงต่อ C ขนานเพื่อชดเชย</div></div></div>
+
+<div class="sec" id="s3">
+<div class="card"><h2>🔺 บทที่ 9 วงจรสามเฟส</h2>
+<div class="def"><b class="l">สามเฟสสมดุล</b>ขนาดและความถี่เท่ากัน ต่างเฟสกัน 120° · ลำดับเฟสบวก a → b → c (ทวนเข็มในแผนภาพเฟสเซอร์)</div>
+<table><tr><th></th><th>สตาร์ (Y)</th><th>เดลตา (Δ)</th></tr>
+<tr><td>แรงดัน</td><td class="m">V_L = √3 V_φ<br>(สายนำเฟส 30°)</td><td class="m">V_L = V_φ</td></tr>
+<tr><td>กระแส</td><td class="m">I_L = I_φ</td><td class="m">I_L = √3 I_φ<br>(สายล้าหลัง 30°)</td></tr></table>
+<div class="ex"><b class="l">วงจรสมมูลเฟสเดียว</b>ใช้กับสตาร์-สตาร์สมดุล: วาดเฟส a เฟสเดียว ให้ Z นิวทรัล = 0 คำนวณแล้วคูณ 3 เมื่อหากำลังรวม</div>
+<h3>กำลัง (ใช้ได้ทั้ง Y และ Δ)</h3>
+<div class="f">P_T = 3P_φ = √3 V_L I_L cosθ_φ<br>Q_T = 3Q_φ = √3 V_L I_L sinθ_φ<br>S_T = 3S_φ = √3 V_L I_L = √(P_T²+Q_T²)<br>PF = P_φ/S_φ = P_T/S_T = cosθ_φ</div>
+<div class="warn"><b class="l">ระวัง</b>θ_φ คือมุมอิมพีแดนซ์โหลดต่อเฟส ไม่ใช่มุมระหว่างแรงดันสายกับกระแสสาย</div>
+</div>
+<div class="card"><h2>📖 9.1-9.3 พื้นฐานสามเฟส</h2>
+<div class="f">ลำดับบวก abc: V_an = V_φ∠0° · V_bn = V_φ∠−120° · V_cn = V_φ∠+120°<br>ลำดับลบ acb: b, c สลับกัน · V_an+V_bn+V_cn = 0 (สมดุล)</div>
+<div class="def"><b class="l">9.2 รูปต่อ</b>สตาร์ (Y): ปลายร่วมเป็นนิวทรัล n (3 หรือ 4 สาย) · เดลตา (Δ): ต่อเป็นวง ไม่มีนิวทรัล ใช้ได้ทั้งแหล่งกำเนิดและโหลด</div>
+<div class="def"><b class="l">9.3 นิยาม</b>แรงดัน/กระแสสาย (line) = ระหว่างสาย/ในสาย · แรงดัน/กระแสเฟส (phase) = คร่อม/ผ่านองค์ประกอบหนึ่งเฟส · สมดุล Y-Y: กระแสนิวทรัล I_n = 0</div></div>
+<div class="card"><h2>📖 9.4-9.6 แรงดัน กระแส วงจรสมมูลเฟสเดียว</h2>
+<div class="f">9.4 สตาร์ (ลำดับบวก): V_ab = V_an − V_bn = √3 V_φ∠30°<br>V_bc = √3 V_φ∠−90° · V_ca = √3 V_φ∠150°<br>9.5 สตาร์: I_L = I_φ = V_φ/Z_φ<br>เดลตา: I_φ = V_L/Z_φ, I_a = I_ab − I_ca = √3 I_ab∠−30°</div>
+<div class="ex"><b class="l">9.6 ขั้นตอน</b>1) แปลงโหลดเดลตาเป็นสตาร์: Z_Y = Z_Δ/3<br>2) วาดเฟส a: I_a = V_an/(Z_line + Z_Y)<br>3) เฟส b, c ได้จากเลื่อนมุม −120°, +120° (ลำดับบวก)<br>4) กำลังรวมคูณ 3</div></div>
+<div class="card"><h2>📝 9.9 แบบฝึกหัด</h2>ฝึกได้ที่แท็บ "แบบฝึกหัด" ซึ่งรวมโจทย์ทุกบทไว้พร้อมเฉลย</div></div>
+
+<div class="sec" id="s4"><div id="qc"></div></div>
+
+<div class="sec" id="s5">
+<div class="card"><h2>🧪 โจทย์วงจรให้ฝึกทำ</h2>ลองทำเองก่อน แล้วกดดูเฉลยทีละขั้น</div>
+
+<div class="card"><h2>โจทย์ 1 · บทที่ 6 RLC อนุกรม</h2>
+<div id="d1"></div>
+สวิตช์ปิดที่ t = 0 ก่อนหน้านั้นวงจรไม่มีพลังงานสะสม (i(0)=0, v_C(0)=0) จงหา v_C(t) เมื่อ t &gt; 0
+<details><summary>ดูเฉลย</summary>
+1) t=0⁻: v_C(0)=0, i(0)=0<br>
+2) KVL: L·di/dt + Ri + v_C = 12 และ i = C·dv_C/dt → LC·v″ + RC·v′ + v = 12<br>
+&nbsp;&nbsp;(1/8)v″ + (6/8)v′ + v = 12 → <b>v″ + 6v′ + 8v = 96</b><br>
+3) s² + 6s + 8 = 0 → s = −2, −4 (หน่วงเกิน) → vₙ = A₁e^(−2t) + A₂e^(−4t)<br>
+4) f คงที่ → v_f = A: 8A = 96 → v_f = 12<br>
+5) v = 12 + A₁e^(−2t) + A₂e^(−4t)<br>
+&nbsp;&nbsp;v(0)=0: A₁ + A₂ = −12<br>
+&nbsp;&nbsp;v′(0) = i(0)/C = 0: −2A₁ − 4A₂ = 0 → A₁ = −2A₂<br>
+&nbsp;&nbsp;→ A₂ = 12, A₁ = −24<br>
+<b>v_C = 12 − 24e^(−2t) + 12e^(−4t) V</b></details></div>
+
+<div class="card"><h2>โจทย์ 2 · บทที่ 7-8 RLC อนุกรม สถานะอยู่ตัว</h2>
+<div id="d2"></div>
+แหล่งกำเนิดไซน์ V = 100∠0° V (RMS) ω = 100 rad/s จงหา Z, I, V_R, V_L, V_C, P, Q, S และ PF
+<details><summary>ดูเฉลย</summary>
+Z_L = j100×0.4 = j40 · Z_C = −j/(100×125µ) = −j80<br>
+<b>Z = 30 + j40 − j80 = 30 − j40 = 50∠−53.1° Ω</b><br>
+I = 100∠0°/50∠−53.1° = <b>2∠53.1° A</b> (กระแสนำแรงดัน)<br>
+V_R = 2×30 = 60∠53.1° V · V_L = 2×40 = 80∠143.1° V · V_C = 2×80 = 160∠−36.9° V<br>
+ตรวจ KVL: (36+j48) + (−64+j48) + (128−j96) = 100 + j0 ✓<br>
+P = I²R = 4×30 = <b>120 W</b> · Q = I²X = 4×(−40) = <b>−160 var</b> · S = 200 VA (S = 120 − j160)<br>
+<b>PF = 120/200 = 0.6 ล้ำหน้า</b> (โหลดเป็นแบบเก็บประจุ เพราะ X_C &gt; X_L)</details></div>
+
+<div class="card"><h2>โจทย์ 3 · บทที่ 8 ปรับปรุงตัวประกอบกำลัง</h2>
+<div id="d3"></div>
+โหลดใช้กำลัง 3 kW PF 0.8 ล้าหลัง ต่อแหล่ง 200 V (RMS) ω = 100 rad/s จงหา C ที่ต่อขนานเพื่อให้ PF = 1 และกระแสจากแหล่งก่อน-หลังต่อ C
+<details><summary>ดูเฉลย</summary>
+cosθ = 0.8 → tanθ = 0.75 → Q_load = 3000×0.75 = 2250 var<br>
+ต้องการ Q รวม = 0 → Q_C = 2250 var<br>
+<b>C = Q_C/(ωV²) = 2250/(100×200²) = 562.5 µF</b><br>
+ก่อนต่อ C: S = 3000/0.8 = 3750 VA → I = 3750/200 = <b>18.75 A</b><br>
+หลังต่อ C: S = P = 3000 VA → I = 3000/200 = <b>15 A</b> (กระแสลดลง)</details></div>
+
+<div class="card"><h2>โจทย์ 4 · บทที่ 9 โหลดเดลตาสมดุล</h2>
+<div id="d4"></div>
+แรงดันสาย 220 V (RMS) ลำดับเฟสบวก โหลดเดลตาสมดุล เฟสละ Z_φ = 17.6 + j13.2 Ω จงหา I_φ, I_L, P_T, Q_T, S_T และ PF
+<details><summary>ดูเฉลย</summary>
+|Z_φ| = √(17.6² + 13.2²) = 22 Ω, θ = 36.87°<br>
+เดลตา: V_φ = V_L = 220 V → <b>I_φ = 220/22 = 10 A</b><br>
+<b>I_L = √3 I_φ = 17.32 A</b> (ล้าหลังกระแสเฟส 30°)<br>
+P_T = 3I_φ²R = 3×100×17.6 = <b>5280 W</b> · Q_T = 3×100×13.2 = <b>3960 var</b><br>
+S_T = √3 V_L I_L = 1.732×220×17.32 = <b>6600 VA</b> (= √(5280² + 3960²) ✓)<br>
+<b>PF = 5280/6600 = 0.8 ล้าหลัง</b><br>
+วิธีเทียบ: Z_Y = Z_Δ/3 = 5.87 + j4.4 Ω ได้ผลกำลังเท่ากัน</details></div>
+
+<div class="card"><h2>🔥 ระดับยากขึ้น (แนวข้อ 20 รูป 6.38)</h2>ต้องทำหลายขั้น: หาค่าเริ่มต้นที่ t=0⁻ → ยุบวงจรที่ t&gt;0 → สมการอันดับสอง → หา A₁, A₂</div>
+
+<div class="card"><h2>โจทย์ 5 · แหล่งหลายตัว + สวิตช์ (เหมือน 6.38)</h2>
+<div id="d5"></div>
+วงจรอยู่ในสถานะอยู่ตัวที่ t = 0⁻ (สวิตช์ปิดมานาน) สวิตช์เปิดที่ t = 0 จงหา v ในช่วง t &gt; 0
+<details><summary>ดูเฉลย</summary>
+<b>1) t=0⁻:</b> L ลัดวงจร, C เปิดวงจร โนด v: −3 + v/4 + v/12 + (v−24)/6 = 0 → ×12: 6v = 84 → <b>v(0) = 14 V</b><br>
+&nbsp;&nbsp;i_L(0) = 3 − 14/4 = <b>−0.5 A</b> (i_L ไม่ใช่ 0 และเป็นกระแสผ่านตัวเหนี่ยวนำ)<br>
+<b>2) t&gt;0:</b> ฝั่งขวาถูกตัดออก · 3A ∥ 4Ω → เทเวนิน 12 V อนุกรม 4Ω → RLC อนุกรม<br>
+&nbsp;&nbsp;LC·v″ + RC·v′ + v = 12 → 0.2v″ + 0.8v′ + v = 12 → <b>v″ + 4v′ + 5v = 60</b><br>
+<b>3)</b> s² + 4s + 5 = 0 → s = −2 ± j1 (หน่วงขาด) → vₙ = e^(−2t)(A₁cos t + A₂sin t)<br>
+<b>4)</b> v_f = 60/5 = 12<br>
+<b>5)</b> v(0) = 14 → 12 + A₁ = 14 → A₁ = 2<br>
+&nbsp;&nbsp;v′(0) = i_L(0)/C = −0.5/0.2 = −2.5 และ v′(0) = −2A₁ + A₂ → A₂ = 1.5<br>
+<b>v = 12 + e^(−2t)(2cos t + 1.5 sin t) V</b></details></div>
+
+<div class="card"><h2>โจทย์ 6 · RLC ขนาน หน่วงวิกฤติ</h2>
+<div id="d6"></div>
+สวิตช์ปิดมานาน เปิดที่ t = 0 จงหา i_L(t) และ v(t) สำหรับ t &gt; 0
+<details><summary>ดูเฉลย</summary>
+<b>t=0⁻:</b> L ลัดวงจรทั้ง C และ 1Ω → v(0)=0, <b>i_L(0) = 24/6 = 4 A</b><br>
+<b>t&gt;0:</b> RLC ขนานไม่มีแหล่ง: α = 1/(2RC) = 2, ω₀ = 1/√(LC) = 2 → α = ω₀ หน่วงวิกฤติ<br>
+สมการของ i_L: LC·i″ + (L/R)·i′ + i = 0 → i″ + 4i′ + 4i = 0 → s = −2 ซ้ำ<br>
+i_L = (A₁ + A₂t)e^(−2t) · i_L(0)=4 → A₁ = 4<br>
+i_L′(0) = v(0)/L = 0 และ i_L′(0) = A₂ − 2A₁ → A₂ = 8<br>
+<b>i_L = (4 + 8t)e^(−2t) A</b><br>
+v = L·di_L/dt = [8 − 2(4+8t)]e^(−2t) = <b>−16t·e^(−2t) V</b> (v(0)=0 ✓)</details></div>
+
+<div class="card"><h2>โจทย์ 7 · เทเวนินแบบเฟสเซอร์</h2>
+<div id="d7"></div>
+V_s = 60∠0° V (RMS) จงหาวงจรสมมูลเทเวนินที่ขั้ว a-b แล้วหากระแสและกำลังเมื่อต่อตัวต้านทาน 5 Ω ที่ขั้ว a-b
+<details><summary>ดูเฉลย</summary>
+<b>V_th (เปิดขั้ว a-b ไม่มีกระแสผ่าน j10):</b> ตัวแบ่งแรงดัน<br>
+V_th = 60 × (−j10)/(10 − j10) = 60 × (1−j)/2 = 30(1−j) = <b>42.4∠−45° V</b><br>
+<b>Z_th (ลัดวงจรแหล่งแรงดัน):</b> Z_th = j10 + (10 ∥ −j10)<br>
+10 ∥ −j10 = (−j100)/(10−j10) = 5 − j5 → <b>Z_th = 5 + j5 Ω</b><br>
+ต่อ 5 Ω: I = V_th/(Z_th + 5) = 30(1−j)/(10+j5) = 1.2 − j3.6 = <b>3.79∠−71.6° A</b><br>
+<b>P = |I|²R = 14.4 × 5 = 72 W</b><br>
+(เสริม: Z_L = 5 − j5 Ω จะได้กำลังสูงสุด |V_th|²/(4R_th) = 1800/20 = 90 W)</details></div>
+
+<div class="card"><h2>โจทย์ 8 · สามเฟสมีอิมพีแดนซ์สาย</h2>
+<div id="d8"></div>
+แหล่งสตาร์สมดุล V_an = 220∠0° V (RMS) ลำดับเฟสบวก สายส่งแต่ละเส้น Z_line = 1 + j2 Ω โหลดเดลตา Z_Δ = 27 + j24 Ω ต่อเฟส จงหา I_a, I_AB, แรงดันสายที่โหลด, กำลังที่โหลดและกำลังสูญเสียในสาย
+<details><summary>ดูเฉลย</summary>
+<b>1) แปลงเดลตา → สตาร์:</b> Z_Y = Z_Δ/3 = 9 + j8 Ω<br>
+<b>2) เฟส a:</b> Z_รวม = (1+j2) + (9+j8) = 10 + j10 = 14.14∠45° Ω<br>
+I_a = 220∠0°/14.14∠45° = <b>15.56∠−45° A</b> (|I_a|² = 242)<br>
+<b>3) กระแสเฟสเดลตา:</b> I_AB = I_a/√3 ∠+30° = <b>8.98∠−15° A</b><br>
+<b>4) แรงดันที่โหลด:</b> V_A'N' = I_a·Z_Y = 15.56×12.04 = 187.3 V → แรงดันสายที่โหลด = √3×187.3 = <b>324.5 V</b><br>
+<b>5) กำลัง:</b> P_load = 3×242×9 = <b>6534 W</b> · Q_load = 3×242×8 = 5808 var<br>
+P_สาย = 3×242×1 = <b>726 W</b><br>
+ตรวจ: P_แหล่ง = 3×242×10 = 7260 W = 6534 + 726 ✓ (PF แหล่ง = cos 45° = 0.707 ล้าหลัง)</details></div>
+</div>
+</div>
+
+<script>
+const T=['บทที่ 6','บทที่ 7','บทที่ 8','บทที่ 9','แบบฝึกหัด','โจทย์วงจร'];
+const tb=document.getElementById('tabs');
+T.forEach((t,i)=>{const b=document.createElement('button');b.className='tab'+(i?'':' on');b.textContent=t;
+b.onclick=()=>{document.querySelectorAll('.tab').forEach((x,j)=>x.classList.toggle('on',i==j));document.querySelectorAll('.sec').forEach((x,j)=>x.classList.toggle('on',i==j));scrollTo(0,0)};tb.appendChild(b)});
+
+function calc(){const a=+c2.value,b=+c1.value,c=+c0.value;const D=b*b-4*a*c;let h;
+if(!a){cres.textContent='a₂ ต้องไม่เป็น 0';return}
+if(D>0){const r1=(-b+Math.sqrt(D))/(2*a),r2=(-b-Math.sqrt(D))/(2*a);h='D = '+D+' > 0 → หน่วงเกิน<br>s₁ = '+r1.toFixed(3)+', s₂ = '+r2.toFixed(3)}
+else if(D==0){h='D = 0 → หน่วงวิกฤติ<br>s = '+(-b/(2*a)).toFixed(3)+' (ซ้ำ)'}
+else{h='D = '+D+' < 0 → หน่วงขาด<br>α = '+(-b/(2*a)*-1).toFixed(3)+', ω_d = '+(Math.sqrt(-D)/(2*a)).toFixed(3)}
+cres.innerHTML=h}
+['c2','c1','c0'].forEach(i=>document.getElementById(i).oninput=calc);calc();
+
+const Q=[
+{c:'บท 6',q:'ลักษณะเฉพาะของ x″ + 6x′ + 9x = 0 เป็นชนิดใด',o:['หน่วงเกิน','หน่วงวิกฤติ','หน่วงขาด','ไม่หน่วง'],a:1,e:'s² + 6s + 9 = (s+3)² = 0 → s = −3 ซ้ำ ดังนั้น xₙ = (A₁ + A₂t)e^(−3t) (D = 36 − 36 = 0)'},
+{c:'บท 6',q:'x″ + 4x′ + 13x = 0 ได้ ω_d เท่าใด',o:['2','3','√13','4'],a:1,e:'s = (−4 ± √(16−52))/2 = −2 ± j3 → α = 2, ω_d = 3 → xₙ = e^(−2t)(A₁cos3t + A₂sin3t)'},
+{c:'บท 6',q:'f(t) = 5cos(2t) ควรกำหนดรูปแบบ x_f เป็นข้อใด',o:['A cos 2t','A cos 2t + B sin 2t','A e^(2t)','At + B'],a:1,e:'ตาราง 6.1: k cos bt → A cos bt + B sin bt ต้องมีทั้ง cos และ sin เสมอ เพราะอนุพันธ์ของ cos เป็น sin'},
+{c:'บท 7',q:'R = 3 Ω และ ωL = 4 Ω ต่ออนุกรม |Z| เท่าใด และกระแสเป็นอย่างไรเทียบแรงดัน',o:['5 Ω, ล้ำหน้า','5 Ω, ล้าหลัง','7 Ω, ล้าหลัง','1 Ω, ล้ำหน้า'],a:1,e:'Z = 3 + j4 → |Z| = √(9+16) = 5 Ω, มุม +53.1° (ส่วนจินตภาพบวก = ตัวเหนี่ยวนำ) → กระแสล้าหลังแรงดัน'},
+{c:'บท 7',q:'ถ้าความถี่แหล่งกำเนิดเพิ่มขึ้น อิมพีแดนซ์ของ L และ C เปลี่ยนอย่างไร',o:['L เพิ่ม, C ลด','L ลด, C เพิ่ม','ทั้งคู่เพิ่ม','ทั้งคู่ลด'],a:0,e:'|Z_L| = ωL เพิ่มตาม ω ส่วน |Z_C| = 1/ωC ลดเมื่อ ω เพิ่ม'},
+{c:'บท 8',q:'โหลด Z = 3 + j4 Ω ต่อแรงดัน 100 V (RMS) ได้ P เท่าใด',o:['600 W','1200 W','2000 W','1600 W'],a:1,e:'I = 100/5 = 20 A, P = I²R = 400×3 = 1200 W (Q = I²X = 1600 var, S = 2000 VA, PF = 0.6 ล้าหลัง)'},
+{c:'บท 9',q:'โหลดสตาร์สมดุล แรงดันสาย 380 V แรงดันเฟสประมาณเท่าใด',o:['380 V','219 V','658 V','127 V'],a:1,e:'สตาร์: V_L = √3 V_φ → V_φ = 380/√3 ≈ 219 V (สำหรับเดลตา V_φ = V_L)'},
+{c:'บท 9',q:'โหลดสามเฟสสมดุล V_L = 200 V, I_L = 10 A, PF = 0.8 ได้ P_T เท่าใด',o:['1.6 kW','2.77 kW','4.8 kW','3.46 kW'],a:1,e:'P_T = √3 V_L I_L cosθ = 1.732×200×10×0.8 ≈ 2771 W ≈ 2.77 kW (ข้อ 4.8 kW เกิดจากใช้ 3 แทน √3)'},
+{c:'บท 8',q:'สัญญาณสี่เหลี่ยมสลับ +10 V และ −10 V ค่า RMS เท่าใด',o:['10 V','7.07 V','5.77 V','0 V'],a:0,e:'x² = 100 ตลอดเวลา → RMS = √100 = 10 V (ค่าเฉลี่ยเป็น 0 แต่ RMS ไม่ใช่ 0)'},
+{c:'บท 9',q:'โหลดเดลตา Z_Δ = 30∠20° Ω เมื่อแปลงเป็นสตาร์สมมูล Z_Y เท่าใด',o:['90∠20° Ω','30∠20° Ω','10∠20° Ω','10√3∠20° Ω'],a:2,e:'Δ→Y สมดุล: Z_Y = Z_Δ/3 = 10∠20° Ω (Y→Δ คูณ 3)'},
+{c:'บท 7',q:'ในการหาวงจรสมมูลเทเวนิน Z_th หาได้จากข้อใด',o:['ปิดแหล่งอิสระ แล้วมองอิมพีแดนซ์จากขั้ว','วัด V_oc อย่างเดียว','ต่อขั้วลัดวงจรแล้ววัดแรงดัน','ใช้ I_N คูณ V_th'],a:0,e:'Z_th = Z มองจากขั้วเมื่อปิดแหล่งอิสระ (แหล่งแรงดัน → ลัดวงจร, แหล่งกระแส → เปิดวงจร) หรือ Z_th = V_oc/I_sc'}
+];
+const qc=document.getElementById('qc');
+Q.forEach((q,i)=>{const d=document.createElement('div');d.className='q';
+d.innerHTML='<div class="qn">ข้อ '+(i+1)+' / '+Q.length+' · '+q.c+'</div><div>'+q.q+'</div>'+q.o.map((o,j)=>'<button class="opt" data-j="'+j+'">'+String.fromCharCode(65+j)+'. '+o+'</button>').join('')+'<div class="fb"></div>';
+d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const j=+b.dataset.j,bs=d.querySelectorAll('.opt'),f=d.querySelector('.fb');
+bs.forEach(x=>x.disabled=true);bs[q.a].classList.add('ok');if(j!=q.a)b.classList.add('no');
+f.className='fb show';f.innerHTML=(j==q.a?'✅ <b>ถูกต้อง!</b><br>':'❌ <b>ไม่ถูก</b> คำตอบคือ '+String.fromCharCode(65+q.a)+'<br>')+'💡 '+q.e});
+qc.appendChild(d)});
+
+const svg=b=>'<svg class="ck" viewBox="0 0 360 200">'+b+'</svg>';
+function series(ac,s,r,l,c){
+return svg('<path d="M30 74V40H60M120 40H160M222 40H245M309 40H330V140H30V106"/>'
++'<path d="M60 40h10l4-8 8 16 8-16 8 16 8-16 4 8h10"/>'
++'<path d="M160 40h10a7 7 0 0 1 14 0a7 7 0 0 1 14 0a7 7 0 0 1 14 0h10"/>'
++'<path d="M245 40h28M273 28v24M281 28v24M281 40h28"/>'
++'<circle cx="30" cy="90" r="16"/>'+(ac?'<path d="M21 90q4.5-9 9 0t9 0"/>':'<text x="25" y="87">+</text><text x="25" y="103">-</text>')
++'<text x="50" y="94">'+s+'</text><text x="68" y="24">'+r+'</text><text x="168" y="24">'+l+'</text><text x="252" y="24">'+c+'</text>');}
+d1.innerHTML=series(0,'12V','R=6','L=1H','C=1/8F');
+d2.innerHTML=series(1,'100V 0deg','R=30','L=0.4H','C=125uF');
+d3.innerHTML=svg('<path d="M30 74V40H330V140H30V106M130 40V70M130 110V140M250 40V82M238 82H262M238 94H262M250 94V140"/>'
++'<rect x="110" y="70" width="40" height="40"/><circle cx="30" cy="90" r="16"/><path d="M21 90q4.5-9 9 0t9 0"/>'
++'<text x="50" y="94">200V</text><text x="157" y="86">Load</text><text x="157" y="102">3kW</text><text x="157" y="118">pf0.8 lag</text>'
++'<text x="270" y="92">C=?</text><text x="30" y="170">w=100 rad/s</text>');
+d4.innerHTML=svg('<polygon points="180,30 80,150 280,150"/><path d="M180 30V8M80 150L50 175M280 150L310 175"/>'
++'<rect x="116" y="82" width="28" height="16" style="fill:var(--s2)"/><rect x="216" y="82" width="28" height="16" style="fill:var(--s2)"/><rect x="166" y="142" width="28" height="16" style="fill:var(--s2)"/>'
++'<text x="188" y="16">a</text><text x="34" y="178">b</text><text x="314" y="178">c</text>'
++'<text x="80" y="76">Zp</text><text x="248" y="76">Zp</text><text x="172" y="176">Zp</text>'
++'<text x="100" y="196">VL=220V  Zp=17.6+j13.2</text>');
+
+const sv=(w,b)=>'<svg class="ck" style="max-width:'+(w+60)+'px" viewBox="0 0 '+w+' 200">'+b+'</svg>';
+const zig='h10l4-8 8 16 8-16 8 16 8-16 4 8h10';
+const coil='h10a7 7 0 0 1 14 0a7 7 0 0 1 14 0a7 7 0 0 1 14 0h10';
+const vsrc=(x,y,t)=>'<circle cx="'+x+'" cy="'+y+'" r="16"/><text x="'+(x-5)+'" y="'+(y-4)+'">+</text><text x="'+(x-5)+'" y="'+(y+12)+'">-</text>'+(t?'<text x="'+(x+20)+'" y="'+(y+4)+'">'+t+'</text>':'');
+const capv=(x)=>'<path d="M'+x+' 40V88M'+(x-12)+' 88H'+(x+12)+'M'+(x-12)+' 98H'+(x+12)+'M'+x+' 98V150"/>';
+const resv=(x)=>'<path d="M'+x+' 40V75M'+x+' 115V150"/><rect x="'+(x-8)+'" y="75" width="16" height="40"/>';
+d5.innerHTML=sv(480,'<path d="M30 79V40H100M100 40H130M192 40H235M275 40H300M300 40H330M390 40H430V79M430 111V150H30V111"/>'
++'<path d="M130 40'+coil+'"/><path d="M330 40'+zig+'"/><path d="M235 40L270 26"/>'
++resv(100)+resv(300)+capv(215)
++'<circle cx="30" cy="95" r="16"/><path d="M30 105V85M25 91L30 85L35 91"/>'+vsrc(430,95,'')
++'<text x="46" y="99">3A</text><text x="112" y="99">4</text><text x="140" y="28">1H</text><text x="228" y="99">0.2F</text><text x="222" y="72">+ v</text><text x="238" y="60">t=0</text><text x="312" y="99">12</text><text x="350" y="28">6</text><text x="448" y="99">24V</text>');
+d6.innerHTML=sv(360,'<path d="M30 79V40H60M100 40H110M170 40H310V150H30V111M190 40V70a7 7 0 0 0 0 14a7 7 0 0 0 0 14a7 7 0 0 0 0 14V150M60 40L95 26"/>'
++'<path d="M110 40'+zig+'"/>'+capv(250)+'<path d="M310 40V75M310 115V150"/><rect x="302" y="75" width="16" height="40"/>'
++vsrc(30,95,'')+'<text x="48" y="99">24V</text><text x="62" y="62">t=0</text><text x="130" y="28">6</text><text x="200" y="99">1H</text><text x="256" y="76">0.25F</text><text x="324" y="99">1</text>');
+d7.innerHTML=sv(400,'<path d="M30 79V40H60M120 40H220M282 40H340M30 111V150H340"/><path d="M60 40'+zig+'"/><path d="M220 40'+coil+'"/>'
++'<path d="M190 40V88M178 88H202M178 98H202M190 98V150"/>'+vsrc(30,95,'')
++'<circle cx="340" cy="40" r="3"/><circle cx="340" cy="150" r="3"/>'
++'<text x="50" y="99">60V</text><text x="80" y="28">10</text><text x="202" y="96">-j10</text><text x="236" y="28">j10</text><text x="350" y="44">a</text><text x="350" y="154">b</text>');
+d8.innerHTML=sv(400,'<path d="M15 40V160M15 40H28M15 100H28M15 160H28M52 40H120M52 100H120M52 160H120M156 40H340M156 100H260M156 160H340"/>'
++'<circle cx="40" cy="40" r="12"/><circle cx="40" cy="100" r="12"/><circle cx="40" cy="160" r="12"/>'
++'<rect x="120" y="32" width="36" height="16"/><rect x="120" y="92" width="36" height="16"/><rect x="120" y="152" width="36" height="16"/>'
++'<polygon points="340,40 340,160 260,100"/>'
++'<rect x="290" y="64" width="20" height="12" style="fill:var(--s2)"/><rect x="290" y="124" width="20" height="12" style="fill:var(--s2)"/><rect x="332" y="86" width="16" height="28" style="fill:var(--s2)"/>'
++'<text x="130" y="26">Zl</text><text x="80" y="34">a</text><text x="80" y="94">b</text><text x="80" y="154">c</text><text x="280" y="190">Z(delta)</text><text x="4" y="22">Van</text>');
+</script>
+</body>
+</html>
