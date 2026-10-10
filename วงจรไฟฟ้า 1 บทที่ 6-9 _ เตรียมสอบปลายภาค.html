@@ -41,6 +41,8 @@ td.m{font-family:var(--mono);font-size:13.5px}
 svg.ck{width:100%;max-width:400px;display:block;margin:10px auto;background:var(--s2);border-radius:10px}
 svg.ck path,svg.ck rect,svg.ck circle,svg.ck polygon{stroke:var(--tx);stroke-width:2;fill:none}
 svg.ck text{fill:var(--ac4);font:13px var(--mono)}
+.tg{font:600 11px var(--mono);padding:1px 8px;border-radius:10px;margin:0 2px;white-space:nowrap}.tg.t{background:rgba(108,99,255,.22);color:#a89fff}.tg.p{background:rgba(0,212,170,.18);color:var(--ac2)}.tg.z{background:rgba(255,217,61,.18);color:var(--ac4)}.tg.r{background:rgba(255,255,255,.12);color:var(--tx)}.tg.s{background:rgba(255,107,107,.2);color:var(--ac3)}
+.calc select{margin-bottom:6px}
 details{background:var(--s2);border-radius:8px;padding:10px 14px;margin-top:10px;font-size:14.5px}
 summary{cursor:pointer;color:var(--ac2);font-weight:600}
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -51,12 +53,72 @@ summary{cursor:pointer;color:var(--ac2);font-weight:600}
 <div class="badge">CIRCUIT 1 · FINAL EXAM</div>
 <h1>วงจรไฟฟ้า 1 <span>บทที่ 6-9</span></h1>
 <p>สรุปอันดับสอง · สถานะอยู่ตัวไซน์ · กำลัง · สามเฟส (ไม่ใช้ลาปลาซ)</p>
-<div class="stats"><div><div class="sn">4</div><div class="sl">บท</div></div><div><div class="sn">11</div><div class="sl">ข้อฝึก</div></div><div><div class="sn">1</div><div class="sl">ตัวอย่างเต็มข้อ 20</div></div></div>
+<div class="stats"><div><div class="sn">4</div><div class="sl">บท</div></div><div><div class="sn">15</div><div class="sl">ข้อฝึก</div></div><div><div class="sn">1</div><div class="sl">ตัวอย่างเต็มข้อ 20</div></div></div>
 </div>
 <div class="tabs" id="tabs"></div>
 <div class="content">
 
-<div class="sec on" id="s0">
+<div class="sec on" id="sL">
+<div class="card"><h2>🔤 อ่านตัวแปรให้ออก: อยู่โดเมนไหน?</h2>
+<div class="def"><b class="l">ป้ายสีที่ใช้ทั้งหน้า</b>
+<span class="tg t">เวลา</span> ฟังก์ชันของ t &nbsp;
+<span class="tg p">เฟสเซอร์</span> เชิงซ้อน (โดเมนความถี่) &nbsp;
+<span class="tg z">Z / Y</span> อิมพีแดนซ์ แอดมิตแตนซ์ &nbsp;
+<span class="tg r">จริง</span> ตัวเลขจริง (ขนาด ค่าคงที่) &nbsp;
+<span class="tg s">S</span> กำลังเชิงซ้อน</div>
+<h3>ตัวแปร 5 ชนิด</h3>
+<table><tr><th>ชนิด</th><th>หน้าตา</th><th>ตัวอย่าง</th><th>ข้อควรจำ</th></tr>
+<tr><td><span class="tg t">เวลา</span></td><td class="m">ตัวพิมพ์เล็ก + (t)</td><td class="m">v(t), i(t), p(t), x(t), f(t)</td><td>มี t ในสูตร เช่น v(t) = V_m cos(ωt + θ)</td></tr>
+<tr><td><span class="tg p">เฟสเซอร์</span></td><td class="m">ตัวพิมพ์ใหญ่ มี ∠ หรือ j ไม่มี t</td><td class="m">V = 100∠30°, I, V_an, I_a</td><td>แทนไซน์ที่ ω คงที่ด้วยตัวเลขเชิงซ้อน 1 ตัว (ขนาด + เฟส)</td></tr>
+<tr><td><span class="tg z">Z / Y</span></td><td class="m">Z, Y</td><td class="m">Z = V/I = 3 + j4 Ω</td><td><b>ไม่ใช่เฟสเซอร์</b> เพราะไม่ได้มาจากฟังก์ชันของเวลา เป็นอัตราส่วนของเฟสเซอร์สองตัว</td></tr>
+<tr><td><span class="tg r">จริง</span></td><td class="m">ค่าเดียว ไม่มี ∠ j t</td><td class="m">R, L, C, ω, f, X_L, V_m, V_rms, P, Q, |S|, PF, θ</td><td>X_L = ωL, X_C = 1/ωC เป็นจำนวนจริง แต่ Z_L = jωL เป็นเชิงซ้อน</td></tr>
+<tr><td><span class="tg s">S</span></td><td class="m">S = P + jQ</td><td class="m">S = VI*</td><td>เชิงซ้อนแต่ไม่ใช่เฟสเซอร์ (ไม่หมุนตามเวลา) ส่วน |S| เป็นจำนวนจริง (VA)</td></tr></table>
+</div>
+
+<div class="card"><h2>📚 ตัวแปรของแต่ละบท</h2>
+<table><tr><th>บท</th><th>ตัวแปร</th><th>ชนิด</th></tr>
+<tr><td rowspan="4">6</td><td class="m">x, f(t), xₙ, x_f, v(t), i(t)</td><td><span class="tg t">เวลา</span></td></tr>
+<tr><td class="m">s (ในสมการ s²+a₁s+a₀=0)</td><td>ตัวแปรช่วยหารากของพหุนามเท่านั้น (ไม่ใช่เฟสเซอร์ ไม่ใช่เวลา)</td></tr>
+<tr><td class="m">s₁, s₂, α, ω₀, ω_d, A₁, A₂, A, B, C</td><td><span class="tg r">จริง</span> (s อาจเป็นเชิงซ้อนสังยุคตอนหน่วงขาด)</td></tr>
+<tr><td class="m">v_C(0), i_L(0), v′(0)</td><td><span class="tg r">จริง</span> ค่า ณ ขณะ t = 0 (ใช้เป็นเงื่อนไขเริ่มต้น)</td></tr>
+<tr><td rowspan="4">7</td><td class="m">v(t), i(t)</td><td><span class="tg t">เวลา</span></td></tr>
+<tr><td class="m">V, I (ตัวพิมพ์ใหญ่ = V_m∠θ)</td><td><span class="tg p">เฟสเซอร์</span> (ใช้ค่ายอด ถ้าโจทย์ไม่บอก RMS)</td></tr>
+<tr><td class="m">Z_R = R, Z_L = jωL, Z_C = −j/ωC</td><td><span class="tg z">Z</span></td></tr>
+<tr><td class="m">V_m, I_m, ω, R, L, C</td><td><span class="tg r">จริง</span></td></tr>
+<tr><td rowspan="4">8</td><td class="m">p(t)</td><td><span class="tg t">เวลา</span> (แกว่งที่ 2ω)</td></tr>
+<tr><td class="m">V, I ใน P = VI cosθ</td><td><span class="tg r">จริง</span> ขนาด RMS (V = V_m/√2)</td></tr>
+<tr><td class="m">V, I ใน S = VI*</td><td><span class="tg p">เฟสเซอร์</span> แบบ RMS (I* = สังยุคของ I)</td></tr>
+<tr><td class="m">P, Q, |S|, PF, θ &nbsp;/&nbsp; S</td><td><span class="tg r">จริง</span> &nbsp;/&nbsp; <span class="tg s">S</span></td></tr>
+<tr><td rowspan="3">9</td><td class="m">V_an, V_ab, I_a, I_AB (มี ∠)</td><td><span class="tg p">เฟสเซอร์</span></td></tr>
+<tr><td class="m">V_L, V_φ, I_L, I_φ (ในสูตร √3)</td><td><span class="tg r">จริง</span> ขนาด RMS</td></tr>
+<tr><td class="m">Z_φ, Z_Y, Z_Δ, Z_line &nbsp;/&nbsp; P_T, Q_T, S_T</td><td><span class="tg z">Z</span> &nbsp;/&nbsp; <span class="tg r">จริง</span> (รวม 3 เฟส)</td></tr></table>
+</div>
+
+<div class="card"><h2>🚦 กฎกันสับสน</h2>
+<div class="box def"><b class="l">เช็ก 3 ข้อก่อนใช้สูตร</b>1) มี t ไหม → <span class="tg t">เวลา</span> · 2) มี ∠ หรือ j ไหม → เชิงซ้อน (<span class="tg p">เฟสเซอร์</span> หรือ <span class="tg z">Z</span>) · 3) เป็นตัวเลขตัวเดียว → <span class="tg r">จริง</span></div>
+<div class="box warn"><b class="l">ห้ามปนโดเมน</b>ห้ามเขียน v(t) = Z·i(t) (ต้องเป็น V = Z·I) · ห้ามบวกเฟสเซอร์ของแหล่งคนละความถี่ (รวมผลที่โดเมนเวลา) · ห้ามใส่ jω ในสมการที่มี t · ผลลัพธ์เฟสเซอร์ต้องแปลงกลับเป็น v(t) ถ้าโจทย์ถาม</div>
+<div class="box ex"><b class="l">กฎแปลง</b>
+v(t) = V_m cos(ωt + θ) ⇄ V = V_m∠θ (ω ต้องคงที่และเท่ากันทั้งวงจร)<br>
+ถ้าโจทย์ให้ sin: sin(ωt + θ) = cos(ωt + θ − 90°) → ใช้ cos เป็นแกนอ้างอิงตลอดทั้งข้อ<br>
+ค่ายอด → RMS: หารด้วย √2 (V_rms = V_m/√2) · เฟสเซอร์แบบ RMS ใช้กับ S = VI*, ถ้าใช้ค่ายอดต้องคูณ ½: S = ½VI*<br>
+Z = V/I (เฟสเซอร์ ÷ เฟสเซอร์) · ωL, 1/ωC ใช้ ω ของแหล่งกำเนิด</div>
+</div>
+
+<div class="card calc"><h2>🔄 ตัวแปลงโดเมน</h2>
+ขนาดยอด V_m <input id="cv" type="number" value="100"> มุม θ° <input id="ct" type="number" value="30"> ω <input id="cw" type="number" value="100">
+<select id="cs" style="background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:6px;padding:6px;font:14px var(--sans)"><option value="cos">โจทย์ให้เป็น cos</option><option value="sin">โจทย์ให้เป็น sin</option></select>
+<div class="f" id="cvr"></div></div>
+
+<div class="card"><h2>🔎 ตัวอย่างอ่านโดเมนทีละบรรทัด (บท 7 ข้อ 20)</h2>
+<div class="f" style="line-height:2">i_g = 3cos5t A <span class="tg t">เวลา</span><br>
+→ I_g = 3∠0° A <span class="tg p">เฟสเซอร์</span> · ω = 5 <span class="tg r">จริง</span><br>
+Z_C = −j/(5×0.1) = −j2 Ω <span class="tg z">Z</span><br>
+V = I_g · Z_p <span class="tg p">เฟสเซอร์</span> = <span class="tg z">Z</span> × <span class="tg p">เฟสเซอร์</span> → <span class="tg p">เฟสเซอร์</span><br>
+V = 5∠−56.3° V <span class="tg p">เฟสเซอร์</span><br>
+→ v(t) = 5cos(5t − 56.3°) V <span class="tg t">เวลา</span></div></div>
+</div>
+
+<div class="sec" id="s0">
 <div class="card"><h2>⚡ บทที่ 6 วงจรอันดับสอง</h2>
 <div class="f">a₂x″ + a₁x′ + a₀x = f(t) &nbsp;→&nbsp; x = xₙ + x_f</div>
 <h3>ผลตอบสนองธรรมชาติ xₙ (ให้ f(t)=0)</h3>
@@ -77,6 +139,7 @@ summary{cursor:pointer;color:var(--ac2);font-weight:600}
 <div class="def"><b class="l">6.1 ที่มา</b>วงจรที่มีตัวสะสมพลังงาน 2 ตัว (L+C) เขียน KVL/KCL ได้สมการอันดับสอง</div>
 <div class="f">RLC อนุกรม: L·di/dt + Ri + (1/C)∫i dt = v_s<br>RLC ขนาน: C·dv/dt + v/R + (1/L)∫v dt = i_s<br>(ดิฟอีกครั้งเพื่อกำจัดอินทิกรัล)</div>
 <div class="def"><b class="l">6.2 ผลเฉลย</b>x = xₙ (ตอบสนองธรรมชาติ แก้สมการเมื่อ f=0) + x_f (ตอบสนองบังคับ ตามรูป f(t)) · ค่าคงที่ A₁, A₂ ได้จาก x(0) และ x′(0)</div>
+<div class="def"><b class="l">โดเมนของตัวแปรบทนี้</b>x, f(t), xₙ, x_f เป็น <span class="tg t">เวลา</span> ทั้งหมด · s ในสมการ s²+a₁s+a₀=0 เป็นตัวช่วยหารากเท่านั้น · A₁, A₂, α, ω₀ เป็น <span class="tg r">จริง</span></div>
 <h3>6.4 เทียบ α กับ ω₀</h3>
 <div class="f">อนุกรม α = R/2L · ขนาน α = 1/2RC · ω₀ = 1/√(LC)<br>α &gt; ω₀ หน่วงเกิน · α = ω₀ วิกฤติ · α &lt; ω₀ หน่วงขาด<br>s = −α ± √(α² − ω₀²)</div>
 </div>
@@ -141,10 +204,10 @@ a₂ <input id="c2" type="number" value="1"> a₁ <input id="c1" type="number" v
 
 <div class="sec" id="s1">
 <div class="card"><h2>🌊 บทที่ 7 สถานะอยู่ตัวของสัญญาณไซน์</h2>
-<div class="f">v(t) = V_m sin(ωt + θ_v) &nbsp; i(t) = I_m sin(ωt + θ_i)<br>v นำ i อยู่ θ_v − θ_i</div>
+<div class="f">v(t) = V_m sin(ωt + θ_v) <span class="tg t">เวลา</span> &nbsp; i(t) = I_m sin(ωt + θ_i) <span class="tg t">เวลา</span><br>V_m, I_m, ω, θ <span class="tg r">จริง</span> · v นำ i อยู่ θ_v − θ_i<br>เฟสเซอร์: V = V_m∠θ_v <span class="tg p">เฟสเซอร์</span> I = I_m∠θ_i <span class="tg p">เฟสเซอร์</span></div>
 <div class="def"><b class="l">หลักการ</b>ω ของผลตอบสนอง = ω ของแหล่งกำเนิด (ต่างกันแค่ขนาดและเฟส) → ใช้เฟสเซอร์แปลงโดเมนเวลาเป็นโดเมนความถี่</div>
 <div class="def"><b class="l">เฟสเซอร์ = จำนวนเชิงซ้อน 3 รูป</b>เชิงขั้ว (V∠θ) · เลขชี้กำลัง (Ve^(jθ)) · พิกัดฉาก (a + jb)</div>
-<h3>อิมพีแดนซ์ Z = V/I (Ω)</h3>
+<h3>อิมพีแดนซ์ Z = V/I (Ω) <span class="tg z">Z</span> = <span class="tg p">เฟสเซอร์</span> ÷ <span class="tg p">เฟสเซอร์</span></h3>
 <table><tr><th>ตัวองค์ประกอบ</th><th>Z</th><th>กระแสเทียบแรงดัน</th></tr>
 <tr><td>R</td><td class="m">R</td><td>เฟสเดียวกัน</td></tr>
 <tr><td>L</td><td class="m">jωL</td><td>ล้าหลัง 90°</td></tr>
@@ -171,11 +234,12 @@ a₂ <input id="c2" type="number" value="1"> a₁ <input id="c1" type="number" v
 <div class="card"><h2>🔌 บทที่ 8 กำลังในสถานะอยู่ตัว</h2>
 <div class="def"><b class="l">RMS</b>V = V_m/√2, I = I_m/√2 (ให้กำลังความร้อนเท่ากับไฟตรงค่านั้น)</div>
 <table><tr><th>ปริมาณ</th><th>สูตร</th><th>หน่วย</th></tr>
-<tr><td>กำลังจริง P</td><td class="m">VI cosθ</td><td>W</td></tr>
-<tr><td>กำลังจินตภาพ Q</td><td class="m">VI sinθ = P tanθ</td><td>var</td></tr>
-<tr><td>กำลังเชิงซ้อน S</td><td class="m">VI* = P + jQ</td><td>VA</td></tr>
-<tr><td>กำลังปรากฏ |S|</td><td class="m">√(P²+Q²) = VI</td><td>VA</td></tr>
-<tr><td>ตัวประกอบกำลัง PF</td><td class="m">P/S = cosθ</td><td>-</td></tr></table>
+<tr><td>กำลังจริง P <span class="tg r">จริง</span></td><td class="m">VI cosθ</td><td>W</td></tr>
+<tr><td>กำลังจินตภาพ Q <span class="tg r">จริง</span></td><td class="m">VI sinθ = P tanθ</td><td>var</td></tr>
+<tr><td>กำลังเชิงซ้อน S <span class="tg s">S</span></td><td class="m">VI* = P + jQ</td><td>VA</td></tr>
+<tr><td>กำลังปรากฏ |S| <span class="tg r">จริง</span></td><td class="m">√(P²+Q²) = VI</td><td>VA</td></tr>
+<tr><td>ตัวประกอบกำลัง PF <span class="tg r">จริง</span></td><td class="m">P/S = cosθ</td><td>-</td></tr></table>
+<div class="box def"><b class="l">V, I ในบทนี้คืออะไร</b>ใน P = VI cosθ และ Q = VI sinθ: V, I เป็น <span class="tg r">จริง</span> ขนาด RMS · ใน S = VI*: V, I เป็น <span class="tg p">เฟสเซอร์</span> แบบ RMS · p(t) เป็น <span class="tg t">เวลา</span> · ถ้าใช้เฟสเซอร์ค่ายอดต้องเป็น S = ½VI*</div>
 <div class="warn"><b class="l">ระวัง</b>θ = มุมระหว่างแรงดันกับกระแส (θ_v − θ_i) และต้องบอก "ล้ำหน้า/ล้าหลัง" ทุกครั้ง · ในสูตร S = VI* มี conjugate ของกระแส</div>
 <h3>ปรับปรุง PF ด้วยตัวเก็บประจุขนาน</h3>
 <div class="f">Q_C = P(tanθ₁ − tanθ₂) &nbsp; C = Q_C / (ωV²)</div>
@@ -200,6 +264,7 @@ a₂ <input id="c2" type="number" value="1"> a₁ <input id="c1" type="number" v
 <div class="ex"><b class="l">วงจรสมมูลเฟสเดียว</b>ใช้กับสตาร์-สตาร์สมดุล: วาดเฟส a เฟสเดียว ให้ Z นิวทรัล = 0 คำนวณแล้วคูณ 3 เมื่อหากำลังรวม</div>
 <h3>กำลัง (ใช้ได้ทั้ง Y และ Δ)</h3>
 <div class="f">P_T = 3P_φ = √3 V_L I_L cosθ_φ<br>Q_T = 3Q_φ = √3 V_L I_L sinθ_φ<br>S_T = 3S_φ = √3 V_L I_L = √(P_T²+Q_T²)<br>PF = P_φ/S_φ = P_T/S_T = cosθ_φ</div>
+<div class="box def"><b class="l">โดเมนของตัวแปรบทนี้</b>V_an, V_ab, I_a, I_AB ที่มี ∠ เป็น <span class="tg p">เฟสเซอร์</span> · V_L, V_φ, I_L, I_φ ในสูตร √3 เป็น <span class="tg r">จริง</span> (ขนาด RMS) · Z_φ, Z_Y, Z_Δ เป็น <span class="tg z">Z</span> · P_T, Q_T, S_T เป็น <span class="tg r">จริง</span></div>
 <div class="warn"><b class="l">ระวัง</b>θ_φ คือมุมอิมพีแดนซ์โหลดต่อเฟส ไม่ใช่มุมระหว่างแรงดันสายกับกระแสสาย</div>
 </div>
 <div class="card"><h2>📖 9.1-9.3 พื้นฐานสามเฟส</h2>
@@ -416,7 +481,7 @@ Z_p = 3(12 − j5)/(3 + 12 − j5) = (36 − j15)/(15 − j5)<br>
 คูณสังยุคของส่วน: (36 − j15)(15 + j5)/(15² + 5²) = (540 + j180 − j225 − j²75)/250<br>
 = (540 + 75 − j45)/250 = (615 − j45)/250 = <b>2.46 − j0.18 Ω</b><br>
 <b>ขั้น 2 · อนุกรมกับ j2</b> (กิ่งจากโนด A ลงกราวด์): Z_br = j2 + 2.46 − j0.18 = <b>2.46 + j1.82 Ω</b><br>
-<b>ขั้น 3 · KCL ที่โนด A</b> (V = แรงดันโนด A): กระแสเข้า = กระแสออก<br>
+<b>ขั้น 3 · KCL ที่โนด A</b> (V = แรงดันโนด A <span class="tg p">เฟสเซอร์</span> · Z_br <span class="tg z">Z</span> · I <span class="tg p">เฟสเซอร์</span> · ตัวเลข 4 Ω, 8∠0° V เป็นค่าที่อยู่ในโดเมนเฟสเซอร์แล้ว): กระแสเข้า = กระแสออก<br>
 เข้า: I = (8 − V)/4 และแหล่งกระแส 1∠0° A &nbsp;| ออก: V/Z_br<br>
 (8 − V)/4 + 1 = V/Z_br → 2 − V/4 + 1 = V/Z_br → V(1/4 + 1/Z_br) = 3<br>
 1/Z_br = (2.46 − j1.82)/(2.46² + 1.82²) = (2.46 − j1.82)/9.364 = 0.2627 − j0.1944<br>
@@ -435,26 +500,26 @@ Z_p = 3(12 − j5)/(3 + 12 − j5) = (36 − j15)/(15 − j5)<br>
 <details open><summary>วิธีทำ</summary>
 <div class="def"><b class="l">แผน</b>วงจรมี 2 ส่วนที่แยกกัน เชื่อมกันผ่านแหล่งควบคุม 2v เท่านั้น → หา v จากส่วนซ้ายก่อน แล้วนำ 2v ไปหา i ในส่วนขวา</div>
 <b>ขั้น 1 · เฟสเซอร์และอิมพีแดนซ์ (ω = 5 rad/s)</b><br>
-i_g = 3cos5t → I_g = 3∠0° A<br>
-Z_C = −j/(ωC) = −j/(5×0.1) = <b>−j2 Ω</b> &nbsp;·&nbsp; Z_L = jωL = j5×0.2 = <b>j1 Ω</b><br>
+i_g = 3cos5t <span class="tg t">เวลา</span> → I_g = 3∠0° A <span class="tg p">เฟสเซอร์</span> (ใช้ cos เป็นแกนอ้างอิง)<br>
+Z_C <span class="tg z">Z</span> = −j/(ωC) = −j/(5×0.1) = <b>−j2 Ω</b> &nbsp;·&nbsp; Z_L = jωL = j5×0.2 = <b>j1 Ω</b><br>
 <b>ขั้น 2 · ส่วนซ้าย: ตัวต้านทาน 3Ω ขนานกับ C ถูกขับด้วยแหล่งกระแส</b><br>
 Z_p = 3(−j2)/(3 − j2) = −j6/(3 − j2) = −j6(3 + j2)/13 = (12 − j18)/13 = 0.923 − j1.385 Ω<br>
 (หรือใช้แอดมิตแตนซ์: Y = 1/3 + j0.5 → V = I_g/Y)<br>
-<b>V</b> = I_g·Z_p = 3(0.923 − j1.385) = 2.769 − j4.154 V<br>
+<b>V</b> <span class="tg p">เฟสเซอร์</span> = I_g·Z_p = <span class="tg p">เฟสเซอร์</span> × <span class="tg z">Z</span> = 3(0.923 − j1.385) = 2.769 − j4.154 V<br>
 |V| = √(2.769² + 4.154²) = 18/√13 = 4.99 ≈ 5 V · มุม = −tan⁻¹(4.154/2.769) = −56.3°<br>
-<b>V = 5∠−56.3° V</b> → <b>v = 5cos(5t − 56.3°) V</b> ✓ (แหล่งกระแสฝั่งซ้ายไม่ขึ้นกับ i)<br>
+<b>V = 5∠−56.3° V</b> → <b>v = 5cos(5t − 56.3°) V</b> <span class="tg t">เวลา</span> ✓ (แหล่งกระแสฝั่งซ้ายไม่ขึ้นกับ i)<br>
 <b>ขั้น 3 · ส่วนขวา: KVL</b> (แหล่งควบคุม 2v ขั้ว + อยู่บน กระแส i ไหลออกจากขั้ว + ไปทางขวา)<br>
 2V − 4I − jωL·I = 0 → 2V = (4 + j1)I<br>
 Z = 4 + j1 = 4.123∠14.04° Ω · 2V = 2×4.99∠−56.3° = 9.98∠−56.3° V<br>
 <b>I</b> = 2V/Z = 9.98∠−56.3°/4.123∠14.04° = 2.42∠(−56.3° − 14.04°) = <b>2.42∠−70.3° A</b><br>
-→ <b>i = 2.4cos(5t − 70.3°) A</b> ✓ ตรงเฉลย<br>
+→ <b>i = 2.4cos(5t − 70.3°) A</b> <span class="tg t">เวลา</span> ✓ ตรงเฉลย (I เป็น <span class="tg p">เฟสเซอร์</span> แปลงกลับเป็นเวลาแล้ว)<br>
 <b>ตรวจ:</b> |I|·|Z| = 2.42×4.123 = 9.98 = |2V| ✓ · i ล้าหลัง 2v อยู่ 14.04° เพราะโหลดเป็นแบบเหนี่ยวนำ (Z มีส่วนจินตภาพบวก) ✓
 <div class="warn" style="margin-top:8px"><b class="l">ระวัง</b>แหล่งควบคุมต้องแทนด้วยค่า 2V (เฟสเซอร์ของ v) ไม่ใช่เลขคงที่ · ตัวเก็บประจุและตัวต้านทานฝั่งซ้ายไม่มีผลต่อ i โดยตรง เพราะขับด้วยแหล่งกระแสอุดมคติ</div></details></div>
 </div>
 </div>
 
 <script>
-const T=['บทที่ 6','บทที่ 7','บทที่ 8','บทที่ 9','แบบฝึกหัด','โจทย์วงจร','แบบฝึกหัด 8','แบบฝึกหัด 7'];
+const T=['ตัวแปร/โดเมน','บทที่ 6','บทที่ 7','บทที่ 8','บทที่ 9','แบบฝึกหัด','โจทย์วงจร','แบบฝึกหัด 8','แบบฝึกหัด 7'];
 const tb=document.getElementById('tabs');
 T.forEach((t,i)=>{const b=document.createElement('button');b.className='tab'+(i?'':' on');b.textContent=t;
 b.onclick=()=>{document.querySelectorAll('.tab').forEach((x,j)=>x.classList.toggle('on',i==j));document.querySelectorAll('.sec').forEach((x,j)=>x.classList.toggle('on',i==j));scrollTo(0,0)};tb.appendChild(b)});
@@ -478,7 +543,11 @@ const Q=[
 {c:'บท 9',q:'โหลดสามเฟสสมดุล V_L = 200 V, I_L = 10 A, PF = 0.8 ได้ P_T เท่าใด',o:['1.6 kW','2.77 kW','4.8 kW','3.46 kW'],a:1,e:'P_T = √3 V_L I_L cosθ = 1.732×200×10×0.8 ≈ 2771 W ≈ 2.77 kW (ข้อ 4.8 kW เกิดจากใช้ 3 แทน √3)'},
 {c:'บท 8',q:'สัญญาณสี่เหลี่ยมสลับ +10 V และ −10 V ค่า RMS เท่าใด',o:['10 V','7.07 V','5.77 V','0 V'],a:0,e:'x² = 100 ตลอดเวลา → RMS = √100 = 10 V (ค่าเฉลี่ยเป็น 0 แต่ RMS ไม่ใช่ 0)'},
 {c:'บท 9',q:'โหลดเดลตา Z_Δ = 30∠20° Ω เมื่อแปลงเป็นสตาร์สมมูล Z_Y เท่าใด',o:['90∠20° Ω','30∠20° Ω','10∠20° Ω','10√3∠20° Ω'],a:2,e:'Δ→Y สมดุล: Z_Y = Z_Δ/3 = 10∠20° Ω (Y→Δ คูณ 3)'},
-{c:'บท 7',q:'ในการหาวงจรสมมูลเทเวนิน Z_th หาได้จากข้อใด',o:['ปิดแหล่งอิสระ แล้วมองอิมพีแดนซ์จากขั้ว','วัด V_oc อย่างเดียว','ต่อขั้วลัดวงจรแล้ววัดแรงดัน','ใช้ I_N คูณ V_th'],a:0,e:'Z_th = Z มองจากขั้วเมื่อปิดแหล่งอิสระ (แหล่งแรงดัน → ลัดวงจร, แหล่งกระแส → เปิดวงจร) หรือ Z_th = V_oc/I_sc'}
+{c:'บท 7',q:'ในการหาวงจรสมมูลเทเวนิน Z_th หาได้จากข้อใด',o:['ปิดแหล่งอิสระ แล้วมองอิมพีแดนซ์จากขั้ว','วัด V_oc อย่างเดียว','ต่อขั้วลัดวงจรแล้ววัดแรงดัน','ใช้ I_N คูณ V_th'],a:0,e:'Z_th = Z มองจากขั้วเมื่อปิดแหล่งอิสระ (แหล่งแรงดัน → ลัดวงจร, แหล่งกระแส → เปิดวงจร) หรือ Z_th = V_oc/I_sc'},
+{c:'โดเมน',q:'ข้อใดต่อไปนี้ไม่ใช่เฟสเซอร์',o:['V = 100∠30° V','I = 5∠−20° A','Z = 3 + j4 Ω','V_an = 220∠0° V'],a:2,e:'Z เป็นอัตราส่วน V/I ของเฟสเซอร์สองตัว ไม่ได้มาจากฟังก์ชันของเวลา จึงเป็นอิมพีแดนซ์ (เชิงซ้อน) แต่ไม่ใช่เฟสเซอร์'},
+{c:'โดเมน',q:'v(t) = 10 sin(100t + 30°) V แปลงเป็นเฟสเซอร์โดยใช้ cos เป็นแกนอ้างอิง ได้เท่าใด',o:['10∠30° V','10∠−60° V','10∠120° V','10∠−30° V'],a:1,e:'sin(ωt + θ) = cos(ωt + θ − 90°) → มุม = 30° − 90° = −60° → V = 10∠−60° V (เฟสเซอร์ ค่ายอด)'},
+{c:'โดเมน',q:'ใน P = VI cosθ ตัวแปร V และ I คืออะไร',o:['เฟสเซอร์ค่ายอด','ค่า RMS ขนาดจริง','ฟังก์ชันของเวลา','อิมพีแดนซ์'],a:1,e:'V = V_m/√2 และ I = I_m/√2 เป็นจำนวนจริง ถ้าใช้ค่ายอดต้องใส่ ½ เป็น P = ½V_mI_m cosθ'},
+{c:'โดเมน',q:'s ในสมการลักษณะเฉพาะ s² + 6s + 9 = 0 คืออะไร',o:['เฟสเซอร์','ฟังก์ชันของเวลา','ตัวแปรช่วยหารากของพหุนาม','อิมพีแดนซ์'],a:2,e:'ในบทที่ 6 s เป็นแค่ตัวแทน d/dt ที่ใช้หารากของสมการ (ได้ s = −3 ซ้ำ) ไม่ใช่เฟสเซอร์และไม่ใช่เวลา'}
 ];
 const qc=document.getElementById('qc');
 Q.forEach((q,i)=>{const d=document.createElement('div');d.className='q';
@@ -564,6 +633,12 @@ d14.innerHTML=sv(480,'<path d="M30 79V40H220M440 150H30V111M300 40V76M300 114V15
 +dg(130,40)+dg(130,150)+dg(220,150)
 +'<text x="150" y="99">0.1F</text><text x="236" y="99">3</text><text x="196" y="72">+</text><text x="196" y="99">v</text><text x="196" y="134">-</text>'
 +'<text x="322" y="99">2v</text><text x="293" y="92" style="font-size:11px">+</text><text x="293" y="109" style="font-size:11px">-</text><text x="355" y="28">4</text><text x="350" y="62">i &gt;</text><text x="450" y="99">0.2H</text><text x="20" y="188">ig = 3cos5t A</text>');
+function cvt(){const m=+cv.value,t=+ct.value,w=+cw.value;let th=cs.value=='sin'?t-90:t;
+const r=th*Math.PI/180,a=m*Math.cos(r),b=m*Math.sin(r),R=m/Math.SQRT2;
+cvr.innerHTML='v(t) = '+m+' '+cs.value+'('+w+'t '+(t<0?'- '+(-t):'+ '+t)+'°) <span class="tg t">เวลา</span><br>'
++'เฟสเซอร์ (ค่ายอด, cos อ้างอิง) V = '+m+'∠'+th+'° = '+a.toFixed(2)+(b<0?' - j':' + j')+Math.abs(b).toFixed(2)+' <span class="tg p">เฟสเซอร์</span><br>'
++'ค่า RMS = '+R.toFixed(2)+' <span class="tg r">จริง</span> · เฟสเซอร์แบบ RMS = '+R.toFixed(2)+'∠'+th+'°'}
+['cv','ct','cw','cs'].forEach(i=>document.getElementById(i).oninput=cvt);cvt();
 </script>
 </body>
 </html>
