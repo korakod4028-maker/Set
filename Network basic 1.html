@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCNA Module 1 — Network Fundamentals</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg:        #0a0e17;
+    --surface:   #111827;
+    --surface2:  #1a2236;
+    --border:    #1e2d47;
+    --accent:    #00d4ff;
+    --accent2:   #7c3aed;
+    --accent3:   #10b981;
+    --warn:      #f59e0b;
+    --danger:    #ef4444;
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --mono:      'JetBrains Mono', monospace;
+    --sans:      'Sarabun', 'Inter', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,23,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    height: 56px;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    background: var(--accent2);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: .05em;
+  }
+  .badge.green { background: var(--accent3); }
+  header h1 { font-size: 0.95rem; font-weight: 600; color: var(--accent); flex: 1; }
+  nav { display: flex; gap: 1rem; }
+  nav a {
+    font-size: 0.78rem; color: var(--muted); text-decoration: none;
+    font-family: var(--mono); transition: color .2s;
+  }
+  nav a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem; color: var(--accent);
+    letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .hero h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700; line-height: 1.1;
+    background: linear-gradient(135deg, #e2e8f0 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+  }
+  .hero p { color: var(--muted); max-width: 540px; margin: 0 auto 2rem; }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    margin-top: 2.5rem;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono); font-size: 2rem; font-weight: 700;
+    color: var(--accent); display: block;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: .05em; }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .progress-label { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+  .progress-track {
+    flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 0.4s ease;
+  }
+  #progress-text { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); white-space: nowrap; }
+
+  /* ── LAYOUT ── */
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-family: var(--mono); font-size: 0.78rem;
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--muted); cursor: pointer; padding: 0.75rem 1.25rem;
+    white-space: nowrap; transition: all .2s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn:hover { color: var(--text); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── SECTION TITLE ── */
+  .section-label {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--accent2); letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-size: 1.6rem; font-weight: 700; margin-bottom: 0.35rem;
+    color: var(--text);
+  }
+  .section-sub { color: var(--muted); margin-bottom: 2rem; font-size: 0.9rem; }
+
+  /* ── CARDS ── */
+  .grid { display: grid; gap: 1rem; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem; transition: border-color .2s, transform .15s;
+  }
+  .card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+  .card-icon {
+    font-size: 1.5rem; margin-bottom: 0.75rem; display: block;
+  }
+  .card h3 {
+    font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem;
+    color: var(--accent);
+  }
+  .card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .card ul { padding-left: 1.1rem; margin-top: 0.5rem; }
+  .card li { font-size: 0.83rem; color: var(--muted); margin-bottom: 0.2rem; }
+
+  /* ── INFO BOX ── */
+  .infobox {
+    background: var(--surface2); border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.5rem 0;
+    font-size: 0.88rem; color: var(--muted);
+  }
+  .infobox.warn { border-color: var(--warn); }
+  .infobox.danger { border-color: var(--danger); }
+  .infobox.green { border-color: var(--accent3); }
+  .infobox strong { color: var(--text); }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th {
+    background: var(--surface2); color: var(--accent);
+    font-family: var(--mono); font-size: 0.73rem; letter-spacing: .08em;
+    padding: 0.65rem 1rem; text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); color: var(--text); }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0;
+    font-family: var(--mono); font-size: 0.8rem; color: #a5d6ff;
+    overflow-x: auto; line-height: 1.8;
+  }
+  .code-block .comment { color: var(--muted); }
+  .code-block .highlight { color: var(--accent3); }
+
+  /* ── COMPARE BLOCK ── */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .compare-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem;
+  }
+  .compare-box .compare-label {
+    font-family: var(--mono); font-size: 0.68rem;
+    letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .compare-box.blue .compare-label { color: var(--accent); }
+  .compare-box.purple .compare-label { color: var(--accent2); }
+  .compare-box h4 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .compare-box p { font-size: 0.82rem; color: var(--muted); }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .flow-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.4rem 0.8rem;
+    font-family: var(--mono); font-size: 0.78rem; color: var(--accent);
+  }
+  .flow-arrow { color: var(--muted); font-size: 1rem; }
+
+  /* ── QUIZ ── */
+  .quiz-container { display: flex; flex-direction: column; gap: 1.5rem; }
+  .quiz-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; transition: border-color .2s;
+  }
+  .quiz-card.correct { border-color: var(--accent3); }
+  .quiz-card.wrong { border-color: var(--danger); }
+  .quiz-num {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--accent2); letter-spacing: .1em; margin-bottom: 0.5rem;
+  }
+  .quiz-q { font-weight: 600; margin-bottom: 1rem; font-size: 0.95rem; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .quiz-opt {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.65rem 1rem;
+    cursor: pointer; font-size: 0.85rem; color: var(--muted);
+    transition: all .15s; text-align: left;
+  }
+  .quiz-opt:hover { border-color: var(--accent2); color: var(--text); }
+  .quiz-opt.selected-correct { background: rgba(16,185,129,.15); border-color: var(--accent3); color: var(--accent3); }
+  .quiz-opt.selected-wrong { background: rgba(239,68,68,.12); border-color: var(--danger); color: var(--danger); }
+  .quiz-opt.reveal-correct { background: rgba(16,185,129,.08); border-color: var(--accent3); color: var(--accent3); }
+  .quiz-feedback {
+    margin-top: 0.75rem; font-size: 0.82rem; padding: 0.6rem 0.9rem;
+    border-radius: 6px; display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(16,185,129,.12); color: var(--accent3); }
+  .quiz-feedback.fail { background: rgba(239,68,68,.1); color: #fca5a5; }
+
+  .quiz-controls {
+    display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; align-items: center;
+  }
+  .btn {
+    font-family: var(--mono); font-size: 0.8rem;
+    border: none; border-radius: 8px; padding: 0.6rem 1.4rem; cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent2); color: #fff; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-accent { background: var(--accent3); color: #fff; }
+  .quiz-score {
+    font-family: var(--mono); font-size: 0.85rem; color: var(--muted); margin-top: 1.5rem;
+    display: none;
+  }
+  .quiz-score.show { display: block; }
+  #score-display { color: var(--accent); font-size: 1.2rem; }
+
+  /* ── FLASHCARD ── */
+  .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+  .flashcard {
+    perspective: 800px; height: 160px; cursor: pointer;
+  }
+  .flashcard-inner {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d; transition: transform .5s ease;
+  }
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+  .fc-front, .fc-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 10px; padding: 1.25rem;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+  }
+  .fc-front {
+    background: var(--surface); border: 1px solid var(--border);
+  }
+  .fc-front .fc-term {
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--accent);
+  }
+  .fc-front .fc-hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; }
+  .fc-back {
+    background: var(--surface2); border: 1px solid var(--accent2);
+    transform: rotateY(180deg);
+  }
+  .fc-back .fc-def { font-size: 0.85rem; color: var(--text); line-height: 1.5; }
+  .fc-back .fc-example { font-size: 0.75rem; color: var(--muted); margin-top: 0.5rem; font-style: italic; }
+
+  /* ── BANDWIDTH CALC ── */
+  .calc-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .calc-box h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--accent); }
+  .input-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+  .input-group label { font-size: 0.78rem; color: var(--muted); font-family: var(--mono); }
+  .input-group input, .input-group select {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); border-radius: 6px; padding: 0.5rem 0.75rem;
+    font-family: var(--mono); font-size: 0.88rem; width: 100%;
+  }
+  .input-group input:focus, .input-group select:focus {
+    outline: none; border-color: var(--accent2);
+  }
+  .calc-result {
+    background: #0d1117; border: 1px solid var(--accent2);
+    border-radius: 8px; padding: 1rem;
+    font-family: var(--mono); font-size: 0.82rem;
+    line-height: 2;
+  }
+  .calc-result .r-val { color: var(--accent); font-weight: 700; }
+  .calc-result .r-label { color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .compare { grid-template-columns: 1fr; }
+    nav { display: none; }
+    .hero-stats { gap: 1.5rem; }
+    .stat-num { font-size: 1.5rem; }
+  }
+
+  /* ── SEPARATOR ── */
+  .sep { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: 0.68rem;
+    padding: 2px 7px; border-radius: 4px; margin: 2px;
+    background: rgba(0,212,255,.1); color: var(--accent); border: 1px solid rgba(0,212,255,.2);
+  }
+  .tag.purple { background: rgba(124,58,237,.15); color: #c4b5fd; border-color: rgba(124,58,237,.3); }
+  .tag.green { background: rgba(16,185,129,.12); color: #6ee7b7; border-color: rgba(16,185,129,.25); }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(124,58,237,.08), rgba(0,212,255,.06));
+    border: 1px solid rgba(0,212,255,.15); border-radius: 10px;
+    padding: 1.25rem 1.5rem; margin: 1.5rem 0;
+  }
+  .highlight-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+  .highlight-box p { font-size: 0.87rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <span class="badge">CCNA</span>
+  <span class="badge green">MODULE 1</span>
+  <h1>Network Fundamentals — Study Guide</h1>
+  <nav>
+    <a href="#" onclick="switchTab('summary')">📖 Summary</a>
+    <a href="#" onclick="switchTab('flashcards')">🃏 Flashcards</a>
+    <a href="#" onclick="switchTab('quiz')">✅ Quiz</a>
+    <a href="#" onclick="switchTab('tools')">🔧 Tools</a>
+  </nav>
+</header>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <span class="progress-label">QUIZ PROGRESS</span>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <span id="progress-text">0 / 20</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">CISCO NETWORKING ACADEMY · INTRO TO NETWORKS</div>
+  <h2>Module 1<br>The Connected World</h2>
+  <p>สรุปเนื้อหาครบ + Flashcards + แบบฝึกหัด สำหรับการเตรียมตัวสอบ CCNA</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">3</span><span class="stat-label">Sub-Modules</span></div>
+    <div class="stat"><span class="stat-num">20</span><span class="stat-label">Quiz Questions</span></div>
+    <div class="stat"><span class="stat-num">24</span><span class="stat-label">Flashcards</span></div>
+    <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Calculators</span></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('summary')">📖 เนื้อหา</button>
+    <button class="tab-btn" onclick="switchTab('flashcards')">🃏 Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">✅ Quiz</button>
+    <button class="tab-btn" onclick="switchTab('tools')">🔧 Tools</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: SUMMARY
+  ══════════════════════════════════════════ -->
+  <div id="tab-summary" class="tab-panel active">
+
+    <!-- 1.1 Connected World -->
+    <div class="section-label">1.1</div>
+    <div class="section-title">The Connected World</div>
+    <div class="section-sub">อินเทอร์เน็ตและโลกที่เชื่อมต่อกัน</div>
+
+    <div class="highlight-box">
+      <h4>🌐 อินเทอร์เน็ต = Network of Networks</h4>
+      <p>อินเทอร์เน็ตไม่มีเจ้าของ ไม่ใช่ของรัฐบาล บริษัท หรือคนใดคนหนึ่ง แต่เกิดจากการเชื่อมเครือข่ายจำนวนมากทั่วโลกเข้าหากัน</p>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <span class="card-icon">🏠</span>
+        <h3>Small Home Network</h3>
+        <p>เครือข่ายในบ้านขนาดเล็ก เชื่อมมือถือ คอม Smart TV และ Printer ผ่าน Wi-Fi Router เข้าอินเทอร์เน็ต</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏢</span>
+        <h3>SOHO Network</h3>
+        <p><strong>Small Office / Home Office</strong> — ใช้แชร์ไฟล์ แชร์ Printer เชื่อมต่อระบบบริษัท เหมาะกับร้านค้า คาเฟ่ หรือทำงานจากบ้าน</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏗️</span>
+        <h3>Medium to Large Network</h3>
+        <p>เครือข่ายระดับองค์กร เช่น มหาวิทยาลัย ธนาคาร โรงพยาบาล มีอุปกรณ์นับร้อยถึงนับพันเครื่อง</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌍</span>
+        <h3>World Wide Web (Internet)</h3>
+        <p>เกิดจากการเชื่อม Local Networks ทั้งหมดทั่วโลกเข้าหากัน เป็นเครือข่ายที่ใหญ่ที่สุดในโลก</p>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- IoT -->
+    <div class="section-label">1.1 — IoT</div>
+    <div class="section-title">Internet of Things</div>
+    <div class="section-sub">ทุกอุปกรณ์สามารถเชื่อมอินเทอร์เน็ตและส่งข้อมูลได้</div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="card-icon">📱</span>
+        <h3>Mobile Devices</h3>
+        <ul>
+          <li>Smartphone (GPS, กล้อง, Internet)</li>
+          <li>Tablet</li>
+          <li>Smartwatch (วัดชีพจร, นับก้าว)</li>
+          <li>Smart Glasses (HUD)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏡</span>
+        <h3>Connected Home</h3>
+        <ul>
+          <li>Smart TV / Gaming Console</li>
+          <li>Security System (กล้อง, ล็อค)</li>
+          <li>Smart Appliances (ตู้เย็น, เตาอบ)</li>
+          <li>Smart Lamp / Air Conditioner</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏭</span>
+        <h3>Other Connected Devices</h3>
+        <ul>
+          <li>Smart Car (GPS, แจ้งเตือนอุบัติเหตุ)</li>
+          <li>RFID Tag (ติดตามสินค้า)</li>
+          <li>Sensor / Actuator (เกษตรอัตโนมัติ)</li>
+          <li>Medical Devices (Pacemaker, ปั๊มอินซูลิน)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="infobox green">
+      <strong>Flow พื้นฐาน IoT:</strong><br>
+      <div class="flow" style="margin-top:.5rem">
+        <div class="flow-box">Sensor/Device</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box">Local Network</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box">Internet</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box">Server/Cloud</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box">User</div>
+      </div>
+      <br><strong>Sensor</strong> = ตรวจจับ (อุณหภูมิ, ความชื้น, การเคลื่อนไหว) &nbsp;|&nbsp;
+      <strong>Actuator</strong> = สั่งงาน (มอเตอร์, เปิดน้ำ, ประตูอัตโนมัติ)
+    </div>
+
+    <hr class="sep">
+
+    <!-- 1.2 Data -->
+    <div class="section-label">1.2</div>
+    <div class="section-title">Data</div>
+    <div class="section-sub">ข้อมูลดิจิทัล — Binary, Bit, Byte, ASCII</div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>Volunteered Data</h3>
+        <p>ข้อมูลที่เราตั้งใจให้เอง เช่น สมัครสมาชิก อัปโหลดรูป กรอกชื่อ</p>
+        <div class="tag" style="margin-top:.5rem">ตั้งใจให้</div>
+      </div>
+      <div class="card">
+        <h3>Observed Data</h3>
+        <p>ระบบเก็บอัตโนมัติจากพฤติกรรม เช่น GPS, Location, ประวัติการใช้งาน</p>
+        <div class="tag purple" style="margin-top:.5rem">ติดตาม</div>
+      </div>
+      <div class="card">
+        <h3>Inferred Data</h3>
+        <p>ระบบวิเคราะห์จากพฤติกรรม เช่น Credit Score, การแนะนำสินค้า, คาดเดานิสัย</p>
+        <div class="tag green" style="margin-top:.5rem">วิเคราะห์</div>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:1.5rem">
+      <table>
+        <thead>
+          <tr><th>หน่วย</th><th>ความหมาย</th><th>ตัวอย่าง</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Bit</td><td>Binary Digit — หน่วยเล็กสุด (0 หรือ 1)</td><td>สวิตช์ ON/OFF</td></tr>
+          <tr><td>Byte</td><td>8 Bits รวมกัน</td><td>ตัวอักษร 1 ตัว (ASCII)</td></tr>
+          <tr><td>Binary</td><td>เลขฐานสอง คอมพิวเตอร์เข้าใจได้เท่านี้</td><td>01000001 = "A"</td></tr>
+          <tr><td>ASCII</td><td>มาตรฐานแปลงตัวอักษร/สัญลักษณ์ → Binary</td><td>A=65, a=97, 0=48</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="code-block">
+<span class="comment">// ตัวอย่าง ASCII → Binary</span>
+A  =  65  =  <span class="highlight">01000001</span>
+Z  =  90  =  <span class="highlight">01011010</span>
+a  =  97  =  <span class="highlight">01100001</span>
+0  =  48  =  <span class="highlight">00110000</span>
+#  =  35  =  <span class="highlight">00100011</span>
+
+<span class="comment">// Input/Output</span>
+Keyboard → Binary (Input Device)
+Monitor  → แสดงผลกลับ (Output Device)
+    </div>
+
+    <div class="infobox warn">
+      <strong>Big Data</strong> — ข้อมูลจำนวนมหาศาลที่ถูกเก็บบนเครือข่าย/Cloud มาจากโทรศัพท์, ธนาคาร, Social Media, แอปต่างๆ ถูกนำไปวิเคราะห์พฤติกรรมผู้ใช้
+    </div>
+
+    <hr class="sep">
+
+    <!-- 1.3 Bandwidth -->
+    <div class="section-label">1.3</div>
+    <div class="section-title">Bandwidth & Throughput</div>
+    <div class="section-sub">ความเร็วเครือข่าย — ทฤษฎี vs ความจริง</div>
+
+    <div class="compare">
+      <div class="compare-box blue">
+        <div class="compare-label">Bandwidth</div>
+        <h4 style="color:var(--accent)">ความเร็วสูงสุด</h4>
+        <p>ตามทฤษฎี เปรียบเหมือนขนาดของถนน (จำนวนเลน)</p>
+        <br><p>= โปร 100 Mbps ที่ซื้อมา</p>
+      </div>
+      <div class="compare-box purple">
+        <div class="compare-label">Throughput</div>
+        <h4 style="color:var(--accent2)">ความเร็วจริง</h4>
+        <p>ใช้งานจริง ต่ำกว่า Bandwidth เสมอ เพราะ delay, congestion, errors</p>
+        <br><p>= ความเร็วที่วัดได้จริง ~70 Mbps</p>
+      </div>
+    </div>
+
+    <div class="infobox">
+      <strong>Latency</strong> = ความหน่วง (เวลาที่ข้อมูลใช้เดินทาง Source → Destination) <br>
+      Latency ต่ำ = ดี — สำคัญมากสำหรับ เกมออนไลน์, Video Call, Cloud Computing
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>หน่วย</th><th>ค่า</th><th>ใช้กับ</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>bps</td><td>bits per second</td><td>ความเร็วพื้นฐาน</td></tr>
+          <tr><td>Kbps</td><td>10³ bps = 1,000 bps</td><td>Dial-up เก่า</td></tr>
+          <tr><td>Mbps</td><td>10⁶ bps = 1,000,000 bps</td><td>บ้าน/สำนักงาน</td></tr>
+          <tr><td>Gbps</td><td>10⁹ bps</td><td>Data Center, Backbone</td></tr>
+          <tr><td>Tbps</td><td>10¹² bps</td><td>Undersea Cable, ISP Backbone</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="infobox warn">
+      <strong>⚠️ สำคัญมาก: Mbps vs MB/s</strong><br>
+      b เล็ก = bit &nbsp;|&nbsp; B ใหญ่ = Byte &nbsp;|&nbsp; 1 Byte = 8 bits<br><br>
+      สูตร: <code>MB/s = Mbps ÷ 8</code><br>
+      ตัวอย่าง: เน็ต 100 Mbps → โหลดจริงสูงสุด 100÷8 = <strong>12.5 MB/s</strong>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 1.4 Signal Types -->
+    <div class="section-label">1.4</div>
+    <div class="section-title">Data Transmission & Signal Types</div>
+    <div class="section-sub">วิธีส่งข้อมูล 3 ประเภท</div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="card-icon">⚡</span>
+        <h3>Electrical Signals</h3>
+        <p>ส่งผ่านสายทองแดง (Copper Cable, Ethernet)</p>
+        <br>
+        <div class="tag green">ราคาถูก</div>
+        <div class="tag" style="background:rgba(239,68,68,.1);color:#fca5a5;border-color:rgba(239,68,68,.2)">ระยะจำกัด</div>
+        <p style="font-size:.8rem;color:var(--muted);margin-top:.5rem">ถูกรบกวนด้วย EMI ได้ง่าย (Electromagnetic Interference)</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">💡</span>
+        <h3>Optical Signals</h3>
+        <p>ส่งผ่านพัลส์แสง — Fiber Optic Cable</p>
+        <br>
+        <div class="tag green">เร็วมาก</div>
+        <div class="tag green">ระยะไกล</div>
+        <div class="tag" style="background:rgba(239,68,68,.1);color:#fca5a5;border-color:rgba(239,68,68,.2)">แพงกว่า</div>
+        <p style="font-size:.8rem;color:var(--muted);margin-top:.5rem">ใช้เป็น Backbone Internet หลักของโลก</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📡</span>
+        <h3>Wireless Signals</h3>
+        <p>ส่งผ่านคลื่นวิทยุ, Microwave, Infrared — Wi-Fi, 4G/5G, Bluetooth</p>
+        <br>
+        <div class="tag green">สะดวก</div>
+        <div class="tag" style="background:rgba(239,68,68,.1);color:#fca5a5;border-color:rgba(239,68,68,.2)">รบกวนง่าย</div>
+        <p style="font-size:.8rem;color:var(--muted);margin-top:.5rem">ความเร็วไม่คงที่ ขึ้นอยู่กับสภาพแวดล้อม</p>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- Reliability -->
+    <div class="section-label">1.4 — Network Quality</div>
+    <div class="section-title">Network Reliability Concepts</div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>🔁 Fault Tolerance</h3>
+        <p>ระบบยังทำงานได้แม้บางส่วนจะเสีย มี path สำรองให้ข้อมูลเดินทางอ้อม</p>
+      </div>
+      <div class="card">
+        <h3>🛡️ Redundancy</h3>
+        <p>มีระบบสำรอง / เส้นทางสำรอง เพื่อป้องกัน Single Point of Failure</p>
+      </div>
+      <div class="card">
+        <h3>📶 Reliability</h3>
+        <p>ความเสถียรของเครือข่ายโดยรวม Network Engineer ดูแลให้ระบบไม่ล่ม</p>
+      </div>
+    </div>
+
+    <div class="infobox green">
+      <strong>🕸️ Internet เปรียบเหมือนใยแมงมุม</strong><br>
+      แม้บางส่วนเสีย ข้อมูลสามารถหาเส้นทางอื่นได้เสมอ — นี่คือหลักการ Fault Tolerance ที่ออกแบบมาตั้งแต่ยุค Cold War
+    </div>
+
+  </div><!-- end summary -->
+
+  <!-- ══════════════════════════════════════════
+       TAB: FLASHCARDS
+  ══════════════════════════════════════════ -->
+  <div id="tab-flashcards" class="tab-panel">
+    <div class="section-label">FLASHCARDS</div>
+    <div class="section-title">คำศัพท์สำคัญ</div>
+    <div class="section-sub">คลิกที่การ์ดเพื่อดูคำนิยาม</div>
+
+    <div class="flashcard-grid" id="flashcard-grid"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: QUIZ
+  ══════════════════════════════════════════ -->
+  <div id="tab-quiz" class="tab-panel">
+    <div class="section-label">QUIZ</div>
+    <div class="section-title">แบบทดสอบ Module 1</div>
+    <div class="section-sub">20 ข้อ — ครอบคลุม 1.1 / 1.2 / 1.3 / 1.4</div>
+
+    <div class="quiz-container" id="quiz-container"></div>
+
+    <div class="quiz-controls">
+      <button class="btn btn-accent" onclick="checkAll()">✔ ตรวจข้อสอบ</button>
+      <button class="btn btn-secondary" onclick="resetQuiz()">↺ ทำใหม่</button>
+    </div>
+    <div class="quiz-score" id="quiz-score">
+      คะแนนของคุณ: <span id="score-display"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: TOOLS
+  ══════════════════════════════════════════ -->
+  <div id="tab-tools" class="tab-panel">
+    <div class="section-label">TOOLS</div>
+    <div class="section-title">เครื่องมือคำนวณ</div>
+    <div class="section-sub">เครื่องคิดเลขสำหรับ Network Engineer</div>
+
+    <!-- Bandwidth Calculator -->
+    <div class="calc-box">
+      <h3>🔢 Bandwidth / Download Speed Calculator</h3>
+      <div class="grid grid-2">
+        <div>
+          <div class="input-group">
+            <label>Bandwidth (Mbps)</label>
+            <input type="number" id="bw-mbps" placeholder="เช่น 100" oninput="calcBandwidth()">
+          </div>
+        </div>
+        <div>
+          <div class="input-group">
+            <label>Throughput จริง (%)</label>
+            <input type="number" id="bw-pct" placeholder="เช่น 70" oninput="calcBandwidth()">
+          </div>
+        </div>
+      </div>
+      <div class="calc-result" id="bw-result">
+        <span class="r-label">กรอก Bandwidth และ Throughput % เพื่อคำนวณ</span>
+      </div>
+    </div>
+
+    <!-- Unit Converter -->
+    <div class="calc-box">
+      <h3>📐 Unit Converter (Data Speed)</h3>
+      <div class="grid grid-2">
+        <div>
+          <div class="input-group">
+            <label>ค่าที่ต้องการแปลง</label>
+            <input type="number" id="conv-val" placeholder="เช่น 1000" oninput="calcConvert()">
+          </div>
+          <div class="input-group">
+            <label>หน่วยต้นทาง</label>
+            <select id="conv-from" onchange="calcConvert()">
+              <option value="1">bps</option>
+              <option value="1000">Kbps</option>
+              <option value="1000000" selected>Mbps</option>
+              <option value="1000000000">Gbps</option>
+              <option value="1000000000000">Tbps</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-result" id="conv-result" style="align-self:center">
+          <span class="r-label">รอผลการคำนวณ...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- File Transfer Time -->
+    <div class="calc-box">
+      <h3>⏱️ File Transfer Time Calculator</h3>
+      <div class="grid grid-2">
+        <div>
+          <div class="input-group">
+            <label>ขนาดไฟล์</label>
+            <input type="number" id="file-size" placeholder="เช่น 1" oninput="calcTransfer()">
+          </div>
+          <div class="input-group">
+            <label>หน่วยไฟล์</label>
+            <select id="file-unit" onchange="calcTransfer()">
+              <option value="8">KB</option>
+              <option value="8000">MB</option>
+              <option value="8000000" selected>GB</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>ความเร็ว (Mbps)</label>
+            <input type="number" id="file-speed" placeholder="เช่น 100" oninput="calcTransfer()">
+          </div>
+        </div>
+        <div class="calc-result" id="transfer-result" style="align-self:center">
+          <span class="r-label">กรอกข้อมูลเพื่อคำนวณเวลาโอนไฟล์</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end tools -->
+</div><!-- end wrapper -->
+
+<script>
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const idx = ['summary','flashcards','quiz','tools'].indexOf(name);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// FLASHCARDS
+// ══════════════════════════════════════════
+const flashcards = [
+  { term: 'Internet', hint: 'ประเภทของเครือข่าย', def: 'Network of Networks — เครือข่ายของเครือข่ายทั่วโลกที่เชื่อมต่อกัน ไม่มีเจ้าของเพียงคนเดียว', ex: 'เกิดจากการเชื่อม Local Networks ทั่วโลก' },
+  { term: 'IoT', hint: 'ย่อมาจาก', def: 'Internet of Things — ทุกสิ่งที่เชื่อมต่ออินเทอร์เน็ตและสามารถส่งข้อมูลได้', ex: 'Smart Watch, Smart Car, Sensor ในนาข้าว' },
+  { term: 'SOHO', hint: 'ประเภทเครือข่าย', def: 'Small Office / Home Office — เครือข่ายขนาดเล็กสำหรับสำนักงานหรือบ้านที่ทำงาน', ex: 'คาเฟ่, ฟรีแลนซ์, ออฟฟิศเล็ก' },
+  { term: 'Bit', hint: 'หน่วยข้อมูล', def: 'Binary Digit — หน่วยข้อมูลที่เล็กที่สุด มีค่าได้แค่ 0 หรือ 1', ex: 'สวิตช์ไฟ: OFF=0, ON=1' },
+  { term: 'Byte', hint: 'กี่ Bit?', def: '1 Byte = 8 Bits — หน่วยพื้นฐานของการจัดเก็บข้อมูล', ex: 'ตัวอักษร 1 ตัว (ASCII) = 1 Byte' },
+  { term: 'ASCII', hint: 'มาตรฐานการแปลง', def: 'American Standard Code for Information Interchange — มาตรฐานแปลงตัวอักษร/ตัวเลข/สัญลักษณ์เป็น Binary', ex: 'A = 65 = 01000001' },
+  { term: 'Bandwidth', hint: 'ความเร็วเครือข่าย', def: 'ความจุสูงสุดตามทฤษฎีในการส่งข้อมูล วัดด้วย bps, Mbps, Gbps', ex: 'โปร 100 Mbps = Bandwidth 100 Mbps' },
+  { term: 'Throughput', hint: 'ความเร็วจริง', def: 'ความเร็วที่ใช้งานได้จริง ต่ำกว่า Bandwidth เสมอ เนื่องจาก delay, congestion, errors', ex: 'ใช้งานจริงได้ 70 Mbps จาก 100 Mbps' },
+  { term: 'Latency', hint: 'ความหน่วง', def: 'เวลาที่ข้อมูลใช้เดินทางจาก Source ไปถึง Destination (วัดเป็น ms)', ex: 'Ping 20ms = Latency ต่ำ = ดี' },
+  { term: 'Sensor', hint: 'IoT device', def: 'อุปกรณ์ตรวจจับข้อมูลจากสภาพแวดล้อม เช่น อุณหภูมิ ความชื้น การเคลื่อนไหว', ex: 'เซนเซอร์วัดความชื้นในนาข้าว' },
+  { term: 'Actuator', hint: 'IoT device', def: 'อุปกรณ์ที่รับคำสั่งและสร้างการเคลื่อนไหวหรือผลลัพธ์ทางกายภาพ', ex: 'มอเตอร์เปิดน้ำ, แขนกล, ประตูอัตโนมัติ' },
+  { term: 'RFID', hint: 'ใช้คลื่นอะไร', def: 'Radio Frequency Identification — ระบบระบุตัวตนด้วยคลื่นวิทยุ', ex: 'บัตรผ่านประตู, ติดตามสินค้าในคลังสินค้า' },
+  { term: 'Fiber Optic', hint: 'ประเภทสัญญาณ', def: 'สายส่งสัญญาณด้วยแสง (Optical Signal) ความเร็วสูงมาก ระยะไกล รบกวนน้อย', ex: 'ใช้เป็น Backbone Internet หลักของโลก' },
+  { term: 'Fault Tolerance', hint: 'คุณสมบัติเครือข่าย', def: 'ระบบยังทำงานได้แม้บางส่วนจะเสีย มีเส้นทางสำรองให้ข้อมูลเดินทาง', ex: 'อินเทอร์เน็ตแบบใยแมงมุม' },
+  { term: 'Redundancy', hint: 'ป้องกันอะไร', def: 'การมีระบบ/เส้นทางสำรอง เพื่อป้องกัน Single Point of Failure', ex: 'ISP มีเส้นทางสำรองหลายเส้นทาง' },
+  { term: 'Binary', hint: 'เลขฐานอะไร', def: 'เลขฐานสอง — คอมพิวเตอร์เข้าใจเพียง 0 กับ 1 เท่านั้น', ex: '65 (เลขฐาน 10) = 01000001 (Binary)' },
+  { term: 'Big Data', hint: 'ปริมาณข้อมูล', def: 'ข้อมูลจำนวนมหาศาลที่ถูกเก็บบน Network/Cloud มาจากหลายแหล่งพร้อมกัน', ex: 'ข้อมูลจาก Social Media, ธนาคาร, GPS ทั่วโลก' },
+  { term: 'Observed Data', hint: 'ประเภทข้อมูล', def: 'ข้อมูลที่ระบบเก็บอัตโนมัติจากพฤติกรรม โดยผู้ใช้ไม่ได้กรอกเอง', ex: 'GPS Location, ประวัติการเดินทาง' },
+  { term: 'Inferred Data', hint: 'ประเภทข้อมูล', def: 'ข้อมูลที่ระบบวิเคราะห์และคาดเดาจากพฤติกรรม ไม่ได้บอกตรงๆ', ex: 'Credit Score, การแนะนำสินค้า' },
+  { term: 'Gbps', hint: 'หน่วย Bandwidth', def: 'Gigabits per second = 10⁹ bps ใช้กับ Data Center, Backbone Network', ex: '1 Gbps = 1,000 Mbps' },
+  { term: 'Download', hint: 'ทิศทางข้อมูล', def: 'การรับข้อมูลจาก Server มาที่อุปกรณ์ของเรา', ex: 'ดู YouTube, โหลดเกม, Netflix' },
+  { term: 'Upload', hint: 'ทิศทางข้อมูล', def: 'การส่งข้อมูลจากอุปกรณ์เราไปยัง Server', ex: 'ส่งรูป, ไลฟ์สด, อัปโหลดไฟล์' },
+  { term: 'Server', hint: 'โครงสร้างเครือข่าย', def: 'เครื่องที่ให้บริการข้อมูลหรือ Application แก่ Client ที่ร้องขอ', ex: 'Web Server, Email Server, Game Server' },
+  { term: 'Cloud', hint: 'โครงสร้าง IT', def: 'ระบบประมวลผลและจัดเก็บข้อมูลบน Internet แทนที่จะเก็บในเครื่องตัวเอง', ex: 'Google Drive, iCloud, AWS, Azure' },
+];
+
+function buildFlashcards() {
+  const grid = document.getElementById('flashcard-grid');
+  grid.innerHTML = flashcards.map((fc, i) => `
+    <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
+      <div class="flashcard-inner">
+        <div class="fc-front">
+          <div class="fc-term">${fc.term}</div>
+          <div class="fc-hint">${fc.hint}</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:.75rem">คลิกเพื่อดูคำตอบ</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-def">${fc.def}</div>
+          <div class="fc-example">${fc.ex}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function flipCard(i) {
+  document.getElementById('fc-' + i).classList.toggle('flipped');
+}
+
+// ══════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════
+const questions = [
+  { q: 'อินเทอร์เน็ตถูกเรียกว่าอะไร?', opts: ['Web of Computers', 'Network of Networks', 'Global Database', 'Cloud System'], ans: 1 },
+  { q: 'SOHO ย่อมาจากอะไร?', opts: ['System of Home Office', 'Small Office / Home Office', 'Shared Online Hub Only', 'Standard Office Host Organization'], ans: 1 },
+  { q: 'หน่วยข้อมูลที่เล็กที่สุดในคอมพิวเตอร์คืออะไร?', opts: ['Byte', 'Nibble', 'Bit', 'Kilobyte'], ans: 2 },
+  { q: '1 Byte มีกี่ Bits?', opts: ['4', '6', '8', '16'], ans: 2 },
+  { q: 'ASCII ใช้ทำอะไร?', opts: ['เข้ารหัสเครือข่าย', 'แปลงตัวอักษรเป็น Binary', 'บีบอัดไฟล์', 'เชื่อมต่อ Wi-Fi'], ans: 1 },
+  { q: 'Bandwidth คืออะไร?', opts: ['ความเร็วจริงที่ใช้งานได้', 'ความจุสูงสุดของการส่งข้อมูลตามทฤษฎี', 'ความหน่วงในเครือข่าย', 'จำนวนผู้ใช้งาน'], ans: 1 },
+  { q: 'Throughput ต่างจาก Bandwidth อย่างไร?', opts: ['Throughput คือความเร็วสูงสุด Bandwidth คือความเร็วจริง', 'Throughput คือความเร็วจริง Bandwidth คือความเร็วสูงสุด', 'ทั้งสองหมายความเหมือนกัน', 'Throughput วัดด้วย Byte Bandwidth วัดด้วย Bit'], ans: 1 },
+  { q: 'เน็ต 200 Mbps มีอัตราโหลดสูงสุดกี่ MB/s?', opts: ['200 MB/s', '100 MB/s', '25 MB/s', '1600 MB/s'], ans: 2 },
+  { q: 'Latency คืออะไร?', opts: ['ปริมาณข้อมูลที่ส่งได้', 'ความเร็วสูงสุด', 'เวลาที่ข้อมูลใช้เดินทาง Source → Destination', 'จำนวนเลนของเครือข่าย'], ans: 2 },
+  { q: 'Fiber Optic ส่งข้อมูลด้วยอะไร?', opts: ['สัญญาณไฟฟ้า', 'คลื่นวิทยุ', 'พัลส์แสง', 'คลื่นเสียง'], ans: 2 },
+  { q: 'IoT ย่อมาจากอะไร?', opts: ['Internet of Technology', 'Integration of Terminals', 'Internet of Things', 'Interconnected Online Tools'], ans: 2 },
+  { q: 'Sensor ในระบบ IoT ทำหน้าที่อะไร?', opts: ['สั่งงานอุปกรณ์', 'ตรวจจับข้อมูลจากสภาพแวดล้อม', 'เก็บไฟล์', 'เชื่อมต่ออินเทอร์เน็ต'], ans: 1 },
+  { q: 'Actuator ทำอะไร?', opts: ['วัดอุณหภูมิ', 'ส่งข้อมูลไป Cloud', 'รับคำสั่งแล้วสร้างการเคลื่อนไหว', 'ตรวจจับแสง'], ans: 2 },
+  { q: 'RFID ใช้เทคโนโลยีอะไร?', opts: ['Fiber Optic', 'คลื่นวิทยุ (Radio Frequency)', 'Bluetooth 5.0', 'Infrared'], ans: 1 },
+  { q: 'Fault Tolerance หมายถึงอะไร?', opts: ['ความเร็วสูงสุดของเครือข่าย', 'ระบบยังทำงานได้แม้บางส่วนเสีย', 'การเข้ารหัสข้อมูล', 'การบีบอัดข้อมูล'], ans: 1 },
+  { q: 'Observed Data คืออะไร?', opts: ['ข้อมูลที่เราตั้งใจกรอกเอง', 'ข้อมูลที่ระบบวิเคราะห์', 'ข้อมูลที่ระบบเก็บอัตโนมัติจากพฤติกรรม', 'ข้อมูลที่ซื้อมาจากบริษัท'], ans: 2 },
+  { q: '1 Gbps เท่ากับกี่ Mbps?', opts: ['10 Mbps', '100 Mbps', '1,000 Mbps', '10,000 Mbps'], ans: 2 },
+  { q: 'ข้อใดคือ Inferred Data?', opts: ['อัปโหลดรูปโปรไฟล์', 'ตำแหน่ง GPS ปัจจุบัน', 'Credit Score ที่ระบบคำนวณ', 'กรอกอีเมลสมัครสมาชิก'], ans: 2 },
+  { q: 'Wireless Signal ส่งผ่านอะไร?', opts: ['สายทองแดง', 'สายแสง Fiber', 'คลื่นวิทยุ/Microwave/Infrared', 'สายโทรศัพท์ Copper'], ans: 2 },
+  { q: 'ในบ้านทั่วไป Upload หรือ Download เร็วกว่ากัน?', opts: ['Upload เร็วกว่าเสมอ', 'Download เร็วกว่า เพราะคนส่วนใหญ่รับข้อมูลมากกว่า', 'เท่ากันทุกโปร', 'ขึ้นอยู่กับ ISP เท่านั้น'], ans: 1 },
+];
+
+let answered = new Array(questions.length).fill(null);
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = questions.map((q, i) => `
+    <div class="quiz-card" id="qcard-${i}">
+      <div class="quiz-num">Q${String(i+1).padStart(2,'0')} / ${questions.length}</div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o, j) => `
+          <button class="quiz-opt" id="qopt-${i}-${j}" onclick="selectOpt(${i},${j})">${o}</button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="qfb-${i}"></div>
+    </div>
+  `).join('');
+  updateProgress();
+}
+
+function selectOpt(qi, oi) {
+  if (answered[qi] !== null) return; // already answered
+  answered[qi] = oi;
+  const card = document.getElementById('qcard-' + qi);
+  const opts = card.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById('qfb-' + qi);
+  const correct = questions[qi].ans;
+
+  opts.forEach((btn, j) => {
+    if (j === correct) btn.classList.add('reveal-correct');
+    if (j === oi && oi !== correct) btn.classList.add('selected-wrong');
+    if (j === oi && oi === correct) btn.classList.add('selected-correct');
+    btn.disabled = true;
+  });
+
+  if (oi === correct) {
+    card.classList.add('correct');
+    fb.textContent = '✓ ถูกต้อง!';
+    fb.className = 'quiz-feedback show ok';
+  } else {
+    card.classList.add('wrong');
+    fb.textContent = '✗ ไม่ถูก — คำตอบที่ถูกต้องคือ: ' + questions[qi].opts[correct];
+    fb.className = 'quiz-feedback show fail';
+  }
+  updateProgress();
+}
+
+function checkAll() {
+  let score = 0;
+  answered.forEach((a, i) => { if (a === questions[i].ans) score++; });
+  const el = document.getElementById('quiz-score');
+  document.getElementById('score-display').textContent = `${score} / ${questions.length} (${Math.round(score/questions.length*100)}%)`;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz() {
+  answered = new Array(questions.length).fill(null);
+  document.getElementById('quiz-score').classList.remove('show');
+  buildQuiz();
+}
+
+function updateProgress() {
+  const done = answered.filter(a => a !== null).length;
+  const pct = Math.round(done / questions.length * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${done} / ${questions.length}`;
+}
+
+// ══════════════════════════════════════════
+// TOOLS
+// ══════════════════════════════════════════
+function calcBandwidth() {
+  const bw = parseFloat(document.getElementById('bw-mbps').value);
+  const pct = parseFloat(document.getElementById('bw-pct').value);
+  const el = document.getElementById('bw-result');
+  if (isNaN(bw) || isNaN(pct)) { el.innerHTML = '<span class="r-label">กรอกข้อมูลให้ครบ</span>'; return; }
+  const throughput = bw * pct / 100;
+  const dlMB = throughput / 8;
+  el.innerHTML = `
+    <span class="r-label">Bandwidth: </span><span class="r-val">${bw} Mbps</span><br>
+    <span class="r-label">Throughput จริง (${pct}%): </span><span class="r-val">${throughput.toFixed(2)} Mbps</span><br>
+    <span class="r-label">อัตราโหลดจริง: </span><span class="r-val">${dlMB.toFixed(2)} MB/s</span>
+  `;
+}
+
+function calcConvert() {
+  const val = parseFloat(document.getElementById('conv-val').value);
+  const from = parseFloat(document.getElementById('conv-from').value);
+  const el = document.getElementById('conv-result');
+  if (isNaN(val)) { el.innerHTML = '<span class="r-label">กรอกค่าที่ต้องการแปลง</span>'; return; }
+  const bps = val * from;
+  el.innerHTML = `
+    <span class="r-label">bps: </span><span class="r-val">${bps.toLocaleString()}</span><br>
+    <span class="r-label">Kbps: </span><span class="r-val">${(bps/1e3).toFixed(3)}</span><br>
+    <span class="r-label">Mbps: </span><span class="r-val">${(bps/1e6).toFixed(6)}</span><br>
+    <span class="r-label">Gbps: </span><span class="r-val">${(bps/1e9).toFixed(9)}</span><br>
+    <span class="r-label">Tbps: </span><span class="r-val">${(bps/1e12).toFixed(12)}</span>
+  `;
+}
+
+function calcTransfer() {
+  const size = parseFloat(document.getElementById('file-size').value);
+  const unit = parseFloat(document.getElementById('file-unit').value); // in Kbits already
+  const speed = parseFloat(document.getElementById('file-speed').value);
+  const el = document.getElementById('transfer-result');
+  if (isNaN(size) || isNaN(speed) || speed === 0) { el.innerHTML = '<span class="r-label">กรอกข้อมูลให้ครบ</span>'; return; }
+  const bits = size * unit * 1000; // convert to bits
+  const seconds = bits / (speed * 1e6);
+  const mins = Math.floor(seconds / 60);
+  const secs = (seconds % 60).toFixed(1);
+  el.innerHTML = `
+    <span class="r-label">ขนาดไฟล์: </span><span class="r-val">${size} (${['KB','MB','GB'][['8','8000','8000000'].indexOf(String(unit))] || 'unit'})</span><br>
+    <span class="r-label">ที่ความเร็ว: </span><span class="r-val">${speed} Mbps</span><br>
+    <span class="r-label">เวลาที่ใช้: </span><span class="r-val">${mins > 0 ? mins + ' นาที ' : ''}${secs} วินาที</span>
+  `;
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+buildFlashcards();
+buildQuiz();
+</script>
+</body>
+</html>

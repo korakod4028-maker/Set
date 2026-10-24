@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCNA Module 4 — Home Networking</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg:        #0a0e17;
+    --surface:   #111827;
+    --surface2:  #1a2236;
+    --border:    #1e2d47;
+    --accent:    #00d4ff;
+    --accent2:   #7c3aed;
+    --accent3:   #10b981;
+    --warn:      #f59e0b;
+    --danger:    #ef4444;
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --mono:      'JetBrains Mono', monospace;
+    --sans:      'Sarabun', 'Inter', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,23,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    height: 56px;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    background: var(--accent2);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: .05em;
+  }
+  .badge.green { background: var(--accent3); }
+  header h1 { font-size: 0.95rem; font-weight: 600; color: var(--accent); flex: 1; }
+  nav { display: flex; gap: 1rem; }
+  nav a {
+    font-size: 0.78rem; color: var(--muted); text-decoration: none;
+    font-family: var(--mono); transition: color .2s;
+  }
+  nav a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem; color: var(--accent);
+    letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .hero h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700; line-height: 1.1;
+    background: linear-gradient(135deg, #e2e8f0 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+  }
+  .hero p { color: var(--muted); max-width: 540px; margin: 0 auto 2rem; }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    margin-top: 2.5rem;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono); font-size: 2rem; font-weight: 700;
+    color: var(--accent); display: block;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: .05em; }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .progress-label { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+  .progress-track {
+    flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 0.4s ease;
+  }
+  #progress-text { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); white-space: nowrap; }
+
+  /* ── LAYOUT ── */
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-family: var(--mono); font-size: 0.78rem;
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--muted); cursor: pointer; padding: 0.75rem 1.25rem;
+    white-space: nowrap; transition: all .2s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn:hover { color: var(--text); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── SECTION TITLE ── */
+  .section-label {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--accent2); letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-size: 1.6rem; font-weight: 700; margin-bottom: 0.35rem;
+    color: var(--text);
+  }
+  .section-sub { color: var(--muted); margin-bottom: 2rem; font-size: 0.9rem; }
+
+  /* ── CARDS ── */
+  .grid { display: grid; gap: 1rem; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem; transition: border-color .2s, transform .15s;
+  }
+  .card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+  .card-icon {
+    font-size: 1.5rem; margin-bottom: 0.75rem; display: block;
+  }
+  .card h3 {
+    font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem;
+    color: var(--accent);
+  }
+  .card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .card ul { padding-left: 1.1rem; margin-top: 0.5rem; }
+  .card li { font-size: 0.83rem; color: var(--muted); margin-bottom: 0.2rem; }
+
+  /* ── INFO BOX ── */
+  .infobox {
+    background: var(--surface2); border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.5rem 0;
+    font-size: 0.88rem; color: var(--muted);
+  }
+  .infobox.warn { border-color: var(--warn); }
+  .infobox.danger { border-color: var(--danger); }
+  .infobox.green { border-color: var(--accent3); }
+  .infobox strong { color: var(--text); }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th {
+    background: var(--surface2); color: var(--accent);
+    font-family: var(--mono); font-size: 0.73rem; letter-spacing: .08em;
+    padding: 0.65rem 1rem; text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); color: var(--text); }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0;
+    font-family: var(--mono); font-size: 0.8rem; color: #a5d6ff;
+    overflow-x: auto; line-height: 1.8;
+  }
+  .code-block .comment { color: var(--muted); }
+  .code-block .highlight { color: var(--accent3); }
+
+  /* ── COMPARE BLOCK ── */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .compare-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem;
+  }
+  .compare-box .compare-label {
+    font-family: var(--mono); font-size: 0.68rem;
+    letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .compare-box.blue .compare-label { color: var(--accent); }
+  .compare-box.purple .compare-label { color: var(--accent2); }
+  .compare-box h4 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .compare-box p { font-size: 0.82rem; color: var(--muted); }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .flow-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.4rem 0.8rem;
+    font-family: var(--mono); font-size: 0.78rem; color: var(--accent);
+  }
+  .flow-arrow { color: var(--muted); font-size: 1rem; }
+
+  /* ── QUIZ ── */
+  .quiz-container { display: flex; flex-direction: column; gap: 1.5rem; }
+  .quiz-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; transition: border-color .2s;
+  }
+  .quiz-card.correct { border-color: var(--accent3); }
+  .quiz-card.wrong { border-color: var(--danger); }
+  .quiz-num {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--accent2); letter-spacing: .1em; margin-bottom: 0.5rem;
+  }
+  .quiz-q { font-weight: 600; margin-bottom: 1rem; font-size: 0.95rem; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .quiz-opt {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.65rem 1rem;
+    cursor: pointer; font-size: 0.85rem; color: var(--muted);
+    transition: all .15s; text-align: left;
+  }
+  .quiz-opt:hover { border-color: var(--accent2); color: var(--text); }
+  .quiz-opt.selected-correct { background: rgba(16,185,129,.15); border-color: var(--accent3); color: var(--accent3); }
+  .quiz-opt.selected-wrong { background: rgba(239,68,68,.12); border-color: var(--danger); color: var(--danger); }
+  .quiz-opt.reveal-correct { background: rgba(16,185,129,.08); border-color: var(--accent3); color: var(--accent3); }
+  .quiz-feedback {
+    margin-top: 0.75rem; font-size: 0.82rem; padding: 0.6rem 0.9rem;
+    border-radius: 6px; display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(16,185,129,.12); color: var(--accent3); }
+  .quiz-feedback.fail { background: rgba(239,68,68,.1); color: #fca5a5; }
+
+  .quiz-controls {
+    display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; align-items: center;
+  }
+  .btn {
+    font-family: var(--mono); font-size: 0.8rem;
+    border: none; border-radius: 8px; padding: 0.6rem 1.4rem; cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent2); color: #fff; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-accent { background: var(--accent3); color: #fff; }
+  .quiz-score {
+    font-family: var(--mono); font-size: 0.85rem; color: var(--muted); margin-top: 1.5rem;
+    display: none;
+  }
+  .quiz-score.show { display: block; }
+  #score-display { color: var(--accent); font-size: 1.2rem; }
+
+  /* ── FLASHCARD ── */
+  .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+  .flashcard {
+    perspective: 800px; height: 160px; cursor: pointer;
+  }
+  .flashcard-inner {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d; transition: transform .5s ease;
+  }
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+  .fc-front, .fc-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 10px; padding: 1.25rem;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+  }
+  .fc-front {
+    background: var(--surface); border: 1px solid var(--border);
+  }
+  .fc-front .fc-term {
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--accent);
+  }
+  .fc-front .fc-hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; }
+  .fc-back {
+    background: var(--surface2); border: 1px solid var(--accent2);
+    transform: rotateY(180deg);
+  }
+  .fc-back .fc-def { font-size: 0.85rem; color: var(--text); line-height: 1.5; }
+  .fc-back .fc-example { font-size: 0.75rem; color: var(--muted); margin-top: 0.5rem; font-style: italic; }
+
+  /* ── BANDWIDTH CALC ── */
+  .calc-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .calc-box h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--accent); }
+  .input-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+  .input-group label { font-size: 0.78rem; color: var(--muted); font-family: var(--mono); }
+  .input-group input, .input-group select {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); border-radius: 6px; padding: 0.5rem 0.75rem;
+    font-family: var(--mono); font-size: 0.88rem; width: 100%;
+  }
+  .input-group input:focus, .input-group select:focus {
+    outline: none; border-color: var(--accent2);
+  }
+  .calc-result {
+    background: #0d1117; border: 1px solid var(--accent2);
+    border-radius: 8px; padding: 1rem;
+    font-family: var(--mono); font-size: 0.82rem;
+    line-height: 2;
+  }
+  .calc-result .r-val { color: var(--accent); font-weight: 700; }
+  .calc-result .r-label { color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .compare { grid-template-columns: 1fr; }
+    nav { display: none; }
+    .hero-stats { gap: 1.5rem; }
+    .stat-num { font-size: 1.5rem; }
+  }
+
+  /* ── SEPARATOR ── */
+  .sep { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: 0.68rem;
+    padding: 2px 7px; border-radius: 4px; margin: 2px;
+    background: rgba(0,212,255,.1); color: var(--accent); border: 1px solid rgba(0,212,255,.2);
+  }
+  .tag.purple { background: rgba(124,58,237,.15); color: #c4b5fd; border-color: rgba(124,58,237,.3); }
+  .tag.green { background: rgba(16,185,129,.12); color: #6ee7b7; border-color: rgba(16,185,129,.25); }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(124,58,237,.08), rgba(0,212,255,.06));
+    border: 1px solid rgba(0,212,255,.15); border-radius: 10px;
+    padding: 1.25rem 1.5rem; margin: 1.5rem 0;
+  }
+  .highlight-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+  .highlight-box p { font-size: 0.87rem; color: var(--muted); }
+</style>
+<body>
+
+<!-- HEADER -->
+<header>
+  <span class="badge">CCNA</span>
+  <span class="badge green">MODULE 4</span>
+  <h1>Home Networking — Study Guide</h1>
+  <nav>
+    <a href="#" onclick="switchTab('summary')">📖 Summary</a>
+    <a href="#" onclick="switchTab('flashcards')">🃏 Flashcards</a>
+    <a href="#" onclick="switchTab('quiz')">✅ Quiz</a>
+    <a href="#" onclick="switchTab('tools')">🔧 Tools</a>
+  </nav>
+</header>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <span class="progress-label">QUIZ PROGRESS</span>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <span id="progress-text">0 / 25</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">CISCO NETWORKING ACADEMY · SKILLS FOR ALL</div>
+  <h2>Module 4<br>Build a Home Network</h2>
+  <p>สรุปเนื้อหาครบ 4.0–4.5 + Flashcards + แบบฝึกหัด + เครื่องมือช่วยตั้งค่า สำหรับเตรียมสอบและใช้งานจริง</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">6</span><span class="stat-label">Sub-Modules</span></div>
+    <div class="stat"><span class="stat-num">25</span><span class="stat-label">Quiz Questions</span></div>
+    <div class="stat"><span class="stat-num">30</span><span class="stat-label">Flashcards</span></div>
+    <div class="stat"><span class="stat-num">3</span><span class="stat-label">Tools</span></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('summary')">📖 เนื้อหา</button>
+    <button class="tab-btn" onclick="switchTab('flashcards')">🃏 Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">✅ Quiz</button>
+    <button class="tab-btn" onclick="switchTab('tools')">🔧 Tools</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: SUMMARY
+  ══════════════════════════════════════════ -->
+  <div id="tab-summary" class="tab-panel active">
+
+    <!-- 4.0-4.1 -->
+    <div class="section-label">4.0 – 4.1</div>
+    <div class="section-title">Build a Home Network</div>
+    <div class="section-sub">ISP, Modem, Router และโครงสร้างพื้นฐานของเครือข่ายภายในบ้าน</div>
+
+    <div class="highlight-box">
+      <h4>🏠 Home Network คืออะไร?</h4>
+      <p>เครือข่ายที่เชื่อมอุปกรณ์หลายเครื่องเข้าด้วยกัน เพื่อแชร์อินเทอร์เน็ต แชร์ไฟล์ แชร์เครื่องพิมพ์ และควบคุม Smart Home</p>
+    </div>
+
+    <div class="flow">
+      <div class="flow-box">ISP</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Modem</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Router</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Laptop / Phone / TV / IoT</div>
+    </div>
+
+    <div class="compare">
+      <div class="compare-box blue">
+        <div class="compare-label">Modem</div>
+        <h4 style="color:var(--accent)">แปลงสัญญาณ</h4>
+        <p>แปลงสัญญาณจาก ISP (Cable / DSL / Fiber) ให้เป็น Ethernet ที่อุปกรณ์ในบ้านเข้าใจ</p>
+      </div>
+      <div class="compare-box purple">
+        <div class="compare-label">Router</div>
+        <h4 style="color:var(--accent2)">ศูนย์กลางเครือข่าย</h4>
+        <p>แจก Internet, แจก IP, กระจาย Wi-Fi และเลือกเส้นทางข้อมูลระหว่าง LAN กับ WAN</p>
+      </div>
+    </div>
+
+    <div class="infobox green">
+      <strong>✅ ไม่ต้องซื้อ Access Point แยก</strong><br>
+      Router บ้านส่วนใหญ่มี Radio Antenna และ Wireless Access Point ในตัวอยู่แล้ว
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>คำศัพท์</th><th>ความหมาย</th></tr></thead>
+        <tbody>
+          <tr><td>LAN</td><td>Local Area Network — เครือข่ายภายในบ้าน</td></tr>
+          <tr><td>WAN</td><td>Wide Area Network — เครือข่ายภายนอก / อินเทอร์เน็ต</td></tr>
+          <tr><td>Internet Port</td><td>เรียกอีกชื่อว่า WAN Port — รับสัญญาณจาก Modem (มีช่องเดียว)</td></tr>
+          <tr><td>Ethernet Port</td><td>เรียกอีกชื่อว่า LAN Port — เสียบ PC, Printer, Switch (มักมี 4 ช่อง)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="infobox warn">
+      <strong>⚠️ Default Password อันตราย</strong><br>
+      Router ใหม่มักตั้งค่าเริ่มต้นเป็น <code>admin / admin</code> — ต้องเปลี่ยนทันทีหลังติดตั้ง
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card"><span class="card-icon">🔑</span><h3>เปลี่ยนรหัส Admin</h3><p>ไม่ใช้ค่าเริ่มต้นจากโรงงาน</p></div>
+      <div class="card"><span class="card-icon">📶</span><h3>ตั้งชื่อ / รหัส Wi-Fi</h3><p>เปลี่ยน SSID และ Passphrase ให้รัดกุม</p></div>
+      <div class="card"><span class="card-icon">🛡️</span><h3>ใช้ WPA2 / WPA3</h3><p>เปิดการเข้ารหัสและอัปเดต Firmware สม่ำเสมอ</p></div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 4.2 -->
+    <div class="section-label">4.2</div>
+    <div class="section-title">Wireless & Wired Network Technologies</div>
+    <div class="section-sub">ความถี่ไร้สาย, Bluetooth, Ethernet และประเภทของสาย</div>
+
+    <div class="compare">
+      <div class="compare-box blue">
+        <div class="compare-label">2.4 GHz</div>
+        <h4 style="color:var(--accent)">ระยะไกล</h4>
+        <p>ทะลุกำแพงดี ระยะไกลกว่า แต่ความเร็วต่ำกว่าและถูกรบกวนง่าย</p>
+      </div>
+      <div class="compare-box purple">
+        <div class="compare-label">5 GHz</div>
+        <h4 style="color:var(--accent2)">ความเร็วสูง</h4>
+        <p>ความเร็วสูงกว่า สัญญาณรบกวนน้อยกว่า แต่ระยะสั้นและทะลุกำแพงได้น้อย</p>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>คุณสมบัติ</th><th>Bluetooth</th><th>Wi-Fi</th></tr></thead>
+        <tbody>
+          <tr><td>ความถี่</td><td>2.4 GHz</td><td>2.4 GHz และ 5 GHz</td></tr>
+          <tr><td>ระยะ</td><td>สั้น</td><td>ไกลกว่า</td></tr>
+          <tr><td>ความเร็ว</td><td>ต่ำ</td><td>สูง</td></tr>
+          <tr><td>ใช้กับ</td><td>เมาส์ คีย์บอร์ด หูฟัง</td><td>อินเทอร์เน็ต / เครือข่าย</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="card-icon">🧵</span><h3>Category 5e (UTP)</h3>
+        <p>สายทองแดง 4 คู่บิดเกลียว (8 เส้น) ราคาถูก รองรับ 1 Gbps ระยะ ~100 เมตร ใช้หัวต่อ RJ-45</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📺</span><h3>Coaxial Cable</h3>
+        <p>ตัวนำกลาง + ฉนวน + ชั้นโลหะป้องกันสัญญาณรบกวน ใช้กับ Cable TV และอินเทอร์เน็ตบางระบบ</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">💡</span><h3>Fiber-Optic</h3>
+        <p>ส่งข้อมูลด้วยแสง เร็วมาก ระยะไกล ไม่โดน EMI รบกวน ใช้เป็น Backbone / ISP</p>
+      </div>
+    </div>
+
+    <div class="infobox">
+      <strong>ทำไมสาย UTP ต้องบิดเกลียว?</strong><br>
+      ลด <strong>EMI</strong> (Electromagnetic Interference) และ <strong>Crosstalk</strong> (สัญญาณรบกวนระหว่างคู่สาย)
+    </div>
+
+    <hr class="sep">
+
+    <!-- 4.3 -->
+    <div class="section-label">4.3</div>
+    <div class="section-title">Wireless Networks</div>
+    <div class="section-sub">มาตรฐาน IEEE 802.11, SSID, Network Mode และความปลอดภัย</div>
+
+    <div class="compare">
+      <div class="compare-box blue">
+        <div class="compare-label">IEEE</div>
+        <h4 style="color:var(--accent)">สร้างมาตรฐาน</h4>
+        <p>กำหนดมาตรฐาน 802.3 (Ethernet) และ 802.11 (Wi-Fi)</p>
+      </div>
+      <div class="compare-box purple">
+        <div class="compare-label">Wi-Fi Alliance</div>
+        <h4 style="color:var(--accent2)">ทดสอบอุปกรณ์</h4>
+        <p>ทดสอบและรับรองว่าอุปกรณ์จากหลายผู้ผลิตใช้งานร่วมกันได้ (Wi-Fi Certified)</p>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>มาตรฐาน</th><th>ชื่อเล่น</th><th>ความถี่</th><th>จุดเด่น</th></tr></thead>
+        <tbody>
+          <tr><td>802.11b</td><td>—</td><td>2.4 GHz</td><td>ความเร็วต่ำ (รุ่นเก่า)</td></tr>
+          <tr><td>802.11g</td><td>—</td><td>2.4 GHz</td><td>เร็วกว่า b</td></tr>
+          <tr><td>802.11n</td><td>Wi-Fi 4</td><td>2.4/5 GHz</td><td>ใช้ MIMO เร็วขึ้น</td></tr>
+          <tr><td>802.11ac</td><td>Wi-Fi 5</td><td>5 GHz</td><td>ความเร็วสูง</td></tr>
+          <tr><td>802.11ax</td><td>Wi-Fi 6</td><td>2.4/5 GHz</td><td>รองรับผู้ใช้จำนวนมาก</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <span class="card-icon">🏷️</span><h3>SSID</h3>
+        <ul>
+          <li>Service Set Identifier = ชื่อเครือข่าย Wi-Fi</li>
+          <li>สูงสุด 32 ตัวอักษร</li>
+          <li>Case-sensitive (ตัวเล็ก/ใหญ่ต่างกัน)</li>
+          <li>ไม่ควรใช้ยี่ห้อ/รุ่น Router เป็นชื่อ</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="card-icon">🎚️</span><h3>Network Mode</h3>
+        <ul>
+          <li>Single Standard = รองรับอุปกรณ์บางรุ่นเท่านั้น</li>
+          <li><strong>Mixed Mode</strong> = รองรับหลายมาตรฐานพร้อมกัน</li>
+          <li>Exam tip: มีอุปกรณ์หลายมาตรฐาน → เลือก Mixed Mode เสมอ</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="infobox danger">
+      <strong>🚫 ซ่อน SSID ≠ ปลอดภัย</strong><br>
+      การปิด SSID Broadcast ช่วยลดการเชื่อมต่อโดยบังเอิญเท่านั้น เครื่องมือวิเคราะห์เครือข่ายยังตรวจจับได้ ต้องใช้ WPA2/WPA3 ร่วมด้วยเสมอ
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>มาตรฐานความปลอดภัย</th><th>สถานะ</th></tr></thead>
+        <tbody>
+          <tr><td>WEP</td><td>ล้าสมัย ถูกเจาะได้ง่าย — ไม่ควรใช้</td></tr>
+          <tr><td>WPA</td><td>ดีกว่า WEP แต่ล้าสมัยแล้ว</td></tr>
+          <tr><td>WPA2 Personal</td><td>มาตรฐานหลักสำหรับบ้านทั่วไป</td></tr>
+          <tr><td>WPA3 Personal</td><td>ปลอดภัยที่สุดในปัจจุบัน (ถ้าอุปกรณ์รองรับ)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 4.4 -->
+    <div class="section-label">4.4</div>
+    <div class="section-title">Configuring a Wireless Router</div>
+    <div class="section-sub">First-Time Setup, GUI, DHCP, NAT, Firewall และการตั้งค่า Wi-Fi Security</div>
+
+    <div class="grid grid-3">
+      <div class="card"><span class="card-icon">🧭</span><h3>Router</h3><p>เลือกเส้นทางข้อมูลระหว่าง LAN และ WAN</p></div>
+      <div class="card"><span class="card-icon">🔀</span><h3>Switch</h3><p>เชื่อมอุปกรณ์แบบใช้สาย (มักมี 4 ports)</p></div>
+      <div class="card"><span class="card-icon">📡</span><h3>Access Point</h3><p>กระจายสัญญาณ Wi-Fi</p></div>
+      <div class="card"><span class="card-icon">🎫</span><h3>DHCP Server</h3><p>แจก IP Address อัตโนมัติให้ทุกเครื่อง</p></div>
+      <div class="card"><span class="card-icon">🔁</span><h3>NAT</h3><p>แปลง Private IP เป็น Public IP ก่อนออกอินเทอร์เน็ต</p></div>
+      <div class="card"><span class="card-icon">🧱</span><h3>Firewall</h3><p>กรองและบล็อกทราฟฟิกที่ไม่พึงประสงค์</p></div>
+    </div>
+
+    <div class="infobox">
+      <strong>DHCP Process — จำด้วยคำว่า "DORA"</strong>
+      <div class="flow" style="margin-top:.5rem">
+        <div class="flow-box">Discover</div><span class="flow-arrow">→</span>
+        <div class="flow-box">Offer</div><span class="flow-arrow">→</span>
+        <div class="flow-box">Request</div><span class="flow-arrow">→</span>
+        <div class="flow-box">Acknowledge</div>
+      </div>
+    </div>
+
+    <div class="code-block">
+<span class="comment">// First-Time Setup Sequence</span>
+1. เสียบสาย LAN เข้า <span class="highlight">LAN Port</span> (ห้ามเสียบ WAN Port)
+2. ตรวจสอบ <span class="highlight">Link Light</span> ติดหรือไม่
+3. รอรับ IP จาก <span class="highlight">DHCP</span>
+4. เปิด Browser → พิมพ์ <span class="highlight">Default Gateway</span> เช่น 192.168.0.1
+5. Login (เปลี่ยนรหัสผ่านทันที)
+6. ตั้งค่า SSID → Wireless Security → Passphrase
+7. กด <span class="highlight">Save Settings</span> ทุกครั้ง
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>เมนู GUI</th><th>ใช้ตั้งค่า</th></tr></thead>
+        <tbody>
+          <tr><td>Setup</td><td>Internet, DHCP, LAN</td></tr>
+          <tr><td>Wireless</td><td>Wi-Fi, SSID, Channel</td></tr>
+          <tr><td>Wireless Security</td><td>WPA2/WPA3, Passphrase</td></tr>
+          <tr><td>Administration</td><td>รหัส Admin, Backup, Reset</td></tr>
+          <tr><td>Status</td><td>สถานะ WAN/LAN, Firmware</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="infobox danger">
+      <strong>🚫 อย่าตั้ง SSID เป็นยี่ห้อ/รุ่น Router</strong><br>
+      เช่น <code>TP-Link_AX55</code> — ผู้โจมตีจะรู้ทันทีว่าใช้รุ่นอะไรและค้นหาช่องโหว่ได้ง่ายขึ้น ให้ใช้ชื่อทั่วไปแทน เช่น <code>BlueSky</code>
+    </div>
+
+    <div class="infobox warn">
+      <strong>Maximum Number of Users (DHCP)</strong> ช่วยจัดการทรัพยากร IP เท่านั้น <strong>ไม่ใช่มาตรการรักษาความปลอดภัยหลัก</strong> — ความปลอดภัยจริงมาจาก WPA2/WPA3
+    </div>
+
+    <hr class="sep">
+
+    <!-- 4.5 -->
+    <div class="section-label">4.5</div>
+    <div class="section-title">Home Networking — Comprehensive Review</div>
+    <div class="section-sub">ข้อดีของ WLAN, MAC Filtering, Guest Network และ Wired vs Wireless</div>
+
+    <div class="grid grid-3">
+      <div class="card"><h3>🚶 Mobility</h3><p>ใช้งานได้ทุกที่ในระยะสัญญาณ</p></div>
+      <div class="card"><h3>📈 Scalability</h3><p>เพิ่มอุปกรณ์ใหม่ได้ง่าย</p></div>
+      <div class="card"><h3>🔧 Flexibility</h3><p>ย้ายอุปกรณ์/จัดผังห้องใหม่ได้สะดวก</p></div>
+      <div class="card"><h3>💰 Cost Savings</h3><p>ไม่ต้องเดินสาย LAN ทุกห้อง</p></div>
+      <div class="card"><h3>⚡ Reduced Install Time</h3><p>ติดตั้งเร็วกว่าการเดินสาย</p></div>
+      <div class="card"><h3>🏚️ Reliability</h3><p>เหมาะกับพื้นที่เดินสายยาก เช่น อาคารเก่า</p></div>
+    </div>
+
+    <div class="infobox danger">
+      <strong>MAC Address Filtering</strong> เพิ่มการควบคุมการเข้าถึงได้ระดับหนึ่ง แต่ <strong>MAC Address สามารถปลอมแปลง (Spoofing) ได้</strong> จึงไม่ควรใช้เป็นมาตรการหลัก ต้องใช้ร่วมกับ WPA2/WPA3 เสมอ
+    </div>
+
+    <div class="infobox green">
+      <strong>👥 Guest Network</strong><br>
+      แยกผู้มาเยือนออกจากอุปกรณ์หลัก — แขกใช้อินเทอร์เน็ตได้ แต่เข้าไม่ถึง Printer, NAS, PC ภายในบ้าน
+    </div>
+
+    <div class="compare">
+      <div class="compare-box blue">
+        <div class="compare-label">Wired (Ethernet)</div>
+        <h4 style="color:var(--accent)">เสถียรกว่า</h4>
+        <p>Latency ต่ำ ไม่ถูกรบกวนง่าย เหมาะกับ Server และเกมที่ต้องการความเสถียร</p>
+      </div>
+      <div class="compare-box purple">
+        <div class="compare-label">Wireless (Wi-Fi)</div>
+        <h4 style="color:var(--accent2)">สะดวกกว่า</h4>
+        <p>Latency สูงกว่าเล็กน้อย อาจถูกรบกวนจากสิ่งแวดล้อม เหมาะกับมือถือ/โน้ตบุ๊ก</p>
+      </div>
+    </div>
+
+  </div><!-- end summary -->
+
+  <!-- ══════════════════════════════════════════
+       TAB: FLASHCARDS
+  ══════════════════════════════════════════ -->
+  <div id="tab-flashcards" class="tab-panel">
+    <div class="section-label">FLASHCARDS</div>
+    <div class="section-title">คำศัพท์สำคัญ — Module 4</div>
+    <div class="section-sub">คลิกที่การ์ดเพื่อดูคำนิยาม</div>
+
+    <div class="flashcard-grid" id="flashcard-grid"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: QUIZ
+  ══════════════════════════════════════════ -->
+  <div id="tab-quiz" class="tab-panel">
+    <div class="section-label">QUIZ</div>
+    <div class="section-title">แบบทดสอบ Module 4</div>
+    <div class="section-sub">25 ข้อ — ครอบคลุม 4.0 / 4.1 / 4.2 / 4.3 / 4.4 / 4.5</div>
+
+    <div class="quiz-container" id="quiz-container"></div>
+
+    <div class="quiz-controls">
+      <button class="btn btn-accent" onclick="checkAll()">✔ ตรวจข้อสอบ</button>
+      <button class="btn btn-secondary" onclick="resetQuiz()">↺ ทำใหม่</button>
+    </div>
+    <div class="quiz-score" id="quiz-score">
+      คะแนนของคุณ: <span id="score-display"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: TOOLS
+  ══════════════════════════════════════════ -->
+  <div id="tab-tools" class="tab-panel">
+    <div class="section-label">TOOLS</div>
+    <div class="section-title">เครื่องมือช่วยตั้งค่าเครือข่าย</div>
+    <div class="section-sub">เครื่องมือสำหรับใช้งานจริงหน้างาน</div>
+
+    <!-- Passphrase Strength Checker -->
+    <div class="calc-box">
+      <h3>🔐 Wi-Fi Passphrase Strength Checker</h3>
+      <div class="input-group">
+        <label>ทดลองพิมพ์ Passphrase</label>
+        <input type="text" id="pw-input" placeholder="เช่น MyPassPhrase1!" oninput="checkPassphrase()">
+      </div>
+      <div class="calc-result" id="pw-result">
+        <span class="r-label">พิมพ์รหัสผ่านเพื่อประเมินความแข็งแรง</span>
+      </div>
+    </div>
+
+    <!-- Wi-Fi Band Advisor -->
+    <div class="calc-box">
+      <h3>📶 Wi-Fi Band Advisor</h3>
+      <div class="grid grid-2">
+        <div>
+          <div class="input-group">
+            <label>ระยะห่างจาก Router</label>
+            <select id="band-distance" onchange="advizeBand()">
+              <option value="near">ใกล้ / ห้องเดียวกัน</option>
+              <option value="far">ไกล / มีหลายผนังกั้น</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>ความต้องการหลัก</label>
+            <select id="band-need" onchange="advizeBand()">
+              <option value="speed">ความเร็วสูง (เกม/สตรีม/โอนไฟล์)</option>
+              <option value="coverage">ครอบคลุมพื้นที่กว้าง</option>
+              <option value="legacy">ต้องรองรับอุปกรณ์เก่า</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-result" id="band-result" style="align-self:center">
+          <span class="r-label">เลือกเงื่อนไขเพื่อดูคำแนะนำ</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Setup Checklist -->
+    <div class="calc-box">
+      <h3>✅ Router Security Setup Checklist</h3>
+      <div id="checklist-items"></div>
+      <div class="calc-result" id="checklist-result" style="margin-top:1rem">
+        <span class="r-label">ทำเครื่องหมายรายการที่ทำเสร็จแล้ว</span>
+      </div>
+    </div>
+
+  </div><!-- end tools -->
+</div><!-- end wrapper -->
+
+<script>
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const idx = ['summary','flashcards','quiz','tools'].indexOf(name);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// FLASHCARDS
+// ══════════════════════════════════════════
+const flashcards = [
+  { term: 'Home Network', hint: 'นิยาม', def: 'เครือข่ายที่เชื่อมอุปกรณ์ภายในบ้านเข้าด้วยกันและออกสู่อินเทอร์เน็ต', ex: 'PC, มือถือ, Smart TV เชื่อมผ่าน Router เดียวกัน' },
+  { term: 'ISP', hint: 'ย่อมาจาก', def: 'Internet Service Provider — ผู้ให้บริการอินเทอร์เน็ต', ex: 'AIS, True, 3BB, NT' },
+  { term: 'Modem', hint: 'หน้าที่', def: 'แปลงสัญญาณจาก ISP (Cable/DSL/Fiber) ให้เป็น Ethernet', ex: 'Cable Modem, DSL Modem' },
+  { term: 'Router', hint: 'หน้าที่', def: 'เชื่อม LAN กับ WAN, แจก IP, กระจาย Wi-Fi, เลือกเส้นทางข้อมูล', ex: 'ศูนย์กลางของเครือข่ายบ้าน' },
+  { term: 'LAN', hint: 'ย่อมาจาก', def: 'Local Area Network — เครือข่ายภายในบ้าน/องค์กร', ex: 'อุปกรณ์ทุกเครื่องในบ้านเดียวกัน' },
+  { term: 'WAN', hint: 'ย่อมาจาก', def: 'Wide Area Network — เครือข่ายภายนอก/อินเทอร์เน็ต', ex: 'การเชื่อมต่อไปหา Google Server' },
+  { term: 'WLAN', hint: 'ย่อมาจาก', def: 'Wireless Local Area Network — LAN แบบไร้สาย', ex: 'Wi-Fi ในบ้าน' },
+  { term: 'Internet Port', hint: 'อีกชื่อ', def: 'เรียกอีกชื่อว่า WAN Port ใช้รับสัญญาณจาก Modem', ex: 'เชื่อมกับ Cable/DSL Modem' },
+  { term: 'Ethernet Port', hint: 'อีกชื่อ', def: 'เรียกอีกชื่อว่า LAN Port ใช้เสียบอุปกรณ์ภายในบ้าน', ex: 'PC, Printer, Switch' },
+  { term: 'Default Gateway', hint: 'คืออะไร', def: 'IP Address ของ Router ที่ใช้เป็นทางออกไปยังเครือข่ายอื่น', ex: '192.168.0.1' },
+  { term: 'DHCP', hint: 'ย่อมาจาก', def: 'Dynamic Host Configuration Protocol — แจก IP Address อัตโนมัติ (DORA)', ex: 'Discover, Offer, Request, Acknowledge' },
+  { term: 'NAT', hint: 'ย่อมาจาก', def: 'Network Address Translation — แปลง Private IP เป็น Public IP', ex: '192.168.1.10 → 171.98.xx.xx' },
+  { term: 'Firewall', hint: 'หน้าที่', def: 'กรองและบล็อกทราฟฟิกที่ไม่พึงประสงค์จากภายนอก', ex: 'ป้องกันการโจมตีจากอินเทอร์เน็ต' },
+  { term: 'SSID', hint: 'ย่อมาจาก', def: 'Service Set Identifier — ชื่อของเครือข่าย Wi-Fi (สูงสุด 32 ตัวอักษร, case-sensitive)', ex: 'HomeWiFi, BlueSky' },
+  { term: 'SSID Broadcast', hint: 'ค่าเริ่มต้น', def: 'การประกาศชื่อ Wi-Fi ออกไป ค่าเริ่มต้นคือ Enabled การปิดไม่ใช่มาตรการความปลอดภัยที่แท้จริง', ex: 'ปิดแล้วยังตรวจจับได้ด้วยเครื่องมือวิเคราะห์' },
+  { term: 'Passphrase', hint: 'คืออะไร', def: 'รหัสผ่านของ Wi-Fi ควรมีตัวใหญ่ ตัวเล็ก ตัวเลข และอักขระพิเศษ', ex: 'MyPassPhrase1!' },
+  { term: 'WPA2 Personal', hint: 'ใช้ที่ไหน', def: 'มาตรฐานความปลอดภัย Wi-Fi ที่ใช้รหัสผ่านเดียวร่วมกันทั้งบ้าน', ex: 'เหมาะกับบ้าน หอพัก ร้านค้าเล็ก' },
+  { term: 'WPA2 Enterprise', hint: 'ใช้ที่ไหน', def: 'ใช้ Username/Password แยกรายบุคคล ร่วมกับ Server เช่น RADIUS', ex: 'มหาวิทยาลัย บริษัท องค์กร' },
+  { term: 'IEEE 802.11', hint: 'คือมาตรฐานของ', def: 'มาตรฐานของ Wi-Fi ที่กำหนดโดย IEEE', ex: '802.11ac, 802.11ax (Wi-Fi 6)' },
+  { term: 'IEEE 802.3', hint: 'คือมาตรฐานของ', def: 'มาตรฐานของ Ethernet (LAN แบบใช้สาย)', ex: 'ใช้กับสาย UTP' },
+  { term: 'Wi-Fi Alliance', hint: 'หน้าที่', def: 'องค์กรที่ทดสอบและรับรองอุปกรณ์ Wi-Fi ให้ใช้งานร่วมกันได้', ex: 'ให้ตรา Wi-Fi Certified' },
+  { term: 'Network Mode', hint: 'ตั้งค่าอะไร', def: 'กำหนดว่า Router จะรองรับมาตรฐาน 802.11 แบบใดบ้าง', ex: '802.11n only, Mixed Mode' },
+  { term: 'Mixed Mode', hint: 'ใช้เมื่อไร', def: 'รองรับหลายมาตรฐาน Wi-Fi พร้อมกัน เหมาะเมื่อมีอุปกรณ์หลายรุ่น', ex: 'รองรับทั้งมือถือใหม่และโน้ตบุ๊กเก่า' },
+  { term: 'Throughput', hint: 'ต่างจาก Speed อย่างไร', def: 'ความเร็วจริงที่ใช้งานได้ ไม่ใช่ความเร็วสูงสุดตามทฤษฎีที่เขียนบนกล่อง', ex: 'เขียน 1200 Mbps ใช้จริง 650 Mbps' },
+  { term: 'MAC Address', hint: 'คืออะไร', def: 'หมายเลขประจำตัวของการ์ดเครือข่าย ไม่ซ้ำกันในแต่ละอุปกรณ์', ex: '00:1A:2B:3C:4D:5E' },
+  { term: 'MAC Address Filtering', hint: 'ข้อควรระวัง', def: 'อนุญาต/ปฏิเสธอุปกรณ์ตาม MAC Address แต่สามารถถูกปลอมแปลง (Spoofing) ได้ ไม่ควรใช้เป็นมาตรการหลัก', ex: 'ควรใช้ร่วมกับ WPA2/WPA3' },
+  { term: 'Guest Network', hint: 'ประโยชน์', def: 'เครือข่าย Wi-Fi แยกสำหรับผู้มาเยือน ให้ใช้อินเทอร์เน็ตได้แต่เข้าไม่ถึงอุปกรณ์หลัก', ex: 'แขกใช้เน็ตได้ แต่เข้า Printer/NAS ไม่ได้' },
+  { term: 'NIC', hint: 'ย่อมาจาก', def: 'Network Interface Card — การ์ดที่ทำให้อุปกรณ์เชื่อมต่อเครือข่ายได้', ex: 'พบ Link Light บน NIC' },
+  { term: 'Cat5e', hint: 'คุณสมบัติ', def: 'สาย UTP ยอดนิยม มี 4 คู่บิดเกลียว (8 เส้น) รองรับ 1 Gbps ระยะ ~100 เมตร', ex: 'ใช้หัวต่อ RJ-45' },
+  { term: 'RJ-45', hint: 'ใช้กับอะไร', def: 'หัวต่อมาตรฐานของสาย Ethernet (UTP)', ex: 'ปลายสาย LAN ทุกเส้น' },
+];
+
+function buildFlashcards() {
+  const grid = document.getElementById('flashcard-grid');
+  grid.innerHTML = flashcards.map((fc, i) => `
+    <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
+      <div class="flashcard-inner">
+        <div class="fc-front">
+          <div class="fc-term">${fc.term}</div>
+          <div class="fc-hint">${fc.hint}</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:.75rem">คลิกเพื่อดูคำตอบ</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-def">${fc.def}</div>
+          <div class="fc-example">${fc.ex}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function flipCard(i) {
+  document.getElementById('fc-' + i).classList.toggle('flipped');
+}
+
+// ══════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════
+const questions = [
+  { q: 'อุปกรณ์ใดทำหน้าที่แปลงสัญญาณจาก ISP ให้เป็น Ethernet?', opts: ['Router', 'Modem', 'Switch', 'Access Point'], ans: 1 },
+  { q: 'พอร์ตใดของ Router ใช้รับสัญญาณจาก Modem?', opts: ['LAN Port', 'Ethernet Port', 'WAN/Internet Port', 'Console Port'], ans: 2 },
+  { q: 'Router ถูกเรียกว่า "router" เพราะเหตุใด?', opts: ['ทำซ้ำสัญญาณ', 'เลือกเส้นทางข้อมูลระหว่างสองเครือข่าย', 'เก็บ IP ถาวร', 'เข้ารหัสข้อมูลทั้งหมด'], ans: 1 },
+  { q: 'ย่านความถี่ใดให้ระยะไกลกว่าแต่ความเร็วต่ำกว่า?', opts: ['5 GHz', '2.4 GHz', '60 GHz', '900 MHz'], ans: 1 },
+  { q: 'Bluetooth ใช้ความถี่ใด?', opts: ['900 MHz', '1.2 GHz', '2.4 GHz', '5 GHz'], ans: 2 },
+  { q: 'องค์กรใดเป็นผู้สร้างมาตรฐาน 802.11?', opts: ['Wi-Fi Alliance', 'IEEE', 'ICANN', 'IETF'], ans: 1 },
+  { q: 'องค์กรใดทดสอบและรับรองอุปกรณ์ Wi-Fi ให้ใช้งานร่วมกันได้?', opts: ['IEEE', 'FCC', 'Wi-Fi Alliance', 'ISO'], ans: 2 },
+  { q: 'SSID ย่อมาจากอะไร?', opts: ['Secure System ID', 'Service Set Identifier', 'Signal Strength Indicator Device', 'Session Security ID'], ans: 1 },
+  { q: 'SSID มีความยาวสูงสุดกี่ตัวอักษร?', opts: ['16', '24', '32', '64'], ans: 2 },
+  { q: 'การปิด SSID Broadcast มีผลอย่างไร?', opts: ['ทำให้เครือข่ายปลอดภัย 100%', 'ซ่อนชื่อจากการมองเห็นทั่วไปแต่ยังตรวจจับได้ ไม่ใช่มาตรการหลัก', 'เพิ่มความเร็วเครือข่าย', 'จำเป็นสำหรับ WPA2'], ans: 1 },
+  { q: 'ถ้าบ้านมีอุปกรณ์ทั้งรุ่นเก่าและใหม่ ควรตั้ง Network Mode แบบใด?', opts: ['มาตรฐานสูงสุดเท่านั้น', 'Legacy เท่านั้น', 'Mixed Mode', 'Disabled'], ans: 2 },
+  { q: 'มาตรฐานความปลอดภัย Wi-Fi ใดล้าสมัยและถูกเจาะได้ง่ายที่สุด?', opts: ['WPA3', 'WPA2', 'WEP', 'WPA2-Enterprise'], ans: 2 },
+  { q: 'WPA2 Enterprise แตกต่างจาก WPA2 Personal อย่างไร?', opts: ['ไม่ใช้รหัสผ่านเลย', 'ใช้ Username/Password รายบุคคลร่วมกับ Server เช่น RADIUS', 'ใช้ได้กับ Guest Network เท่านั้น', 'ใช้กับ Wi-Fi ไม่ได้'], ans: 1 },
+  { q: 'ขั้นตอน DHCP เรียงลำดับตามคำใด?', opts: ['SYN, ACK, FIN', 'DORA', 'OSI', 'ARP'], ans: 1 },
+  { q: 'NAT มีหน้าที่หลักคืออะไร?', opts: ['กำหนด MAC Address', 'แปลง Private IP เป็น Public IP', 'เข้ารหัส Wi-Fi', 'ประกาศ SSID'], ans: 1 },
+  { q: 'สายชนิดใดส่งข้อมูลด้วยแสง?', opts: ['Coaxial', 'UTP', 'Fiber-optic', 'Powerline'], ans: 2 },
+  { q: 'สาย Cat5e มีคู่สายบิดเกลียวกี่คู่?', opts: ['2', '4', '6', '8'], ans: 1 },
+  { q: 'การบิดเกลียวของ UTP ช่วยลดอะไร?', opts: ['ค่าใช้จ่าย', 'EMI และ Crosstalk', 'ความยาวสาย', 'ขนาดหัวต่อ'], ans: 1 },
+  { q: 'หัวต่อชนิดใดใช้กับสาย Ethernet UTP มาตรฐาน?', opts: ['RJ-11', 'RJ-45', 'BNC', 'SC'], ans: 1 },
+  { q: 'MAC Address Filtering ควรถูกมองว่าเป็นอย่างไร?', opts: ['ทดแทนการเข้ารหัสได้เต็มรูปแบบ', 'มาตรการเสริมที่สามารถถูกหลบเลี่ยงได้ด้วย MAC Spoofing', 'ไม่เกี่ยวข้องกับความปลอดภัยเลย', 'ข้อบังคับตาม IEEE 802.11'], ans: 1 },
+  { q: 'Guest Network ถูกออกแบบมาเพื่ออะไร?', opts: ['ให้แขกเข้าถึงอุปกรณ์ทุกชิ้นในบ้าน', 'ให้อินเทอร์เน็ตแก่แขกโดยแยกจากอุปกรณ์ภายในบ้าน', 'แทนที่ SSID หลัก', 'ปิดการทำงานของ DHCP'], ans: 1 },
+  { q: 'พอร์ตใดใช้เชื่อมต่อ PC เข้ากับ Internal Switch ของ Router โดยตรง?', opts: ['WAN Port', 'Ethernet (LAN) Port', 'Coaxial Port', 'USB Port'], ans: 1 },
+  { q: 'Throughput แตกต่างจากความเร็วที่โฆษณาไว้อย่างไร?', opts: ['เป็นค่าทฤษฎีสูงสุดเท่านั้น', 'คือความเร็วจริงที่ใช้งานได้ภายใต้สภาพแวดล้อมจริง', 'คือราคาของ Router', 'คือความยาวของ SSID'], ans: 1 },
+  { q: 'หลังแก้ไขค่าใดๆ ในหน้า GUI ของ Router ต้องทำสิ่งใดเสมอ?', opts: ['รีสตาร์ท Modem', 'กด Save Settings', 'ถอดปลั๊ก Router', 'เปลี่ยน SSID ซ้ำอีกครั้ง'], ans: 1 },
+  { q: 'True or False: Home Router ส่วนใหญ่ต้องซื้ออุปกรณ์ Wi-Fi แยกต่างหาก', opts: ['True', 'False'], ans: 1 },
+];
+
+let answered = new Array(questions.length).fill(null);
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = questions.map((q, i) => `
+    <div class="quiz-card" id="qcard-${i}">
+      <div class="quiz-num">Q${String(i+1).padStart(2,'0')} / ${questions.length}</div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o, j) => `
+          <button class="quiz-opt" id="qopt-${i}-${j}" onclick="selectOpt(${i},${j})">${o}</button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="qfb-${i}"></div>
+    </div>
+  `).join('');
+  updateProgress();
+}
+
+function selectOpt(qi, oi) {
+  if (answered[qi] !== null) return;
+  answered[qi] = oi;
+  const card = document.getElementById('qcard-' + qi);
+  const opts = card.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById('qfb-' + qi);
+  const correct = questions[qi].ans;
+
+  opts.forEach((btn, j) => {
+    if (j === correct) btn.classList.add('reveal-correct');
+    if (j === oi && oi !== correct) btn.classList.add('selected-wrong');
+    if (j === oi && oi === correct) btn.classList.add('selected-correct');
+    btn.disabled = true;
+  });
+
+  if (oi === correct) {
+    card.classList.add('correct');
+    fb.textContent = '✓ ถูกต้อง!';
+    fb.className = 'quiz-feedback show ok';
+  } else {
+    card.classList.add('wrong');
+    fb.textContent = '✗ ไม่ถูก — คำตอบที่ถูกต้องคือ: ' + questions[qi].opts[correct];
+    fb.className = 'quiz-feedback show fail';
+  }
+  updateProgress();
+}
+
+function checkAll() {
+  let score = 0;
+  answered.forEach((a, i) => { if (a === questions[i].ans) score++; });
+  const el = document.getElementById('quiz-score');
+  document.getElementById('score-display').textContent = `${score} / ${questions.length} (${Math.round(score/questions.length*100)}%)`;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz() {
+  answered = new Array(questions.length).fill(null);
+  document.getElementById('quiz-score').classList.remove('show');
+  buildQuiz();
+}
+
+function updateProgress() {
+  const done = answered.filter(a => a !== null).length;
+  const pct = Math.round(done / questions.length * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${done} / ${questions.length}`;
+}
+
+// ══════════════════════════════════════════
+// TOOLS
+// ══════════════════════════════════════════
+function checkPassphrase() {
+  const val = document.getElementById('pw-input').value;
+  const el = document.getElementById('pw-result');
+  if (!val) { el.innerHTML = '<span class="r-label">พิมพ์รหัสผ่านเพื่อประเมินความแข็งแรง</span>'; return; }
+
+  let score = 0;
+  const checks = [
+    { test: val.length >= 8, label: 'ความยาวอย่างน้อย 8 ตัวอักษร' },
+    { test: /[A-Z]/.test(val), label: 'มีตัวพิมพ์ใหญ่' },
+    { test: /[a-z]/.test(val), label: 'มีตัวพิมพ์เล็ก' },
+    { test: /[0-9]/.test(val), label: 'มีตัวเลข' },
+    { test: /[^A-Za-z0-9]/.test(val), label: 'มีอักขระพิเศษ' },
+  ];
+  checks.forEach(c => { if (c.test) score++; });
+
+  const levels = ['อ่อนมาก 🔴','อ่อน 🟠','พอใช้ 🟡','ดี 🟢','แข็งแรง 🟢','แข็งแรงมาก 💪'];
+  const level = levels[score];
+
+  el.innerHTML = checks.map(c =>
+    `<span class="r-label">${c.test ? '✅' : '⬜'} ${c.label}</span>`
+  ).join('<br>') + `<br><br><span class="r-label">ระดับความปลอดภัย: </span><span class="r-val">${level}</span>`;
+}
+
+function advizeBand() {
+  const dist = document.getElementById('band-distance').value;
+  const need = document.getElementById('band-need').value;
+  const el = document.getElementById('band-result');
+
+  let rec = '';
+  if (need === 'legacy') {
+    rec = 'ใช้ <strong>Mixed Mode</strong> (2.4 GHz) เพื่อรองรับอุปกรณ์รุ่นเก่าและใหม่พร้อมกัน';
+  } else if (dist === 'far') {
+    rec = 'ใช้ <strong>2.4 GHz</strong> เพราะทะลุกำแพงได้ดีกว่าและระยะไกลกว่า';
+  } else if (need === 'speed') {
+    rec = 'ใช้ <strong>5 GHz</strong> เพื่อความเร็วสูงสุดและสัญญาณรบกวนน้อยที่สุด';
+  } else {
+    rec = 'ใช้ <strong>2.4 GHz</strong> เพื่อครอบคลุมพื้นที่กว้างที่สุด';
+  }
+
+  el.innerHTML = `<span class="r-label">คำแนะนำ:</span><br><span class="r-val">${rec}</span>`;
+}
+
+const checklistData = [
+  'เปลี่ยนรหัสผ่าน Admin จากค่าเริ่มต้น (admin/admin)',
+  'ตั้งชื่อ SSID ใหม่ (ไม่ใช้ยี่ห้อ/รุ่น Router)',
+  'ตั้ง Passphrase ที่แข็งแรง (ตัวใหญ่ ตัวเล็ก ตัวเลข สัญลักษณ์)',
+  'เลือก Security Mode เป็น WPA2 Personal หรือ WPA3 Personal',
+  'อัปเดต Firmware ของ Router ให้เป็นเวอร์ชันล่าสุด',
+  'เปิดใช้งาน Guest Network สำหรับผู้มาเยือน',
+  'ตั้งค่า Network Mode ให้เหมาะกับอุปกรณ์ในบ้าน (Mixed Mode ถ้าจำเป็น)',
+  'กด Save Settings หลังการเปลี่ยนแปลงทุกครั้ง',
+];
+
+function buildChecklist() {
+  const container = document.getElementById('checklist-items');
+  container.innerHTML = checklistData.map((item, i) => `
+    <div class="input-group" style="flex-direction:row;align-items:center;gap:.6rem">
+      <input type="checkbox" id="chk-${i}" onchange="updateChecklist()" style="width:auto">
+      <label for="chk-${i}" style="font-family:var(--sans);font-size:.85rem;color:var(--text)">${item}</label>
+    </div>
+  `).join('');
+  updateChecklist();
+}
+
+function updateChecklist() {
+  const total = checklistData.length;
+  let done = 0;
+  for (let i = 0; i < total; i++) {
+    if (document.getElementById('chk-' + i).checked) done++;
+  }
+  const pct = Math.round(done / total * 100);
+  const el = document.getElementById('checklist-result');
+  el.innerHTML = `<span class="r-label">ความคืบหน้า: </span><span class="r-val">${done} / ${total} (${pct}%)</span>` +
+    (done === total ? '<br><span class="r-val">🎉 ตั้งค่าความปลอดภัยครบถ้วนแล้ว!</span>' : '');
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+buildFlashcards();
+buildQuiz();
+buildChecklist();
+</script>
+</body>
+</html>

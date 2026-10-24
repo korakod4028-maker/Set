@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCNA Module 4-5 — Network Basics 5</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg:        #0a0e17;
+    --surface:   #111827;
+    --surface2:  #1a2236;
+    --border:    #1e2d47;
+    --accent:    #00d4ff;
+    --accent2:   #7c3aed;
+    --accent3:   #10b981;
+    --warn:      #f59e0b;
+    --danger:    #ef4444;
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --mono:      'JetBrains Mono', monospace;
+    --sans:      'Sarabun', 'Inter', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,23,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    height: 56px;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    background: var(--accent2);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: .05em;
+  }
+  .badge.green { background: var(--accent3); }
+  header h1 { font-size: 0.95rem; font-weight: 600; color: var(--accent); flex: 1; }
+  nav { display: flex; gap: 1rem; }
+  nav a {
+    font-size: 0.78rem; color: var(--muted); text-decoration: none;
+    font-family: var(--mono); transition: color .2s;
+  }
+  nav a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem; color: var(--accent);
+    letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .hero h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700; line-height: 1.1;
+    background: linear-gradient(135deg, #e2e8f0 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+  }
+  .hero p { color: var(--muted); max-width: 540px; margin: 0 auto 2rem; }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+    margin-top: 2.5rem;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: var(--mono); font-size: 2rem; font-weight: 700;
+    color: var(--accent); display: block;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: .05em; }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .progress-label { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+  .progress-track {
+    flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 0.4s ease;
+  }
+  #progress-text { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); white-space: nowrap; }
+
+  /* ── LAYOUT ── */
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-family: var(--mono); font-size: 0.78rem;
+    background: none; border: none; border-bottom: 2px solid transparent;
+    color: var(--muted); cursor: pointer; padding: 0.75rem 1.25rem;
+    white-space: nowrap; transition: all .2s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn:hover { color: var(--text); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── SECTION TITLE ── */
+  .section-label {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--accent2); letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-size: 1.6rem; font-weight: 700; margin-bottom: 0.35rem;
+    color: var(--text);
+  }
+  .section-sub { color: var(--muted); margin-bottom: 2rem; font-size: 0.9rem; }
+
+  /* ── CARDS ── */
+  .grid { display: grid; gap: 1rem; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem; transition: border-color .2s, transform .15s;
+  }
+  .card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+  .card-icon {
+    font-size: 1.5rem; margin-bottom: 0.75rem; display: block;
+  }
+  .card h3 {
+    font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem;
+    color: var(--accent);
+  }
+  .card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .card ul { padding-left: 1.1rem; margin-top: 0.5rem; }
+  .card li { font-size: 0.83rem; color: var(--muted); margin-bottom: 0.2rem; }
+
+  /* ── INFO BOX ── */
+  .infobox {
+    background: var(--surface2); border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.5rem 0;
+    font-size: 0.88rem; color: var(--muted);
+  }
+  .infobox.warn { border-color: var(--warn); }
+  .infobox.danger { border-color: var(--danger); }
+  .infobox.green { border-color: var(--accent3); }
+  .infobox strong { color: var(--text); }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th {
+    background: var(--surface2); color: var(--accent);
+    font-family: var(--mono); font-size: 0.73rem; letter-spacing: .08em;
+    padding: 0.65rem 1rem; text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); color: var(--text); }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0;
+    font-family: var(--mono); font-size: 0.8rem; color: #a5d6ff;
+    overflow-x: auto; line-height: 1.8;
+  }
+  .code-block .comment { color: var(--muted); }
+  .code-block .highlight { color: var(--accent3); }
+
+  /* ── COMPARE BLOCK ── */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .compare-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem;
+  }
+  .compare-box .compare-label {
+    font-family: var(--mono); font-size: 0.68rem;
+    letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .compare-box.blue .compare-label { color: var(--accent); }
+  .compare-box.purple .compare-label { color: var(--accent2); }
+  .compare-box h4 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .compare-box p { font-size: 0.82rem; color: var(--muted); }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .flow-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.4rem 0.8rem;
+    font-family: var(--mono); font-size: 0.78rem; color: var(--accent);
+  }
+  .flow-arrow { color: var(--muted); font-size: 1rem; }
+
+  /* ── QUIZ ── */
+  .quiz-container { display: flex; flex-direction: column; gap: 1.5rem; }
+  .quiz-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; transition: border-color .2s;
+  }
+  .quiz-card.correct { border-color: var(--accent3); }
+  .quiz-card.wrong { border-color: var(--danger); }
+  .quiz-num {
+    font-family: var(--mono); font-size: 0.68rem;
+    color: var(--accent2); letter-spacing: .1em; margin-bottom: 0.5rem;
+  }
+  .quiz-q { font-weight: 600; margin-bottom: 1rem; font-size: 0.95rem; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .quiz-opt {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.65rem 1rem;
+    cursor: pointer; font-size: 0.85rem; color: var(--muted);
+    transition: all .15s; text-align: left;
+  }
+  .quiz-opt:hover { border-color: var(--accent2); color: var(--text); }
+  .quiz-opt.selected-correct { background: rgba(16,185,129,.15); border-color: var(--accent3); color: var(--accent3); }
+  .quiz-opt.selected-wrong { background: rgba(239,68,68,.12); border-color: var(--danger); color: var(--danger); }
+  .quiz-opt.reveal-correct { background: rgba(16,185,129,.08); border-color: var(--accent3); color: var(--accent3); }
+  .quiz-feedback {
+    margin-top: 0.75rem; font-size: 0.82rem; padding: 0.6rem 0.9rem;
+    border-radius: 6px; display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(16,185,129,.12); color: var(--accent3); }
+  .quiz-feedback.fail { background: rgba(239,68,68,.1); color: #fca5a5; }
+
+  .quiz-controls {
+    display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; align-items: center;
+  }
+  .btn {
+    font-family: var(--mono); font-size: 0.8rem;
+    border: none; border-radius: 8px; padding: 0.6rem 1.4rem; cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent2); color: #fff; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-accent { background: var(--accent3); color: #fff; }
+  .quiz-score {
+    font-family: var(--mono); font-size: 0.85rem; color: var(--muted); margin-top: 1.5rem;
+    display: none;
+  }
+  .quiz-score.show { display: block; }
+  #score-display { color: var(--accent); font-size: 1.2rem; }
+
+  /* ── FLASHCARD ── */
+  .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+  .flashcard {
+    perspective: 800px; height: 160px; cursor: pointer;
+  }
+  .flashcard-inner {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d; transition: transform .5s ease;
+  }
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+  .fc-front, .fc-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 10px; padding: 1.25rem;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+  }
+  .fc-front {
+    background: var(--surface); border: 1px solid var(--border);
+  }
+  .fc-front .fc-term {
+    font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--accent);
+  }
+  .fc-front .fc-hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; }
+  .fc-back {
+    background: var(--surface2); border: 1px solid var(--accent2);
+    transform: rotateY(180deg);
+  }
+  .fc-back .fc-def { font-size: 0.85rem; color: var(--text); line-height: 1.5; }
+  .fc-back .fc-example { font-size: 0.75rem; color: var(--muted); margin-top: 0.5rem; font-style: italic; }
+
+  /* ── CALC / TOOLS ── */
+  .calc-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .calc-box h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--accent); }
+  .input-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+  .input-group label { font-size: 0.78rem; color: var(--muted); font-family: var(--mono); }
+  .input-group input, .input-group select {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); border-radius: 6px; padding: 0.5rem 0.75rem;
+    font-family: var(--mono); font-size: 0.88rem; width: 100%;
+  }
+  .input-group input:focus, .input-group select:focus {
+    outline: none; border-color: var(--accent2);
+  }
+  .calc-result {
+    background: #0d1117; border: 1px solid var(--accent2);
+    border-radius: 8px; padding: 1rem;
+    font-family: var(--mono); font-size: 0.82rem;
+    line-height: 2; word-break: break-word;
+  }
+  .calc-result .r-val { color: var(--accent); font-weight: 700; }
+  .calc-result .r-label { color: var(--muted); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .compare { grid-template-columns: 1fr; }
+    nav { display: none; }
+    .hero-stats { gap: 1.5rem; }
+    .stat-num { font-size: 1.5rem; }
+  }
+
+  /* ── SEPARATOR ── */
+  .sep { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: 0.68rem;
+    padding: 2px 7px; border-radius: 4px; margin: 2px;
+    background: rgba(0,212,255,.1); color: var(--accent); border: 1px solid rgba(0,212,255,.2);
+  }
+  .tag.purple { background: rgba(124,58,237,.15); color: #c4b5fd; border-color: rgba(124,58,237,.3); }
+  .tag.green { background: rgba(16,185,129,.12); color: #6ee7b7; border-color: rgba(16,185,129,.25); }
+  .tag.red { background: rgba(239,68,68,.1); color: #fca5a5; border-color: rgba(239,68,68,.2); }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(124,58,237,.08), rgba(0,212,255,.06));
+    border: 1px solid rgba(0,212,255,.15); border-radius: 10px;
+    padding: 1.25rem 1.5rem; margin: 1.5rem 0;
+  }
+  .highlight-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+  .highlight-box p { font-size: 0.87rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <span class="badge">CISCO</span>
+  <span class="badge green">MODULE 4-5</span>
+  <h1>Communication Principles — Study Guide</h1>
+  <nav>
+    <a href="#" onclick="switchTab('summary')">📖 Summary</a>
+    <a href="#" onclick="switchTab('flashcards')">🃏 Flashcards</a>
+    <a href="#" onclick="switchTab('quiz')">✅ Quiz</a>
+    <a href="#" onclick="switchTab('tools')">🔧 Tools</a>
+  </nav>
+</header>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <span class="progress-label">QUIZ PROGRESS</span>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <span id="progress-text">0 / 30</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">CISCO NETWORKING ACADEMY · NETWORK FUNDAMENTALS</div>
+  <h2>Network Basics 5<br>Communication Principles</h2>
+  <p>สรุปเนื้อหา Module 4 (Networking Basics) + Module 5 (Communication Protocols, Standards, Network Models) พร้อม Flashcards แบบทดสอบ และเครื่องมือคำนวณ สำหรับเตรียมสอบสายงาน Network Engineer</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">8</span><span class="stat-label">Sub-Topics</span></div>
+    <div class="stat"><span class="stat-num">30</span><span class="stat-label">Quiz Questions</span></div>
+    <div class="stat"><span class="stat-num">32</span><span class="stat-label">Flashcards</span></div>
+    <div class="stat"><span class="stat-num">3</span><span class="stat-label">Tools</span></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('summary')">📖 เนื้อหา</button>
+    <button class="tab-btn" onclick="switchTab('flashcards')">🃏 Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">✅ Quiz</button>
+    <button class="tab-btn" onclick="switchTab('tools')">🔧 Tools</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: SUMMARY
+  ══════════════════════════════════════════ -->
+  <div id="tab-summary" class="tab-panel active">
+
+    <!-- 4.1 Binary & Bandwidth -->
+    <div class="section-label">MODULE 4.1</div>
+    <div class="section-title">ข้อมูลดิจิทัล, Network & Bandwidth</div>
+    <div class="section-sub">พื้นฐานของ Binary, สื่อกลางเครือข่าย และหน่วยวัดความเร็ว</div>
+
+    <div class="highlight-box">
+      <h4>💻 คอมพิวเตอร์ "คิด" เป็น Binary เท่านั้น</h4>
+      <p>ข้อมูลทุกชนิดที่อุปกรณ์เครือข่ายประมวลผล ไม่ว่าจะเป็นข้อความ ภาพ หรือเสียง ล้วนถูกแปลงเป็นเลขฐานสอง (0 และ 1) ก่อนเสมอ — เลขฐานสอง 1 หลัก (1 บิต) แทนค่าได้เพียง 2 ค่า</p>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="card-icon">🔌</span>
+        <h3>Network</h3>
+        <p>สิ่งที่ทำให้อุปกรณ์ดิจิทัลเชื่อมต่อและแลกเปลี่ยนข้อมูลกันได้</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📡</span>
+        <h3>Network Media</h3>
+        <p>สื่อกลางของเครือข่าย ได้แก่ <strong>สายสัญญาณ (Wires)</strong> และ <strong>คลื่นวิทยุ (Radio Waves)</strong></p>
+      </div>
+      <div class="card">
+        <span class="card-icon">⚡</span>
+        <h3>Bandwidth</h3>
+        <p>ความสามารถในการรับส่งข้อมูลของสื่อกลาง วัดหน่วยเป็น Kbps / Mbps / Gbps / Tbps</p>
+      </div>
+    </div>
+
+    <div class="flow" style="margin-top:1.5rem">
+      <div class="flow-box">Kbps</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Mbps</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Gbps</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Tbps</div>
+    </div>
+    <div class="infobox">จำลำดับจากน้อยไปมาก: <strong>Kilo &lt; Mega &lt; Giga &lt; Tera</strong> — เป็นคำถามยอดฮิตของ Module 4</div>
+
+    <hr class="sep">
+
+    <!-- 4.2 End vs Intermediary -->
+    <div class="section-label">MODULE 4.2</div>
+    <div class="section-title">End Devices vs Intermediary Devices</div>
+    <div class="section-sub">อุปกรณ์ในเครือข่ายแบ่งออกเป็น 2 ประเภทหลัก</div>
+
+    <div class="compare">
+      <div class="compare-box blue">
+        <div class="compare-label">End Device</div>
+        <h4 style="color:var(--accent)">อุปกรณ์ปลายทาง</h4>
+        <p>จุดเริ่มต้นหรือปลายทางของข้อมูล ผู้ใช้งานโต้ตอบโดยตรง</p>
+        <br>
+        <div class="tag">PC</div><div class="tag">Laptop</div><div class="tag">Smartphone</div><div class="tag">Printer</div><div class="tag">Smart Device</div>
+      </div>
+      <div class="compare-box purple">
+        <div class="compare-label">Intermediary Device</div>
+        <h4 style="color:var(--accent2)">อุปกรณ์ตัวกลาง</h4>
+        <p>เชื่อมต่อและส่งต่อข้อมูลระหว่าง End Device ต่างๆ</p>
+        <br>
+        <div class="tag purple">Router</div><div class="tag purple">Switch</div><div class="tag purple">Firewall</div><div class="tag purple">Access Point</div><div class="tag purple">Hub</div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 4.3 Wireless & Mobile -->
+    <div class="section-label">MODULE 4.3</div>
+    <div class="section-title">การเชื่อมต่ออินเทอร์เน็ตและเทคโนโลยีไร้สาย</div>
+    <div class="section-sub">Wired, Bluetooth, NFC, Wi-Fi, Cellular และ Tethering</div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <span class="card-icon">🔌</span>
+        <h3>Wired High-Speed Internet</h3>
+        <p><strong>Cable</strong> และ <strong>DSL</strong> เป็นการเชื่อมต่อความเร็วสูงแบบมีสาย</p>
+        <div class="tag red" style="margin-top:.5rem">Dial-up = ช้า ไม่จัดเป็น High-Speed</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">📶</span>
+        <h3>Wireless Internet</h3>
+        <p><strong>Satellite</strong> และ <strong>Cellular</strong> เป็นการเชื่อมต่ออินเทอร์เน็ตแบบไร้สาย</p>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:1.5rem">
+      <table>
+        <thead><tr><th>เทคโนโลยี</th><th>ลักษณะการใช้งาน</th><th>ตัวอย่าง</th></tr></thead>
+        <tbody>
+          <tr><td>Bluetooth</td><td>เชื่อมต่อระยะสั้น จับคู่อุปกรณ์ (Pairing) มักต้องใช้ PIN</td><td>หูฟังไร้สายฟังเพลงจากมือถือ</td></tr>
+          <tr><td>NFC</td><td>เชื่อมต่อระยะประชิดมาก ใช้แลกเปลี่ยนข้อมูลจำนวนน้อยอย่างรวดเร็ว</td><td>แตะจ่ายเงินที่เครื่อง POS</td></tr>
+          <tr><td>Wi-Fi</td><td>เครือข่ายไร้สายระยะกลาง เชื่อมต่ออินเทอร์เน็ตในบ้าน/ที่ทำงาน</td><td>เชื่อมต่อผ่านเราเตอร์ไร้สาย</td></tr>
+          <tr><td>Cellular</td><td>เครือข่ายมือถือระยะไกล ให้บริการอินเทอร์เน็ตนอกบ้าน</td><td>3G/4G/5G ขณะเดินทาง</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="infobox green">
+      <strong>📲 Tethering</strong> คือการแชร์สัญญาณอินเทอร์เน็ตจากมือถือไปยังอุปกรณ์อื่น — วิธีหลักที่มือถือเชื่อมต่ออินเทอร์เน็ตคือ <strong>Cellular</strong> และ <strong>Wi-Fi</strong>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 4.4 Home Wireless -->
+    <div class="section-label">MODULE 4.4</div>
+    <div class="section-title">เครือข่ายไร้สายภายในบ้าน (Home Wireless LAN)</div>
+    <div class="section-sub">SSID, MAC Filtering และย่านความถี่ RF</div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="card-icon">🏠</span>
+        <h3>Wireless Router</h3>
+        <p>ต้องมีอุปกรณ์นี้เพื่อสร้างเครือข่าย Wi-Fi ภายในบ้าน</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏷️</span>
+        <h3>SSID</h3>
+        <p>ชื่อที่ใช้ระบุเครือข่าย WLAN แต่ละเครือข่ายอย่างไม่ซ้ำกัน</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔒</span>
+        <h3>MAC Filtering</h3>
+        <p>จำกัดการเข้าถึงเครือข่ายไร้สายโดยอนุญาตเฉพาะอุปกรณ์ที่มี MAC Address ที่กำหนดไว้</p>
+      </div>
+    </div>
+
+    <div class="compare" style="margin-top:1.5rem">
+      <div class="compare-box blue">
+        <div class="compare-label">2.4 GHz</div>
+        <h4 style="color:var(--accent)">ระยะไกล ทะลุกำแพงดี</h4>
+        <p>ความเร็วต่ำกว่า สัญญาณรบกวนมากกว่า (ใช้ร่วมกับอุปกรณ์อื่น เช่น ไมโครเวฟ)</p>
+        <br><p>มาตรฐาน IEEE 802.11b/g ใช้คลื่นนี้</p>
+      </div>
+      <div class="compare-box purple">
+        <div class="compare-label">5 GHz</div>
+        <h4 style="color:var(--accent2)">ความเร็วสูงกว่า</h4>
+        <p>สัญญาณรบกวนน้อยกว่า แต่ระยะสัญญาณสั้นกว่า</p>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 5.1 Protocols -->
+    <div class="section-label">MODULE 5.1</div>
+    <div class="section-title">Communication Protocols</div>
+    <div class="section-sub">กฎการสื่อสารระหว่างอุปกรณ์ในเครือข่าย</div>
+
+    <div class="highlight-box">
+      <h4>🗣️ ตัวอย่าง Kishori &amp; Srinivas</h4>
+      <p>พยาบาลพูด Marathi ผู้ป่วยพูด Telugu ไม่เข้าใจภาษาแม่ของกันและกัน แต่ทั้งคู่พูดอังกฤษได้ จึงตกลงสื่อสารด้วยภาษาอังกฤษ — ก่อนสื่อสารกันต้องตกลง 3 เรื่องตามลำดับ</p>
+    </div>
+
+    <div class="flow">
+      <div class="flow-box">1. Method</div><span class="flow-arrow">→</span>
+      <div class="flow-box">2. Language</div><span class="flow-arrow">→</span>
+      <div class="flow-box">3. Confirmation</div>
+    </div>
+    <div class="infobox">
+      ตัวอย่างข้อสอบ: Bianka ถามทาง Nguyệt เป็นภาษาอังกฤษ (Method = พูดคุย, Language = English) แล้ว Bianka พูดทวนและ Nguyệt ยืนยันว่า "Yes, that is correct." (Confirmation) — ลำดับคือ <strong>Method → Language → Confirmation</strong>
+    </div>
+
+    <div class="section-sub" style="margin-top:1.5rem;margin-bottom:.75rem">6 คุณลักษณะที่ Protocol กำหนด (Protocol Characteristics)</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>คุณลักษณะ</th><th>ความหมาย</th><th>ตัวอย่าง</th></tr></thead>
+        <tbody>
+          <tr><td>Message Format</td><td>โครงสร้างของข้อมูล</td><td>Header | Data | Trailer</td></tr>
+          <tr><td>Message Size</td><td>ขนาดสูงสุดของข้อมูลที่ส่งได้ในแต่ละครั้ง</td><td>Ethernet Frame ~64–1518 Bytes</td></tr>
+          <tr><td>Timing</td><td>จังหวะเวลาในการส่ง (Flow Control)</td><td>ควบคุมความเร็วและลำดับการส่ง</td></tr>
+          <tr><td>Encoding</td><td>การแปลงข้อมูลเป็นบิตแล้วแปลงเป็นสัญญาณ</td><td>สาย LAN→ไฟฟ้า, Fiber→แสง, Wi-Fi→คลื่นวิทยุ</td></tr>
+          <tr><td>Encapsulation</td><td>การเพิ่ม Header/Trailer ห่อหุ้มข้อมูลก่อนส่ง</td><td>ใส่ Source/Destination Address ใน Header</td></tr>
+          <tr><td>Message Pattern</td><td>รูปแบบการส่ง Request/Response หรือ Streaming</td><td>HTTP (Req/Res), วิดีโอสด (Streaming)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="compare" style="margin-top:1.5rem">
+      <div class="compare-box blue">
+        <div class="compare-label">TCP</div>
+        <h4 style="color:var(--accent)">Reliable</h4>
+        <p>มี ACK ตรวจสอบข้อมูลทุก Packet เหมาะกับเว็บ ดาวน์โหลด อีเมล</p>
+      </div>
+      <div class="compare-box purple">
+        <div class="compare-label">UDP</div>
+        <h4 style="color:var(--accent2)">Fast</h4>
+        <p>ไม่มี ACK ไม่ตรวจสอบทุก Packet เหมาะกับสตรีมมิ่ง เกม VoIP</p>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 5.2 Standards -->
+    <div class="section-label">MODULE 5.2</div>
+    <div class="section-title">Network Protocols and Standards</div>
+    <div class="section-sub">มาตรฐานที่ทำให้อุปกรณ์ต่างยี่ห้อสื่อสารกันได้</div>
+
+    <div class="flow">
+      <div class="flow-box">เสนอแนวคิด</div><span class="flow-arrow">→</span>
+      <div class="flow-box">อภิปราย</div><span class="flow-arrow">→</span>
+      <div class="flow-box">ทดลอง</div><span class="flow-arrow">→</span>
+      <div class="flow-box">ปรับปรุง</div><span class="flow-arrow">→</span>
+      <div class="flow-box">อนุมัติ</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Standard</div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:1rem">
+      <table>
+        <thead><tr><th>องค์กร</th><th>ชื่อเต็ม</th><th>หน้าที่หลัก</th></tr></thead>
+        <tbody>
+          <tr><td>IETF</td><td>Internet Engineering Task Force</td><td>พัฒนาโปรโตคอลอินเทอร์เน็ต ดูแลและเผยแพร่ RFC</td></tr>
+          <tr><td>IANA</td><td>Internet Assigned Numbers Authority</td><td>จัดสรร IP Address, DNS Root, Port Number</td></tr>
+          <tr><td>IEEE</td><td>Institute of Electrical and Electronics Engineers</td><td>มาตรฐาน Ethernet (802.3), Wi-Fi (802.11), Bluetooth (802.15)</td></tr>
+          <tr><td>ISO</td><td>International Organization for Standardization</td><td>พัฒนามาตรฐานสากล ผู้กำหนด OSI Model</td></tr>
+          <tr><td>ICANN</td><td>Internet Corporation for Assigned Names and Numbers</td><td>บริหารชื่อโดเมนและการจัดสรร IP Address เชิงนโยบาย</td></tr>
+          <tr><td>W3C</td><td>World Wide Web Consortium</td><td>มาตรฐานเว็บไซต์ เช่น HTML, CSS</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="infobox warn">
+      <strong>RFC (Request for Comments)</strong> คือเอกสารที่บันทึกแนวคิดและรายละเอียดของมาตรฐานอินเทอร์เน็ต แต่ละฉบับมีหมายเลขกำกับ เช่น RFC 791 (IPv4), RFC 1035 (DNS) — เผยแพร่และดูแลโดย <strong>IETF</strong>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 5.3 Models -->
+    <div class="section-label">MODULE 5.3</div>
+    <div class="section-title">TCP/IP Model และ OSI Model</div>
+    <div class="section-sub">Protocol Model (ใช้งานจริง) เทียบกับ Reference Model (ใช้อธิบาย)</div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>TCP/IP Model — 4 Layer (Protocol Model)</h3>
+        <ul>
+          <li><strong>4. Application</strong> — HTTP, HTTPS, DNS, FTP, SMTP, DHCP</li>
+          <li><strong>3. Transport</strong> — TCP, UDP</li>
+          <li><strong>2. Internet</strong> — IPv4, IPv6, ICMP</li>
+          <li><strong>1. Network Access</strong> — Ethernet, Wi-Fi</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>OSI Model — 7 Layer (Reference Model)</h3>
+        <ul>
+          <li><strong>7. Application</strong> — Browser, Email</li>
+          <li><strong>6. Presentation</strong> — เข้ารหัส/บีบอัด</li>
+          <li><strong>5. Session</strong> — จัดการ Session</li>
+          <li><strong>4. Transport</strong> — Segment/Reassemble</li>
+          <li><strong>3. Network</strong> — Routing, IP Address</li>
+          <li><strong>2. Data Link</strong> — Frame, MAC Address</li>
+          <li><strong>1. Physical</strong> — Bit, สาย/Fiber/Wi-Fi</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:1.5rem">
+      <table>
+        <thead><tr><th>OSI Model (7 Layer)</th><th>TCP/IP Model (4 Layer)</th></tr></thead>
+        <tbody>
+          <tr><td>Application + Presentation + Session</td><td>Application</td></tr>
+          <tr><td>Transport</td><td>Transport</td></tr>
+          <tr><td>Network</td><td>Internet</td></tr>
+          <tr><td>Data Link + Physical</td><td>Network Access</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="infobox green">
+      <strong>จำให้แม่น:</strong> OSI = 7 Layer ใช้อธิบาย/สอน (Reference Model) &nbsp;|&nbsp; TCP/IP = 4 Layer ใช้งานจริงบนอินเทอร์เน็ต (Protocol Model)
+    </div>
+
+    <hr class="sep">
+
+    <!-- 5.4 Encapsulation -->
+    <div class="section-label">MODULE 5.4</div>
+    <div class="section-title">Data Encapsulation & PDU</div>
+    <div class="section-sub">หน่วยข้อมูลในแต่ละ Layer เปลี่ยนชื่อไปตามลำดับ</div>
+
+    <div class="flow">
+      <div class="flow-box">Data</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Segment</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Packet</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Frame</div><span class="flow-arrow">→</span>
+      <div class="flow-box">Bits</div>
+    </div>
+
+    <div class="code-block">
+<span class="comment">// การห่อหุ้มข้อมูล (Encapsulation) ก่อนส่งออกเครือข่าย</span>
+Application Data
+  ↓ <span class="highlight">+ TCP Header</span>       → Segment
+  ↓ <span class="highlight">+ IP Header</span>        → Packet
+  ↓ <span class="highlight">+ Ethernet Header</span>  → Frame
+  ↓ <span class="highlight">แปลงเป็น Bits</span>       → ส่งออกสื่อกลาง
+    </div>
+
+    <div class="infobox">
+      ตัวอย่างข้อสอบ: Ethernet Frame วาง <strong>Destination MAC ไว้ก่อน Source MAC</strong> — นี่คือคุณสมบัติของ <strong>Encapsulation</strong> (การจัดวางข้อมูลใน Header)
+    </div>
+
+  </div><!-- end summary -->
+
+  <!-- ══════════════════════════════════════════
+       TAB: FLASHCARDS
+  ══════════════════════════════════════════ -->
+  <div id="tab-flashcards" class="tab-panel">
+    <div class="section-label">FLASHCARDS</div>
+    <div class="section-title">คำศัพท์สำคัญ Module 4-5</div>
+    <div class="section-sub">คลิกที่การ์ดเพื่อดูคำนิยาม</div>
+
+    <div class="flashcard-grid" id="flashcard-grid"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: QUIZ
+  ══════════════════════════════════════════ -->
+  <div id="tab-quiz" class="tab-panel">
+    <div class="section-label">QUIZ</div>
+    <div class="section-title">แบบทดสอบ Module 4-5</div>
+    <div class="section-sub">30 ข้อ — ครอบคลุม Networking Basics, Protocols, Standards, TCP/IP &amp; OSI</div>
+
+    <div class="quiz-container" id="quiz-container"></div>
+
+    <div class="quiz-controls">
+      <button class="btn btn-accent" onclick="checkAll()">✔ ตรวจข้อสอบ</button>
+      <button class="btn btn-secondary" onclick="resetQuiz()">↺ ทำใหม่</button>
+    </div>
+    <div class="quiz-score" id="quiz-score">
+      คะแนนของคุณ: <span id="score-display"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: TOOLS
+  ══════════════════════════════════════════ -->
+  <div id="tab-tools" class="tab-panel">
+    <div class="section-label">TOOLS</div>
+    <div class="section-title">เครื่องมือคำนวณ &amp; ทบทวน</div>
+    <div class="section-sub">เครื่องมือสำหรับ Network Engineer</div>
+
+    <!-- Bandwidth Unit Converter -->
+    <div class="calc-box">
+      <h3>📐 Bandwidth Unit Converter</h3>
+      <div class="grid grid-2">
+        <div>
+          <div class="input-group">
+            <label>ค่าที่ต้องการแปลง</label>
+            <input type="number" id="conv-val" placeholder="เช่น 1000" oninput="calcConvert()">
+          </div>
+          <div class="input-group">
+            <label>หน่วยต้นทาง</label>
+            <select id="conv-from" onchange="calcConvert()">
+              <option value="1">bps</option>
+              <option value="1000">Kbps</option>
+              <option value="1000000" selected>Mbps</option>
+              <option value="1000000000">Gbps</option>
+              <option value="1000000000000">Tbps</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-result" id="conv-result" style="align-self:center">
+          <span class="r-label">รอผลการคำนวณ...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OSI <-> TCP/IP Layer Finder -->
+    <div class="calc-box">
+      <h3>🧭 OSI ↔ TCP/IP Layer Finder</h3>
+      <div class="input-group">
+        <label>เลือก OSI Layer</label>
+        <select id="layer-select" onchange="calcLayer()">
+          <option value="7">Layer 7 — Application</option>
+          <option value="6">Layer 6 — Presentation</option>
+          <option value="5">Layer 5 — Session</option>
+          <option value="4">Layer 4 — Transport</option>
+          <option value="3">Layer 3 — Network</option>
+          <option value="2">Layer 2 — Data Link</option>
+          <option value="1">Layer 1 — Physical</option>
+        </select>
+      </div>
+      <div class="calc-result" id="layer-result">
+        <span class="r-label">เลือก Layer เพื่อดูข้อมูล...</span>
+      </div>
+    </div>
+
+    <!-- Text to Binary Encoder -->
+    <div class="calc-box">
+      <h3>🔢 Text → Binary (ASCII) Encoder</h3>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">สาธิตแนวคิด Encoding — การแปลงข้อมูลเป็นบิตก่อนส่งผ่านเครือข่าย</p>
+      <div class="input-group">
+        <label>พิมพ์ข้อความ (ภาษาอังกฤษ/ตัวเลข)</label>
+        <input type="text" id="bin-input" placeholder="เช่น Hi" oninput="calcBinary()" maxlength="12">
+      </div>
+      <div class="calc-result" id="bin-result">
+        <span class="r-label">พิมพ์ข้อความเพื่อดูผลลัพธ์...</span>
+      </div>
+    </div>
+
+  </div><!-- end tools -->
+</div><!-- end wrapper -->
+
+<script>
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const idx = ['summary','flashcards','quiz','tools'].indexOf(name);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// FLASHCARDS
+// ══════════════════════════════════════════
+const flashcards = [
+  { term: 'Binary', hint: 'เลขฐานอะไร', def: 'เลขฐานสอง — คอมพิวเตอร์ประมวลผลข้อมูลด้วย 0 และ 1 เท่านั้น', ex: '1 บิตแทนค่าได้ 2 ค่า' },
+  { term: 'Network', hint: 'นิยาม', def: 'สิ่งที่ทำให้อุปกรณ์ดิจิทัลเชื่อมต่อและแลกเปลี่ยนข้อมูลกันได้', ex: 'บ้าน สำนักงาน อินเทอร์เน็ต' },
+  { term: 'Bandwidth', hint: 'หน่วยวัด', def: 'ความสามารถในการรับส่งข้อมูลของสื่อกลาง วัดเป็น bps/Kbps/Mbps/Gbps/Tbps', ex: 'โปรอินเทอร์เน็ต 100 Mbps' },
+  { term: 'Network Media', hint: 'สื่อกลาง', def: 'สายสัญญาณ (Wires) และคลื่นวิทยุ (Radio Waves) ที่ใช้ส่งข้อมูล', ex: 'สาย LAN, Fiber, Wi-Fi' },
+  { term: 'End Device', hint: 'ประเภทอุปกรณ์', def: 'อุปกรณ์ปลายทางที่ผู้ใช้โต้ตอบโดยตรง', ex: 'PC, Smartphone, Printer' },
+  { term: 'Intermediary Device', hint: 'ประเภทอุปกรณ์', def: 'อุปกรณ์ตัวกลางที่เชื่อมต่อและส่งต่อข้อมูล', ex: 'Router, Switch, Firewall' },
+  { term: 'SSID', hint: 'Wi-Fi', def: 'ชื่อที่ใช้ระบุเครือข่าย WLAN อย่างไม่ซ้ำกัน', ex: '"Home_WiFi_5G"' },
+  { term: 'MAC Filtering', hint: 'ความปลอดภัย Wi-Fi', def: 'จำกัดการเข้าถึงเครือข่ายไร้สายตาม MAC Address ของอุปกรณ์', ex: 'อนุญาตเฉพาะอุปกรณ์ที่ลงทะเบียนไว้' },
+  { term: 'Tethering', hint: 'มือถือ', def: 'การแชร์สัญญาณอินเทอร์เน็ตจากมือถือไปยังอุปกรณ์อื่น', ex: 'แชร์ Hotspot ให้โน้ตบุ๊ก' },
+  { term: 'NFC', hint: 'ระยะสัญญาณ', def: 'Near Field Communication — เชื่อมต่อระยะประชิดมาก แลกเปลี่ยนข้อมูลจำนวนน้อยอย่างรวดเร็ว', ex: 'แตะจ่ายเงินที่เครื่อง POS' },
+  { term: 'Bluetooth', hint: 'ระยะสัญญาณ', def: 'เทคโนโลยีไร้สายระยะสั้น ใช้จับคู่อุปกรณ์ (Pairing) มักต้องใช้ PIN', ex: 'หูฟังไร้สายฟังเพลง' },
+  { term: 'Protocol', hint: 'นิยาม', def: 'ชุดกฎที่กำหนดวิธีการสื่อสารระหว่างอุปกรณ์ในเครือข่าย', ex: 'TCP, IP, HTTP, Ethernet' },
+  { term: 'Standard', hint: 'นิยาม', def: 'มาตรฐานกลางที่ทุกผู้ผลิต/บริษัทตกลงปฏิบัติตาม เพื่อให้อุปกรณ์ทำงานร่วมกันได้', ex: 'ทำให้ Apple คุยกับ Samsung ได้' },
+  { term: 'Sender / Receiver', hint: 'บทบาท', def: 'ผู้ส่งข้อมูล / ผู้รับข้อมูลในการสื่อสารระหว่างอุปกรณ์', ex: 'PC A (Sender) → PC B (Receiver)' },
+  { term: 'Message Format', hint: 'Protocol Char.', def: 'โครงสร้าง/รูปแบบของข้อมูลที่ส่ง เช่น Header–Data–Trailer', ex: 'อีเมล: From/To/Subject/Body' },
+  { term: 'Message Size', hint: 'Protocol Char.', def: 'ขนาดสูงสุดของข้อมูลที่ส่งได้ในแต่ละครั้ง', ex: 'Ethernet Frame 64–1518 Bytes' },
+  { term: 'Timing', hint: 'Protocol Char.', def: 'จังหวะเวลาในการส่งข้อมูล ควบคุมความเร็วและการจัดลำดับ', ex: 'Flow Control' },
+  { term: 'Encoding', hint: 'Protocol Char.', def: 'การแปลงข้อมูลเป็นบิต (0/1) แล้วแปลงเป็นสัญญาณตามสื่อกลาง', ex: 'สาย LAN→ไฟฟ้า, Fiber→แสง' },
+  { term: 'Encapsulation', hint: 'Protocol Char.', def: 'การห่อหุ้มข้อมูลด้วยการเพิ่ม Header/Trailer ก่อนส่ง', ex: 'เพิ่ม Source/Destination Address' },
+  { term: 'Message Pattern', hint: 'Protocol Char.', def: 'รูปแบบการส่งข้อมูล เช่น Request/Response หรือ Streaming', ex: 'HTTP = Request/Response' },
+  { term: 'Acknowledgment (ACK)', hint: 'TCP', def: 'การยืนยันว่าข้อมูลถูกส่งถึงและได้รับแล้ว', ex: 'ใช้ใน TCP เพื่อความเชื่อถือได้' },
+  { term: 'RFC', hint: 'ย่อมาจาก', def: 'Request for Comments — เอกสารบันทึกและเผยแพร่มาตรฐานอินเทอร์เน็ต แต่ละฉบับมีหมายเลขกำกับ', ex: 'RFC 791 = IPv4, RFC 1035 = DNS' },
+  { term: 'IETF', hint: 'องค์กร', def: 'Internet Engineering Task Force — พัฒนาโปรโตคอลอินเทอร์เน็ตและดูแลเผยแพร่ RFC', ex: 'ดูแล RFC โดยตรง' },
+  { term: 'IANA', hint: 'องค์กร', def: 'Internet Assigned Numbers Authority — จัดสรร IP Address, DNS Root, Port Number', ex: 'จัดการทรัพยากรหมายเลขอินเทอร์เน็ต' },
+  { term: 'IEEE', hint: 'องค์กร', def: 'กำหนดมาตรฐานเครือข่าย เช่น Ethernet และ Wi-Fi', ex: '802.3 = Ethernet, 802.11 = Wi-Fi' },
+  { term: 'ISO', hint: 'องค์กร', def: 'International Organization for Standardization — ผู้กำหนด OSI Model', ex: 'พัฒนามาตรฐานสากล' },
+  { term: 'ICANN', hint: 'องค์กร', def: 'ดูแลชื่อโดเมนและการจัดสรร IP Address ในระดับนโยบาย', ex: 'บริหารจัดการ Domain Name' },
+  { term: 'W3C', hint: 'องค์กร', def: 'World Wide Web Consortium — กำหนดมาตรฐานของเว็บไซต์', ex: 'HTML, CSS' },
+  { term: 'TCP/IP Model', hint: 'จำนวน Layer', def: 'แบบจำลอง Protocol Model ที่ใช้งานจริง มี 4 Layer', ex: 'Application, Transport, Internet, Network Access' },
+  { term: 'OSI Model', hint: 'จำนวน Layer', def: 'แบบจำลอง Reference Model มี 7 Layer ใช้อธิบายและสอน', ex: 'พัฒนาโดย ISO' },
+  { term: 'PDU', hint: 'ย่อมาจาก', def: 'Protocol Data Unit — ชื่อของหน่วยข้อมูลในแต่ละ Layer', ex: 'Data → Segment → Packet → Frame → Bits' },
+  { term: 'Frame', hint: 'PDU Layer 2', def: 'หน่วยข้อมูลใน Data Link Layer ใช้ MAC Address', ex: 'Switch ทำงานกับ Frame' },
+];
+
+function buildFlashcards() {
+  const grid = document.getElementById('flashcard-grid');
+  grid.innerHTML = flashcards.map((fc, i) => `
+    <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
+      <div class="flashcard-inner">
+        <div class="fc-front">
+          <div class="fc-term">${fc.term}</div>
+          <div class="fc-hint">${fc.hint}</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:.75rem">คลิกเพื่อดูคำตอบ</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-def">${fc.def}</div>
+          <div class="fc-example">${fc.ex}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function flipCard(i) {
+  document.getElementById('fc-' + i).classList.toggle('flipped');
+}
+
+// ══════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════
+const questions = [
+  { q: 'เลขฐานสอง (Binary) 1 หลัก สามารถแทนค่าได้กี่ค่า?', opts: ['1', '2', '4', '8'], ans: 1 },
+  { q: 'คอมพิวเตอร์และอุปกรณ์เครือข่ายประมวลผลข้อมูลด้วยรูปแบบใด?', opts: ['Text', 'Binary', 'Analog', 'Decimal'], ans: 1 },
+  { q: 'สิ่งใดทำให้อุปกรณ์ดิจิทัลสามารถเชื่อมต่อและแลกเปลี่ยนข้อมูลกันได้?', opts: ['Sensor', 'Network', 'GPS', 'Smartphone'], ans: 1 },
+  { q: 'ลำดับหน่วยวัด Bandwidth จากน้อยไปมากคือข้อใด?', opts: ['Kbps → Mbps → Gbps → Tbps', 'Gbps → Tbps → Mbps → Kbps', 'Tbps → Mbps → Kbps → Gbps', 'Mbps → Kbps → Tbps → Gbps'], ans: 0 },
+  { q: 'สิ่งใดเรียกรวมกันว่า "Network Media"?', opts: ['Routers and switches', 'Wires and radio waves', 'PCs and laptops', 'Firewalls and servers'], ans: 1 },
+  { q: 'ข้อใดต่อไปนี้เป็น End Device ทั้งคู่?', opts: ['Laptop และ Printer', 'Router และ Switch', 'Hub และ Firewall', 'Switch และ Access Point'], ans: 0 },
+  { q: 'ข้อใดต่อไปนี้คือ Intermediary Device?', opts: ['Router', 'Laptop', 'Printer', 'Smart Device'], ans: 0 },
+  { q: 'อินเทอร์เน็ตความเร็วสูงแบบมีสาย 2 ชนิดคือข้อใด?', opts: ['Cable และ DSL', 'Satellite และ Cellular', 'Dial-up และ Cable', 'Cellular และ DSL'], ans: 0 },
+  { q: 'ขณะจับคู่อุปกรณ์ผ่าน Bluetooth มักต้องใช้ข้อมูลใด?', opts: ['a PIN', 'the SSID', 'an IP address', 'a username'], ans: 0 },
+  { q: 'หูฟังไร้สายที่เชื่อมต่อกับสมาร์ตโฟนเพื่อฟังเพลง ใช้เทคโนโลยีใด?', opts: ['Wi-Fi', 'Bluetooth', 'NFC', 'Infrared'], ans: 1 },
+  { q: 'การแตะสมาร์ตโฟนที่เครื่อง POS เพื่อจ่ายเงิน ใช้เทคโนโลยีใด?', opts: ['Bluetooth', 'Wi-Fi', 'NFC', '3G'], ans: 2 },
+  { q: 'Tethering หมายถึงอะไร?', opts: ['การแชร์อินเทอร์เน็ตจากมือถือไปยังอุปกรณ์อื่น', 'การเชื่อมต่อหูฟังไร้สาย', 'การเสียบชาร์จผ่าน USB', 'การเชื่อมต่อ 4G เท่านั้น'], ans: 0 },
+  { q: 'เทคโนโลยีใดใช้ระบุชื่อเครือข่าย WLAN อย่างไม่ซ้ำกัน?', opts: ['SSID', 'WEP', 'WPA', 'MAC address table'], ans: 0 },
+  { q: 'MAC Filtering มีคุณสมบัติอย่างไร?', opts: ['เข้ารหัสข้อมูลทั้งหมด', 'จำกัดการเข้าถึงเครือข่ายตาม MAC Address', 'ตั้งค่าได้ที่คอมพิวเตอร์เท่านั้น', 'เพิ่มความเร็ว Wi-Fi'], ans: 1 },
+  { q: 'มาตรฐาน IEEE 802.11b/g ใช้คลื่นความถี่ใด?', opts: ['900 MHz', '2.4 GHz', '5 GHz', '60 GHz'], ans: 1 },
+  { q: 'ก่อนเริ่มสื่อสารกัน ควรตกลง 3 เรื่องตามลำดับใด?', opts: ['Method → Language → Confirmation', 'Language → Method → Confirmation', 'Confirmation → Method → Language', 'Method → Confirmation → Language'], ans: 0 },
+  { q: 'Protocol คืออะไร?', opts: ['ชุดกฎที่กำหนดวิธีการสื่อสารระหว่างอุปกรณ์', 'ชื่อของเครือข่ายไร้สาย', 'อุปกรณ์ตัวกลางชนิดหนึ่ง', 'สายสัญญาณชนิดหนึ่ง'], ans: 0 },
+  { q: 'การที่ Destination MAC อยู่ก่อน Source MAC ใน Ethernet Frame เกี่ยวข้องกับคุณสมบัติ Protocol ข้อใด?', opts: ['Encoding', 'Encapsulation', 'Timing', 'Message Pattern'], ans: 1 },
+  { q: 'Ethernet Frame มีขนาด 64–1518 Bytes เกี่ยวข้องกับคุณสมบัติของ Protocol ข้อใด?', opts: ['Message Size', 'Timing', 'Message Pattern', 'Encapsulation'], ans: 0 },
+  { q: 'องค์กรใดเผยแพร่และดูแลเอกสาร RFC?', opts: ['IETF', 'IEEE', 'ISO', 'ICANN'], ans: 0 },
+  { q: 'องค์กรใดเป็นผู้กำหนดมาตรฐาน Ethernet และ Wi-Fi?', opts: ['IEEE', 'IETF', 'IANA', 'W3C'], ans: 0 },
+  { q: 'ISO เป็นผู้กำหนดแบบจำลองใด?', opts: ['OSI Model', 'TCP/IP Model', 'RFC Model', 'IEEE Model'], ans: 0 },
+  { q: 'IANA มีหน้าที่หลักคือข้อใด?', opts: ['จัดสรร IP Address, DNS Root และ Port Number', 'กำหนดมาตรฐาน Wi-Fi', 'เผยแพร่เอกสาร RFC', 'ดูแลมาตรฐานเว็บ HTML/CSS'], ans: 0 },
+  { q: 'TCP/IP Model มีทั้งหมดกี่ Layer?', opts: ['4', '7', '5', '3'], ans: 0 },
+  { q: 'OSI Model มีทั้งหมดกี่ Layer?', opts: ['7', '4', '5', '6'], ans: 0 },
+  { q: 'OSI Layer ใดรวมกันเป็น TCP/IP Application Layer?', opts: ['Application + Presentation + Session', 'Transport + Network', 'Data Link + Physical', 'Session + Transport'], ans: 0 },
+  { q: 'OSI Layer ใดรวมกันเป็น TCP/IP Network Access Layer?', opts: ['Data Link + Physical', 'Application + Session', 'Transport + Network', 'Presentation + Session'], ans: 0 },
+  { q: 'Layer ใดของ OSI มีหน้าที่ Segment และ Reassemble ข้อมูล?', opts: ['Transport', 'Network', 'Physical', 'Session'], ans: 0 },
+  { q: 'Router ทำงานอยู่ที่ Layer ใดของ OSI Model?', opts: ['Network', 'Transport', 'Physical', 'Session'], ans: 0 },
+  { q: 'PDU ของ Data Link Layer เรียกว่าอะไร?', opts: ['Frame', 'Packet', 'Segment', 'Bit'], ans: 0 },
+];
+
+let answered = new Array(questions.length).fill(null);
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = questions.map((q, i) => `
+    <div class="quiz-card" id="qcard-${i}">
+      <div class="quiz-num">Q${String(i+1).padStart(2,'0')} / ${questions.length}</div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o, j) => `
+          <button class="quiz-opt" id="qopt-${i}-${j}" onclick="selectOpt(${i},${j})">${o}</button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="qfb-${i}"></div>
+    </div>
+  `).join('');
+  updateProgress();
+}
+
+function selectOpt(qi, oi) {
+  if (answered[qi] !== null) return; // already answered
+  answered[qi] = oi;
+  const card = document.getElementById('qcard-' + qi);
+  const opts = card.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById('qfb-' + qi);
+  const correct = questions[qi].ans;
+
+  opts.forEach((btn, j) => {
+    if (j === correct) btn.classList.add('reveal-correct');
+    if (j === oi && oi !== correct) btn.classList.add('selected-wrong');
+    if (j === oi && oi === correct) btn.classList.add('selected-correct');
+    btn.disabled = true;
+  });
+
+  if (oi === correct) {
+    card.classList.add('correct');
+    fb.textContent = '✓ ถูกต้อง!';
+    fb.className = 'quiz-feedback show ok';
+  } else {
+    card.classList.add('wrong');
+    fb.textContent = '✗ ไม่ถูก — คำตอบที่ถูกต้องคือ: ' + questions[qi].opts[correct];
+    fb.className = 'quiz-feedback show fail';
+  }
+  updateProgress();
+}
+
+function checkAll() {
+  let score = 0;
+  answered.forEach((a, i) => { if (a === questions[i].ans) score++; });
+  const el = document.getElementById('quiz-score');
+  document.getElementById('score-display').textContent = `${score} / ${questions.length} (${Math.round(score/questions.length*100)}%)`;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz() {
+  answered = new Array(questions.length).fill(null);
+  document.getElementById('quiz-score').classList.remove('show');
+  buildQuiz();
+}
+
+function updateProgress() {
+  const done = answered.filter(a => a !== null).length;
+  const pct = Math.round(done / questions.length * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${done} / ${questions.length}`;
+}
+
+// ══════════════════════════════════════════
+// TOOLS
+// ══════════════════════════════════════════
+function calcConvert() {
+  const val = parseFloat(document.getElementById('conv-val').value);
+  const from = parseFloat(document.getElementById('conv-from').value);
+  const el = document.getElementById('conv-result');
+  if (isNaN(val)) { el.innerHTML = '<span class="r-label">กรอกค่าที่ต้องการแปลง</span>'; return; }
+  const bps = val * from;
+  el.innerHTML = `
+    <span class="r-label">bps: </span><span class="r-val">${bps.toLocaleString()}</span><br>
+    <span class="r-label">Kbps: </span><span class="r-val">${(bps/1e3).toFixed(3)}</span><br>
+    <span class="r-label">Mbps: </span><span class="r-val">${(bps/1e6).toFixed(6)}</span><br>
+    <span class="r-label">Gbps: </span><span class="r-val">${(bps/1e9).toFixed(9)}</span><br>
+    <span class="r-label">Tbps: </span><span class="r-val">${(bps/1e12).toFixed(12)}</span>
+  `;
+}
+
+const layerData = {
+  7: { tcpip: 'Application', pdu: 'Data', ex: 'HTTP, HTTPS, DNS, FTP, SMTP' },
+  6: { tcpip: 'Application', pdu: 'Data', ex: 'เข้ารหัส/ถอดรหัส, บีบอัดข้อมูล' },
+  5: { tcpip: 'Application', pdu: 'Data', ex: 'เปิด/ปิด/ควบคุม Session' },
+  4: { tcpip: 'Transport', pdu: 'Segment', ex: 'TCP, UDP' },
+  3: { tcpip: 'Internet', pdu: 'Packet', ex: 'IPv4, IPv6, Router' },
+  2: { tcpip: 'Network Access', pdu: 'Frame', ex: 'Ethernet, MAC Address, Switch' },
+  1: { tcpip: 'Network Access', pdu: 'Bits', ex: 'สาย LAN, Fiber, Wi-Fi Signal' },
+};
+function calcLayer() {
+  const layer = document.getElementById('layer-select').value;
+  const d = layerData[layer];
+  const el = document.getElementById('layer-result');
+  el.innerHTML = `
+    <span class="r-label">OSI Layer: </span><span class="r-val">${layer}</span><br>
+    <span class="r-label">TCP/IP Layer: </span><span class="r-val">${d.tcpip}</span><br>
+    <span class="r-label">PDU: </span><span class="r-val">${d.pdu}</span><br>
+    <span class="r-label">ตัวอย่าง: </span><span class="r-val">${d.ex}</span>
+  `;
+}
+
+function calcBinary() {
+  const text = document.getElementById('bin-input').value;
+  const el = document.getElementById('bin-result');
+  if (!text) { el.innerHTML = '<span class="r-label">พิมพ์ข้อความเพื่อดูผลลัพธ์...</span>'; return; }
+  const parts = text.split('').map(ch => {
+    const code = ch.charCodeAt(0);
+    const bin = code.toString(2).padStart(8, '0');
+    return `<span class="r-label">${ch}</span> = <span class="r-val">${code}</span> = <span class="r-val">${bin}</span>`;
+  });
+  el.innerHTML = parts.join('<br>');
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+buildFlashcards();
+buildQuiz();
+calcLayer();
+</script>
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โมดูล 3 – เครือข่ายไร้สาย | CCNA คู่มือเตรียมสอบ</title>
+<style>
+:root{--bg:#0d1117;--surface:#161b22;--surface2:#1e2530;--surface3:#252d3a;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);--text:#e6edf3;--muted:#8b949e;--dim:#6e7681;--accent:#58a6ff;--accent2:#1f6feb;--green:#3fb950;--gbg:rgba(63,185,80,0.1);--red:#f85149;--rbg:rgba(248,81,73,0.1);--yellow:#d29922;--ybg:rgba(210,153,34,0.1);--purple:#bc8cff;--pbg:rgba(188,140,255,0.1);--orange:#ff7b72;--cyan:#79c0ff;--r:8px;--rl:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Sarabun',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.7;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#0d1117 0%,#1a1f35 50%,#0d1117 100%);border-bottom:1px solid var(--border2);padding:2.5rem 2rem 2rem;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(88,166,255,0.12) 0%,transparent 70%);pointer-events:none}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(88,166,255,0.15);border:1px solid rgba(88,166,255,0.3);color:var(--accent);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:1rem}
+.bdot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hdr h1{font-size:2rem;font-weight:700;color:#fff;margin-bottom:.5rem;line-height:1.3}
+.hdr h1 span{color:var(--accent)}
+.hdr p{color:var(--muted);font-size:14px;max-width:600px}
+.meta{display:flex;gap:1.5rem;margin-top:1.2rem;flex-wrap:wrap}
+.mi{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dim)}
+.mdot{width:4px;height:4px;border-radius:50%;background:var(--dim)}
+.nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;position:sticky;top:0;z-index:100;overflow-x:auto}
+.tb{background:none;border:none;color:var(--muted);font-size:13px;font-weight:500;padding:.85rem 1.1rem;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;font-family:inherit}
+.tb:hover{color:var(--text)}
+.tb.active{color:var(--accent);border-bottom-color:var(--accent)}
+.main{max-width:960px;margin:0 auto;padding:2rem}
+.tc{display:none}
+.tc.active{display:block}
+.st{font-size:1.05rem;font-weight:600;color:var(--text);margin:2rem 0 1rem;display:flex;align-items:center;gap:10px}
+.st::after{content:'';flex:1;height:1px;background:var(--border)}
+.sn{background:var(--accent2);color:#fff;font-size:11px;font-weight:700;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:1.5rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.2rem;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:.8rem}
+.ico{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ic-c{background:rgba(88,166,255,.15)}
+.ic-w{background:rgba(63,185,80,.15)}
+.ic-b{background:rgba(188,140,255,.15)}
+.ic-n{background:rgba(255,123,114,.15)}
+.ic-g{background:rgba(210,153,34,.15)}
+.cn{font-weight:600;font-size:15px;color:var(--text)}
+.cf{font-size:11px;color:var(--dim)}
+.specs{display:flex;flex-direction:column;gap:6px}
+.sr{display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.sl{color:var(--muted)}
+.sv{font-size:12px;font-weight:500;padding:2px 8px;border-radius:4px;border:1px solid var(--border);color:var(--text)}
+.sv.yes{color:var(--green);border-color:rgba(63,185,80,.3);background:var(--gbg)}
+.sv.no{color:var(--red);border-color:rgba(248,81,73,.3);background:var(--rbg)}
+.kps{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
+.kp{background:var(--surface);border:1px solid var(--border);border-left:3px solid;border-radius:var(--r);padding:.9rem 1rem;display:flex;gap:10px;align-items:flex-start}
+.kp.info{border-left-color:var(--accent)}
+.kp.warn{border-left-color:var(--yellow)}
+.kp.ok{border-left-color:var(--green)}
+.kp.err{border-left-color:var(--red)}
+.ki{font-size:16px;margin-top:1px;flex-shrink:0}
+.kt{font-size:14px;color:var(--text)}
+.kt strong{color:#fff}
+.tw{overflow-x:auto;margin-bottom:1.5rem;border-radius:var(--rl);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--surface2);color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:.7rem 1rem;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:.75rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:hover td{background:var(--surface)}
+tr:last-child td{border-bottom:none}
+.tt{font-weight:600;color:#fff;display:flex;align-items:center;gap:8px}
+.dot8{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tc2{color:var(--green);font-weight:600}
+.tx2{color:var(--red)}
+.tr2{color:var(--accent);font-family:'SF Mono',monospace;font-size:12px}
+.gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem}
+.gc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center}
+.gn{font-size:1.4rem;font-weight:700;color:var(--accent)}
+.gl{font-size:11px;color:var(--dim);margin-top:2px}
+.gs{font-size:13px;font-weight:500;margin-top:8px;color:var(--text)}
+.gb{margin-top:8px;background:var(--surface2);border-radius:4px;height:4px}
+.gbr{height:4px;border-radius:4px;background:var(--accent)}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:1.5rem}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem}
+.sc.rec{border-color:rgba(63,185,80,.4)}
+.sc.dep{border-color:rgba(248,81,73,.3);opacity:.7}
+.ss{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.ss.ok{color:var(--green)}
+.ss.bad{color:var(--red)}
+.sn2{font-size:1.2rem;font-weight:700;color:#fff}
+.sd{font-size:12px;color:var(--muted);margin-top:4px}
+.flow{display:flex;flex-wrap:wrap;margin-bottom:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.fs{flex:1;min-width:110px;padding:1rem;border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.fs:last-child{border-right:none}
+.fn{width:28px;height:28px;background:var(--accent2);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.ft{font-size:11px;color:var(--dim)}
+.fl{font-size:12px;font-weight:600;color:var(--text)}
+.vg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;margin-bottom:1.5rem}
+.vi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.7rem 1rem;display:flex;gap:10px}
+.vt{font-family:'SF Mono','Fira Code',monospace;font-size:12px;font-weight:600;color:var(--cyan);min-width:90px;flex-shrink:0}
+.vd{font-size:13px;color:var(--muted)}
+.qhdr{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.2rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.qst{display:flex;gap:1.5rem}
+.qsi{text-align:center}
+.qsn{font-size:1.4rem;font-weight:700;color:var(--accent)}
+.qsl{font-size:11px;color:var(--dim)}
+.qpb{height:3px;background:var(--surface2);border-radius:4px;margin-top:8px;overflow:hidden}
+.qpf{height:100%;background:var(--accent);transition:width .4s}
+.bp{background:var(--accent2);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.bp:hover{background:var(--accent);transform:translateY(-1px)}
+.bs{background:transparent;color:var(--muted);border:1px solid var(--border2);padding:.6rem 1.2rem;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;font-family:inherit}
+.bs:hover{color:var(--text);border-color:var(--muted)}
+.qc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:1rem;transition:border-color .3s}
+.qc.answered{border-color:var(--border2)}
+.qnum{font-size:11px;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem}
+.qt{font-size:15px;font-weight:500;color:#fff;margin-bottom:1rem;line-height:1.6}
+.qtg{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:4px;margin-bottom:.8rem}
+.qtg.cellular{background:rgba(88,166,255,.15);color:var(--accent)}
+.qtg.wifi{background:rgba(63,185,80,.15);color:var(--green)}
+.qtg.bluetooth{background:rgba(188,140,255,.15);color:var(--purple)}
+.qtg.nfc{background:rgba(255,123,114,.15);color:var(--orange)}
+.qtg.gps{background:rgba(210,153,34,.15);color:var(--yellow)}
+.qtg.security{background:rgba(248,81,73,.15);color:var(--red)}
+.qtg.general{background:var(--surface2);color:var(--muted)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.ob{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:.75rem 1rem;text-align:left;cursor:pointer;font-size:14px;color:var(--text);transition:all .2s;display:flex;align-items:center;gap:10px;font-family:inherit}
+.ob:hover:not(:disabled){border-color:var(--border2);background:var(--surface3)}
+.ob:disabled{cursor:default}
+.ob.correct{border-color:var(--green);background:var(--gbg);color:var(--green)}
+.ob.wrong{border-color:var(--red);background:var(--rbg);color:var(--red)}
+.ob.ns:disabled{opacity:.4}
+.ol{width:22px;height:22px;border-radius:50%;background:var(--surface);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.ob.correct .ol{background:var(--green);border-color:var(--green);color:#fff}
+.ob.wrong .ol{background:var(--red);border-color:var(--red);color:#fff}
+.exp{margin-top:1rem;padding:.8rem 1rem;background:var(--surface2);border-radius:var(--r);border-left:3px solid var(--accent);font-size:13px;color:var(--muted);display:none}
+.exp.show{display:block}
+.exp strong{color:var(--accent)}
+.rs{display:none;text-align:center;padding:3rem 2rem}
+.rs.show{display:block}
+.rsco{font-size:4rem;font-weight:700;color:var(--accent);margin-bottom:.5rem}
+.rsl{font-size:16px;color:var(--muted);margin-bottom:2rem}
+.rsg{font-size:1.1rem;font-weight:600;padding:.5rem 1.5rem;border-radius:20px;display:inline-block;margin-bottom:2rem}
+.ga{background:var(--gbg);color:var(--green);border:1px solid rgba(63,185,80,.3)}
+.gb2{background:var(--ybg);color:var(--yellow);border:1px solid rgba(210,153,34,.3)}
+.gc2{background:var(--rbg);color:var(--red);border:1px solid rgba(248,81,73,.3)}
+.rb{display:flex;justify-content:center;gap:2rem;margin-bottom:2rem;flex-wrap:wrap}
+.ri{text-align:center}
+.rn{font-size:1.5rem;font-weight:700}
+.rl2{font-size:12px;color:var(--dim)}
+.csg{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem}
+.csc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.csh{padding:.8rem 1rem;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px}
+.csb{padding:.8rem 1rem}
+.csi{font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px}
+.csi:last-child{border-bottom:none}
+.csbu{color:var(--accent);margin-top:2px;flex-shrink:0}
+.cst{color:var(--muted)}
+.cst strong{color:var(--text)}
+.et{background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.25);border-radius:var(--r);padding:.8rem 1rem;font-size:13px;display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.ei{color:var(--yellow);flex-shrink:0;font-size:15px}
+@media(max-width:600px){.hdr{padding:1.5rem 1rem}.hdr h1{font-size:1.4rem}.main{padding:1rem}.flow{flex-direction:column}.fs{border-right:none;border-bottom:1px solid var(--border)}.fs:last-child{border-bottom:none}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="badge"><span class="bdot"></span>CCNA คู่มือเตรียมสอบ</div>
+  <h1>โมดูล 3 – <span>เครือข่ายไร้สายและอุปกรณ์มือถือ</span></h1>
+  <p>Cisco Networking Academy · โมดูล 3.0–3.3 · สรุปครบพร้อมแบบทดสอบก่อนสอบ</p>
+  <div class="meta">
+    <span class="mi"><span class="mdot"></span>5 เทคโนโลยีหลัก</span>
+    <span class="mi"><span class="mdot"></span>Cellular / Wi-Fi / Bluetooth / NFC / GPS</span>
+    <span class="mi"><span class="mdot"></span>20 ข้อฝึกหัด</span>
+    <span class="mi"><span class="mdot"></span>Cheat Sheet พร้อมสอบ</span>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="tb active" onclick="showTab('ov',this)">📡 ภาพรวม</button>
+  <button class="tb" onclick="showTab('tech',this)">🔗 เทคโนโลยี</button>
+  <button class="tb" onclick="showTab('sec',this)">🔒 ความปลอดภัย</button>
+  <button class="tb" onclick="showTab('quiz',this)">🎯 แบบทดสอบ</button>
+  <button class="tb" onclick="showTab('cs',this)">⚡ Cheat Sheet</button>
+</div>
+
+<div class="main">
+
+<!-- ภาพรวม -->
+<div class="tc active" id="tab-ov">
+  <div class="st"><span class="sn">1</span>แนวคิดหลัก: สมาร์ตโฟนในยุคปัจจุบัน</div>
+  <div class="kps">
+    <div class="kp info"><span class="ki">💡</span><span class="kt">สมาร์ตโฟน 1 เครื่องมี <strong>วงจรรับ–ส่งสัญญาณ (Radio) หลายชุด</strong> ที่ทำงานพร้อมกันในความถี่ต่างกัน ได้แก่ Cellular, Wi-Fi, Bluetooth, NFC และ GPS</span></div>
+    <div class="kp ok"><span class="ki">✅</span><span class="kt">ตัวอย่าง: Google Maps (GPS) + หูฟัง Bluetooth + อินเทอร์เน็ต 5G + รับ SMS ทำได้ <strong>พร้อมกันทั้งหมด</strong> เพราะแต่ละอย่างใช้ Radio คนละตัว</span></div>
+    <div class="kp warn"><span class="ki">⚠️</span><span class="kt"><strong>ข้อสอบ Cisco ชอบถาม:</strong> อุปกรณ์จะเลือกใช้ <strong>Wi-Fi ก่อนเสมอ</strong> ถ้าไม่มี Wi-Fi จึงสลับมาใช้ Cellular Data โดยอัตโนมัติ</span></div>
+  </div>
+
+  <div class="st"><span class="sn">2</span>ตารางเปรียบเทียบเทคโนโลยีทั้งหมด</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>เทคโนโลยี</th><th>ใช้ทำอะไร</th><th>ระยะ</th><th>ใช้อินเทอร์เน็ต?</th><th>ใช้ดาวเทียม?</th><th>พลังงาน</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tt"><span class="dot8" style="background:#58a6ff"></span>Cellular (5G/4G/3G)</span></td><td>โทร, SMS, อินเทอร์เน็ตมือถือ</td><td class="tr2">หลายกิโลเมตร</td><td class="tc2">✔ ใช้</td><td class="tx2">✘ ไม่ใช้</td><td>สูง</td></tr>
+        <tr><td><span class="tt"><span class="dot8" style="background:#3fb950"></span>Wi-Fi (WLAN)</span></td><td>อินเทอร์เน็ตความเร็วสูง</td><td class="tr2">20–100 เมตร</td><td class="tc2">✔ ใช้</td><td class="tx2">✘ ไม่ใช้</td><td>ปานกลาง</td></tr>
+        <tr><td><span class="tt"><span class="dot8" style="background:#bc8cff"></span>Bluetooth</span></td><td>เชื่อมต่ออุปกรณ์เสริม, เสียง</td><td class="tr2">~10–100 เมตร</td><td class="tx2">✘ ไม่จำเป็น</td><td class="tx2">✘ ไม่ใช้</td><td>ต่ำ</td></tr>
+        <tr><td><span class="tt"><span class="dot8" style="background:#ff7b72"></span>NFC</span></td><td>แตะจ่ายเงิน, บัตร</td><td class="tr2">4–10 ซม.</td><td class="tx2">✘ ไม่จำเป็น</td><td class="tx2">✘ ไม่ใช้</td><td>ต่ำมาก</td></tr>
+        <tr><td><span class="tt"><span class="dot8" style="background:#d29922"></span>GPS</span></td><td>ระบุตำแหน่ง, นำทาง</td><td class="tr2">ทั่วโลก</td><td class="tx2">✘ ไม่ใช้</td><td class="tc2">✔ ใช้</td><td>ต่ำ–ปานกลาง</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="st"><span class="sn">3</span>ลำดับการเลือกอินเทอร์เน็ตของมือถือ</div>
+  <div class="flow">
+    <div class="fs"><div class="fn">1</div><div class="fl">เปิดเครื่อง</div><div class="ft">Power on</div></div>
+    <div class="fs"><div class="fn">2</div><div class="fl">ค้นหา Wi-Fi</div><div class="ft">สแกน SSID ที่รู้จัก</div></div>
+    <div class="fs"><div class="fn">3</div><div class="fl">เจอ Wi-Fi?</div><div class="ft">อยู่ในระยะ AP?</div></div>
+    <div class="fs"><div class="fn">4A</div><div class="fl">เชื่อม Wi-Fi ✓</div><div class="ft">รับ IP ใช้งานได้</div></div>
+    <div class="fs"><div class="fn">4B</div><div class="fl">ใช้ Cellular</div><div class="ft">สลับ 5G/4G/3G</div></div>
+  </div>
+
+  <div class="st"><span class="sn">4</span>คำศัพท์สำคัญทั้งหมด</div>
+  <div class="vg">
+    <div class="vi"><span class="vt">SSID</span><span class="vd">ชื่อของเครือข่าย Wi-Fi</span></div>
+    <div class="vi"><span class="vt">Passphrase</span><span class="vd">รหัสผ่าน Wi-Fi (ตัวพิมพ์ใหญ่-เล็กมีผล)</span></div>
+    <div class="vi"><span class="vt">Access Point</span><span class="vd">อุปกรณ์ปล่อยสัญญาณ Wi-Fi</span></div>
+    <div class="vi"><span class="vt">Hotspot</span><span class="vd">พื้นที่ที่มีสัญญาณ Wi-Fi ครอบคลุม</span></div>
+    <div class="vi"><span class="vt">Tethering</span><span class="vd">แชร์อินเทอร์เน็ตจากมือถือไปยังอุปกรณ์อื่น</span></div>
+    <div class="vi"><span class="vt">Data Plan</span><span class="vd">แพ็กเกจอินเทอร์เน็ตมือถือ (จำนวน GB)</span></div>
+    <div class="vi"><span class="vt">Cell Tower</span><span class="vd">เสาสัญญาณโทรศัพท์มือถือ</span></div>
+    <div class="vi"><span class="vt">Protocol</span><span class="vd">กฎมาตรฐานในการสื่อสารระหว่างอุปกรณ์</span></div>
+    <div class="vi"><span class="vt">Radio</span><span class="vd">วงจรรับ–ส่งคลื่นวิทยุภายในอุปกรณ์</span></div>
+    <div class="vi"><span class="vt">Discoverable</span><span class="vd">โหมด Bluetooth ที่ทำให้อุปกรณ์อื่นค้นพบได้</span></div>
+    <div class="vi"><span class="vt">Pairing</span><span class="vd">กระบวนการจับคู่ Bluetooth ครั้งแรก</span></div>
+    <div class="vi"><span class="vt">Plaintext</span><span class="vd">ข้อมูลที่ไม่ได้เข้ารหัส อ่านได้ทันทีหากถูกดักจับ</span></div>
+    <div class="vi"><span class="vt">VPN</span><span class="vd">Virtual Private Network — อุโมงค์ข้อมูลที่เข้ารหัส</span></div>
+    <div class="vi"><span class="vt">WPA2/WPA3</span><span class="vd">มาตรฐานการเข้ารหัส Wi-Fi (WPA3 คือรุ่นใหม่สุด)</span></div>
+    <div class="vi"><span class="vt">IP Address</span><span class="vd">หมายเลขประจำอุปกรณ์ในเครือข่าย</span></div>
+    <div class="vi"><span class="vt">LTE</span><span class="vd">Long Term Evolution — 4G ที่พัฒนาเพิ่มความเร็ว</span></div>
+    <div class="vi"><span class="vt">GSM</span><span class="vd">Global System for Mobile Communications — มาตรฐาน 2G</span></div>
+    <div class="vi"><span class="vt">WLAN</span><span class="vd">Wireless Local Area Network — เครือข่าย Wi-Fi ภายในพื้นที่</span></div>
+  </div>
+</div>
+
+<!-- เทคโนโลยี -->
+<div class="tc" id="tab-tech">
+  <div class="st"><span class="sn">1</span>วิวัฒนาการ Cellular Network</div>
+  <div class="gg">
+    <div class="gc"><div class="gn">GSM</div><div class="gl">ยุค 2G</div><div class="gs">โทร + SMS</div><div class="gb"><div class="gbr" style="width:8%"></div></div></div>
+    <div class="gc"><div class="gn">3G</div><div class="gl">รุ่นที่ 3</div><div class="gs">~7.2 Mbps</div><div class="gb"><div class="gbr" style="width:28%"></div></div></div>
+    <div class="gc"><div class="gn">4G</div><div class="gl">รุ่นที่ 4</div><div class="gs">~150 Mbps</div><div class="gb"><div class="gbr" style="width:55%"></div></div></div>
+    <div class="gc"><div class="gn">LTE</div><div class="gl">4G ขั้นสูง</div><div class="gs">~300 Mbps</div><div class="gb"><div class="gbr" style="width:72%"></div></div></div>
+    <div class="gc"><div class="gn">5G</div><div class="gl">รุ่นที่ 5</div><div class="gs">1–20 Gbps</div><div class="gb"><div class="gbr" style="width:100%"></div></div></div>
+  </div>
+  <div class="kps">
+    <div class="kp info"><span class="ki">📶</span><span class="kt">5G มี Latency ต่ำมาก เหมาะสำหรับ <strong>IoT, รถไร้คนขับ, AR/VR, AI</strong> และรองรับอุปกรณ์เชื่อมต่อจำนวนมากพร้อมกัน</span></div>
+  </div>
+
+  <div class="st"><span class="sn">2</span>Wi-Fi — รายละเอียดการตั้งค่า</div>
+  <div class="grid2">
+    <div class="card"><div class="ch"><div class="ico ic-w">📶</div><div><div class="cn">ขั้นตอนเชื่อม Wi-Fi</div><div class="cf">Normal connection flow</div></div></div>
+      <div class="specs">
+        <div class="sr"><span class="sl">ขั้นที่ 1</span><span class="sv">เปิด Wi-Fi</span></div>
+        <div class="sr"><span class="sl">ขั้นที่ 2</span><span class="sv">สแกนหา SSID</span></div>
+        <div class="sr"><span class="sl">ขั้นที่ 3</span><span class="sv">ใส่ Passphrase</span></div>
+        <div class="sr"><span class="sl">ขั้นที่ 4</span><span class="sv">รับ IP Address</span></div>
+        <div class="sr"><span class="sl">ขั้นที่ 5</span><span class="sv">ใช้อินเทอร์เน็ตได้</span></div>
+      </div>
+    </div>
+    <div class="card"><div class="ch"><div class="ico ic-w">🔧</div><div><div class="cn">Hidden SSID</div><div class="cf">เชื่อมต่อด้วยตนเอง</div></div></div>
+      <div class="specs">
+        <div class="sr"><span class="sl">Android</span><span class="sv">Settings → Add Network</span></div>
+        <div class="sr"><span class="sl">iPhone</span><span class="sv">Settings → Wi-Fi → Other</span></div>
+        <div class="sr"><span class="sl">ต้องรู้</span><span class="sv">SSID + Security + รหัสผ่าน</span></div>
+        <div class="sr"><span class="sl">Auto-connect</span><span class="sv yes">✔ ครั้งต่อไปอัตโนมัติ</span></div>
+      </div>
+    </div>
+    <div class="card"><div class="ch"><div class="ico ic-w">📡</div><div><div class="cn">Mobile Hotspot</div><div class="cf">แชร์อินเทอร์เน็ต</div></div></div>
+      <div class="specs">
+        <div class="sr"><span class="sl">Wi-Fi Hotspot</span><span class="sv">มือถือทำหน้าที่เป็น AP</span></div>
+        <div class="sr"><span class="sl">Bluetooth Tethering</span><span class="sv">แชร์ผ่าน BT</span></div>
+        <div class="sr"><span class="sl">USB Tethering</span><span class="sv">แชร์ผ่านสาย USB</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="st"><span class="sn">3</span>Bluetooth — กระบวนการ Pairing</div>
+  <div class="flow">
+    <div class="fs"><div class="fn">1</div><div class="fl">เปิด Bluetooth</div><div class="ft">ทั้งสองเครื่อง</div></div>
+    <div class="fs"><div class="fn">2</div><div class="fl">Discoverable Mode</div><div class="ft">อุปกรณ์เป้าหมาย</div></div>
+    <div class="fs"><div class="fn">3</div><div class="fl">สแกนหาอุปกรณ์</div><div class="ft">เครื่องต้นทางสแกน</div></div>
+    <div class="fs"><div class="fn">4</div><div class="fl">เลือกอุปกรณ์</div><div class="ft">แตะชื่ออุปกรณ์</div></div>
+    <div class="fs"><div class="fn">5</div><div class="fl">ใส่ PIN</div><div class="ft">ถ้าต้องการ (0000/1234)</div></div>
+    <div class="fs"><div class="fn">6</div><div class="fl">จับคู่สำเร็จ ✓</div><div class="ft">เชื่อมอัตโนมัติครั้งหน้า</div></div>
+  </div>
+  <div class="kps">
+    <div class="kp info"><span class="ki">📱</span><span class="kt">เมื่ออุปกรณ์เปิด Discoverable Mode จะส่งข้อมูลออกไป: <strong>ชื่ออุปกรณ์, Bluetooth Class, บริการที่รองรับ, เวอร์ชัน Bluetooth</strong></span></div>
+    <div class="kp ok"><span class="ki">🔗</span><span class="kt">Cisco ระบุว่า Bluetooth เชื่อมต่ออุปกรณ์ได้สูงสุด <strong>8 เครื่องพร้อมกัน</strong> และใช้พลังงานต่ำ เหมาะกับอุปกรณ์เสริมทุกชนิด</span></div>
+  </div>
+
+  <div class="st"><span class="sn">4</span>NFC vs GPS — ความแตกต่างที่ต้องจำ</div>
+  <div class="grid2">
+    <div class="card"><div class="ch"><div class="ico ic-n">📲</div><div><div class="cn">NFC</div><div class="cf">Near Field Communication</div></div></div>
+      <div class="specs">
+        <div class="sr"><span class="sl">ระยะ</span><span class="sv">4–10 เซนติเมตร</span></div>
+        <div class="sr"><span class="sl">อินเทอร์เน็ต</span><span class="sv no">✘ ไม่จำเป็น</span></div>
+        <div class="sr"><span class="sl">ใช้งาน</span><span class="sv">จ่ายเงิน · บัตร · ประตู</span></div>
+        <div class="sr"><span class="sl">วิธีใช้</span><span class="sv">แตะ / แนบชิดกัน</span></div>
+      </div>
+    </div>
+    <div class="card"><div class="ch"><div class="ico ic-g">🛰️</div><div><div class="cn">GPS</div><div class="cf">Global Positioning System</div></div></div>
+      <div class="specs">
+        <div class="sr"><span class="sl">ระยะ</span><span class="sv">ทั่วโลก (ผ่านดาวเทียม)</span></div>
+        <div class="sr"><span class="sl">อินเทอร์เน็ต</span><span class="sv no">✘ ไม่ใช้อินเทอร์เน็ต</span></div>
+        <div class="sr"><span class="sl">สัญญาณจาก</span><span class="sv">ดาวเทียม (รับทางเดียว)</span></div>
+        <div class="sr"><span class="sl">ความแม่นยำ</span><span class="sv">~10 เมตร</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ความปลอดภัย -->
+<div class="tc" id="tab-sec">
+  <div class="st"><span class="sn">1</span>มาตรฐานการเข้ารหัส Wi-Fi</div>
+  <div class="sg">
+    <div class="sc dep"><div class="ss bad">⛔ ห้ามใช้เด็ดขาด</div><div class="sn2">WEP</div><div class="sd">Wired Equivalent Privacy — ถูกถอดรหัสได้ภายในไม่กี่นาที ล้าสมัยและอันตราย</div></div>
+    <div class="sc dep"><div class="ss bad">⚠️ หลีกเลี่ยง</div><div class="sn2">WPA</div><div class="sd">Wi-Fi Protected Access — ดีกว่า WEP แต่ยังมีช่องโหว่ที่ถูกโจมตีได้</div></div>
+    <div class="sc rec"><div class="ss ok">✔ มาตรฐานขั้นต่ำ (Cisco)</div><div class="sn2">WPA2</div><div class="sd">ใช้ AES encryption — Cisco กำหนดให้เป็นมาตรฐานขั้นต่ำสำหรับทุกเครือข่าย</div></div>
+    <div class="sc rec"><div class="ss ok">✔ แนะนำสูงสุด</div><div class="sn2">WPA3</div><div class="sd">มาตรฐานใหม่ล่าสุด ป้องกัน offline attack มีระบบยืนยันตัวตนที่แข็งแกร่งกว่า</div></div>
+  </div>
+
+  <div class="st"><span class="sn">2</span>แนวปฏิบัติด้านความปลอดภัย (ตาม Cisco)</div>
+  <div class="kps">
+    <div class="kp err"><span class="ki">🚨</span><span class="kt"><strong>ห้ามส่ง Username และ Password แบบ Plaintext</strong> — ข้อมูลที่ไม่ได้เข้ารหัส หากมีคนดักฟังในเครือข่ายเดียวกันสามารถอ่านได้ทันที</span></div>
+    <div class="kp warn"><span class="ki">🔐</span><span class="kt"><strong>ใช้ VPN</strong> ทุกครั้งที่ส่งข้อมูลสำคัญผ่าน Wi-Fi สาธารณะ VPN สร้างอุโมงค์ข้อมูลที่เข้ารหัสตั้งแต่ต้นทางถึงปลายทาง</span></div>
+    <div class="kp ok"><span class="ki">✅</span><span class="kt"><strong>เปิดใช้ WPA2 หรือ WPA3</strong> บน Router และ Access Point ทุกตัว ปิดการใช้งาน WEP ทันทีหากพบในระบบ</span></div>
+    <div class="kp info"><span class="ki">📶</span><span class="kt"><strong>Wi-Fi สาธารณะ</strong> (ร้านกาแฟ, สนามบิน) ถือว่าไม่น่าเชื่อถือ ควรถือว่าข้อมูลทุกอย่างอาจถูกดูได้โดยบุคคลอื่น</span></div>
+  </div>
+
+  <div class="st"><span class="sn">3</span>โครงสร้างพื้นฐานเครือข่าย (Infrastructure)</div>
+  <div class="grid2">
+    <div class="card"><div class="ch"><div class="ico ic-w">🔲</div><div><div class="cn">Access Point (AP)</div><div class="cf">จุดกระจายสัญญาณ Wi-Fi</div></div></div>
+      <div class="specs">
+        <div class="sr"><span class="sl">หน้าที่</span><span class="sv">ปล่อยสัญญาณ Wi-Fi</span></div>
+        <div class="sr"><span class="sl">เชื่อมต่อกับ</span><span class="sv">Router / Switch</span></div>
+        <div class="sr"><span class="sl">ระยะครอบคลุม</span><span class="sv">20–100 เมตร</span></div>
+        <div class="sr"><span class="sl">แจก IP ผ่าน</span><span class="sv">DHCP</span></div>
+      </div>
+    </div>
+    <div class="card"><div class="ch"><div class="ico ic-c">🗼</div><div><div class="cn">Cell Tower</div><div class="cf">เสาสัญญาณโทรศัพท์</div></div></div>
+      <div class="specs">
+        <div class="sr"><span class="sl">หน้าที่</span><span class="sv">รับ–ส่งสัญญาณ Cellular</span></div>
+        <div class="sr"><span class="sl">ระยะครอบคลุม</span><span class="sv">หลายกิโลเมตร</span></div>
+        <div class="sr"><span class="sl">เชื่อมต่อกับ</span><span class="sv">เครือข่ายผู้ให้บริการ</span></div>
+        <div class="sr"><span class="sl">Handover</span><span class="sv">สลับเสาโดยไม่หลุด</span></div>
+      </div>
+    </div>
+    <div class="card"><div class="ch"><div class="ico ic-g">🌐</div><div><div class="cn">GPS Satellite</div><div class="cf">ดาวเทียม GPS</div></div></div>
+      <div class="specs">
+        <div class="sr"><span class="sl">วงโคจร</span><span class="sv">MEO ~20,200 กม.</span></div>
+        <div class="sr"><span class="sl">ขั้นต่ำ</span><span class="sv">3 ดวง (2D fix)</span></div>
+        <div class="sr"><span class="sl">สัญญาณ</span><span class="sv">ส่งทางเดียว (ไม่รับ)</span></div>
+        <div class="sr"><span class="sl">ความแม่นยำ</span><span class="sv">~10 เมตร</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- แบบทดสอบ -->
+<div class="tc" id="tab-quiz">
+  <div class="qhdr">
+    <div>
+      <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;">แบบทดสอบโมดูล 3</div>
+      <div style="font-size:12px;color:var(--dim);">20 ข้อ · สไตล์ข้อสอบ Cisco CCNA</div>
+      <div class="qpb" style="width:200px;margin-top:8px;"><div class="qpf" id="pfill" style="width:0%"></div></div>
+    </div>
+    <div class="qst">
+      <div class="qsi"><div class="qsn" id="s-ans">0</div><div class="qsl">ตอบแล้ว</div></div>
+      <div class="qsi"><div class="qsn" id="s-cor" style="color:var(--green)">0</div><div class="qsl">ถูก</div></div>
+      <div class="qsi"><div class="qsn" id="s-tot">20</div><div class="qsl">ทั้งหมด</div></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="bp" onclick="submitAll()">ส่งคำตอบ</button>
+      <button class="bs" onclick="resetQuiz()">เริ่มใหม่</button>
+    </div>
+  </div>
+  <div id="qqs"></div>
+  <div class="rs" id="rscreen">
+    <div class="rsco" id="rscore">0%</div>
+    <div class="rsl">คะแนนสุดท้าย</div>
+    <div class="rsg" id="rgrade"></div>
+    <div class="rb">
+      <div class="ri"><div class="rn" id="rb-c" style="color:var(--green)">0</div><div class="rl2">ถูก</div></div>
+      <div class="ri"><div class="rn" id="rb-w" style="color:var(--red)">0</div><div class="rl2">ผิด</div></div>
+      <div class="ri"><div class="rn" id="rb-p">0%</div><div class="rl2">คะแนน</div></div>
+    </div>
+    <button class="bp" onclick="resetQuiz()">ทำแบบทดสอบอีกครั้ง</button>
+  </div>
+</div>
+
+<!-- Cheat Sheet -->
+<div class="tc" id="tab-cs">
+  <div class="st"><span class="sn">1</span>ข้อเท็จจริงที่ Cisco ชอบออกสอบ</div>
+  <div class="et"><span class="ei">⭐</span><span><strong>GPS</strong> ใช้ดาวเทียม — ไม่ได้ใช้อินเทอร์เน็ต ข้อสอบมักหลอกให้สับสนระหว่าง GPS กับ Wi-Fi</span></div>
+  <div class="et"><span class="ei">⭐</span><span><strong>Bluetooth</strong> = ใช้พลังงานต่ำ, ระยะสั้น, ทดแทนสาย, Pair ได้สูงสุด 8 เครื่อง, ต้อง Pairing ก่อนใช้ครั้งแรก</span></div>
+  <div class="et"><span class="ei">⭐</span><span><strong>NFC</strong> ระยะ 4–10 ซม. ใช้แตะจ่ายเงิน (Apple Pay, Google Pay, บัตรเครดิต Contactless)</span></div>
+  <div class="et"><span class="ei">⭐</span><span>Wi-Fi ต้องอยู่ในระยะของ <strong>Access Point (AP)</strong> เสมอ — Hotspot คือพื้นที่ที่มีสัญญาณ ไม่ใช่ตัวอุปกรณ์</span></div>
+  <div class="et"><span class="ei">⭐</span><span>ลำดับ: <strong>Wi-Fi ก่อน → Cellular</strong> สลับอัตโนมัติเมื่อไม่มี Wi-Fi</span></div>
+  <div class="et"><span class="ei">⭐</span><span><strong>WEP ห้ามใช้</strong> — เลือก WPA2 หรือ WPA3 เสมอ WEP ถูกถอดรหัสได้ง่ายมาก</span></div>
+  <div class="et"><span class="ei">⭐</span><span>วิวัฒนาการ: GSM → 3G → 4G → LTE → 5G แต่ละรุ่นเร็วขึ้นและ Latency ต่ำลง</span></div>
+  <div class="et"><span class="ei">⭐</span><span>สมาร์ตโฟนมี <strong>Radio หลายชุด</strong> จึงใช้หลายเทคโนโลยีพร้อมกันได้</span></div>
+
+  <div class="st"><span class="sn">2</span>สรุปย่อแต่ละเทคโนโลยี</div>
+  <div class="csg">
+    <div class="csc"><div class="csh" style="color:var(--accent)">📡 Cellular Network</div><div class="csb">
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>GSM</strong> – 2G, โทร + SMS เท่านั้น</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>3G</strong> – อินเทอร์เน็ต, ความเร็วต่ำ</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>4G</strong> – เร็ว, ดู YouTube, Video Call</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>LTE</strong> – Long Term Evolution (4G ขั้นสูง)</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>5G</strong> – เร็วสุด, IoT, Latency ต่ำมาก</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">เชื่อมต่อผ่าน <strong>Cell Tower (เสาสัญญาณ)</strong></span></div>
+    </div></div>
+    <div class="csc"><div class="csh" style="color:var(--green)">📶 Wi-Fi</div><div class="csb">
+      <div class="csi"><span class="csbu">›</span><span class="cst">ระยะ <strong>20–100 เมตร</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ต้องรู้ <strong>SSID + Passphrase</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">เชื่อมต่อผ่าน <strong>Access Point (AP)</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">SSID ซ่อน → ต้องเพิ่มเครือข่ายเอง</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">เคยเชื่อมแล้ว → Auto-connect ครั้งต่อไป</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>อุปกรณ์เลือก Wi-Fi ก่อน Cellular เสมอ</strong></span></div>
+    </div></div>
+    <div class="csc"><div class="csh" style="color:var(--purple)">🎧 Bluetooth</div><div class="csb">
+      <div class="csi"><span class="csbu">›</span><span class="cst">ระยะ <strong>~10–100 เมตร</strong> (ขึ้นอยู่กับ Class)</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">พลังงาน: <strong>ต่ำมาก (Low Power)</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ทดแทนสาย: หูฟัง, เมาส์, คีย์บอร์ด</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ต้อง <strong>Pairing</strong> ก่อนใช้ครั้งแรก</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">สูงสุด <strong>8 เครื่องพร้อมกัน</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">Discoverable Mode + PIN สำหรับ Pairing</span></div>
+    </div></div>
+    <div class="csc"><div class="csh" style="color:var(--orange)">📲 NFC</div><div class="csb">
+      <div class="csi"><span class="csbu">›</span><span class="cst">ชื่อเต็ม: <strong>Near Field Communication</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ระยะ: <strong>4–10 เซนติเมตรเท่านั้น</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ใช้: จ่ายเงิน, สแกนบัตร, เปิดประตู</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">วิธีใช้: <strong>แตะ/แนบชิดกัน</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ไม่ต้องใช้อินเทอร์เน็ต</span></div>
+    </div></div>
+    <div class="csc"><div class="csh" style="color:var(--yellow)">🛰️ GPS</div><div class="csb">
+      <div class="csi"><span class="csbu">›</span><span class="cst">ชื่อเต็ม: <strong>Global Positioning System</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">รับสัญญาณจาก <strong>ดาวเทียม (รับทางเดียว)</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ความแม่นยำ: <strong>~10 เมตร</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>ไม่ใช้อินเทอร์เน็ตเลย</strong></span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ใช้ใน: Google Maps, Grab, Food Delivery</span></div>
+    </div></div>
+    <div class="csc"><div class="csh" style="color:var(--red)">🔒 ความปลอดภัย Wi-Fi</div><div class="csb">
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>WEP</strong> – ห้ามใช้ ถูกแฮกได้ง่ายมาก</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>WPA2</strong> – มาตรฐานขั้นต่ำที่ Cisco กำหนด</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst"><strong>WPA3</strong> – ล่าสุด ปลอดภัยที่สุด</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ใช้ <strong>VPN</strong> บน Wi-Fi สาธารณะ</span></div>
+      <div class="csi"><span class="csbu">›</span><span class="cst">ห้ามส่งข้อมูลแบบ <strong>Plaintext</strong></span></div>
+    </div></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const Q=[
+  {text:"เทคโนโลยีใดที่ใช้ดาวเทียมในการระบุตำแหน่ง และไม่ต้องการอินเทอร์เน็ตในการทำงาน?",tag:"gps",opts:["Wi-Fi","Bluetooth","GPS","NFC"],ans:2,exp:"GPS (Global Positioning System) รับสัญญาณจากดาวเทียมเพื่อคำนวณตำแหน่ง เป็นระบบรับสัญญาณทางเดียว ไม่ต้องใช้หรือส่งข้อมูลผ่านอินเทอร์เน็ตแต่อย่างใด"},
+  {text:"เมื่ออุปกรณ์มือถืออยู่ในระยะของ Wi-Fi และมี Cellular Data Plan ด้วย อุปกรณ์จะเลือกใช้การเชื่อมต่อใดก่อน?",tag:"wifi",opts:["Cellular — เพราะเร็วกว่าเสมอ","Wi-Fi — เลือกโดยอัตโนมัติ","GPS — เพื่อความแม่นยำ","Bluetooth — เพื่อประหยัดพลังงาน"],ans:1,exp:"อุปกรณ์มือถือ (iOS และ Android) จะเลือกใช้ Wi-Fi โดยอัตโนมัติเมื่ออยู่ในระยะของเครือข่ายที่รู้จัก Cellular คือ fallback เมื่อไม่มี Wi-Fi เท่านั้น"},
+  {text:"NFC มีระยะการสื่อสารสูงสุดเท่าใด?",tag:"nfc",opts:["10 เมตร","100 เมตร","4–10 เซนติเมตร","1 กิโลเมตร"],ans:2,exp:"NFC (Near Field Communication) ทำงานในระยะใกล้มากประมาณ 4–10 เซนติเมตรเท่านั้น ระยะสั้นนี้ออกแบบมาเพื่อความปลอดภัยในการชำระเงินแบบ Contactless"},
+  {text:"ก่อนจะใช้หูฟัง Bluetooth กับสมาร์ตโฟนเป็นครั้งแรก ต้องทำขั้นตอนใดก่อน?",tag:"bluetooth",opts:["ตั้งค่า SSID","ยืนยัน WPA2","Bluetooth Pairing","รับ IP Address"],ans:2,exp:"Bluetooth ต้องผ่านกระบวนการ Pairing ก่อนใช้งานครั้งแรก ประกอบด้วยการเปิด Discoverable Mode, สแกนหา, เลือกอุปกรณ์ และยืนยันด้วย PIN (ถ้ามี)"},
+  {text:"มาตรฐานการเข้ารหัส Wi-Fi ใดที่ถือว่าถูกโจมตีได้ง่ายและ Cisco ห้ามใช้อย่างเด็ดขาด?",tag:"security",opts:["WPA3","WPA2","WPA","WEP"],ans:3,exp:"WEP (Wired Equivalent Privacy) มีช่องโหว่ด้านการเข้ารหัสที่ร้ายแรง สามารถถูกถอดรหัสได้ภายในไม่กี่นาที Cisco กำหนดให้ใช้ WPA2 เป็นขั้นต่ำ หรือ WPA3 เพื่อความปลอดภัยสูงสุด"},
+  {text:"Cisco ระบุว่า Bluetooth สามารถเชื่อมต่ออุปกรณ์ได้สูงสุดกี่เครื่องพร้อมกัน?",tag:"bluetooth",opts:["4 เครื่อง","8 เครื่อง","16 เครื่อง","ไม่จำกัด"],ans:1,exp:"Cisco ระบุว่า Bluetooth รองรับการเชื่อมต่อพร้อมกันสูงสุด 8 อุปกรณ์ ซึ่งเป็นข้อจำกัดมาตรฐานของ Bluetooth Piconet"},
+  {text:"SSID ย่อมาจากอะไรในบริบทของ Wi-Fi?",tag:"wifi",opts:["Secure Signal ID","Service Set Identifier","System Security Interface Definition","Subnet Signal Index Device"],ans:1,exp:"SSID ย่อมาจาก Service Set Identifier คือชื่อของเครือข่าย Wi-Fi ที่แสดงในรายการเครือข่ายบนอุปกรณ์"},
+  {text:"เทคโนโลยีใดสร้างอุโมงค์เข้ารหัสเพื่อปกป้องข้อมูลที่ส่งผ่าน Wi-Fi สาธารณะ?",tag:"security",opts:["Bluetooth","GPS","VPN","NFC"],ans:2,exp:"VPN (Virtual Private Network) เข้ารหัสการรับส่งข้อมูลทั้งหมด สร้างอุโมงค์ปลอดภัยแม้ใช้ผ่าน Wi-Fi สาธารณะที่ไม่น่าเชื่อถือ Cisco แนะนำให้ใช้ VPN ทุกครั้งที่ส่งข้อมูลสำคัญ"},
+  {text:"เครือข่าย Cellular รุ่นใดมี Latency ต่ำที่สุดและรองรับ IoT, รถไร้คนขับ และ AR/VR?",tag:"cellular",opts:["3G","4G LTE","5G","GSM"],ans:2,exp:"5G (รุ่นที่ 5) มี Latency ต่ำมากถึง sub-1ms ความเร็วสูงและรองรับการเชื่อมต่ออุปกรณ์ IoT จำนวนมากพร้อมกัน เหมาะสำหรับรถไร้คนขับ, AR/VR และแอปพลิเคชัน AI"},
+  {text:"LTE ย่อมาจากอะไร?",tag:"cellular",opts:["Local Terminal Extension","Long Term Evolution","Low Transmission Ethernet","Layered Topology Engineering"],ans:1,exp:"LTE ย่อมาจาก Long Term Evolution คือการพัฒนา 4G ให้มีความเร็วสูงขึ้น จึงมักเห็นเขียนว่า '4G LTE' บนอุปกรณ์"},
+  {text:"ระหว่าง Bluetooth Pairing อุปกรณ์เป้าหมายต้องเปิดโหมดใดเพื่อให้อุปกรณ์อื่นค้นพบได้?",tag:"bluetooth",opts:["Silent Mode","Airplane Mode","Discoverable Mode","Access Point Mode"],ans:2,exp:"อุปกรณ์เป้าหมายต้องเปิด Discoverable Mode เพื่อออกอากาศข้อมูล: ชื่ออุปกรณ์, Bluetooth Class, บริการที่รองรับ และเวอร์ชัน Bluetooth ให้อุปกรณ์อื่นตรวจพบได้"},
+  {text:"การเชื่อมต่อ Wi-Fi ที่ซ่อน SSID (Hidden Network) ต้องการข้อมูลอะไรบ้าง?",tag:"wifi",opts:["แค่ IP Address","SSID, ประเภทการรักษาความปลอดภัย และรหัสผ่าน","แค่ MAC Address ของ AP","แค่ความถี่ (Frequency Band)"],ans:1,exp:"การเชื่อมต่อ Wi-Fi แบบ Hidden Network ด้วยตนเอง ต้องกรอก SSID (ชื่อเครือข่าย), ประเภทความปลอดภัย (WPA2, WPA3) และ Password/Passphrase ครบทั้งสามอย่าง"},
+  {text:"ข้อใดถูกต้องเกี่ยวกับ GPS?",tag:"gps",opts:["GPS ส่งข้อมูลกลับไปยังดาวเทียม","GPS ใช้ Cell Tower ระบุตำแหน่ง","GPS รับสัญญาณจากดาวเทียมแต่ไม่ส่งสัญญาณกลับ","GPS ต้องใช้อินเทอร์เน็ตเสมอ"],ans:2,exp:"GPS เป็นระบบรับสัญญาณทางเดียว อุปกรณ์จะฟังสัญญาณจากดาวเทียม (ขั้นต่ำ 3 ดวงสำหรับ 2D fix) และคำนวณตำแหน่งเอง โดยไม่เคยส่งสัญญาณใดกลับไปยังดาวเทียม"},
+  {text:"การส่ง Username และ Password โดยไม่มีการเข้ารหัสเรียกว่าอะไร?",tag:"security",opts:["Cipher text","Plaintext","Encoded format","Compressed format"],ans:1,exp:"Plaintext คือข้อมูลที่ส่งโดยไม่มีการเข้ารหัส หากผู้โจมตีดักจับได้ในเครือข่ายเดียวกัน สามารถอ่านได้ทันทีโดยไม่ต้องถอดรหัส"},
+  {text:"เทคโนโลยีใดเหมาะสมที่สุดสำหรับเชื่อมต่อคีย์บอร์ดไร้สายกับ Notebook?",tag:"bluetooth",opts:["NFC — ระยะสั้นที่สุด","Bluetooth — พลังงานต่ำ, ทดแทนสาย","GPS — ระบุตำแหน่ง","5G Cellular — ความเร็วสูง"],ans:1,exp:"Bluetooth ถูกออกแบบมาเพื่อทดแทนสายสำหรับอุปกรณ์ต่อพ่วง การใช้พลังงานต่ำและระยะที่เหมาะสม (~10 เมตร) ทำให้เหมาะกับคีย์บอร์ด, เมาส์ และหูฟัง"},
+  {text:"สมาร์ตโฟนสามารถใช้ Google Maps + ฟังเพลงผ่าน Bluetooth + ท่องเน็ต 4G ได้พร้อมกัน เพราะเหตุใด?",tag:"general",opts:["OS จัดคิวการทำงาน","สมาร์ตโฟนมีวงจร Radio หลายชุดแยกกัน","ใช้ได้ทีละอย่างเท่านั้น","4G รับผิดชอบการสื่อสารทั้งหมด"],ans:1,exp:"สมาร์ตโฟนสมัยใหม่มีวงจร Radio แยกกันหลายชุด (Cellular, Wi-Fi, Bluetooth, GPS, NFC) แต่ละชุดทำงานบนความถี่และ Protocol ต่างกัน จึงสามารถทำงานพร้อมกันได้"},
+  {text:"Mobile Hotspot คืออะไร?",tag:"wifi",opts:["เสาสัญญาณ Cellular","ฟีเจอร์ที่ทำให้สมาร์ตโฟนแชร์อินเทอร์เน็ต Cellular เป็น Wi-Fi","Access Point ติดตั้งถาวรในร้านกาแฟ","เครื่องรูดบัตร NFC"],ans:1,exp:"Mobile Hotspot คือฟีเจอร์ที่เปลี่ยนสมาร์ตโฟนให้เป็น Access Point แบบพกพา แชร์การเชื่อมต่อ Cellular Data ให้อุปกรณ์อื่นอย่าง Notebook หรือ Tablet เชื่อมต่อผ่าน Wi-Fi ได้"},
+  {text:"หลังจาก Bluetooth Pairing สำเร็จครั้งแรก ครั้งต่อไปจะเกิดอะไรขึ้นเมื่อเปิดอุปกรณ์ทั้งสองและอยู่ในระยะ?",tag:"bluetooth",opts:["ต้องกรอก PIN ใหม่ทุกครั้ง","ต้องทำ Pairing ใหม่ตั้งแต่ต้น","เชื่อมต่ออัตโนมัติโดยไม่ต้องทำอะไร","ต้องเลือกอุปกรณ์ด้วยตนเองทุกครั้ง"],ans:2,exp:"หลังจาก Pairing สำเร็จครั้งแรก อุปกรณ์จะจดจำข้อมูลของกันและกัน ครั้งต่อไปเมื่อเปิด Bluetooth ทั้งสองเครื่องและอยู่ในระยะ จะเชื่อมต่อกันอัตโนมัติ"},
+  {text:"Tethering คืออะไร?",tag:"general",opts:["วิธีรักษาความปลอดภัยของ Bluetooth","การแชร์อินเทอร์เน็ตจากอุปกรณ์หนึ่งไปยังอุปกรณ์อื่น ผ่าน USB, BT หรือ Wi-Fi","การเชื่อมต่อ Wi-Fi แบบ Hidden SSID","วิธีคำนวณตำแหน่งจากดาวเทียม GPS"],ans:1,exp:"Tethering คือการแชร์การเชื่อมต่ออินเทอร์เน็ตจากอุปกรณ์มือถือไปยังอุปกรณ์อื่น ทำได้ 3 วิธี ได้แก่ สาย USB, Bluetooth และ Wi-Fi (Mobile Hotspot)"},
+  {text:"Cisco กำหนดมาตรฐานความปลอดภัย Wi-Fi ขั้นต่ำที่แนะนำคือระดับใด?",tag:"security",opts:["WEP","WPA","WPA2","Open (ไม่มีรหัสผ่าน)"],ans:2,exp:"Cisco กำหนดให้ WPA2 เป็นมาตรฐานขั้นต่ำที่ยอมรับได้สำหรับ Wi-Fi ทุกเครือข่าย แนะนำ WPA3 เมื่อรองรับ ส่วน WEP และ Open Network ห้ามใช้สำหรับการส่งข้อมูลใดๆ"}
+];
+
+let ans=new Set(),cor=0,sub=false;
+
+function buildQuiz(){
+  const c=document.getElementById('qqs');
+  c.innerHTML='';
+  ans.clear();cor=0;sub=false;
+  document.getElementById('rscreen').classList.remove('show');
+  upd();
+  Q.forEach((q,qi)=>{
+    const d=document.createElement('div');
+    d.className='qc';d.id='qc'+qi;
+    const L=['ก','ข','ค','ง'];
+    d.innerHTML=`<div class="qnum">ข้อที่ ${qi+1} จาก ${Q.length}</div>
+      <div class="qtg ${q.tag}">${q.tag.toUpperCase()}</div>
+      <div class="qt">${q.text}</div>
+      <div class="opts">${q.opts.map((o,oi)=>`<button class="ob" onclick="sel(${qi},${oi})" id="o${qi}-${oi}"><span class="ol">${L[oi]}</span>${o}</button>`).join('')}</div>
+      <div class="exp" id="ex${qi}"><strong>คำอธิบาย:</strong> ${q.exp}</div>`;
+    c.appendChild(d);
+  });
+}
+
+function sel(qi,oi){
+  if(ans.has(qi)||sub)return;
+  ans.add(qi);
+  const q=Q[qi],ok=oi===q.ans;
+  if(ok)cor++;
+  document.getElementById('qc'+qi).classList.add('answered');
+  q.opts.forEach((_,i)=>{
+    const b=document.getElementById(`o${qi}-${i}`);
+    b.disabled=true;
+    if(i===q.ans)b.classList.add('correct');
+    else if(i===oi&&!ok)b.classList.add('wrong');
+    else b.classList.add('ns');
+  });
+  document.getElementById('ex'+qi).classList.add('show');
+  upd();
+}
+
+function upd(){
+  document.getElementById('s-ans').textContent=ans.size;
+  document.getElementById('s-cor').textContent=cor;
+  const p=Q.length>0?Math.round(ans.size/Q.length*100):0;
+  document.getElementById('pfill').style.width=p+'%';
+}
+
+function submitAll(){
+  if(ans.size<Q.length&&!confirm(`ยังมีอีก ${Q.length-ans.size} ข้อที่ยังไม่ได้ตอบ ต้องการส่งเลยไหมครับ?`))return;
+  sub=true;
+  Q.forEach((q,qi)=>{
+    if(!ans.has(qi)){
+      q.opts.forEach((_,i)=>{
+        const b=document.getElementById(`o${qi}-${i}`);
+        b.disabled=true;
+        if(i===q.ans)b.classList.add('correct');
+        else b.classList.add('ns');
+      });
+      document.getElementById('ex'+qi).classList.add('show');
+    }
+  });
+  const p=Math.round(cor/Q.length*100);
+  document.getElementById('rscore').textContent=p+'%';
+  document.getElementById('rb-c').textContent=cor;
+  document.getElementById('rb-w').textContent=Q.length-cor;
+  document.getElementById('rb-p').textContent=p+'%';
+  const el=document.getElementById('rgrade');
+  if(p>=80){el.textContent='🏆 ผ่าน — พร้อมสอบแล้ว!';el.className='rsg ga';}
+  else if(p>=60){el.textContent='📚 เกือบแล้ว — ทบทวนจุดอ่อนอีกนิด';el.className='rsg gb2';}
+  else{el.textContent='🔄 ต้องทบทวนเพิ่มเติม';el.className='rsg gc2';}
+  document.getElementById('rscreen').classList.add('show');
+  document.getElementById('rscreen').scrollIntoView({behavior:'smooth'});
+}
+
+function resetQuiz(){buildQuiz();}
+
+function showTab(n,btn){
+  document.querySelectorAll('.tc').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+n).classList.add('active');
+  btn.classList.add('active');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
