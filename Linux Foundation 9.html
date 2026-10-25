@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation 9 — คำสั่ง ps (Process Status)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e14;
+    --bg-elevated:#0f141c;
+    --surface:#141a24;
+    --surface-2:#1a212d;
+    --border:#232b39;
+    --border-soft:#1a212c;
+    --text:#e7edf5;
+    --text-dim:#94a1b3;
+    --text-faint:#5c6779;
+    --mono:'JetBrains Mono', monospace;
+    --sans:'IBM Plex Sans Thai','IBM Plex Sans', sans-serif;
+
+    --accent:#5eead4;      /* cursor cyan */
+    --accent-dim:#2d5c56;
+    --amber:#f2c879;       /* warnings / highlight */
+
+    --r-run:#7ee787;
+    --r-sleep:#79c0ff;
+    --r-io:#ff9060;
+    --r-stop:#9aa7b8;
+    --r-zombie:#d2a8ff;
+    --r-idle:#56d4dd;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  code, .mono{font-family:var(--mono);}
+
+  ::selection{background:var(--accent-dim); color:var(--text);}
+
+  a{color:var(--accent); text-decoration:none;}
+
+  /* ---------- layout shells ---------- */
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px;}
+  section{padding:64px 0;}
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:12px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:18px; height:1px; background:var(--accent); display:inline-block;}
+  h2{font-size:clamp(24px,3.4vw,32px); font-weight:600; margin-bottom:8px; letter-spacing:-.01em;}
+  h3{font-size:19px; font-weight:600; margin-bottom:10px; color:var(--text);}
+  .lede{color:var(--text-dim); font-size:16px; max-width:640px; margin-bottom:36px;}
+  p{color:var(--text-dim);}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,14,20,.86); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-soft);
+  }
+  nav .wrap{display:flex; align-items:center; gap:22px; height:56px; overflow-x:auto; max-width:960px;}
+  nav .brand{font-family:var(--mono); font-size:13px; color:var(--text); white-space:nowrap; display:flex; gap:8px; align-items:center;}
+  nav .brand .dot{width:7px; height:7px; border-radius:50%; background:var(--r-run); box-shadow:0 0 8px var(--r-run);}
+  nav .links{display:flex; gap:18px; white-space:nowrap;}
+  nav .links a{font-size:13.5px; color:var(--text-faint); transition:color .15s;}
+  nav .links a:hover{color:var(--accent);}
+
+  /* ---------- hero / terminal ---------- */
+  .hero{padding:70px 0 50px;}
+  .hero .kicker{
+    font-family:var(--mono); font-size:13px; color:var(--text-faint); letter-spacing:.08em;
+    text-transform:uppercase; margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(32px,5.6vw,52px); font-weight:700; letter-spacing:-.02em; line-height:1.12;
+    margin-bottom:16px;
+  }
+  .hero h1 .hl{color:var(--accent);}
+  .hero .sub{color:var(--text-dim); font-size:17px; max-width:600px; margin-bottom:36px;}
+
+  .term{
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; box-shadow:0 20px 60px -20px rgba(0,0,0,.6);
+  }
+  .term-bar{
+    display:flex; align-items:center; gap:8px; padding:11px 16px; background:var(--surface);
+    border-bottom:1px solid var(--border);
+  }
+  .term-dot{width:10px; height:10px; border-radius:50%;}
+  .term-bar span.label{margin-left:8px; font-family:var(--mono); font-size:12px; color:var(--text-faint);}
+  .term-body{padding:20px 22px; font-family:var(--mono); font-size:13.5px; line-height:1.85; min-height:210px;}
+  .term-line{color:var(--text-dim);}
+  .prompt{color:var(--r-run);}
+  .path{color:var(--accent);}
+  .cursor{display:inline-block; width:7px; height:15px; background:var(--accent); vertical-align:-2px; animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .term-out{white-space:pre; color:var(--text-dim); opacity:0; transition:opacity .3s;}
+  .term-out.show{opacity:1;}
+  .stat-R{color:var(--r-run);} .stat-S{color:var(--r-sleep);} .stat-D{color:var(--r-io);}
+  .stat-T{color:var(--r-stop);} .stat-Z{color:var(--r-zombie);}
+
+  /* ---------- cards / grids ---------- */
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px 24px;
+  }
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media(max-width:720px){.grid2,.grid3{grid-template-columns:1fr;}}
+
+  .concept-box{
+    border-left:3px solid var(--accent); background:var(--surface); border-radius:0 10px 10px 0;
+    padding:18px 22px; margin-bottom:22px;
+  }
+  .concept-box .tag{font-family:var(--mono); font-size:11.5px; color:var(--accent); text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; display:block;}
+
+  /* ---------- tables ---------- */
+  table{width:100%; border-collapse:collapse; font-size:14.5px;}
+  th{
+    text-align:left; font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--text-faint); padding:10px 14px; border-bottom:1px solid var(--border); font-weight:500;
+  }
+  td{padding:12px 14px; border-bottom:1px solid var(--border-soft); color:var(--text-dim); vertical-align:top;}
+  td code, th code{font-family:var(--mono); background:var(--surface-2); padding:2px 7px; border-radius:5px; color:var(--accent); font-size:13px;}
+  tr:last-child td{border-bottom:none;}
+  .table-wrap{background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px;}
+  .table-wrap table{margin:0;}
+  .table-wrap th{background:var(--surface);}
+
+  /* ---------- STAT diagram ---------- */
+  .stat-legend{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+  .chip{
+    display:flex; align-items:center; gap:8px; padding:7px 13px; border-radius:100px;
+    background:var(--surface); border:1px solid var(--border); font-family:var(--mono); font-size:12.5px;
+  }
+  .chip .sw{width:9px; height:9px; border-radius:50%;}
+
+  .mod-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-top:18px;}
+  .mod-card{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px;}
+  .mod-card .sym{font-family:var(--mono); color:var(--amber); font-size:18px; font-weight:700;}
+  .mod-card p{font-size:13.5px; margin-top:4px; color:var(--text-dim);}
+
+  /* ---------- subcommand cards ---------- */
+  .cmd-card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px 22px; margin-bottom:16px;}
+  .cmd-card .cmd{font-family:var(--mono); color:var(--accent); font-size:15.5px; font-weight:600; margin-bottom:6px; display:block;}
+  .cmd-card .desc{color:var(--text-dim); font-size:14.5px; margin-bottom:12px;}
+  .mini-term{background:var(--bg-elevated); border:1px solid var(--border-soft); border-radius:8px; padding:12px 14px; font-family:var(--mono); font-size:12.5px; color:var(--text-faint); overflow-x:auto; white-space:pre;}
+
+  .badge-new{
+    font-family:var(--mono); font-size:10.5px; background:rgba(94,234,212,.12); color:var(--accent);
+    border:1px solid rgba(94,234,212,.3); padding:2px 8px; border-radius:5px; letter-spacing:.05em;
+  }
+
+  /* ---------- cloud box ---------- */
+  .cloud-box{
+    background:linear-gradient(160deg, rgba(94,234,212,.06), rgba(20,26,36,0)); border:1px solid var(--border);
+    border-radius:14px; padding:26px 26px;
+  }
+  .scenario{border-top:1px dashed var(--border); padding-top:16px; margin-top:16px;}
+  .scenario:first-of-type{border-top:none; margin-top:0; padding-top:0;}
+  .scenario .who{font-family:var(--mono); font-size:11.5px; color:var(--amber); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;}
+  .scenario .ans{font-family:var(--mono); font-size:13.5px; color:var(--r-run); background:var(--bg-elevated); padding:8px 12px; border-radius:7px; margin-top:8px; display:inline-block;}
+
+  /* ---------- exercises ---------- */
+  .ex{background:var(--surface); border:1px solid var(--border); border-radius:12px; margin-bottom:14px; overflow:hidden;}
+  .ex-q{padding:18px 22px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px;}
+  .ex-q .num{font-family:var(--mono); color:var(--accent); font-size:13px; margin-right:10px;}
+  .ex-q .qtext{font-size:14.5px; color:var(--text);}
+  .ex-q .chev{color:var(--text-faint); transition:transform .2s; flex-shrink:0;}
+  .ex.open .chev{transform:rotate(180deg);}
+  .ex-a{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .ex.open .ex-a{max-height:600px;}
+  .ex-a-inner{padding:0 22px 20px 22px; border-top:1px solid var(--border-soft);}
+  .ex-a-inner .lbl{font-family:var(--mono); font-size:11px; color:var(--r-run); text-transform:uppercase; letter-spacing:.08em; margin:14px 0 6px;}
+  .ex-a-inner code.block{display:block; background:var(--bg-elevated); padding:10px 14px; border-radius:8px; color:var(--accent); font-size:13.5px; margin-top:6px;}
+
+  /* ---------- quiz ---------- */
+  .quiz-card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px; margin-bottom:16px;}
+  .quiz-progress{font-family:var(--mono); font-size:12px; color:var(--text-faint); margin-bottom:14px;}
+  .quiz-q{font-size:16px; margin-bottom:16px; font-weight:500;}
+  .quiz-opts{display:flex; flex-direction:column; gap:9px;}
+  .qopt{
+    text-align:right; background:var(--bg-elevated); border:1px solid var(--border); border-radius:9px;
+    padding:12px 16px; color:var(--text-dim); cursor:pointer; font-family:var(--sans); font-size:14.5px;
+    transition:all .15s;
+  }
+  .qopt:hover{border-color:var(--accent); color:var(--text);}
+  .qopt.correct{border-color:var(--r-run); background:rgba(126,231,135,.08); color:var(--r-run);}
+  .qopt.wrong{border-color:var(--r-io); background:rgba(255,144,96,.08); color:var(--r-io);}
+  .qopt.disabled{pointer-events:none;}
+  .quiz-explain{margin-top:14px; padding:14px 16px; background:var(--bg-elevated); border-radius:9px; font-size:13.5px; color:var(--text-dim); display:none;}
+  .quiz-explain.show{display:block;}
+  .quiz-nav{display:flex; justify-content:space-between; align-items:center; margin-top:18px;}
+  .btn{
+    font-family:var(--sans); font-size:13.5px; background:var(--accent); color:#08201c; border:none;
+    padding:9px 18px; border-radius:8px; cursor:pointer; font-weight:600;
+  }
+  .btn:disabled{opacity:.35; cursor:not-allowed;}
+  .btn.ghost{background:transparent; border:1px solid var(--border); color:var(--text-dim);}
+  .quiz-result{text-align:center; padding:40px 20px;}
+  .quiz-result .score{font-family:var(--mono); font-size:48px; color:var(--accent); font-weight:700;}
+  .hidden{display:none;}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--border-soft); padding:40px 0 60px;}
+  .added-list{list-style:none; margin-top:10px;}
+  .added-list li{color:var(--text-dim); font-size:13.5px; padding:6px 0 6px 20px; position:relative;}
+  .added-list li::before{content:'+'; position:absolute; left:0; color:var(--accent); font-family:var(--mono);}
+  .next-lesson{margin-top:28px; display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 24px;}
+  @media(max-width:600px){.next-lesson{flex-direction:column; gap:12px; text-align:center;}}
+
+  ::-webkit-scrollbar{height:8px; width:8px;}
+  ::-webkit-scrollbar-thumb{background:var(--border); border-radius:4px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>linux-foundation-9 / ps</div>
+    <div class="links">
+      <a href="#overview">ภาพรวม</a>
+      <a href="#fields">คอลัมน์</a>
+      <a href="#stat">สถานะ (STAT)</a>
+      <a href="#subcmd">คำสั่งย่อย</a>
+      <a href="#filter">การกรอง</a>
+      <a href="#cloud">Cloud Engineer</a>
+      <a href="#exercise">แบบฝึกหัด</a>
+      <a href="#quiz">แบบทดสอบ</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">Linux Foundation 9 — Review Sheet</div>
+    <h1>คำสั่ง <span class="hl">ps</span><br>Process Status</h1>
+    <p class="sub">สรุปทบทวนแบบมืออาชีพ พร้อมแบบฝึกหัดและแบบทดสอบ สำหรับเตรียมความพร้อมสู่การเป็น Cloud Engineer — เพราะทุกเซิร์ฟเวอร์ในคลาวด์ไม่มีหน้าจอ GUI ให้ดู มีแต่เทอร์มินัลกับคำสั่งนี้เท่านั้น</p>
+
+    <div class="term">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#ff5f57"></div>
+        <div class="term-dot" style="background:#febc2e"></div>
+        <div class="term-dot" style="background:#28c840"></div>
+        <span class="label">mix@ubuntu-server: ~</span>
+      </div>
+      <div class="term-body" id="termBody">
+        <div class="term-line"><span class="prompt">$</span> <span id="typedCmd"></span><span class="cursor" id="cur"></span></div>
+        <div class="term-out" id="termOut"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ OVERVIEW ============ -->
+  <section id="overview">
+    <div class="eyebrow">01 · ภาพรวม</div>
+    <h2>ps คืออะไร และทำไมต้องรู้จัก</h2>
+    <p class="lede">ก่อนจะจำ syntax ให้เข้าใจ "ทำไม" ก่อน — เพราะข้อสอบและงานจริงมักถามเชิงสถานการณ์ ไม่ใช่ท่องคำสั่งเปล่า ๆ</p>
+
+    <div class="concept-box">
+      <span class="tag">แนวคิดก่อน</span>
+      ลองนึกภาพว่าเซิร์ฟเวอร์คือโรงงานที่มีคนงาน (โพรเซส) ทำงานพร้อมกันหลายร้อยคน โดยที่คุณมองไม่เห็นตัวคนงานเลย สิ่งเดียวที่คุณมีคือ "กระดานเช็คชื่อ" ที่บอกว่าใครกำลังทำงาน ใครหยุดพัก ใครติดขัด — <code>ps</code> คือคำสั่งที่ "อ่านกระดานเช็คชื่อ" นั้นให้คุณดู ณ เวลาปัจจุบัน (เหมือนถ่ายภาพนิ่ง ไม่ใช่วิดีโอ)
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>นิยามทางการ</h3>
+        <p><code>ps</code> (Process Status) คือคำสั่งที่แสดงสถานะของโพรเซสที่กำลังทำงานอยู่ในระบบ ณ ขณะนั้น ข้อมูลถูกอ่านมาจากไฟล์ระบบภายใต้ <code>/proc/[PID]/</code> ซึ่งเคอร์เนลอัปเดตอยู่ตลอดเวลา</p>
+      </div>
+      <div class="card">
+        <h3>รันเปล่า ๆ ไม่มี argument</h3>
+        <p>จะเห็นเฉพาะโพรเซสที่ผูกกับ <b>session เทอร์มินัลปัจจุบัน</b> เท่านั้น เช่น shell (<code>bash</code>) และตัว <code>ps</code> เอง — ไม่เห็นโพรเซสของ user อื่นหรือ background service เลย</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FIELDS ============ -->
+  <section id="fields">
+    <div class="eyebrow">02 · คอลัมน์ที่ต้องรู้</div>
+    <h2>อ่านผลลัพธ์ของ ps ให้เป็น</h2>
+    <p class="lede">คอลัมน์ที่แสดงจะต่างกันไปตามรูปแบบคำสั่ง — สองรูปแบบที่เจอบ่อยที่สุดคือ <code>ps aux</code> (BSD style) และ <code>ps -ef</code> (UNIX style) <span class="badge-new">เพิ่มเติมจากเนื้อหาต้นฉบับ</span></p>
+
+    <h3 style="margin-bottom:10px">คอลัมน์ของ <code>ps aux</code></h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>คอลัมน์</th><th>ความหมาย</th></tr></thead>
+        <tbody>
+          <tr><td><code>USER</code></td><td>เจ้าของโพรเซส (user ที่รันคำสั่งนี้ขึ้นมา)</td></tr>
+          <tr><td><code>PID</code></td><td>Process ID — เลขประจำตัวเฉพาะของโพรเซสนั้น ไม่ซ้ำกัน</td></tr>
+          <tr><td><code>%CPU</code></td><td>เปอร์เซ็นต์การใช้งาน CPU ของโพรเซส</td></tr>
+          <tr><td><code>%MEM</code></td><td>เปอร์เซ็นต์การใช้งาน RAM ของโพรเซส</td></tr>
+          <tr><td><code>VSZ</code></td><td>Virtual Memory Size (KB) — หน่วยความจำเสมือนทั้งหมดที่จองไว้</td></tr>
+          <tr><td><code>RSS</code></td><td>Resident Set Size (KB) — หน่วยความจำจริงที่ถูกใช้อยู่ใน RAM ขณะนี้</td></tr>
+          <tr><td><code>TTY</code></td><td>เทอร์มินัลที่เกี่ยวข้อง หากเป็น <code>?</code> แปลว่าไม่มี controlling terminal (มักเป็น daemon/background service)</td></tr>
+          <tr><td><code>STAT</code></td><td>สถานะการทำงานของโพรเซส (ดูรายละเอียดหัวข้อถัดไป)</td></tr>
+          <tr><td><code>START</code></td><td>เวลาที่โพรเซสเริ่มทำงาน</td></tr>
+          <tr><td><code>TIME</code></td><td>เวลา CPU สะสมทั้งหมดที่โพรเซสใช้ไป (ไม่ใช่เวลาที่ทำงานผ่านมา)</td></tr>
+          <tr><td><code>COMMAND</code></td><td>ชื่อคำสั่งหรือโปรแกรมที่กำลังทำงาน พร้อม argument</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-bottom:10px">คอลัมน์ของ <code>ps -ef</code> <span class="badge-new">เพิ่มเติม</span></h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>คอลัมน์</th><th>ความหมาย</th></tr></thead>
+        <tbody>
+          <tr><td><code>UID</code></td><td>เจ้าของโพรเซส (เทียบเท่า USER ใน ps aux)</td></tr>
+          <tr><td><code>PID</code></td><td>Process ID</td></tr>
+          <tr><td><code>PPID</code></td><td>Parent Process ID — PID ของโพรเซสแม่ที่สร้างโพรเซสนี้ขึ้นมา (จุดเด่นของ <code>-ef</code> ที่ <code>aux</code> ไม่มีให้เห็นตรง ๆ)</td></tr>
+          <tr><td><code>C</code></td><td>เปอร์เซ็นต์การใช้ CPU โดยประมาณ</td></tr>
+          <tr><td><code>STIME</code></td><td>เวลาที่โพรเซสเริ่มทำงาน (เทียบเท่า START)</td></tr>
+          <tr><td><code>TTY</code> / <code>TIME</code> / <code>CMD</code></td><td>ความหมายเดียวกับใน <code>ps aux</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="concept-box">
+      <span class="tag">ทำไมต้องมีสองแบบ</span>
+      ใช้ <code>ps -ef</code> เมื่อต้องการดูความสัมพันธ์ "พ่อ-ลูก" ของโพรเซส (ผ่านคอลัมน์ PPID) และใช้ <code>ps aux</code> เมื่อต้องการโฟกัสที่การใช้ทรัพยากร (CPU/RAM) เป็นหลัก
+    </div>
+  </section>
+
+  <!-- ============ STAT ============ -->
+  <section id="stat">
+    <div class="eyebrow">03 · สถานะโพรเซส</div>
+    <h2>STAT — วงจรชีวิตของโพรเซส</h2>
+    <p class="lede">ตัวอักษรแรกของ STAT บอกว่าโพรเซส "กำลังทำอะไร" ที่ต้องเข้าใจลึกที่สุดคือความต่างระหว่าง S, D และ Z เพราะเป็นสิ่งที่ระบบจริงพังบ่อยที่สุด</p>
+
+    <div id="statDiagram"></div>
+
+    <div class="stat-legend">
+      <div class="chip"><span class="sw" style="background:var(--r-run)"></span>R = Running/Runnable</div>
+      <div class="chip"><span class="sw" style="background:var(--r-sleep)"></span>S = Interruptible sleep</div>
+      <div class="chip"><span class="sw" style="background:var(--r-io)"></span>D = Uninterruptible sleep</div>
+      <div class="chip"><span class="sw" style="background:var(--r-stop)"></span>T = Stopped</div>
+      <div class="chip"><span class="sw" style="background:var(--r-zombie)"></span>Z = Zombie</div>
+      <div class="chip"><span class="sw" style="background:var(--r-idle)"></span>I = Idle (kernel thread)</div>
+    </div>
+
+    <div class="grid2" style="margin-top:24px">
+      <div class="card">
+        <h3 style="color:var(--r-io)">⚠ ทำไม D อันตรายกว่า S</h3>
+        <p>โพรเซสในสถานะ <code>S</code> รอสัญญาณทั่วไปและ <b>ขัดจังหวะได้</b> — สามารถ <code>kill</code> ได้ทันที แต่โพรเซสในสถานะ <code>D</code> กำลังรอ I/O ระดับ hardware (เช่น อ่านดิสก์ที่เสีย หรือ NFS ที่ต่อไม่ติด) จึง <b>ขัดจังหวะไม่ได้แม้แต่ SIGKILL (-9)</b> ต้องรอให้ I/O เสร็จหรือ hardware ตอบกลับก่อนเท่านั้น — เป็นสาเหตุคลาสสิกที่เซิร์ฟเวอร์ "ค้าง" แบบสั่งอะไรก็ไม่ตอบ</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--r-zombie)">👻 Zombie (Z) จัดการยังไง</h3>
+        <p>Zombie คือโพรเซสที่ทำงาน<b>เสร็จแล้ว</b> แต่โพรเซสแม่ยังไม่เรียก <code>wait()</code> เพื่อเก็บ exit status มันไม่กิน CPU/RAM แต่จะไปจอง<b>ช่องว่างในตาราง PID</b> ไว้เฉย ๆ วิธีแก้คือไม่ต้อง kill ตัว zombie เอง (เพราะมันตายไปแล้ว) แต่ต้อง<b>แก้ที่โพรเซสแม่</b> — restart หรือ kill โพรเซสแม่แทน</p>
+      </div>
+    </div>
+
+    <h3 style="margin:26px 0 4px">รหัสเสริม (ตัวอักษรที่สอง)</h3>
+    <div class="mod-grid">
+      <div class="mod-card"><span class="sym">&lt;</span><p>High-priority — ความสำคัญสูง</p></div>
+      <div class="mod-card"><span class="sym">N</span><p>Low-priority / Nice — ความสำคัญต่ำ</p></div>
+      <div class="mod-card"><span class="sym">s</span><p>Session leader — หัวหน้า session</p></div>
+      <div class="mod-card"><span class="sym">l</span><p>Multi-threaded — ทำงานหลายเธรด</p></div>
+      <div class="mod-card"><span class="sym">+</span><p>Foreground — ทำงานอยู่ฉากหน้า</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SUBCOMMANDS ============ -->
+  <section id="subcmd">
+    <div class="eyebrow">04 · คำสั่งย่อยยอดนิยม</div>
+    <h2>สำหรับ System / Cloud Admin</h2>
+
+    <div class="cmd-card">
+      <code class="cmd">ps aux</code>
+      <div class="desc">นิยมที่สุด! แสดงโพรเซสทั้งหมดในระบบ (ทุก user) พร้อมรายละเอียด CPU/RAM</div>
+      <div class="mini-term">USER   PID  %CPU %MEM  STAT  START TIME COMMAND
+root     1   0.0  0.1   Ss    08:00 0:02 /sbin/init
+www-data 812 12.4  3.2   R     09:15 4:10 nginx: worker process</div>
+    </div>
+
+    <div class="cmd-card">
+      <code class="cmd">ps -ef</code>
+      <div class="desc">นิยมใช้ค้นหา PID แบบรวดเร็ว และดูความสัมพันธ์ผ่านคอลัมน์ PPID</div>
+      <div class="mini-term">UID    PID  PPID  C STIME TTY  TIME     CMD
+root      1     0  0 08:00 ?    00:00:02 /sbin/init
+root    812     1  9 09:15 ?    00:04:10 nginx: master process</div>
+    </div>
+
+    <div class="cmd-card">
+      <code class="cmd">ps aux --forest</code>
+      <div class="desc">แสดงโพรเซสทั้งหมดพร้อมโครงสร้างต้นไม้ เห็นความสัมพันธ์แม่-ลูกชัดเจน</div>
+      <div class="mini-term">root      812  nginx: master process
+www-data  813   \_ nginx: worker process
+www-data  814   \_ nginx: worker process</div>
+    </div>
+
+    <div class="cmd-card">
+      <code class="cmd">pstree</code>
+      <div class="desc">ดูโครงสร้างความเชื่อมโยงของโพรเซสแบบภาพรวมย่อ ๆ (กระชับกว่า --forest)</div>
+      <div class="mini-term">init─┬─nginx─┬─nginx
+     │      └─nginx
+     └─sshd───bash───ps</div>
+    </div>
+
+    <div class="cmd-card">
+      <code class="cmd">ps aux --sort=-%mem</code> <span class="badge-new">เพิ่มเติม</span>
+      <div class="desc">เรียงลำดับโพรเซสจากใช้ RAM มากไปน้อย — คำสั่งที่ใช้บ่อยที่สุดตอนไล่จับโพรเซสกินแรมบนคลาวด์ (เปลี่ยนเป็น <code>--sort=-%cpu</code> เพื่อดู CPU แทน)</div>
+      <div class="mini-term">$ ps aux --sort=-%mem | head -6</div>
+    </div>
+
+    <div class="concept-box">
+      <span class="tag">รู้ไว้</span>
+      <code>ps</code> รับทั้ง argument แบบมีขีด <code>-</code> (UNIX style เช่น <code>ps -a</code>) และไม่มีขีด (BSD style เช่น <code>ps a</code>) ซึ่งให้รูปแบบผลลัพธ์ต่างกันเล็กน้อย — ที่มาคือ <code>ps</code> ยุคใหม่ (procps) รวมสองมาตรฐานเก่าเข้าด้วยกัน
+    </div>
+  </section>
+
+  <!-- ============ FILTER ============ -->
+  <section id="filter">
+    <div class="eyebrow">05 · การกรองข้อมูล</div>
+    <h2>กรองด้วย option ของ ps เอง (ไม่ต้องพึ่ง grep)</h2>
+    <p class="lede">ข้อดีของการกรองด้วย option ตรง ๆ คือแม่นยำกว่า <code>grep</code> (ซึ่งบางทีไปแมตช์คำสั่งของตัว grep เองด้วย)</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>เป้าหมาย</th><th>คำสั่ง</th></tr></thead>
+        <tbody>
+          <tr><td>ค้นหาตาม User</td><td><code>ps -f -u syslog</code></td></tr>
+          <tr><td>ค้นหาตามชื่อโปรแกรม</td><td><code>ps -f -C cron</code></td></tr>
+          <tr><td>ค้นหาตาม PID เดียว</td><td><code>ps -f -p 101</code></td></tr>
+          <tr><td>ค้นหาหลาย PID</td><td><code>ps -f -p 101,102,103</code></td></tr>
+          <tr><td>ค้นหาโพรเซสลูกของ PID</td><td><code>ps -f --ppid 812</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin-bottom:10px">เทคนิคเสริมที่ใช้คู่กันบ่อย <span class="badge-new">เพิ่มเติม</span></h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>สถานการณ์</th><th>คำสั่ง</th></tr></thead>
+        <tbody>
+          <tr><td>หา PID ของโปรแกรมตามชื่อแบบเร็ว ๆ (ไม่ต้องพิมพ์ ps เลย)</td><td><code>pgrep nginx</code></td></tr>
+          <tr><td>ฆ่าโพรเซสทุกตัวที่ชื่อตรงกับ pattern</td><td><code>pkill -f "node server.js"</code></td></tr>
+          <tr><td>เลือกดูเฉพาะคอลัมน์ที่ต้องการ + เรียงลำดับ</td><td><code>ps -eo pid,ppid,cmd,%mem --sort=-%mem</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ CLOUD ============ -->
+  <section id="cloud">
+    <div class="eyebrow">06 · เชื่อมกับสาย Cloud Engineer</div>
+    <h2>ทำไมเรื่องนี้สำคัญกับงานจริง</h2>
+    <p class="lede">บนเซิร์ฟเวอร์คลาวด์ (EC2, Compute Engine ฯลฯ) ไม่มี Task Manager แบบ Windows ให้คลิก — <code>ps</code> คือเครื่องมือวินิจฉัยด่านแรกเสมอ</p>
+
+    <div class="cloud-box">
+      <div class="scenario">
+        <div class="who">สถานการณ์ 1 · Memory Alert</div>
+        <p>CloudWatch แจ้งเตือนว่า EC2 instance ใช้ RAM 92% คุณ SSH เข้าไปเพื่อหาตัวการที่กินแรมมากที่สุด 5 อันดับแรก</p>
+        <span class="ans">ps aux --sort=-%mem | head -6</span>
+      </div>
+      <div class="scenario">
+        <div class="who">สถานการณ์ 2 · Zombie Buildup</div>
+        <p>เห็นโพรเซสสถานะ <code>Z</code> หลายสิบตัวสะสมอยู่ ทำให้ใกล้ชนขีดจำกัดจำนวน PID ของระบบ วิธีแก้ที่ถูกต้องคือทำอย่างไร</p>
+        <span class="ans">หา PPID ด้วย ps -ef แล้ว restart โพรเซสแม่ ไม่ใช่ kill zombie ตรง ๆ</span>
+      </div>
+      <div class="scenario">
+        <div class="who">สถานการณ์ 3 · Server ค้างทั้งระบบ</div>
+        <p>สั่งคำสั่งอะไรก็ไม่ตอบสนอง ตรวจสอบแล้วพบโพรเซสสถานะ <code>D</code> ค้างอยู่นาน คุณจะอธิบายสาเหตุกับทีมอย่างไร</p>
+        <span class="ans">โพรเซสกำลังรอ I/O ระดับ hardware (เช่น disk/NFS มีปัญหา) ซึ่งขัดจังหวะไม่ได้แม้แต่ kill -9</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXERCISES ============ -->
+  <section id="exercise">
+    <div class="eyebrow">07 · แบบฝึกหัดทบทวน</div>
+    <h2>ลองทำก่อนดูเฉลย</h2>
+    <p class="lede">คลิกที่คำถามเพื่อดูเฉลยและคำอธิบาย</p>
+    <div id="exList"></div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz">
+    <div class="eyebrow">08 · แบบทดสอบ</div>
+    <h2>เช็คความเข้าใจ 8 ข้อ</h2>
+    <div id="quizArea"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <h3>สิ่งที่เพิ่มเข้ามาจากเนื้อหาต้นฉบับ</h3>
+    <ul class="added-list">
+      <li>คอลัมน์เต็มของ <code>ps aux</code> (USER, %CPU, %MEM, VSZ, RSS, START) และ <code>ps -ef</code> (UID, PPID, C, STIME) ที่เอกสารเดิมกล่าวถึงไม่ครบ</li>
+      <li>คำอธิบายเชิงลึกว่าทำไมสถานะ D อันตรายกว่า S และวิธีจัดการ Zombie ที่ถูกต้อง</li>
+      <li>คำสั่งเรียงลำดับ <code>--sort=-%mem</code> / <code>--sort=-%cpu</code> และการเลือกคอลัมน์ด้วย <code>-eo</code></li>
+      <li>คำสั่งคู่หู <code>pgrep</code> / <code>pkill</code> ที่มักใช้แทน ps + grep + kill</li>
+      <li>สถานการณ์จำลองระดับ Cloud Engineer (EC2 memory alert, zombie cleanup, server ค้าง)</li>
+      <li>แบบฝึกหัดพร้อมเฉลยและแบบทดสอบแบบโต้ตอบ</li>
+    </ul>
+
+    <div class="next-lesson">
+      <div>
+        <div style="font-family:var(--mono); font-size:12px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em">ถัดไป</div>
+        <div style="font-size:15px; margin-top:4px">พร้อมไปต่อบทเรียนถัดไปของ Linux Foundation 9 ไหม?</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ---------- Hero terminal typing ----------
+(function(){
+  const cmdEl = document.getElementById('typedCmd');
+  const outEl = document.getElementById('termOut');
+  const cur = document.getElementById('cur');
+  const cmd = 'ps aux --sort=-%mem | head -5';
+  const out =
+`USER   PID  %CPU %MEM    VSZ   RSS TTY   STAT START   TIME COMMAND
+mongo  2117  3.1 18.4 1892344 91020 ?    <span class="stat-S">Sl</span>   09:02  12:41 mongod --config
+node   3390  9.8 11.2  843120 55880 ?    <span class="stat-R">R</span>    10:44   3:02 node server.js
+root    812  0.4  2.0  102340  9980 ?    <span class="stat-S">Ss</span>   08:00   0:44 nginx: master
+mysql  1904  0.1  1.8  455200  8912 ?    <span class="stat-S">Sl</span>   08:00   1:12 mysqld`;
+
+  let i = 0;
+  function typeChar(){
+    if(i <= cmd.length){
+      cmdEl.textContent = cmd.slice(0, i);
+      i++;
+      setTimeout(typeChar, 32);
+    } else {
+      setTimeout(()=>{
+        outEl.innerHTML = out;
+        outEl.classList.add('show');
+        cur.style.display='none';
+      }, 250);
+    }
+  }
+  typeChar();
+})();
+
+// ---------- STAT state diagram (SVG) ----------
+(function(){
+  const el = document.getElementById('statDiagram');
+  const nodes = [
+    {id:'R', label:'R', name:'Running / Runnable', x:340, y:60, color:'var(--r-run)'},
+    {id:'S', label:'S', name:'Interruptible Sleep', x:150, y:180, color:'var(--r-sleep)'},
+    {id:'D', label:'D', name:'Uninterruptible Sleep', x:530, y:180, color:'var(--r-io)'},
+    {id:'T', label:'T', name:'Stopped', x:150, y:320, color:'var(--r-stop)'},
+    {id:'Z', label:'Z', name:'Zombie', x:530, y:320, color:'var(--r-zombie)'}
+  ];
+  let svg = `<svg viewBox="0 0 680 400" style="width:100%; height:auto; background:var(--bg-elevated); border:1px solid var(--border); border-radius:12px;">`;
+
+  // edges
+  const edges = [
+    ['R','S'], ['S','R'], ['R','D'], ['D','S'],
+    ['R','T'], ['S','T'], ['R','Z']
+  ];
+  const byId = Object.fromEntries(nodes.map(n=>[n.id,n]));
+  edges.forEach(([a,b])=>{
+    const A = byId[a], B = byId[b];
+    svg += `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="#232b39" stroke-width="1.5"/>`;
+  });
+
+  nodes.forEach(n=>{
+    svg += `
+      <circle cx="${n.x}" cy="${n.y}" r="30" fill="var(--surface)" stroke="${n.color}" stroke-width="2"/>
+      <text x="${n.x}" y="${n.y+7}" text-anchor="middle" font-family="JetBrains Mono" font-size="18" font-weight="700" fill="${n.color}">${n.label}</text>
+      <text x="${n.x}" y="${n.y+52}" text-anchor="middle" font-family="IBM Plex Sans Thai" font-size="11.5" fill="#94a1b3">${n.name}</text>
+    `;
+  });
+
+  svg += `</svg>`;
+  el.innerHTML = svg;
+})();
+
+// ---------- Exercises ----------
+const exercises = [
+  {
+    q:"เซิร์ฟเวอร์ Ubuntu บน AWS EC2 มี RAM เต็ม 90% ทีมงานให้คุณหาโพรเซส 5 อันดับที่กิน RAM มากที่สุดโดยเร็ว คุณจะพิมพ์คำสั่งอะไร?",
+    a:"ps aux --sort=-%mem | head -6",
+    note:"ใช้ --sort=-%mem เพื่อเรียงจากมากไปน้อย แล้ว head -6 เพื่อดูบรรทัดหัวตาราง + 5 อันดับแรก"
+  },
+  {
+    q:"คุณเห็นโพรเซส nginx worker หลายตัว และต้องการรู้ว่าใครคือโพรเซสแม่ (master) ของมัน ควรใช้คำสั่งไหน และดูที่คอลัมน์ใด?",
+    a:"ps -ef | grep nginx  →  ดูคอลัมน์ PPID",
+    note:"ps -ef มีคอลัมน์ PPID ให้เห็นตรง ๆ ต่างจาก ps aux ที่ไม่มีคอลัมน์นี้"
+  },
+  {
+    q:"ระบบมี process ที่ STAT ขึ้น D ค้างมานาน 20 นาที คุณลอง kill -9 แล้วไม่หาย เพราะอะไร และควรทำอย่างไรต่อ?",
+    a:"D คือ uninterruptible sleep ที่รอ I/O ระดับ hardware — สัญญาณ SIGKILL ก็หยุดไม่ได้ ต้องตรวจสอบต้นตอ I/O (เช่น ดิสก์/NFS) แทนการพยายาม kill",
+    note:"นี่คือกับดักคลาสสิกในข้อสอบและงานจริง — D ต่างจาก S ตรงนี้"
+  },
+  {
+    q:"คุณต้องการดูเฉพาะโพรเซสของ user ชื่อ 'deploy' แบบละเอียด (full-format) โดยไม่ใช้ grep เลย คำสั่งคืออะไร?",
+    a:"ps -f -u deploy",
+    note:"option -u ของ ps กรองตาม user ได้ตรง ๆ แม่นยำกว่าการ grep ชื่อ user"
+  },
+  {
+    q:"PID 4021 มี process ลูกหลายตัวที่ spawn ออกมา อยากดูว่าลูก ๆ ของมันคือ PID อะไรบ้าง ใช้คำสั่งไหน?",
+    a:"ps -f --ppid 4021",
+    note:"--ppid กรองแสดงเฉพาะโพรเซสที่มี PPID ตรงกับค่าที่ระบุ คือลูกของ PID นั้น"
+  },
+  {
+    q:"เห็นโพรเซสสถานะ Z (Zombie) ค้างอยู่ 40 ตัว จะแก้ปัญหาที่ต้นเหตุอย่างไร (ไม่ใช่การ kill zombie ตรง ๆ)?",
+    a:"หา PPID ของ zombie เหล่านั้นด้วย ps -ef แล้ว restart หรือ kill โพรเซสแม่ เพื่อให้ระบบเรียก wait() เก็บกวาด zombie",
+    note:"Zombie ตายไปแล้ว kill ไม่ได้ผล ปัญหาจริงอยู่ที่โพรเซสแม่ที่ไม่ยอม wait()"
+  }
+];
+
+const exListEl = document.getElementById('exList');
+exercises.forEach((ex, idx)=>{
+  const div = document.createElement('div');
+  div.className = 'ex';
+  div.innerHTML = `
+    <div class="ex-q">
+      <div><span class="num">Q${idx+1}</span><span class="qtext">${ex.q}</span></div>
+      <span class="chev">▾</span>
+    </div>
+    <div class="ex-a"><div class="ex-a-inner">
+      <div class="lbl">เฉลย</div>
+      <code class="block">${ex.a}</code>
+      <div class="lbl" style="margin-top:12px">อธิบาย</div>
+      <p style="font-size:13.5px; margin-top:4px">${ex.note}</p>
+    </div></div>
+  `;
+  div.querySelector('.ex-q').addEventListener('click', ()=> div.classList.toggle('open'));
+  exListEl.appendChild(div);
+});
+
+// ---------- Quiz ----------
+const quiz = [
+  {
+    q:"คำสั่ง ps เมื่อรันโดยไม่มี argument ใด ๆ จะแสดงผลอะไร?",
+    opts:["โพรเซสทั้งหมดในระบบทุก user","เฉพาะโพรเซสของ session เทอร์มินัลปัจจุบัน","เฉพาะโพรเซสที่ใช้ CPU สูงสุด","เฉพาะโพรเซสที่เป็น root"],
+    correct:1,
+    explain:"ps เปล่า ๆ แสดงเฉพาะโพรเซสที่ผูกกับ session เทอร์มินัลที่กำลังใช้อยู่ เช่น bash และ ps เอง"
+  },
+  {
+    q:"คอลัมน์ VSZ และ RSS ใน ps aux ต่างกันอย่างไร?",
+    opts:["VSZ คือ CPU, RSS คือ Memory","VSZ คือหน่วยความจำเสมือนที่จองไว้ทั้งหมด ส่วน RSS คือหน่วยความจำจริงที่ใช้อยู่ใน RAM","ทั้งสองคือค่าเดียวกัน","RSS ใหญ่กว่า VSZ เสมอ"],
+    correct:1,
+    explain:"VSZ (Virtual Memory Size) คือพื้นที่ที่จองไว้ทั้งหมด ส่วน RSS (Resident Set Size) คือพื้นที่จริงที่ถูกใช้อยู่ใน RAM ขณะนั้น"
+  },
+  {
+    q:"โพรเซสสถานะ D (Uninterruptible sleep) มีลักษณะพิเศษอย่างไร?",
+    opts:["สามารถ kill -9 ได้ทันที","กำลังรอ I/O ระดับ hardware และขัดจังหวะไม่ได้แม้แต่ SIGKILL","เป็นโพรเซสที่ตายแล้วแต่ยังไม่ถูกเก็บกวาด","เป็นโพรเซสที่มี priority สูงสุด"],
+    correct:1,
+    explain:"D คือการรอ I/O ระดับ hardware เช่น ดิสก์หรือ NFS ซึ่งไม่สามารถขัดจังหวะได้ด้วยสัญญาณใด ๆ รวมถึง kill -9"
+  },
+  {
+    q:"ต้องการดูความสัมพันธ์ 'พ่อ-ลูก' ของโพรเซสผ่านคอลัมน์ PPID ควรใช้คำสั่งใด?",
+    opts:["ps aux","ps -ef","ps -u","ps --sort"],
+    correct:1,
+    explain:"ps -ef มีคอลัมน์ PPID แสดงตรง ๆ ทำให้เห็นความสัมพันธ์ระหว่างโพรเซสแม่และลูกได้ชัดเจน"
+  },
+  {
+    q:"โพรเซส Zombie (Z) ควรจัดการอย่างไรจึงจะถูกต้อง?",
+    opts:["kill -9 ที่ตัว zombie โดยตรง","ไม่ต้องทำอะไร ปล่อยไว้ได้ตลอดไป","restart หรือแก้ไขโพรเซสแม่ ให้เรียก wait() เก็บกวาด","เพิ่ม RAM ให้เครื่อง"],
+    correct:2,
+    explain:"Zombie ตายไปแล้วจึง kill ไม่ได้ผล ต้องแก้ที่โพรเซสแม่ที่ยังไม่เรียก wait() เพื่อเก็บ exit status"
+  },
+  {
+    q:"คำสั่งใดใช้เรียงลำดับโพรเซสจากใช้ RAM มากไปน้อย?",
+    opts:["ps aux --sort=%mem","ps aux --sort=-%mem","ps aux --mem-sort","ps -ef --top-mem"],
+    correct:1,
+    explain:"เครื่องหมายลบหน้า %mem หมายถึงเรียงจากมากไปน้อย (descending)"
+  },
+  {
+    q:"ในคอลัมน์ TTY หากขึ้นเป็นเครื่องหมาย ? หมายความว่าอย่างไร?",
+    opts:["โพรเซสมีปัญหา error","โพรเซสไม่มี controlling terminal เช่นเป็น background service","โพรเซสถูกหยุดชั่วคราว","ไม่สามารถระบุ user ได้"],
+    correct:1,
+    explain:"เครื่องหมาย ? หมายถึงไม่มี terminal ผูกอยู่ ซึ่งพบได้บ่อยในโพรเซสประเภท daemon หรือ background service"
+  },
+  {
+    q:"ต้องการหา PID ของโปรแกรมชื่อ 'cron' แบบรวดเร็วโดยไม่ต้องพึ่ง grep ควรใช้คำสั่งใด?",
+    opts:["ps -f -C cron","ps aux | find cron","ps --name cron","ps -k cron"],
+    correct:0,
+    explain:"option -C ของ ps ใช้กรองตามชื่อโปรแกรม (command name) ได้ตรง ๆ"
+  }
+];
+
+let qIdx = 0, score = 0, answered = false;
+const quizArea = document.getElementById('quizArea');
+
+function renderQuiz(){
+  if(qIdx >= quiz.length){
+    quizArea.innerHTML = `
+      <div class="quiz-card quiz-result">
+        <div class="quiz-progress">ผลคะแนน</div>
+        <div class="score">${score}/${quiz.length}</div>
+        <p style="margin-top:10px">${score === quiz.length ? 'เยี่ยมมาก เข้าใจครบทุกจุดสำคัญ 🎉' : score >= quiz.length*0.6 ? 'ดีมาก ลองทบทวนข้อที่พลาดอีกรอบ' : 'ลองย้อนอ่านหัวข้อ STAT และคอลัมน์อีกครั้ง'}</p>
+        <button class="btn" style="margin-top:20px" onclick="restartQuiz()">ทำใหม่อีกครั้ง</button>
+      </div>`;
+    return;
+  }
+  const item = quiz[qIdx];
+  answered = false;
+  quizArea.innerHTML = `
+    <div class="quiz-card">
+      <div class="quiz-progress">ข้อ ${qIdx+1} / ${quiz.length}</div>
+      <div class="quiz-q">${item.q}</div>
+      <div class="quiz-opts">
+        ${item.opts.map((o,i)=>`<button class="qopt" data-i="${i}">${o}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="explainBox">${item.explain}</div>
+      <div class="quiz-nav">
+        <span class="mono" style="font-size:12px; color:var(--text-faint)">คะแนนสะสม: ${score}</span>
+        <button class="btn" id="nextBtn" disabled>ข้อถัดไป →</button>
+      </div>
+    </div>`;
+
+  quizArea.querySelectorAll('.qopt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(answered) return;
+      answered = true;
+      const chosen = parseInt(btn.dataset.i);
+      quizArea.querySelectorAll('.qopt').forEach(b=>b.classList.add('disabled'));
+      if(chosen === item.correct){
+        btn.classList.add('correct');
+        score++;
+      } else {
+        btn.classList.add('wrong');
+        quizArea.querySelector(`.qopt[data-i="${item.correct}"]`).classList.add('correct');
+      }
+      document.getElementById('explainBox').classList.add('show');
+      document.getElementById('nextBtn').disabled = false;
+    });
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    qIdx++;
+    renderQuiz();
+  });
+}
+
+function restartQuiz(){
+  qIdx = 0; score = 0;
+  renderQuiz();
+}
+
+renderQuiz();
+</script>
+
+</body>
+</html>

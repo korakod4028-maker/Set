@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation 10 — Work with Users</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0c1210;
+    --panel: #121b18;
+    --panel-2: #16211d;
+    --line: #23332c;
+    --text: #dde8e2;
+    --text-dim: #8fa39a;
+    --accent: #e0a94b;      /* root / sudo gold */
+    --accent-dim: #8a6a2f;
+    --teal: #4fc9b0;        /* secondary — process/command highlight */
+    --red: #d9695f;
+    --blue: #6fa8dc;
+    --radius: 10px;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans Thai', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(224,169,75,0.06), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(79,201,176,0.05), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.7;
+    min-height:100vh;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:28px 20px 80px;}
+
+  /* HEADER */
+  header{
+    border-bottom:1px solid var(--line);
+    padding-bottom:22px;
+    margin-bottom:22px;
+  }
+  .kicker{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--teal);
+    letter-spacing:0.02em;
+    margin-bottom:10px;
+  }
+  h1{
+    font-size:clamp(26px,4vw,36px);
+    margin:0 0 8px;
+    font-weight:700;
+    color:#f2ece0;
+  }
+  .subtitle{color:var(--text-dim);font-size:15px;max-width:640px;}
+  .prompt{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--accent);
+    margin-top:14px;
+  }
+  .prompt::before{content:"$ ";color:var(--text-dim);}
+
+  /* TABS */
+  .tabs{
+    display:flex;
+    gap:4px;
+    flex-wrap:wrap;
+    border-bottom:1px solid var(--line);
+    margin-bottom:24px;
+    position:sticky;
+    top:0;
+    background:var(--bg);
+    padding-top:8px;
+    z-index:10;
+  }
+  .tab-btn{
+    background:none;
+    border:none;
+    color:var(--text-dim);
+    font-family:var(--sans);
+    font-size:14.5px;
+    font-weight:500;
+    padding:10px 14px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+  .panel{display:none;animation:fade .25s ease;}
+  .panel.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  /* CONTENT BLOCKS */
+  section.block{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 22px;
+    margin-bottom:16px;
+  }
+  section.block h2{
+    font-size:18px;
+    margin:0 0 4px;
+    color:#f2ece0;
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  section.block h2 .tag{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--bg);
+    background:var(--accent);
+    padding:2px 7px;
+    border-radius:4px;
+    font-weight:600;
+  }
+  section.block .desc{color:var(--text-dim);font-size:13.5px;margin-bottom:14px;}
+  section.block h3{font-size:15px;color:var(--teal);margin:18px 0 8px;}
+
+  code, .code{
+    font-family:var(--mono);
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--accent);
+    padding:1px 6px;
+    border-radius:5px;
+    font-size:.92em;
+  }
+  pre{
+    font-family:var(--mono);
+    background:#0a100e;
+    border:1px solid var(--line);
+    border-left:3px solid var(--teal);
+    border-radius:8px;
+    padding:14px 16px;
+    overflow-x:auto;
+    font-size:13.5px;
+    color:#c9f0e5;
+    margin:10px 0;
+  }
+  pre .c{color:var(--text-dim);}
+
+  table{width:100%;border-collapse:collapse;margin:10px 0 4px;font-size:14px;}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:var(--panel-2);color:var(--accent);font-weight:600;font-size:12.5px;}
+  tr:nth-child(even) td{background:rgba(255,255,255,0.015);}
+
+  .uid-scale{display:flex;flex-direction:column;gap:6px;margin:12px 0;}
+  .uid-row{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;font-size:13.5px;}
+  .uid-bar{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+    padding:7px 10px;color:var(--text-dim);
+  }
+  .uid-bar b{color:var(--text);}
+
+  .note{
+    border:1px solid var(--accent-dim);
+    background:rgba(224,169,75,0.06);
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:13.5px;
+    margin:12px 0;
+  }
+  .note b{color:var(--accent);}
+  .fix{
+    border:1px solid #5c3a34;
+    background:rgba(217,105,95,0.08);
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:13.5px;
+    margin:12px 0;
+  }
+  .fix b{color:var(--red);}
+  .extra{
+    border:1px solid #2f5c50;
+    background:rgba(79,201,176,0.07);
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:13.5px;
+    margin:12px 0;
+  }
+  .extra b{color:var(--teal);}
+
+  /* FLASHCARDS */
+  .fc-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:var(--text-dim);font-size:13px;}
+  .fc-stage{perspective:1400px;height:230px;margin-bottom:14px;}
+  .fc-card{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1);
+    cursor:pointer;
+  }
+  .fc-card.flipped{transform:rotateY(180deg);}
+  .fc-face{
+    position:absolute;inset:0;backface-visibility:hidden;
+    border-radius:var(--radius);border:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:24px;
+  }
+  .fc-front{background:var(--panel);}
+  .fc-front .lbl{font-family:var(--mono);font-size:11px;color:var(--teal);margin-bottom:10px;}
+  .fc-front .txt{font-size:19px;font-weight:600;color:#f2ece0;}
+  .fc-back{background:var(--panel-2);transform:rotateY(180deg);}
+  .fc-back .lbl{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:10px;}
+  .fc-back .txt{font-size:14.5px;color:var(--text);}
+  .fc-nav{display:flex;gap:10px;justify-content:center;}
+  .fc-btn{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    font-family:var(--sans);padding:9px 18px;border-radius:8px;cursor:pointer;font-size:13.5px;
+  }
+  .fc-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* LAB */
+  .lab-step{
+    display:grid;grid-template-columns:34px 1fr;gap:12px;
+    padding:14px 0;border-bottom:1px dashed var(--line);
+  }
+  .lab-step:last-child{border-bottom:none;}
+  .lab-num{
+    width:34px;height:34px;border-radius:50%;
+    background:var(--panel-2);border:1px solid var(--accent-dim);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:13px;
+  }
+  .lab-title{font-weight:600;color:#f2ece0;margin-bottom:4px;font-size:15px;}
+  .lab-goal{color:var(--text-dim);font-size:13px;margin-bottom:8px;}
+  .check{
+    display:flex;gap:8px;align-items:flex-start;margin-top:8px;font-size:13px;color:var(--text-dim);
+    background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:8px 10px;
+  }
+  .check b{color:var(--teal);}
+
+  /* QUIZ */
+  .q-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 18px;margin-bottom:12px;
+  }
+  .q-head{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px;}
+  .q-num{font-family:var(--mono);color:var(--teal);font-size:12.5px;}
+  .q-text{font-weight:600;color:#f2ece0;font-size:15px;margin-bottom:12px;}
+  .opts{display:flex;flex-direction:column;gap:8px;}
+  .opt{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+    padding:10px 12px;cursor:pointer;font-size:13.5px;transition:border-color .15s;
+  }
+  .opt:hover{border-color:var(--accent-dim);}
+  .opt.correct{border-color:var(--teal);background:rgba(79,201,176,0.1);color:#dffff5;}
+  .opt.wrong{border-color:var(--red);background:rgba(217,105,95,0.1);color:#ffe1dd;}
+  .opt.disabled{pointer-events:none;}
+  .explain{
+    margin-top:10px;font-size:13px;color:var(--text-dim);
+    border-top:1px solid var(--line);padding-top:10px;display:none;
+  }
+  .explain.show{display:block;}
+  .q-fill{margin-top:6px;}
+  .q-fill input{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    font-family:var(--mono);padding:8px 10px;border-radius:6px;width:220px;font-size:13.5px;
+  }
+  .q-fill button{
+    background:var(--accent);color:#1a1200;border:none;font-weight:600;
+    padding:8px 14px;border-radius:6px;cursor:pointer;margin-left:8px;font-size:13.5px;
+  }
+  .score-bar{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:14px 18px;margin-bottom:16px;font-family:var(--mono);font-size:13.5px;
+  }
+  #score{color:var(--accent);font-weight:600;}
+  .reset-btn{
+    background:none;border:1px solid var(--line);color:var(--text-dim);
+    padding:6px 12px;border-radius:6px;cursor:pointer;font-family:var(--sans);font-size:12.5px;
+  }
+  .reset-btn:hover{color:var(--red);border-color:var(--red);}
+
+  footer{text-align:center;color:var(--text-dim);font-size:12px;margin-top:40px;font-family:var(--mono);}
+  ::selection{background:var(--accent-dim);color:#fff;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">LINUX FOUNDATION CERTIFICATION TRACK · LFCS/LFCE PREP</div>
+    <h1>Module 10 — Work with Users</h1>
+    <div class="subtitle">การจัดการผู้ใช้งานในระบบ Linux: UID/GID, ไฟล์คอนฟิกผู้ใช้, คำสั่งสร้าง–แก้ไข–ลบผู้ใช้ และแนวทางที่ใช้จริงในงาน Cloud/Network Engineer</div>
+    <div class="prompt">id && whoami && cat /etc/passwd | tail -1</div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="content">เนื้อหา</button>
+    <button class="tab-btn" data-tab="flash">Flashcards</button>
+    <button class="tab-btn" data-tab="lab">Lab ปฏิบัติ</button>
+    <button class="tab-btn" data-tab="cheat">สรุปคำสั่ง</button>
+    <button class="tab-btn" data-tab="quiz">Quiz</button>
+  </div>
+
+  <!-- ============ CONTENT ============ -->
+  <div class="panel active" id="content">
+
+    <section class="block">
+      <h2><span class="tag">01</span>ประเภทของผู้ใช้ใน Linux</h2>
+      <div class="desc">ระบบสิทธิ์ของ Linux แบ่งผู้ใช้ออกเป็น 3 ระดับ ซึ่งเป็นพื้นฐานของโมเดล Least Privilege ที่ทีม Cloud/Security ใช้ทุกวัน</div>
+      <table>
+        <tr><th>ระดับ</th><th>คำอธิบาย</th><th>ตัวอย่างการใช้งานจริง</th></tr>
+        <tr><td><b>Standard User</b></td><td>สิทธิ์จำกัด เข้าถึงเฉพาะไฟล์/โฟลเดอร์ของตัวเอง</td><td>บัญชี dev ที่ deploy โค้ดแต่แก้ config ระบบไม่ได้</td></tr>
+        <tr><td><b>Elevated User</b></td><td>ผู้ใช้ทั่วไปที่ถูกอนุญาตให้รันคำสั่งผ่าน <code>sudo</code> ได้บางส่วนหรือทั้งหมด</td><td>วิศวกรที่อยู่ในกลุ่ม <code>sudo</code>/<code>wheel</code></td></tr>
+        <tr><td><b>Root</b></td><td>สิทธิ์สูงสุด (UID 0) ทำได้ทุกอย่างในระบบ</td><td>ควรหลีกเลี่ยงการล็อกอิน root โดยตรง — ใช้ sudo แทนเพื่อเก็บ audit log</td></tr>
+      </table>
+      <div class="note"><b>มุมมอง Engineer:</b> ในสภาพแวดล้อม Cloud ควรปิดการ SSH login ด้วย root โดยตรง (<code>PermitRootLogin no</code> ใน <code>/etc/ssh/sshd_config</code>) แล้วให้ทุกคนใช้บัญชีของตัวเอง + sudo เพื่อให้ระบุตัวตนผู้กระทำได้ในภายหลัง</div>
+    </section>
+
+    <section class="block">
+      <h2><span class="tag">02</span>โครงสร้าง UID และ GID</h2>
+      <div class="desc">UID (User Identifier) และ GID (Group Identifier) คือเลขที่ระบบใช้อ้างอิงสิทธิ์จริง ๆ เบื้องหลัง — ชื่อผู้ใช้เป็นแค่ label ที่มนุษย์อ่านง่าย</div>
+      <div class="uid-scale">
+        <div class="uid-row"><span>UID 0</span><div class="uid-bar"><b>root</b> — สงวนไว้สำหรับผู้ดูแลระบบสูงสุดเสมอ</div></div>
+        <div class="uid-row"><span>UID 1–99</span><div class="uid-bar">บัญชีระบบที่ตั้งไว้ล่วงหน้าโดย distro เช่น <b>mail, www-data, bin</b></div></div>
+        <div class="uid-row"><span>UID 100–999</span><div class="uid-bar">บัญชีระบบ/เดมอนที่ถูกสร้างภายหลังโดยแพ็กเกจต่าง ๆ เช่น <b>mysql, docker</b></div></div>
+        <div class="uid-row"><span>UID 1000+</span><div class="uid-bar">บัญชี <b>ผู้ใช้งานทั่วไป</b> (ค่าเริ่มต้นตั้งแต่ Ubuntu, Debian, RHEL/CentOS รุ่นปัจจุบัน)</div></div>
+      </div>
+      <div class="fix"><b>แก้ไขจากเอกสารต้นทาง:</b> ช่วง UID ไม่ได้ตายตัวเป็น "มากกว่า 1000" เสมอไป — ค่าจริงถูกกำหนดโดยตัวแปร <code>UID_MIN</code> และ <code>UID_MAX</code> ใน <code>/etc/login.defs</code> ระบบเก่าบางตัว (RHEL 6 เดิม) เคยตั้ง <code>UID_MIN=500</code> การเช็กค่าที่แท้จริงในเครื่องควรรัน <code>grep UID_MIN /etc/login.defs</code> เสมอ ไม่ควรท่องจำเลข 1000 แบบตายตัวตอนไปเจอระบบจริง</div>
+    </section>
+
+    <section class="block">
+      <h2><span class="tag">03</span>ไฟล์คอนฟิกผู้ใช้ 4 ไฟล์หลัก</h2>
+      <h3>/etc/passwd — ข้อมูลพื้นฐานผู้ใช้ทุกคน</h3>
+      <pre>username:x:1001:1001:Mix K:/home/mix:/bin/bash
+   <span class="c">│    │  │    │      │        │        └─ shell เริ่มต้น</span>
+   <span class="c">│    │  │    │      │        └─ home directory</span>
+   <span class="c">│    │  │    │      └─ description / GECOS</span>
+   <span class="c">│    │  │    └─ GID (กลุ่มหลัก)</span>
+   <span class="c">│    │  └─ UID</span>
+   <span class="c">│    └─ password field = x → รหัสจริงเก็บที่ /etc/shadow</span>
+   <span class="c">└─ username</span></pre>
+      <div class="note"><b>ข้อสังเกต:</b> ถ้าช่อง shell เป็น <code>/sbin/nologin</code> หรือ <code>/usr/sbin/nologin</code> แปลว่าห้าม login แบบ interactive shell — นิยมใช้กับบัญชีระบบ (เช่น service account ของ nginx, mysql) เพื่อลดพื้นผิวการโจมตี</div>
+
+      <h3>/etc/shadow — รหัสผ่านที่เข้ารหัสแล้ว</h3>
+      <p>เก็บ hashed password และข้อมูลอายุรหัสผ่าน (password aging) ที่ไม่อยู่ใน <code>/etc/passwd</code> เพื่อความปลอดภัย เพราะไฟล์นี้อ่านได้เฉพาะ root เท่านั้น</p>
+      <div class="fix"><b>แก้ไขจากเอกสารต้นทาง:</b> ความหมายของสัญลักษณ์ในช่องรหัสผ่านมีรายละเอียดมากกว่าที่สรุปไว้ ควรแยกให้ชัดดังนี้:
+        <table style="margin-top:10px;">
+          <tr><th>สัญลักษณ์</th><th>ความหมาย</th></tr>
+          <tr><td><code>!</code> หรือ <code>!!</code></td><td>บัญชีถูก <b>ล็อก</b> (locked) — มักเกิดจาก <code>passwd -l</code> หรือบัญชีที่ยังไม่เคยตั้งรหัสผ่านเลย ทำให้ login ด้วยรหัสผ่านไม่ได้ (แต่ถ้ามี SSH key ตั้งไว้ ก็ยัง login ผ่าน key ได้ปกติ — เป็นแนวทางที่ปลอดภัยสำหรับ service account)</td></tr>
+          <tr><td><code>*</code></td><td>บัญชี <b>ปิดใช้งานถาวร</b> ด้วยรหัสผ่าน (มักใช้กับ system account ที่ไม่ควร login ได้เลย)</td></tr>
+          <tr><td>string ยาวขึ้นต้นด้วย <code>$6$...</code></td><td>Hash รหัสผ่านจริง (เลข 6 คือ SHA-512)</td></tr>
+        </table>
+      </div>
+
+      <h3>/etc/group — ข้อมูลกลุ่ม</h3>
+      <pre>developers:x:1002:mix,anan,ploy
+   <span class="c">│         │  │    └─ รายชื่อสมาชิกกลุ่มรอง (secondary members)</span>
+   <span class="c">│         │  └─ GID</span>
+   <span class="c">│         └─ password field (แทบไม่ใช้แล้ว)</span>
+   <span class="c">└─ group name</span></pre>
+
+      <h3>/etc/gshadow — รหัสผ่านกลุ่ม (เข้ารหัส)</h3>
+      <p>เก็บ hashed password ของกลุ่ม และรายชื่อ group administrator — ปัจจุบันใช้งานน้อยมากเพราะการยืนยันตัวตนระดับกลุ่มถูกแทนที่ด้วย sudo/RBAC เกือบทั้งหมด</p>
+    </section>
+
+    <section class="block">
+      <h2><span class="tag">04</span>คำสั่งตรวจสอบตัวตน</h2>
+      <table>
+        <tr><th>คำสั่ง</th><th>ใช้ทำอะไร</th></tr>
+        <tr><td><code>whoami</code></td><td>บอกว่ากำลังล็อกอินเป็นผู้ใช้คนไหน (ไม่รับ argument ชื่อผู้ใช้อื่น)</td></tr>
+        <tr><td><code>id</code></td><td>แสดง UID, GID, กลุ่มหลัก, กลุ่มรอง ของผู้ใช้ปัจจุบัน</td></tr>
+        <tr><td><code>id &lt;username&gt;</code></td><td>ตรวจสอบ UID/GID ของผู้ใช้อื่นได้ เช่น <code>id ubuntu</code></td></tr>
+        <tr><td><code>groups</code></td><td>แสดงรายชื่อกลุ่มทั้งหมดที่ผู้ใช้ปัจจุบันเป็นสมาชิก</td></tr>
+      </table>
+    </section>
+
+    <section class="block">
+      <h2><span class="tag">05</span>useradd vs adduser</h2>
+      <table>
+        <tr><th></th><th>useradd</th><th>adduser</th></tr>
+        <tr><td>ชนิดโปรแกรม</td><td>Binary (compiled) — มีในทุกตระกูล Linux</td><td>Perl script ที่เรียก <code>useradd</code> ทำงานเบื้องหลัง</td></tr>
+        <tr><td>โหมดทำงาน</td><td>ไม่ interactive — รันคำสั่งเปล่าๆ จะไม่สร้าง /home และไม่ตั้งรหัสผ่านให้</td><td>Interactive — ถามรหัสผ่าน สร้าง /home และกำหนด shell ให้อัตโนมัติ</td></tr>
+        <tr><td>ความพร้อมใช้งาน</td><td>มีในทุก distro เสมอ</td><td>เดิมมีเฉพาะ Debian/Ubuntu เป็นหลัก</td></tr>
+      </table>
+      <div class="fix"><b>แก้ไขจากเอกสารต้นทาง:</b> ข้อสรุปที่ว่า "adduser เป็น Perl script" ถูกต้องสำหรับตระกูล <b>Debian/Ubuntu</b> (ซึ่งเป็นฐานที่ LFCS ใช้สอน) แต่ในตระกูล <b>RHEL/CentOS/Fedora/Amazon Linux</b> คำสั่ง <code>adduser</code> มักเป็นแค่ <b>symbolic link ไปยัง useradd</b> ไม่ใช่ Perl script และไม่ interactive — สำคัญมากถ้าคุณต้องทำงานข้าม distro ในสาย Cloud/Network Engineer ให้เช็กด้วย <code>file $(which adduser)</code> ก่อนสรุปทุกครั้ง</div>
+    </section>
+
+    <section class="block">
+      <h2><span class="tag">06</span>คำสั่งจัดการผู้ใช้ (Cheat Sheet เชิงลึก)</h2>
+      <h3>สร้างผู้ใช้</h3>
+      <pre>useradd mix -m -s /bin/bash -c "Mix Korakod"
+<span class="c"># -m สร้าง /home/mix
+# -s กำหนด shell
+# -c ใส่คำอธิบาย (GECOS)</span></pre>
+      <h3>ตั้ง/เปลี่ยนรหัสผ่าน</h3>
+      <pre>passwd mix</pre>
+      <h3>แก้ไขผู้ใช้</h3>
+      <pre>usermod mix -g developers        <span class="c"># เปลี่ยนกลุ่มหลัก</span>
+usermod mix -aG sudo,docker      <span class="c"># เพิ่มกลุ่มรอง (-a append เสมอ!)</span>
+usermod mix -d /srv/mix -m       <span class="c"># ย้าย home พร้อมไฟล์เดิม</span>
+usermod mix -s /usr/sbin/nologin <span class="c"># ปิด interactive shell</span>
+usermod mix -G ""                <span class="c"># ล้างกลุ่มรองทั้งหมด</span></pre>
+      <div class="fix"><b>คำเตือนสำคัญ:</b> การลืม <code>-a</code> ตอนใช้ <code>-G</code> คือหนึ่งใน incident ที่พบบ่อยที่สุดของมือใหม่ — <code>usermod mix -G docker</code> (ไม่มี -a) จะ "เขียนทับ" กลุ่มรองเดิมทั้งหมดแล้วเหลือแค่ docker กลุ่มเดียว ทำให้สิทธิ์อื่นหายไปเงียบ ๆ โดยไม่มี error เตือน</div>
+      <h3>ลบผู้ใช้</h3>
+      <pre>userdel -rf mix
+<span class="c"># -r ลบ /home และ mail spool ไปด้วย
+# -f บังคับลบแม้ยังมี process ค้างอยู่ หรือไฟล์ถูกล็อก</span></pre>
+    </section>
+
+    <section class="block">
+      <h2><span class="tag">07</span>คำสั่งผู้ช่วยใน Terminal</h2>
+      <table>
+        <tr><th>คำสั่ง</th><th>หน้าที่</th></tr>
+        <tr><td><code>which &lt;command&gt;</code></td><td>หาตำแหน่ง binary ของคำสั่ง เช่น <code>which useradd</code> → <code>/usr/sbin/useradd</code></td></tr>
+        <tr><td><code>file &lt;path&gt;</code></td><td>ดูประเภทของไฟล์ (ELF binary, script, symlink ฯลฯ)</td></tr>
+        <tr><td><code>command1 $(command2)</code></td><td>Command substitution — เอาผลลัพธ์ของ command2 ไปเป็น argument ของ command1</td></tr>
+      </table>
+      <pre>file $(which adduser)
+<span class="c"># Debian/Ubuntu → "Perl script text executable"
+# RHEL/CentOS   → "symbolic link to useradd"</span></pre>
+    </section>
+
+    <section class="block">
+      <h2><span class="tag">08</span>หัวข้อเสริม — สิ่งที่เอกสารต้นฉบับยังไม่ครอบคลุม</h2>
+      <div class="desc">หัวข้อเหล่านี้ไม่ได้อยู่ในเอกสารต้นทาง แต่เป็นความรู้ที่สอบและใช้งานจริงในสาย Cloud/Network Engineer มักถูกถามควบคู่กันเสมอ</div>
+
+      <h3>8.1 การล็อก/ปลดล็อกบัญชี</h3>
+      <pre>passwd -l mix     <span class="c"># ล็อกบัญชี (เติม ! หน้า hash ใน /etc/shadow)</span>
+passwd -u mix     <span class="c"># ปลดล็อก</span>
+usermod -L mix    <span class="c"># เทียบเท่า passwd -l</span>
+usermod -U mix    <span class="c"># เทียบเท่า passwd -u</span></pre>
+
+      <h3>8.2 Password Aging ด้วย chage</h3>
+      <pre>chage -l mix              <span class="c"># ดูข้อมูลอายุรหัสผ่านของ mix</span>
+chage -M 90 -W 7 mix      <span class="c"># รหัสหมดอายุทุก 90 วัน เตือนล่วงหน้า 7 วัน</span></pre>
+      <div class="note"><b>ทำไมต้องรู้:</b> ข้อกำหนด compliance ระดับองค์กร (เช่น ISO 27001, PCI-DSS) มักบังคับ password rotation policy — <code>chage</code> คือคำสั่งที่ใช้บังคับ policy นี้ในระดับ OS</div>
+
+      <h3>8.3 /etc/login.defs — ค่าเริ่มต้นระดับระบบ</h3>
+      <p>ไฟล์นี้กำหนดค่าเริ่มต้นตอนสร้างผู้ใช้ เช่น <code>UID_MIN</code>, <code>UID_MAX</code>, <code>PASS_MAX_DAYS</code>, <code>PASS_MIN_LEN</code> — เป็นจุดแรกที่ engineer ควรเปิดดูเวลาต้อง harden เซิร์ฟเวอร์ใหม่</p>
+
+      <h3>8.4 sudo และ visudo</h3>
+      <p>การให้สิทธิ์ elevated ไม่ควรแก้ <code>/etc/sudoers</code> ตรง ๆ ด้วย text editor ทั่วไป เพราะถ้า syntax ผิดจะทำให้ sudo พังทั้งระบบ ต้องใช้ <code>visudo</code> ซึ่งเช็ก syntax ก่อน save เสมอ</p>
+      <pre>visudo
+<span class="c"># เพิ่มบรรทัด: mix ALL=(ALL) NOPASSWD:ALL   (ให้สิทธิ์แบบไม่ถามรหัส — ใช้ระวังในโปรดักชัน)</span></pre>
+
+      <h3>8.5 su vs sudo -i vs sudo -s</h3>
+      <table>
+        <tr><th>คำสั่ง</th><th>พฤติกรรม</th></tr>
+        <tr><td><code>su - mix</code></td><td>สลับผู้ใช้แบบเต็มรูปแบบ พร้อม environment ของ mix (ต้องรู้รหัสผ่าน mix)</td></tr>
+        <tr><td><code>sudo -i</code></td><td>เข้าสู่ root shell แบบมี environment ของ root (ต้องรู้รหัสผ่านตัวเอง ไม่ใช่ของ root)</td></tr>
+        <tr><td><code>sudo -s</code></td><td>เข้าสู่ root shell แต่ใช้ environment เดิมของผู้ใช้ปัจจุบัน</td></tr>
+      </table>
+
+      <h3>8.6 มุมมอง Cloud/Automation</h3>
+      <div class="extra"><b>เชื่อมโยงกับงานจริง:</b> ในสภาพแวดล้อม Cloud แทบไม่มีใครรัน <code>useradd</code> ด้วยมือแล้ว — งานจัดการผู้ใช้ถูกทำผ่าน Infrastructure as Code แทน:
+        <ul style="margin:8px 0 0;padding-right:0;padding-left:20px;">
+          <li><b>cloud-init</b> — สร้างผู้ใช้และ inject SSH public key อัตโนมัติตอน provision VM ใหม่ (ตรงกับแนวคิด "! ใน shadow ปลอดภัยถ้ามี SSH key")</li>
+          <li><b>Ansible</b> — module <code>ansible.builtin.user</code> จัดการ create/modify/delete user แบบ idempotent ทั้ง fleet เซิร์ฟเวอร์</li>
+          <li><b>IAM (AWS/GCP/Azure)</b> — แนวคิด UID/GID + group membership บน Linux เทียบเคียงได้กับ IAM User + IAM Group + Policy บน cloud platform</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ============ FLASHCARDS ============ -->
+  <div class="panel" id="flash">
+    <section class="block">
+      <div class="fc-controls">
+        <span>การ์ดที่ <span id="fc-index">1</span> / <span id="fc-total">14</span></span>
+        <span>คลิกที่การ์ดเพื่อพลิกดูคำตอบ</span>
+      </div>
+      <div class="fc-stage">
+        <div class="fc-card" id="fc-card">
+          <div class="fc-face fc-front">
+            <div class="lbl">คำถาม</div>
+            <div class="txt" id="fc-front-txt"></div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="lbl">คำตอบ</div>
+            <div class="txt" id="fc-back-txt"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="fc-btn" id="fc-prev">← ก่อนหน้า</button>
+        <button class="fc-btn" id="fc-shuffle">สุ่มลำดับ</button>
+        <button class="fc-btn" id="fc-next">ถัดไป →</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ LAB ============ -->
+  <div class="panel" id="lab">
+    <section class="block">
+      <h2><span class="tag">LAB</span>สร้างและจัดการผู้ใช้แบบมืออาชีพ</h2>
+      <div class="desc">สถานการณ์: คุณเพิ่งได้รับเซิร์ฟเวอร์ Ubuntu ใหม่ ต้องเตรียมบัญชีให้ทีม DevOps ชื่อ <code>nan</code> ให้ทำงานได้ตาม policy ของบริษัท ทำตามทีละขั้นในเทอร์มินัลจริง (VM/VirtualBox/WSL ก็ได้)</div>
+
+      <div class="lab-step">
+        <div class="lab-num">1</div>
+        <div>
+          <div class="lab-title">สร้างผู้ใช้พร้อม home directory และ shell ที่ถูกต้อง</div>
+          <div class="lab-goal">ต้องการให้ nan มี /home/nan และใช้ bash</div>
+          <pre>sudo useradd nan -m -s /bin/bash -c "Nan DevOps"</pre>
+          <div class="check"><b>ตรวจสอบ:</b> รัน <code>id nan</code> ต้องเห็น UID/GID ≥ 1000 และรัน <code>ls /home</code> ต้องเห็นโฟลเดอร์ nan</div>
+        </div>
+      </div>
+
+      <div class="lab-step">
+        <div class="lab-num">2</div>
+        <div>
+          <div class="lab-title">ตั้งรหัสผ่านชั่วคราว</div>
+          <div class="lab-goal">ทีมความปลอดภัยกำหนดให้ผู้ใช้ใหม่ต้องเปลี่ยนรหัสในการ login ครั้งแรก</div>
+          <pre>sudo passwd nan
+sudo chage -d 0 nan   <span class="c"># บังคับเปลี่ยนรหัสผ่านทันทีที่ login ครั้งแรก</span></pre>
+          <div class="check"><b>ตรวจสอบ:</b> <code>chage -l nan</code> ต้องแสดง "password must be changed" หรือ "password expired"</div>
+        </div>
+      </div>
+
+      <div class="lab-step">
+        <div class="lab-num">3</div>
+        <div>
+          <div class="lab-title">เพิ่มเข้ากลุ่ม sudo และ docker โดยไม่ทำกลุ่มเดิมหาย</div>
+          <div class="lab-goal">nan ต้องรัน sudo ได้ และใช้ docker ได้ด้วย</div>
+          <pre>sudo usermod -aG sudo,docker nan</pre>
+          <div class="check"><b>ตรวจสอบ:</b> <code>groups nan</code> ต้องเห็นทั้ง sudo และ docker อยู่ร่วมกับกลุ่มเดิม (ถ้าลืม -a กลุ่มเดิมจะหาย!)</div>
+        </div>
+      </div>
+
+      <div class="lab-step">
+        <div class="lab-num">4</div>
+        <div>
+          <div class="lab-title">สร้าง service account ที่ห้าม login</div>
+          <div class="lab-goal">สร้างบัญชี <code>appsvc</code> สำหรับรันแอปพลิเคชันเท่านั้น ห้ามใครใช้ login เข้าเครื่อง</div>
+          <pre>sudo useradd appsvc -r -s /usr/sbin/nologin
+sudo passwd -l appsvc</pre>
+          <div class="check"><b>ตรวจสอบ:</b> <code>grep appsvc /etc/shadow</code> ต้องขึ้นต้นด้วย <code>!</code> และลอง <code>su - appsvc</code> ต้องถูกปฏิเสธ</div>
+        </div>
+      </div>
+
+      <div class="lab-step">
+        <div class="lab-num">5</div>
+        <div>
+          <div class="lab-title">ตรวจสอบด้วย command substitution</div>
+          <div class="lab-goal">เช็กว่า useradd ในเครื่องนี้เป็น binary จริงหรือ symlink</div>
+          <pre>file $(which useradd)
+file $(which adduser)</pre>
+          <div class="check"><b>ตรวจสอบ:</b> เทียบผลลัพธ์กับตาราง useradd vs adduser ในแท็บเนื้อหา ว่าตรงกับ distro ที่ใช้อยู่หรือไม่</div>
+        </div>
+      </div>
+
+      <div class="lab-step">
+        <div class="lab-num">6</div>
+        <div>
+          <div class="lab-title">ล้างระบบ — ลบผู้ใช้ทดสอบ</div>
+          <div class="lab-goal">ลบ nan และ appsvc พร้อมไฟล์ทั้งหมด</div>
+          <pre>sudo userdel -rf nan
+sudo userdel -rf appsvc</pre>
+          <div class="check"><b>ตรวจสอบ:</b> <code>ls /home</code> ต้องไม่เห็นโฟลเดอร์ nan เหลืออยู่ และ <code>id nan</code> ต้องขึ้น "no such user"</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <div class="panel" id="cheat">
+    <section class="block">
+      <h2><span class="tag">REF</span>สรุปคำสั่งทั้งหมด</h2>
+      <table>
+        <tr><th>งาน</th><th>คำสั่ง</th></tr>
+        <tr><td>ดูตัวเอง</td><td><code>whoami</code> / <code>id</code></td></tr>
+        <tr><td>ดูผู้ใช้อื่น</td><td><code>id &lt;user&gt;</code></td></tr>
+        <tr><td>สร้างผู้ใช้ครบ</td><td><code>useradd &lt;user&gt; -m -s /bin/bash -c "desc"</code></td></tr>
+        <tr><td>สร้างแบบ interactive</td><td><code>adduser &lt;user&gt;</code></td></tr>
+        <tr><td>ตั้ง/เปลี่ยนรหัสผ่าน</td><td><code>passwd &lt;user&gt;</code></td></tr>
+        <tr><td>บังคับเปลี่ยนรหัสรอบถัดไป</td><td><code>chage -d 0 &lt;user&gt;</code></td></tr>
+        <tr><td>ล็อก / ปลดล็อกบัญชี</td><td><code>passwd -l</code> / <code>passwd -u</code> หรือ <code>usermod -L</code> / <code>-U</code></td></tr>
+        <tr><td>เปลี่ยนกลุ่มหลัก</td><td><code>usermod -g &lt;group&gt; &lt;user&gt;</code></td></tr>
+        <tr><td>เพิ่มกลุ่มรอง (append)</td><td><code>usermod -aG &lt;group&gt; &lt;user&gt;</code></td></tr>
+        <tr><td>ล้างกลุ่มรองทั้งหมด</td><td><code>usermod -G "" &lt;user&gt;</code></td></tr>
+        <tr><td>ย้าย home directory</td><td><code>usermod -d /new/path -m &lt;user&gt;</code></td></tr>
+        <tr><td>เปลี่ยน shell / ปิด login</td><td><code>usermod -s /usr/sbin/nologin &lt;user&gt;</code></td></tr>
+        <tr><td>ลบผู้ใช้พร้อมไฟล์</td><td><code>userdel -rf &lt;user&gt;</code></td></tr>
+        <tr><td>หาตำแหน่งคำสั่ง</td><td><code>which &lt;cmd&gt;</code></td></tr>
+        <tr><td>ดูประเภทไฟล์</td><td><code>file &lt;path&gt;</code></td></tr>
+        <tr><td>แก้ไข sudoers อย่างปลอดภัย</td><td><code>visudo</code></td></tr>
+        <tr><td>ดูค่าเริ่มต้นระบบ</td><td><code>cat /etc/login.defs</code></td></tr>
+      </table>
+      <h3>ไฟล์คอนฟิกสำคัญ</h3>
+      <table>
+        <tr><th>ไฟล์</th><th>เก็บอะไร</th></tr>
+        <tr><td><code>/etc/passwd</code></td><td>username:x:UID:GID:desc:home:shell</td></tr>
+        <tr><td><code>/etc/shadow</code></td><td>hashed password + password aging (root อ่านได้เท่านั้น)</td></tr>
+        <tr><td><code>/etc/group</code></td><td>group:x:GID:member1,member2</td></tr>
+        <tr><td><code>/etc/gshadow</code></td><td>hashed group password + group admin</td></tr>
+        <tr><td><code>/etc/login.defs</code></td><td>UID_MIN, UID_MAX, PASS_MAX_DAYS ฯลฯ</td></tr>
+        <tr><td><code>/etc/sudoers</code></td><td>สิทธิ์ sudo — แก้ผ่าน <code>visudo</code> เท่านั้น</td></tr>
+      </table>
+    </section>
+  </div>
+
+  <!-- ============ QUIZ ============ -->
+  <div class="panel" id="quiz">
+    <div class="score-bar">
+      <span>คะแนน: <span id="score">0</span> / <span id="score-total">0</span></span>
+      <button class="reset-btn" id="quiz-reset">ทำใหม่</button>
+    </div>
+    <div id="quiz-container"></div>
+  </div>
+
+  <footer>Linux Foundation Study Series · Module 10 · Work with Users</footer>
+</div>
+
+<script>
+/* ---------- TABS ---------- */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---------- FLASHCARDS ---------- */
+const flashcards = [
+  {f:"/etc/passwd เก็บข้อมูลอะไร?", b:"ข้อมูลพื้นฐานผู้ใช้: username, UID, GID, description, home directory, shell (ไม่เก็บรหัสผ่านจริง)"},
+  {f:"/etc/shadow เก็บข้อมูลอะไร?", b:"Hashed password และข้อมูลอายุรหัสผ่าน (password aging) — อ่านได้เฉพาะ root"},
+  {f:"UID 0 คือใคร?", b:"root เสมอ ไม่ว่าจะ distro ไหน"},
+  {f:"ช่วง UID ของผู้ใช้ทั่วไปกำหนดโดยอะไร?", b:"ตัวแปร UID_MIN / UID_MAX ใน /etc/login.defs (ปัจจุบันส่วนใหญ่ตั้ง 1000 เป็นค่าเริ่มต้น)"},
+  {f:"เครื่องหมาย ! ใน /etc/shadow หมายถึงอะไร?", b:"บัญชีถูกล็อก / ยังไม่ตั้งรหัสผ่านด้วยระบบ password — แต่ยัง login ผ่าน SSH key ได้ปกติ"},
+  {f:"ความต่างของ useradd กับ adduser (บน Debian/Ubuntu)?", b:"useradd เป็น binary ไม่ interactive; adduser เป็น Perl script ที่เรียก useradd แบบ interactive"},
+  {f:"บน RHEL/CentOS คำสั่ง adduser คืออะไร?", b:"เป็นแค่ symbolic link ไปยัง useradd ไม่ใช่ Perl script"},
+  {f:"คำสั่งเช็ก UID/GID ของผู้ใช้คนอื่น?", b:"id <username> เช่น id ubuntu"},
+  {f:"argument กำหนด shell ตอนสร้างผู้ใช้ด้วย useradd?", b:"-s เช่น useradd mix -s /bin/bash"},
+  {f:"argument ที่ถูกต้องสำหรับเพิ่มกลุ่มรองโดยไม่ลบกลุ่มเดิม?", b:"-aG (ต้องมี -a append เสมอ ไม่งั้นกลุ่มรองเดิมจะถูกเขียนทับ)"},
+  {f:"คำสั่งลบผู้ใช้พร้อมไฟล์ทั้งหมด?", b:"userdel -rf <username>"},
+  {f:"คำสั่งบังคับผู้ใช้เปลี่ยนรหัสผ่านตอน login ครั้งถัดไป?", b:"chage -d 0 <username>"},
+  {f:"visudo ใช้ทำอะไร และทำไมต้องใช้แทน text editor ปกติ?", b:"แก้ไข /etc/sudoers อย่างปลอดภัย เพราะ visudo เช็ก syntax ก่อน save ป้องกัน sudo พังทั้งระบบ"},
+  {f:"เทียบ UID/GID บน Linux กับแนวคิดบน Cloud ได้กับอะไร?", b:"เทียบเคียงได้กับ IAM User และ IAM Group บนแพลตฟอร์ม Cloud อย่าง AWS/GCP/Azure"}
+];
+let fcOrder = flashcards.map((_,i)=>i);
+let fcIdx = 0;
+const fcFront=document.getElementById('fc-front-txt');
+const fcBack=document.getElementById('fc-back-txt');
+const fcCard=document.getElementById('fc-card');
+const fcIndexEl=document.getElementById('fc-index');
+document.getElementById('fc-total').textContent = flashcards.length;
+
+function renderFC(){
+  const card = flashcards[fcOrder[fcIdx]];
+  fcCard.classList.remove('flipped');
+  fcFront.textContent = card.f;
+  fcBack.textContent = card.b;
+  fcIndexEl.textContent = fcIdx+1;
+}
+fcCard.addEventListener('click',()=>fcCard.classList.toggle('flipped'));
+document.getElementById('fc-next').addEventListener('click',()=>{fcIdx=(fcIdx+1)%flashcards.length;renderFC();});
+document.getElementById('fc-prev').addEventListener('click',()=>{fcIdx=(fcIdx-1+flashcards.length)%flashcards.length;renderFC();});
+document.getElementById('fc-shuffle').addEventListener('click',()=>{
+  for(let i=fcOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcOrder[i],fcOrder[j]]=[fcOrder[j],fcOrder[i]];}
+  fcIdx=0; renderFC();
+});
+renderFC();
+
+/* ---------- QUIZ ---------- */
+const quiz = [
+  {type:"mc", q:"ไฟล์ที่จัดเก็บข้อมูลพื้นฐานเกี่ยวกับผู้ใช้งานคือไฟล์ใด?",
+   opts:["etc/passwd","/etc/passwd","/etc/group","/bin/passwd"], correct:1,
+   explain:"/etc/passwd เก็บข้อมูลพื้นฐานของผู้ใช้ทุกคน ส่วน /etc/group เก็บข้อมูลกลุ่ม และ /bin/passwd ไม่มีอยู่จริง (คำสั่งอยู่ที่ /usr/bin/passwd)"},
+  {type:"mc", q:"ต้องการทราบ UID และ GID ของผู้ใช้ mysterioususer ต้องใช้คำสั่งใด?",
+   opts:["id","whoami mysterioususer","id mysterioususer","showuser mysterioususer"], correct:2,
+   explain:"id <username> ใช้ตรวจสอบ UID, GID และกลุ่มของผู้ใช้ที่ระบุได้ ส่วน whoami ไม่รับ argument ชื่อผู้ใช้อื่น"},
+  {type:"mc", q:"GID ย่อมาจากอะไร?",
+   opts:["Group IDentifier","Groups IDentifier","General IDentifier"], correct:0,
+   explain:"GID = Group IDentifier คือเลขระบุตัวตนประจำกลุ่ม"},
+  {type:"mc", q:"เครื่องหมาย ! ใน /etc/shadow สื่อถึงอะไรได้บ้าง? (เลือกคำตอบที่ครบถ้วนที่สุด)",
+   opts:["รหัสผ่านถอดรหัสง่าย","รหัสผ่านหมดอายุ","บัญชีถูกล็อก/ยังไม่ตั้งรหัสผ่าน — ยัง login ผ่าน SSH key ได้","รหัสผ่านถูกตั้งค่าไว้แล้วปกติ"], correct:2,
+   explain:"! หมายถึงบัญชีถูกล็อกหรือยังไม่เคยตั้งรหัสผ่าน ทำให้ login ด้วยรหัสผ่านไม่ได้ แต่ถ้ามี SSH key ก็ยัง login ได้ปกติ — เป็นแนวทางที่ใช้บ่อยกับ service account"},
+  {type:"mc", q:"บน Debian/Ubuntu คำสั่ง adduser คือประเภทไฟล์แบบใด?",
+   opts:["Bash script","Binary (compiled)","Perl script","Symbolic link ไปยัง useradd เสมอทุก distro"], correct:2,
+   explain:"บน Debian/Ubuntu adduser เป็น Perl script ที่เรียก useradd ทำงานเบื้องหลัง แต่บน RHEL/CentOS มักเป็นแค่ symlink ไปยัง useradd เท่านั้น — ไม่ใช่ทุก distro เหมือนกัน"},
+  {type:"fill", q:"เมื่อใช้ useradd และต้องการระบุ shell ให้ผู้ใช้ ต้องใส่ argument ตัวใด (เช่น -x)?",
+   answer:"-s", explain:"ตัวเลือก -s (shell) เช่น useradd testuser -s /bin/bash"},
+  {type:"fill", q:"คำสั่งที่ใช้เปลี่ยนรหัสผ่านของผู้ใช้คือคำสั่งใด?",
+   answer:"passwd", explain:"พิมพ์ passwd หรือ passwd <username> เพื่อเปลี่ยนรหัสผ่าน"},
+  {type:"fill", q:"เมื่อใช้ usermod และต้องการเพิ่มกลุ่มรองอีกหนึ่งกลุ่มโดยไม่ลบกลุ่มเดิม ต้องใช้ argument ใด?",
+   answer:"-aG", explain:"ต้องใช้ -a (append) ร่วมกับ -G (secondary group) เพื่อไม่ให้กลุ่มรองเดิมหายไป"},
+  {type:"mc", q:"ต้องการลบผู้ใช้พร้อมไฟล์ทั้งหมดของผู้ใช้คนนั้น ต้องใช้คำสั่งใด?",
+   opts:["deluser -rf user","rmuser -rf user","userdel -ar user","userdel -rf user"], correct:3,
+   explain:"userdel -r ลบไฟล์ใน home directory ส่วน -f บังคับลบเมื่อไฟล์ถูกล็อกหรือติดเงื่อนไขอื่น"},
+  {type:"mc", q:"ช่วง UID ของผู้ใช้งานทั่วไป (normal user) ถูกกำหนดไว้ที่ใด?",
+   opts:["ตายตัวที่มากกว่า 1000 เสมอทุกระบบ","ตัวแปร UID_MIN/UID_MAX ใน /etc/login.defs","ตัวแปรใน /etc/passwd โดยตรง","กำหนดไม่ได้ ต้องดูจาก /etc/shadow"], correct:1,
+   explain:"ค่าจริงถูกกำหนดโดย UID_MIN และ UID_MAX ใน /etc/login.defs ค่าเริ่มต้นปัจจุบันส่วนใหญ่คือ 1000 แต่ระบบเก่าบางตัวเคยตั้งไว้ที่ 500"},
+  {type:"mc", q:"คำสั่งใดใช้บังคับให้ผู้ใช้ต้องเปลี่ยนรหัสผ่านทันทีในการ login ครั้งถัดไป?",
+   opts:["passwd -e user","chage -d 0 user","usermod -L user","passwd -l user"], correct:1,
+   explain:"chage -d 0 user ตั้งวันที่เปลี่ยนรหัสผ่านล่าสุดเป็นวันที่ 0 (epoch) ทำให้ระบบมองว่ารหัสผ่านหมดอายุทันที ต้องเปลี่ยนก่อน login ครั้งถัดไป"},
+  {type:"mc", q:"ทำไมการแก้ไข /etc/sudoers ควรใช้ visudo แทน text editor ทั่วไป?",
+   opts:["visudo เร็วกว่า","visudo เช็ก syntax ก่อน save ป้องกัน sudo พังทั้งระบบ","visudo มี GUI สวยกว่า","ไม่มีความแตกต่าง ใช้ตัวไหนก็ได้"], correct:1,
+   explain:"ถ้าแก้ /etc/sudoers ด้วย editor ทั่วไปแล้ว syntax ผิด อาจทำให้ sudo ใช้งานไม่ได้ทั้งระบบ visudo จะตรวจสอบ syntax ก่อนบันทึกไฟล์เสมอ"}
+];
+
+const quizContainer = document.getElementById('quiz-container');
+let score = 0;
+document.getElementById('score-total').textContent = quiz.length;
+
+function renderQuiz(){
+  quizContainer.innerHTML = '';
+  score = 0;
+  updateScore();
+  quiz.forEach((item,i)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    let inner = `<div class="q-head"><span class="q-num">คำถามที่ ${i+1}</span></div><div class="q-text">${item.q}</div>`;
+    if(item.type==='mc'){
+      inner += `<div class="opts">` + item.opts.map((o,oi)=>`<div class="opt" data-i="${oi}">${o}</div>`).join('') + `</div>`;
+    } else {
+      inner += `<div class="q-fill"><input type="text" placeholder="พิมพ์คำตอบ..."><button>ตรวจคำตอบ</button></div>`;
+    }
+    inner += `<div class="explain">${item.explain}</div>`;
+    card.innerHTML = inner;
+    quizContainer.appendChild(card);
+
+    if(item.type==='mc'){
+      const opts = card.querySelectorAll('.opt');
+      opts.forEach(opt=>{
+        opt.addEventListener('click',()=>{
+          if(card.dataset.answered) return;
+          card.dataset.answered = '1';
+          const oi = parseInt(opt.dataset.i);
+          opts.forEach(o=>o.classList.add('disabled'));
+          if(oi===item.correct){
+            opt.classList.add('correct');
+            score++; updateScore();
+          } else {
+            opt.classList.add('wrong');
+            opts[item.correct].classList.add('correct');
+          }
+          card.querySelector('.explain').classList.add('show');
+        });
+      });
+    } else {
+      const input = card.querySelector('input');
+      const btn = card.querySelector('button');
+      const check = ()=>{
+        if(card.dataset.answered) return;
+        card.dataset.answered = '1';
+        const val = input.value.trim().toLowerCase();
+        input.disabled = true; btn.disabled = true;
+        if(val === item.answer.toLowerCase()){
+          input.style.borderColor = 'var(--teal)';
+          score++; updateScore();
+        } else {
+          input.style.borderColor = 'var(--red)';
+        }
+        card.querySelector('.explain').classList.add('show');
+        card.querySelector('.explain').innerHTML = `คำตอบที่ถูกต้อง: <code>${item.answer}</code><br>${item.explain}`;
+      };
+      btn.addEventListener('click',check);
+      input.addEventListener('keydown',e=>{if(e.key==='Enter')check();});
+    }
+  });
+}
+function updateScore(){document.getElementById('score').textContent = score;}
+document.getElementById('quiz-reset').addEventListener('click', renderQuiz);
+renderQuiz();
+</script>
+</body>
+</html>

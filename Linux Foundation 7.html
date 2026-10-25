@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation — Module 7: cp & mv Commands</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#222636;
+  --surface3:#2a2f44;
+  --border:#2e3349;
+  --border2:#3d4565;
+  --text:#e8eaf6;
+  --text2:#9ea3c0;
+  --text3:#6b7094;
+  --accent:#7c83f5;
+  --accent-bg:rgba(124,131,245,0.12);
+  --accent-border:rgba(124,131,245,0.3);
+  --green:#1db87a;
+  --green-bg:rgba(29,184,122,0.1);
+  --green-border:rgba(29,184,122,0.3);
+  --amber:#f5a623;
+  --amber-bg:rgba(245,166,35,0.1);
+  --amber-border:rgba(245,166,35,0.3);
+  --red:#f56565;
+  --red-bg:rgba(245,101,101,0.1);
+  --red-border:rgba(245,101,101,0.3);
+  --mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:10px;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding:24px 16px}
+.wrap{max-width:780px;margin:0 auto}
+
+/* Hero */
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 28px 24px;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1db87a,#7c83f5,#f56565)}
+.badge{display:inline-block;background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;padding:3px 12px;border-radius:20px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px;border:1px solid var(--accent-border)}
+.hero-title{font-size:26px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
+.hero-title code{background:var(--accent-bg);color:var(--accent);padding:2px 8px;border-radius:6px;font-family:var(--mono);font-size:22px}
+.hero-sub{font-size:14px;color:var(--text2)}
+.meta-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2)}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;background:var(--surface);padding:8px;border-radius:14px;border:1px solid var(--border)}
+.tab{padding:8px 18px;border-radius:10px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;gap:6px}
+.tab.active{background:var(--accent);color:#fff}
+.tab:hover:not(.active){background:var(--surface3);color:var(--text)}
+.section{display:none}
+.section.show{display:block}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.card-title span{font-size:16px}
+
+/* Command rows */
+.cmd-row{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.cmd-row:last-child{border-bottom:none;padding-bottom:0}
+.cmd-row.highlight{background:var(--surface3);border-radius:8px;margin:2px 0;padding:9px 12px}
+.cmd{font-family:var(--mono);font-size:12.5px;background:var(--accent-bg);color:var(--accent);padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;border:1px solid var(--accent-border);min-width:fit-content}
+.cmd-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.cmd-desc strong{color:var(--text);font-weight:500}
+.cmd-desc code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+/* Info boxes */
+.info-box{background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.info-box p{font-size:13px;color:var(--green);line-height:1.6}
+.info-box p code{background:rgba(29,184,122,.15);color:var(--green);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.warn-box{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.warn-box p{font-size:13px;color:var(--amber);line-height:1.6}
+.warn-box p code{background:rgba(245,166,35,.15);color:var(--amber);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+/* Generic table */
+.col-table{width:100%;border-collapse:collapse;font-size:13px}
+.col-table th{background:var(--surface3);color:var(--text2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.col-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+.col-table tr:last-child td{border-bottom:none}
+.col-table td:first-child{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;white-space:nowrap}
+
+/* Folder tree visual */
+.tree-box{background:#0a0c12;border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:12.5px;color:#a8b4d8;margin-top:10px;overflow-x:auto;line-height:1.9}
+.tree-box .dir{color:#7c83f5}
+.tree-box .file{color:#e8eaf6}
+.tree-box .arrow{color:var(--text3)}
+
+/* Scenario cards */
+.scenario{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+@media(max-width:520px){.scenario{grid-template-columns:1fr}}
+.scen-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px}
+.scen-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+
+.section-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin:18px 0 8px;padding-left:2px}
+.section-label:first-child{margin-top:0}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.cols{grid-template-columns:1fr}.tab{padding:7px 12px;font-size:12px}}
+
+/* Tips */
+.tip-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.tip-row:last-child{border-bottom:none}
+.tip-icon{color:var(--accent);font-size:16px;flex-shrink:0;margin-top:1px;width:20px}
+.tip-text{font-size:13px;color:var(--text2);line-height:1.6}
+.tip-text code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.tip-text strong{color:var(--text)}
+
+/* Quiz */
+.q-wrap{margin-bottom:14px}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.q-num{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.6}
+.q-text code{background:var(--surface3);color:var(--accent);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:13px}
+.q-opts{display:flex;flex-direction:column;gap:7px}
+.q-opt{padding:11px 15px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:13px;font-family:var(--sans);cursor:pointer;text-align:left;transition:all .12s;line-height:1.5}
+.q-opt code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:12px}
+.q-opt:hover:not(.disabled){background:var(--surface3);border-color:var(--border2);color:var(--text)}
+.q-opt.correct{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.q-opt.wrong{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.q-opt.disabled{cursor:default}
+.q-explain{margin-top:12px;font-size:13px;color:var(--text2);line-height:1.7;background:var(--surface2);padding:12px 14px;border-radius:8px;border-left:3px solid var(--accent);display:none}
+.q-explain.show{display:block}
+.q-explain code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:none}
+.score-label{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.score-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;background:var(--green);transition:width .5s ease}
+.score-sub{font-size:13px;color:var(--text2);margin-top:8px}
+
+.reset-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;margin-top:8px;transition:all .12s}
+.reset-btn:hover{background:var(--surface2);border-color:var(--accent)}
+
+footer{text-align:center;font-size:12px;color:var(--text3);margin-top:28px;padding-top:20px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="badge">Linux Foundation</div>
+  <div class="hero-title">Module 7 — <code>cp</code> & <code>mv</code></div>
+  <div class="hero-sub">คู่มือทบทวนฉบับสมบูรณ์ พร้อมแบบทดสอบ · Cloud Engineer Edition</div>
+  <div class="meta-chips">
+    <span class="chip">📚 Command Reference</span>
+    <span class="chip">🔀 cp vs mv</span>
+    <span class="chip">📋 Cheat Sheet</span>
+    <span class="chip">✏️ Quiz 13 ข้อ</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('ref',this)">📂 Reference</button>
+  <button class="tab" onclick="showTab('compare',this)">🔀 cp vs mv</button>
+  <button class="tab" onclick="showTab('cheat',this)">📋 Cheat Sheet</button>
+  <button class="tab" onclick="showTab('quiz',this)">✏️ Quiz</button>
+</div>
+
+<!-- ===== TAB: REFERENCE ===== -->
+<div id="ref" class="section show">
+
+  <div class="section-label">Copying Files</div>
+  <div class="card">
+    <div class="card-title"><span>📄</span> คำสั่ง cp (Copy)</div>
+    <div class="cmd-row">
+      <span class="cmd">cp file1 dir/</span>
+      <span class="cmd-desc"><strong>คัดลอกไฟล์</strong> ไปยังโฟลเดอร์ปลายทาง — ไฟล์ต้นฉบับยังอยู่เหมือนเดิม</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">cp file1 dir/newname</span>
+      <span class="cmd-desc"><strong>คัดลอก + เปลี่ยนชื่อ</strong> ในคำสั่งเดียว — ไฟล์ปลายทางจะชื่อ <code>newname</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">cp f1 f2 f3 dir/</span>
+      <span class="cmd-desc"><strong>คัดลอกหลายไฟล์พร้อมกัน</strong> — อาร์กิวเมนต์<u>ตัวสุดท้าย</u>ต้องเป็นโฟลเดอร์ปลายทางเสมอ</span>
+    </div>
+    <div class="cmd-row highlight">
+      <span class="cmd">cp -R srcdir newdir</span>
+      <span class="cmd-desc"><strong>Recursive</strong> — คัดลอกทั้งโฟลเดอร์ ต้องใส่ <code>-R</code> เสมอ มิฉะนั้น cp จะไม่คัดลอกโฟลเดอร์เลย</span>
+    </div>
+    <div class="warn-box"><p>⚠️ <strong>กับดักข้อสอบ:</strong> ลืมใส่ <code>-R</code> ตอน cp โฟลเดอร์ = คำสั่งจะ error หรือข้ามโฟลเดอร์นั้นไปเฉยๆ</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🎯</span> Wildcards — ตัวช่วยเลือกไฟล์แบบกลุ่ม</div>
+    <div class="cmd-row">
+      <span class="cmd">?</span>
+      <span class="cmd-desc"><strong>แทนอักขระ 1 ตัวเท่านั้น</strong><br><code>cp my?file dir/</code> จับคู่ <code>my1file</code>, <code>myafile</code> แต่ไม่จับ <code>my12file</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">*</span>
+      <span class="cmd-desc"><strong>แทนอักขระกี่ตัวก็ได้ หรือไม่มีเลยก็ได้</strong><br><code>cp three* dir/</code> คัดลอกทุกไฟล์ที่ขึ้นต้นด้วย <code>three</code></span>
+    </div>
+    <div class="info-box"><p>ผสม <code>*</code> และ <code>?</code> ในคำสั่งเดียวกันได้ เช่น <code>log*.txt</code> หรือ <code>file?.*</code> เพื่อคุมรูปแบบให้แม่นยำขึ้น</p></div>
+  </div>
+
+  <div class="section-label">Moving Files</div>
+  <div class="card">
+    <div class="card-title"><span>🚚</span> คำสั่ง mv (Move)</div>
+    <div class="cmd-row">
+      <span class="cmd">mv file1 dir/</span>
+      <span class="cmd-desc"><strong>ย้ายไฟล์</strong> ไปยังโฟลเดอร์ปลายทาง — ไฟล์ต้นฉบับ<u>หายไป</u>จากที่เดิม</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">mv file1 dir/newname</span>
+      <span class="cmd-desc"><strong>ย้าย + เปลี่ยนชื่อ</strong> ในคำสั่งเดียว</span>
+    </div>
+    <div class="cmd-row highlight">
+      <span class="cmd">mv olddir newdir</span>
+      <span class="cmd-desc"><strong>เปลี่ยนชื่อโฟลเดอร์</strong> — ใช้ได้เมื่อ <code>newdir</code> ยังไม่มีอยู่จริงในระบบ</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">mv dir1 dir2</span>
+      <span class="cmd-desc">ถ้า <code>dir2</code> มีอยู่แล้ว — <code>dir1</code> ทั้งโฟลเดอร์จะถูกย้ายไปซ้อนอยู่<strong>ข้างใน</strong> dir2</span>
+    </div>
+    <div class="info-box"><p>💚 ข้อดีของ <code>mv</code>: ย้ายโฟลเดอร์ได้ทันที <strong>ไม่ต้องใส่ -R</strong> เหมือนคำสั่ง cp</p></div>
+    <div class="warn-box"><p>⚠️ <code>mv</code> ทับไฟล์ปลายทางที่ชื่อซ้ำกันโดยไม่ถามยืนยัน (ในหลาย distro) — ใช้ <code>mv -i</code> เพื่อให้ระบบถามก่อนเขียนทับ</p></div>
+  </div>
+
+  <div class="section-label">Extra Commands</div>
+  <div class="card">
+    <div class="card-title"><span>🛠️</span> คำสั่งและเทคนิคเสริม</div>
+    <div class="cmd-row"><span class="cmd">tree [dir]</span><span class="cmd-desc">แสดงโครงสร้างไฟล์/โฟลเดอร์แบบ<strong>กิ่งไม้</strong> (Recursive) — เหมาะใช้ตรวจผลลัพธ์หลัง cp/mv</span></div>
+    <div class="cmd-row"><span class="cmd">clear</span><span class="cmd-desc">ล้างหน้าจอ Terminal ให้ว่างเปล่า (ไม่ลบ history — กด <code>Arrow Up</code> ย้อนดูคำสั่งเก่าได้)</span></div>
+    <div class="cmd-row"><span class="cmd">cat f1 > f2</span><span class="cmd-desc"><strong>Redirection</strong> — อ่านเนื้อหาจาก f1 แล้วเขียนทับลงใน f2 (คล้ายคัดลอกเนื้อหา แต่ไม่ใช่คำสั่ง cp โดยตรง)</span></div>
+    <div class="cmd-row"><span class="cmd">diff f1 f2</span><span class="cmd-desc">เปรียบเทียบเนื้อหาสองไฟล์ว่าต่างกันตรงไหน</span></div>
+    <div class="warn-box"><p>⚠️ <code>cat f1 > f2</code> เขียนทับไฟล์ปลายทางทั้งหมดโดยไม่ถาม ถ้าต้องการต่อท้ายแทนการเขียนทับ ให้ใช้ <code>>></code> แทน</p></div>
+    <div class="info-box"><p><strong>จำให้แม่น:</strong> ถ้ารัน <code>diff</code> แล้วหน้าจอไม่มีข้อความใดๆ เลย (No output) แปลว่าไฟล์ทั้งสองมีเนื้อหา<strong>เหมือนกัน 100%</strong> — จุดนี้ข้อสอบชอบออกบ่อย</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>💡</span> Engineer Tips — ใช้งานจริง</div>
+    <div class="tip-row"><div class="tip-icon">→</div><div class="tip-text">ใช้ <code>cp -i</code> / <code>mv -i</code> บน Production เสมอ เพื่อให้ระบบถามยืนยันก่อนเขียนทับไฟล์ — ป้องกันข้อมูลหายจากการพิมพ์ผิด</div></div>
+    <div class="tip-row"><div class="tip-icon">→</div><div class="tip-text">ใช้ <code>cp -v</code> / <code>mv -v</code> (verbose) เพื่อดูว่ากำลังคัดลอก/ย้ายไฟล์ไหนอยู่ระหว่างทำงาน</div></div>
+    <div class="tip-row"><div class="tip-icon">→</div><div class="tip-text"><code>cp -p</code> คงค่า permission, owner, timestamp เดิมไว้ — สำคัญมากตอน deploy ไฟล์ config บนเซิร์ฟเวอร์จริง</div></div>
+    <div class="tip-row"><div class="tip-icon">→</div><div class="tip-text"><code>cp -u</code> คัดลอกเฉพาะไฟล์ที่ใหม่กว่าไฟล์ปลายทาง หรือปลายทางยังไม่มีไฟล์นั้น</div></div>
+    <div class="tip-row"><div class="tip-icon">→</div><div class="tip-text">ใช้ <code>mkdir -p path/to/dir</code> เตรียมโฟลเดอร์ปลายทางซ้อนหลายชั้นก่อน cp/mv ในคำสั่งเดียว</div></div>
+    <div class="tip-row"><div class="tip-icon">→</div><div class="tip-text">งานจริงย้ายไฟล์ข้ามเครื่อง ให้ต่อยอดไปใช้ <code>scp</code> หรือ <code>rsync -av src/ dest/</code> ซึ่งทรงพลังกว่า cp ธรรมดามาก</div></div>
+  </div>
+</div>
+
+<!-- ===== TAB: COMPARE ===== -->
+<div id="compare" class="section">
+  <div class="card">
+    <div class="card-title"><span>⚖️</span> ตารางเปรียบเทียบ cp vs mv</div>
+    <table class="col-table">
+      <tr><th>ประเด็น</th><th>cp</th><th>mv</th></tr>
+      <tr><td>ต้นฉบับ</td><td>ยังอยู่เหมือนเดิม</td><td>หายไปจากตำแหน่งเดิม</td></tr>
+      <tr><td>คัดลอก/ย้ายโฟลเดอร์</td><td>ต้องใส่ <code>-R</code> เสมอ</td><td>ย้ายได้ทันที ไม่ต้องใส่ -R</td></tr>
+      <tr><td>เปลี่ยนชื่อ</td><td>ได้ (ตอนคัดลอก)</td><td>ได้ (ใช้งานหลักอย่างหนึ่ง)</td></tr>
+      <tr><td>ปลายทางมีอยู่แล้ว</td><td>ต้นทางซ้อนเข้าไปข้างใน</td><td>ต้นทางซ้อนเข้าไปข้างใน (เหมือนกัน)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>📁</span> พฤติกรรมเมื่อโฟลเดอร์ปลายทาง "มี" หรือ "ไม่มี" อยู่แล้ว</div>
+    <div class="cmd-row"><span class="cmd">cp -R src newdir</span><span class="cmd-desc">กรณีตัวอย่าง — <code>src</code> มีไฟล์ <code>a.txt</code> อยู่ข้างใน</span></div>
+    <div class="scenario">
+      <div class="scen-box">
+        <div class="scen-label" style="color:var(--green)">✅ newdir ยังไม่มีอยู่</div>
+        <div class="tree-box"><span class="dir">newdir/</span><br>└── <span class="file">a.txt</span></div>
+      </div>
+      <div class="scen-box">
+        <div class="scen-label" style="color:var(--amber)">⚠️ newdir มีอยู่แล้ว</div>
+        <div class="tree-box"><span class="dir">newdir/</span><br>└── <span class="dir">src/</span><br>&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">a.txt</span></div>
+      </div>
+    </div>
+    <div class="warn-box"><p>⚠️ <strong>จุดที่สับสนบ่อยที่สุด:</strong> ถ้าปลายทางมีโฟลเดอร์ชื่อเดียวกันอยู่แล้ว ผลลัพธ์จะซ้อนลึกลงไปอีกชั้น ไม่ใช่การรวมเนื้อหาแบบตรงๆ ให้ตรวจสอบด้วย <code>ls</code> หรือ <code>tree</code> ก่อนรันคำสั่งเสมอ</p></div>
+    <div class="info-box"><p>กติกาเดียวกันนี้ใช้กับ <code>mv dir1 dir2</code> ด้วย — ถ้า <code>dir2</code> มีอยู่แล้ว <code>dir1</code> จะถูกย้ายไปซ้อนข้างใน กลายเป็น <code>dir2/dir1/...</code></p></div>
+  </div>
+</div>
+
+<!-- ===== TAB: CHEAT SHEET ===== -->
+<div id="cheat" class="section">
+  <div class="card">
+    <div class="card-title"><span>📋</span> Cheat Sheet ฉบับสมบูรณ์</div>
+    <div class="cmd-row"><span class="cmd">cp f1 dir/</span><span class="cmd-desc">คัดลอกไฟล์ไปยังโฟลเดอร์ปลายทาง</span></div>
+    <div class="cmd-row"><span class="cmd">cp f1 dir/new</span><span class="cmd-desc">คัดลอก + เปลี่ยนชื่อในคำสั่งเดียว</span></div>
+    <div class="cmd-row"><span class="cmd">cp f1 f2 f3 dir/</span><span class="cmd-desc">คัดลอกหลายไฟล์ — ตัวสุดท้ายต้องเป็นโฟลเดอร์</span></div>
+    <div class="cmd-row"><span class="cmd">cp -R src new</span><span class="cmd-desc"><strong>Recursive</strong> คัดลอกทั้งโฟลเดอร์</span></div>
+    <div class="cmd-row"><span class="cmd">cp -i</span><span class="cmd-desc">ถามยืนยันก่อนเขียนทับ (interactive)</span></div>
+    <div class="cmd-row"><span class="cmd">cp -v</span><span class="cmd-desc">แสดงผล verbose ระหว่างคัดลอก</span></div>
+    <div class="cmd-row"><span class="cmd">cp -p</span><span class="cmd-desc">คงค่า permission/owner/timestamp เดิม</span></div>
+    <div class="cmd-row"><span class="cmd">cp -u</span><span class="cmd-desc">คัดลอกเฉพาะไฟล์ที่ใหม่กว่าปลายทาง</span></div>
+    <div class="cmd-row"><span class="cmd">mv f1 dir/</span><span class="cmd-desc">ย้ายไฟล์ — ต้นฉบับหายจากที่เดิม</span></div>
+    <div class="cmd-row"><span class="cmd">mv old new</span><span class="cmd-desc">เปลี่ยนชื่อไฟล์/โฟลเดอร์ (new ยังไม่มีอยู่)</span></div>
+    <div class="cmd-row"><span class="cmd">mv -i</span><span class="cmd-desc">ถามยืนยันก่อนเขียนทับ</span></div>
+    <div class="cmd-row"><span class="cmd">?</span><span class="cmd-desc">Wildcard แทนอักขระ 1 ตัว</span></div>
+    <div class="cmd-row"><span class="cmd">*</span><span class="cmd-desc">Wildcard แทนอักขระกี่ตัวก็ได้ / ไม่มีก็ได้</span></div>
+    <div class="cmd-row"><span class="cmd">tree [dir]</span><span class="cmd-desc">แสดงโครงสร้างไฟล์แบบกิ่งไม้ (Recursive)</span></div>
+    <div class="cmd-row"><span class="cmd">clear</span><span class="cmd-desc">ล้างหน้าจอ Terminal</span></div>
+    <div class="cmd-row"><span class="cmd">cat f1 > f2</span><span class="cmd-desc">เขียนทับเนื้อหา f1 ลงใน f2 (Redirection)</span></div>
+    <div class="cmd-row"><span class="cmd">cat f1 >> f2</span><span class="cmd-desc">ต่อท้ายเนื้อหา f1 เข้าไปใน f2</span></div>
+    <div class="cmd-row"><span class="cmd">diff f1 f2</span><span class="cmd-desc">เทียบไฟล์ — ไม่มี output = เหมือนกัน 100%</span></div>
+    <div class="cmd-row"><span class="cmd">mkdir -p a/b/c</span><span class="cmd-desc">สร้างโฟลเดอร์ซ้อนหลายชั้นในคำสั่งเดียว</span></div>
+    <div class="cmd-row"><span class="cmd">rsync -av src/ dst/</span><span class="cmd-desc">ซิงค์/คัดลอกไฟล์ขั้นสูง นิยมใช้แทน cp งานจริง</span></div>
+  </div>
+</div>
+
+<!-- ===== TAB: QUIZ ===== -->
+<div id="quiz" class="section">
+  <div class="score-card" id="score-card">
+    <div class="score-label" id="score-label">คะแนน: 0 / 0</div>
+    <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+    <div class="score-sub" id="score-sub"></div>
+  </div>
+  <div id="quiz-container"></div>
+  <button class="reset-btn" onclick="resetQuiz()">↺ เริ่มใหม่ทั้งหมด</button>
+</div>
+
+</div><!-- end wrap -->
+
+<footer>Linux Foundation · Module 7: cp & mv Commands · Cloud Engineer Study Card</footer>
+
+<script>
+const questions=[
+  {q:"คำสั่ง <code>cp file1 file2</code> จะทำให้ file1 เป็นอย่างไร?",opts:["หายไปจากตำแหน่งเดิม","ยังอยู่เหมือนเดิม","ถูกเปลี่ยนชื่อเป็น file2","ถูกลบทิ้งอัตโนมัติ"],ans:1,exp:"cp = Copy ไฟล์ต้นฉบับจะยังอยู่เหมือนเดิมเสมอหลังคัดลอกเสร็จ ต่างจาก mv ที่ต้นฉบับจะหายไป"},
+  {q:"การคัดลอกทั้งโฟลเดอร์ด้วย <code>cp</code> ต้องใส่ตัวเลือกใด?",opts:["-v","-i","-R","-p"],ans:2,exp:"ต้องใส่ -R (Recursive) เสมอเมื่อคัดลอกโฟลเดอร์ มิฉะนั้น cp จะไม่คัดลอกโฟลเดอร์นั้น"},
+  {q:"ข้อใดถูกต้องเกี่ยวกับคำสั่ง <code>mv</code>?",opts:["ต้องใส่ -R เพื่อย้ายโฟลเดอร์เหมือน cp","ย้ายโฟลเดอร์ได้ทันทีโดยไม่ต้องใส่ -R","ใช้คัดลอกไฟล์ได้เท่านั้น","ไม่สามารถเปลี่ยนชื่อไฟล์ได้"],ans:1,exp:"ข้อดีของ mv คือย้ายโฟลเดอร์ได้ทันทีโดยไม่ต้องใส่ -R ต่างจาก cp ที่ต้องใส่ -R เสมอ"},
+  {q:"Wildcard <code>?</code> แทนอักขระได้กี่ตัว?",opts:["0 ตัวขึ้นไป","1 ตัวเท่านั้น","2 ตัวเท่านั้น","ไม่จำกัด"],ans:1,exp:"\"?\" แทนอักขระได้แค่ 1 ตัวเท่านั้น เช่น my?file จับคู่ my1file แต่ไม่จับ my12file"},
+  {q:"คำสั่ง <code>cp three* targetdir</code> จะคัดลอกไฟล์ใดบ้าง?",opts:["เฉพาะไฟล์ชื่อ three พอดี","ไฟล์ที่ขึ้นต้นด้วย three ทุกไฟล์","ไฟล์ที่ลงท้ายด้วย three","ไฟล์ที่มีคำว่า three อยู่ตรงกลาง"],ans:1,exp:"* แทนอักขระกี่ตัวก็ได้หรือไม่มีเลยก็ได้ ดังนั้น three* จับคู่ทุกไฟล์ที่ขึ้นต้นด้วยคำว่า three"},
+  {q:"ถ้า newdir มีอยู่แล้ว แล้วรัน <code>cp -R sourcedir newdir</code> ผลลัพธ์จะเป็นอย่างไร?",opts:["เนื้อหาจะถูกรวมเข้าไปใน newdir โดยตรง","เกิด error ทันที","sourcedir ทั้งโฟลเดอร์จะซ้อนอยู่ข้างใน newdir","ระบบจะลบ newdir แล้วสร้างใหม่"],ans:2,exp:"เมื่อปลายทางมีอยู่แล้ว โฟลเดอร์ต้นทางทั้งก้อนจะถูกคัดลอกไปวางซ้อนไว้ข้างในปลายทาง กลายเป็น newdir/sourcedir/..."},
+  {q:"ถ้า newdir ยังไม่มีอยู่ แล้วรัน <code>cp -R sourcedir newdir</code> ผลลัพธ์จะเป็นอย่างไร?",opts:["ระบบสร้าง newdir ขึ้นมาใหม่ เนื้อหาเหมือน sourcedir เป๊ะ","เกิด error เพราะไม่มีปลายทาง","sourcedir จะซ้อนอยู่ข้างใน newdir","ไม่มีอะไรเกิดขึ้น"],ans:0,exp:"เมื่อปลายทางยังไม่มี ระบบจะสร้างโฟลเดอร์ใหม่ชื่อ newdir แล้วคัดลอกเนื้อหาข้างในทั้งหมดไปไว้ ผลคือ newdir มีเนื้อหาเหมือน sourcedir"},
+  {q:"คำสั่งใดใช้เปลี่ยนชื่อโฟลเดอร์ <code>olddir</code> เป็น <code>newdir</code>?",opts:["cp olddir newdir","cp -R olddir newdir","mv olddir newdir","tree olddir newdir"],ans:2,exp:"mv olddir newdir ใช้เปลี่ยนชื่อโฟลเดอร์ได้เลย (เมื่อ newdir ยังไม่มีอยู่จริง) ซึ่งเป็นการใช้งานหลักอย่างหนึ่งของ mv"},
+  {q:"คำสั่งใดแสดงโครงสร้างไฟล์และโฟลเดอร์แบบกิ่งไม้ (Recursive)?",opts:["ls -R","tree","cat -r","diff -r"],ans:1,exp:"tree [dir] แสดงโฟลเดอร์และไฟล์ย่อยทั้งหมดแบบ Recursive เป็นรูปกิ่งไม้ในคำสั่งเดียว"},
+  {q:"ถ้ารัน <code>diff file1 file2</code> แล้วหน้าจอไม่แสดงผลลัพธ์ใดๆ เลย (No output) หมายความว่าอย่างไร?",opts:["ไฟล์ทั้งสองแตกต่างกันมาก","เกิดข้อผิดพลาดของคำสั่ง","ไฟล์ทั้งสองมีเนื้อหาเหมือนกัน 100%","ไฟล์ใดไฟล์หนึ่งไม่มีอยู่จริง"],ans:2,exp:"ถ้า diff ไม่แสดงผลลัพธ์ใดๆ เลย แปลว่าไฟล์ทั้งสองมีเนื้อหาเหมือนกัน 100% — จุดนี้เป็นจุดที่ข้อสอบชอบออกบ่อย"},
+  {q:"คำสั่ง <code>cat file1 > file2</code> ทำงานอย่างไร?",opts:["ต่อท้ายเนื้อหา file1 เข้าไปใน file2","อ่านเนื้อหา file1 แล้วเขียนทับลงใน file2","ลบเนื้อหาทั้งหมดใน file1","เปรียบเทียบเนื้อหา file1 กับ file2"],ans:1,exp:"เครื่องหมาย > อ่านเนื้อหาจาก file1 แล้วเขียนทับลงใน file2 ทั้งหมด ถ้าต้องการต่อท้ายแทนการเขียนทับต้องใช้ >> แทน"},
+  {q:"ตัวเลือกใดของ cp ใช้คงค่า permission, owner และ timestamp เดิมของไฟล์ต้นฉบับไว้?",opts:["-v","-p","-u","-i"],ans:1,exp:"cp -p (preserve) คงค่า permission, owner, timestamp เดิมไว้ — สำคัญมากตอน deploy ไฟล์ config บนเซิร์ฟเวอร์จริง"},
+  {q:"ทำไมวิศวกรมักใช้ตัวเลือก <code>-i</code> ร่วมกับ cp หรือ mv บนเซิร์ฟเวอร์จริง (Production)?",opts:["ทำให้คำสั่งทำงานเร็วขึ้น","ให้ระบบถามยืนยันก่อนเขียนทับไฟล์ ป้องกันข้อมูลหาย","ลดการใช้พื้นที่ดิสก์","จำเป็นสำหรับการคัดลอกโฟลเดอร์เท่านั้น"],ans:1,exp:"-i (interactive) ทำให้ระบบถามยืนยันก่อนเขียนทับไฟล์ปลายทางที่ชื่อซ้ำทุกครั้ง ช่วยลดความเสี่ยงข้อมูลหายจากการพิมพ์ผิดหรือทำงานเร็วเกินไป"}
+];
+
+let answered={},correct=0;
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML='';
+  questions.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='q-wrap';
+    div.innerHTML=`<div class="q-card">
+      <div class="q-num">ข้อที่ ${i+1} จาก ${questions.length} ข้อ</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">${q.opts.map((o,j)=>`<button class="q-opt" onclick="answer(${i},${j})" id="opt-${i}-${j}">${o}</button>`).join('')}</div>
+      <div class="q-explain" id="exp-${i}">💡 ${q.exp}</div>
+    </div>`;
+    c.appendChild(div);
+  });
+}
+
+function answer(qi,oi){
+  if(answered[qi]!==undefined)return;
+  answered[qi]=oi;
+  const q=questions[qi];
+  for(let j=0;j<q.opts.length;j++){
+    const btn=document.getElementById(`opt-${qi}-${j}`);
+    btn.classList.add('disabled');
+    if(j===q.ans)btn.classList.add('correct');
+    else if(j===oi&&oi!==q.ans)btn.classList.add('wrong');
+  }
+  document.getElementById(`exp-${qi}`).classList.add('show');
+  if(oi===q.ans)correct++;
+  updateScore();
+}
+
+function updateScore(){
+  const total=Object.keys(answered).length;
+  const card=document.getElementById('score-card');
+  card.style.display='block';
+  document.getElementById('score-label').textContent=`คะแนน: ${correct} / ${total} ข้อ`;
+  const pct=total>0?Math.round(correct/total*100):0;
+  document.getElementById('score-fill').style.width=pct+'%';
+  let msg='';
+  if(total===questions.length){
+    if(pct>=90)msg='ยอดเยี่ยม! พร้อมสำหรับงาน Cloud Engineer แล้ว 🎯';
+    else if(pct>=70)msg='ดีมาก! ทบทวนข้อที่ผิดแล้วลุยต่อได้เลย 👍';
+    else msg='ทบทวนเนื้อหาในแท็บอื่นแล้วลองใหม่อีกครั้งนะครับ 💪';
+  }else{
+    msg=`ตอบไปแล้ว ${total} จาก ${questions.length} ข้อ`;
+  }
+  document.getElementById('score-sub').textContent=msg;
+}
+
+function resetQuiz(){
+  answered={};correct=0;
+  document.getElementById('score-card').style.display='none';
+  buildQuiz();
+}
+
+function showTab(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('show');
+  el.classList.add('active');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation — Module 4: การสร้างและการลบไฟล์</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#222636;
+  --surface3:#2a2f44;
+  --border:#2e3349;
+  --border2:#3d4565;
+  --text:#e8eaf6;
+  --text2:#9ea3c0;
+  --text3:#6b7094;
+  --accent:#7c83f5;
+  --accent-bg:rgba(124,131,245,0.12);
+  --accent-border:rgba(124,131,245,0.3);
+  --green:#1db87a;
+  --green-bg:rgba(29,184,122,0.1);
+  --green-border:rgba(29,184,122,0.3);
+  --amber:#f5a623;
+  --amber-bg:rgba(245,166,35,0.1);
+  --amber-border:rgba(245,166,35,0.3);
+  --red:#f56565;
+  --red-bg:rgba(245,101,101,0.1);
+  --red-border:rgba(245,101,101,0.3);
+  --mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:10px;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding:24px 16px}
+.wrap{max-width:780px;margin:0 auto}
+
+/* Hero */
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 28px 24px;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1db87a,#7c83f5,#f56565)}
+.badge{display:inline-block;background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;padding:3px 12px;border-radius:20px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px;border:1px solid var(--accent-border)}
+.hero-title{font-size:26px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
+.hero-title code{background:var(--accent-bg);color:var(--accent);padding:2px 8px;border-radius:6px;font-family:var(--mono);font-size:20px}
+.hero-sub{font-size:14px;color:var(--text2)}
+.meta-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2)}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;background:var(--surface);padding:8px;border-radius:14px;border:1px solid var(--border)}
+.tab{padding:8px 18px;border-radius:10px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;gap:6px}
+.tab.active{background:var(--accent);color:#fff}
+.tab:hover:not(.active){background:var(--surface3);color:var(--text)}
+.section{display:none}
+.section.show{display:block}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.card-title span{font-size:16px}
+
+/* Command rows */
+.cmd-row{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.cmd-row:last-child{border-bottom:none;padding-bottom:0}
+.cmd{font-family:var(--mono);font-size:12.5px;background:var(--accent-bg);color:var(--accent);padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;border:1px solid var(--accent-border);min-width:fit-content}
+.cmd-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.cmd-desc strong{color:var(--text);font-weight:500}
+.cmd-desc code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+/* Info boxes */
+.info-box{background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.info-box p{font-size:13px;color:var(--green);line-height:1.6}
+.info-box p code{background:rgba(29,184,122,.15);color:var(--green);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.warn-box{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.warn-box p{font-size:13px;color:var(--amber);line-height:1.6}
+.warn-box p code{background:rgba(245,166,35,.15);color:var(--amber);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.danger-box{background:var(--red-bg);border:1px solid var(--red-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.danger-box p{font-size:13px;color:var(--red);line-height:1.6}
+.danger-box p code{background:rgba(245,101,101,.15);color:var(--red);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+/* Terminal block */
+.term{background:#0a0c12;border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:12.5px;color:#a8b4d8;margin-bottom:14px;overflow-x:auto;line-height:1.9}
+.term .g{color:#1db87a}
+.term .p{color:#7c83f5}
+.term .c{color:#6b7094}
+.term .w{color:#f5a623}
+.col-table{width:100%;border-collapse:collapse;font-size:13px}
+.col-table th{background:var(--surface3);color:var(--text2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.col-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+.col-table tr:last-child td{border-bottom:none}
+.col-table td:first-child{font-family:var(--mono);font-size:12px;color:var(--accent);background:var(--accent-bg);border-radius:4px;font-weight:600;white-space:nowrap}
+.col-table td:nth-child(2){color:var(--text);font-weight:500}
+
+/* Vim mode badges */
+.mode-row{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:start}
+.mode-row:last-child{border-bottom:none}
+.mode-badge{font-family:var(--mono);font-size:12px;font-weight:700;padding:6px 10px;border-radius:8px;text-align:center}
+.mode-normal{background:rgba(124,131,245,.15);color:#7c83f5;border:1px solid rgba(124,131,245,.3)}
+.mode-insert{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.mode-cmd{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.mode-info{font-size:13px;line-height:1.6}
+.mode-info strong{color:var(--text);font-weight:600;display:block;margin-bottom:2px}
+.mode-info span{color:var(--text2)}
+.mode-info small{color:var(--text3);font-size:11.5px;display:block;margin-top:4px;font-family:var(--mono)}
+
+/* Cheat sheet */
+.cmd-row.highlight{background:var(--surface3);border-radius:8px;margin:2px 0;padding:9px 12px}
+
+/* Quiz */
+.q-wrap{margin-bottom:14px}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.q-num{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.6}
+.q-text code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:13px}
+.q-opts{display:flex;flex-direction:column;gap:7px}
+.q-opt{padding:11px 15px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:13px;font-family:var(--sans);cursor:pointer;text-align:left;transition:all .12s;line-height:1.5}
+.q-opt:hover:not(.disabled){background:var(--surface3);border-color:var(--border2);color:var(--text)}
+.q-opt.correct{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.q-opt.wrong{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.q-opt.disabled{cursor:default}
+.q-explain{margin-top:12px;font-size:13px;color:var(--text2);line-height:1.7;background:var(--surface2);padding:12px 14px;border-radius:8px;border-left:3px solid var(--accent);display:none}
+.q-explain.show{display:block}
+.q-explain code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:none}
+.score-label{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.score-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;background:var(--green);transition:width .5s ease}
+.score-sub{font-size:13px;color:var(--text2);margin-top:8px}
+
+.reset-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;margin-top:8px;transition:all .12s}
+.reset-btn:hover{background:var(--surface2);border-color:var(--accent)}
+
+/* Tips */
+.tip-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.tip-row:last-child{border-bottom:none}
+.tip-icon{color:var(--accent);font-size:16px;flex-shrink:0;margin-top:1px;width:20px}
+.tip-text{font-size:13px;color:var(--text2);line-height:1.6}
+.tip-text code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.tip-text strong{color:var(--text)}
+
+.section-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin:18px 0 8px;padding-left:2px}
+.section-label:first-child{margin-top:0}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.cols{grid-template-columns:1fr}.tab{padding:7px 12px;font-size:12px}}
+
+footer{text-align:center;font-size:12px;color:var(--text3);margin-top:28px;padding-top:20px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="badge">Linux Foundation</div>
+  <div class="hero-title">Module 4 — <code>touch · mkdir · rm · vim</code></div>
+  <div class="hero-sub">การสร้างและการลบไฟล์/ไดเรกทอรี ฉบับสมบูรณ์ · Cloud Engineer Edition</div>
+  <div class="meta-chips">
+    <span class="chip">📄 touch & Brace Expansion</span>
+    <span class="chip">🔍 Wildcards * ?</span>
+    <span class="chip">🗑️ rm -rf</span>
+    <span class="chip">✍️ vim Basics</span>
+    <span class="chip">✏️ Quiz 14 ข้อ</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('ref',this)">📄 Touch/Wildcard</button>
+  <button class="tab" onclick="showTab('dir',this)">📁 mkdir/rm</button>
+  <button class="tab" onclick="showTab('vim',this)">✍️ Vim</button>
+  <button class="tab" onclick="showTab('cheat',this)">📋 Cheat Sheet</button>
+  <button class="tab" onclick="showTab('quiz',this)">✏️ Quiz</button>
+</div>
+
+<!-- ===== TAB: TOUCH & WILDCARDS ===== -->
+<div id="ref" class="section show">
+  <div class="section-label">การสร้างไฟล์</div>
+  <div class="card">
+    <div class="card-title"><span>📄</span> คำสั่ง touch</div>
+    <div class="cmd-row">
+      <span class="cmd">touch file.txt</span>
+      <span class="cmd-desc">สร้าง <strong>ไฟล์ว่างเปล่า (Empty File)</strong> ขนาด <code>0 Bytes</code> — ถ้าไฟล์มีอยู่แล้ว จะไม่ลบข้อมูลเดิม แต่จะไปอัปเดต <strong>timestamp (mtime/atime)</strong> ของไฟล์แทน</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">touch a b c</span>
+      <span class="cmd-desc">สร้างไฟล์หลายไฟล์พร้อมกันได้ในคำสั่งเดียว โดยเว้นวรรคคั่นชื่อไฟล์</span>
+    </div>
+    <div class="info-box"><p>💡 <code>touch</code> ไม่ได้มีไว้ "สร้างไฟล์" อย่างเดียว — จุดประสงค์จริงคือแก้ไข timestamp ของไฟล์ (ใช้บ่อยในสคริปต์และ build system เช่น Makefile)</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🔁</span> Brace Expansion — สร้างไฟล์จำนวนมาก</div>
+    <div class="cmd-row">
+      <span class="cmd">touch my{01..100}file</span>
+      <span class="cmd-desc">สร้างไฟล์ <code>my01file</code> ถึง <code>my100file</code> รวม <strong>100 ไฟล์</strong> ในคำสั่งเดียว — Shell จะขยาย <code>{01..100}</code> เป็นรายการตัวเลขก่อนส่งให้ <code>touch</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">touch file{1,3,5}</span>
+      <span class="cmd-desc">ระบุค่าที่ต้องการแบบเจาะจงด้วย comma แทนช่วงตัวเลข → สร้าง <code>file1 file3 file5</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">mkdir -p proj/{src,bin,doc}</span>
+      <span class="cmd-desc">Brace Expansion ใช้ได้กับคำสั่งอื่นด้วย ไม่ใช่แค่ <code>touch</code> — สร้าง 3 โฟลเดอร์ย่อยพร้อมกัน</span>
+    </div>
+    <div class="warn-box"><p>⚠️ ห้ามเว้นวรรคภายใน <code>{...}</code> เช่น <code>{01.. 100}</code> จะทำให้ Brace Expansion ไม่ทำงาน และ Shell จะมองเป็น argument แปลกๆ แทน</p></div>
+  </div>
+
+  <div class="section-label">Wildcards — ค้นหา/แสดงรายชื่อไฟล์</div>
+  <div class="card">
+    <div class="card-title"><span>🔍</span> * (Asterisk) และ ? (Question Mark)</div>
+    <div class="cmd-row">
+      <span class="cmd">*</span>
+      <span class="cmd-desc"><strong>แทนอักขระกี่ตัวก็ได้ (หรือไม่มีเลยก็ได้)</strong><br><code>ls my*file</code> → หาไฟล์ที่ขึ้นต้นด้วย <code>my</code> ลงท้ายด้วย <code>file</code> ตรงกลางจะมีกี่ตัวอักษรก็ได้<br><code>ls try*</code> → แสดงทุกไฟล์ที่ขึ้นต้นด้วย <code>try</code> เช่น <code>try1, try2, try01, tryABC</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">?</span>
+      <span class="cmd-desc"><strong>แทนอักขระอะไรก็ได้ แต่เจาะจงแค่ 1 ตัวเท่านั้น</strong><br><code>ls try?</code> → แสดงเฉพาะ <code>try1</code> และ <code>try2</code> (ไม่รวม <code>try01</code> เพราะมี 2 ตัวอักษรต่อท้าย ไม่ใช่ 1 ตัว)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">[abc]</span>
+      <span class="cmd-desc"><strong>Character class</strong> — แทนอักขระ 1 ตัวจากกลุ่มที่ระบุ<br><code>ls try[12]</code> → ตรงกับ <code>try1</code> หรือ <code>try2</code> เท่านั้น</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">[0-9]</span>
+      <span class="cmd-desc"><strong>Range</strong> — ระบุช่วงอักขระ เช่นตัวเลขหรือตัวอักษร<br><code>ls file[0-9]</code> → ตรงกับ <code>file0</code> ถึง <code>file9</code></span>
+    </div>
+    <table class="col-table">
+      <thead><tr><th>รูปแบบ</th><th>ความหมาย</th><th>ตัวอย่างที่ตรง</th></tr></thead>
+      <tbody>
+        <tr><td>*</td><td>กี่ตัวก็ได้ / ไม่มีก็ได้</td><td>my*file → myfile, my123file</td></tr>
+        <tr><td>?</td><td>เจาะจง 1 ตัวอักษร</td><td>try? → try1, try2 (ไม่ใช่ try01)</td></tr>
+        <tr><td>[abc]</td><td>1 ตัวจากกลุ่มที่กำหนด</td><td>try[12] → try1, try2</td></tr>
+        <tr><td>[0-9]</td><td>1 ตัวจากช่วงที่กำหนด</td><td>file[0-9] → file0 ... file9</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TAB: mkdir / rm ===== -->
+<div id="dir" class="section">
+  <div class="card">
+    <div class="card-title"><span>📁</span> การสร้างไดเรกทอรีด้วย mkdir</div>
+    <div class="cmd-row">
+      <span class="cmd">mkdir dirname</span>
+      <span class="cmd-desc">สร้างไดเรกทอรีใหม่ 1 โฟลเดอร์ในตำแหน่งปัจจุบัน</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">mkdir -p a/b/c</span>
+      <span class="cmd-desc"><strong>Parents</strong> — สร้างโฟลเดอร์ซ้อนกันหลายชั้นในคำสั่งเดียว แม้ <code>a</code> และ <code>a/b</code> จะยังไม่มีอยู่ก็ตาม (ถ้าไม่ใส่ <code>-p</code> จะ error ทันทีเพราะ parent directory ไม่มีอยู่จริง)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">mkdir dir1 dir2</span>
+      <span class="cmd-desc">สร้างหลายโฟลเดอร์พร้อมกันได้ในคำสั่งเดียว</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🗑️</span> การลบไฟล์และไดเรกทอรีด้วย rm</div>
+    <div class="cmd-row">
+      <span class="cmd">rm try01</span>
+      <span class="cmd-desc">ลบไฟล์เดียวแบบระบุชื่อตรงๆ</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">rm try1 try2</span>
+      <span class="cmd-desc">ลบหลายไฟล์พร้อมกัน โดยระบุชื่อคั่นด้วยช่องว่าง</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">rm testdir/mytest{01..1000}</span>
+      <span class="cmd-desc">ลบไฟล์เป็นกลุ่มโดยใช้ <strong>Brace Expansion</strong> ร่วมกับ <code>rm</code> — ลบ <code>mytest01</code> ถึง <code>mytest1000</code> ในคำสั่งเดียว</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">rm -rf testdir</span>
+      <span class="cmd-desc">ลบทั้งโฟลเดอร์และไฟล์ข้างในทั้งหมดแบบไม่ถามยืนยัน — ดูรายละเอียด flag ด้านล่าง</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">rmdir emptydir</span>
+      <span class="cmd-desc">ลบไดเรกทอรีได้เฉพาะกรณีที่ <strong>ว่างเปล่าเท่านั้น</strong> — ถ้ามีไฟล์ข้างในจะ error ต้องใช้ <code>rm -r</code> แทน</span>
+    </div>
+    <table class="col-table">
+      <thead><tr><th>Flag</th><th>ชื่อเต็ม</th><th>ความหมาย</th></tr></thead>
+      <tbody>
+        <tr><td>-r</td><td>Recursive</td><td>ลบลึกลงไปในโฟลเดอร์ย่อยและไฟล์ข้างในทั้งหมด — จำเป็นเมื่อลบโฟลเดอร์</td></tr>
+        <tr><td>-f</td><td>Force</td><td>บังคับลบทันทีโดยไม่ถามยืนยัน แม้ไฟล์จะ read-only</td></tr>
+        <tr><td>-i</td><td>Interactive</td><td>ถามยืนยันก่อนลบทุกไฟล์ — ใช้เพื่อความปลอดภัยแทน -f</td></tr>
+        <tr><td>-v</td><td>Verbose</td><td>แสดงชื่อไฟล์ทุกไฟล์ที่ถูกลบออกมาให้เห็น</td></tr>
+      </tbody>
+    </table>
+    <div class="danger-box"><p>🚨 <strong>คำสั่งอันตรายที่สุดใน Linux:</strong> <code>rm -rf</code> <strong>ไม่มีถังขยะ (Recycle Bin)</strong> — ลบแล้วลบเลย กู้คืนไม่ได้ ต้องเช็ก path ให้แน่ใจก่อนกด Enter ทุกครั้ง โดยเฉพาะการรันด้วยสิทธิ์ <code>sudo</code> หรือรันจาก root <code>/</code></p></div>
+  </div>
+</div>
+
+<!-- ===== TAB: VIM ===== -->
+<div id="vim" class="section">
+  <div class="card">
+    <div class="card-title"><span>✍️</span> สร้างไฟล์พร้อมใส่ข้อมูลด้วย vim</div>
+    <div class="cmd-row">
+      <span class="cmd">vim mynewfile</span>
+      <span class="cmd-desc"><code>touch</code> ไม่ใช่วิธีเดียวในการสร้างไฟล์ — <code>vim</code> เป็น Text Editor ที่เปิด (หรือสร้างใหม่ถ้ายังไม่มี) ไฟล์และให้พิมพ์ข้อความลงไปได้ทันที</span>
+    </div>
+    <div class="info-box"><p>💡 ถ้าไฟล์ที่ระบุยังไม่มีอยู่ vim จะสร้างไฟล์ใหม่ให้อัตโนมัติเมื่อบันทึกด้วย <code>:w</code> หรือ <code>:wq</code> — ก่อนบันทึกไฟล์จะยังไม่ถูกสร้างขึ้นจริงบนดิสก์</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🔀</span> 3 โหมดหลักของ vim</div>
+    <div class="mode-row">
+      <span class="mode-badge mode-normal">Normal</span>
+      <div class="mode-info">
+        <strong>Command / Normal Mode</strong>
+        <span>โหมดเริ่มต้นเมื่อเปิด vim — ใช้เคลื่อนไหว cursor, ลบ, copy/paste ไม่ใช่การพิมพ์ข้อความ</span>
+        <small>→ กด ESC จากโหมดใดๆ เพื่อกลับมาที่นี่</small>
+      </div>
+    </div>
+    <div class="mode-row">
+      <span class="mode-badge mode-insert">Insert</span>
+      <div class="mode-info">
+        <strong>Insert Mode (โหมดพิมพ์)</strong>
+        <span>โหมดสำหรับพิมพ์/แก้ไขข้อความจริง เข้าสู่โหมดนี้ได้หลายวิธี</span>
+        <small>→ i = พิมพ์หน้า cursor | a = พิมพ์หลัง cursor | o = เปิดบรรทัดใหม่ด้านล่าง</small>
+      </div>
+    </div>
+    <div class="mode-row">
+      <span class="mode-badge mode-cmd">Command-line</span>
+      <div class="mode-info">
+        <strong>Command-line Mode</strong>
+        <span>เข้าสู่โหมดนี้ด้วยการพิมพ์ <code>:</code> จาก Normal Mode — ใช้สั่งบันทึก, ออก, ค้นหา, แทนที่ข้อความ</span>
+        <small>→ :wq = save และ quit | :q! = ออกโดยไม่บันทึก</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>⌨️</span> คำสั่งพื้นฐานที่ใช้บ่อย</div>
+    <div class="cmd-row"><span class="cmd">i</span><span class="cmd-desc">เข้า Insert Mode เพื่อเริ่มพิมพ์ข้อความ</span></div>
+    <div class="cmd-row"><span class="cmd">ESC</span><span class="cmd-desc">ออกจาก Insert Mode กลับไป Normal Mode — <strong>ต้องกดก่อนพิมพ์คำสั่ง <code>:</code> เสมอ</strong></span></div>
+    <div class="cmd-row"><span class="cmd">:w</span><span class="cmd-desc"><strong>Write</strong> — บันทึกไฟล์ (ไม่ออกจากโปรแกรม)</span></div>
+    <div class="cmd-row"><span class="cmd">:q</span><span class="cmd-desc"><strong>Quit</strong> — ออกจากโปรแกรม (ถ้ามีการแก้ไขที่ยังไม่บันทึก จะ error)</span></div>
+    <div class="cmd-row"><span class="cmd">:wq</span><span class="cmd-desc">บันทึกแล้วออก — คำสั่งที่ใช้บ่อยที่สุด (w = write, q = quit)</span></div>
+    <div class="cmd-row"><span class="cmd">:q!</span><span class="cmd-desc">ออกโดย<strong>ไม่บันทึก</strong> ทิ้งการแก้ไขทั้งหมด (! = force)</span></div>
+    <div class="cmd-row"><span class="cmd">dd</span><span class="cmd-desc">ลบทั้งบรรทัดที่ cursor อยู่ (ใช้ใน Normal Mode)</span></div>
+    <div class="cmd-row"><span class="cmd">yy / p</span><span class="cmd-desc">yy = copy บรรทัด (yank), p = paste วางบรรทัด</span></div>
+    <div class="cmd-row"><span class="cmd">u</span><span class="cmd-desc"><strong>Undo</strong> — ย้อนกลับการแก้ไขล่าสุด</span></div>
+    <div class="warn-box"><p>⚠️ มือใหม่ส่วนใหญ่ "ติดอยู่ใน vim" เพราะลืมกด <code>ESC</code> ก่อนพิมพ์ <code>:wq</code> — ถ้าพิมพ์ตอนอยู่ Insert Mode จะกลายเป็นข้อความในไฟล์แทนคำสั่ง</p></div>
+  </div>
+</div>
+
+<!-- ===== TAB: CHEAT SHEET ===== -->
+<div id="cheat" class="section">
+  <div class="card">
+    <div class="card-title"><span>📋</span> Cheat Sheet ฉบับสมบูรณ์</div>
+    <div class="cmd-row"><span class="cmd">touch file</span><span class="cmd-desc">สร้างไฟล์ว่าง หรืออัปเดต timestamp ถ้ามีอยู่แล้ว</span></div>
+    <div class="cmd-row"><span class="cmd">touch a{01..100}b</span><span class="cmd-desc">Brace Expansion — สร้างไฟล์จำนวนมากในคำสั่งเดียว</span></div>
+    <div class="cmd-row"><span class="cmd">mkdir dir</span><span class="cmd-desc">สร้างไดเรกทอรีใหม่</span></div>
+    <div class="cmd-row"><span class="cmd">mkdir -p a/b/c</span><span class="cmd-desc">สร้างโฟลเดอร์ซ้อนหลายชั้นในคำสั่งเดียว</span></div>
+    <div class="cmd-row"><span class="cmd">ls name*</span><span class="cmd-desc">Wildcard * = อักขระกี่ตัวก็ได้</span></div>
+    <div class="cmd-row"><span class="cmd">ls name?</span><span class="cmd-desc">Wildcard ? = เจาะจง 1 ตัวอักษร</span></div>
+    <div class="cmd-row"><span class="cmd">rm file</span><span class="cmd-desc">ลบไฟล์เดียว</span></div>
+    <div class="cmd-row"><span class="cmd">rmdir dir</span><span class="cmd-desc">ลบไดเรกทอรีที่ว่างเปล่าเท่านั้น</span></div>
+    <div class="cmd-row"><span class="cmd">rm -rf dir</span><span class="cmd-desc">ลบโฟลเดอร์และไฟล์ข้างในทั้งหมดแบบไม่ถาม — <strong>อันตรายมาก กู้คืนไม่ได้</strong></span></div>
+    <div class="cmd-row"><span class="cmd">rm -i file</span><span class="cmd-desc">ลบแบบถามยืนยันก่อนทุกครั้ง — ปลอดภัยกว่า -f</span></div>
+    <div class="cmd-row"><span class="cmd">vim file</span><span class="cmd-desc">เปิด/สร้างไฟล์ด้วย vim</span></div>
+    <div class="cmd-row"><span class="cmd">i / ESC</span><span class="cmd-desc">เข้า / ออกจาก Insert Mode</span></div>
+    <div class="cmd-row"><span class="cmd">:wq</span><span class="cmd-desc">บันทึกและออกจาก vim</span></div>
+    <div class="cmd-row"><span class="cmd">:q!</span><span class="cmd-desc">ออกโดยไม่บันทึก</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>💡</span> Engineer Tips — ใช้งานจริง</div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ก่อนรัน <code>rm -rf</code> ทุกครั้ง ให้รัน <code>ls</code> ที่ path เดียวกันก่อนเพื่อเช็กว่ากำลังจะลบอะไร — เป็นนิสัยที่ Cloud Engineer ทุกคนต้องมี</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ใช้ <code>rm -i</code> แทน <code>rm -f</code> เมื่อทำงานกับข้อมูลสำคัญ หรือใช้ alias <code>alias rm='rm -i'</code> เพื่อป้องกันการลบผิดพลาด</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text"><code>touch</code> มีประโยชน์มากในการ trigger ให้ build tool เช่น <code>make</code> มองว่าไฟล์ถูกแก้ไขใหม่ (อัปเดต mtime) โดยไม่ต้องแก้เนื้อหาจริง</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">Brace Expansion (<code>{01..100}</code>) เป็นฟีเจอร์ของ Shell (bash) ไม่ใช่ของคำสั่ง — ใช้ร่วมกับ <code>touch, mkdir, rm, cp, mv</code> ได้หมด</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ถ้าติดอยู่ใน vim ไม่รู้จะออกยังไง กด <code>ESC</code> ก่อนเสมอ แล้วพิมพ์ <code>:q!</code> เพื่อออกแบบไม่บันทึก เป็นทางออกฉุกเฉินที่ใช้ได้เสมอ</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: QUIZ ===== -->
+<div id="quiz" class="section">
+  <div class="score-card" id="score-card">
+    <div class="score-label" id="score-label">คะแนน: 0 / 0</div>
+    <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+    <div class="score-sub" id="score-sub"></div>
+  </div>
+  <div id="quiz-container"></div>
+  <button class="reset-btn" onclick="resetQuiz()">↺ เริ่มใหม่ทั้งหมด</button>
+</div>
+
+</div><!-- end wrap -->
+
+<footer>Linux Foundation · Module 4: การสร้างและการลบไฟล์ · Cloud Engineer Study Card</footer>
+
+<script>
+const questions=[
+  {q:"คำสั่ง <code>touch</code> ใช้ทำอะไรเป็นหลัก?",opts:["ลบไฟล์","สร้างไฟล์ว่างเปล่า หรืออัปเดต timestamp","แสดงเนื้อหาไฟล์","เปลี่ยนชื่อไฟล์"],ans:1,exp:"touch สร้างไฟล์ว่างเปล่า (0 Bytes) ถ้ายังไม่มีไฟล์นั้น แต่ถ้าไฟล์มีอยู่แล้ว จะไปอัปเดต timestamp (mtime/atime) แทน โดยไม่ลบเนื้อหาเดิม"},
+  {q:"คำสั่ง <code>touch my{01..100}file</code> จะสร้างไฟล์กี่ไฟล์?",opts:["10 ไฟล์","99 ไฟล์","100 ไฟล์","101 ไฟล์"],ans:2,exp:"Brace Expansion {01..100} ขยายเป็นตัวเลข 01 ถึง 100 รวมทั้งหมด 100 ค่า จึงสร้างไฟล์ my01file ถึง my100file รวม 100 ไฟล์"},
+  {q:"ต้องการหาไฟล์ที่ขึ้นต้นด้วย try และตามด้วยอักขระกี่ตัวก็ได้ ใช้ wildcard ใด?",opts:["try?","try*","try[1]","try.."],ans:1,exp:"* (Asterisk) แทนอักขระกี่ตัวก็ได้ หรือไม่มีเลยก็ได้ เช่น try* จะตรงกับ try, try1, try01, tryABC ทั้งหมด"},
+  {q:"คำสั่ง <code>ls try?</code> จะแสดงไฟล์ใดต่อไปนี้ (มีไฟล์ try1, try2, try01)?",opts:["try1, try2, try01","try01 เท่านั้น","try1 และ try2 เท่านั้น","ไม่แสดงไฟล์ใดเลย"],ans:2,exp:"? แทนอักขระเพียง 1 ตัวเท่านั้น จึงตรงกับ try1 และ try2 แต่ไม่ตรงกับ try01 เพราะมีอักขระต่อท้ายถึง 2 ตัว"},
+  {q:"ต้องการลบไดเรกทอรีที่มีไฟล์อยู่ข้างในทั้งหมด (ไม่ถามยืนยัน) ควรใช้คำสั่งใด?",opts:["rm dirname","rmdir dirname","rm -rf dirname","rm -i dirname"],ans:2,exp:"rm -rf ใช้ -r (recursive) เพื่อลบลึกลงไปในโฟลเดอร์ย่อยทั้งหมด และ -f (force) เพื่อลบทันทีโดยไม่ถามยืนยัน"},
+  {q:"Flag <code>-f</code> ใน <code>rm -rf</code> ย่อมาจากอะไร?",opts:["File","Force","Fast","Folder"],ans:1,exp:"-f ย่อมาจาก Force คือบังคับลบทันทีโดยไม่ต้องถามยืนยัน ต่างจาก -i (Interactive) ที่จะถามก่อนลบทุกไฟล์"},
+  {q:"คำสั่ง <code>rmdir</code> ต่างจาก <code>rm -r</code> อย่างไร?",opts:["ไม่มีความต่าง","rmdir ลบได้เฉพาะโฟลเดอร์ที่ว่างเปล่าเท่านั้น","rmdir ลบไฟล์ได้เร็วกว่า","rm -r ใช้ได้กับไฟล์เท่านั้น ไม่ใช่โฟลเดอร์"],ans:1,exp:"rmdir ลบไดเรกทอรีได้เฉพาะกรณีที่ว่างเปล่า ถ้ามีไฟล์ข้างในจะ error ทันที ต้องใช้ rm -r เพื่อลบโฟลเดอร์ที่มีไฟล์ข้างในแบบ recursive"},
+  {q:"คำสั่ง <code>rm -rf</code> มีถังขยะ (Recycle Bin) ให้กู้คืนไฟล์ที่ลบผิดหรือไม่?",opts:["มี กู้คืนได้ภายใน 30 วัน","ไม่มี ลบแล้วลบเลย กู้คืนไม่ได้","มีเฉพาะบน Ubuntu เท่านั้น","ขึ้นอยู่กับว่าใช้ sudo หรือไม่"],ans:1,exp:"rm -rf ไม่มีถังขยะ ไฟล์ที่ลบไปแล้วจะหายถาวรทันที (ต่างจาก GUI file manager) จึงต้องเช็ก path ให้แน่ใจก่อนรันคำสั่งนี้เสมอ"},
+  {q:"คำสั่งใดใช้สร้างโฟลเดอร์ซ้อนกันหลายชั้นในคำสั่งเดียว เช่น a/b/c ที่ยังไม่มี a และ b?",opts:["mkdir a/b/c","mkdir -p a/b/c","mkdir -r a/b/c","touch a/b/c"],ans:1,exp:"mkdir -p (parents) สร้างโฟลเดอร์แม่ที่ยังไม่มีให้อัตโนมัติ ถ้าไม่ใส่ -p คำสั่งจะ error ทันทีเพราะ parent directory a และ a/b ยังไม่มีอยู่จริง"},
+  {q:"ใน vim ต้องกดปุ่มใดเพื่อเข้าสู่ Insert Mode สำหรับพิมพ์ข้อความ?",opts:["ESC","i","w","q"],ans:1,exp:"กดปุ่ม i เพื่อเข้า Insert Mode แล้วเริ่มพิมพ์ข้อความได้ทันที เมื่อพิมพ์เสร็จต้องกด ESC เพื่อกลับสู่ Normal Mode ก่อนพิมพ์คำสั่งอื่น"},
+  {q:"คำสั่ง <code>:wq</code> ใน vim ทำอะไร?",opts:["ออกโดยไม่บันทึก","ค้นหาข้อความในไฟล์","บันทึกไฟล์แล้วออกจากโปรแกรม","ลบทั้งไฟล์"],ans:2,exp:":wq คือ w (write = บันทึก) รวมกับ q (quit = ออก) ทำให้บันทึกไฟล์แล้วปิดโปรแกรมในคำสั่งเดียว ต้องกด ESC ก่อนพิมพ์เสมอ"},
+  {q:"ถ้าพิมพ์ข้อความผิดใน vim แล้วต้องการออกโดยไม่บันทึกการเปลี่ยนแปลงเลย ใช้คำสั่งใด?",opts:[":w","ESC",":q!","dd"],ans:2,exp:":q! บังคับออกจาก vim โดยไม่บันทึกการแก้ไขใดๆ ทั้งหมด (! คือ force) เหมาะเมื่อพิมพ์ผิดพลาดและไม่ต้องการเก็บการเปลี่ยนแปลงไว้"},
+  {q:"Wildcard <code>[0-9]</code> ใน Linux หมายถึงอะไร?",opts:["ตัวเลข 0 กับ 9 เท่านั้น","อักขระ 1 ตัวจากช่วง 0 ถึง 9","ต้องมีตัวเลขอย่างน้อย 10 ตัว","ไม่ใช่ wildcard ที่ใช้งานได้จริง"],ans:1,exp:"[0-9] คือ character range แทนอักขระ 1 ตัวจากช่วงที่กำหนด เช่น file[0-9] จะตรงกับ file0 ถึง file9 ทีละ 1 ไฟล์"},
+  {q:"เหตุใดจึงควรรัน <code>ls</code> ที่ path เดิมก่อนรัน <code>rm -rf</code> ทุกครั้ง?",opts:["เพื่อความเร็วในการลบ","เพื่อเช็กว่ากำลังจะลบไฟล์/โฟลเดอร์อะไรบ้าง ป้องกันการลบผิด","เป็นข้อบังคับของระบบ Linux","ไม่มีความจำเป็น เป็นแค่ความเชื่อผิดๆ"],ans:1,exp:"เนื่องจาก rm -rf ลบถาวรและไม่มีถังขยะ การเช็กด้วย ls ก่อนช่วยยืนยันว่า path และไฟล์ที่จะถูกลบถูกต้องตรงกับที่ตั้งใจ เป็นนิสัยความปลอดภัยพื้นฐานของ Engineer"}
+];
+
+let answered={},correct=0;
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML='';
+  questions.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='q-wrap';
+    div.innerHTML=`<div class="q-card">
+      <div class="q-num">ข้อที่ ${i+1} จาก ${questions.length} ข้อ</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">${q.opts.map((o,j)=>`<button class="q-opt" onclick="answer(${i},${j})" id="opt-${i}-${j}">${o}</button>`).join('')}</div>
+      <div class="q-explain" id="exp-${i}">💡 ${q.exp}</div>
+    </div>`;
+    c.appendChild(div);
+  });
+}
+
+function answer(qi,oi){
+  if(answered[qi]!==undefined)return;
+  answered[qi]=oi;
+  const q=questions[qi];
+  for(let j=0;j<q.opts.length;j++){
+    const btn=document.getElementById(`opt-${qi}-${j}`);
+    btn.classList.add('disabled');
+    if(j===q.ans)btn.classList.add('correct');
+    else if(j===oi&&oi!==q.ans)btn.classList.add('wrong');
+  }
+  document.getElementById(`exp-${qi}`).classList.add('show');
+  if(oi===q.ans)correct++;
+  updateScore();
+}
+
+function updateScore(){
+  const total=Object.keys(answered).length;
+  const card=document.getElementById('score-card');
+  card.style.display='block';
+  document.getElementById('score-label').textContent=`คะแนน: ${correct} / ${total} ข้อ`;
+  const pct=total>0?Math.round(correct/total*100):0;
+  document.getElementById('score-fill').style.width=pct+'%';
+  let msg='';
+  if(total===questions.length){
+    if(pct>=90)msg='ยอดเยี่ยม! พร้อมสำหรับงาน Cloud Engineer แล้ว 🎯';
+    else if(pct>=70)msg='ดีมาก! ทบทวนข้อที่ผิดแล้วลุยต่อได้เลย 👍';
+    else msg='ทบทวนเนื้อหาในแท็บอื่นแล้วลองใหม่อีกครั้งนะครับ 💪';
+  }else{
+    msg=`ตอบไปแล้ว ${total} จาก ${questions.length} ข้อ`;
+  }
+  document.getElementById('score-sub').textContent=msg;
+}
+
+function resetQuiz(){
+  answered={};correct=0;
+  document.getElementById('score-card').style.display='none';
+  buildQuiz();
+}
+
+function showTab(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('show');
+  el.classList.add('active');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

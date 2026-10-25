@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation 3 — Work with Directories</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Sarabun:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg:        #0d1117;
+    --bg2:       #161b22;
+    --bg3:       #21262d;
+    --border:    #30363d;
+    --text:      #e6edf3;
+    --muted:     #8b949e;
+    --green:     #3fb950;
+    --green-dim: #1a3a22;
+    --yellow:    #d29922;
+    --yellow-dim:#2d2210;
+    --red:       #f85149;
+    --red-dim:   #3d1a19;
+    --blue:      #58a6ff;
+    --blue-dim:  #0d2340;
+    --purple:    #bc8cff;
+    --purple-dim:#1e1040;
+    --cyan:      #39d0d8;
+    --mono:      'JetBrains Mono', monospace;
+    --sans:      'Sarabun', 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .header-icon {
+    font-size: 42px;
+    line-height: 1;
+    filter: drop-shadow(0 0 12px #3fb95066);
+  }
+  .header-info { flex: 1; }
+  .header-badge {
+    display: inline-block;
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid #3fb95044;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -.02em;
+  }
+  .header p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .progress-bar-wrap {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--cyan));
+    border-radius: 3px;
+    transition: width .4s;
+  }
+  .progress-label { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  /* ── NAV TABS ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+    user-select: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  /* ── MAIN ── */
+  .main { max-width: 900px; margin: 0 auto; padding: 36px 40px 80px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── COMMAND BLOCKS ── */
+  .cmd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .cmd-grid { grid-template-columns: 1fr; } }
+
+  .cmd-block {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    position: relative;
+    cursor: pointer;
+    transition: border-color .15s, transform .1s;
+  }
+  .cmd-block:hover { border-color: var(--green); transform: translateY(-1px); }
+  .cmd-block .cmd-tag {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cmd-block .cmd-desc {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .cmd-block .cmd-args {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--cyan);
+    margin-top: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+  .cmd-block .copy-hint {
+    position: absolute;
+    top: 10px; right: 12px;
+    font-size: 10px;
+    color: var(--border);
+  }
+  .cmd-block:hover .copy-hint { color: var(--muted); }
+
+  /* ── CODE SNIPPET ── */
+  .code {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.9;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  .code .prompt { color: var(--green); }
+  .code .flag   { color: var(--yellow); }
+  .code .path   { color: var(--blue); }
+  .code .comment { color: var(--muted); font-style: italic; }
+  .code .output { color: var(--muted); }
+
+  /* ── PATH DIAGRAM ── */
+  .path-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 12px 0;
+  }
+  @media (max-width: 640px) { .path-compare { grid-template-columns: 1fr; } }
+  .path-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+  }
+  .path-box.abs { border-color: #58a6ff55; background: var(--blue-dim); }
+  .path-box.rel { border-color: #3fb95055; background: var(--green-dim); }
+  .path-box h4 { font-family: var(--mono); font-size: 13px; margin-bottom: 10px; }
+  .path-box.abs h4 { color: var(--blue); }
+  .path-box.rel h4 { color: var(--green); }
+  .path-box p { font-size: 13px; color: var(--muted); }
+  .path-box .example {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--cyan);
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #ffffff08;
+    border-radius: 4px;
+  }
+
+  /* ── HOME DIR TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  th {
+    background: var(--bg3);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  td code {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--green);
+    background: var(--green-dim);
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  td .note { color: var(--muted); font-size: 12px; margin-top: 3px; }
+  .best { color: var(--yellow); font-size: 11px; font-weight: 600; }
+
+  /* ── ALERT ── */
+  .alert {
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    margin: 12px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .alert.warn { background: var(--yellow-dim); border: 1px solid #d2992255; color: var(--yellow); }
+  .alert.danger { background: var(--red-dim); border: 1px solid #f8514955; color: var(--red); }
+  .alert.tip { background: var(--blue-dim); border: 1px solid #58a6ff44; color: var(--blue); }
+  .alert.info { background: var(--green-dim); border: 1px solid #3fb95044; color: var(--green); }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .alert p { color: var(--text); font-size: 13px; line-height: 1.6; }
+  .alert strong { color: inherit; }
+
+  /* ── CHEAT SHEET ── */
+  .cheat-table { }
+  .cheat-row {
+    display: grid;
+    grid-template-columns: 220px 1fr auto;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  @media (max-width: 640px) {
+    .cheat-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+  .cheat-row:last-child { border-bottom: none; }
+  .cheat-cmd {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--green);
+    word-break: break-all;
+  }
+  .cheat-desc { font-size: 13px; color: var(--text); }
+  .cheat-flag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .cat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--purple);
+    text-transform: uppercase;
+    padding: 16px 0 6px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  /* ── QUIZ ── */
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .quiz-status {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .quiz-question {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .quiz-question.active { display: block; }
+  .q-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+  }
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+  .q-code {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--cyan);
+    margin-bottom: 16px;
+  }
+  .q-options { display: flex; flex-direction: column; gap: 10px; }
+  .q-option {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: var(--mono);
+    transition: border-color .15s, background .15s;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .q-option:hover:not(.disabled) { border-color: var(--blue); background: var(--blue-dim); }
+  .q-option.correct { border-color: var(--green); background: var(--green-dim); color: var(--green); }
+  .q-option.wrong   { border-color: var(--red); background: var(--red-dim); color: var(--red); }
+  .q-option.disabled { cursor: default; }
+  .q-option-key {
+    width: 22px; height: 22px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+    color: var(--muted);
+  }
+  .q-explanation {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    display: none;
+    line-height: 1.7;
+  }
+  .q-explanation.show { display: block; }
+  .q-explanation strong { color: var(--text); }
+  .q-explanation code { font-family: var(--mono); color: var(--green); background: var(--green-dim); padding: 1px 6px; border-radius: 3px; font-size: 12px; }
+
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+  .btn {
+    padding: 9px 20px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  .btn-primary {
+    background: var(--green);
+    color: #0d1117;
+    border-color: var(--green);
+  }
+  .btn-primary:hover { background: #2ea043; }
+  .btn-ghost { background: transparent; color: var(--text); }
+  .btn-ghost:hover { background: var(--bg3); }
+  .btn-danger { background: var(--red-dim); color: var(--red); border-color: #f8514955; }
+  .btn-danger:hover { background: #5a1f1e; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .score-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    display: none;
+  }
+  .score-card.show { display: block; }
+  .score-big {
+    font-family: var(--mono);
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .score-label { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .score-grade {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  /* ── TREE VIZ ── */
+  .tree {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 2;
+    color: var(--muted);
+    padding: 16px 20px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .tree .dir  { color: var(--blue); }
+  .tree .root { color: var(--yellow); font-weight: 700; }
+  .tree .user { color: var(--green); }
+  .tree .file { color: var(--text); }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+
+  /* ── FOOTER ── */
+  .footer-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    z-index: 100;
+  }
+  .footer-bar .dot { color: var(--green); }
+
+  /* ── TERMINAL DEMO ── */
+  .terminal {
+    background: #0a0e14;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+  .terminal-bar {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot-r { width: 12px; height: 12px; border-radius: 50%; background: #f85149; }
+  .dot-y { width: 12px; height: 12px; border-radius: 50%; background: #d29922; }
+  .dot-g { width: 12px; height: 12px; border-radius: 50%; background: #3fb950; }
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: -44px;
+  }
+  .terminal-body {
+    padding: 20px 24px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 2;
+  }
+  .t-prompt { color: var(--green); }
+  .t-cmd    { color: var(--text); }
+  .t-flag   { color: var(--yellow); }
+  .t-path   { color: var(--blue); }
+  .t-out    { color: var(--muted); }
+  .t-hi     { color: var(--cyan); }
+
+  /* scroll */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-icon">📂</div>
+  <div class="header-info">
+    <div class="header-badge">LINUX FOUNDATION · MODULE 3</div>
+    <h1>Work with Directories</h1>
+    <p>คำสั่ง Filesystem Navigation ที่ทุก Engineer ต้องแม่น | สำหรับ CCNA / Cloud / DevOps</p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar"><div class="progress-bar-fill" id="globalProgress" style="width:0%"></div></div>
+      <span class="progress-label" id="globalProgressLabel">0 / 5 หัวข้อ</span>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('overview')">📋 Overview</div>
+  <div class="tab" onclick="switchTab('commands')">⌨️ Commands</div>
+  <div class="tab" onclick="switchTab('paths')">🗺️ Paths</div>
+  <div class="tab" onclick="switchTab('cheatsheet')">📄 Cheat Sheet</div>
+  <div class="tab" onclick="switchTab('quiz')">🧪 Quiz (20Q)</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- ══════════════ OVERVIEW ══════════════ -->
+<div id="tab-overview" class="section active">
+  <div class="section-title">ภาพรวมของ Linux Directory System</div>
+  <div class="section-sub">ก่อนจะลงคำสั่ง ต้องเข้าใจโครงสร้างก่อน — ทำไม Linux ถึงต่างจาก Windows</div>
+
+  <div class="card">
+    <div class="card-title">🌳 Filesystem Tree — โครงสร้างแบบต้นไม้ของ Linux</div>
+    <div class="tree">
+<span class="root">/</span>  ← Root Directory (จุดสูงสุด, ไม่มีอะไรอยู่เหนือกว่านี้)<br>
+├── <span class="dir">bin</span>/       ← คำสั่งพื้นฐาน (ls, cd, mkdir, ...)<br>
+├── <span class="dir">etc</span>/       ← ไฟล์ config ของระบบ<br>
+├── <span class="dir">home</span>/      ← โฮมของ users ทั่วไป<br>
+│   ├── <span class="user">alice</span>/   ← home ของ alice: /home/alice<br>
+│   └── <span class="user">bob</span>/<br>
+├── <span class="dir">root</span>/      ← home ของ root user: /root  ⚠️ ต่างจาก /<br>
+├── <span class="dir">tmp</span>/       ← ไฟล์ชั่วคราว<br>
+├── <span class="dir">var</span>/       ← log, cache, spool<br>
+│   └── <span class="dir">log</span>/<br>
+│       └── <span class="file">syslog</span><br>
+└── <span class="dir">usr</span>/       ← โปรแกรมที่ติดตั้งเพิ่ม<br>
+    </div>
+    <div class="alert info">
+      <div class="alert-icon">💡</div>
+      <p>Linux ใช้ <strong>/</strong> (forward slash) เป็น separator — ต่างจาก Windows ที่ใช้ <strong>\</strong> (backslash) และทุกอย่างเริ่มจาก <strong>/</strong> ไม่มี C:\, D:\ แบบ Windows</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ root กี่ความหมาย? — จุดสับสนที่ Engineer ต้องรู้</div>
+    <table>
+      <tr>
+        <th>คำ</th><th>หมายถึง</th><th>ตัวอย่าง</th>
+      </tr>
+      <tr>
+        <td><code>/</code></td>
+        <td>Root Directory — ไดเรกทอรีสูงสุดของระบบ</td>
+        <td><code>ls /</code></td>
+      </tr>
+      <tr>
+        <td><code>root user</code></td>
+        <td>Superuser / Admin ของระบบ (มีสิทธิ์ทุกอย่าง)</td>
+        <td>login เป็น root</td>
+      </tr>
+      <tr>
+        <td><code>/root</code></td>
+        <td>Home directory ของ root user (ไม่ใช่ /)</td>
+        <td><code>cd /root</code></td>
+      </tr>
+    </table>
+    <div class="terminal">
+      <div class="terminal-bar"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><div class="terminal-title">bash — root@server</div></div>
+      <div class="terminal-body">
+        <span class="t-prompt">root@server:/root$</span> <span class="t-cmd">cd root</span>   <span class="t-out">← Relative: เข้าโฟลเดอร์ชื่อ "root" ที่อยู่ใน /root</span><br>
+        <span class="t-prompt">root@server:/root/root$</span> <span class="t-cmd">cd /root</span>  <span class="t-out">← Absolute: วาร์ปไปที่ /root เสมอ</span><br>
+        <span class="t-prompt">root@server:/root$</span> <span class="t-hi">_</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 ทำไม Engineer ต้องแม่นเรื่อง Directory</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px">
+        <div style="color:var(--cyan);font-family:var(--mono);font-size:12px;margin-bottom:8px">🔧 Network Engineer</div>
+        <div style="font-size:13px;color:var(--muted)">SSH เข้า router/switch แล้วต้องเดินหาไฟล์ config ใน /etc หรือ log ใน /var/log ได้ทันที</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px">
+        <div style="color:var(--yellow);font-family:var(--mono);font-size:12px;margin-bottom:8px">☁️ Cloud / DevOps</div>
+        <div style="font-size:13px;color:var(--muted)">Deploy app บน Linux server ต้องสร้าง/จัดการ directory structure ก่อน run script เสมอ</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ COMMANDS ══════════════ -->
+<div id="tab-commands" class="section">
+  <div class="section-title">คำสั่งจัดการ Directory</div>
+  <div class="section-sub">ครบทุกคำสั่ง พร้อม option และตัวอย่างการใช้งานจริง</div>
+
+  <!-- NAVIGATION -->
+  <div class="card">
+    <div class="card-title">🧭 Navigation Commands</div>
+    <div class="cmd-grid">
+      <div class="cmd-block">
+        <span class="copy-hint">click</span>
+        <span class="cmd-tag">pwd</span>
+        <div class="cmd-desc">แสดง path ของ directory ที่อยู่ตอนนี้</div>
+        <div class="cmd-args">Print Working Directory — ไม่มี option พิเศษ</div>
+      </div>
+      <div class="cmd-block">
+        <span class="cmd-tag">cd [path]</span>
+        <div class="cmd-desc">เปลี่ยน directory</div>
+        <div class="cmd-args">cd ~  |  cd ..  |  cd -  |  cd /abs/path</div>
+      </div>
+      <div class="cmd-block">
+        <span class="cmd-tag">ls</span>
+        <div class="cmd-desc">แสดงรายชื่อไฟล์ใน directory</div>
+        <div class="cmd-args">-l (long)  -a (hidden)  -lh (human size)  -R (recursive)</div>
+      </div>
+      <div class="cmd-block">
+        <span class="cmd-tag">ls -la</span>
+        <div class="cmd-desc">ดูทุกไฟล์รวม hidden file แบบละเอียด</div>
+        <div class="cmd-args">ใช้บ่อยมากใน production server</div>
+      </div>
+    </div>
+
+    <div class="terminal" style="margin-top:16px">
+      <div class="terminal-bar"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><div class="terminal-title">bash — navigation demo</div></div>
+      <div class="terminal-body">
+        <span class="t-prompt">$</span> <span class="t-cmd">pwd</span><br>
+        <span class="t-out">/home/alice</span><br>
+        <span class="t-prompt">$</span> <span class="t-cmd">cd <span class="t-path">/var/log</span></span>   <span class="t-out">← absolute path</span><br>
+        <span class="t-prompt">$</span> <span class="t-cmd">pwd</span><br>
+        <span class="t-out">/var/log</span><br>
+        <span class="t-prompt">$</span> <span class="t-cmd">cd <span class="t-path">../..</span></span>         <span class="t-out">← ถอยออก 2 ชั้น → ไปที่ /</span><br>
+        <span class="t-prompt">$</span> <span class="t-cmd">cd <span class="t-flag">-</span></span>            <span class="t-out">← กลับ directory ก่อนหน้า (/var/log)</span><br>
+        <span class="t-prompt">$</span> <span class="t-cmd">cd</span>              <span class="t-out">← กลับ home เสมอ (วิธีที่เร็วที่สุด)</span><br>
+      </div>
+    </div>
+
+    <div class="alert tip">
+      <div class="alert-icon">💡</div>
+      <p><strong>Pro tip:</strong> <code>cd -</code> ใช้สลับไป-มาระหว่าง 2 directory ที่ใช้งานอยู่ — มีประโยชน์มากตอน troubleshoot บน server</p>
+    </div>
+  </div>
+
+  <!-- CREATE -->
+  <div class="card">
+    <div class="card-title">🏗️ Create Directories — mkdir</div>
+
+    <div class="code">
+<span class="prompt">$</span> mkdir mydir                     <span class="comment"># สร้างโฟลเดอร์ทั่วไป</span><br>
+<span class="prompt">$</span> mkdir dir1 dir2 dir3            <span class="comment"># สร้างหลายอันพร้อมกัน</span><br>
+<span class="prompt">$</span> mkdir <span class="flag">-p</span> parent/child/grandchild <span class="comment"># สร้าง nested ลึกๆ ทีเดียว</span><br>
+<span class="prompt">$</span> mkdir testdir{1..10}           <span class="comment"># testdir1 ถึง testdir10</span><br>
+<span class="prompt">$</span> mkdir testdir{01..100}         <span class="comment"># Zero Padding → เรียง ls ได้สวย</span><br>
+<span class="prompt">$</span> mkdir hello{001..100}          <span class="comment"># hello001 ถึง hello100</span><br>
+    </div>
+
+    <div class="alert warn">
+      <div class="alert-icon">⚠️</div>
+      <p><strong>Zero Padding ทำไมถึงสำคัญ?</strong> ถ้า mkdir testdir{1..10} จะได้ testdir1, testdir10, testdir2... (ls เรียงตามตัวอักษร 1 ตามด้วย 10) — การใส่ 01..10 บังคับให้ตัวเลขมีหลักเท่ากัน ทำให้ระบบเรียงถูก</p>
+    </div>
+
+    <div class="terminal" style="margin-top:12px">
+      <div class="terminal-bar"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><div class="terminal-title">bash — brace expansion</div></div>
+      <div class="terminal-body">
+        <span class="t-prompt">$</span> <span class="t-cmd">mkdir <span class="t-flag">-p</span> <span class="t-path">/opt/app/config/nginx</span></span><br>
+        <span class="t-out">สร้างทุก directory ในเส้นทาง แม้ยังไม่มี</span><br>
+        <span class="t-prompt">$</span> <span class="t-cmd">mkdir server{01..05}</span><br>
+        <span class="t-prompt">$</span> <span class="t-cmd">ls</span><br>
+        <span class="t-hi">server01  server02  server03  server04  server05</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE -->
+  <div class="card">
+    <div class="card-title">🗑️ Delete Directories — rmdir &amp; rm</div>
+
+    <div class="code">
+<span class="prompt">$</span> rmdir emptydir              <span class="comment"># ลบได้เฉพาะโฟลเดอร์ว่าง</span><br>
+<span class="prompt">$</span> rmdir <span class="flag">-p</span> parent/child       <span class="comment"># ลบ child แล้วลบ parent ถ้าว่าง</span><br>
+<span class="prompt">$</span> rmdir /directory/<span class="flag">*</span>        <span class="comment"># ลบ subdirectory ว่างทุกอัน</span><br>
+<span class="prompt">$</span> rm myfile.txt               <span class="comment"># ลบไฟล์ (ใช้กับโฟลเดอร์ตรงๆ ไม่ได้)</span><br>
+<span class="prompt">$</span> rm <span class="flag">-rf</span> somedir             <span class="comment"># ลบโฟลเดอร์ + ทุกอย่างข้างใน ทันที</span><br>
+    </div>
+
+    <table>
+      <tr><th>Flag</th><th>ความหมาย</th><th>ใช้กับ</th></tr>
+      <tr><td><code>-r</code></td><td>Recursive — ลบลงไปทุกชั้น</td><td>rm</td></tr>
+      <tr><td><code>-f</code></td><td>Force — ไม่ถาม ไม่แจ้งเตือน</td><td>rm</td></tr>
+      <tr><td><code>-rf</code></td><td>รวมทั้งสอง → ลบทุกอย่างทันที</td><td>rm</td></tr>
+      <tr><td><code>-p</code></td><td>Remove parents — ลบ parent ด้วยถ้าว่าง</td><td>rmdir</td></tr>
+      <tr><td><code>-i</code></td><td>Interactive — ถามยืนยันทีละไฟล์ (ปลอดภัยกว่า)</td><td>rm</td></tr>
+    </table>
+
+    <div class="alert danger">
+      <div class="alert-icon">🚨</div>
+      <p><strong>NEVER RUN:</strong> <code style="color:var(--red);background:#3d1a19;padding:2px 6px;border-radius:3px">rm -rf /</code> — สั่งลบทุกอย่างบนระบบ ตั้งแต่รากฐาน ระบบพังทันที (Linux รุ่นใหม่จะบล็อกและเตือน แต่อย่าลอง)</p>
+    </div>
+
+    <div class="alert warn">
+      <div class="alert-icon">⚠️</div>
+      <p><strong>Best practice บน Production:</strong> ใช้ <code>rm -ri</code> แทน <code>rm -rf</code> เวลาไม่แน่ใจ — flag <code>-i</code> จะถามยืนยันทีละไฟล์ ป้องกัน human error</p>
+    </div>
+  </div>
+
+  <!-- HOME SHORTCUTS -->
+  <div class="card">
+    <div class="card-title">🏠 กลับ Home Directory — 4 วิธี</div>
+    <table>
+      <tr><th>คำสั่ง</th><th>วิธีการ</th><th>หมายเหตุ</th></tr>
+      <tr>
+        <td><code>cd</code></td>
+        <td>พิมพ์ cd เปล่า + Enter</td>
+        <td><span class="best">★ นิยมที่สุด — สั้นสุด</span></td>
+      </tr>
+      <tr>
+        <td><code>cd ~</code></td>
+        <td>Tilde shortcut</td>
+        <td>ใช้ต่อกันได้ เช่น <code>cd ~/app/tests</code></td>
+      </tr>
+      <tr>
+        <td><code>cd $HOME</code></td>
+        <td>Environment variable</td>
+        <td>ดูค่าได้ด้วย <code>echo $HOME</code></td>
+      </tr>
+      <tr>
+        <td><code>cd /home/username</code></td>
+        <td>Absolute path เต็ม</td>
+        <td>ใช้เวลา script หรือต้องการ explicit</td>
+      </tr>
+    </table>
+    <div class="alert tip">
+      <div class="alert-icon">💡</div>
+      <p>สามารถเชื่อม <code>~</code> และ <code>$HOME</code> ต่อ path ได้เลย เช่น <code>cd $HOME/app/tests</code> หรือ <code>cd ~/projects/web</code></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PATHS ══════════════ -->
+<div id="tab-paths" class="section">
+  <div class="section-title">Absolute vs Relative Path</div>
+  <div class="section-sub">แนวคิดนี้ใช้ทุกวันใน Linux, scripting, networking config — ต้องแม่น 100%</div>
+
+  <div class="path-compare">
+    <div class="path-box abs">
+      <h4>🔵 Absolute Path — เส้นทางสัมบูรณ์</h4>
+      <p>ขึ้นต้นด้วย <strong>/</strong> เสมอ<br>วาร์ปจากจุดสูงสุดของระบบไปเป้าหมายโดยตรง ไม่สนว่าตอนนี้อยู่ที่ไหน</p>
+      <div class="example">cd /var/log/nginx<br>cd /home/alice/projects<br>cat /etc/hosts</div>
+    </div>
+    <div class="path-box rel">
+      <h4>🟢 Relative Path — เส้นทางสัมพัทธ์</h4>
+      <p>ไม่ขึ้นต้นด้วย <strong>/</strong><br>นับจากตำแหน่งปัจจุบันที่ยืนอยู่ ต้องรู้ว่าตัวเองอยู่ที่ไหน</p>
+      <div class="example">cd config/nginx<br>cd ../../var<br>cd ../alice</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🧭 Special Path Symbols</div>
+    <table>
+      <tr><th>Symbol</th><th>หมายถึง</th><th>ตัวอย่าง</th></tr>
+      <tr>
+        <td><code>/</code></td>
+        <td>Root directory (จุดเริ่มต้นของ Absolute path)</td>
+        <td><code>cd /</code></td>
+      </tr>
+      <tr>
+        <td><code>.</code> (จุดเดียว)</td>
+        <td>Current directory (ที่ฉันอยู่ตอนนี้)</td>
+        <td><code>./script.sh</code></td>
+      </tr>
+      <tr>
+        <td><code>..</code> (สองจุด)</td>
+        <td>Parent directory (ชั้นนอก 1 ชั้น)</td>
+        <td><code>cd ..</code></td>
+      </tr>
+      <tr>
+        <td><code>~</code></td>
+        <td>Home directory ของ user ปัจจุบัน</td>
+        <td><code>cd ~/Desktop</code></td>
+      </tr>
+      <tr>
+        <td><code>-</code></td>
+        <td>Previous directory (ที่เพิ่งมา)</td>
+        <td><code>cd -</code></td>
+      </tr>
+      <tr>
+        <td><code>*</code></td>
+        <td>Wildcard — แทนทุกอย่าง</td>
+        <td><code>rmdir /tmp/*</code></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎮 Scenario Practice — อ่านให้เข้าใจ</div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-family:var(--mono);font-size:12px;color:var(--yellow);margin-bottom:10px">SCENARIO 1</div>
+      <p style="font-size:13px;margin-bottom:10px">คุณอยู่ที่ <code style="font-family:var(--mono);color:var(--green)">/home/user1</code> ต้องการไปที่ <code style="font-family:var(--mono);color:var(--green)">/home/user2</code></p>
+      <div class="code">
+<span class="comment"># Absolute (ทำได้จากทุกที่)</span><br>
+<span class="prompt">$</span> cd /home/user2<br><br>
+<span class="comment"># Relative (นับจากที่อยู่ปัจจุบัน)</span><br>
+<span class="prompt">$</span> cd ../user2    <span class="comment"># ถอยออก 1 ชั้น แล้วเข้า user2</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-family:var(--mono);font-size:12px;color:var(--yellow);margin-bottom:10px">SCENARIO 2</div>
+      <p style="font-size:13px;margin-bottom:10px">คุณอยู่ที่ <code style="font-family:var(--mono);color:var(--green)">/mydir</code> ต้องการลบ somedir (ข้างใน) พร้อมเนื้อหาทั้งหมด โดยไม่ใช้ absolute path</p>
+      <div class="code">
+<span class="prompt">$</span> rm <span class="flag">-rf</span> somedir    <span class="comment"># relative path — พิมพ์ชื่อตรงๆ</span>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family:var(--mono);font-size:12px;color:var(--yellow);margin-bottom:10px">SCENARIO 3</div>
+      <p style="font-size:13px;margin-bottom:10px">ต้องการไปที่ home แล้วต่อไปที่ app/tests ในทีเดียว</p>
+      <div class="code">
+<span class="prompt">$</span> cd $HOME/app/tests<br>
+<span class="comment"># หรือ</span><br>
+<span class="prompt">$</span> cd ~/app/tests
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CHEAT SHEET ══════════════ -->
+<div id="tab-cheatsheet" class="section">
+  <div class="section-title">📄 Cheat Sheet — พกติดตัว</div>
+  <div class="section-sub">สรุปทุกคำสั่ง + option ในหน้าเดียว พิมพ์ออกมาแปะไว้ได้เลย</div>
+
+  <div class="card">
+    <div class="cheat-table">
+
+      <div class="cat-label">📍 CHECK POSITION</div>
+      <div class="cheat-row"><div class="cheat-cmd">pwd</div><div class="cheat-desc">แสดง directory ปัจจุบัน (Print Working Directory)</div><div class="cheat-flag">—</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">ls</div><div class="cheat-desc">แสดงรายชื่อไฟล์ใน directory ปัจจุบัน</div><div class="cheat-flag">—</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">ls -l</div><div class="cheat-desc">แสดงละเอียด (permissions, size, date)</div><div class="cheat-flag">-l long</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">ls -a</div><div class="cheat-desc">แสดง hidden files (ขึ้นต้นด้วย .)</div><div class="cheat-flag">-a all</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">ls -lh</div><div class="cheat-desc">ขนาดไฟล์แบบ human-readable (KB, MB)</div><div class="cheat-flag">-h human</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">ls -la</div><div class="cheat-desc">รวม long + hidden — ใช้บ่อยที่สุดบน server</div><div class="cheat-flag">—</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">ls -R</div><div class="cheat-desc">แสดงทุกไฟล์ recursive ลงไปทุก subdirectory</div><div class="cheat-flag">-R recursive</div></div>
+
+      <div class="cat-label">🧭 NAVIGATION</div>
+      <div class="cheat-row"><div class="cheat-cmd">cd [path]</div><div class="cheat-desc">เปลี่ยนไปยัง directory ที่ระบุ</div><div class="cheat-flag">—</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">cd</div><div class="cheat-desc">กลับ Home directory (เร็วที่สุด)</div><div class="cheat-flag">★ นิยม</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">cd ~</div><div class="cheat-desc">กลับ Home ด้วย tilde</div><div class="cheat-flag">~</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">cd $HOME</div><div class="cheat-desc">กลับ Home ด้วย env variable</div><div class="cheat-flag">$HOME</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">cd ..</div><div class="cheat-desc">ถอยออก 1 ชั้น (parent directory)</div><div class="cheat-flag">..</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">cd ../..</div><div class="cheat-desc">ถอยออก 2 ชั้น</div><div class="cheat-flag">—</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">cd -</div><div class="cheat-desc">กลับ directory ก่อนหน้า (toggle)</div><div class="cheat-flag">-</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">cd /abs/path</div><div class="cheat-desc">ไปยัง absolute path โดยตรง</div><div class="cheat-flag">/ นำหน้า</div></div>
+
+      <div class="cat-label">🏗️ CREATE</div>
+      <div class="cheat-row"><div class="cheat-cmd">mkdir dir</div><div class="cheat-desc">สร้าง directory ชั้นเดียว</div><div class="cheat-flag">—</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">mkdir d1 d2 d3</div><div class="cheat-desc">สร้างหลาย directory พร้อมกัน</div><div class="cheat-flag">—</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">mkdir -p a/b/c</div><div class="cheat-desc">สร้าง nested directory ทีเดียว (สร้าง parent ให้ด้วย)</div><div class="cheat-flag">-p parents</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">mkdir dir{1..10}</div><div class="cheat-desc">สร้าง dir1 ถึง dir10 ด้วย brace expansion</div><div class="cheat-flag">{}</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">mkdir dir{01..100}</div><div class="cheat-desc">Zero-padded → เรียง ls ถูกต้อง</div><div class="cheat-flag">0 padding</div></div>
+
+      <div class="cat-label">🗑️ DELETE</div>
+      <div class="cheat-row"><div class="cheat-cmd">rmdir dir</div><div class="cheat-desc">ลบ directory ว่างเท่านั้น</div><div class="cheat-flag">—</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">rmdir -p a/b</div><div class="cheat-desc">ลบ b แล้วลบ a ถ้าว่าง</div><div class="cheat-flag">-p parents</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">rmdir dir/*</div><div class="cheat-desc">ลบทุก subdirectory ว่างใน dir</div><div class="cheat-flag">*</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">rm file</div><div class="cheat-desc">ลบไฟล์ (ใช้กับ directory ตรงๆ ไม่ได้)</div><div class="cheat-flag">—</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">rm -r dir</div><div class="cheat-desc">ลบ directory + ข้างใน recursive</div><div class="cheat-flag">-r recursive</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">rm -f file</div><div class="cheat-desc">Force ลบ ไม่ถาม</div><div class="cheat-flag">-f force</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">rm -rf dir</div><div class="cheat-desc">ลบทุกอย่างในทันที ⚠️ ระวัง</div><div class="cheat-flag">★ อันตราย</div></div>
+      <div class="cheat-row"><div class="cheat-cmd">rm -ri dir</div><div class="cheat-desc">ลบแบบถามยืนยันทีละไฟล์ (ปลอดภัย)</div><div class="cheat-flag">-i interactive</div></div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔑 Key Concepts Summary</div>
+    <table>
+      <tr><th>Concept</th><th>คำอธิบาย</th><th>จำไว้ว่า</th></tr>
+      <tr>
+        <td><code>/</code> (Root)</td>
+        <td>จุดสูงสุดของ Linux filesystem</td>
+        <td>ทุก path เริ่มจากนี่</td>
+      </tr>
+      <tr>
+        <td>Absolute Path</td>
+        <td>ขึ้นต้นด้วย <code>/</code> เสมอ</td>
+        <td>ใช้ได้จากทุกที่ ไม่ขึ้นกับ cwd</td>
+      </tr>
+      <tr>
+        <td>Relative Path</td>
+        <td>นับจาก current directory</td>
+        <td>ไม่มี <code>/</code> นำหน้า</td>
+      </tr>
+      <tr>
+        <td>Zero Padding</td>
+        <td>mkdir dir{01..10} แทน {1..10}</td>
+        <td>บังคับให้ ls เรียงถูก</td>
+      </tr>
+      <tr>
+        <td>-p flag</td>
+        <td>mkdir: สร้าง parent ให้ด้วย / rmdir: ลบ parent ด้วย</td>
+        <td>ใช้กับทั้ง mkdir และ rmdir</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════ QUIZ ══════════════ -->
+<div id="tab-quiz" class="section">
+  <div class="quiz-header">
+    <div>
+      <div class="section-title">🧪 Quiz — ทดสอบความพร้อม</div>
+      <div class="section-sub">20 ข้อ ครอบคลุมเนื้อหาทั้งหมด — ระดับ CCNA / Linux Engineer</div>
+    </div>
+    <div class="quiz-status">
+      <span id="qStatusText">ข้อ 1 / 20</span><br>
+      <span id="qScore" style="color:var(--green)">✓ 0</span>
+      <span style="color:var(--muted)"> / </span>
+      <span id="qWrong" style="color:var(--red)">✗ 0</span>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-question active" id="q1">
+    <div class="q-num">QUESTION 01 / 20 — Navigation</div>
+    <div class="q-text">คำสั่งใดใช้ตรวจสอบว่าตอนนี้เรายืนอยู่ที่ directory ไหน?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','A',1)"><div class="q-option-key">A</div> pwd</div>
+      <div class="q-option" onclick="answer(this,'B','A',1)"><div class="q-option-key">B</div> ls</div>
+      <div class="q-option" onclick="answer(this,'C','A',1)"><div class="q-option-key">C</div> cd</div>
+      <div class="q-option" onclick="answer(this,'D','A',1)"><div class="q-option-key">D</div> dir</div>
+    </div>
+    <div class="q-explanation" id="exp1"><strong>pwd</strong> = Print Working Directory — พิมพ์ path เต็มของ directory ที่อยู่ตอนนี้ เช่น <code>/home/alice</code>. <code>ls</code> แสดงไฟล์ใน directory, <code>cd</code> เปลี่ยน directory, <code>dir</code> ไม่ใช่คำสั่งมาตรฐานใน Linux</div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-question" id="q2">
+    <div class="q-num">QUESTION 02 / 20 — Absolute Path</div>
+    <div class="q-text">คุณอยู่ที่ /home/user1 ต้องการไปที่ /home/user2 โดยใช้ Absolute Path — คำสั่งที่ถูกต้องคือ?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','B',2)"><div class="q-option-key">A</div> cd ../user2</div>
+      <div class="q-option" onclick="answer(this,'B','B',2)"><div class="q-option-key">B</div> cd /home/user2</div>
+      <div class="q-option" onclick="answer(this,'C','B',2)"><div class="q-option-key">C</div> cd home/user2</div>
+      <div class="q-option" onclick="answer(this,'D','B',2)"><div class="q-option-key">D</div> cd user2</div>
+    </div>
+    <div class="q-explanation" id="exp2"><strong>cd /home/user2</strong> คือ Absolute Path เพราะขึ้นต้นด้วย <code>/</code> — ทำงานได้จากทุกที่. A คือ Relative Path (ถูก แต่ไม่ใช่ absolute), C และ D ไม่มี / นำหน้า = Relative path เหมือนกัน</div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-question" id="q3">
+    <div class="q-num">QUESTION 03 / 20 — Tilde Symbol</div>
+    <div class="q-text">เครื่องหมาย ~ (Tilde) ใน Linux หมายถึงอะไร?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','B',3)"><div class="q-option-key">A</div> Root directory (/)</div>
+      <div class="q-option" onclick="answer(this,'B','B',3)"><div class="q-option-key">B</div> Home directory ของ user ปัจจุบัน</div>
+      <div class="q-option" onclick="answer(this,'C','B',3)"><div class="q-option-key">C</div> Temp directory (/tmp)</div>
+      <div class="q-option" onclick="answer(this,'D','B',3)"><div class="q-option-key">D</div> Previous directory</div>
+    </div>
+    <div class="q-explanation" id="exp3"><strong>~</strong> แทน Home directory ของ user ที่ล็อกอินอยู่. ถ้า login เป็น alice → <code>~</code> = <code>/home/alice</code>. ถ้า login เป็น root → <code>~</code> = <code>/root</code>. Previous directory ใช้ <code>-</code> แทน</div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-question" id="q4">
+    <div class="q-num">QUESTION 04 / 20 — Zero Padding</div>
+    <div class="q-text">ต้องการสร้าง directory 100 อัน ชื่อ hello001 ถึง hello100 คำสั่งที่ถูกต้องคือ?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','C',4)"><div class="q-option-key">A</div> mkdir hello{1..100}</div>
+      <div class="q-option" onclick="answer(this,'B','C',4)"><div class="q-option-key">B</div> mkdir hello[001..100]</div>
+      <div class="q-option" onclick="answer(this,'C','C',4)"><div class="q-option-key">C</div> mkdir hello{001..100}</div>
+      <div class="q-option" onclick="answer(this,'D','C',4)"><div class="q-option-key">D</div> mkdir hello001-hello100</div>
+    </div>
+    <div class="q-explanation" id="exp4"><strong>mkdir hello{001..100}</strong> ใช้ brace expansion พร้อม zero padding 3 หลัก → ได้ hello001, hello002, ..., hello100 และ <code>ls</code> จะเรียงถูกต้อง. A จะได้ hello1-hello100 (เรียง ls ไม่สวย), B ใช้ [] ผิด syntax, D ไม่ใช่ syntax ที่ใช้งานได้</div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-question" id="q5">
+    <div class="q-num">QUESTION 05 / 20 — Home Navigation</div>
+    <div class="q-text">คำสั่งใดบ้างที่ใช้กลับ Home directory ได้? (เลือกที่ถูกต้องที่สุดที่มีหลายตัวเลือก)</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','C',5)"><div class="q-option-key">A</div> cd / และ cd root</div>
+      <div class="q-option" onclick="answer(this,'B','C',5)"><div class="q-option-key">B</div> cd $HOME และ cd /</div>
+      <div class="q-option" onclick="answer(this,'C','C',5)"><div class="q-option-key">C</div> cd, cd ~, และ cd $HOME</div>
+      <div class="q-option" onclick="answer(this,'D','C',5)"><div class="q-option-key">D</div> cd .. และ cd -</div>
+    </div>
+    <div class="q-explanation" id="exp5">วิธีกลับ Home ที่ถูกต้องคือ: <code>cd</code> (เปล่า), <code>cd ~</code>, <code>cd $HOME</code>, และ <code>cd /home/username</code>. <code>cd /</code> ไปที่ Root ไม่ใช่ Home. <code>cd ..</code> ถอยออกแค่ 1 ชั้น. <code>cd -</code> กลับ directory ก่อนหน้า</div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-question" id="q6">
+    <div class="q-num">QUESTION 06 / 20 — Combined Path</div>
+    <div class="q-text">ต้องการไปที่ Home directory แล้วต่อเข้า app/tests ในคำสั่งเดียว โดยใช้ $HOME คำสั่งที่ถูกต้องคือ?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','B',6)"><div class="q-option-key">A</div> cd $HOME app/tests</div>
+      <div class="q-option" onclick="answer(this,'B','B',6)"><div class="q-option-key">B</div> cd $HOME/app/tests</div>
+      <div class="q-option" onclick="answer(this,'C','B',6)"><div class="q-option-key">C</div> cd $HOME + app/tests</div>
+      <div class="q-option" onclick="answer(this,'D','B',6)"><div class="q-option-key">D</div> cd ~/app tests</div>
+    </div>
+    <div class="q-explanation" id="exp6"><code>cd $HOME/app/tests</code> ใช้ <code>/</code> ต่อ path ตามปกติ เทียบเท่ากับ <code>cd ~/app/tests</code>. A มีช่องว่างคั่น (cd จะรับแค่ argument แรก), C และ D ผิด syntax</div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-question" id="q7">
+    <div class="q-num">QUESTION 07 / 20 — mkdir -p</div>
+    <div class="q-text">ต้องการสร้าง directory structure: /opt/myapp/config/ssl — ในทีเดียว คำสั่งที่ถูกต้องคือ?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','B',7)"><div class="q-option-key">A</div> mkdir /opt/myapp/config/ssl</div>
+      <div class="q-option" onclick="answer(this,'B','B',7)"><div class="q-option-key">B</div> mkdir -p /opt/myapp/config/ssl</div>
+      <div class="q-option" onclick="answer(this,'C','B',7)"><div class="q-option-key">C</div> mkdir -r /opt/myapp/config/ssl</div>
+      <div class="q-option" onclick="answer(this,'D','B',7)"><div class="q-option-key">D</div> mkdir --all /opt/myapp/config/ssl</div>
+    </div>
+    <div class="q-explanation" id="exp7"><code>mkdir -p</code> (parents) สร้าง parent directories ที่ยังไม่มีให้อัตโนมัติ. A จะ error ถ้า /opt/myapp ไม่มีอยู่. <code>-r</code> ไม่ใช่ option ของ mkdir. <code>--all</code> ไม่มีใน mkdir</div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-question" id="q8">
+    <div class="q-num">QUESTION 08 / 20 — rmdir Limitation</div>
+    <div class="q-text">ข้อใดคือข้อจำกัดของคำสั่ง rmdir?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','C',8)"><div class="q-option-key">A</div> ลบได้แค่ directory ชั้นเดียว ไม่สามารถลบ path ยาวๆ ได้</div>
+      <div class="q-option" onclick="answer(this,'B','C',8)"><div class="q-option-key">B</div> ต้องใช้ sudo เท่านั้น</div>
+      <div class="q-option" onclick="answer(this,'C','C',8)"><div class="q-option-key">C</div> ลบได้เฉพาะ directory ที่ว่างเปล่าเท่านั้น</div>
+      <div class="q-option" onclick="answer(this,'D','C',8)"><div class="q-option-key">D</div> ลบไฟล์ไม่ได้ ต้องใช้ rm ก่อนเสมอ</div>
+    </div>
+    <div class="q-explanation" id="exp8"><code>rmdir</code> จะ error ถ้า directory มีไฟล์หรือ subdirectory ข้างใน — ต้องเป็น directory ว่างเท่านั้น. ถ้าต้องการลบพร้อมเนื้อหาให้ใช้ <code>rm -rf</code> แทน</div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-question" id="q9">
+    <div class="q-num">QUESTION 09 / 20 — rm -rf</div>
+    <div class="q-text">คุณอยู่ที่ /mydir และต้องการลบ somedir พร้อมทุกอย่างข้างใน โดยไม่ต้องยืนยัน และไม่ใช้ absolute path</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','C',9)"><div class="q-option-key">A</div> rm -rf /mydir/somedir</div>
+      <div class="q-option" onclick="answer(this,'B','C',9)"><div class="q-option-key">B</div> rmdir somedir</div>
+      <div class="q-option" onclick="answer(this,'C','C',9)"><div class="q-option-key">C</div> rm -rf somedir</div>
+      <div class="q-option" onclick="answer(this,'D','C',9)"><div class="q-option-key">D</div> rm -r somedir</div>
+    </div>
+    <div class="q-explanation" id="exp9"><code>rm -rf somedir</code> — <code>-r</code> ลบ recursive, <code>-f</code> force ไม่ถาม, และ <code>somedir</code> คือ relative path (ไม่มี / นำหน้า). A ใช้ absolute path (ผิดเงื่อนไข), B ใช้ rmdir ซึ่งลบได้แค่ directory ว่าง, D ขาด -f อาจถามยืนยัน</div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-question" id="q10">
+    <div class="q-num">QUESTION 10 / 20 — rmdir Wildcard</div>
+    <div class="q-text">ต้องการลบทุก subdirectory (ที่ว่างเปล่า) ใน /directory โดยไม่ใช้คำสั่ง rm คำสั่งที่ถูกต้องคือ?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','C',10)"><div class="q-option-key">A</div> rmdir -rf /directory</div>
+      <div class="q-option" onclick="answer(this,'B','C',10)"><div class="q-option-key">B</div> rmdir /directory</div>
+      <div class="q-option" onclick="answer(this,'C','C',10)"><div class="q-option-key">C</div> rmdir /directory/*</div>
+      <div class="q-option" onclick="answer(this,'D','C',10)"><div class="q-option-key">D</div> rmdir -a /directory</div>
+    </div>
+    <div class="q-explanation" id="exp10"><code>rmdir /directory/*</code> ใช้ wildcard <code>*</code> แทน "ทุกอย่างใน /directory" — rmdir จะลบทุก subdirectory ว่างที่พบ. A: rmdir ไม่มี flag -rf. B: จะลบตัว /directory เอง (ไม่ใช่ subdirectory). D: ไม่มี -a flag ใน rmdir</div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="quiz-question" id="q11">
+    <div class="q-num">QUESTION 11 / 20 — Relative Path</div>
+    <div class="q-text">คุณอยู่ที่ /home/alice/projects คำสั่งใดจะพาคุณไปที่ /home/alice/documents โดยใช้ relative path?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','B',11)"><div class="q-option-key">A</div> cd /home/alice/documents</div>
+      <div class="q-option" onclick="answer(this,'B','B',11)"><div class="q-option-key">B</div> cd ../documents</div>
+      <div class="q-option" onclick="answer(this,'C','B',11)"><div class="q-option-key">C</div> cd documents</div>
+      <div class="q-option" onclick="answer(this,'D','B',11)"><div class="q-option-key">D</div> cd home/alice/documents</div>
+    </div>
+    <div class="q-explanation" id="exp11">จาก /home/alice/projects: <code>..</code> ถอยไปที่ /home/alice แล้ว <code>documents</code> เข้าไปใน documents → รวมได้ <code>../documents</code>. A คือ Absolute path. C จะหา documents ใน /home/alice/projects (ไม่มี). D ขาด / นำหน้า แต่นับจากที่อยู่ปัจจุบัน ซึ่งผิด</div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="quiz-question" id="q12">
+    <div class="q-num">QUESTION 12 / 20 — cd -</div>
+    <div class="q-text">คุณทำงานสลับไป-มาระหว่าง /etc/nginx และ /var/log/nginx คำสั่งใดที่สะดวกที่สุดในการสลับระหว่างสอง directory นี้?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','D',12)"><div class="q-option-key">A</div> cd ~</div>
+      <div class="q-option" onclick="answer(this,'B','D',12)"><div class="q-option-key">B</div> cd ..</div>
+      <div class="q-option" onclick="answer(this,'C','D',12)"><div class="q-option-key">C</div> pwd</div>
+      <div class="q-option" onclick="answer(this,'D','D',12)"><div class="q-option-key">D</div> cd -</div>
+    </div>
+    <div class="q-explanation" id="exp12"><code>cd -</code> สลับไปยัง directory ก่อนหน้า (OLDPWD) — เหมือนกด back ใน browser. เหมาะมากเวลา toggle ระหว่าง 2 directory. ใน production server ใช้บ่อยมากตอน troubleshoot</div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="quiz-question" id="q13">
+    <div class="q-num">QUESTION 13 / 20 — Root vs /root</div>
+    <div class="q-text">คุณอยู่ใน /root แล้วพิมพ์ <code>cd root</code> (ไม่มี / นำหน้า) จะเกิดอะไรขึ้น?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','C',13)"><div class="q-option-key">A</div> ไปที่ Root directory (/)</div>
+      <div class="q-option" onclick="answer(this,'B','C',13)"><div class="q-option-key">B</div> อยู่ที่เดิม (/root) ไม่มีอะไรเกิดขึ้น</div>
+      <div class="q-option" onclick="answer(this,'C','C',13)"><div class="q-option-key">C</div> เข้า subdirectory ชื่อ root ที่อยู่ใน /root (ถ้ามี)</div>
+      <div class="q-option" onclick="answer(this,'D','C',13)"><div class="q-option-key">D</div> ไปที่ /root เหมือนเดิม เพราะ root = /root</div>
+    </div>
+    <div class="q-explanation" id="exp13"><code>cd root</code> จาก /root = Relative path → Linux จะมองหา subdirectory ชื่อ "root" ภายใน /root คือ /root/root. ถ้าไม่มีจะ error. ต้องการไปที่ /root ต้องใช้ <code>cd /root</code> (absolute) หรือ <code>cd</code> (home shortcut)</div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="quiz-question" id="q14">
+    <div class="q-num">QUESTION 14 / 20 — ls Options</div>
+    <div class="q-text">ต้องการดูทุกไฟล์ใน /etc รวมถึง hidden files แบบละเอียด (permissions, size, date) คำสั่งที่ถูกต้องคือ?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','C',14)"><div class="q-option-key">A</div> ls -l /etc</div>
+      <div class="q-option" onclick="answer(this,'B','C',14)"><div class="q-option-key">B</div> ls -a /etc</div>
+      <div class="q-option" onclick="answer(this,'C','C',14)"><div class="q-option-key">C</div> ls -la /etc</div>
+      <div class="q-option" onclick="answer(this,'D','C',14)"><div class="q-option-key">D</div> ls -r /etc</div>
+    </div>
+    <div class="q-explanation" id="exp14"><code>ls -la</code> รวม <code>-l</code> (long format: permissions, owner, size, date) และ <code>-a</code> (all: รวม hidden files ที่ขึ้นต้นด้วย .). A แสดงละเอียดแต่ไม่มี hidden, B แสดง hidden แต่ไม่ละเอียด, D ใช้ -r แสดง recursive (คนละเรื่อง)</div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="quiz-question" id="q15">
+    <div class="q-num">QUESTION 15 / 20 — Brace Expansion</div>
+    <div class="q-text">ผลลัพธ์ของคำสั่ง <code>mkdir server{01..05}</code> คือ directory ชื่ออะไรบ้าง?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','B',15)"><div class="q-option-key">A</div> server1, server2, server3, server4, server5</div>
+      <div class="q-option" onclick="answer(this,'B','B',15)"><div class="q-option-key">B</div> server01, server02, server03, server04, server05</div>
+      <div class="q-option" onclick="answer(this,'C','B',15)"><div class="q-option-key">C</div> server{01}, server{02}, server{03}, server{04}, server{05}</div>
+      <div class="q-option" onclick="answer(this,'D','B',15)"><div class="q-option-key">D</div> server0, server1, server2, server3, server4, server5</div>
+    </div>
+    <div class="q-explanation" id="exp15">Brace expansion <code>{01..05}</code> สร้างตัวเลข 2 หลัก: 01, 02, 03, 04, 05 → ได้ server01 ถึง server05. ใส่ 0 นำหน้า (zero padding) เพื่อให้ ls เรียงตัวเลขถูกต้อง</div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="quiz-question" id="q16">
+    <div class="q-num">QUESTION 16 / 20 — Safety</div>
+    <div class="q-text">บน production server คุณต้องการลบ directory แต่ไม่แน่ใจ 100% ว่าข้างในมีอะไร — option ใดปลอดภัยที่สุด?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','C',16)"><div class="q-option-key">A</div> rm -rf [directory]</div>
+      <div class="q-option" onclick="answer(this,'B','C',16)"><div class="q-option-key">B</div> rm -r [directory]</div>
+      <div class="q-option" onclick="answer(this,'C','C',16)"><div class="q-option-key">C</div> rm -ri [directory]</div>
+      <div class="q-option" onclick="answer(this,'D','C',16)"><div class="q-option-key">D</div> rmdir [directory]</div>
+    </div>
+    <div class="q-explanation" id="exp16"><code>rm -ri</code> — <code>-i</code> (interactive) จะถามยืนยันก่อนลบทุกไฟล์ ป้องกัน human error บน production. <code>-rf</code> อันตรายที่สุดเพราะลบทันที. <code>-r</code> อาจถามบ้างแต่ไม่สม่ำเสมอ. rmdir ใช้ได้แค่กับ directory ว่าง</div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="quiz-question" id="q17">
+    <div class="q-num">QUESTION 17 / 20 — echo $HOME</div>
+    <div class="q-text">คำสั่ง <code>echo $HOME</code> ทำอะไร?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','B',17)"><div class="q-option-key">A</div> เปลี่ยน directory ไปที่ Home</div>
+      <div class="q-option" onclick="answer(this,'B','B',17)"><div class="q-option-key">B</div> แสดง absolute path ของ Home directory</div>
+      <div class="q-option" onclick="answer(this,'C','B',17)"><div class="q-option-key">C</div> แสดงชื่อ user ปัจจุบัน</div>
+      <div class="q-option" onclick="answer(this,'D','B',17)"><div class="q-option-key">D</div> สร้าง directory ชื่อ HOME</div>
+    </div>
+    <div class="q-explanation" id="exp17"><code>echo $HOME</code> พิมพ์ค่าของ environment variable HOME เช่น <code>/home/alice</code> หรือ <code>/root</code> — ใช้ตรวจสอบว่า home directory อยู่ที่ไหนก่อน cd. <code>echo $USER</code> แสดงชื่อ user</div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="quiz-question" id="q18">
+    <div class="q-num">QUESTION 18 / 20 — Path separator</div>
+    <div class="q-text">ใน Linux ใช้เครื่องหมายอะไรคั่น directory ใน path?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','A',18)"><div class="q-option-key">A</div> / (forward slash)</div>
+      <div class="q-option" onclick="answer(this,'B','A',18)"><div class="q-option-key">B</div> \ (backslash)</div>
+      <div class="q-option" onclick="answer(this,'C','A',18)"><div class="q-option-key">C</div> : (colon)</div>
+      <div class="q-option" onclick="answer(this,'D','A',18)"><div class="q-option-key">D</div> | (pipe)</div>
+    </div>
+    <div class="q-explanation" id="exp18">Linux ใช้ <code>/</code> (forward slash) — เช่น <code>/home/alice/projects</code>. Windows ใช้ <code>\</code> (backslash) — เช่น <code>C:\Users\Alice\Projects</code>. Colon <code>:</code> ใช้ใน PATH variable (คั่น paths หลายอัน)</div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="quiz-question" id="q19">
+    <div class="q-num">QUESTION 19 / 20 — Scenario</div>
+    <div class="q-text">คุณอยู่ที่ /var/log/nginx ต้องการไปที่ /var/cache คำสั่ง relative path ที่ถูกต้องคือ?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','C',19)"><div class="q-option-key">A</div> cd ../cache</div>
+      <div class="q-option" onclick="answer(this,'B','C',19)"><div class="q-option-key">B</div> cd cache</div>
+      <div class="q-option" onclick="answer(this,'C','C',19)"><div class="q-option-key">C</div> cd ../../cache</div>
+      <div class="q-option" onclick="answer(this,'D','C',19)"><div class="q-option-key">D</div> cd /var/cache</div>
+    </div>
+    <div class="q-explanation" id="exp19">จาก /var/log/nginx: <code>..</code> = /var/log, <code>../..</code> = /var แล้ว <code>/cache</code> เข้า cache → <code>../../cache</code>. A <code>../cache</code> จะพาไปที่ /var/log/cache (ไม่มี). D คือ absolute path (ผิดเงื่อนไข)</div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="quiz-question" id="q20">
+    <div class="q-num">QUESTION 20 / 20 — Real World</div>
+    <div class="q-text">Engineer SSH เข้า server และต้องการดู nginx error log ซึ่งอยู่ที่ /var/log/nginx/error.log ตอนนี้อยู่ที่ /home/admin คำสั่งรวดเดียวที่เร็วที่สุดคือ?</div>
+    <div class="q-options">
+      <div class="q-option" onclick="answer(this,'A','B',20)"><div class="q-option-key">A</div> cd /var/log/nginx แล้ว cat error.log</div>
+      <div class="q-option" onclick="answer(this,'B','B',20)"><div class="q-option-key">B</div> cat /var/log/nginx/error.log</div>
+      <div class="q-option" onclick="answer(this,'C','B',20)"><div class="q-option-key">C</div> cd ../../var/log/nginx/error.log</div>
+      <div class="q-option" onclick="answer(this,'D','B',20)"><div class="q-option-key">D</div> ls /var/log/nginx/error.log</div>
+    </div>
+    <div class="q-explanation" id="exp20"><code>cat /var/log/nginx/error.log</code> ใช้ absolute path โดยตรง — ไม่ต้อง cd ก่อน เร็วที่สุด. A ถูกแต่ต้องพิมพ์ 2 คำสั่ง. C ผิด (error.log เป็นไฟล์ไม่ใช่ directory). D ใช้ ls แค่แสดงชื่อไม่ได้อ่านเนื้อหา</div>
+  </div>
+
+  <!-- SCORE CARD -->
+  <div class="score-card" id="scoreCard">
+    <div class="score-big" id="scoreBig">0/20</div>
+    <div class="score-label">คะแนนรวม</div>
+    <div class="score-grade" id="scoreGrade"></div>
+    <p id="scoreMsg" style="font-size:14px;color:var(--muted);margin-bottom:28px"></p>
+    <button class="btn btn-primary" onclick="resetQuiz()">🔄 เริ่มใหม่</button>
+  </div>
+
+  <!-- NAV -->
+  <div class="quiz-nav">
+    <button class="btn btn-ghost" id="btnPrev" onclick="prevQ()" disabled>← ก่อนหน้า</button>
+    <span id="qDots" style="font-family:var(--mono);font-size:11px;color:var(--muted)"></span>
+    <button class="btn btn-primary" id="btnNext" onclick="nextQ()">ถัดไป →</button>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer-bar">
+  <span><span class="dot">●</span> Linux Foundation 3 — Work with Directories</span>
+  <span id="footerScore">Quiz: 0/20</span>
+</div>
+
+<script>
+// ── STATE ──
+let currentTab = 'overview';
+let tabVisited = { overview:false, commands:false, paths:false, cheatsheet:false, quiz:false };
+let currentQ = 1;
+let totalQ = 20;
+let score = 0;
+let wrong = 0;
+let answered = {};
+
+// ── TABS ──
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const ids = ['overview','commands','paths','cheatsheet','quiz'];
+    t.classList.toggle('active', ids[i] === id);
+  });
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  currentTab = id;
+  tabVisited[id] = true;
+  updateProgress();
+}
+
+function updateProgress() {
+  const visited = Object.values(tabVisited).filter(Boolean).length;
+  document.getElementById('globalProgress').style.width = (visited/5*100)+'%';
+  document.getElementById('globalProgressLabel').textContent = visited+' / 5 หัวข้อ';
+}
+
+// ── QUIZ ──
+function answer(el, chosen, correct, qNum) {
+  if (answered[qNum]) return;
+  answered[qNum] = true;
+
+  const opts = el.parentElement.querySelectorAll('.q-option');
+  opts.forEach(o => o.classList.add('disabled'));
+
+  if (chosen === correct) {
+    el.classList.add('correct');
+    score++;
+  } else {
+    el.classList.add('wrong');
+    wrong++;
+    // show correct
+    opts.forEach(o => {
+      if (o.onclick && o.onclick.toString().includes("'"+correct+"'")) {
+        o.classList.add('correct');
+      }
+    });
+  }
+
+  document.getElementById('exp'+qNum).classList.add('show');
+  updateScoreDisplay();
+}
+
+function updateScoreDisplay() {
+  document.getElementById('qScore').textContent = '✓ '+score;
+  document.getElementById('qWrong').textContent = '✗ '+wrong;
+  document.getElementById('footerScore').textContent = 'Quiz: '+score+'/'+totalQ;
+}
+
+function showQ(n) {
+  document.querySelectorAll('.quiz-question').forEach(q => q.classList.remove('active'));
+  const card = document.getElementById('q'+n);
+  if (card) card.classList.add('active');
+  document.getElementById('qStatusText').textContent = 'ข้อ '+n+' / '+totalQ;
+  document.getElementById('btnPrev').disabled = n <= 1;
+
+  const allAnswered = Object.keys(answered).length === totalQ;
+  if (n > totalQ) {
+    showScore();
+    return;
+  }
+  document.getElementById('btnNext').textContent = n === totalQ ? 'ดูผลลัพธ์ 🎯' : 'ถัดไป →';
+  updateDots(n);
+}
+
+function nextQ() {
+  if (currentQ === totalQ) { showScore(); return; }
+  currentQ = Math.min(totalQ, currentQ+1);
+  showQ(currentQ);
+}
+
+function prevQ() {
+  currentQ = Math.max(1, currentQ-1);
+  showQ(currentQ);
+}
+
+function showScore() {
+  document.querySelectorAll('.quiz-question').forEach(q => q.classList.remove('active'));
+  const sc = document.getElementById('scoreCard');
+  sc.classList.add('show');
+  document.getElementById('scoreBig').textContent = score+'/'+totalQ;
+  document.getElementById('btnNext').disabled = true;
+  document.getElementById('btnPrev').disabled = true;
+
+  const pct = score/totalQ*100;
+  const grade = document.getElementById('scoreGrade');
+  const msg = document.getElementById('scoreMsg');
+  if (pct >= 90) {
+    grade.textContent = 'S — Outstanding'; grade.style.background='#1a3a22'; grade.style.color='#3fb950';
+    msg.textContent = 'พร้อมออกงานจริงแล้ว! ความรู้ Linux Directory แน่นมาก 💪';
+  } else if (pct >= 75) {
+    grade.textContent = 'A — Pass'; grade.style.background='#0d2340'; grade.style.color='#58a6ff';
+    msg.textContent = 'ผ่านเกณฑ์ดีมาก ทบทวนข้อที่ผิดแล้วก็พร้อมแล้ว';
+  } else if (pct >= 60) {
+    grade.textContent = 'B — Almost'; grade.style.background='#2d2210'; grade.style.color='#d29922';
+    msg.textContent = 'เกือบแล้ว! กลับไปทบทวน Cheat Sheet แล้วลองใหม่';
+  } else {
+    grade.textContent = 'C — Review Needed'; grade.style.background='#3d1a19'; grade.style.color='#f85149';
+    msg.textContent = 'กลับไปอ่าน Commands และ Paths ก่อน แล้วมาลองใหม่ 📖';
+  }
+}
+
+function resetQuiz() {
+  score = 0; wrong = 0; answered = {}; currentQ = 1;
+  document.getElementById('scoreCard').classList.remove('show');
+  document.querySelectorAll('.q-option').forEach(o => {
+    o.classList.remove('correct','wrong','disabled');
+  });
+  document.querySelectorAll('.q-explanation').forEach(e => e.classList.remove('show'));
+  document.getElementById('btnNext').disabled = false;
+  document.getElementById('btnPrev').disabled = true;
+  document.getElementById('btnNext').textContent = 'ถัดไป →';
+  updateScoreDisplay();
+  showQ(1);
+}
+
+function updateDots(current) {
+  let dots = '';
+  for (let i=1;i<=totalQ;i++) {
+    if (answered[i]) {
+      dots += '<span style="color:var(--green)">●</span>';
+    } else if (i===current) {
+      dots += '<span style="color:var(--blue)">◉</span>';
+    } else {
+      dots += '<span style="color:var(--border)">○</span>';
+    }
+    if (i<totalQ) dots += ' ';
+  }
+  document.getElementById('qDots').innerHTML = dots;
+}
+
+// init
+showQ(1);
+tabVisited.overview = true;
+updateProgress();
+</script>
+</body>
+</html>

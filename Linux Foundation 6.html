@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation 6 — Reading the File</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e14;
+    --bg-panel:#10161f;
+    --bg-panel-2:#141b26;
+    --bg-code:#0d1219;
+    --fg:#d9e1ec;
+    --fg-dim:#7c8797;
+    --fg-dimmer:#4d5666;
+    --accent-amber:#ffb545;
+    --accent-cyan:#5ec8d8;
+    --accent-green:#6bcf7f;
+    --accent-red:#ff7b72;
+    --border:#212a38;
+    --border-soft:#1a2230;
+    --mono:'IBM Plex Mono', 'Courier New', monospace;
+    --thai:'IBM Plex Sans Thai','IBM Plex Mono',sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:var(--thai);
+    line-height:1.7;
+    padding-bottom:80px;
+  }
+  ::selection{ background:var(--accent-amber); color:#0a0e14; }
+
+  a{ color:var(--accent-cyan); }
+
+  /* ---------- Scanline / grid backdrop ---------- */
+  .backdrop{
+    position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(255,181,69,0.07), transparent 45%),
+      radial-gradient(circle at 85% 15%, rgba(94,200,216,0.06), transparent 40%),
+      repeating-linear-gradient(180deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:16px 28px;
+    border-bottom:1px solid var(--border-soft);
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--fg-dimmer);
+    letter-spacing:0.06em;
+  }
+  .topbar .dot{ color:var(--accent-green); }
+
+  /* ---------- Hero: terminal window ---------- */
+  .hero{
+    max-width:960px; margin:56px auto 40px; padding:0 24px;
+  }
+  .term-window{
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .term-titlebar{
+    display:flex; align-items:center; gap:8px;
+    padding:11px 16px;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--border);
+  }
+  .term-dot{ width:11px; height:11px; border-radius:50%; }
+  .term-dot.r{ background:#ff5f56; }
+  .term-dot.y{ background:#ffbd2e; }
+  .term-dot.g{ background:#27c93f; }
+  .term-title{
+    margin:0 auto; transform:translateX(-18px);
+    font-family:var(--mono); font-size:12px; color:var(--fg-dim);
+  }
+  .term-body{
+    padding:28px 26px 30px;
+    font-family:var(--mono);
+    font-size:14.5px;
+  }
+  .term-line{ color:var(--fg-dim); margin-bottom:6px;}
+  .prompt{ color:var(--accent-green); }
+  .path{ color:var(--accent-cyan); }
+  .cmd{ color:var(--fg); }
+  .typed{
+    display:inline-block;
+    overflow:hidden;
+    white-space:nowrap;
+    border-right:2px solid var(--accent-amber);
+    width:0;
+    animation: type 2.6s steps(38,end) forwards, blink 0.85s step-end infinite;
+    vertical-align:bottom;
+  }
+  @keyframes type{ to{ width:38ch; } }
+  @keyframes blink{ 50%{ border-color:transparent; } }
+
+  .hero-title{
+    margin-top:14px;
+    font-size:15px;
+  }
+  .hero h1{
+    font-family:var(--thai);
+    font-weight:700;
+    font-size:clamp(28px,4vw,42px);
+    margin:22px 0 8px;
+    letter-spacing:-0.01em;
+  }
+  .hero .subtitle{
+    color:var(--fg-dim);
+    font-size:16px;
+    max-width:640px;
+  }
+  .hero .subtitle b{ color:var(--accent-amber); font-weight:600; }
+
+  .tags{ display:flex; gap:8px; margin-top:18px; flex-wrap:wrap; }
+  .tag{
+    font-family:var(--mono); font-size:11.5px;
+    padding:5px 10px; border:1px solid var(--border);
+    border-radius:5px; color:var(--fg-dim);
+    background:var(--bg-panel);
+  }
+
+  /* ---------- Man-page style section header (signature element) ---------- */
+  .manpage-header{
+    display:flex; justify-content:space-between;
+    font-family:var(--mono); font-size:11px;
+    color:var(--fg-dimmer);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    padding:6px 2px;
+    margin:0 0 22px;
+    letter-spacing:0.04em;
+  }
+
+  section.lesson{
+    max-width:960px; margin:0 auto; padding:52px 24px 0;
+  }
+  .lesson h2{
+    font-size:22px;
+    font-weight:700;
+    display:flex; align-items:baseline; gap:12px;
+    margin-bottom:4px;
+  }
+  .lesson h2 .num{
+    font-family:var(--mono);
+    color:var(--accent-amber);
+    font-size:15px;
+    font-weight:600;
+  }
+  .lesson .lede{
+    color:var(--fg-dim);
+    max-width:680px;
+    margin-bottom:26px;
+    font-size:15px;
+  }
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 22px;
+    margin-bottom:14px;
+  }
+  .card h3{
+    font-size:15px; margin-bottom:8px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .card p{ color:var(--fg-dim); font-size:14.5px; }
+  code, .code-inline{
+    font-family:var(--mono);
+    background:var(--bg-code);
+    border:1px solid var(--border-soft);
+    padding:2px 7px;
+    border-radius:4px;
+    font-size:0.9em;
+    color:var(--accent-cyan);
+  }
+
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media(max-width:720px){ .grid-2{ grid-template-columns:1fr; } }
+
+  /* ---------- Table ---------- */
+  .cmd-table{
+    width:100%; border-collapse:collapse;
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    font-size:14px;
+  }
+  .cmd-table thead th{
+    text-align:left;
+    background:var(--bg-panel-2);
+    color:var(--accent-amber);
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.04em;
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .cmd-table td{
+    padding:14px 16px;
+    border-bottom:1px solid var(--border-soft);
+    color:var(--fg);
+    vertical-align:top;
+  }
+  .cmd-table tr:last-child td{ border-bottom:none; }
+  .cmd-table td.cmdname{
+    font-family:var(--mono);
+    color:var(--accent-green);
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .cmd-table td small{ color:var(--fg-dim); display:block; margin-top:3px; font-size:12px;}
+
+  /* ---------- Timeline / steps for pre-check ---------- */
+  .steps{ display:flex; flex-direction:column; gap:10px; }
+  .step{
+    display:flex; gap:14px;
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:16px 18px;
+  }
+  .step .idx{
+    font-family:var(--mono); color:var(--accent-amber);
+    font-weight:700; font-size:14px;
+    min-width:22px;
+  }
+  .step code{ margin:0 4px; }
+
+  /* ---------- Vim modes diagram ---------- */
+  .vim-modes{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+    margin-bottom:14px;
+  }
+  @media(max-width:720px){ .vim-modes{ grid-template-columns:1fr; } }
+  .mode-card{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px;
+    background:var(--bg-panel);
+    position:relative;
+  }
+  .mode-card .mode-badge{
+    font-family:var(--mono); font-size:11px;
+    display:inline-block; padding:3px 9px; border-radius:20px;
+    margin-bottom:10px;
+  }
+  .mode-badge.command{ background:rgba(255,181,69,0.12); color:var(--accent-amber); border:1px solid rgba(255,181,69,0.3);}
+  .mode-badge.insert{ background:rgba(107,207,127,0.12); color:var(--accent-green); border:1px solid rgba(107,207,127,0.3);}
+  .mode-badge.visual{ background:rgba(94,200,216,0.12); color:var(--accent-cyan); border:1px solid rgba(94,200,216,0.3);}
+  .mode-card p{ font-size:13.5px; color:var(--fg-dim); }
+  .esc-note{
+    font-family:var(--mono); font-size:12.5px; color:var(--fg-dim);
+    text-align:center; padding:10px; border:1px dashed var(--border);
+    border-radius:8px; margin-top:4px;
+  }
+  .esc-note b{ color:var(--accent-amber); }
+
+  .exit-list{ list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:12px;}
+  .exit-list li{
+    font-family:var(--mono); font-size:13.5px;
+    display:flex; gap:12px; align-items:baseline;
+  }
+  .exit-list li b{ color:var(--accent-cyan); min-width:56px; display:inline-block; }
+
+  /* ---------- Quiz ---------- */
+  .quiz-item{
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px 20px;
+    margin-bottom:12px;
+  }
+  .quiz-item .q-tag{
+    font-family:var(--mono); font-size:11px; color:var(--fg-dimmer);
+    letter-spacing:0.06em; margin-bottom:6px; display:block;
+  }
+  .quiz-item .q-text{ font-weight:600; margin-bottom:12px; font-size:15px; }
+  .quiz-options{ display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+  .quiz-options span{
+    font-family:var(--mono); font-size:13.5px; color:var(--fg-dim);
+    padding-left:6px;
+  }
+  .reveal-btn{
+    font-family:var(--mono); font-size:12.5px;
+    background:transparent; color:var(--accent-amber);
+    border:1px solid rgba(255,181,69,0.4);
+    padding:7px 14px; border-radius:6px; cursor:pointer;
+    transition:all .15s ease;
+  }
+  .reveal-btn:hover{ background:rgba(255,181,69,0.1); }
+  .answer-box{
+    display:none; margin-top:12px; padding:12px 14px;
+    background:rgba(107,207,127,0.08);
+    border:1px solid rgba(107,207,127,0.3);
+    border-radius:8px; font-size:13.5px;
+  }
+  .answer-box.show{ display:block; }
+  .answer-box .ans-cmd{ color:var(--accent-green); font-family:var(--mono); font-weight:700; }
+
+  /* ---------- Cheat sheet ---------- */
+  .cheat-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:10px;
+    font-family:var(--mono); font-size:13px;
+  }
+  @media(max-width:720px){ .cheat-grid{ grid-template-columns:1fr; } }
+  .cheat-row{
+    display:flex; justify-content:space-between; gap:10px;
+    background:var(--bg-panel); border:1px solid var(--border-soft);
+    border-radius:6px; padding:9px 12px;
+  }
+  .cheat-row .k{ color:var(--accent-green); }
+  .cheat-row .v{ color:var(--fg-dim); text-align:right; }
+
+  footer{
+    max-width:960px; margin:60px auto 0; padding:24px 24px 0;
+    border-top:1px solid var(--border-soft);
+    font-family:var(--mono); font-size:11.5px; color:var(--fg-dimmer);
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="backdrop"></div>
+
+<div class="topbar">
+  <span><span class="dot">●</span> LINUX FOUNDATION — TRACK/CLOUD-ENGINEER</span>
+  <span>LESSON 06 · READING THE FILE</span>
+</div>
+
+<div class="hero">
+  <div class="term-window">
+    <div class="term-titlebar">
+      <span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span>
+      <p class="term-title">student@linux-foundation: ~/lesson06</p>
+    </div>
+    <div class="term-body">
+      <div class="term-line"><span class="prompt">student@lab</span>:<span class="path">~/lesson06</span>$ <span class="typed cmd">cat notes.md | less --review</span></div>
+      <div class="term-line" style="opacity:.6">กำลังเปิดสรุปทบทวนสำหรับสาย Cloud Engineer...</div>
+    </div>
+  </div>
+
+  <h1>Lesson 6 — Reading the File</h1>
+  <p class="subtitle">
+    สรุปทบทวนฉบับมืออาชีพ ครอบคลุมคำสั่งอ่านไฟล์ทั้งหมดใน Linux Foundation บทที่ 6
+    พร้อม <b>ภาคเสริมที่ Cloud Engineer ตัวจริงใช้งานทุกวัน</b> และแบบฝึกหัดทบทวนพร้อมเฉลย
+  </p>
+  <div class="tags">
+    <span class="tag">cat · more · less</span>
+    <span class="tag">head · tail</span>
+    <span class="tag">vim · view</span>
+    <span class="tag">pipe &amp; search</span>
+    <span class="tag">bonus: grep · tail -f · wc</span>
+  </div>
+</div>
+
+<!-- ============ SECTION 1 ============ -->
+<section class="lesson" id="s1">
+  <div class="manpage-header"><span>READING(1)</span><span>User Commands</span><span>READING(1)</span></div>
+  <h2><span class="num">01</span> เช็กไฟล์ก่อนเปิดเสมอ</h2>
+  <p class="lede">ก่อนเปิดไฟล์ใด ๆ วิศวกรมืออาชีพจะไม่ "เดา" — ต้องรู้ก่อนว่าไฟล์มีอยู่จริง มีสิทธิ์เข้าถึงหรือไม่ และเป็นไฟล์ประเภทใด เพื่อเลือกเครื่องมือเปิดไฟล์ให้ถูกต้อง</p>
+
+  <div class="steps">
+    <div class="step">
+      <span class="idx">01</span>
+      <div><code>ls -l [filename]</code> — ตรวจสอบว่าไฟล์มีอยู่จริง ดูเจ้าของไฟล์ สิทธิ์ (permission) และขนาดไฟล์
+      <br><small style="color:var(--fg-dim)">ใช้บ่อยตอน debug ปัญหา "permission denied" บนเซิร์ฟเวอร์จริง</small></div>
+    </div>
+    <div class="step">
+      <span class="idx">02</span>
+      <div><code>file [filename]</code> — เช็กประเภทไฟล์ก่อนเปิด เช่น ASCII text, binary, gzip compressed
+      <br><small style="color:var(--fg-dim)">⚠️ ห้ามใช้ <code>cat</code> เปิดไฟล์ไบนารีโดยตรง เพราะจะพ่นอักขระแปลก ๆ ทำให้ terminal ค้างหรือแสดงผลเพี้ยนได้</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 2 ============ -->
+<section class="lesson" id="s2">
+  <div class="manpage-header"><span>READING(1)</span><span>Core Commands</span><span>READING(1)</span></div>
+  <h2><span class="num">02</span> เครื่องมืออ่านไฟล์หลัก</h2>
+  <p class="lede">คำสั่งพื้นฐาน 5 ตัวที่ต้องคล่องแบบไม่ต้องคิด เพราะจะถูกใช้แทบทุกวันในงาน Cloud / DevOps</p>
+
+  <table class="cmd-table">
+    <thead>
+      <tr><th>คำสั่ง</th><th>การทำงาน</th><th>ข้อดี</th><th>ข้อจำกัด / วิธีออก</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="cmdname">cat</td>
+        <td>พิมพ์เนื้อหาทั้งไฟล์ออกมาทีเดียว<small>ย่อจาก concatenate</small></td>
+        <td>เร็ว เหมาะกับไฟล์เล็ก</td>
+        <td>ไฟล์ใหญ่จะไหลทะลักเต็มจอ อ่านไม่ทัน</td>
+      </tr>
+      <tr>
+        <td class="cmdname">more</td>
+        <td>แสดงผลทีละหน้าแบบ interactive</td>
+        <td>อ่านสะดวกกว่า cat สำหรับไฟล์ยาว</td>
+        <td>เลื่อนได้ทิศทางเดียว (ลงอย่างเดียว) — กด <code>Enter</code> เลื่อนบรรทัด, <code>Space</code> เลื่อนหน้า, กด <code>q</code> ออก</td>
+      </tr>
+      <tr>
+        <td class="cmdname">less</td>
+        <td>แสดงผลทีละหน้าแบบยืดหยุ่นกว่า more</td>
+        <td>เลื่อน<b> ขึ้น-ลง</b>ได้อิสระ + ค้นหาคำได้ด้วย <code>/</code></td>
+        <td>กด <code>q</code> เพื่อออก</td>
+      </tr>
+      <tr>
+        <td class="cmdname">head</td>
+        <td>แสดงส่วนต้นของไฟล์</td>
+        <td>ดีฟอลต์ 10 บรรทัดแรก, ระบุจำนวนด้วย <code>-n</code> เช่น <code>head -n5 file</code></td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td class="cmdname">tail</td>
+        <td>แสดงส่วนท้ายของไฟล์</td>
+        <td>ดีฟอลต์ 10 บรรทัดสุดท้าย, ระบุจำนวนด้วย <code>-n</code> เช่น <code>tail -n2 file</code></td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ SECTION 3 ============ -->
+<section class="lesson" id="s3">
+  <div class="manpage-header"><span>VIM(1)</span><span>Text Editor / Viewer</span><span>VIM(1)</span></div>
+  <h2><span class="num">03</span> vim &amp; view — Text Editor</h2>
+  <p class="lede"><code>vim</code> ไม่ใช่แค่ตัวอ่านไฟล์ แต่เป็น text editor ที่ทรงพลังที่สุดตัวหนึ่งบน Linux มี 3 โหมดการทำงานหลักที่ต้องจำให้ขึ้นใจ</p>
+
+  <div class="vim-modes">
+    <div class="mode-card">
+      <span class="mode-badge command">COMMAND MODE</span>
+      <p>โหมดเริ่มต้นเมื่อเปิดโปรแกรม ใช้สั่งงาน เช่น เลื่อนเคอร์เซอร์ ลบบรรทัด บันทึกไฟล์ ค้นหา ฯลฯ</p>
+    </div>
+    <div class="mode-card">
+      <span class="mode-badge insert">INSERT MODE</span>
+      <p>โหมดพิมพ์ / แก้ไขข้อความจริง เข้าโหมดนี้ด้วยปุ่ม <code>i</code>, <code>a</code>, หรือ <code>o</code></p>
+    </div>
+    <div class="mode-card">
+      <span class="mode-badge visual">VISUAL MODE</span>
+      <p>โหมดคลุมดำ (select) ข้อความ เพื่อคัดลอก ลบ หรือแก้ไขเป็นกลุ่ม เข้าด้วยปุ่ม <code>v</code></p>
+    </div>
+  </div>
+  <div class="esc-note">กด <b>ESC</b> เพื่อกลับสู่ COMMAND Mode ได้เสมอ ไม่ว่าจะอยู่โหมดไหนก็ตาม</div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3>🚪 คำสั่งออกจาก vim (พิมพ์ใน COMMAND mode)</h3>
+    <ul class="exit-list">
+      <li><b>:q</b> ออกจากโปรแกรม (ใช้ได้เมื่อไม่มีการแก้ไขค้างอยู่)</li>
+      <li><b>:q!</b> ออกโดย <u>ไม่บันทึก</u> การแก้ไขที่ทำไว้</li>
+      <li><b>:wq</b> บันทึกแล้วออก (Write &amp; Quit) — หรือใช้ <code>:x</code> ได้ผลเหมือนกัน</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>👁️ เปิดแบบอ่านอย่างเดียว (Read-Only)</h3>
+    <p><code>view [filename]</code> = เปิดไฟล์ด้วย vim ในโหมดอ่านอย่างเดียว ป้องกันการเผลอแก้ไขข้อมูลสำคัญโดยไม่ตั้งใจ — เหมาะมากเวลาต้องเปิดไฟล์ config บน production server เพื่อดูเฉย ๆ (ออกด้วย <code>:q</code>)</p>
+  </div>
+</section>
+
+<!-- ============ SECTION 4 ============ -->
+<section class="lesson" id="s4">
+  <div class="manpage-header"><span>LESS(1)</span><span>Search &amp; Pipe</span><span>LESS(1)</span></div>
+  <h2><span class="num">04</span> เทคนิคขั้นสูง: ค้นหา &amp; Pipe</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>🔎 การค้นหาใน less</h3>
+      <p>พิมพ์ <code>/ข้อความ</code> เพื่อค้นหา (Linux เป็น <b>case-sensitive</b> ตัวพิมพ์เล็ก-ใหญ่ต่างกัน)</p>
+      <p style="margin-top:8px;">กด <code>n</code> → ไปผลลัพธ์ถัดไป (เลื่อนลง)</p>
+      <p>กด <code>N</code> → ย้อนกลับผลลัพธ์ก่อนหน้า (เลื่อนขึ้น)</p>
+    </div>
+    <div class="card">
+      <h3>🔗 การใช้ Pipe ( | )</h3>
+      <p>เชื่อมคำสั่งต่อกันเพื่อกรองข้อมูล ผลลัพธ์ของคำสั่งซ้ายจะถูกส่งเป็น input ให้คำสั่งขวา</p>
+      <p style="margin-top:8px;"><code>cat testfile | head -n4 | tail -n2</code></p>
+      <p><small style="color:var(--fg-dim)">ดึง 4 บรรทัดแรกมาก่อน แล้วตัดเอาเฉพาะ 2 บรรทัดท้ายของกลุ่มนั้น → ได้บรรทัดที่ 3 และ 4 ของไฟล์</small></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 5 : BONUS ============ -->
+<section class="lesson" id="s5">
+  <div class="manpage-header"><span>BONUS(1)</span><span>For Cloud Engineers</span><span>BONUS(1)</span></div>
+  <h2><span class="num">05</span> ภาคเสริม: คำสั่งที่ Cloud Engineer ใช้จริงทุกวัน</h2>
+  <p class="lede">เนื้อหาต้นฉบับของ Lesson 6 ยังไม่ครอบคลุมคำสั่งเหล่านี้ แต่จำเป็นมากเมื่อเริ่มทำงานสาย Cloud/DevOps จริง — เพิ่มให้ครบเพื่อเตรียมความพร้อมสัมภาษณ์งานและใช้งานหน้างาน</p>
+
+  <table class="cmd-table">
+    <thead>
+      <tr><th>คำสั่ง</th><th>การทำงาน</th><th>ใช้เมื่อไหร่ในงานจริง</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="cmdname">tail -f</td>
+        <td>ติดตามไฟล์แบบ real-time โดยไม่ต้องปิดหน้าต่าง</td>
+        <td>ดู log server ที่กำลังเขียนอยู่ เช่น <code>tail -f /var/log/nginx/access.log</code></td>
+      </tr>
+      <tr>
+        <td class="cmdname">grep</td>
+        <td>ค้นหาข้อความ/pattern ในไฟล์</td>
+        <td>ไล่หา error ใน log จำนวนมาก เช่น <code>grep -i "error" app.log</code></td>
+      </tr>
+      <tr>
+        <td class="cmdname">wc -l</td>
+        <td>นับจำนวนบรรทัดในไฟล์</td>
+        <td>เช็คขนาด log หรือจำนวน record คร่าว ๆ ก่อนประมวลผล</td>
+      </tr>
+      <tr>
+        <td class="cmdname">stat</td>
+        <td>แสดงรายละเอียดไฟล์แบบละเอียดกว่า <code>ls -l</code> (เวลาแก้ไขล่าสุด, inode ฯลฯ)</td>
+        <td>ตรวจสอบว่าไฟล์ถูกแก้ไขล่าสุดเมื่อไหร่ เวลา troubleshoot deployment</td>
+      </tr>
+      <tr>
+        <td class="cmdname">&gt; และ &gt;&gt;</td>
+        <td>Redirect output ไปเขียนไฟล์ (<code>&gt;</code> เขียนทับ, <code>&gt;&gt;</code> ต่อท้ายไฟล์)</td>
+        <td>เก็บผลลัพธ์คำสั่งไว้เป็นไฟล์ log เช่น <code>command &gt;&gt; result.log</code></td>
+      </tr>
+      <tr>
+        <td class="cmdname">du -sh</td>
+        <td>ดูขนาดไฟล์/โฟลเดอร์แบบอ่านง่าย (human-readable)</td>
+        <td>เช็คว่า disk เต็มเพราะไฟล์ไหน ก่อน storage เต็มบน server</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ SECTION 6 : QUIZ ============ -->
+<section class="lesson" id="s6">
+  <div class="manpage-header"><span>QUIZ(1)</span><span>Self-Review</span><span>QUIZ(1)</span></div>
+  <h2><span class="num">06</span> แบบฝึกหัดทบทวน</h2>
+  <p class="lede">ลองตอบในใจก่อน แล้วค่อยกดปุ่ม "ดูเฉลย" เพื่อเช็คคำตอบ — ข้อ 1-3 มาจากแบบทดสอบต้นฉบับ ข้อ 4-7 เป็นสถานการณ์จริงที่เพิ่มให้เพื่อเตรียมสัมภาษณ์งาน Cloud Engineer</p>
+
+  <div class="quiz-item">
+    <span class="q-tag">Q1 / ORIGINAL QUIZ</span>
+    <div class="q-text">Which command shows the whole file at once?</div>
+    <div class="quiz-options"><span>1) cat &nbsp; 2) show &nbsp; 3) edit &nbsp; 4) print</span></div>
+    <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">ดูเฉลย</button>
+    <div class="answer-box"><span class="ans-cmd">cat</span> — พิมพ์เนื้อหาไฟล์ตั้งแต่บรรทัดแรกถึงบรรทัดสุดท้ายออกมาทีเดียวทั้งหมด</div>
+  </div>
+
+  <div class="quiz-item">
+    <span class="q-tag">Q2 / ORIGINAL QUIZ</span>
+    <div class="q-text">This command allows you to navigate (up/down) and search through the file.</div>
+    <div class="quiz-options"><span>1) more &nbsp; 2) edit &nbsp; 3) cat &nbsp; 4) less</span></div>
+    <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">ดูเฉลย</button>
+    <div class="answer-box"><span class="ans-cmd">less</span> — เลื่อนดูเนื้อหาได้ทั้งขึ้นและลง และค้นหาข้อความได้ด้วยเครื่องหมาย <code>/</code></div>
+  </div>
+
+  <div class="quiz-item">
+    <span class="q-tag">Q3 / ORIGINAL QUIZ</span>
+    <div class="q-text">I want to see the first 5 lines of the file. Which command is correct?</div>
+    <div class="quiz-options"><span>1) cat file &nbsp; 2) less -N5 file &nbsp; 3) less --head file &nbsp; 4) head -n5 file</span></div>
+    <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">ดูเฉลย</button>
+    <div class="answer-box"><span class="ans-cmd">head -n5 file</span> — <code>head</code> ใช้ดูส่วนต้นของไฟล์ อาร์กิวเมนต์ <code>-n5</code> ระบุจำนวน 5 บรรทัดแรก (ตัวเลือกอื่นใช้ syntax ที่ไม่มีอยู่จริง)</div>
+  </div>
+
+  <div class="quiz-item">
+    <span class="q-tag">Q4 / SCENARIO</span>
+    <div class="q-text">คุณ SSH เข้าเซิร์ฟเวอร์ production แล้วต้องการดู log ที่กำลังถูกเขียนแบบ real-time ระหว่างที่ระบบทำงานอยู่ ควรใช้คำสั่งอะไร?</div>
+    <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">ดูเฉลย</button>
+    <div class="answer-box"><span class="ans-cmd">tail -f filename.log</span> — ติดตามไฟล์แบบต่อเนื่อง ไม่ต้องรันคำสั่งซ้ำเมื่อมีบรรทัดใหม่เข้ามา</div>
+  </div>
+
+  <div class="quiz-item">
+    <span class="q-tag">Q5 / SCENARIO</span>
+    <div class="q-text">มีไฟล์ log ขนาด 2GB คุณต้องการหาว่ามีคำว่า "timeout" อยู่กี่ครั้งและตรงไหนบ้าง โดยไม่เปิดไฟล์ทั้งหมด ควรทำอย่างไร?</div>
+    <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">ดูเฉลย</button>
+    <div class="answer-box"><span class="ans-cmd">grep "timeout" filename.log</span> — ค้นหาเฉพาะบรรทัดที่มีคำนั้น เร็วกว่าและประหยัดกว่าการเปิดทั้งไฟล์มาก</div>
+  </div>
+
+  <div class="quiz-item">
+    <span class="q-tag">Q6 / SCENARIO</span>
+    <div class="q-text">ก่อนจะรัน <code>cat</code> เปิดไฟล์ที่ไม่รู้จัก คุณควรตรวจสอบอะไรก่อนเพื่อป้องกัน terminal พัง?</div>
+    <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">ดูเฉลย</button>
+    <div class="answer-box"><span class="ans-cmd">file filename</span> — เช็คประเภทไฟล์ก่อนเสมอ ถ้าเป็นไฟล์ binary ห้ามใช้ <code>cat</code> เปิดตรง ๆ</div>
+  </div>
+
+  <div class="quiz-item">
+    <span class="q-tag">Q7 / SCENARIO</span>
+    <div class="q-text">คุณต้องการดูเฉพาะบรรทัดที่ 8-10 ของไฟล์ config โดยใช้เทคนิค pipe จะเขียนคำสั่งอย่างไร?</div>
+    <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">ดูเฉลย</button>
+    <div class="answer-box"><span class="ans-cmd">cat config | head -n10 | tail -n3</span> — ดึง 10 บรรทัดแรกมาก่อน แล้วตัดเอา 3 บรรทัดสุดท้ายของกลุ่มนั้น = บรรทัดที่ 8, 9, 10</div>
+  </div>
+</section>
+
+<!-- ============ SECTION 7 : CHEAT SHEET ============ -->
+<section class="lesson" id="s7">
+  <div class="manpage-header"><span>CHEATSHEET(1)</span><span>Quick Reference</span><span>CHEATSHEET(1)</span></div>
+  <h2><span class="num">07</span> Quick Reference Cheat Sheet</h2>
+  <div class="cheat-grid">
+    <div class="cheat-row"><span class="k">ls -l file</span><span class="v">เช็คว่าไฟล์มีอยู่ / สิทธิ์</span></div>
+    <div class="cheat-row"><span class="k">file file</span><span class="v">เช็คประเภทไฟล์</span></div>
+    <div class="cheat-row"><span class="k">cat file</span><span class="v">แสดงทั้งไฟล์</span></div>
+    <div class="cheat-row"><span class="k">more file</span><span class="v">อ่านทีละหน้า (ลงอย่างเดียว)</span></div>
+    <div class="cheat-row"><span class="k">less file</span><span class="v">อ่านทีละหน้า (ขึ้น-ลง+ค้นหา)</span></div>
+    <div class="cheat-row"><span class="k">head -n5 file</span><span class="v">5 บรรทัดแรก</span></div>
+    <div class="cheat-row"><span class="k">tail -n5 file</span><span class="v">5 บรรทัดสุดท้าย</span></div>
+    <div class="cheat-row"><span class="k">tail -f file</span><span class="v">ติดตามแบบ real-time</span></div>
+    <div class="cheat-row"><span class="k">view file</span><span class="v">เปิดแบบอ่านอย่างเดียว</span></div>
+    <div class="cheat-row"><span class="k">grep "x" file</span><span class="v">ค้นหาคำ x ในไฟล์</span></div>
+    <div class="cheat-row"><span class="k">wc -l file</span><span class="v">นับจำนวนบรรทัด</span></div>
+    <div class="cheat-row"><span class="k">:wq / :q!</span><span class="v">บันทึกออก / ออกไม่บันทึก</span></div>
+  </div>
+</section>
+
+<footer>
+  LINUX FOUNDATION · LESSON 06 SUMMARY — REVIEWED &amp; EXTENDED FOR CLOUD ENGINEER TRACK
+</footer>
+
+</body>
+</html>

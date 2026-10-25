@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation — Module 2: Filesystem & man</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#222636;
+  --surface3:#2a2f44;
+  --border:#2e3349;
+  --border2:#3d4565;
+  --text:#e8eaf6;
+  --text2:#9ea3c0;
+  --text3:#6b7094;
+  --accent:#7c83f5;
+  --accent-bg:rgba(124,131,245,0.12);
+  --accent-border:rgba(124,131,245,0.3);
+  --green:#1db87a;
+  --green-bg:rgba(29,184,122,0.1);
+  --green-border:rgba(29,184,122,0.3);
+  --amber:#f5a623;
+  --amber-bg:rgba(245,166,35,0.1);
+  --amber-border:rgba(245,166,35,0.3);
+  --red:#f56565;
+  --red-bg:rgba(245,101,101,0.1);
+  --red-border:rgba(245,101,101,0.3);
+  --blue:#64b5f6;
+  --blue-bg:rgba(100,181,246,0.1);
+  --blue-border:rgba(100,181,246,0.3);
+  --mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:10px;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding:24px 16px}
+.wrap{max-width:780px;margin:0 auto}
+
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 28px 24px;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7c83f5,#1db87a,#f5a623)}
+.badge{display:inline-block;background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;padding:3px 12px;border-radius:20px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px;border:1px solid var(--accent-border)}
+.hero-title{font-size:26px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
+.hero-sub{font-size:14px;color:var(--text2)}
+.meta-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2)}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;background:var(--surface);padding:8px;border-radius:14px;border:1px solid var(--border)}
+.tab{padding:8px 18px;border-radius:10px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:all .15s}
+.tab.active{background:var(--accent);color:#fff}
+.tab:hover:not(.active){background:var(--surface3);color:var(--text)}
+.section{display:none}
+.section.show{display:block}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+
+.cmd-row{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.cmd-row:last-child{border-bottom:none;padding-bottom:0}
+.cmd{font-family:var(--mono);font-size:12.5px;background:var(--accent-bg);color:var(--accent);padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;border:1px solid var(--accent-border)}
+.cmd-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.cmd-desc strong{color:var(--text);font-weight:500}
+.cmd-desc code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+.info-box{background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.info-box p{font-size:13px;color:var(--green);line-height:1.6}
+.info-box p code{background:rgba(29,184,122,.15);color:var(--green);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.warn-box{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.warn-box p{font-size:13px;color:var(--amber);line-height:1.6}
+.warn-box p code{background:rgba(245,166,35,.15);color:var(--amber);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.blue-box{background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.blue-box p{font-size:13px;color:var(--blue);line-height:1.6}
+.blue-box p code{background:rgba(100,181,246,.15);color:var(--blue);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+/* Filesystem tree */
+.tree{background:#0a0c12;border:1px solid var(--border);border-radius:10px;padding:20px;font-family:var(--mono);font-size:13px;line-height:2.2;overflow-x:auto}
+.tree-root{color:#f56565;font-weight:700;font-size:15px}
+.tree-l1{color:#f5a623;padding-left:20px}
+.tree-l2{color:#1db87a;padding-left:40px}
+.tree-l3{color:#7c83f5;padding-left:60px}
+.tree-l4{color:var(--text2);padding-left:80px}
+.tree-dot{color:var(--text3)}
+.tree-desc{color:var(--text3);font-size:11px;font-family:var(--sans);margin-left:8px}
+
+/* Dir cards */
+.dir-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+@media(max-width:520px){.dir-grid{grid-template-columns:1fr}}
+.dir-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.dir-path{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;margin-bottom:6px}
+.dir-desc{font-size:12.5px;color:var(--text2);line-height:1.5}
+
+/* Man sections table */
+.man-table{width:100%;border-collapse:collapse;font-size:13px}
+.man-table th{background:var(--surface3);color:var(--text2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.man-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+.man-table tr:last-child td{border-bottom:none}
+.man-table td:first-child{font-family:var(--mono);font-size:13px;color:var(--amber);font-weight:700;background:var(--amber-bg);border-radius:4px;text-align:center;width:60px}
+.man-table td:nth-child(2){color:var(--text);font-weight:500}
+.man-table tr.highlight td{background:rgba(124,131,245,.06)}
+
+/* Key badges */
+.key{display:inline-block;background:var(--surface3);border:1px solid var(--border2);border-radius:5px;padding:2px 8px;font-family:var(--mono);font-size:12px;color:var(--text);box-shadow:0 2px 0 var(--border2);margin:0 2px}
+
+/* Tips */
+.tip-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.tip-row:last-child{border-bottom:none}
+.tip-icon{color:var(--accent);font-size:14px;flex-shrink:0;margin-top:2px;width:20px;text-align:center}
+.tip-text{font-size:13px;color:var(--text2);line-height:1.6}
+.tip-text code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.tip-text strong{color:var(--text)}
+
+.section-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin:18px 0 8px;padding-left:2px}
+.section-label:first-child{margin-top:0}
+
+/* Quiz */
+.q-wrap{margin-bottom:14px}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.q-num{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.6}
+.q-text code{background:var(--surface3);color:var(--accent);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:13px}
+.q-opts{display:flex;flex-direction:column;gap:7px}
+.q-opt{padding:11px 15px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:13px;font-family:var(--sans);cursor:pointer;text-align:left;transition:all .12s;line-height:1.5}
+.q-opt:hover:not(.disabled){background:var(--surface3);border-color:var(--border2);color:var(--text)}
+.q-opt.correct{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.q-opt.wrong{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.q-opt.disabled{cursor:default}
+.q-explain{margin-top:12px;font-size:13px;color:var(--text2);line-height:1.7;background:var(--surface2);padding:12px 14px;border-radius:8px;border-left:3px solid var(--accent);display:none}
+.q-explain.show{display:block}
+.q-explain code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:none}
+.score-label{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.score-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;background:var(--green);transition:width .5s ease}
+.score-sub{font-size:13px;color:var(--text2);margin-top:8px}
+.reset-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;margin-top:8px;transition:all .12s}
+.reset-btn:hover{background:var(--surface2);border-color:var(--accent)}
+
+footer{text-align:center;font-size:12px;color:var(--text3);margin-top:28px;padding-top:20px;border-top:1px solid var(--border)}
+
+.nav-badge{display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-family:var(--mono);font-size:11px;color:var(--text2);margin-left:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="badge">Linux Foundation</div>
+  <div class="hero-title">Module 2 — Filesystem &amp; <code style="background:var(--accent-bg);color:var(--accent);padding:2px 8px;border-radius:6px;font-family:var(--mono);font-size:20px">man</code></div>
+  <div class="hero-sub">โครงสร้างระบบไฟล์ Linux + คำสั่ง Manual · Cloud Engineer Edition</div>
+  <div class="meta-chips">
+    <span class="chip">🌳 Filesystem Tree</span>
+    <span class="chip">📂 Key Directories</span>
+    <span class="chip">📖 man Command</span>
+    <span class="chip">📋 Cheat Sheet</span>
+    <span class="chip">✏️ Quiz 12 ข้อ</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('fs',this)">🌳 Filesystem</button>
+  <button class="tab" onclick="showTab('man',this)">📖 man</button>
+  <button class="tab" onclick="showTab('cheat',this)">📋 Cheat Sheet</button>
+  <button class="tab" onclick="showTab('quiz',this)">✏️ Quiz</button>
+</div>
+
+<!-- ===== TAB: FILESYSTEM ===== -->
+<div id="fs" class="section show">
+
+  <div class="section-label">โครงสร้างหลัก</div>
+  <div class="card">
+    <div class="card-title"><span>🌳</span> Linux Filesystem Hierarchy (FHS)</div>
+    <div class="tree">
+<div class="tree-root">/ <span class="tree-desc">← Root Directory (ใหญ่ที่สุดในระบบ 👑)</span></div>
+<div class="tree-l1">├── bin/ <span class="tree-desc">คำสั่งพื้นฐาน (ls, cp, mv, cat...)</span></div>
+<div class="tree-l1">├── sbin/ <span class="tree-desc">คำสั่งสำหรับ Admin เท่านั้น</span></div>
+<div class="tree-l1">├── etc/ <span class="tree-desc">ไฟล์ config ทั้งหมดของระบบ</span></div>
+<div class="tree-l1">├── home/ <span class="tree-desc">บ้านรวมของผู้ใช้ทุกคน</span></div>
+<div class="tree-l2">│   ├── alice/ <span class="tree-desc">← Home Directory ของ alice</span></div>
+<div class="tree-l3">│   │   ├── .bashrc <span class="tree-desc">ไฟล์ซ่อน (dotfile)</span></div>
+<div class="tree-l3">│   │   └── Documents/</div>
+<div class="tree-l2">│   └── bob/ <span class="tree-desc">← Home Directory ของ bob</span></div>
+<div class="tree-l1">├── root/ <span class="tree-desc">Home ของ root user (superuser)</span></div>
+<div class="tree-l1">├── var/ <span class="tree-desc">ข้อมูลที่เปลี่ยนแปลงบ่อย (logs, databases)</span></div>
+<div class="tree-l1">├── tmp/ <span class="tree-desc">ไฟล์ชั่วคราว (ลบเมื่อ reboot)</span></div>
+<div class="tree-l1">├── usr/ <span class="tree-desc">โปรแกรมที่ติดตั้งเพิ่มเติม</span></div>
+<div class="tree-l1">├── lib/ <span class="tree-desc">Library ที่โปรแกรมต้องการ</span></div>
+<div class="tree-l1">├── dev/ <span class="tree-desc">อุปกรณ์ฮาร์ดแวร์ (disk, usb...)</span></div>
+<div class="tree-l1">├── proc/ <span class="tree-desc">ข้อมูล process ที่กำลังรันอยู่ (virtual)</span></div>
+<div class="tree-l1">└── mnt/ <span class="tree-desc">จุด mount ชั่วคราว (USB, NFS...)</span></div>
+    </div>
+    <div class="info-box"><p>Linux ใช้โครงสร้าง <strong>ต้นไม้ต้นเดียว (Single Tree)</strong> — ไม่มี Drive C: D: เหมือน Windows ทุกอย่างเริ่มจาก <code>/</code></p></div>
+  </div>
+
+  <div class="section-label">Directories ที่สำคัญ</div>
+  <div class="dir-grid">
+    <div class="dir-card">
+      <div class="dir-path">/ (Root)</div>
+      <div class="dir-desc">จุดเริ่มต้นของทุกอย่างในระบบ — ใหญ่ที่สุด ไม่มี parent directory</div>
+    </div>
+    <div class="dir-card">
+      <div class="dir-path">/home</div>
+      <div class="dir-desc">โฟลเดอร์บ้านรวม เก็บ home directory ของผู้ใช้ทุกคน</div>
+    </div>
+    <div class="dir-card">
+      <div class="dir-path">~</div>
+      <div class="dir-desc">ย่อมาจาก Home Directory ของผู้ใช้ปัจจุบัน เช่น <code>/home/alice</code></div>
+    </div>
+    <div class="dir-card">
+      <div class="dir-path">/root</div>
+      <div class="dir-desc">Home Directory ของ root user (superuser) — แยกออกจาก /home</div>
+    </div>
+    <div class="dir-card">
+      <div class="dir-path">/etc</div>
+      <div class="dir-desc">ไฟล์ config ทั้งหมด เช่น /etc/passwd, /etc/hosts, /etc/fstab</div>
+    </div>
+    <div class="dir-card">
+      <div class="dir-path">/var/log</div>
+      <div class="dir-desc">Log files ทั้งหมด — แหล่ง debug สำคัญสำหรับ Engineer</div>
+    </div>
+    <div class="dir-card">
+      <div class="dir-path">/tmp</div>
+      <div class="dir-desc">ไฟล์ชั่วคราว ทุกคนเขียนได้ ถูกลบเมื่อ reboot</div>
+    </div>
+    <div class="dir-card">
+      <div class="dir-path">/proc</div>
+      <div class="dir-desc">Virtual filesystem — ข้อมูล kernel และ process แบบ real-time</div>
+    </div>
+  </div>
+
+  <div class="section-label">Path และ Navigation</div>
+  <div class="card">
+    <div class="card-title"><span>🧭</span> Absolute Path vs Relative Path</div>
+    <div class="cmd-row">
+      <span class="cmd">/home/alice/file.txt</span>
+      <span class="cmd-desc"><strong>Absolute Path</strong> — เริ่มจาก <code>/</code> เสมอ ใช้งานได้จากทุกที่</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">./file.txt</span>
+      <span class="cmd-desc"><strong>Relative Path</strong> — อิงกับ directory ปัจจุบัน (<code>.</code> = current dir)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">../file.txt</span>
+      <span class="cmd-desc"><strong>Relative Path</strong> — ขึ้นไป 1 ชั้น (<code>..</code> = parent dir) แล้วเปิดไฟล์</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">~/Documents</span>
+      <span class="cmd-desc"><strong>Tilde Expansion</strong> — <code>~</code> แทน Home Directory ของ user ปัจจุบัน</span>
+    </div>
+    <div class="warn-box"><p>⚠️ <strong>จุดสำคัญ:</strong> <code>.</code> = โฟลเดอร์ปัจจุบัน · <code>..</code> = โฟลเดอร์แม่ (parent) · <code>~</code> = Home Directory ของคุณ</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>⌨️</span> คำสั่ง Navigation พื้นฐาน</div>
+    <div class="cmd-row">
+      <span class="cmd">pwd</span>
+      <span class="cmd-desc"><strong>Print Working Directory</strong> — แสดง path ที่คุณอยู่ตอนนี้</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">cd /path</span>
+      <span class="cmd-desc"><strong>Change Directory</strong> — ไปยัง path ที่กำหนด (absolute)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">cd ~</span>
+      <span class="cmd-desc">กลับไปยัง Home Directory ของตัวเอง</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">cd ..</span>
+      <span class="cmd-desc">ขึ้นไปยัง parent directory 1 ชั้น</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">cd -</span>
+      <span class="cmd-desc">กลับไปยัง directory ก่อนหน้า (toggle ระหว่าง 2 ที่)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">cd /</span>
+      <span class="cmd-desc">ไปยัง Root Directory</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: MAN ===== -->
+<div id="man" class="section">
+
+  <div class="section-label">คำสั่ง man คืออะไร</div>
+  <div class="card">
+    <div class="card-title"><span>📖</span> man — Manual Pages</div>
+    <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">คำสั่ง <code style="background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono)">man</code> เปิดคู่มือการใช้งาน (manual page) ของคำสั่งต่างๆ ใน Linux แบบ offline — เพื่อนแท้ของ Engineer ที่ไม่ต้องเปิด Google</p>
+    <div class="cmd-row">
+      <span class="cmd">man ls</span>
+      <span class="cmd-desc">เปิดคู่มือฉบับเต็มของคำสั่ง <code>ls</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">man 1 intro</span>
+      <span class="cmd-desc">เจาะจงเปิดหมวดที่ 1 — <code>man [section] [command]</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">man passwd</span>
+      <span class="cmd-desc">ดูคู่มือ passwd (อาจมีหลาย section — ระบุเลข section ถ้าต้องการ)</span>
+    </div>
+    <div class="blue-box"><p>ใน man page โครงสร้างมาตรฐานจะมี: <strong>NAME</strong> (ชื่อ), <strong>SYNOPSIS</strong> (วิธีใช้), <strong>DESCRIPTION</strong> (อธิบาย), <strong>OPTIONS</strong> (flags ทั้งหมด), <strong>EXAMPLES</strong>, <strong>SEE ALSO</strong></p></div>
+  </div>
+
+  <div class="section-label">การควบคุมหน้าต่าง man</div>
+  <div class="card">
+    <div class="card-title"><span>⌨️</span> Keyboard Controls ใน man page</div>
+    <div class="cmd-row">
+      <span class="cmd">q</span>
+      <span class="cmd-desc"><strong>Quit</strong> — ออกจาก man page (สำคัญที่สุด!)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">↑ / ↓</span>
+      <span class="cmd-desc">เลื่อนขึ้น/ลงทีละบรรทัด</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">Space / PgDn</span>
+      <span class="cmd-desc">เลื่อนลงทีละหน้า</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">b / PgUp</span>
+      <span class="cmd-desc">เลื่อนขึ้นทีละหน้า (back)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">/keyword</span>
+      <span class="cmd-desc"><strong>ค้นหาคำ</strong> ภายใน man page (กด Enter แล้วกด <code>n</code> เพื่อไปผลถัดไป)</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">n / N</span>
+      <span class="cmd-desc">ไปผลค้นหาถัดไป / ย้อนกลับ</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">g / G</span>
+      <span class="cmd-desc">กระโดดไปหัว / ท้าย ของ man page</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">h</span>
+      <span class="cmd-desc">เปิด help ของ pager (man ใช้ less เป็น pager)</span>
+    </div>
+  </div>
+
+  <div class="section-label">9 Sections ของ man</div>
+  <div class="card">
+    <div class="card-title"><span>📚</span> Man Page Sections</div>
+    <table class="man-table">
+      <thead><tr><th>§</th><th>หมวด</th><th>ตัวอย่าง</th></tr></thead>
+      <tbody>
+        <tr class="highlight"><td>1</td><td>User Commands (คำสั่งทั่วไป)</td><td style="font-family:var(--mono);font-size:12px;color:var(--text3)">ls, cd, cp, cat</td></tr>
+        <tr><td>2</td><td>System Calls (เรียกใช้ kernel โดยตรง)</td><td style="font-family:var(--mono);font-size:12px;color:var(--text3)">open(), read(), fork()</td></tr>
+        <tr><td>3</td><td>Library Functions (ฟังก์ชัน C library)</td><td style="font-family:var(--mono);font-size:12px;color:var(--text3)">printf(), malloc()</td></tr>
+        <tr><td>4</td><td>Special Files (device files)</td><td style="font-family:var(--mono);font-size:12px;color:var(--text3)">/dev/null, /dev/sda</td></tr>
+        <tr class="highlight"><td>5</td><td>File Formats & Configuration</td><td style="font-family:var(--mono);font-size:12px;color:var(--text3)">/etc/passwd, crontab</td></tr>
+        <tr><td>6</td><td>Games</td><td style="font-family:var(--mono);font-size:12px;color:var(--text3)">—</td></tr>
+        <tr><td>7</td><td>Miscellaneous (conventions, protocols)</td><td style="font-family:var(--mono);font-size:12px;color:var(--text3)">regex, glob, signal</td></tr>
+        <tr class="highlight"><td>8</td><td>System Admin Commands (root only)</td><td style="font-family:var(--mono);font-size:12px;color:var(--text3)">mount, iptables, fdisk</td></tr>
+        <tr><td>9</td><td>Kernel Routines</td><td style="font-family:var(--mono);font-size:12px;color:var(--text3)">—</td></tr>
+      </tbody>
+    </table>
+    <div class="warn-box"><p>⚠️ หมวดที่ต้องจำ: <strong>1</strong> = User commands · <strong>5</strong> = Config files · <strong>8</strong> = Admin commands — ข้อสอบออกบ่อย!</p></div>
+  </div>
+
+  <div class="section-label">คำสั่งค้นหาด่วน</div>
+  <div class="card">
+    <div class="card-title"><span>🔍</span> Quick Lookup Commands</div>
+    <div class="cmd-row">
+      <span class="cmd">whatis ls</span>
+      <span class="cmd-desc"><strong>คำอธิบายสั้น 1 บรรทัด</strong> ว่า ls ทำอะไร — เทียบเท่า <code>man -f ls</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">man -f ls</span>
+      <span class="cmd-desc">เหมือน <code>whatis ls</code> — แสดงทุก section ที่มีคำสั่งนี้</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">man -k keyword</span>
+      <span class="cmd-desc"><strong>ค้นหา</strong> ทุก man page ที่มีคำนี้ในชื่อหรือคำอธิบาย — เทียบเท่า <code>apropos keyword</code></span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">apropos network</span>
+      <span class="cmd-desc">ค้นหา man pages ทั้งหมดที่เกี่ยวกับ network</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">man -w ls</span>
+      <span class="cmd-desc">แสดง <strong>path</strong> ของไฟล์ man page บนเครื่อง</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">man 5 passwd</span>
+      <span class="cmd-desc">เปิดคู่มือ passwd <strong>ในหมวด 5</strong> (format ของไฟล์) ไม่ใช่หมวด 1 (คำสั่ง)</span>
+    </div>
+    <div class="info-box"><p><code>whatis</code> = <code>man -f</code> และ <code>apropos</code> = <code>man -k</code> — จำคู่นี้ไว้ มักออกข้อสอบในรูปแบบ "คำสั่งใดเทียบเท่ากัน"</p></div>
+  </div>
+</div>
+
+<!-- ===== TAB: CHEAT SHEET ===== -->
+<div id="cheat" class="section">
+  <div class="card">
+    <div class="card-title"><span>🌳</span> Filesystem — Quick Reference</div>
+    <div class="cmd-row"><span class="cmd">pwd</span><span class="cmd-desc">แสดง directory ปัจจุบัน (Print Working Directory)</span></div>
+    <div class="cmd-row"><span class="cmd">cd ~</span><span class="cmd-desc">กลับ Home Directory</span></div>
+    <div class="cmd-row"><span class="cmd">cd /</span><span class="cmd-desc">ไป Root Directory</span></div>
+    <div class="cmd-row"><span class="cmd">cd ..</span><span class="cmd-desc">ขึ้นไป parent directory 1 ชั้น</span></div>
+    <div class="cmd-row"><span class="cmd">cd -</span><span class="cmd-desc">กลับไป directory ก่อนหน้า</span></div>
+    <div class="cmd-row"><span class="cmd">ls /</span><span class="cmd-desc">ดูไฟล์ใน Root Directory</span></div>
+    <div class="cmd-row"><span class="cmd">ls ~</span><span class="cmd-desc">ดูไฟล์ใน Home Directory</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>📖</span> man — Quick Reference</div>
+    <div class="cmd-row"><span class="cmd">man ls</span><span class="cmd-desc">เปิดคู่มือเต็มของ ls (กด <strong>q</strong> เพื่อออก)</span></div>
+    <div class="cmd-row"><span class="cmd">man 1 intro</span><span class="cmd-desc">เปิดคู่มือ intro ในหมวด 1 (user commands)</span></div>
+    <div class="cmd-row"><span class="cmd">man 5 passwd</span><span class="cmd-desc">เปิดคู่มือ passwd ในหมวด 5 (file format)</span></div>
+    <div class="cmd-row"><span class="cmd">man 8 mount</span><span class="cmd-desc">เปิดคู่มือ mount ในหมวด 8 (admin commands)</span></div>
+    <div class="cmd-row"><span class="cmd">whatis ls</span><span class="cmd-desc">คำอธิบาย 1 บรรทัด (= man -f ls)</span></div>
+    <div class="cmd-row"><span class="cmd">man -f ls</span><span class="cmd-desc">เหมือน whatis — แสดงทุก section ที่มี ls</span></div>
+    <div class="cmd-row"><span class="cmd">man -k network</span><span class="cmd-desc">ค้นหาทุก man page ที่มีคำว่า network (= apropos)</span></div>
+    <div class="cmd-row"><span class="cmd">apropos network</span><span class="cmd-desc">เหมือน man -k — ค้นหา man pages</span></div>
+    <div class="cmd-row"><span class="cmd">man -w ls</span><span class="cmd-desc">แสดง path ไฟล์ man page ของ ls</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>⌨️</span> man Page Controls</div>
+    <div class="cmd-row"><span class="cmd">q</span><span class="cmd-desc"><strong>ออกจาก man page</strong> — สำคัญที่สุด</span></div>
+    <div class="cmd-row"><span class="cmd">/ keyword</span><span class="cmd-desc">ค้นหาคำในหน้า man</span></div>
+    <div class="cmd-row"><span class="cmd">n / N</span><span class="cmd-desc">ผลค้นหาถัดไป / ย้อนกลับ</span></div>
+    <div class="cmd-row"><span class="cmd">Space</span><span class="cmd-desc">เลื่อนลงทีละหน้า</span></div>
+    <div class="cmd-row"><span class="cmd">b</span><span class="cmd-desc">เลื่อนขึ้นทีละหน้า (back)</span></div>
+    <div class="cmd-row"><span class="cmd">g / G</span><span class="cmd-desc">ไปหัว / ท้าย ของ man page</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>💡</span> Engineer Tips</div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ไม่รู้จะใช้คำสั่งไหน ใช้ <code>man -k keyword</code> หรือ <code>apropos keyword</code> เพื่อค้นหาก่อนเสมอ</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ใช้ <code>man 5 passwd</code> ดู format ของ /etc/passwd — แตกต่างจาก <code>man passwd</code> (section 1 = คำสั่ง)</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ใน man page กด <code>/OPTIONS</code> แล้ว Enter เพื่อกระโดดไปหัวข้อ OPTIONS ทันที ไม่ต้องเลื่อนหา</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text"><code>man hier</code> — เปิดคู่มือโครงสร้าง Linux Filesystem ทั้งหมด มีประโยชน์มากสำหรับ Engineer ใหม่</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">Log files อยู่ที่ <code>/var/log/</code> เสมอ — เมื่อเจอปัญหา ให้ดู <code>ls -altr /var/log/</code> เพื่อหา log ล่าสุด</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">Config ทั้งหมดอยู่ใน <code>/etc/</code> — เมื่อต้องการแก้ไข service ให้มองหาที่นี่ก่อน</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: QUIZ ===== -->
+<div id="quiz" class="section">
+  <div class="score-card" id="score-card">
+    <div class="score-label" id="score-label">คะแนน: 0 / 0</div>
+    <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+    <div class="score-sub" id="score-sub"></div>
+  </div>
+  <div id="quiz-container"></div>
+  <button class="reset-btn" onclick="resetQuiz()">↺ เริ่มใหม่ทั้งหมด</button>
+</div>
+
+</div>
+<footer>Linux Foundation · Module 2: Filesystem &amp; man Command · Cloud Engineer Study Card</footer>
+
+<script>
+const questions=[
+  {q:"อะไรคือ directory ที่ใหญ่ที่สุดในระบบ Linux?",opts:["/home","/root","/","/usr"],ans:2,exp:"/ (Root Directory) คือจุดเริ่มต้นของทุกอย่างในระบบ Linux — ทุก directory และไฟล์อยู่ใต้ / ทั้งหมด ไม่มี Drive C: D: เหมือน Windows"},
+  {q:"Home Directory ของ root user อยู่ที่ path ใด?",opts:["/home/root","/root","/home","/etc/root"],ans:1,exp:"/root คือ Home Directory ของ root user (superuser) — แยกออกจาก /home ซึ่งเก็บ home ของ user ทั่วไป เช่น /home/alice"},
+  {q:"สัญลักษณ์ ~ (tilde) ใน Linux หมายถึงอะไร?",opts:["Root directory /","Directory ปัจจุบัน","Home Directory ของ user ปัจจุบัน","Parent directory"],ans:2,exp:"~ (tilde) ย่อมาจาก Home Directory ของ user ที่ login อยู่ เช่น ถ้า login เป็น alice จะหมายถึง /home/alice"},
+  {q:"ไฟล์ config ของระบบ Linux ส่วนใหญ่อยู่ที่ directory ใด?",opts:["/var","/etc","/bin","/usr"],ans:1,exp:"/etc คือที่เก็บ configuration files ทั้งหมดของระบบ เช่น /etc/passwd (users), /etc/hosts (DNS), /etc/fstab (mount points)"},
+  {q:"คำสั่งใดแสดง path ของ directory ที่คุณอยู่ตอนนี้?",opts:["ls","cd","pwd","path"],ans:2,exp:"pwd = Print Working Directory — แสดง absolute path ของ directory ปัจจุบัน เช่น /home/alice/projects"},
+  {q:"คำสั่ง whatis ls เทียบเท่ากับคำสั่งใด?",opts:["man ls","man -k ls","man -f ls","man -w ls"],ans:2,exp:"whatis = man -f — แสดงคำอธิบายสั้น 1 บรรทัดของคำสั่ง ส่วน man -k = apropos (ค้นหา) และ man -w แสดง path ของ man file"},
+  {q:"man page Section 5 เก็บเนื้อหาประเภทใด?",opts:["User commands","System Calls","File Formats & Configuration","Admin Commands"],ans:2,exp:"Section 5 = File Formats and Configuration — เช่น man 5 passwd ดู format ของ /etc/passwd ส่วน Section 1 = User Commands, Section 8 = Admin Commands"},
+  {q:"จะออกจากหน้าต่าง man page ต้องกดปุ่มอะไร?",opts:["Esc","x","q","Ctrl+C"],ans:2,exp:"กด q (Quit) เพื่อออกจาก man page — man ใช้ less เป็น pager ดังนั้น shortcut ของ less ทั้งหมดใช้ได้ใน man"},
+  {q:"คำสั่ง man -k network เทียบเท่ากับคำสั่งใด?",opts:["whatis network","man -f network","apropos network","man -w network"],ans:2,exp:"man -k = apropos — ค้นหา man pages ทั้งหมดที่มีคำนี้ในชื่อหรือ description ส่วน whatis/man -f แสดงแค่ exact match"},
+  {q:"ใน man page จะค้นหาคำว่า OPTIONS ได้อย่างไร?",opts:["กด Ctrl+F แล้วพิมพ์ OPTIONS","พิมพ์ /OPTIONS แล้วกด Enter","กด s แล้วพิมพ์ OPTIONS","ไม่สามารถค้นหาได้"],ans:1,exp:"พิมพ์ /keyword แล้วกด Enter เพื่อค้นหาใน man page จากนั้นกด n เพื่อไปผลถัดไป และ N เพื่อย้อนกลับ"},
+  {q:"cd - (cd ขีด) ทำอะไร?",opts:["ไป root directory","ไป home directory","กลับไป directory ก่อนหน้า","แสดง directory ปัจจุบัน"],ans:2,exp:"cd - กลับไปยัง directory ที่เคยอยู่ก่อนหน้า (toggle ระหว่าง 2 locations) มีประโยชน์มากเมื่อสลับงานระหว่าง 2 directory"},
+  {q:"Log files ของระบบ Linux อยู่ที่ path ใด?",opts:["/tmp/log","/etc/log","/var/log","/home/log"],ans:2,exp:"/var/log คือที่เก็บ log files ทั้งหมด เช่น /var/log/syslog, /var/log/auth.log — เป็นแหล่ง debug สำคัญสำหรับ Engineer ทุกคน"}
+];
+
+let answered={},correct=0;
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML='';
+  questions.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='q-wrap';
+    div.innerHTML=`<div class="q-card">
+      <div class="q-num">ข้อที่ ${i+1} จาก ${questions.length} ข้อ</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">${q.opts.map((o,j)=>`<button class="q-opt" onclick="answer(${i},${j})" id="opt-${i}-${j}">${o}</button>`).join('')}</div>
+      <div class="q-explain" id="exp-${i}">💡 ${q.exp}</div>
+    </div>`;
+    c.appendChild(div);
+  });
+}
+
+function answer(qi,oi){
+  if(answered[qi]!==undefined)return;
+  answered[qi]=oi;
+  const q=questions[qi];
+  for(let j=0;j<q.opts.length;j++){
+    const btn=document.getElementById(`opt-${qi}-${j}`);
+    btn.classList.add('disabled');
+    if(j===q.ans)btn.classList.add('correct');
+    else if(j===oi&&oi!==q.ans)btn.classList.add('wrong');
+  }
+  document.getElementById(`exp-${qi}`).classList.add('show');
+  if(oi===q.ans)correct++;
+  updateScore();
+}
+
+function updateScore(){
+  const total=Object.keys(answered).length;
+  const card=document.getElementById('score-card');
+  card.style.display='block';
+  document.getElementById('score-label').textContent=`คะแนน: ${correct} / ${total} ข้อ`;
+  const pct=total>0?Math.round(correct/total*100):0;
+  document.getElementById('score-fill').style.width=pct+'%';
+  let msg='';
+  if(total===questions.length){
+    if(pct>=90)msg='ยอดเยี่ยม! พร้อมสำหรับงาน Cloud Engineer แล้ว 🎯';
+    else if(pct>=70)msg='ดีมาก! ทบทวนข้อที่ผิดแล้วลุยต่อได้เลย 👍';
+    else msg='ทบทวนเนื้อหาในแท็บอื่นแล้วลองใหม่อีกครั้งนะครับ 💪';
+  }else{
+    msg=`ตอบไปแล้ว ${total} จาก ${questions.length} ข้อ`;
+  }
+  document.getElementById('score-sub').textContent=msg;
+}
+
+function resetQuiz(){
+  answered={};correct=0;
+  document.getElementById('score-card').style.display='none';
+  buildQuiz();
+}
+
+function showTab(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('show');
+  el.classList.add('active');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

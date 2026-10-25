@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation — Module 5: Pipes & Redirections</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#222636;
+  --surface3:#2a2f44;
+  --border:#2e3349;
+  --border2:#3d4565;
+  --text:#e8eaf6;
+  --text2:#9ea3c0;
+  --text3:#6b7094;
+  --accent:#7c83f5;
+  --accent-bg:rgba(124,131,245,0.12);
+  --accent-border:rgba(124,131,245,0.3);
+  --green:#1db87a;
+  --green-bg:rgba(29,184,122,0.1);
+  --green-border:rgba(29,184,122,0.3);
+  --amber:#f5a623;
+  --amber-bg:rgba(245,166,35,0.1);
+  --amber-border:rgba(245,166,35,0.3);
+  --red:#f56565;
+  --red-bg:rgba(245,101,101,0.1);
+  --red-border:rgba(245,101,101,0.3);
+  --mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:10px;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;padding:24px 16px}
+.wrap{max-width:780px;margin:0 auto}
+
+/* Hero */
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 28px 24px;margin-bottom:20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1db87a,#7c83f5,#f56565)}
+.badge{display:inline-block;background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;padding:3px 12px;border-radius:20px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px;border:1px solid var(--accent-border)}
+.hero-title{font-size:26px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
+.hero-title code{background:var(--accent-bg);color:var(--accent);padding:2px 8px;border-radius:6px;font-family:var(--mono);font-size:22px}
+.hero-sub{font-size:14px;color:var(--text2)}
+.meta-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--text2)}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;background:var(--surface);padding:8px;border-radius:14px;border:1px solid var(--border)}
+.tab{padding:8px 18px;border-radius:10px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;gap:6px}
+.tab.active{background:var(--accent);color:#fff}
+.tab:hover:not(.active){background:var(--surface3);color:var(--text)}
+.section{display:none}
+.section.show{display:block}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+.card-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.card-title span{font-size:16px}
+
+/* Command rows */
+.cmd-row{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.cmd-row:last-child{border-bottom:none;padding-bottom:0}
+.cmd{font-family:var(--mono);font-size:12.5px;background:var(--accent-bg);color:var(--accent);padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;border:1px solid var(--accent-border);min-width:fit-content}
+.cmd-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.cmd-desc strong{color:var(--text);font-weight:500}
+.cmd-desc code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+/* Info boxes */
+.info-box{background:var(--green-bg);border:1px solid var(--green-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.info-box p{font-size:13px;color:var(--green);line-height:1.6}
+.info-box p code{background:rgba(29,184,122,.15);color:var(--green);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.warn-box{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:12px 14px;margin-top:12px}
+.warn-box p{font-size:13px;color:var(--amber);line-height:1.6}
+.warn-box p code{background:rgba(245,166,35,.15);color:var(--amber);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+/* ls -l table */
+.term{background:#0a0c12;border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:var(--mono);font-size:12.5px;color:#a8b4d8;margin-bottom:14px;overflow-x:auto;line-height:2}
+.t-perm{color:#f56565}
+.t-link{color:var(--text3)}
+.t-owner{color:#1db87a}
+.t-group{color:#7c83f5}
+.t-size{color:#f5a623}
+.t-date{color:#64b5f6}
+.t-name{color:#e8eaf6}
+.col-table{width:100%;border-collapse:collapse;font-size:13px}
+.col-table th{background:var(--surface3);color:var(--text2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.col-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
+.col-table tr:last-child td{border-bottom:none}
+.col-table td:first-child{font-family:var(--mono);font-size:12px;color:var(--accent);background:var(--accent-bg);border-radius:4px;font-weight:600;white-space:nowrap}
+.col-table td:nth-child(2){color:var(--text);font-weight:500}
+
+/* Perm grid */
+.perm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin:12px 0}
+.perm-cell{background:var(--surface2);padding:10px;text-align:center}
+.perm-cell .pl{font-size:11px;color:var(--text3);margin-bottom:5px}
+.perm-cell .pv{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--text)}
+.perm-cell .ps{font-size:11px;color:var(--text2);margin-top:3px}
+
+/* Timestamps */
+.ts-row{display:grid;grid-template-columns:100px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:start}
+.ts-row:last-child{border-bottom:none}
+.ts-badge{font-family:var(--mono);font-size:12px;font-weight:700;padding:6px 10px;border-radius:8px;text-align:center}
+.ts-mtime{background:rgba(124,131,245,.15);color:#7c83f5;border:1px solid rgba(124,131,245,.3)}
+.ts-atime{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.ts-ctime{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.ts-info{font-size:13px;line-height:1.6}
+.ts-info strong{color:var(--text);font-weight:600;display:block;margin-bottom:2px}
+.ts-info span{color:var(--text2)}
+.ts-info small{color:var(--text3);font-size:11.5px;display:block;margin-top:4px;font-family:var(--mono)}
+
+/* Cheat sheet */
+.cmd-row.highlight{background:var(--surface3);border-radius:8px;margin:2px 0;padding:9px 12px}
+
+/* Quiz */
+.q-wrap{margin-bottom:14px}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.q-num{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.q-text{font-size:15px;font-weight:500;color:var(--text);margin-bottom:14px;line-height:1.6}
+.q-opts{display:flex;flex-direction:column;gap:7px}
+.q-opt{padding:11px 15px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:13px;font-family:var(--sans);cursor:pointer;text-align:left;transition:all .12s;line-height:1.5}
+.q-opt:hover:not(.disabled){background:var(--surface3);border-color:var(--border2);color:var(--text)}
+.q-opt.correct{background:var(--green-bg);border-color:var(--green-border);color:var(--green)}
+.q-opt.wrong{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.q-opt.disabled{cursor:default}
+.q-explain{margin-top:12px;font-size:13px;color:var(--text2);line-height:1.7;background:var(--surface2);padding:12px 14px;border-radius:8px;border-left:3px solid var(--accent);display:none}
+.q-explain.show{display:block}
+.q-explain code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:16px;display:none}
+.score-label{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.score-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;background:var(--green);transition:width .5s ease}
+.score-sub{font-size:13px;color:var(--text2);margin-top:8px}
+
+.reset-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:13px;font-weight:500;font-family:var(--sans);cursor:pointer;margin-top:8px;transition:all .12s}
+.reset-btn:hover{background:var(--surface2);border-color:var(--accent)}
+
+/* Tips */
+.tip-row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.tip-row:last-child{border-bottom:none}
+.tip-icon{color:var(--accent);font-size:16px;flex-shrink:0;margin-top:1px;width:20px}
+.tip-text{font-size:13px;color:var(--text2);line-height:1.6}
+.tip-text code{background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono);font-size:11.5px}
+.tip-text strong{color:var(--text)}
+
+.section-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin:18px 0 8px;padding-left:2px}
+.section-label:first-child{margin-top:0}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.cols{grid-template-columns:1fr}.tab{padding:7px 12px;font-size:12px}}
+
+footer{text-align:center;font-size:12px;color:var(--text3);margin-top:28px;padding-top:20px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="badge">Linux Foundation</div>
+  <div class="hero-title">Module 5 — <code>Pipes & Redirections</code></div>
+  <div class="hero-sub">คู่มือทบทวนฉบับสมบูรณ์ พร้อมแบบทดสอบ · Cloud Engineer Edition</div>
+  <div class="meta-chips">
+    <span class="chip">🔀 Pipe |</span>
+    <span class="chip">📤 Redirection &gt; &gt;&gt; &lt;</span>
+    <span class="chip">🌊 stdin/stdout/stderr</span>
+    <span class="chip">🧩 Command Combos</span>
+    <span class="chip">✏️ Quiz 15 ข้อ</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('ref',this)">📂 Reference</button>
+  <button class="tab" onclick="showTab('stream',this)">🌊 Streams</button>
+  <button class="tab" onclick="showTab('combo',this)">🧩 Combos</button>
+  <button class="tab" onclick="showTab('cheat',this)">📋 Cheat Sheet</button>
+  <button class="tab" onclick="showTab('quiz',this)">✏️ Quiz</button>
+</div>
+
+<!-- ===== TAB: REFERENCE ===== -->
+<div id="ref" class="section show">
+  <div class="section-label">แนวคิดพื้นฐาน — Pipe คืออะไร</div>
+  <div class="card">
+    <div class="card-title"><span>🔀</span> Pipe — เครื่องหมาย <code style="background:var(--surface3);color:var(--accent);padding:1px 5px;border-radius:4px;font-family:var(--mono)">|</code></div>
+    <div class="cmd-row">
+      <span class="cmd">Cmd1 | Cmd2</span>
+      <span class="cmd-desc"><strong>Pipe</strong> — นำ <strong>stdout</strong> (ผลลัพธ์) ของคำสั่งซ้าย ไปเป็น <strong>stdin</strong> (ข้อมูลนำเข้า) ของคำสั่งขวาโดยตรง<br>ไม่ผ่านการสร้างไฟล์ชั่วคราวใดๆ</span>
+    </div>
+    <div class="cmd-row">
+      <span class="cmd">Cmd1 | Cmd2 | Cmd3</span>
+      <span class="cmd-desc">ต่อ pipe กี่ทอดก็ได้ — ผลลัพธ์จะไหลจากซ้ายไปขวาเป็นทอดๆ เหมือนสายพาน</span>
+    </div>
+    <div class="info-box"><p>🏭 <strong>เปรียบเทียบ:</strong> Pipe เหมือน <strong>สายพานโรงงาน</strong> — วัตถุดิบ (output) จากสถานีที่ 1 ถูกส่งต่อไปแปรรูปที่สถานีที่ 2 ทันที โดยไม่ต้องพักไว้ที่ไหนก่อน</p></div>
+    <div class="warn-box"><p>⚠️ <strong>อย่าสับสน:</strong> <code>|</code> (pipe เดี่ยว) ใช้ส่งข้อมูล แต่ <code>||</code> (สองอัน) คือ <strong>logical OR</strong> ในการเขียน shell script — ใช้คนละความหมายกันโดยสิ้นเชิง</p></div>
+  </div>
+
+  <div class="section-label">แนวคิดพื้นฐาน — Redirection คืออะไร</div>
+  <div class="card">
+    <div class="card-title"><span>📤</span> Redirection — เปลี่ยนทิศทางข้อมูลเข้า/ออก</div>
+    <div class="cmd-row">
+      <span class="cmd-desc">Redirection คือการ<strong>เปลี่ยนปลายทาง</strong>ของข้อมูล จากที่ปกติจะวิ่งเข้า/ออกหน้าจอ (terminal) ให้วิ่งเข้า/ออก<strong>ไฟล์</strong>แทน</span>
+    </div>
+    <table class="col-table">
+      <tr><th>Operator</th><th>ชื่อเรียก</th><th>หน้าที่</th></tr>
+      <tr><td>&gt;</td><td>Overwrite</td><td>เขียนผลลัพธ์ลงไฟล์ — ถ้ามีไฟล์เดิมอยู่แล้ว จะ<strong>ลบทิ้งแล้วเขียนใหม่ทั้งหมด</strong></td></tr>
+      <tr><td>&gt;&gt;</td><td>Append</td><td>เขียนผลลัพธ์ลงไฟล์ — ต่อท้ายเนื้อหาเดิม ไม่ลบของเก่า</td></tr>
+      <tr><td>&lt;</td><td>Input Redirect</td><td>ดึงเนื้อหาจากไฟล์ ป้อนเข้าไปเป็น stdin ของคำสั่ง</td></tr>
+      <tr><td>&lt;&lt;</td><td>Heredoc</td><td>ป้อนข้อความหลายบรรทัดจากใน terminal เองจนกว่าจะเจอคำปิด (delimiter)</td></tr>
+    </table>
+    <div class="info-box"><p>✍️ <strong>จำง่ายๆ:</strong> <code>&gt;</code> ตัวเดียว = ฉีกกระดาษเก่าทิ้งแล้วเขียนใหม่ &nbsp;·&nbsp; <code>&gt;&gt;</code> สองตัว = จดต่อท้ายบรรทัดล่างสุดของกระดาษเดิม</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>⌨️</span> ตัวอย่างการใช้งาน Redirection</div>
+    <div class="cmd-row"><span class="cmd">ls -al &gt; list.txt</span><span class="cmd-desc">บันทึกผลลัพธ์ของ <code>ls -al</code> ลงไฟล์ <code>list.txt</code> (สร้างใหม่/เขียนทับ)</span></div>
+    <div class="cmd-row"><span class="cmd">echo "Done" &gt;&gt; list.txt</span><span class="cmd-desc">เพิ่มข้อความ <code>Done</code> ต่อท้ายไฟล์ <code>list.txt</code> โดยไม่ลบของเดิม</span></div>
+    <div class="cmd-row"><span class="cmd">wc -l &lt; numbers.txt</span><span class="cmd-desc">ป้อนเนื้อหาไฟล์ <code>numbers.txt</code> เข้าคำสั่ง <code>wc -l</code> โดยตรง ผลลัพธ์จะเป็นตัวเลขล้วน ไม่มีชื่อไฟล์ติดมา</span></div>
+    <div class="cmd-row"><span class="cmd">sort &lt; names.txt &gt; sorted.txt</span><span class="cmd-desc">อ่านจากไฟล์หนึ่ง เรียงลำดับ แล้วเขียนผลลัพธ์ลงอีกไฟล์หนึ่ง — ใช้ <code>&lt;</code> และ <code>&gt;</code> พร้อมกันได้</span></div>
+  </div>
+</div>
+
+<!-- ===== TAB: STREAMS ===== -->
+<div id="stream" class="section">
+  <div class="card">
+    <div class="card-title"><span>🌊</span> 3 ช่องทางข้อมูลมาตรฐาน (Standard Streams)</div>
+    <div class="ts-row">
+      <span class="ts-badge ts-mtime">0 · stdin</span>
+      <div class="ts-info">
+        <strong>Standard Input</strong>
+        <span>ช่องทางรับข้อมูล<strong>เข้า</strong>คำสั่ง — ปกติคือคีย์บอร์ด แต่เปลี่ยนได้ด้วย <code>&lt;</code> หรือ <code>|</code></span>
+      </div>
+    </div>
+    <div class="ts-row">
+      <span class="ts-badge ts-atime">1 · stdout</span>
+      <div class="ts-info">
+        <strong>Standard Output</strong>
+        <span>ช่องทาง<strong>ผลลัพธ์ปกติ</strong>ของคำสั่ง — ปกติออกหน้าจอ เปลี่ยนได้ด้วย <code>&gt;</code>, <code>&gt;&gt;</code> หรือ <code>|</code></span>
+      </div>
+    </div>
+    <div class="ts-row">
+      <span class="ts-badge ts-ctime">2 · stderr</span>
+      <div class="ts-info">
+        <strong>Standard Error</strong>
+        <span>ช่องทาง<strong>ข้อความ error</strong> — แยกจาก stdout เพื่อไม่ให้ error ปนกับผลลัพธ์ปกติ เปลี่ยนได้ด้วย <code>2&gt;</code></span>
+      </div>
+    </div>
+    <div class="info-box"><p>💡 ทุกช่องทางมี<strong>เลขประจำตัว (file descriptor)</strong>: <code>0</code> = stdin, <code>1</code> = stdout, <code>2</code> = stderr — เวลาเขียน <code>&gt;</code> เฉยๆ ระบบจะเข้าใจว่าหมายถึง <code>1&gt;</code> โดยอัตโนมัติ</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>🎯</span> การ Redirect เฉพาะ stderr</div>
+    <div class="cmd-row"><span class="cmd">cmd 2&gt; error.log</span><span class="cmd-desc">ส่ง<strong>เฉพาะ error</strong>ไปเก็บไว้ในไฟล์ <code>error.log</code> ส่วนผลลัพธ์ปกติยังขึ้นหน้าจอ</span></div>
+    <div class="cmd-row"><span class="cmd">cmd 2&gt;/dev/null</span><span class="cmd-desc">ทิ้ง error ทั้งหมด — <code>/dev/null</code> คือ "ถังขยะ" ของระบบ Linux ใส่อะไรเข้าไปก็หายไปเลย</span></div>
+    <div class="cmd-row"><span class="cmd">cmd &gt; out.log 2&gt;&amp;1</span><span class="cmd-desc">รวม stdout และ stderr ไปไฟล์<strong>เดียวกัน</strong> — <code>2&gt;&amp;1</code> แปลว่า "ให้ stream 2 ไปทางเดียวกับ stream 1"</span></div>
+    <div class="cmd-row"><span class="cmd">cmd &amp;&gt; all.log</span><span class="cmd-desc">รูปแบบย่อของ <code>&gt; file 2&gt;&amp;1</code> ใน bash — รวมทั้ง stdout และ stderr ในคำสั่งเดียว</span></div>
+    <div class="warn-box"><p>⚠️ <strong>กับดักข้อสอบ:</strong> ลำดับสำคัญมาก! <code>cmd &gt; file 2&gt;&amp;1</code> ถูกต้อง (รวมทั้งคู่ไปที่ <code>file</code>) แต่ <code>cmd 2&gt;&amp;1 &gt; file</code> จะ<strong>ไม่</strong>ได้ผลแบบเดียวกัน เพราะตอนสั่ง <code>2&gt;&amp;1</code> stdout ยังชี้ไปที่หน้าจออยู่</p></div>
+  </div>
+</div>
+
+<!-- ===== TAB: COMBOS ===== -->
+<div id="combo" class="section">
+  <div class="section-label">คำสั่งยอดฮิตที่ใช้คู่กับ Pipe</div>
+  <div class="card">
+    <div class="card-title"><span>🧰</span> Toolbox พื้นฐานสำหรับต่อ Pipe</div>
+    <div class="cmd-row"><span class="cmd">sort</span><span class="cmd-desc">เรียงลำดับข้อมูลตามตัวอักษร (A→Z) เป็นค่า default</span></div>
+    <div class="cmd-row"><span class="cmd">sort -r</span><span class="cmd-desc"><strong>Reverse</strong> — เรียงย้อนกลับ (Z→A)</span></div>
+    <div class="cmd-row"><span class="cmd">sort -n</span><span class="cmd-desc"><strong>Numeric</strong> — เรียงแบบตัวเลขจริง (ไม่ใช่เรียงแบบ string ที่ "10" จะมาก่อน "9")</span></div>
+    <div class="cmd-row"><span class="cmd">uniq</span><span class="cmd-desc">ลบบรรทัดที่ซ้ำ<strong>ติดกัน</strong>ออก — <u>ต้อง sort ก่อนเสมอ</u> ไม่งั้นจะลบซ้ำไม่หมด</span></div>
+    <div class="cmd-row"><span class="cmd">uniq -c</span><span class="cmd-desc">นับจำนวนที่แต่ละรายการซ้ำกัน แสดงเป็นตัวเลขนำหน้า</span></div>
+    <div class="cmd-row"><span class="cmd">wc -l / -w / -c</span><span class="cmd-desc">นับ<strong>บรรทัด</strong> / <strong>คำ</strong> / <strong>ตัวอักษร (byte)</strong> ตามลำดับ</span></div>
+    <div class="cmd-row"><span class="cmd">grep 'pattern'</span><span class="cmd-desc">กรองเฉพาะบรรทัดที่ตรงกับ pattern ที่ระบุ</span></div>
+    <div class="cmd-row"><span class="cmd">grep -c 'pattern'</span><span class="cmd-desc">นับจำนวนบรรทัดที่ match แทนที่จะแสดงบรรทัดนั้นๆ</span></div>
+    <div class="cmd-row"><span class="cmd">head -n5 / tail -n5</span><span class="cmd-desc">แสดงเฉพาะ 5 บรรทัด<strong>บนสุด</strong> / <strong>ล่างสุด</strong></span></div>
+    <div class="cmd-row"><span class="cmd">tee file.txt</span><span class="cmd-desc">เขียนผลลัพธ์ลงไฟล์ <strong>และ</strong> ส่งต่อไปยัง pipe ถัดไปด้วยพร้อมกัน (ไม่ใช่เลือกอย่างใดอย่างหนึ่งแบบ <code>&gt;</code>)</span></div>
+    <div class="cmd-row"><span class="cmd">xargs cmd</span><span class="cmd-desc">แปลงข้อมูลจาก stdin ให้กลายเป็น <strong>argument</strong> ของคำสั่งถัดไป — ใช้เมื่อคำสั่งปลายทางไม่รับ stdin โดยตรง</span></div>
+    <div class="warn-box"><p>⚠️ <strong>กับดักข้อสอบยอดฮิต:</strong> <code>uniq</code> ทำงานกับบรรทัดที่ซ้ำ<strong>ติดกันเท่านั้น</strong> ถ้าข้อมูลไม่เรียงก่อน (<code>sort</code>) ผลลัพธ์จะยังมีของซ้ำหลงเหลืออยู่ — สูตรที่ถูกต้องเสมอคือ <code>sort | uniq</code></p></div>
+  </div>
+
+  <div class="section-label">ตัวอย่างการต่อคำสั่งใช้งานจริง</div>
+  <div class="card">
+    <div class="card-title"><span>💡</span> Real-World Pipeline Patterns</div>
+    <div class="cmd-row highlight"><span class="cmd">cat file.txt | sort | uniq | wc -l</span><span class="cmd-desc">นับจำนวน<strong>คำที่ไม่ซ้ำกัน</strong>ในไฟล์ — sort ก่อน → ลบซ้ำ → นับบรรทัด</span></div>
+    <div class="cmd-row"><span class="cmd">ls -al | grep '.txt'</span><span class="cmd-desc">แสดงเฉพาะไฟล์ที่มีคำว่า <code>.txt</code> อยู่ในผลลัพธ์ของ <code>ls -al</code></span></div>
+    <div class="cmd-row"><span class="cmd">ps aux | grep nginx</span><span class="cmd-desc">ค้นหา process ที่ชื่อมีคำว่า <code>nginx</code> อยู่ — ใช้บ่อยมากตอน debug service</span></div>
+    <div class="cmd-row"><span class="cmd">cat access.log | grep 404 | wc -l</span><span class="cmd-desc">นับจำนวนบรรทัด log ที่มีรหัส <code>404</code> (Not Found) เกิดขึ้นทั้งหมด</span></div>
+    <div class="cmd-row"><span class="cmd">du -sh * | sort -rh | head -10</span><span class="cmd-desc">หา 10 ไฟล์/โฟลเดอร์ที่<strong>ใช้พื้นที่มากที่สุด</strong> ในไดเรกทอรีปัจจุบัน (<code>-h</code> ใน sort ใช้เรียง human-readable size เช่น 1K, 1M, 1G ได้ถูกต้อง)</span></div>
+    <div class="cmd-row"><span class="cmd">cat file.txt | tee backup.txt | wc -l</span><span class="cmd-desc">สำรองข้อมูลลง <code>backup.txt</code> พร้อมกับนับบรรทัดไปด้วยในคำสั่งเดียว</span></div>
+    <div class="cmd-row"><span class="cmd">history | tail -20</span><span class="cmd-desc">ดูคำสั่ง 20 รายการล่าสุดที่เคยพิมพ์ใน terminal</span></div>
+    <div class="cmd-row"><span class="cmd">find . -name "*.log" | xargs rm</span><span class="cmd-desc">ค้นหาไฟล์ <code>.log</code> ทั้งหมด แล้วส่งชื่อไฟล์เหล่านั้นเป็น argument ให้ <code>rm</code> ลบทีเดียว</span></div>
+  </div>
+</div>
+
+<!-- ===== TAB: CHEAT SHEET ===== -->
+<div id="cheat" class="section">
+  <div class="card">
+    <div class="card-title"><span>📋</span> Cheat Sheet ฉบับสมบูรณ์</div>
+    <div class="cmd-row"><span class="cmd">|</span><span class="cmd-desc">Pipe — ส่ง stdout ของคำสั่งซ้ายเข้า stdin ของคำสั่งขวา</span></div>
+    <div class="cmd-row"><span class="cmd">&gt;</span><span class="cmd-desc">Overwrite — เขียนผลลัพธ์ลงไฟล์ ทับของเดิมทั้งหมด</span></div>
+    <div class="cmd-row"><span class="cmd">&gt;&gt;</span><span class="cmd-desc">Append — เขียนผลลัพธ์ต่อท้ายไฟล์ ไม่ลบของเดิม</span></div>
+    <div class="cmd-row"><span class="cmd">&lt;</span><span class="cmd-desc">Input redirect — ป้อนเนื้อหาไฟล์เข้าเป็น stdin</span></div>
+    <div class="cmd-row"><span class="cmd">&lt;&lt;</span><span class="cmd-desc">Heredoc — ป้อนข้อความหลายบรรทัดจนกว่าจะเจอ delimiter</span></div>
+    <div class="cmd-row"><span class="cmd">2&gt;</span><span class="cmd-desc">Redirect เฉพาะ <strong>stderr</strong> ไปไฟล์ที่ระบุ</span></div>
+    <div class="cmd-row"><span class="cmd">2&gt;/dev/null</span><span class="cmd-desc">ทิ้ง error ทั้งหมดไม่ให้แสดงผล</span></div>
+    <div class="cmd-row"><span class="cmd">&gt; file 2&gt;&amp;1</span><span class="cmd-desc">รวม stdout + stderr ไปไฟล์เดียวกัน (ต้องเรียงลำดับแบบนี้)</span></div>
+    <div class="cmd-row"><span class="cmd">&amp;&gt;</span><span class="cmd-desc">รูปแบบย่อของ <code>&gt; file 2&gt;&amp;1</code> ใน bash</span></div>
+    <div class="cmd-row"><span class="cmd">sort | uniq | wc -l</span><span class="cmd-desc">สูตรมาตรฐาน: เรียง → ลบซ้ำ → นับจำนวนไม่ซ้ำ</span></div>
+    <div class="cmd-row"><span class="cmd">uniq -c</span><span class="cmd-desc">นับจำนวนที่แต่ละรายการซ้ำกัน</span></div>
+    <div class="cmd-row"><span class="cmd">grep 'x' / grep -c 'x'</span><span class="cmd-desc">กรองบรรทัดที่ match / นับจำนวนบรรทัดที่ match</span></div>
+    <div class="cmd-row"><span class="cmd">tee file</span><span class="cmd-desc">เขียนไฟล์ พร้อมส่งต่อ pipe ถัดไปในคำสั่งเดียว</span></div>
+    <div class="cmd-row"><span class="cmd">xargs</span><span class="cmd-desc">แปลง stdin ให้เป็น argument ของคำสั่งถัดไป</span></div>
+    <div class="cmd-row"><span class="cmd">wc -l &lt; file</span><span class="cmd-desc">นับบรรทัด ได้ผลลัพธ์เป็นตัวเลขล้วน ไม่มีชื่อไฟล์ติดมา</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>💡</span> Engineer Tips — ใช้งานจริง</div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ก่อนใช้ <code>uniq</code> ทุกครั้ง เช็กก่อนว่า <code>sort</code> มาก่อนหรือยัง — เป็นบั๊กที่พบบ่อยที่สุดในการเขียน pipeline</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ใช้ <code>2&gt;/dev/null</code> เวลา run สคริปต์ที่รู้อยู่แล้วว่าจะมี error บางส่วนที่ไม่สำคัญ เพื่อให้ log สะอาด อ่านง่าย</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ใช้ <code>tee</code> แทน <code>&gt;</code> เมื่อยังอยากเห็นผลลัพธ์บนหน้าจอ<strong>พร้อมกับ</strong>บันทึกไฟล์ — <code>&gt;</code> อย่างเดียวจะไม่โชว์อะไรบนหน้าจอเลย</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">จำสูตร <strong>"count → sort → uniq → wc"</strong> ไว้ให้ขึ้นใจ เป็น pattern ที่ออกข้อสอบและใช้งานจริงบ่อยที่สุด</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">ตรวจสอบ error log ของ production ด้วย <code>tail -f app.log | grep ERROR</code> เพื่อดู error แบบ real-time</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-icon">→</div>
+      <div class="tip-text">เมื่อคำสั่งไม่รับ stdin โดยตรง (เช่น <code>rm</code>, <code>mkdir</code>) ให้ต่อด้วย <code>xargs</code> เสมอเพื่อแปลง stdin เป็น argument</div>
+    </div>
+  </div>
+</div>
+<!-- ===== TAB: QUIZ ===== -->
+<div id="quiz" class="section">
+  <div class="score-card" id="score-card">
+    <div class="score-label" id="score-label">คะแนน: 0 / 0</div>
+    <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+    <div class="score-sub" id="score-sub"></div>
+  </div>
+  <div id="quiz-container"></div>
+  <button class="reset-btn" onclick="resetQuiz()">↺ เริ่มใหม่ทั้งหมด</button>
+</div>
+
+</div><!-- end wrap -->
+
+<footer>Linux Foundation · Module 5: Pipes & Redirections · Cloud Engineer Study Card</footer>
+
+<script>
+const questions=[
+  {q:"สัญลักษณ์ | ถูกใช้สำหรับหน้าที่ใด?",opts:["Redirection (เปลี่ยนทิศทางไฟล์)","Pipe (ส่งผลลัพธ์ต่อคำสั่ง)","Comment (คอมเมนต์โค้ด)","Wildcard (ตัวแทนอักษร)"],ans:1,exp:"| คือสัญลักษณ์ Pipe ใช้ส่ง stdout ของคำสั่งซ้ายเข้าเป็น stdin ของคำสั่งขวา ไม่ใช่ redirection ที่ทำงานกับไฟล์"},
+  {q:"ตัวอย่างใดแสดงสถานการณ์ที่ Command2 ทำงานกับผลลัพธ์จาก Command1?",opts:["Command2 | Command1","Command1 || Command2","Command1 | Command2","Command1 | Command3 | Command2"],ans:2,exp:"Command1 | Command2 — ผลลัพธ์จากฝั่งซ้าย (Command1) จะถูกส่งไปให้ฝั่งขวา (Command2) ทำงานต่อ ตามลำดับการอ่าน"},
+  {q:"มีไฟล์ที่แต่ละบรรทัดมีคำหนึ่งคำ ต้องการนับคำที่ไม่ซ้ำกัน คำสั่งใดถูกต้อง?",opts:["cat file | sort | wc -l","cat file | sort | wc -l | uniq","cat file | uniq | sort | wc -l","cat file | wc -l | uniq | sort","cat file | sort | uniq | wc -l"],ans:4,exp:"ต้องเรียงข้อมูลด้วย sort ก่อน แล้วคัดคำซ้ำออกด้วย uniq (ซึ่งทำงานกับบรรทัดที่ซ้ำติดกันเท่านั้น) จากนั้นค่อยนับบรรทัดด้วย wc -l"},
+  {q:"ต้องใช้สัญลักษณ์ใดในการเขียนข้อมูลต่อท้ายไฟล์ (Append) เมื่อ redirect?",opts:[">>",">",">=","<","<<"],ans:0,exp:">> ใช้เขียนต่อท้ายไฟล์โดยไม่ลบของเดิม ส่วน > จะลบของเดิมแล้วเขียนทับทั้งหมด"},
+  {q:"คำสั่ง wc -l < numbers.txt จะทำหน้าที่อะไร?",opts:["นับจำนวนตัวอักษรในชื่อไฟล์","นับจำนวนบรรทัดในไฟล์ numbers.txt","เขียนผลรวมตัวเลขลงในไฟล์ numbers.txt","ลบไฟล์ numbers.txt ทิ้ง"],ans:1,exp:"< ป้อนเนื้อหาไฟล์ numbers.txt เข้าเป็น stdin ของ wc -l ผลลัพธ์คือจำนวนบรรทัด และจะแสดงเป็นตัวเลขล้วนไม่มีชื่อไฟล์ติดมา"},
+  {q:"ข้อใดคือความแตกต่างหลักระหว่าง > กับ >>?",opts:["> เร็วกว่า >>","> ลบของเดิมแล้วเขียนทับ ส่วน >> เขียนต่อท้าย","ไม่มีความแตกต่างกัน","> ใช้กับไฟล์ .txt เท่านั้น"],ans:1,exp:"> (overwrite) ลบเนื้อหาเดิมในไฟล์ทั้งหมดแล้วเขียนใหม่ ส่วน >> (append) เขียนข้อมูลต่อท้ายโดยไม่ลบของเดิม"},
+  {q:"stderr มีเลข file descriptor เท่าใด?",opts:["0","1","2","3"],ans:2,exp:"stdin = 0, stdout = 1, stderr = 2 — เป็นเลขมาตรฐานที่ใช้อ้างอิงช่องทางข้อมูลใน Linux ทุกระบบ"},
+  {q:"คำสั่งใดใช้ทิ้ง (discard) ข้อความ error ทั้งหมดไม่ให้แสดงผล?",opts:["cmd > /dev/null","cmd 2> /dev/null","cmd < /dev/null","cmd 1> /dev/null"],ans:1,exp:"2> /dev/null คือการ redirect stream หมายเลข 2 (stderr) ไปยัง /dev/null ซึ่งเป็น 'ถังขยะ' ของระบบ ทำให้ error หายไปโดยไม่กระทบ stdout"},
+  {q:"คำสั่ง uniq จะทำงานถูกต้องแม่นยำ ต้องใช้คู่กับคำสั่งใดก่อนเสมอ?",opts:["grep","sort","wc","head"],ans:1,exp:"uniq ลบเฉพาะบรรทัดที่ซ้ำ 'ติดกัน' เท่านั้น ถ้าข้อมูลไม่ได้เรียงด้วย sort ก่อน ข้อมูลซ้ำที่อยู่ไม่ติดกันจะไม่ถูกลบออก"},
+  {q:"คำสั่ง tee แตกต่างจาก > อย่างไร?",opts:["tee เร็วกว่า > เสมอ","tee เขียนไฟล์พร้อมส่งต่อ pipe ได้ ส่วน > ไม่ส่งต่อ","tee ใช้ลบไฟล์ ส่วน > ใช้สร้างไฟล์","ไม่มีความแตกต่างกันเลย"],ans:1,exp:"tee เขียนผลลัพธ์ลงไฟล์ พร้อมส่งข้อมูลเดิมต่อไปยัง pipe ถัดไปได้ในเวลาเดียวกัน ส่วน > ส่งข้อมูลไปที่ไฟล์อย่างเดียวเท่านั้น หยุดสายพานตรงนั้น"},
+  {q:"คำสั่ง xargs มีหน้าที่หลักคืออะไร?",opts:["เรียงลำดับข้อมูล","แปลงข้อมูลจาก stdin ให้เป็น argument ของคำสั่งถัดไป","ลบไฟล์ที่ซ้ำกัน","บีบอัดไฟล์"],ans:1,exp:"xargs รับข้อมูลจาก stdin แล้วแปลงให้กลายเป็น argument ป้อนให้คำสั่งถัดไป ใช้เมื่อคำสั่งปลายทาง (เช่น rm, mkdir) ไม่รับ stdin โดยตรง"},
+  {q:"grep -c 'ERROR' log.txt จะให้ผลลัพธ์แบบใด?",opts:["แสดงบรรทัดที่มีคำว่า ERROR ทั้งหมด","แสดงจำนวนบรรทัดที่มีคำว่า ERROR เป็นตัวเลข","ลบบรรทัดที่มีคำว่า ERROR ออก","เขียนคำว่า ERROR ลงไฟล์ใหม่"],ans:1,exp:"-c (count) ทำให้ grep แสดงผลเป็นจำนวนบรรทัดที่ match แทนที่จะแสดงเนื้อหาบรรทัดนั้นๆ ออกมา"},
+  {q:"sort -n ต่างจาก sort เฉยๆ อย่างไร?",opts:["ไม่มีความต่างกัน","-n เรียงแบบตัวเลขจริง ส่วน sort ปกติเรียงแบบ string","-n เรียงย้อนกลับ","-n ใช้ลบข้อมูลซ้ำ"],ans:1,exp:"sort ปกติเรียงแบบ string ทำให้ '10' มาก่อน '9' แต่ sort -n เรียงตามค่าตัวเลขจริง ทำให้ได้ลำดับ 9 มาก่อน 10 ถูกต้องตามหลักคณิตศาสตร์"},
+  {q:"คำสั่ง cmd > file 2>&1 ทำอะไร?",opts:["ส่ง stdout กับ stderr ไปคนละไฟล์","รวม stdout และ stderr ไปเก็บไว้ในไฟล์เดียวกัน","ลบไฟล์ file ทิ้งก่อนรัน cmd","แสดงเฉพาะ error บนหน้าจอ"],ans:1,exp:"> file ส่ง stdout ไปที่ file ก่อน แล้ว 2>&1 บอกให้ stream 2 (stderr) ไปทางเดียวกับ stream 1 (ซึ่งตอนนี้ชี้ไปที่ file แล้ว) ผลคือทั้งคู่ไปรวมกันในไฟล์เดียว"},
+  {q:"เหตุใดลำดับใน cmd 2>&1 > file จึงไม่รวม error ลงไฟล์เหมือน cmd > file 2>&1?",opts:["เพราะ 2>&1 ต้องเขียนก่อนเสมอ","เพราะตอนสั่ง 2>&1 stdout (1) ยังชี้ไปที่หน้าจออยู่ ยังไม่ถูกเปลี่ยนไปที่ file","เพราะ Linux ไม่รองรับการเขียนแบบนี้","เพราะ error จะถูกลบทิ้งอัตโนมัติ"],ans:1,exp:"Redirection ทำงานจากซ้ายไปขวาตามลำดับที่เขียน — cmd 2>&1 > file จะให้ stderr ไปทางเดียวกับ stdout ที่ 'ยังเป็นหน้าจอ' อยู่ก่อน แล้วค่อยเปลี่ยน stdout ไปที่ file ทีหลัง ทำให้ error ยังคงขึ้นหน้าจอ ไม่ได้ไปอยู่ในไฟล์"}
+];
+
+let answered={},correct=0;
+
+function buildQuiz(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML='';
+  questions.forEach((q,i)=>{
+    const div=document.createElement('div');
+    div.className='q-wrap';
+    div.innerHTML=`<div class="q-card">
+      <div class="q-num">ข้อที่ ${i+1} จาก ${questions.length} ข้อ</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">${q.opts.map((o,j)=>`<button class="q-opt" onclick="answer(${i},${j})" id="opt-${i}-${j}">${o}</button>`).join('')}</div>
+      <div class="q-explain" id="exp-${i}">💡 ${q.exp}</div>
+    </div>`;
+    c.appendChild(div);
+  });
+}
+
+function answer(qi,oi){
+  if(answered[qi]!==undefined)return;
+  answered[qi]=oi;
+  const q=questions[qi];
+  for(let j=0;j<q.opts.length;j++){
+    const btn=document.getElementById(`opt-${qi}-${j}`);
+    btn.classList.add('disabled');
+    if(j===q.ans)btn.classList.add('correct');
+    else if(j===oi&&oi!==q.ans)btn.classList.add('wrong');
+  }
+  document.getElementById(`exp-${qi}`).classList.add('show');
+  if(oi===q.ans)correct++;
+  updateScore();
+}
+
+function updateScore(){
+  const total=Object.keys(answered).length;
+  const card=document.getElementById('score-card');
+  card.style.display='block';
+  document.getElementById('score-label').textContent=`คะแนน: ${correct} / ${total} ข้อ`;
+  const pct=total>0?Math.round(correct/total*100):0;
+  document.getElementById('score-fill').style.width=pct+'%';
+  let msg='';
+  if(total===questions.length){
+    if(pct>=90)msg='ยอดเยี่ยม! พร้อมสำหรับงาน Cloud Engineer แล้ว 🎯';
+    else if(pct>=70)msg='ดีมาก! ทบทวนข้อที่ผิดแล้วลุยต่อได้เลย 👍';
+    else msg='ทบทวนเนื้อหาในแท็บอื่นแล้วลองใหม่อีกครั้งนะครับ 💪';
+  }else{
+    msg=`ตอบไปแล้ว ${total} จาก ${questions.length} ข้อ`;
+  }
+  document.getElementById('score-sub').textContent=msg;
+}
+
+function resetQuiz(){
+  answered={};correct=0;
+  document.getElementById('score-card').style.display='none';
+  buildQuiz();
+}
+
+function showTab(id,el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('show');
+  el.classList.add('active');
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
