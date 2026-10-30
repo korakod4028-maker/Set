@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network Basics 6 — Network Address & Subnet Mask</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Sarabun:wght@300;400;600;700&display=swap');
+:root{--bg:#0a0e17;--s:#111827;--s2:#1a2236;--bd:#1e2d47;--ac:#00d4ff;--ac2:#7c3aed;--ok:#10b981;--warn:#f59e0b;--bad:#ef4444;--tx:#e2e8f0;--mu:#94a3b8;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0}body{background:var(--bg);color:var(--tx);font:16px/1.7 'Sarabun',sans-serif;padding:16px}
+.w{max-width:900px;margin:auto}h1{font-size:1.6rem;color:var(--ac)}h2{color:var(--ac);margin:22px 0 8px;font-size:1.2rem}h3{color:var(--warn);margin:14px 0 4px;font-size:1rem}
+.sub{color:var(--mu);margin-bottom:14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;position:sticky;top:0;background:var(--bg);padding:6px 0;z-index:5}
+.tb{background:var(--s);color:var(--mu);border:1px solid var(--bd);padding:8px 14px;border-radius:8px;cursor:pointer;font:inherit}
+.tb.on{background:var(--ac);color:#04121a;font-weight:700}.p{display:none}.p.on{display:block}
+.c{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin:10px 0}
+.k{border-left:4px solid var(--ok)}.wn{border-left:4px solid var(--warn)}.nw{border-left:4px solid var(--ac2)}
+code,.m{font-family:var(--mono);background:var(--s2);padding:1px 6px;border-radius:5px;color:var(--ac);font-size:.92em}
+pre{font-family:var(--mono);background:#060a12;border:1px solid var(--bd);border-radius:8px;padding:10px;overflow-x:auto;font-size:.88rem;color:#a7f3d0;line-height:1.5}
+table{border-collapse:collapse;width:100%;font-size:.93rem}.tw{overflow-x:auto}th,td{border:1px solid var(--bd);padding:6px 9px;text-align:left}th{background:var(--s2);color:var(--ac)}
+.net{color:var(--ac);font-weight:700}.hst{color:var(--warn);font-weight:700}
+input{background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;font:1rem var(--mono);width:100%}
+.bt{background:var(--ac);color:#04121a;border:0;border-radius:8px;padding:9px 16px;font:700 1rem 'Sarabun';cursor:pointer;margin:4px 4px 4px 0}.bt.g{background:var(--s2);color:var(--tx);border:1px solid var(--bd)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:600px){.g2{grid-template-columns:1fr}}
+.fc{min-height:150px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.15rem;cursor:pointer;padding:20px;background:var(--s2);border:2px dashed var(--ac);border-radius:14px}
+.q{margin:12px 0}.o{display:block;width:100%;text-align:left;background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;margin:5px 0;font:.95rem var(--mono);cursor:pointer}
+.o.sel{border-color:var(--ac)}.o.ok{border-color:var(--ok);background:#0b2a22}.o.no{border-color:var(--bad);background:#2a1111}
+.ex{display:none;color:var(--mu);font-size:.93rem;margin-top:4px}.ex.on{display:block}
+.res{color:var(--ok)}.err{color:var(--bad)}
+</style></head><body><div class="w">
+<h1>🌐 Network Basics 6 — หา Network Address &amp; ดูว่า IP อยู่ Network เดียวกันไหม</h1>
+<div class="sub">Module 8 (IPv4 Addressing · Networks and Hosts) · เตรียมสอบ + ใช้งานจริงในสาย Network Engineer</div>
+<div class="tabs">
+<button class="tb on" data-t="a">📖 เนื้อหา</button><button class="tb" data-t="b">🧮 Calculator</button><button class="tb" data-t="c">🃏 Flashcards</button><button class="tb" data-t="d">✅ แบบฝึกหัด</button><button class="tb" data-t="e">🛠 Lab &amp; Cheat Sheet</button></div>
+
+<div class="p on" id="a">
+<div class="c k"><b>แก่นของบท:</b> IPv4 = 32 bits = 4 Octets = <span class="net">Network Portion</span> + <span class="hst">Host Portion</span>. <b>Subnet Mask</b> คือตัวบอกว่า "Network จบตรงไหน"</div>
+
+<h2>1. พื้นฐาน IPv4</h2>
+<div class="c"><ul style="padding-left:20px">
+<li>Logical Address ระบุ Host บน Network · ต้อง <b>Unique</b> ภายใน Local Network</li>
+<li>กำหนดให้ <b>Network Interface (NIC)</b> ไม่ใช่ตัวเครื่องลอย ๆ — Server 2 NIC = 2 IP</li>
+<li>ทุก Packet มี Source IP + Destination IP (ให้ Reply กลับถูกที่)</li>
+<li>แต่ละ Octet = 0–255 · IPv4 = 32 bits · IPv6 = 128 bits</li></ul></div>
+
+<h2>2. Subnet Mask 3 แบบหลัก</h2>
+<div class="tw"><table><tr><th>Mask</th><th>CIDR</th><th>Network</th><th>Host</th><th>ตัวอย่าง</th></tr>
+<tr><td class="m">255.0.0.0</td><td>/8</td><td>Octet 1</td><td>2–4</td><td>10.<span class="hst">5.4.100</span> → 10.0.0.0</td></tr>
+<tr><td class="m">255.255.0.0</td><td>/16</td><td>Octet 1–2</td><td>3–4</td><td>172.16.<span class="hst">4.100</span> → 172.16.0.0</td></tr>
+<tr><td class="m">255.255.255.0</td><td>/24</td><td>Octet 1–3</td><td>4</td><td>10.5.4.<span class="hst">100</span> → 10.5.4.0</td></tr></table></div>
+<div class="c nw"><b>เพิ่มเติม:</b> <code>/24</code> = จำนวน bit 1 ต่อเนื่องจากซ้ายใน Mask (24 bits = 255.255.255.0) — ใน CCNA/งานจริงจะเห็นเขียนแบบ <code>192.168.1.50/24</code> บ่อยกว่าเขียน Mask เต็ม</div>
+
+<h2>3. วิธีหา Network Address (4 ขั้น)</h2>
+<div class="c"><ol style="padding-left:20px"><li>ดู Subnet Mask</li><li>นับว่า Network กี่ Octet (นับ 255)</li><li>เก็บส่วน Network ไว้</li><li>เปลี่ยน Host Portion เป็น <b>0</b></li></ol>
+<pre>10.5.4.100 / 255.255.255.0
+10.5.4 | 100   →  Network Address = 10.5.4.0</pre></div>
+
+<h2>4. วิธีเช็กว่า "Network เดียวกัน" ไหม</h2>
+<div class="c"><pre>Host-A  10.5.4.100/24  → Network = 10.5.4.0
+10.5.4.1    ✅  (10.5.4 ตรง)
+10.5.4.99   ✅
+10.5.100.4  ❌  (Octet 3 ต่าง)
+10.5.0.1    ❌
+10.0.0.98   ❌</pre>
+<b>กฎ:</b> Network Portion เหมือนกัน + Host Portion ไม่ซ้ำ = อยู่ Network เดียวกัน (IP ต่างกันได้ ขอแค่ Network Portion ตรง)<br>
+<b>ระวัง:</b> ต้องเทียบเฉพาะ Octet ที่เป็น Network ตาม Mask — /16 เทียบแค่ 2 Octet แรก ไม่ใช่ 3</div>
+
+<h2>5. 🧠 เพิ่มให้ครบแบบ Engineer: ทำไมถึงทำแบบนี้ได้ (AND Operation)</h2>
+<div class="c nw">จริง ๆ แล้ว Network Address = <b>IP AND Subnet Mask</b> (ทีละ bit) — "เปลี่ยน Host เป็น 0" เป็นแค่ทางลัดที่ใช้ได้เมื่อ Mask ตัดตรง Octet
+<pre>192.168.5.130  = 11000000.10101000.00000101.10000010
+255.255.255.128= 11111111.11111111.11111111.10000000
+AND            = 11000000.10101000.00000101.10000000
+               = 192.168.5.128   (Mask /25 ตัดกลาง Octet!)</pre>
+ในสอบ Module นี้มีแค่ /8 /16 /24 แต่งานจริง (Subnetting) จะเจอ /25–/30 — ใช้ AND หรือ Calculator แท็บถัดไป</div>
+
+<h2>6. ค่าอื่นที่ได้จาก Network Address (ของใหม่)</h2>
+<div class="tw"><table><tr><th>ค่า</th><th>วิธีได้</th><th>ตัวอย่าง 192.168.1.0/24</th></tr>
+<tr><td>Network Address</td><td>Host bits ทั้งหมด = 0</td><td class="m">192.168.1.0</td></tr>
+<tr><td>Broadcast Address</td><td>Host bits ทั้งหมด = 1</td><td class="m">192.168.1.255</td></tr>
+<tr><td>Usable Hosts</td><td>2<sup>host bits</sup> − 2</td><td>254 (.1 – .254)</td></tr></table></div>
+<div class="c wn">⚠️ <b>ใส่ Network/Broadcast Address ให้ Host ไม่ได้</b> — ข้อสอบ/งานจริงชอบถาม เช่น ตั้ง PC เป็น 192.168.1.0/24 หรือ .255 = ผิด</div>
+
+<h2>7. ข้าม Network ต้องใช้อะไร</h2>
+<div class="c"><ul style="padding-left:20px">
+<li><b>Network เดียวกัน</b> → คุยกันตรง ผ่าน Switch (Switch ส่งตาม MAC; Host ใช้ ARP หา MAC)</li>
+<li><b>คนละ Network</b> → ต้องผ่าน <b>Router (Routing)</b> · Host ต้องตั้ง <b>Default Gateway</b> (IP ของ Router ใน Network ตัวเอง)</li>
+<li>Router สนใจแค่ "Network ปลายทางอยู่ทางไหน" ไม่ต้องจำทุก Host = <b>Hierarchical Addressing</b></li>
+<li>Physical Network เดียวมีหลาย Logical Network ได้ (เช่น 192.168.18.x กับ 192.168.5.x) แต่จะคุยข้ามกันก็ต้อง Routing</li></ul>
+<div class="c wn" style="margin-top:8px">📌 <b>ปรับความเข้าใจ:</b> ในสรุปเดิมเขียนว่า "Network Portion ไม่ตรง = สื่อสารไม่ได้" — ที่ถูกคือ <b>"สื่อสารตรงไม่ได้"</b> ต้องมี Router/Gateway ตัวกลาง ถ้าตั้ง IP ผิด Network (เช่น ย้าย PC ไปเสียบ Network อื่นแต่ยังใช้ IP เดิม) ก็จะติดต่อใครไม่ได้เพราะ Gateway ไม่อยู่ใน Network เดียวกับ PC</div></div>
+
+<h2>8. Private IP &amp; Address พิเศษ (ของใหม่ ต้องรู้ในงาน)</h2>
+<div class="tw"><table><tr><th>ช่วง</th><th>ใช้ทำอะไร</th></tr>
+<tr><td class="m">10.0.0.0/8</td><td>Private (RFC 1918)</td></tr><tr><td class="m">172.16.0.0 – 172.31.255.255 (/12)</td><td>Private (RFC 1918)</td></tr>
+<tr><td class="m">192.168.0.0/16</td><td>Private (RFC 1918)</td></tr>
+<tr><td class="m">127.0.0.0/8</td><td>Loopback (127.0.0.1 = เครื่องตัวเอง)</td></tr>
+<tr><td class="m">169.254.0.0/16</td><td>APIPA — ได้ IP นี้ = <b>DHCP ล้มเหลว</b></td></tr></table></div>
+
+<h2>9. Troubleshooting จริง</h2>
+<div class="c"><pre>Windows: ipconfig /all      Linux: ip addr / ip route
+ping &lt;IP&gt;   → ทดสอบถึงปลายทาง (TTL, loss)
+ถ้า ping เพื่อนใน LAN ไม่ได้ → เช็ก IP/Mask เหมือน Network เดียวกันไหม + IP ซ้ำไหม
+ถ้า ping LAN ได้แต่ออกนอกไม่ได้ → เช็ก Default Gateway
+Timeout แรก ๆ ปกติ (กำลังทำ ARP)</pre></div>
+</div>
+
+<div class="p" id="b">
+<div class="c"><h3>🧮 Subnet Calculator</h3>
+<div class="g2"><div>IP Address<input id="ip" value="192.168.5.130"></div><div>Mask (255.255.255.0 หรือ /24)<input id="mk" value="255.255.255.128"></div></div>
+<button class="bt" onclick="calc()">คำนวณ</button><div id="out" style="margin-top:8px"></div></div>
+<div class="c"><h3>🔍 เช็ก 2 IP อยู่ Network เดียวกันไหม</h3>
+<div class="g2"><div>IP A<input id="ia" value="10.5.4.100"></div><div>IP B<input id="ib" value="10.5.100.4"></div></div>
+<div style="margin-top:6px">Mask ร่วม<input id="im" value="/24"></div>
+<button class="bt" onclick="same()">เช็ก</button><div id="so" style="margin-top:8px"></div></div></div>
+
+<div class="p" id="c"><div class="fc" id="fc" onclick="flip()"></div>
+<div style="text-align:center;margin-top:8px"><button class="bt g" onclick="nx(-1)">◀</button><span id="fn"></span><button class="bt g" onclick="nx(1)">▶</button></div></div>
+
+<div class="p" id="d"><div id="qs"></div>
+<button class="bt" onclick="chk()">✔ ตรวจคำตอบ</button><button class="bt g" onclick="rq()">↺ ทำใหม่</button><div id="sc" style="font-size:1.2rem;margin-top:8px"></div></div>
+
+<div class="p" id="e">
+<h2>🛠 Lab: ลงมือจริง (Packet Tracer / เครื่องจริง)</h2>
+<div class="c"><ol style="padding-left:20px">
+<li>ตั้ง PC1 = <code>192.168.1.10/24</code>, PC2 = <code>192.168.1.20/24</code> ต่อ Switch เดียวกัน → <code>ping</code> ผ่าน</li>
+<li>เปลี่ยน PC2 เป็น <code>192.168.2.20/24</code> → ping ไม่ผ่าน (คนละ Network ไม่มี Router)</li>
+<li>เพิ่ม Router: Gi0/0 = 192.168.1.1/24, Gi0/1 = 192.168.2.1/24 ตั้ง Default Gateway ให้ PC ทั้งสอง → ping ผ่าน</li>
+<li>ลองตั้ง IP ซ้ำ 2 เครื่อง → สังเกต IP conflict</li>
+<li>ลองตั้ง Mask เป็น /16 กับ PC หนึ่งเครื่อง แล้ว ping หา → ผลเป็นอย่างไร? (คิดก่อนทดสอบ: Mask ไม่ตรงกันทำให้ 2 ฝั่งเห็น "Network" ไม่เหมือนกัน)</li></ol></div>
+<h2>📋 Cheat Sheet</h2>
+<div class="c"><pre>IPv4 = 32 bits = 4 Octets = Network + Host
+/8  255.0.0.0     → จำ 1 Octet
+/16 255.255.0.0   → จำ 2 Octet
+/24 255.255.255.0 → จำ 3 Octet
+Network Addr  = IP AND Mask  (Host bits = 0)
+Broadcast     = Host bits = 1
+Usable hosts  = 2^h − 2
+Same network  = Network Portion เหมือนกัน
+Different net = ต้องใช้ Router + Default Gateway
+IPv4 = Logical + Hierarchical   (IPv6 = 128 bits)
+ต้องมี IP: Server 2 NIC, Printer NIC ในตัว, IP Phone
+ไม่ต้อง: PDA ต่อ PC, Web camera ต่อ Host, Wireless mouse</pre></div>
+<div class="c k">🎯 <b>ประโยคเดียวก่อนทำโจทย์:</b> ดู Mask → นับ Octet ของ Network → เอาส่วน Network ไปเทียบ → Host เป็น 0 = Network Address</div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tb,.p').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(b.dataset.t).classList.add('on')});
+const pIP=s=>{const p=s.trim().split('.');if(p.length!=4||p.some(x=>!/^\d+$/.test(x)||+x>255))return null;return p.reduce((a,x)=>((a<<8)|+x)>>>0,0)};
+const tS=n=>[24,16,8,0].map(s=>(n>>>s)&255).join('.');
+const bn=n=>[24,16,8,0].map(s=>((n>>>s)&255).toString(2).padStart(8,'0')).join('.');
+function pM(s){s=s.trim();let m;if(s[0]=='/'){const n=+s.slice(1);if(!(n>=0&&n<=32))return null;m=n==0?0:(0xFFFFFFFF<<(32-n))>>>0}else m=pIP(s);
+ if(m===null)return null;const inv=(~m)>>>0;if((inv&(inv+1))!==0&&inv!==0xFFFFFFFF&&inv!==0)return null;return m}
+const cidr=m=>m.toString(2).replace(/0/g,'').length;
+function calc(){const i=pIP($('ip').value),m=pM($('mk').value);if(i===null||m===null){$('out').innerHTML='<span class=err>IP หรือ Mask ไม่ถูกต้อง (Mask ต้องเป็น 1 ต่อเนื่องแล้วตามด้วย 0)</span>';return}
+ const n=(i&m)>>>0,b=(n|(~m>>>0))>>>0,h=32-cidr(m),us=h<2?0:Math.pow(2,h)-2;
+ $('out').innerHTML=`<pre>IP        ${bn(i)}\nMask      ${bn(m)}  (/${cidr(m)})\nAND       ${bn(n)}\n\nNetwork   <b>${tS(n)}</b>\nBroadcast ${tS(b)}\nRange     ${us?tS(n+1)+' – '+tS(b-1):'-'}\nUsable    ${us}\nHost?     ${i==n?'❌ นี่คือ Network Address':i==b?'❌ นี่คือ Broadcast':'✅ ใช้เป็น Host ได้'}</pre>`}
+function same(){const a=pIP($('ia').value),b=pIP($('ib').value),m=pM($('im').value);if(a===null||b===null||m===null){$('so').innerHTML='<span class=err>ข้อมูลไม่ถูกต้อง</span>';return}
+ const na=(a&m)>>>0,nb=(b&m)>>>0;$('so').innerHTML=`<pre>A → Network ${tS(na)}\nB → Network ${tS(nb)}</pre>`+(na==nb?'<b class=res>✅ Network เดียวกัน — คุยกันตรงได้</b>':'<b class=err>❌ คนละ Network — ต้องผ่าน Router</b>')}
+const F=[["IPv4 ยาวกี่ bits? กี่ Octet?","32 bits = 4 Octets (8 bits ต่อ Octet)"],["IPv4 ประกอบด้วยอะไร?","Network Portion + Host Portion"],["Subnet Mask ใช้ทำอะไร?","บอกว่าส่วนไหนเป็น Network / Host → หา Subnet ที่ Host อยู่"],["255.255.0.0 = Network กี่ Octet?","2 Octet (/16)"],["วิธีหา Network Address แบบเร็ว?","เก็บส่วน Network ไว้ แล้วเปลี่ยน Host Portion เป็น 0 (จริง ๆ คือ IP AND Mask)"],["Network เดียวกันต้องมีอะไรเหมือนกัน?","Network Portion เหมือนกัน (Host Portion ต้องไม่ซ้ำ)"],["Network Address ของ 172.16.4.100/16?","172.16.0.0"],["Broadcast ของ 192.168.1.0/24?","192.168.1.255 (Host bits = 1 ทั้งหมด)"],["คนละ Network สื่อสารกันด้วยอะไร?","Routing (Router) + Default Gateway — ไม่ใช่ Switching"],["IPv4 มี 2 คุณสมบัติหลัก?","Logical + Hierarchical addressing"],["IP 169.254.x.x หมายถึง?","APIPA — DHCP ล้มเหลว"],["อุปกรณ์ใดต้องมี IP?","Server (ทุก NIC), Network Printer, IP Phone"]];
+let fi=0,fs=0;function rf(){$('fc').textContent=fs?F[fi][1]:F[fi][0];$('fc').style.borderColor=fs?'#10b981':'#00d4ff';$('fn').textContent='  '+(fi+1)+'/'+F.length+'  '}
+function flip(){fs^=1;rf()}function nx(d){fi=(fi+d+F.length)%F.length;fs=0;rf()}rf();
+const Q=[
+["Host-A 10.5.4.100 / 255.255.255.0 → Network Address?",["10.5.4.0","10.5.0.0","10.0.0.0","10.5.4.255"],0,"Mask 3 Octet → 10.5.4 | 100 → Host = 0"],
+["Host-A 172.16.4.100 / 255.255.0.0 → Network Address?",["172.16.4.0","172.16.0.0","172.0.0.0","172.16.255.255"],1,"Mask 2 Octet → 172.16 | 4.100 → 172.16.0.0"],
+["Host-A 10.5.4.100/24 — IP ไหนอยู่ Network เดียวกัน?",["10.5.100.4","10.5.0.1","10.0.0.98","10.5.4.99"],3,"ต้องขึ้นต้น 10.5.4"],
+["Host-A 172.16.4.100/16 — IP ไหนอยู่ Network เดียวกัน?",["172.18.4.1","172.17.4.1","172.16.0.1","172.17.4.99"],2,"ขึ้นต้น 172.16.x.x · /16 ดูแค่ 2 Octet แรก"],
+["Host-A 192.168.1.50/24 — IP ไหนอยู่ Network เดียวกัน?",["192.168.2.1","192.168.0.100","192.168.0.1","192.168.1.100"],3,"ขึ้นต้น 192.168.1"],
+["192.168.10.25 / 255.255.255.0 → Network?",["192.168.10.0","192.168.0.0","192.168.10.25","192.168.10.255"],0,"เปลี่ยน Octet สุดท้ายเป็น 0"],
+["172.16.34.10 / 255.255.255.0 → Network Number?",["172.16.0.0","172.16.34.0","34.10","10"],1,"3 Octet แรกคือ Network"],
+["10.1.2.3 / 255.0.0.0 → Network Address?",["10.1.2.0","10.1.0.0","10.0.0.0","10.255.255.255"],2,"Mask /8 → เก็บ Octet แรกเดียว"],
+["Mask 255.255.0.0 ใช้กี่ Octet เป็น Network?",["1","2","3","4"],1,"/16 = 16 bits = 2 Octet"],
+["192.168.1.10/24 กับ 192.168.2.20/24 จะคุยกันได้อย่างไร?",["ผ่าน Switch ตัวเดียวก็พอ","ต้องมี Router/Routing","เปลี่ยน MAC Address","ไม่มีทางคุยกันได้"],1,"คนละ Network (1 vs 2) → ต้อง Routing"],
+["Broadcast Address ของ 192.168.1.0/24?",["192.168.1.0","192.168.1.1","192.168.1.254","192.168.1.255"],3,"Host bits ทั้งหมด = 1"],
+["(โจทย์ท้าทาย) 192.168.5.130 / 255.255.255.128 → Network?",["192.168.5.0","192.168.5.128","192.168.5.130","192.168.0.0"],1,"130 = 10000010 AND 10000000 = 128"],
+["PC สองเครื่องใน LAN เดียวกันตั้ง IP 192.168.3.10 เหมือนกัน เกิดอะไร?",["ทำงานปกติ","IP conflict — สื่อสารมีปัญหา","Router แก้ให้อัตโนมัติ","ต้องเปลี่ยน Network Portion"],1,"Host Portion ต้อง Unique ใน Network เดียวกัน"]];
+let ans=[];
+function rq(){ans=[];$('sc').textContent='';$('qs').innerHTML=Q.map((q,i)=>`<div class="c q"><b>${i+1}. ${q[0]}</b>`+q[1].map((o,j)=>`<button class="o" id="o${i}_${j}" onclick="pick(${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join('')+`<div class="ex" id="x${i}">💡 ${q[3]}</div></div>`).join('')}
+function pick(i,j){q=Q[i][1].length;for(let k=0;k<q;k++)$('o'+i+'_'+k).classList.remove('sel');$('o'+i+'_'+j).classList.add('sel');ans[i]=j}
+function chk(){let s=0;Q.forEach((q,i)=>{q[1].forEach((_,k)=>{const e=$('o'+i+'_'+k);e.classList.remove('ok','no');if(k==q[2])e.classList.add('ok');else if(ans[i]==k)e.classList.add('no')});if(ans[i]==q[2])s++;$('x'+i).classList.add('on')});$('sc').innerHTML=`คะแนน: <b class="${s>=Q.length*.8?'res':'err'}">${s}/${Q.length}</b>`}
+rq();calc();same();
+</script></body></html>

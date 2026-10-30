@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Network basics 7</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5f4;--ink:#13221e;--mut:#55655f;--card:#fff;--line:#d2dbd8;--acc:#0b7a6b;--accbg:#d9f0eb;--warn:#a84a00;--warnbg:#fdeed9;--ok:#157a3a;--okbg:#dcf3e3;--bad:#b3261e;--badbg:#fbe1de;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1917;--ink:#e5eeeb;--mut:#93a7a0;--card:#15231f;--line:#2a3b36;--acc:#4fd1b5;--accbg:#12342d;--warn:#f0a35e;--warnbg:#3a2612;--ok:#6fd48f;--okbg:#12311d;--bad:#ff8a80;--badbg:#3b1815;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1917;--ink:#e5eeeb;--mut:#93a7a0;--card:#15231f;--line:#2a3b36;--acc:#4fd1b5;--accbg:#12342d;--warn:#f0a35e;--warnbg:#3a2612;--ok:#6fd48f;--okbg:#12311d;--bad:#ff8a80;--badbg:#3b1815;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 "IBM Plex Sans Thai",system-ui,sans-serif}
+.w{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.25rem;margin:1.6em 0 .4em}h3{font-size:1.02rem;margin:1.2em 0 .3em}
+p{margin:.4em 0}.mut{color:var(--mut);font-size:.9rem}
+code,.m{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em}
+nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;z-index:5;border-bottom:1px solid var(--line)}
+nav button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 13px;border-radius:99px;font:inherit;font-size:.9rem;cursor:pointer}
+nav button[aria-selected=true]{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:600}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0}
+.key{border-left:4px solid var(--acc);background:var(--accbg);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.fix{border-left:4px solid var(--warn);background:var(--warnbg);padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0}
+.sc{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}th{color:var(--mut);font-weight:600}
+.bar{display:flex;gap:3px;margin:10px 0;min-width:560px}
+.bar button{border:0;border-radius:6px;padding:14px 2px;font:600 .72rem "IBM Plex Mono",monospace;color:#fff;cursor:pointer;opacity:.78}
+.bar button[aria-pressed=true]{opacity:1;outline:3px solid var(--ink);outline-offset:1px}
+.nest div{border:2px solid;border-radius:8px;padding:8px 10px;margin:0}
+.nest .l{display:inline-block;font:600 .75rem "IBM Plex Mono",monospace;padding:1px 7px;border-radius:5px;margin:0 4px 6px 0;color:#fff}
+input[type=range]{width:100%;accent-color:var(--acc)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+select,.btn{font:inherit;padding:7px 11px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.btn{cursor:pointer}.btn.p{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:600}
+.hosts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.h{border:2px solid var(--line);border-radius:8px;padding:8px 4px;text-align:center;font-size:.82rem;background:var(--card)}
+.h b{display:block}.h.go{border-color:var(--ok);background:var(--okbg)}.h.no{border-color:var(--line);opacity:.55}.h.src{border-color:var(--acc);background:var(--accbg)}
+.log li{margin:4px 0}.tag{font:600 .72rem "IBM Plex Mono",monospace;padding:1px 6px;border-radius:4px;background:var(--accbg);color:var(--acc)}
+.q{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:12px 14px;margin:12px 0}
+.q button{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;cursor:pointer}
+.q button.ok{background:var(--okbg);border-color:var(--ok)}.q button.bad{background:var(--badbg);border-color:var(--bad)}
+.ex{display:none;margin-top:6px;font-size:.92rem;color:var(--mut)}.score{position:sticky;top:50px;background:var(--acc);color:var(--bg);padding:6px 12px;border-radius:8px;font-weight:600;z-index:4}
+</style></head><body><div class="w">
+<h1>Network basics 7</h1>
+<p class="mut">Ethernet Frame · Encapsulation · Switch และ MAC Address Table — สรุปจาก 3 ไฟล์ของคุณ ตรวจแก้ และเติมส่วนที่ขาดสำหรับงาน Cloud Engineer</p>
+<nav role="tablist" id="nav"></nav>
+
+<section id="s0"><h2>ภาพรวม: ข้อมูลเดินทางอย่างไร</h2>
+<div class="key"><b>ประโยคเดียวที่ต้องจำ:</b> Switch <b>เรียนรู้</b>จาก Source MAC แต่ <b>ตัดสินใจส่ง</b>จาก Destination MAC</div>
+<p>ลากแถบเพื่อดูการ <b>ห่อ (Encapsulation)</b> ไปทางขวา และ <b>แกะ (De-encapsulation)</b> ไปทางซ้าย</p>
+<div class="card"><input type="range" id="enc" min="0" max="4" value="0" aria-label="ขั้นตอน encapsulation"><div class="mut" id="encT"></div><div class="nest" id="encV"></div></div>
+<div class="sc"><table><tr><th>Layer</th><th>PDU</th><th>ที่อยู่ที่ใช้</th><th>ตัวอย่าง</th></tr>
+<tr><td>4 Transport</td><td>Segment / Datagram</td><td>Port</td><td>TCP 443, UDP 53</td></tr>
+<tr><td>3 Network</td><td>Packet</td><td>IP</td><td>IPv4, IPv6 (header 40 B)</td></tr>
+<tr><td>2 Data Link</td><td>Frame</td><td>MAC</td><td>Ethernet, Switch</td></tr>
+<tr><td>1 Physical</td><td>Bits</td><td>—</td><td>สายสัญญาณ, ไฟเบอร์</td></tr></table></div>
+<div class="fix"><b>เติมที่ขาด:</b> ตอนข้าม Router แต่ละ hop <b>IP คงเดิม แต่ MAC (ทั้ง Source และ Destination) เปลี่ยนทุก hop</b> เพราะ Frame มีผลแค่ในเครือข่ายท้องถิ่นเดียว นี่คือเหตุผลที่ต้องมี ARP (IP → MAC)</div></section>
+
+<section id="s1"><h2>โครงสร้าง Ethernet Frame</h2>
+<p class="mut">แตะแต่ละช่องเพื่อดูรายละเอียด</p>
+<div class="sc"><div class="bar" id="bar"></div></div><div class="card" id="fd"></div>
+<h3>Type / Length ใช้ยังไง</h3>
+<div class="sc"><table><tr><th>ค่า</th><th>ความหมาย</th></tr>
+<tr><td class="m">≤ 1500 (0x05DC)</td><td>Length: ความยาว Payload</td></tr>
+<tr><td class="m">≥ 1536 (0x0600)</td><td>EtherType: บอกชนิดข้อมูลข้างใน</td></tr>
+<tr><td class="m">0x0800 / 0x86DD</td><td>IPv4 / IPv6</td></tr>
+<tr><td class="m">0x0806</td><td>ARP</td></tr>
+<tr><td class="m">0x8100</td><td>VLAN tag (802.1Q)</td></tr></table></div>
+<div class="fix"><b>เติมที่ขาด:</b> ขนาดเฟรมขั้นต่ำ 64 B และสูงสุด 1518 B นับตั้งแต่ Destination MAC ถึง FCS <b>ไม่นับ Preamble + SFD</b> (รวมเป็น 8 B). ถ้า Payload น้อยกว่า 46 B จะมี padding เติมให้ครบ</div></section>
+
+<section id="s2"><h2>จำลอง Switch: Learn → Look → Forward</h2>
+<p>MAC ย่อ: H1=AA, H2=BB, H3=CC, H4=DD. ลองส่งซ้ำ ๆ สังเกตว่าเมื่อไหร่ Flood และเมื่อไหร่ส่งตรง</p>
+<div class="card"><div class="row"><label>จาก <select id="fs"></select></label><label>ถึง <select id="fd2"></select></label><button class="btn p" id="send">ส่ง Frame</button><button class="btn" id="clr">ล้างตาราง</button></div>
+<div class="hosts" id="hosts"></div>
+<table><thead><tr><th>MAC</th><th>Port</th></tr></thead><tbody id="mt"></tbody></table>
+<ol class="log" id="log"></ol></div>
+<div class="key"><b>ลองทำตามนี้:</b> (1) H1→H4 = Flood เพราะยังไม่รู้ DD (2) H4→H1 = ส่งตรง เพราะรู้ AA แล้ว และตอนนี้เรียนรู้ DD (3) H1→H4 อีกครั้ง = ส่งตรง ไม่ Flood (4) ส่งไป Broadcast = Flood เสมอ</div></section>
+
+<section id="s3"><h2>เพิ่มเติมที่ต้องรู้ก่อนไปทำงาน</h2>
+<h3>โครงสร้าง MAC Address (48 bit)</h3>
+<p><span class="m">AA:BB:CC:11:22:33</span> → 3 ไบต์แรก = <b>OUI</b> (ผู้ผลิต) 3 ไบต์หลัง = ลำดับของ NIC. แบ่ง 3 แบบ: <b>Unicast</b> (1 ต่อ 1) · <b>Multicast</b> (bit ต่ำสุดของไบต์แรก = 1) · <b>Broadcast</b> <span class="m">FF:FF:FF:FF:FF:FF</span> (ทุกเครื่องใน Broadcast domain). Switch ไม่เรียนรู้ Broadcast/Multicast เป็น Source และ Flood Broadcast เสมอ</p>
+<h3>Hub vs Switch vs Router</h3>
+<div class="sc"><table><tr><th></th><th>Hub</th><th>Switch</th><th>Router</th></tr>
+<tr><td>Layer</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>ตัดสินใจจาก</td><td>ไม่ตัดสินใจ ส่งซ้ำทุกพอร์ต</td><td>Dest MAC</td><td>Dest IP</td></tr>
+<tr><td>Collision domain</td><td>1 อันร่วมกัน</td><td>1 ต่อพอร์ต</td><td>1 ต่อพอร์ต</td></tr>
+<tr><td>Broadcast domain</td><td>1</td><td>1 (ต่อ VLAN)</td><td>แยกต่อ interface</td></tr></table></div>
+<h3>ส่วนที่เกี่ยวข้องในงานจริง</h3>
+<ul><li><b>ARP:</b> เครื่องส่ง Broadcast ถาม “IP นี้ MAC อะไร” แล้วเก็บใน ARP cache. ดูด้วย <code>ip neigh</code></li>
+<li><b>VLAN (802.1Q):</b> แบ่ง Switch ตัวเดียวเป็นหลาย Broadcast domain ด้วย tag 4 B</li>
+<li><b>Duplex:</b> Switch สมัยใหม่เป็น Full-duplex จึงไม่ต้องใช้ CSMA/CD (กลไกตรวจ collision ของ Hub/Half-duplex)</li>
+<li><b>วิธีส่งต่อ:</b> Store-and-forward (ตรวจ FCS ก่อนส่ง) กับ Cut-through (ส่งทันทีหลังอ่าน Dest MAC)</li>
+<li><b>MTU:</b> Payload สูงสุด 1500 B ปกติ. Jumbo frame ถึง ~9000 B ต้องตั้งตลอดเส้นทาง</li></ul>
+<h3>โยงกับ Cloud และ Linux</h3>
+<ul><li>VPC ใน AWS ทำงานเหมือน Virtual Switch: instance แต่ละตัวมี ENI ที่มี MAC ของตัวเอง; Broadcast/ARP ถูกจัดการโดยระบบเครือข่ายเสมือน ไม่ได้ Flood แบบ Switch จริง</li>
+<li>AWS รองรับ Jumbo frame (MTU 9001) ภายใน VPC แต่ผ่าน Internet Gateway ใช้ 1500 ปัญหา MTU ไม่ตรงทำให้ Packet ใหญ่หายแบบงงได้</li>
+<li>คำสั่งที่ควรรู้: <code>ip link</code> (MAC/MTU) · <code>ip neigh</code> (ARP) · <code>bridge fdb show</code> (MAC table ของ Linux bridge) · <code>tcpdump -e</code> (ดู MAC ใน Frame) · Cisco: <code>show mac address-table</code></li></ul></section>
+
+<section id="s4"><h2>ข้อที่ตรวจแก้และเติมจากไฟล์ต้นฉบับ</h2>
+<div class="fix"><b>1. “Ethernet = Layer 2” ถูกสำหรับข้อสอบ แต่ไม่ครบ</b><br>IEEE 802.3 ครอบคลุม Layer 1 (สัญญาณ สาย) และ Layer 2 (MAC, Frame). ตอบข้อสอบว่า Layer 2 Data Link</div>
+<div class="fix"><b>2. Flood ไม่เท่ากับ Broadcast</b><br>ในข้อ Q1 ตัวเลือก “broadcasts out of all ports” ผิดเพราะรวมพอร์ตขาเข้า. Flood = ทุกพอร์ต <u>ยกเว้นพอร์ตขาเข้า</u>. ส่วน Broadcast frame คือ Dest = FF:FF:FF:FF:FF:FF ซึ่งก็ถูก Flood เช่นกัน</div>
+<div class="fix"><b>3. Hub ไม่ใช่แค่ “ล้าสมัย”</b><br>เป็นอุปกรณ์ Layer 1 ที่ทวนสัญญาณไปทุกพอร์ต ทำให้เกิด Collision domain เดียวและชนกันได้ จึงถูกแทนที่ด้วย Switch</div>
+<div class="fix"><b>4. “Frame = ซองจดหมาย” ควรเสริม</b><br>ซอง (MAC) ถูกเปลี่ยนใหม่ทุก hop แต่จดหมายข้างใน (IP Packet) คงเดิมตั้งแต่ต้นทางถึงปลายทาง</div>
+<div class="fix"><b>5. NIC ทิ้ง Frame ที่ไม่ใช่ของตัวเอง</b><br>ถูกในโหมดปกติ. ข้อยกเว้น: <b>promiscuous mode</b> (เช่น Wireshark) NIC รับทุก Frame. และ Broadcast/Multicast ที่สนใจจะถูกรับ ไม่ทิ้ง</div>
+<div class="fix"><b>6. MAC aging 5 นาที</b><br>เป็นค่า default ของ Cisco และ Linux bridge (300 วินาที) ปรับได้ ไม่ใช่ค่าตายตัว. ถ้าเครื่องย้ายพอร์ต Switch จะอัปเดตรายการเมื่อเห็น Source MAC เดิมจากพอร์ตใหม่</div>
+<div class="fix"><b>7. ที่เอกสารไม่ได้ระบุ:</b> ขนาด Preamble 7 B / SFD 1 B / MAC 6 B / Type 2 B / FCS 4 B (CRC-32) และช่วง Payload 46–1500 B</div></section>
+
+<section id="s5"><h2>แบบฝึกหัด</h2><div class="score" id="sc">คะแนน 0 / 0</div><div id="qs"></div>
+<button class="btn" id="rq">เริ่มใหม่</button></section>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const tabs=["ภาพรวม","Frame","จำลอง Switch","เพิ่มเติม","จุดที่แก้","แบบฝึกหัด"];
+tabs.forEach((t,i)=>{const b=document.createElement("button");b.textContent=t;b.setAttribute("role","tab");b.onclick=()=>show(i);$("nav").appendChild(b)});
+function show(i){tabs.forEach((_,j)=>{$("s"+j).classList.toggle("on",i==j);$("nav").children[j].setAttribute("aria-selected",i==j)});window.scrollTo(0,0)}
+show(0);
+/* encapsulation */
+const E=["Application Data","เพิ่ม TCP/UDP header → Segment","เพิ่ม IP header → Packet","เพิ่ม Ethernet header + FCS → Frame","แปลงเป็น Bits ส่งลงสาย"];
+const C=["#0b7a6b","#2563a8","#7a4bb0","#a84a00"];
+function encR(){const n=+$("enc").value;let h='<div style="border-color:'+C[0]+'"><span class="l" style="background:'+C[0]+'">Data</span></div>';
+const L=[["TCP/UDP","Segment"],["IP","Packet"],["Eth + FCS","Frame"]];
+for(let i=0;i<Math.min(n,3);i++)h='<div style="border-color:'+C[i+1]+'"><span class="l" style="background:'+C[i+1]+'">'+L[i][0]+" · "+L[i][1]+'</span>'+h+'</div>';
+if(n==4)h+='<p class="m">01101000 01101001 …</p>';
+$("encV").innerHTML=h;$("encT").textContent="ขั้น "+n+": "+E[n]}
+$("enc").oninput=encR;encR();
+/* frame */
+const F=[["Preamble","7 B","#5b6b66",1.3,"รูปแบบ 10101010 ให้ NIC ฝั่งรับ sync สัญญาณ"],["SFD","1 B","#7a4bb0",.8,"Start Frame Delimiter: บอกว่าหลังจากนี้คือ Frame จริง. Preamble + SFD = จุดเริ่มต้น Frame"],["Dest MAC","6 B","#0b7a6b",1.6,"MAC ผู้รับ. Switch ใช้เลือกพอร์ตส่งออก (Forward)"],["Src MAC","6 B","#2563a8",1.6,"MAC ผู้ส่ง. Switch ใช้เรียนรู้ (Learn) ลง MAC table"],["Type/Len","2 B","#a84a00",1.1,"EtherType (ชนิดข้อมูลข้างใน) หรือ Length"],["Payload","46–1500 B","#b3261e",3,"IPv4/IPv6 Packet ที่ถูกห่ออยู่. Ethernet ไม่ต้องเข้าใจเนื้อหาข้างใน"],["FCS","4 B","#6b6b00",1,"Frame Check Sequence (CRC-32) ตรวจ Error. ไม่ผ่าน = Discard"]];
+F.forEach((f,i)=>{const b=document.createElement("button");b.textContent=f[0];b.style.cssText="background:"+f[2]+";flex:"+f[3];b.setAttribute("aria-pressed",i==2);b.onclick=()=>fr(i);$("bar").appendChild(b)});
+function fr(i){[...$("bar").children].forEach((b,j)=>b.setAttribute("aria-pressed",i==j));$("fd").innerHTML="<b>"+F[i][0]+"</b> <span class=tag>"+F[i][1]+"</span><p>"+F[i][4]+"</p>"}fr(2);
+/* switch sim */
+const H=[["H1","AA",1],["H2","BB",2],["H3","CC",3],["H4","DD",4]];let T={};
+const opt=(a,b)=>a.map(x=>"<option value="+x[1]+">"+x[0]+" ("+x[1]+")</option>").join("");
+$("fs").innerHTML=opt(H);$("fd2").innerHTML=opt(H)+"<option value=FF>Broadcast (FF)</option>";$("fd2").value="DD";
+function draw(src,got){$("hosts").innerHTML=H.map(h=>'<div class="h '+(h[1]==src?"src":got?(got.includes(h[1])?"go":"no"):"")+'"><b>'+h[0]+"</b>Fa0/"+h[2]+"<br>"+h[1]+(got&&h[1]!=src?(got.includes(h[1])?"<br>รับ":"<br>ทิ้ง"):"")+"</div>").join("");
+$("mt").innerHTML=Object.keys(T).length?Object.entries(T).map(([m,p])=>"<tr><td class=m>"+m+"</td><td>Fa0/"+p+"</td></tr>").join(""):"<tr><td colspan=2 class=mut>ว่าง</td></tr>"}
+$("send").onclick=()=>{const s=$("fs").value,d=$("fd2").value,sp=H.find(h=>h[1]==s)[2];let L=[];
+const had=T[s];T[s]=sp;L.push("<span class=tag>LEARN</span> Source "+s+" มาทาง Fa0/"+sp+(had?" (มีแล้ว รีเฟรช)":" → บันทึกลงตาราง"));
+let got;
+if(d=="FF"){got=H.filter(h=>h[1]!=s).map(h=>h[1]);L.push("<span class=tag>LOOK</span> Dest = Broadcast (FF) ไม่มีใน table เสมอ");L.push("<span class=tag>FLOOD</span> ส่งทุกพอร์ตยกเว้น Fa0/"+sp+" ทุกเครื่องรับ")}
+else if(d==s){got=[];L.push("<span class=tag>LOOK</span> Dest คือตัวเอง")}
+else if(T[d]){const dp=T[d];got=[d];L.push("<span class=tag>LOOK</span> พบ "+d+" → Fa0/"+dp);L.push("<span class=tag>FORWARD</span> ส่งเฉพาะ Fa0/"+dp+" (Filtering)")}
+else{got=H.filter(h=>h[1]!=s).map(h=>h[1]);L.push("<span class=tag>LOOK</span> ไม่พบ "+d+" (Unknown unicast)");L.push("<span class=tag>FLOOD</span> ส่งทุกพอร์ตยกเว้น Fa0/"+sp+" เครื่องที่ MAC ไม่ตรงจะทิ้ง เหลือ "+d+" รับ")}
+$("log").innerHTML=L.map(x=>"<li>"+x+"</li>").join("");
+const rc=d=="FF"?got:got.filter(x=>x==d);draw(s,d=="FF"?got:(T[d]&&got.length==1?got:got));
+if(d!="FF"&&got.length>1)[...$("hosts").children].forEach((e,i)=>{if(H[i][1]!=s)e.className="h "+(H[i][1]==d?"go":"no")})};
+$("clr").onclick=()=>{T={};$("log").innerHTML="";draw()};draw();
+/* quiz */
+const Q=[
+["Switch เพิ่มรายการใน MAC table จากฟิลด์ใด?",["Source MAC","Destination MAC","Type/Length","FCS"],0,"Learn จาก Source MAC พร้อมพอร์ตขาเข้า"],
+["Switch ตัดสินใจ Forward จากฟิลด์ใด?",["Source MAC","Destination MAC","Preamble","SFD"],1,"Look ที่ Destination MAC แล้วหาพอร์ตใน table"],
+["Dest MAC ไม่อยู่ใน MAC table Switch ทำอะไร?",["ส่ง ARP request","ทิ้ง Frame","ส่งออกทุกพอร์ตยกเว้นพอร์ตขาเข้า","แจ้งผู้ส่งว่าส่งไม่ได้"],2,"Unknown unicast → Flood ยกเว้นพอร์ตขาเข้า"],
+["FCS ใช้ทำอะไร?",["บอกจุดเริ่ม Frame","ตรวจ Error ระหว่างส่ง/รับ","ระบุผู้รับ","บอกชนิด Payload"],1,"CRC-32 ไม่ตรง = Discard"],
+["Ethernet ทำงานที่ OSI Layer ใดในข้อสอบ?",["Layer 1","Layer 2","Layer 3","Layer 4"],1,"Data Link (MAC, Frame). จริง ๆ 802.3 ครอบคลุม L1 ด้วย"],
+["กระบวนการใส่ข้อมูลชุดหนึ่งไว้ในอีกชุดเพื่อส่งคือ?",["De-encapsulation","Segmentation","Encapsulation","Flooding"],2,"Packet → Frame คือ Encapsulation"],
+["Host ได้ unicast Frame ที่ Dest MAC ไม่ตรงกับตัวเอง จะทำอย่างไร?",["รับแล้วส่งต่อ","ทิ้ง Frame","ตอบ ARP","ส่ง Broadcast"],1,"NIC ตรวจ Dest MAC ไม่ตรงก็ทิ้ง (ยกเว้น promiscuous mode)"],
+["Table ว่าง H1 (AA, Fa0/1) ส่งหา DD. หลังเฟรมนี้ใน table มีอะไร?",["DD → Fa0/4","AA → Fa0/1 เท่านั้น","ทั้งสองรายการ","ว่างอยู่"],1,"Learn เฉพาะ Source. DD ยังไม่เคยส่งจึงยังไม่รู้"],
+["Frame ที่ Dest = FF:FF:FF:FF:FF:FF เข้า Fa0/2 Switch ทำอย่างไร?",["ส่งเฉพาะ Fa0/1","ทิ้ง","Flood ทุกพอร์ตยกเว้น Fa0/2","ส่งกลับ Fa0/2"],2,"Broadcast ถูก Flood เสมอ"],
+["Frame ข้าม Router 1 ตัว อะไรเปลี่ยน?",["เฉพาะ IP","MAC อย่างเดียว (IP เดิม)","ทั้ง IP และ MAC","ไม่มีอะไรเปลี่ยน"],1,"MAC เปลี่ยนทุก hop, IP end-to-end คงเดิม"],
+["H4 ย้ายไปเสียบพอร์ตอื่น แล้วส่ง Frame ออกมา. Table ทำอย่างไร?",["เก็บพอร์ตเก่า","อัปเดต DD เป็นพอร์ตใหม่","ลบทั้งตาราง","ปฏิเสธ Frame"],1,"เห็น Source MAC เดิมจากพอร์ตใหม่ → อัปเดต"],
+["ขนาด Frame ขั้นต่ำ 64 B นับจากฟิลด์ใดถึงใด?",["Preamble ถึง FCS","Dest MAC ถึง FCS","Dest MAC ถึง Payload","Payload อย่างเดียว"],1,"ไม่นับ Preamble + SFD"],
+["คำสั่ง Linux ใดดู MAC table ของ bridge?",["ip neigh","ip route","bridge fdb show","ss -tn"],2,"ip neigh คือ ARP cache (IP→MAC) ไม่ใช่ MAC table"],
+["ข้อใดต่างระหว่าง Hub กับ Switch ถูกต้อง?",["Hub เรียนรู้ MAC","Switch ส่งซ้ำทุกพอร์ตเสมอ","Hub เป็น L1 ส่งซ้ำทุกพอร์ต","Hub ทำงานที่ L3"],2,"Hub = repeater L1 ไม่มี table"]];
+let sc=0,an=0;
+function qr(){sc=an=0;$("sc").textContent="คะแนน 0 / "+Q.length;$("qs").innerHTML="";Q.forEach((q,i)=>{const d=document.createElement("div");d.className="q";d.innerHTML="<b>"+(i+1)+". "+q[0]+"</b>";const ex=document.createElement("div");ex.className="ex";ex.textContent="เฉลย: "+q[3];
+q[1].forEach((o,j)=>{const b=document.createElement("button");b.textContent=o;b.onclick=()=>{if(d.dataset.d)return;d.dataset.d=1;an++;if(j==q[2])sc++;[...d.querySelectorAll("button")].forEach((x,k)=>{if(k==q[2])x.classList.add("ok");else if(k==j)x.classList.add("bad")});ex.style.display="block";$("sc").textContent="คะแนน "+sc+" / "+Q.length+(an==Q.length?" เสร็จแล้ว":"")};d.appendChild(b)});d.appendChild(ex);$("qs").appendChild(d)})}
+$("rq").onclick=()=>{qr();window.scrollTo(0,0)};qr();
+</script></body></html>
