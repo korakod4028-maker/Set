@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCNA Module 6 — Network Media</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg:        #0a0e17;
+    --surface:   #111827;
+    --surface2:  #1a2236;
+    --border:    #1e2d47;
+    --accent:    #00d4ff;
+    --accent2:   #7c3aed;
+    --accent3:   #10b981;
+    --warn:      #f59e0b;
+    --danger:    #ef4444;
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --mono:      'JetBrains Mono', monospace;
+    --sans:      'Sarabun', 'Inter', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text); font-family: var(--sans);
+    font-size: 16px; line-height: 1.7; min-height: 100vh;
+  }
+
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,23,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem; height: 56px;
+  }
+  .badge {
+    font-family: var(--mono); font-size: 0.7rem; background: var(--accent2);
+    color: #fff; padding: 2px 8px; border-radius: 4px; letter-spacing: .05em;
+  }
+  .badge.green { background: var(--accent3); }
+  header h1 { font-size: 0.95rem; font-weight: 600; color: var(--accent); flex: 1; }
+  nav { display: flex; gap: 1rem; }
+  nav a {
+    font-size: 0.78rem; color: var(--muted); text-decoration: none;
+    font-family: var(--mono); transition: color .2s;
+  }
+  nav a:hover { color: var(--accent); }
+
+  .hero {
+    position: relative; overflow: hidden; padding: 5rem 2rem 4rem;
+    text-align: center; border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--accent);
+    letter-spacing: .15em; text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .hero h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.1;
+    background: linear-gradient(135deg, #e2e8f0 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem;
+  }
+  .hero p { color: var(--muted); max-width: 560px; margin: 0 auto 2rem; }
+  .hero-stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin-top: 2.5rem; }
+  .stat { text-align: center; }
+  .stat-num { font-family: var(--mono); font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: .05em; }
+
+  .progress-bar-wrap {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1rem;
+  }
+  .progress-label { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+  .progress-track { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent)); transition: width 0.4s ease; }
+  #progress-text { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); white-space: nowrap; }
+
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-family: var(--mono); font-size: 0.78rem; background: none; border: none;
+    border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer;
+    padding: 0.75rem 1.25rem; white-space: nowrap; transition: all .2s;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn:hover { color: var(--text); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .section-label { font-family: var(--mono); font-size: 0.68rem; color: var(--accent2); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .section-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.35rem; color: var(--text); }
+  .section-sub { color: var(--muted); margin-bottom: 2rem; font-size: 0.9rem; }
+
+  .grid { display: grid; gap: 1rem; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; transition: border-color .2s, transform .15s; }
+  .card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+  .card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+  .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--accent); }
+  .card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .card ul { padding-left: 1.1rem; margin-top: 0.5rem; }
+  .card li { font-size: 0.83rem; color: var(--muted); margin-bottom: 0.2rem; }
+
+  .infobox { background: var(--surface2); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.5rem 0; font-size: 0.88rem; color: var(--muted); }
+  .infobox.warn { border-color: var(--warn); }
+  .infobox.danger { border-color: var(--danger); }
+  .infobox.green { border-color: var(--accent3); }
+  .infobox strong { color: var(--text); }
+
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { background: var(--surface2); color: var(--accent); font-family: var(--mono); font-size: 0.73rem; letter-spacing: .08em; padding: 0.65rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+  td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); color: var(--text); }
+
+  .code-block { background: #0d1117; border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; font-family: var(--mono); font-size: 0.8rem; color: #a5d6ff; overflow-x: auto; line-height: 1.8; }
+  .code-block .comment { color: var(--muted); }
+  .code-block .highlight { color: var(--accent3); }
+
+  .compare { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 1rem; margin: 1rem 0; }
+  .compare-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+  .compare-box .compare-label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .compare-box.blue .compare-label { color: var(--accent); }
+  .compare-box.purple .compare-label { color: var(--accent2); }
+  .compare-box.green .compare-label { color: var(--accent3); }
+  .compare-box h4 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .compare-box p { font-size: 0.82rem; color: var(--muted); }
+
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
+  .flow-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.8rem; font-family: var(--mono); font-size: 0.78rem; color: var(--accent); }
+  .flow-arrow { color: var(--muted); font-size: 1rem; }
+
+  .quiz-container { display: flex; flex-direction: column; gap: 1.5rem; }
+  .quiz-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: border-color .2s; }
+  .quiz-card.correct { border-color: var(--accent3); }
+  .quiz-card.wrong { border-color: var(--danger); }
+  .quiz-num { font-family: var(--mono); font-size: 0.68rem; color: var(--accent2); letter-spacing: .1em; margin-bottom: 0.5rem; }
+  .quiz-q { font-weight: 600; margin-bottom: 1rem; font-size: 0.95rem; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .quiz-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0.65rem 1rem; cursor: pointer; font-size: 0.85rem; color: var(--muted); transition: all .15s; text-align: left; }
+  .quiz-opt:hover { border-color: var(--accent2); color: var(--text); }
+  .quiz-opt.selected-correct { background: rgba(16,185,129,.15); border-color: var(--accent3); color: var(--accent3); }
+  .quiz-opt.selected-wrong { background: rgba(239,68,68,.12); border-color: var(--danger); color: var(--danger); }
+  .quiz-opt.reveal-correct { background: rgba(16,185,129,.08); border-color: var(--accent3); color: var(--accent3); }
+  .quiz-feedback { margin-top: 0.75rem; font-size: 0.82rem; padding: 0.6rem 0.9rem; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(16,185,129,.12); color: var(--accent3); }
+  .quiz-feedback.fail { background: rgba(239,68,68,.1); color: #fca5a5; }
+
+  .quiz-controls { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; align-items: center; }
+  .btn { font-family: var(--mono); font-size: 0.8rem; border: none; border-radius: 8px; padding: 0.6rem 1.4rem; cursor: pointer; transition: opacity .15s, transform .1s; }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent2); color: #fff; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-accent { background: var(--accent3); color: #fff; }
+  .quiz-score { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); margin-top: 1.5rem; display: none; }
+  .quiz-score.show { display: block; }
+  #score-display { color: var(--accent); font-size: 1.2rem; }
+
+  .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+  .flashcard { perspective: 800px; height: 160px; cursor: pointer; }
+  .flashcard-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .5s ease; }
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+  .fc-front, .fc-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 10px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+  .fc-front { background: var(--surface); border: 1px solid var(--border); }
+  .fc-front .fc-term { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  .fc-front .fc-hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; }
+  .fc-back { background: var(--surface2); border: 1px solid var(--accent2); transform: rotateY(180deg); }
+  .fc-back .fc-def { font-size: 0.85rem; color: var(--text); line-height: 1.5; }
+  .fc-back .fc-example { font-size: 0.75rem; color: var(--muted); margin-top: 0.5rem; font-style: italic; }
+
+  .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .calc-box h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--accent); }
+  .input-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+  .input-group label { font-size: 0.78rem; color: var(--muted); font-family: var(--mono); }
+  .input-group input, .input-group select { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 0.5rem 0.75rem; font-family: var(--mono); font-size: 0.88rem; width: 100%; }
+  .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--accent2); }
+  .calc-result { background: #0d1117; border: 1px solid var(--accent2); border-radius: 8px; padding: 1rem; font-family: var(--mono); font-size: 0.82rem; line-height: 2; }
+  .calc-result .r-val { color: var(--accent); font-weight: 700; }
+  .calc-result .r-label { color: var(--muted); }
+  .calc-result .r-bad { color: var(--danger); font-weight: 700; }
+
+  .cable-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; margin: 1rem 0; }
+  .cable-diagram svg { width: 100%; height: auto; display: block; }
+
+  @media (max-width: 640px) {
+    nav { display: none; }
+    .hero-stats { gap: 1.5rem; }
+    .stat-num { font-size: 1.5rem; }
+  }
+
+  .sep { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.68rem; padding: 2px 7px; border-radius: 4px; margin: 2px; background: rgba(0,212,255,.1); color: var(--accent); border: 1px solid rgba(0,212,255,.2); }
+  .tag.purple { background: rgba(124,58,237,.15); color: #c4b5fd; border-color: rgba(124,58,237,.3); }
+  .tag.green { background: rgba(16,185,129,.12); color: #6ee7b7; border-color: rgba(16,185,129,.25); }
+  .tag.bad { background: rgba(239,68,68,.1); color: #fca5a5; border-color: rgba(239,68,68,.2); }
+
+  .highlight-box { background: linear-gradient(135deg, rgba(124,58,237,.08), rgba(0,212,255,.06)); border: 1px solid rgba(0,212,255,.15); border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+  .highlight-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+  .highlight-box p { font-size: 0.87rem; color: var(--muted); }
+
+  .fixnote { background: rgba(245,158,11,.08); border: 1px dashed var(--warn); border-radius: 8px; padding: 0.85rem 1.1rem; margin: 1rem 0; font-size: 0.82rem; color: #fcd34d; }
+  .fixnote strong { color: var(--warn); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <span class="badge">CCNA</span>
+  <span class="badge green">MODULE 6</span>
+  <h1>Network Media — Study Guide</h1>
+  <nav>
+    <a href="#" onclick="switchTab('summary')">📖 Summary</a>
+    <a href="#" onclick="switchTab('flashcards')">🃏 Flashcards</a>
+    <a href="#" onclick="switchTab('quiz')">✅ Quiz</a>
+    <a href="#" onclick="switchTab('tools')">🔧 Tools</a>
+  </nav>
+</header>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap">
+  <span class="progress-label">QUIZ PROGRESS</span>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <span id="progress-text">0 / 26</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">CISCO NETWORKING ACADEMY · INTRO TO NETWORKS</div>
+  <h2>Module 6<br>Network Media</h2>
+  <p>สรุปเนื้อหาครบ 6.0–6.2 + Flashcards + Quiz + เครื่องมือช่วยตัดสินใจเลือกสาย สำหรับเตรียมสอบ CCNA และใช้งานจริงในสาย Cloud/Network Engineer</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">3</span><span class="stat-label">Sub-Modules</span></div>
+    <div class="stat"><span class="stat-num">26</span><span class="stat-label">Quiz Questions</span></div>
+    <div class="stat"><span class="stat-num">22</span><span class="stat-label">Flashcards</span></div>
+    <div class="stat"><span class="stat-num">1</span><span class="stat-label">Cable Selector Tool</span></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('summary')">📖 เนื้อหา</button>
+    <button class="tab-btn" onclick="switchTab('flashcards')">🃏 Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">✅ Quiz</button>
+    <button class="tab-btn" onclick="switchTab('tools')">🔧 Tools</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: SUMMARY
+  ══════════════════════════════════════════ -->
+  <div id="tab-summary" class="tab-panel active">
+
+    <!-- 6.0 Intro -->
+    <div class="section-label">6.0</div>
+    <div class="section-title">Introduction to Network Media</div>
+    <div class="section-sub">ทำไม Network Engineer ต้องเข้าใจเรื่องสื่อกลาง</div>
+
+    <div class="highlight-box">
+      <h4>🏥 ตัวอย่างจาก Cisco: ห้องผู้ป่วยในโรงพยาบาล</h4>
+      <p>อุปกรณ์การแพทย์ 15–20 เครื่องในห้องผู้ป่วยเชื่อมต่อแบบ Wireless แต่ที่เคาน์เตอร์พยาบาล Desktop Computer ปิด Wi-Fi แล้วยังใช้งานระบบโรงพยาบาลได้ปกติ — เพราะเชื่อมผ่าน <strong>Ethernet Cable (UTP)</strong> นี่คือเหตุผลที่ต้องเข้าใจสื่อกลางทุกประเภท ไม่ใช่แค่ Wi-Fi</p>
+    </div>
+
+    <div class="infobox">
+      <strong>Network Media คืออะไร:</strong> สื่อกลางที่ข้อมูลใช้เดินทางจาก Source ไปยัง Destination<br><br>
+      เปรียบเทียบง่าย ๆ: <strong>ข้อมูล = รถยนต์</strong> &nbsp;|&nbsp; <strong>Media = ถนน</strong> — ไม่มีถนน รถวิ่งไม่ได้ / ไม่มี Media ข้อมูลก็ส่งไม่ได้
+      <div class="flow" style="margin-top:.75rem">
+        <div class="flow-box">Source</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box">Network Media</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-box">Destination</div>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="card-icon">⚡</span>
+        <h3>1. Copper Media</h3>
+        <p>สายทองแดง ส่งข้อมูลด้วย <strong>Electrical Impulses (สัญญาณไฟฟ้า)</strong></p>
+        <ul><li>Twisted-Pair (UTP/STP)</li><li>Coaxial</li></ul>
+      </div>
+      <div class="card">
+        <span class="card-icon">💡</span>
+        <h3>2. Fiber Optic</h3>
+        <p>สายใยแก้ว ส่งข้อมูลด้วย <strong>Pulses of Light (พัลส์แสง)</strong> ไม่ใช้ไฟฟ้า</p>
+        <ul><li>Single-mode</li><li>Multi-mode</li></ul>
+      </div>
+      <div class="card">
+        <span class="card-icon">📡</span>
+        <h3>3. Wireless</h3>
+        <p>ไม่มีสาย ส่งข้อมูลด้วยการ <strong>Modulation</strong> บน Electromagnetic Waves</p>
+        <ul><li>Wi-Fi, Bluetooth</li><li>Cellular (4G/5G)</li></ul>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:1.5rem">
+      <table>
+        <thead><tr><th>สื่อกลาง</th><th>วิธีส่งข้อมูล</th><th>ตัวอย่าง</th></tr></thead>
+        <tbody>
+          <tr><td>Copper</td><td>Electrical Signal (สัญญาณไฟฟ้า)</td><td>UTP, STP, Coaxial</td></tr>
+          <tr><td>Fiber</td><td>Light Pulse (พัลส์แสง)</td><td>Single-mode, Multi-mode Fiber</td></tr>
+          <tr><td>Wireless</td><td>Electromagnetic Wave (คลื่นแม่เหล็กไฟฟ้า)</td><td>Wi-Fi, Bluetooth, 4G/5G</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 4 Criteria -->
+    <div class="section-label">6.0 — Selection Criteria</div>
+    <div class="section-title">4 ปัจจัยในการเลือก Network Media</div>
+    <div class="section-sub">Cisco ย้ำเสมอว่าอย่าดูแค่ความเร็ว ต้องพิจารณาให้ครบทั้ง 4 ข้อ</div>
+
+    <div class="grid grid-4">
+      <div class="card">
+        <span class="card-icon">📏</span>
+        <h3>1. Distance</h3>
+        <p>ระยะทางสูงสุดที่สื่อกลางส่งสัญญาณได้โดยคุณภาพยังดี เช่น UTP ≈100 m, Fiber หลายกิโลเมตร</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🏭</span>
+        <h3>2. Environment</h3>
+        <p>สภาพแวดล้อมที่ติดตั้ง เช่น โรงงานที่มี EMI สูง ควรเลี่ยง Copper แล้วใช้ Fiber แทน</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📊</span>
+        <h3>3. Amount of Data / Speed</h3>
+        <p>ปริมาณข้อมูลและความเร็วที่ต้องการ เช่น Office 1 Gbps, Data Center 100–400 Gbps</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">💰</span>
+        <h3>4. Cost</h3>
+        <p>งบประมาณในการติดตั้ง UTP ถูกที่สุด ตามด้วย Coaxial ส่วน Fiber แพงที่สุดแต่ประสิทธิภาพสูงสุด</p>
+      </div>
+    </div>
+
+    <div class="fixnote">
+      <strong>⚠️ จุดที่ข้อสอบชอบหลอก:</strong> "Type of data ที่จะส่ง" <u>ไม่ใช่</u> หนึ่งใน 4 เกณฑ์ เพราะสื่อกลางทั้ง 3 ชนิดส่งข้อมูลดิจิทัล (digital data) ได้เหมือนกันหมด สิ่งที่ต่างกันคือ "วิธีเข้ารหัสสัญญาณ" (ไฟฟ้า/แสง/คลื่น) ไม่ใช่ "ประเภทข้อมูล" — ถ้าเจอโจทย์ "which is NOT a criterion" แล้วมีตัวเลือก type of data มา ให้ตอบว่านั่นคือข้อที่ไม่ใช่เกณฑ์
+    </div>
+
+    <hr class="sep">
+
+    <!-- 6.1 Twisted Pair -->
+    <div class="section-label">6.1</div>
+    <div class="section-title">Twisted-Pair Cable (UTP / STP)</div>
+    <div class="section-sub">สื่อกลางที่ใช้มากที่สุดใน Ethernet LAN</div>
+
+    <div class="cable-diagram">
+      <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="700" height="180" fill="var(--surface)"/>
+        <text x="20" y="25" fill="var(--accent)" font-family="JetBrains Mono, monospace" font-size="12">UTP — 4 Pairs / 8 Wires</text>
+        <g stroke-width="3" fill="none">
+          <path d="M40,50 Q70,35 100,50 Q130,65 160,50 Q190,35 220,50" stroke="#f97316"/>
+          <path d="M40,55 Q70,70 100,55 Q130,40 160,55 Q190,70 220,55" stroke="#fdba74"/>
+          <path d="M40,85 Q70,70 100,85 Q130,100 160,85 Q190,70 220,85" stroke="#22c55e"/>
+          <path d="M40,90 Q70,105 100,90 Q130,75 160,90 Q190,105 220,90" stroke="#86efac"/>
+          <path d="M40,120 Q70,105 100,120 Q130,135 160,120 Q190,105 220,120" stroke="#3b82f6"/>
+          <path d="M40,125 Q70,140 100,125 Q130,110 160,125 Q190,140 220,125" stroke="#93c5fd"/>
+          <path d="M40,150 Q70,135 100,150 Q130,165 160,150 Q190,135 220,150" stroke="#a16207"/>
+          <path d="M40,155 Q70,170 100,155 Q130,140 160,155 Q190,170 220,155" stroke="#d6a35c"/>
+        </g>
+        <text x="250" y="60" fill="var(--muted)" font-family="Sarabun" font-size="12">Pair 1: ขาวส้ม/ส้ม</text>
+        <text x="250" y="95" fill="var(--muted)" font-family="Sarabun" font-size="12">Pair 2: ขาวเขียว/เขียว</text>
+        <text x="250" y="130" fill="var(--muted)" font-family="Sarabun" font-size="12">Pair 3: ขาวน้ำเงิน/น้ำเงิน</text>
+        <text x="250" y="165" fill="var(--muted)" font-family="Sarabun" font-size="12">Pair 4: ขาวน้ำตาล/น้ำตาล</text>
+        <rect x="480" y="40" width="180" height="120" rx="8" fill="var(--surface2)" stroke="var(--border)"/>
+        <text x="570" y="65" fill="var(--accent)" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">RJ45 Connector</text>
+        <rect x="540" y="80" width="60" height="55" rx="4" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <line x1="548" y1="80" x2="548" y2="135" stroke="var(--accent)" stroke-width="1"/>
+        <line x1="556" y1="80" x2="556" y2="135" stroke="var(--accent)" stroke-width="1"/>
+        <line x1="564" y1="80" x2="564" y2="135" stroke="var(--accent)" stroke-width="1"/>
+        <line x1="572" y1="80" x2="572" y2="135" stroke="var(--accent)" stroke-width="1"/>
+        <line x1="580" y1="80" x2="580" y2="135" stroke="var(--accent)" stroke-width="1"/>
+        <line x1="588" y1="80" x2="588" y2="135" stroke="var(--accent)" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>🧵 โครงสร้าง</h3>
+        <p>สายทองแดง 8 เส้น แบ่งเป็น 4 คู่ แต่ละคู่ถูก <strong>บิดเกลียว (twist)</strong> เพื่อลด EMI และ Crosstalk (สัญญาณรบกวนระหว่างคู่สาย)</p>
+      </div>
+      <div class="card">
+        <h3>🔌 หัวต่อ</h3>
+        <p>ใช้หัวต่อ <strong>RJ45</strong> เข้าหัวตามมาตรฐาน T568A หรือ T568B ซึ่งจะเรียนละเอียดในบทถัดไป</p>
+      </div>
+    </div>
+
+    <div class="compare">
+      <div class="compare-box blue">
+        <div class="compare-label">UTP</div>
+        <h4 style="color:var(--accent)">Unshielded Twisted Pair</h4>
+        <p>ไม่มีฟอยล์หุ้ม ราคาถูกที่สุด นิยมที่สุดในบ้าน โรงเรียน สำนักงานทั่วไป</p>
+      </div>
+      <div class="compare-box purple">
+        <div class="compare-label">STP</div>
+        <h4 style="color:var(--accent2)">Shielded Twisted Pair</h4>
+        <p>มี Foil Shield ป้องกัน EMI ได้ดีกว่า เหมาะกับโรงงานหรือห้องเครื่องที่มีสัญญาณรบกวนสูง แลกมากับราคาที่แพงกว่า</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>✔ ข้อดี</h3>
+        <div class="tag green">ราคาถูก</div>
+        <div class="tag green">ติดตั้งง่าย</div>
+        <div class="tag green">ใช้กันทั่วโลก</div>
+        <div class="tag green">Ethernet ใช้เป็นหลัก</div>
+      </div>
+      <div class="card">
+        <h3>✘ ข้อเสีย</h3>
+        <div class="tag bad">ส่งได้ไกลสุด ≈100 เมตร</div>
+        <div class="tag bad">EMI มีผลต่อสัญญาณ (โดยเฉพาะ UTP)</div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- 6.1 Coaxial -->
+    <div class="section-label">6.1</div>
+    <div class="section-title">Coaxial Cable</div>
+    <div class="section-sub">สายทองแดงรุ่นเก่าแก่ที่สุดชนิดหนึ่ง มีแกนนำสัญญาณเดี่ยว</div>
+
+    <div class="cable-diagram">
+      <svg viewBox="0 0 700 140" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="700" height="140" fill="var(--surface)"/>
+        <text x="20" y="22" fill="var(--accent)" font-family="JetBrains Mono, monospace" font-size="12">Coaxial Cable — Cross Section</text>
+        <circle cx="140" cy="80" r="50" fill="none" stroke="#374151" stroke-width="14"/>
+        <circle cx="140" cy="80" r="38" fill="none" stroke="#9ca3af" stroke-width="3"/>
+        <circle cx="140" cy="80" r="30" fill="var(--surface2)" stroke="var(--accent2)" stroke-width="2"/>
+        <circle cx="140" cy="80" r="6" fill="#f97316"/>
+        <text x="260" y="45" fill="#f97316" font-family="Sarabun" font-size="12">● Copper Core — แกนทองแดงแข็ง 1 เส้น (ข้อมูลวิ่งผ่าน)</text>
+        <text x="260" y="68" fill="var(--accent2)" font-family="Sarabun" font-size="12">● Plastic Insulation — ฉนวนพลาสติก</text>
+        <text x="260" y="91" fill="#9ca3af" font-family="Sarabun" font-size="12">● Metal Shield — ตาข่ายโลหะกัน EMI</text>
+        <text x="260" y="114" fill="#374151" font-family="Sarabun" font-size="12" style="paint-order:stroke" stroke="#e2e8f0" stroke-width="0.3">● Outer Jacket — เปลือกนอกป้องกันสาย</text>
+      </svg>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>🔌 หัวต่อ</h3>
+        <p><strong>BNC</strong> และ <strong>F-Type</strong></p>
+      </div>
+      <div class="card">
+        <h3>📍 ใช้ที่ไหน</h3>
+        <p>Cable TV, Internet Cable, Satellite, CCTV — <strong>ไม่นิยมใน LAN ปัจจุบัน</strong></p>
+      </div>
+      <div class="card">
+        <h3>⚖️ จุดเด่น</h3>
+        <p>กัน EMI ได้ดีกว่า UTP เพราะมี Metal Shield ห่อหุ้ม เหมาะกับสัญญาณความถี่สูง</p>
+      </div>
+    </div>
+
+    <div class="infobox warn">
+      <strong>ข้อเสีย:</strong> สายหนา ติดตั้งยากกว่า UTP และแทบไม่ถูกใช้ใน LAN สมัยใหม่แล้ว แต่ยังพบได้บ่อยในระบบ Cable TV / Satellite / CCTV
+    </div>
+
+    <hr class="sep">
+
+    <!-- 6.1 Fiber -->
+    <div class="section-label">6.1</div>
+    <div class="section-title">Fiber-Optic Cable</div>
+    <div class="section-sub">สื่อกลางที่ Cisco ให้ความสำคัญมากที่สุด — เร็วที่สุด ไกลที่สุด</div>
+
+    <div class="cable-diagram">
+      <svg viewBox="0 0 700 140" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="700" height="140" fill="var(--surface)"/>
+        <text x="20" y="22" fill="var(--accent)" font-family="JetBrains Mono, monospace" font-size="12">Fiber Optic — Total Internal Reflection</text>
+        <rect x="40" y="55" width="500" height="50" rx="25" fill="none" stroke="var(--border)" stroke-width="18"/>
+        <rect x="40" y="55" width="500" height="50" rx="25" fill="none" stroke="var(--accent2)" stroke-width="8" opacity="0.35"/>
+        <polyline points="55,80 120,60 190,100 260,60 330,100 400,60 470,100 530,80" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+        <circle cx="55" cy="80" r="4" fill="var(--accent)"/>
+        <text x="570" y="75" fill="var(--accent)" font-family="Sarabun" font-size="12">Core</text>
+        <text x="570" y="95" fill="var(--muted)" font-family="Sarabun" font-size="11">(แสงเดินทาง)</text>
+        <text x="30" y="125" fill="var(--muted)" font-family="Sarabun" font-size="11">Cladding สะท้อนแสงให้วิ่งวนอยู่ใน Core เท่านั้น (Total Internal Reflection)</text>
+      </svg>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>🧬 ทำจากอะไร</h3>
+        <p>แกน (Core) ทำจาก Glass หรือ Plastic — ขนาดเล็กมาก ใกล้เคียงเส้นผมมนุษย์ ล้อมด้วย Cladding และ Jacket</p>
+      </div>
+      <div class="card">
+        <h3>💡 หลักการทำงาน</h3>
+        <p>LED/Laser ยิงแสงเข้า Core → Cladding สะท้อนแสงกลับเข้า Core เสมอ (Total Internal Reflection) → Receiver ปลายทางแปลงแสงกลับเป็นข้อมูล</p>
+      </div>
+      <div class="card">
+        <h3>🔌 หัวต่อทั่วไป</h3>
+        <p><strong>LC, SC, ST</strong> — ใช้ในงาน Data Center และ ISP</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>✔ ข้อดี</h3>
+        <div class="tag green">ไม่โดน EMI/RFI</div>
+        <div class="tag green">ส่งได้หลายกิโลเมตร</div>
+        <div class="tag green">ความเร็วสูงมาก (10G–400G+)</div>
+        <div class="tag green">Bandwidth สูง & ปลอดภัยกว่า</div>
+        <p style="margin-top:.5rem">ใช้กับ Backbone, Data Center, ISP, การเชื่อมต่อระหว่างอาคาร/Telephone Company</p>
+      </div>
+      <div class="card">
+        <h3>✘ ข้อเสีย</h3>
+        <div class="tag bad">ราคาแพงที่สุด</div>
+        <div class="tag bad">ติดตั้งยากกว่า</div>
+        <div class="tag bad">ต้องใช้อุปกรณ์เฉพาะ (Transceiver, Splicer)</div>
+      </div>
+    </div>
+
+    <div class="infobox">
+      <strong>💡 เกร็ดเพิ่มเติมสำหรับงาน Cloud/Network Engineer:</strong> Fiber แบ่งเป็น 2 ชนิดหลัก — <strong>Single-mode</strong> (แกนเล็ก ใช้ Laser ส่งได้ไกลระดับหลายสิบกิโลเมตร นิยมใช้เชื่อม Data Center ระหว่างเมือง) และ <strong>Multi-mode</strong> (แกนใหญ่กว่า ใช้ LED ส่งได้ไม่ไกลเท่า แต่ต้นทุนต่ำกว่า นิยมใช้ภายใน Data Center เดียวกัน)
+    </div>
+
+    <hr class="sep">
+
+    <!-- Wireless brief -->
+    <div class="section-label">6.1 — Wireless</div>
+    <div class="section-title">Wireless Media (โดยสรุป)</div>
+    <div class="section-sub">ไม่มีสาย ใช้คลื่นแม่เหล็กไฟฟ้า</div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="card-icon">📶</span>
+        <h3>Wi-Fi</h3>
+        <p>เชื่อมต่ออุปกรณ์ภายในบ้าน/ออฟฟิศ ผ่าน Access Point คลื่นความถี่ 2.4GHz/5GHz</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📱</span>
+        <h3>Cellular (4G/5G)</h3>
+        <p>เชื่อมต่ออุปกรณ์พกพาผ่านเสาสัญญาณโทรศัพท์มือถือ ครอบคลุมพื้นที่กว้าง</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔵</span>
+        <h3>Bluetooth</h3>
+        <p>เชื่อมต่อระยะสั้น พลังงานต่ำ ใช้กับอุปกรณ์รอบตัว เช่น หูฟัง เมาส์</p>
+      </div>
+    </div>
+
+    <div class="infobox warn">
+      <strong>ข้อควรระวัง:</strong> Wireless สะดวกแต่ความเร็ว/ความเสถียรผันผวนตามสภาพแวดล้อม สิ่งกีดขวาง และจำนวนอุปกรณ์ที่แชร์คลื่นเดียวกัน — ในงานที่ต้องการความเสถียรสูง (Server, Data Center) มักเลือกใช้สายแทน
+    </div>
+
+    <hr class="sep">
+
+    <!-- Big comparison table -->
+    <div class="section-label">SUMMARY TABLE</div>
+    <div class="section-title">เปรียบเทียบสื่อกลางทั้งหมด</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>คุณสมบัติ</th><th>Twisted-Pair (UTP/STP)</th><th>Coaxial</th><th>Fiber Optic</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ตัวนำสัญญาณ</td><td>ทองแดง (Copper)</td><td>ทองแดง (Copper)</td><td>แก้ว/พลาสติก (Glass/Plastic)</td></tr>
+          <tr><td>วิธีส่งข้อมูล</td><td>Electrical Impulses</td><td>Electrical Impulses</td><td>Pulses of Light</td></tr>
+          <tr><td>ระยะทาง</td><td>≈100 เมตร</td><td>หลายร้อยเมตร</td><td>หลายกิโลเมตร</td></tr>
+          <tr><td>ความเร็ว</td><td>สูง (1–10 Gbps)</td><td>ปานกลาง</td><td>สูงมาก (10G–400G+)</td></tr>
+          <tr><td>EMI / RFI</td><td>มีผล (STP ทนกว่า UTP)</td><td>ทนกว่า UTP (มี Shield)</td><td>ไม่มีผลเลย</td></tr>
+          <tr><td>ราคา</td><td>ถูกที่สุด</td><td>ปานกลาง</td><td>แพงที่สุด</td></tr>
+          <tr><td>หัวต่อ</td><td>RJ45</td><td>BNC, F-Type</td><td>LC, SC, ST</td></tr>
+          <tr><td>ใช้งานหลัก</td><td>Ethernet LAN</td><td>Cable TV, Satellite, CCTV</td><td>Backbone, Data Center, ISP</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="infobox green">
+      <strong>🎯 จุดจำก่อนสอบ (สรุปรวด):</strong><br>
+      • UTP/STP → Ethernet LAN มากที่สุด, หัว RJ45, ≈100 m<br>
+      • Coaxial → Cable TV / Satellite / CCTV, หัว BNC/F-Type, แกนทองแดงเดี่ยว<br>
+      • Fiber → เร็วที่สุด ไกลที่สุด ไม่โดน EMI ใช้กับ Backbone/Data Center/ISP<br>
+      • เกณฑ์เลือกสื่อกลางมี 4 ข้อ: Distance, Environment, Data Rate/Speed, Cost — <strong>ไม่มี "Type of Data"</strong>
+    </div>
+
+  </div><!-- end summary -->
+
+  <!-- ══════════════════════════════════════════
+       TAB: FLASHCARDS
+  ══════════════════════════════════════════ -->
+  <div id="tab-flashcards" class="tab-panel">
+    <div class="section-label">FLASHCARDS</div>
+    <div class="section-title">คำศัพท์สำคัญ — Module 6</div>
+    <div class="section-sub">คลิกที่การ์ดเพื่อดูคำนิยาม</div>
+
+    <div class="flashcard-grid" id="flashcard-grid"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: QUIZ
+  ══════════════════════════════════════════ -->
+  <div id="tab-quiz" class="tab-panel">
+    <div class="section-label">QUIZ</div>
+    <div class="section-title">แบบทดสอบ Module 6</div>
+    <div class="section-sub">26 ข้อ — ครอบคลุม 6.0 / 6.1 / 6.2 (รวมข้อสอบจาก Quiz จริงของ Cisco)</div>
+
+    <div class="quiz-container" id="quiz-container"></div>
+
+    <div class="quiz-controls">
+      <button class="btn btn-accent" onclick="checkAll()">✔ ตรวจข้อสอบ</button>
+      <button class="btn btn-secondary" onclick="resetQuiz()">↺ ทำใหม่</button>
+    </div>
+    <div class="quiz-score" id="quiz-score">
+      คะแนนของคุณ: <span id="score-display"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TAB: TOOLS
+  ══════════════════════════════════════════ -->
+  <div id="tab-tools" class="tab-panel">
+    <div class="section-label">TOOLS</div>
+    <div class="section-title">Cable Selector — เครื่องมือช่วยเลือกสื่อกลาง</div>
+    <div class="section-sub">จำลองการตัดสินใจแบบ Network Engineer โดยใช้ 4 เกณฑ์ของ Cisco</div>
+
+    <div class="calc-box">
+      <h3>🧭 เลือกสถานการณ์ของคุณ</h3>
+      <div class="grid grid-2">
+        <div class="input-group">
+          <label>ระยะทางที่ต้องการเชื่อมต่อ</label>
+          <select id="sel-distance" onchange="calcSelector()">
+            <option value="short">ภายในห้อง/อาคารเดียว (&lt;100 m)</option>
+            <option value="medium">ระหว่างอาคารในองค์กร (100 m – 2 km)</option>
+            <option value="long">ระหว่างเมือง / ข้ามพื้นที่ (&gt;2 km)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>สภาพแวดล้อม</label>
+          <select id="sel-env" onchange="calcSelector()">
+            <option value="normal">สำนักงานทั่วไป / EMI ต่ำ</option>
+            <option value="high-emi">โรงงาน / ใกล้มอเตอร์-เครื่องเชื่อม (EMI สูง)</option>
+            <option value="outdoor">กลางแจ้ง / ใต้ดิน</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>ความเร็วที่ต้องการ</label>
+          <select id="sel-speed" onchange="calcSelector()">
+            <option value="low">≤1 Gbps (ใช้งานทั่วไป)</option>
+            <option value="high">10 Gbps ขึ้นไป (Data Center)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>งบประมาณ</label>
+          <select id="sel-cost" onchange="calcSelector()">
+            <option value="low">จำกัด ต้องการราคาประหยัด</option>
+            <option value="flexible">ยืดหยุ่น เน้นประสิทธิภาพ</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-result" id="selector-result">
+        <span class="r-label">เลือกเงื่อนไขด้านบนเพื่อดูคำแนะนำ</span>
+      </div>
+    </div>
+
+    <div class="infobox">
+      <strong>หมายเหตุ:</strong> เครื่องมือนี้จำลองหลักการตัดสินใจตาม 4 เกณฑ์ของ Cisco (Distance, Environment, Speed, Cost) เพื่อฝึกกระบวนการคิดแบบ Network Engineer จริง ไม่ใช่คำตอบตายตัวที่ใช้แทนการออกแบบเครือข่ายจริงได้ทั้งหมด — หน้างานจริงยังต้องพิจารณาปัจจัยอื่นเพิ่ม เช่น มาตรฐานองค์กร และอุปกรณ์ที่รองรับ
+    </div>
+
+  </div><!-- end tools -->
+</div><!-- end wrapper -->
+
+<script>
+// ══════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const idx = ['summary','flashcards','quiz','tools'].indexOf(name);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// FLASHCARDS
+// ══════════════════════════════════════════
+const flashcards = [
+  { term: 'Network Media', hint: 'นิยาม', def: 'สื่อกลางที่ใช้ส่งข้อมูลจาก Source ไปยัง Destination', ex: 'เปรียบเหมือนถนนที่รถ (ข้อมูล) วิ่งผ่าน' },
+  { term: 'Copper Media', hint: 'ประเภทสื่อกลาง', def: 'สื่อกลางที่ทำจากทองแดง ส่งข้อมูลด้วยสัญญาณไฟฟ้า (Electrical Impulses)', ex: 'UTP, STP, Coaxial' },
+  { term: 'Fiber Optic', hint: 'ประเภทสื่อกลาง', def: 'สื่อกลางที่ใช้แสง (Pulses of Light) ส่งข้อมูล ไม่ใช้ไฟฟ้า', ex: 'ใช้ใน Backbone, Data Center, ISP' },
+  { term: 'Wireless', hint: 'ประเภทสื่อกลาง', def: 'สื่อกลางไร้สาย ส่งข้อมูลด้วยการ Modulation บนคลื่นแม่เหล็กไฟฟ้า', ex: 'Wi-Fi, Bluetooth, 4G/5G' },
+  { term: 'Twisted-Pair', hint: 'ชื่อสาย', def: 'สายคู่บิดเกลียว 4 คู่ (8 เส้น) ใช้มากที่สุดใน Ethernet LAN', ex: 'เชื่อม PC เข้ากับ Switch' },
+  { term: 'UTP', hint: 'ย่อมาจาก', def: 'Unshielded Twisted Pair — สายคู่บิดเกลียวไม่มีฟอยล์หุ้ม ราคาถูก นิยมที่สุด', ex: 'สาย LAN ทั่วไปในบ้าน/ออฟฟิศ' },
+  { term: 'STP', hint: 'ย่อมาจาก', def: 'Shielded Twisted Pair — มี Foil Shield ป้องกัน EMI เหมาะกับโรงงาน', ex: 'ใช้ในพื้นที่ที่มีสัญญาณรบกวนสูง' },
+  { term: 'Crosstalk', hint: 'ปัญหาในสาย', def: 'สัญญาณของคู่สายหนึ่งไปรบกวนอีกคู่สาย ลดได้ด้วยการบิดเกลียว', ex: 'เหตุผลที่ UTP ต้องบิดสายเป็นคู่' },
+  { term: 'EMI', hint: 'ย่อมาจาก', def: 'Electromagnetic Interference — คลื่นแม่เหล็กไฟฟ้าที่รบกวนสัญญาณในสาย Copper', ex: 'เกิดจากมอเตอร์ เครื่องเชื่อม หม้อแปลง' },
+  { term: 'RFI', hint: 'ย่อมาจาก', def: 'Radio Frequency Interference — คลื่นวิทยุที่รบกวนสัญญาณ', ex: 'เกิดจากวิทยุ Wi-Fi Bluetooth' },
+  { term: 'RJ45', hint: 'ใช้กับสายอะไร', def: 'หัวต่อมาตรฐานของสาย Twisted-Pair', ex: 'เข้าหัวสาย LAN เชื่อม PC-Switch' },
+  { term: 'Coaxial Cable', hint: 'โครงสร้าง', def: 'สายทองแดงที่มีแกนนำสัญญาณเดี่ยว ล้อมด้วยฉนวน ตาข่ายโลหะ และเปลือกนอก', ex: 'ใช้กับ Cable TV, Satellite, CCTV' },
+  { term: 'BNC / F-Type', hint: 'ใช้กับสายอะไร', def: 'หัวต่อมาตรฐานของสาย Coaxial', ex: 'เชื่อมกล่องรับสัญญาณ Cable TV' },
+  { term: 'Core (Fiber)', hint: 'ส่วนประกอบ Fiber', def: 'แกนกลางของสาย Fiber ที่แสงเดินทางผ่าน', ex: 'ทำจาก Glass หรือ Plastic' },
+  { term: 'Cladding', hint: 'ส่วนประกอบ Fiber', def: 'ชั้นที่สะท้อนแสงให้วิ่งอยู่ภายใน Core ตามหลัก Total Internal Reflection', ex: 'ห่อหุ้มรอบ Core' },
+  { term: 'Total Internal Reflection', hint: 'หลักการของ Fiber', def: 'หลักการที่แสงสะท้อนกลับเข้า Core เสมอ ทำให้แสงเดินทางไปได้ไกลโดยไม่รั่วออก', ex: 'หลักการฟิสิกส์ที่ Fiber ใช้ส่งข้อมูล' },
+  { term: 'Single-mode Fiber', hint: 'ประเภท Fiber', def: 'แกนเล็ก ใช้ Laser ส่งได้ไกลระดับหลายสิบกิโลเมตร', ex: 'ใช้เชื่อม Data Center ระหว่างเมือง' },
+  { term: 'Multi-mode Fiber', hint: 'ประเภท Fiber', def: 'แกนใหญ่กว่า ใช้ LED ส่งได้ไม่ไกลเท่า Single-mode แต่ราคาถูกกว่า', ex: 'ใช้ภายใน Data Center เดียวกัน' },
+  { term: 'Bandwidth', hint: 'ความหมาย', def: 'ความสามารถสูงสุดในการรับส่งข้อมูลของสื่อกลาง', ex: 'Fiber มี Bandwidth สูงกว่า Copper มาก' },
+  { term: 'Backbone', hint: 'ใช้สื่อกลางอะไร', def: 'เครือข่ายแกนหลักที่เชื่อมต่อเครือข่ายย่อยเข้าด้วยกัน มักใช้ Fiber', ex: 'เชื่อม Data Center หลายแห่งของ ISP' },
+  { term: 'Selection Criteria', hint: 'มีกี่ข้อ', def: '4 เกณฑ์ในการเลือก Network Media: Distance, Environment, Data Rate/Speed, Cost', ex: 'ไม่รวม "Type of Data"' },
+  { term: 'Modulation', hint: 'ใช้กับสื่อกลางอะไร', def: 'การเข้ารหัสข้อมูลลงบนคลื่นแม่เหล็กไฟฟ้าในระบบ Wireless', ex: 'หลักการที่ Wi-Fi ใช้ส่งข้อมูล' },
+];
+
+function buildFlashcards() {
+  const grid = document.getElementById('flashcard-grid');
+  grid.innerHTML = flashcards.map((fc, i) => `
+    <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
+      <div class="flashcard-inner">
+        <div class="fc-front">
+          <div class="fc-term">${fc.term}</div>
+          <div class="fc-hint">${fc.hint}</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:.75rem">คลิกเพื่อดูคำตอบ</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-def">${fc.def}</div>
+          <div class="fc-example">${fc.ex}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function flipCard(i) {
+  document.getElementById('fc-' + i).classList.toggle('flipped');
+}
+
+// ══════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════
+const questions = [
+  { q: 'Network Media คืออะไร?', opts: ['ซอฟต์แวร์จัดการเครือข่าย', 'ช่องทางที่ข้อมูลเดินทางจาก Source ไปยัง Destination', 'อุปกรณ์เก็บข้อมูล', 'โปรโตคอลการสื่อสาร'], ans: 1 },
+  { q: 'ข้อใด ไม่ใช่ (NOT) เกณฑ์ในการเลือกสื่อกลางเครือข่าย?', opts: ['ค่าใช้จ่ายในการติดตั้ง', 'สภาพแวดล้อมที่ติดตั้ง', 'ระยะทางสูงสุดที่ส่งสัญญาณได้', 'ประเภทของข้อมูลที่ส่งได้'], ans: 3 },
+  { q: 'Copper Media ส่งข้อมูลด้วยอะไร?', opts: ['พัลส์แสง', 'สัญญาณไฟฟ้า', 'คลื่นวิทยุ', 'คลื่นเสียง'], ans: 1 },
+  { q: 'Fiber Optic ส่งข้อมูลด้วยอะไร?', opts: ['สัญญาณไฟฟ้า', 'คลื่นแม่เหล็กไฟฟ้า', 'พัลส์แสง (Pulses of Light)', 'คลื่นวิทยุ'], ans: 2 },
+  { q: 'Wireless ส่งข้อมูลด้วยอะไร?', opts: ['สัญญาณไฟฟ้า', 'พัลส์แสง', 'การ Modulation บนคลื่นแม่เหล็กไฟฟ้า', 'สัญญาณเสียง'], ans: 2 },
+  { q: 'สื่อกลางแบบใช้สายชนิดใดที่บริษัท Cable TV นิยมใช้เชื่อมต่อไปยัง Set-top Box?', opts: ['Twisted-pair cable', 'Coaxial cable', 'Fiber-optic cable', 'Wireless'], ans: 1 },
+  { q: 'สื่อกลางแบบใช้สายชนิดใดใช้ส่งข้อมูลความเร็วสูงมากในระยะทางไกล?', opts: ['Coaxial cable', 'Fiber-optic cable', 'Twisted-pair cable', 'STP'], ans: 1 },
+  { q: 'สื่อกลางชนิดใดนิยมใช้มากที่สุดในการเชื่อมต่ออุปกรณ์เข้ากับ Ethernet LAN?', opts: ['Twisted-pair cable', 'Coaxial cable', 'Fiber-optic cable', 'Wireless เท่านั้น'], ans: 0 },
+  { q: 'UTP ย่อมาจากอะไร?', opts: ['Unified Twisted Pair', 'Unshielded Twisted Pair', 'Universal Transfer Protocol', 'Unified Transmission Path'], ans: 1 },
+  { q: 'STP ต่างจาก UTP อย่างไร?', opts: ['STP ใช้แสงส่งข้อมูล', 'STP มี Foil Shield ป้องกัน EMI', 'STP ไม่มีการบิดเกลียว', 'STP ใช้หัวต่อ BNC'], ans: 1 },
+  { q: 'ทำไมสายภายใน UTP ต้องถูกบิดเป็นคู่ (Twisted Pair)?', opts: ['เพื่อให้สายแข็งแรงขึ้น', 'เพื่อลด EMI และ Crosstalk', 'เพื่อให้ราคาถูกลง', 'เพื่อเพิ่มความเร็วสัญญาณ'], ans: 1 },
+  { q: 'UTP มีสายทั้งหมดกี่เส้น แบ่งเป็นกี่คู่?', opts: ['4 เส้น 2 คู่', '8 เส้น 4 คู่', '6 เส้น 3 คู่', '2 เส้น 1 คู่'], ans: 1 },
+  { q: 'UTP เข้าหัวต่อชนิดใด?', opts: ['BNC', 'F-Type', 'RJ45', 'LC'], ans: 2 },
+  { q: 'UTP ส่งสัญญาณได้ไกลสุดประมาณเท่าใด?', opts: ['10 เมตร', '100 เมตร', '1 กิโลเมตร', '10 กิโลเมตร'], ans: 1 },
+  { q: 'Coaxial Cable มีแกนนำสัญญาณกี่เส้น?', opts: ['1 เส้น', '2 เส้น', '4 เส้น', '8 เส้น'], ans: 0 },
+  { q: 'Coaxial Cable เข้าหัวต่อชนิดใด?', opts: ['RJ45', 'BNC และ F-Type', 'LC และ SC', 'RJ11'], ans: 1 },
+  { q: 'ส่วนใดของ Coaxial Cable ทำหน้าที่กัน EMI?', opts: ['Copper Core', 'Plastic Insulation', 'Metal Shield', 'Outer Jacket'], ans: 2 },
+  { q: 'Fiber-optic ทำมาจากวัสดุใดเป็นหลัก?', opts: ['ทองแดง', 'อะลูมิเนียม', 'แก้ว (Glass)', 'เหล็ก'], ans: 2 },
+  { q: 'หลักการที่ทำให้แสงเดินทางอยู่ภายใน Core ของ Fiber เรียกว่าอะไร?', opts: ['Electromagnetic Induction', 'Total Internal Reflection', 'Signal Modulation', 'Impedance Matching'], ans: 1 },
+  { q: 'อะไรคือข้อดีเด่นที่สุดของ Fiber เมื่อเทียบกับ Copper ในการเชื่อมต่อระหว่างอาคาร? (เลือกที่ตรงที่สุด)', opts: ['ราคาถูกกว่า', 'ติดตั้งง่ายกว่า', 'ไม่ถูกรบกวนจาก EMI/RFI และส่งได้ไกลกว่า', 'ใช้หัวต่อเดียวกับ UTP'], ans: 2 },
+  { q: 'Fiber Optic เหมาะกับการใช้งานประเภทใดมากที่สุด?', opts: ['เชื่อม PC กับ Printer ในบ้าน', 'Backbone, Data Center, ISP', 'รีโมทควบคุมทีวี', 'สาย HDMI'], ans: 1 },
+  { q: 'Single-mode Fiber ต่างจาก Multi-mode Fiber อย่างไร?', opts: ['Single-mode ใช้ Laser ส่งได้ไกลกว่า Multi-mode', 'Multi-mode ใช้ไฟฟ้าแทนแสง', 'Single-mode ราคาถูกกว่าเสมอ', 'ทั้งสองแบบไม่มีความต่าง'], ans: 0 },
+  { q: 'ข้อใดคือ 4 ปัจจัยในการเลือก Network Media ตาม Cisco?', opts: ['Speed, Color, Size, Weight', 'Distance, Environment, Amount of Data/Speed, Cost', 'Brand, Warranty, Price, Design', 'Voltage, Frequency, Wavelength, Length'], ans: 1 },
+  { q: 'โรงงานที่มีเครื่องจักรและ EMI สูง ควรเลือกสื่อกลางประเภทใด?', opts: ['UTP ธรรมดา', 'Coaxial', 'Fiber Optic', 'Wireless เท่านั้น'], ans: 2 },
+  { q: 'ระบบที่ต้องการความเร็วระดับ 100–400 Gbps เช่น Data Center มักใช้สื่อกลางใด?', opts: ['UTP', 'Coaxial', 'Fiber Optic', 'Bluetooth'], ans: 2 },
+  { q: 'ข้อใดถูกต้องเกี่ยวกับ Wireless Media?', opts: ['ส่งข้อมูลด้วยสัญญาณไฟฟ้า', 'ไม่มีสาย ใช้คลื่นแม่เหล็กไฟฟ้า และความเร็วผันผวนตามสภาพแวดล้อม', 'ไม่มีข้อเสียเลย', 'ใช้หัวต่อ RJ45'], ans: 1 },
+];
+
+let answered = new Array(questions.length).fill(null);
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = questions.map((q, i) => `
+    <div class="quiz-card" id="qcard-${i}">
+      <div class="quiz-num">Q${String(i+1).padStart(2,'0')} / ${questions.length}</div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o, j) => `
+          <button class="quiz-opt" id="qopt-${i}-${j}" onclick="selectOpt(${i},${j})">${o}</button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="qfb-${i}"></div>
+    </div>
+  `).join('');
+  updateProgress();
+}
+
+function selectOpt(qi, oi) {
+  if (answered[qi] !== null) return;
+  answered[qi] = oi;
+  const card = document.getElementById('qcard-' + qi);
+  const opts = card.querySelectorAll('.quiz-opt');
+  const fb = document.getElementById('qfb-' + qi);
+  const correct = questions[qi].ans;
+
+  opts.forEach((btn, j) => {
+    if (j === correct) btn.classList.add('reveal-correct');
+    if (j === oi && oi !== correct) btn.classList.add('selected-wrong');
+    if (j === oi && oi === correct) btn.classList.add('selected-correct');
+    btn.disabled = true;
+  });
+
+  if (oi === correct) {
+    card.classList.add('correct');
+    fb.textContent = '✓ ถูกต้อง!';
+    fb.className = 'quiz-feedback show ok';
+  } else {
+    card.classList.add('wrong');
+    fb.textContent = '✗ ไม่ถูก — คำตอบที่ถูกต้องคือ: ' + questions[qi].opts[correct];
+    fb.className = 'quiz-feedback show fail';
+  }
+  updateProgress();
+}
+
+function checkAll() {
+  let score = 0;
+  answered.forEach((a, i) => { if (a === questions[i].ans) score++; });
+  const el = document.getElementById('quiz-score');
+  document.getElementById('score-display').textContent = `${score} / ${questions.length} (${Math.round(score/questions.length*100)}%)`;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz() {
+  answered = new Array(questions.length).fill(null);
+  document.getElementById('quiz-score').classList.remove('show');
+  buildQuiz();
+}
+
+function updateProgress() {
+  const done = answered.filter(a => a !== null).length;
+  const pct = Math.round(done / questions.length * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${done} / ${questions.length}`;
+}
+
+// ══════════════════════════════════════════
+// TOOLS — Cable Selector
+// ══════════════════════════════════════════
+function calcSelector() {
+  const distance = document.getElementById('sel-distance').value;
+  const env = document.getElementById('sel-env').value;
+  const speed = document.getElementById('sel-speed').value;
+  const cost = document.getElementById('sel-cost').value;
+  const el = document.getElementById('selector-result');
+
+  let score = { utp: 0, coax: 0, fiber: 0 };
+
+  if (distance === 'short') { score.utp += 2; score.coax += 1; }
+  if (distance === 'medium') { score.coax += 1; score.fiber += 2; }
+  if (distance === 'long') { score.fiber += 3; }
+
+  if (env === 'normal') { score.utp += 2; }
+  if (env === 'high-emi') { score.fiber += 3; score.coax += 1; }
+  if (env === 'outdoor') { score.fiber += 2; }
+
+  if (speed === 'low') { score.utp += 1; score.coax += 1; }
+  if (speed === 'high') { score.fiber += 3; }
+
+  if (cost === 'low') { score.utp += 2; }
+  if (cost === 'flexible') { score.fiber += 1; }
+
+  const entries = Object.entries(score).sort((a,b) => b[1]-a[1]);
+  const winner = entries[0][0];
+
+  const names = { utp: 'Twisted-Pair Cable (UTP/STP)', coax: 'Coaxial Cable', fiber: 'Fiber-Optic Cable' };
+  const reasons = {
+    utp: 'เหมาะกับระยะใกล้ในอาคาร งบประมาณจำกัด และสภาพแวดล้อม EMI ต่ำ — คุ้มค่าที่สุดสำหรับ Ethernet LAN ทั่วไป',
+    coax: 'เหมาะกับงานเฉพาะทางเช่น Cable TV/CCTV หรือระยะกลางที่ต้องการกัน EMI ได้ดีกว่า UTP บ้าง',
+    fiber: 'เหมาะกับระยะไกล ความเร็วสูง หรือสภาพแวดล้อมที่มี EMI/RFI รบกวนมาก แม้ต้นทุนจะสูงกว่า'
+  };
+
+  el.innerHTML = `
+    <span class="r-label">คำแนะนำ: </span><span class="r-val">${names[winner]}</span><br>
+    <span class="r-label">เหตุผล: </span>${reasons[winner]}<br><br>
+    <span class="r-label">คะแนนเทียบ:</span> UTP=${score.utp} · Coax=${score.coax} · Fiber=${score.fiber}
+  `;
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+buildFlashcards();
+buildQuiz();
+calcSelector();
+</script>
+</body>
+</html>
