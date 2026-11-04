@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network basics 11 — DHCP</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1520;--p:#142031;--l:#243650;--t:#e6edf6;--m:#8fa3bd;--c:#5ccfe6;--a:#ffb454;--g:#7fd99a;--r:#ff7a7a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:16px/1.7 'Noto Sans Thai',system-ui,sans-serif}
+code,pre,.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+header{padding:28px 20px 8px;max-width:920px;margin:auto}h1{margin:0;font-size:1.7rem}header p{margin:4px 0 0;color:var(--m)}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--l);z-index:5;display:flex;gap:4px;overflow-x:auto;padding:8px 16px;justify-content:center}
+nav button{background:none;border:1px solid transparent;color:var(--m);padding:8px 14px;border-radius:8px;font:inherit;cursor:pointer;white-space:nowrap}
+nav button.on{color:var(--c);border-color:var(--c);background:var(--p)}button:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+main{max-width:920px;margin:auto;padding:16px 20px 60px}section{display:none}section.on{display:block}
+h2{font-size:1.25rem;margin:32px 0 8px;color:var(--c)}h3{font-size:1.05rem;margin:18px 0 6px}
+.box{background:var(--p);border:1px solid var(--l);border-radius:10px;padding:14px 16px;margin:12px 0}
+.x{display:inline-block;background:var(--a);color:#1b1200;font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:99px;margin-left:8px;vertical-align:middle}
+.warn{border-left:4px solid var(--r)}.tip{border-left:4px solid var(--g)}.add{border-left:4px solid var(--a)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}th,td{border:1px solid var(--l);padding:7px 10px;text-align:left;vertical-align:top}th{background:#192b42}
+.sc{overflow-x:auto}pre{background:#0a111b;border:1px solid var(--l);border-radius:8px;padding:12px;overflow-x:auto;font-size:.85rem;line-height:1.5;margin:8px 0}
+.mut{color:var(--m)}.k{color:var(--a)}
+.btn{background:var(--c);color:#04222b;border:0;border-radius:8px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer}.btn.s{background:var(--p);color:var(--t);border:1px solid var(--l)}
+.lane{display:grid;grid-template-columns:1fr 1fr;text-align:center;font-weight:700;margin-top:10px}
+.arr{margin:6px 0;padding:8px 12px;border:1px dashed var(--l);border-radius:8px;opacity:.35;transition:.25s}
+.arr.on{opacity:1;border:1px solid var(--c);background:#10283a}.arr.cur{border-color:var(--a);box-shadow:0 0 0 2px #ffb45455}
+.arr.r{text-align:right}.fld{display:grid;grid-template-columns:130px 1fr;gap:2px 10px;font-size:.88rem;margin-top:6px}.fld b{color:var(--m);font-weight:400}
+.card{min-height:170px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;cursor:pointer;font-size:1.15rem;background:var(--p);border:1px solid var(--l);border-radius:12px;user-select:none}
+.card.back{border-color:var(--a);color:var(--a)}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 14px;background:var(--p);color:var(--t);border:1px solid var(--l);border-radius:8px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--c)}.opt.ok{border-color:var(--g);background:#12301f}.opt.no{border-color:var(--r);background:#3a1a1a}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}input{background:#0a111b;color:var(--t);border:1px solid var(--l);border-radius:6px;padding:6px 10px;width:90px;font:inherit}
+@media(max-width:560px){.fld{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.arr{transition:none}}
+</style></head><body>
+<header><h1>Network basics 11 — DHCP</h1><p>Cisco Module 11 · IPv4 แบบ Static / Dynamic, DORA, Lease, Packet Tracer Lab · ป้าย <span class="x" style="margin:0">เพิ่มเติม</span> = เนื้อหาที่เพิ่มจากต้นฉบับ</p></header>
+<nav id="nav"></nav>
+<main>
+<section id="t0">
+<h2>1. Static vs Dynamic IPv4</h2>
+<div class="sc"><table><tr><th>หัวข้อ</th><th>Static</th><th>Dynamic (DHCP)</th></tr>
+<tr><td>ใครกำหนด</td><td>Network Administrator ตั้งเอง</td><td>DHCP Server แจกอัตโนมัติ</td></tr>
+<tr><td>เหมาะกับ</td><td>Server, Printer, Router, Switch</td><td>PC, Laptop, มือถือ</td></tr>
+<tr><td>ข้อดี</td><td>IP คงเดิม หาเครื่องเจอเสมอ</td><td>ลดงาน Admin, กรอกผิดน้อย, นำ IP กลับมาใช้ซ้ำ</td></tr>
+<tr><td>ข้อเสีย</td><td>ตั้งทีละเครื่อง, ผิดง่าย, ต้องจดทะเบียน IP</td><td>IP เปลี่ยนได้เมื่อ Lease หมด</td></tr></table></div>
+<div class="box">ข้อมูลที่ต้องตั้ง: <b>IP Address</b> (เครื่องไหน) · <b>Subnet Mask</b> (Network ไหน) · <b>Default Gateway</b> (ทางออกไป Network อื่น) · <b>DNS Server</b> (แปลงชื่อโดเมนเป็น IP)</div>
+<div class="box add">ในสรุป Module 11 ไม่ได้ระบุ DNS ไว้ในรายการขั้นต่ำ แต่ในงานจริงต้องมี DNS ด้วยเสมอ ไม่อย่างนั้นเข้า google.com ไม่ได้ทั้งที่ ping 8.8.8.8 ผ่าน <span class="x">เพิ่มเติม</span></div>
+
+<h2>2. คำศัพท์หลัก</h2>
+<div class="sc"><table><tr><th>คำ</th><th>ความหมาย</th></tr>
+<tr><td>DHCP Client</td><td>เครื่องที่ขอ IP</td></tr><tr><td>DHCP Server</td><td>อุปกรณ์ที่แจก IP + Network config (เป็น PC Server, Wireless Router หรือ Router ก็ได้ ขอแค่เปิด DHCP service)</td></tr>
+<tr><td>DHCP Pool</td><td>ช่วง IP ที่ Server มีไว้แจก</td></tr><tr><td>Lease</td><td>สัญญาเช่า IP ชั่วคราว หมดอายุแล้ว IP กลับเข้า Pool</td></tr></table></div>
+
+<h2>3. Home Router ทำสองบทบาท</h2>
+<pre>INTERNET ── ISP (DHCP Server)
+               │ Public IPv4
+        ┌──────▼───────┐
+        │ Wireless Router│  WAN: DHCP <span class="k">Client</span>  (รับ IP จาก ISP)
+        │               │  LAN: DHCP <span class="k">Server</span>  (แจก Private IP)
+        └──┬─────┬────┬─┘
+        Laptop  Phone  PC    ← DHCP Clients (192.168.x.x)</pre>
+<div class="box add">NAT คือตัวที่ทำให้ Private IP ด้านในออกเน็ตผ่าน Public IP เดียวของ Router ได้ <span class="x">เพิ่มเติม</span><br>ISP ไทยหลายเจ้าใช้ <b>CGNAT</b> ทำให้ WAN IP ของ Router เป็น <code>100.64.0.0/10</code> ไม่ใช่ Public จริง ตรวจได้โดยเทียบ WAN IP กับ IP ที่เว็บ "what is my ip" แสดง ถ้าไม่ตรงกัน แสดงว่าอยู่หลัง CGNAT (มีผลกับการ port forward และ self-host)</div>
+
+<h2>4. DORA — จำลองทีละขั้น</h2>
+<p class="mut">กด "ขั้นต่อไป" เพื่อดู field ของแต่ละแพ็กเก็ต หา → เสนอ → ขอ → ยืนยัน</p>
+<div class="row"><button class="btn" id="nx">ขั้นต่อไป</button><button class="btn s" id="rs">เริ่มใหม่</button></div>
+<div class="lane"><div>DHCP Client</div><div>DHCP Server</div></div><div id="dora"></div>
+<div class="box warn"><b>ข้อสอบชอบหลอก</b><br>• DISCOVER ไม่ได้ส่งหา Server ตรง ๆ ต้องเป็น Broadcast เพราะ Client ยังไม่รู้ว่า Server อยู่ไหน<br>• ทุก Host ใน Broadcast Domain ได้รับเฟรม แต่มีเฉพาะ DHCP Server ที่ตอบ<br>• <code>FF-FF-FF-FF-FF-FF</code> คือ <b>Destination</b> MAC ไม่ใช่ Source<br>• Client ส่ง DISCOVER และ REQUEST · Server ส่ง OFFER และ ACK</div>
+<div class="box add">REQUEST ปกติถูกส่งแบบ Broadcast ด้วย เพื่อบอก Server อื่นที่ส่ง OFFER มาว่า "ไม่ได้ถูกเลือก" และ DISCOVER มี Source IP เป็น <code>0.0.0.0</code> เพราะ Client ยังไม่มี IP <span class="x">เพิ่มเติม</span></div>
+
+<h2>5. ส่วนที่งานจริงต้องรู้ <span class="x">เพิ่มเติม</span></h2>
+<h3>Lease renewal</h3>
+<div class="sc"><table><tr><th>เวลา</th><th>เกิดอะไรขึ้น</th></tr>
+<tr><td>50% ของ Lease (T1)</td><td>Client ส่ง REQUEST แบบ Unicast ไป Server เดิมเพื่อต่ออายุ</td></tr>
+<tr><td>87.5% (T2)</td><td>ถ้า Server เดิมเงียบ Client Broadcast REQUEST หา Server ใดก็ได้ (Rebind)</td></tr>
+<tr><td>100%</td><td>Lease หมด Client ต้องเลิกใช้ IP แล้วเริ่ม DORA ใหม่</td></tr></table></div>
+<h3>ข้อความ DHCP อื่น ๆ</h3>
+<div class="sc"><table><tr><th>ข้อความ</th><th>ใครส่ง / ใช้ทำอะไร</th></tr>
+<tr><td>DHCPNAK</td><td>Server ปฏิเสธ เช่น IP ไม่ถูกต้องกับ Network นี้</td></tr>
+<tr><td>DHCPDECLINE</td><td>Client พบว่า IP ที่ได้ซ้ำกับเครื่องอื่น</td></tr>
+<tr><td>DHCPRELEASE</td><td>Client คืน IP ก่อนหมด Lease</td></tr>
+<tr><td>DHCPINFORM</td><td>Client ตั้ง IP เองแล้ว แต่ขอ config อื่น เช่น DNS</td></tr></table></div>
+<h3>Port และ Protocol</h3>
+<p>DHCP ใช้ <b>UDP</b> · Server ฟังที่พอร์ต <b>67</b> · Client ใช้พอร์ต <b>68</b></p>
+<h3>APIPA (169.254.0.0/16)</h3>
+<p>ถ้า Windows ขอ DHCP แล้วไม่มีใครตอบ จะตั้ง IP ให้ตัวเองเป็น <code>169.254.x.x</code> ใช้คุยได้เฉพาะวงเดียวกัน <b>เห็น IP นี้ = DHCP มีปัญหา</b> เป็นอาการแรกที่ต้องเช็กเวลาลูกค้าบอกว่าเน็ตใช้ไม่ได้</p>
+<h3>DHCP Relay</h3>
+<p>Broadcast ข้าม Router ไม่ได้ ถ้า DHCP Server อยู่คนละ VLAN/Subnet ต้องตั้ง Relay บน Router/L3 Switch ด้วยคำสั่ง <code>ip helper-address &lt;IP Server&gt;</code> ที่ Interface ฝั่ง Client</p>
+<h3>DHCP Reservation และ Excluded range</h3>
+<p>Reservation ผูก MAC → IP ให้ Printer/กล้อง ได้ IP เดิมเสมอโดยยังรับจาก DHCP · ส่วน Static IP ของ Gateway/Server ให้วางไว้ <b>นอก Pool</b> หรือกัน IP นั้นด้วย excluded-address ไม่งั้นอาจเกิด IP ซ้ำ</p>
+<h3>ความเสี่ยงด้านความปลอดภัย</h3>
+<p><b>Rogue DHCP Server</b> — เครื่องปลอมแจก Gateway/DNS ผิดเพื่อดักข้อมูล · <b>DHCP Starvation</b> — ยิง DISCOVER ด้วย MAC ปลอมจน Pool หมด · วิธีป้องกันบน Switch คือ <b>DHCP Snooping</b> (อนุญาต Offer เฉพาะ Trusted port)</p>
+<p class="mut">IPv6 ใช้ SLAAC หรือ DHCPv6 แทน ไม่มี Broadcast (ใช้ Multicast) ไว้ศึกษาต่อในโมดูลถัด ๆ ไป</p>
+</section>
+
+<section id="t1"><h2>Flashcards</h2><p class="mut">คลิกการ์ดเพื่อพลิก · <span id="fc"></span></p>
+<div class="card" id="card" tabindex="0" role="button"></div>
+<div class="row"><button class="btn s" id="fp">ก่อนหน้า</button><button class="btn s" id="fn">ถัดไป</button><button class="btn s" id="fs">สลับลำดับ</button></div></section>
+
+<section id="t2"><h2>Lab: Configure DHCP on a Wireless Router (Packet Tracer)</h2>
+<div class="box"><b>โครงสร้าง</b><br>Wireless Router <code>192.168.5.1</code> (Gateway + DHCP Server) → PC0 .126 · PC1 .127 · PC2 .128 (DHCP Clients) · Mask <code>255.255.255.0</code></div>
+<div class="sc"><table><tr><th>ขั้น</th><th>ทำอะไร</th></tr>
+<tr><td>1</td><td>ต่อ PC0–PC2 เข้า Router ด้วยสาย Straight-through</td></tr>
+<tr><td>2</td><td>ที่ PC: Desktop → IP Configuration → เลือก <b>DHCP</b></td></tr>
+<tr><td>3</td><td>เปิด Web Browser เข้า IP ของ Default Gateway · login <code>admin / admin</code></td></tr>
+<tr><td>4</td><td>เปลี่ยน Router IP เป็น <code>192.168.5.1</code> → Save Settings (หน้าเว็บ Error ได้ เพราะ Browser ยังใช้ IP เก่า ไม่ใช่ความผิดเรา)</td></tr>
+<tr><td>5</td><td>ที่ PC สลับ Static → DHCP เพื่อขอ IP ใหม่ แล้วเข้า Router ที่ 192.168.5.1</td></tr>
+<tr><td>6</td><td>ตั้ง Starting IP = <code>192.168.5.126</code>, Maximum users = <code>75</code> → Save</td></tr>
+<tr><td>7</td><td>ตรวจด้วย <code>ipconfig</code> และทดสอบด้วย <code>ping 192.168.5.1</code>, <code>ping 192.168.5.127</code></td></tr></table></div>
+<h3>คำนวณ Pool</h3>
+<div class="row">Start .<input id="ps" type="number" value="126" min="1" max="254"> จำนวนผู้ใช้ <input id="pn" type="number" value="75" min="1" max="254"> <button class="btn" id="pc">คำนวณ</button></div>
+<div class="box" id="pr">สูตร: End = Start + Users − 1 → 126 + 75 − 1 = 200</div>
+<h3>ทำเหมือนกันบน Cisco IOS <span class="x">เพิ่มเติม</span></h3>
+<pre>Router(config)# ip dhcp excluded-address 192.168.5.1 192.168.5.125
+Router(config)# ip dhcp pool LAN5
+Router(dhcp-config)# network 192.168.5.0 255.255.255.0
+Router(dhcp-config)# default-router 192.168.5.1
+Router(dhcp-config)# dns-server 8.8.8.8
+Router(dhcp-config)# lease 1            <span class="mut"># 1 วัน</span>
+
+Router# show ip dhcp binding           <span class="mut"># ใครได้ IP ไหน</span>
+Router# show ip dhcp pool
+Router# show ip dhcp conflict</pre>
+<p class="mut">ลำดับสำคัญ: กัน excluded-address ก่อน เพื่อให้ Pool เริ่มที่ .126 ได้ผลเทียบเท่าการตั้ง Start IP ใน GUI</p>
+<h3>คำสั่งฝั่ง Client <span class="x">เพิ่มเติม</span></h3>
+<pre>ipconfig /all        <span class="mut"># ดู IP, Gateway, DNS, DHCP Server, Lease เริ่ม/หมด</span>
+ipconfig /release    <span class="mut"># คืน IP</span>
+ipconfig /renew      <span class="mut"># ขอใหม่ (เริ่ม DORA)</span>
+ping &lt;Gateway&gt;       <span class="mut"># เช็กวงเดียวกัน</span>
+ping 8.8.8.8         <span class="mut"># เช็กออกเน็ต (ไม่พึ่ง DNS)</span>
+ping google.com      <span class="mut"># เช็ก DNS</span></pre>
+<h3>Troubleshooting <span class="x">เพิ่มเติม</span></h3>
+<div class="sc"><table><tr><th>อาการ</th><th>สาเหตุที่น่าจะเป็น</th></tr>
+<tr><td>ได้ 169.254.x.x</td><td>ไม่เจอ DHCP Server: สาย/VLAN ผิด, service ปิด, Pool หมด</td></tr>
+<tr><td>ได้ IP แต่ออกเน็ตไม่ได้</td><td>Gateway หรือ DNS ผิด/ไม่ถูกแจก, ISP มีปัญหา</td></tr>
+<tr><td>IP ซ้ำ / conflict</td><td>Static อยู่ใน Pool โดยไม่ได้ exclude, มี Rogue DHCP</td></tr>
+<tr><td>ได้ Gateway แปลก ๆ</td><td>Rogue DHCP Server ใน LAN</td></tr>
+<tr><td>Client คนละ Subnet ไม่ได้ IP</td><td>ยังไม่ตั้ง ip helper-address</td></tr></table></div></section>
+
+<section id="t3"><h2>Cheat Sheet</h2>
+<div class="box tip"><b>DORA</b> = Discover (หา) → Offer (เสนอ) → Request (ขอ) → Acknowledge (ยืนยัน)<br>Client ส่ง D และ R · Server ส่ง O และ A</div>
+<div class="sc"><table><tr><th>ถามว่า</th><th>ตอบ</th></tr>
+<tr><td>ใครกำหนด Static IP</td><td>Network Administrator</td></tr>
+<tr><td>Protocol แจก IP อัตโนมัติ</td><td>DHCP (Dynamic Host Configuration Protocol)</td></tr>
+<tr><td>DISCOVER Dest IPv4</td><td class="mono">255.255.255.255</td></tr>
+<tr><td>DISCOVER Dest MAC</td><td class="mono">FF-FF-FF-FF-FF-FF</td></tr>
+<tr><td>DISCOVER Source IPv4 <span class="x">เพิ่มเติม</span></td><td class="mono">0.0.0.0</td></tr>
+<tr><td>Port Server / Client <span class="x">เพิ่มเติม</span></td><td>UDP 67 / UDP 68</td></tr>
+<tr><td>Server เสนอ IP / ยืนยัน</td><td>DHCPOFFER / DHCPACK</td></tr>
+<tr><td>Client ขอใช้ IP ที่เสนอ</td><td>DHCPREQUEST</td></tr>
+<tr><td>Home Router ฝั่ง WAN / LAN</td><td>DHCP Client / DHCP Server</td></tr>
+<tr><td>ISP แจกอะไร / Router แจกอะไร</td><td>Public IPv4 / Private IPv4</td></tr>
+<tr><td>Lease ต่ออายุที่ <span class="x">เพิ่มเติม</span></td><td>50% (unicast) → 87.5% (broadcast) → 100% หมด</td></tr>
+<tr><td>IP ขึ้นต้น 169.254 <span class="x">เพิ่มเติม</span></td><td>APIPA = DHCP ล้มเหลว</td></tr>
+<tr><td>Server อยู่คนละ Subnet <span class="x">เพิ่มเติม</span></td><td>ip helper-address (DHCP Relay)</td></tr>
+<tr><td>กัน Rogue DHCP <span class="x">เพิ่มเติม</span></td><td>DHCP Snooping</td></tr>
+<tr><td>Lab: Router / Pool / Users / End</td><td class="mono">.5.1 / .5.126 / 75 / .5.200</td></tr></table></div>
+<div class="box"><b>ประโยคเดียวจบ</b> DHCP Server แจก IP อัตโนมัติ ส่วน Static ต้องให้ Network Administrator กำหนดเอง และ Wireless Router ในบ้านเป็นทั้ง DHCP Client (รับ Public IP จาก ISP) และ DHCP Server (แจก Private IP ให้เครื่องในบ้าน)</div></section>
+
+<section id="t4"><h2>แบบฝึกหัด</h2><p class="mut" id="qs"></p><div id="qb"></div><div class="row"><button class="btn s" id="qn" hidden>ข้อต่อไป</button><button class="btn s" id="qr" hidden>ทำใหม่</button></div></section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const tabs=['เนื้อหา','Flashcards','Lab','Cheat Sheet','แบบฝึกหัด'];
+tabs.forEach((n,i)=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>go(i);$('#nav').appendChild(b)});
+function go(i){document.querySelectorAll('section').forEach((s,j)=>s.classList.toggle('on',i===j));[...$('#nav').children].forEach((b,j)=>b.classList.toggle('on',i===j));scrollTo(0,0)}
+go(0);
+/* DORA */
+const D=[
+['DHCPDISCOVER','C','"มี DHCP Server ไหม? ขอ IP หน่อย"',[['Source IP','0.0.0.0 (ยังไม่มี IP)'],['Dest IP','255.255.255.255 (Broadcast)'],['Dest MAC','FF-FF-FF-FF-FF-FF'],['Port','UDP 68 → 67']]],
+['DHCPOFFER','S','"เสนอ 192.168.1.10 ให้ เอาไหม?"',[['Source IP','192.168.1.1 (Server)'],['Dest IP','192.168.1.10 (หรือ Broadcast ตาม flag)'],['เสนอ','IP + Mask + Gateway + DNS + Lease'],['Port','UDP 67 → 68']]],
+['DHCPREQUEST','C','"ตกลง ขอใช้ 192.168.1.10"',[['Source IP','0.0.0.0'],['Dest IP','255.255.255.255 (บอก Server อื่นด้วย)'],['Dest MAC','FF-FF-FF-FF-FF-FF'],['Port','UDP 68 → 67']]],
+['DHCPACK','S','"ยืนยัน ใช้ได้ Lease เริ่มนับ"',[['Source IP','192.168.1.1'],['Dest IP','192.168.1.10 (หรือ Broadcast ตาม flag)'],['ผลลัพธ์','Client ตั้งค่า IP แล้วใช้งานได้'],['Port','UDP 67 → 68']]]];
+let ds=0;
+function drawD(){$('#dora').innerHTML=D.map((d,i)=>`<div class="arr ${d[1]==='S'?'r':''} ${i<ds?'on':''} ${i===ds-1?'cur':''}"><b class="mono">${i+1}. ${d[0]}</b> ${d[1]==='C'?'→':'←'} <span class="mut">${d[2]}</span>${i<ds?'<div class="fld">'+d[3].map(f=>`<b>${f[0]}</b><span class="mono">${f[1]}</span>`).join('')+'</div>':''}</div>`).join('')}
+$('#nx').onclick=()=>{ds=Math.min(4,ds+1);drawD()};$('#rs').onclick=()=>{ds=0;drawD()};drawD();
+/* Flashcards */
+let F=[['Static IP ใครกำหนด?','Network Administrator (Manual)'],['Protocol แจก IP อัตโนมัติ?','DHCP — Dynamic Host Configuration Protocol'],['DORA ย่อจากอะไร?','Discover, Offer, Request, Acknowledge'],['Client ส่งข้อความไหนใน DORA?','DISCOVER และ REQUEST'],['Server ส่งข้อความไหนใน DORA?','OFFER และ ACK'],['DISCOVER ใช้ Dest IP / Dest MAC อะไร?','255.255.255.255 / FF-FF-FF-FF-FF-FF'],['ทำไม DISCOVER ต้อง Broadcast?','Client ยังไม่รู้ว่า DHCP Server อยู่ที่ไหน'],['DISCOVER Source IP คืออะไร?','0.0.0.0 เพราะ Client ยังไม่มี IP'],['DHCP ใช้ Protocol/Port อะไร?','UDP — Server 67, Client 68'],['Lease คืออะไร?','การเช่า IP ชั่วคราว หมดอายุแล้ว IP กลับเข้า Pool'],['DHCP Pool คืออะไร?','ช่วง IP ที่ Server มีไว้แจก'],['Home Router ฝั่ง WAN เป็นอะไร?','DHCP Client (รับ Public IP จาก ISP)'],['Home Router ฝั่ง LAN เป็นอะไร?','DHCP Server (แจก Private IP)'],['IP 169.254.x.x บอกอะไร?','APIPA — Client ไม่ได้รับ IP จาก DHCP'],['Server คนละ Subnet ต้องตั้งอะไร?','DHCP Relay: ip helper-address'],['Rogue DHCP ป้องกันด้วยอะไร?','DHCP Snooping (Trusted port)']],fi=0,fb=false;
+function drawF(){const c=$('#card');c.textContent=F[fi][fb?1:0];c.classList.toggle('back',fb);$('#fc').textContent=(fi+1)+' / '+F.length}
+$('#card').onclick=()=>{fb=!fb;drawF()};$('#card').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fb=!fb;drawF()}};
+$('#fn').onclick=()=>{fi=(fi+1)%F.length;fb=false;drawF()};$('#fp').onclick=()=>{fi=(fi-1+F.length)%F.length;fb=false;drawF()};
+$('#fs').onclick=()=>{F.sort(()=>Math.random()-.5);fi=0;fb=false;drawF()};drawF();
+/* Pool calc */
+$('#pc').onclick=()=>{const s=+$('#ps').value,n=+$('#pn').value,e=s+n-1;$('#pr').innerHTML=e>254?`<span style="color:var(--r)">เกินช่วง Host ของ /24 (สูงสุด .254) ลดจำนวนผู้ใช้</span>`:`End = ${s} + ${n} − 1 = <b>${e}</b> → Pool: <code>192.168.5.${s}</code> ถึง <code>192.168.5.${e}</code>`};
+/* Quiz */
+const Q=[
+['Who is responsible for statically assigning IP addressing information?',['the network administrator','the DHCP server','the ISP','the client PC'],0,'Static = Manual configuration ซึ่งโดยปกติ Network Administrator เป็นคนกำหนดและตั้งค่า'],
+['What protocol is responsible for automatically assigning IP addressing information?',['DNS','DHCP','ARP','NAT'],1,'DHCP แจก IP และข้อมูล Network อื่นให้ Client อัตโนมัติ (DNS แปลงชื่อ, ARP หา MAC, NAT แปลง Private→Public)'],
+['ลำดับ DORA ที่ถูกต้องคือข้อใด?',['Offer → Discover → Request → ACK','Discover → Offer → Request → ACK','Discover → Request → Offer → ACK','Request → Offer → Discover → ACK'],1,'หา → เสนอ → ขอ → ยืนยัน'],
+['ข้อความใดที่ Client เป็นฝ่ายส่ง?',['DHCPOFFER และ DHCPACK','DHCPDISCOVER และ DHCPREQUEST','DHCPOFFER และ DHCPREQUEST','DHCPACK เท่านั้น'],1,'Client ส่ง Discover กับ Request · Server ส่ง Offer กับ ACK'],
+['DHCPDISCOVER ใช้ Destination MAC ใด?',['00-00-00-00-00-00','FF-FF-FF-FF-FF-FF','MAC ของ DHCP Server','MAC ของ Router เท่านั้น'],1,'Client ไม่รู้ MAC Server จึงใช้ Broadcast MAC ปลายทาง (FF คือ Destination ไม่ใช่ Source)'],
+['ข้อใดถูกต้องเกี่ยวกับ DHCPDISCOVER?',['ส่ง Unicast หา Server','มีเฉพาะ DHCP Server ที่ได้รับเฟรม','ทุก Host ใน Broadcast Domain ได้รับ แต่ Server เป็นตัวตอบ','ใช้ Source IP 255.255.255.255'],2,'Broadcast ถึงทุกเครื่อง แต่เฉพาะ DHCP Server ที่ตอบ และ Source IP คือ 0.0.0.0'],
+['Wireless Router ในบ้านทำหน้าที่ใดฝั่ง WAN และ LAN?',['WAN: Server, LAN: Client','WAN: Client, LAN: Server','Client ทั้งสองฝั่ง','Server ทั้งสองฝั่ง'],1,'WAN ขอ Public IP จาก ISP (Client) · LAN แจก Private IP ให้เครื่องในบ้าน (Server)'],
+['Lab: Router 192.168.5.1, Start 192.168.5.126, Max users 75 — IP สุดท้ายของ Pool คือ?',['192.168.5.175','192.168.5.200','192.168.5.201','192.168.5.150'],1,'126 + 75 − 1 = 200 (ถ้าเอา 126+75 = 201 จะเกินไป 1 เครื่อง)'],
+['อุปกรณ์ใดควรตั้ง Static IP มากที่สุด?',['Smartphone ผู้เยี่ยมชม','Laptop พนักงาน','Network Printer','แท็บเล็ต'],2,'อุปกรณ์ที่คนอื่นต้องหาเจอเสมอ (Server, Printer, Network device) ควรได้ IP เดิม'],
+['เครื่อง Windows ได้ IP 169.254.12.7 แสดงว่า?',['รับ IP จาก ISP สำเร็จ','DHCP ล้มเหลว Windows ตั้ง APIPA ให้ตัวเอง','เป็น Public IP','Lease เหลือ 50%'],1,'169.254.0.0/16 คือ APIPA เกิดเมื่อไม่มี DHCP Server ตอบ'],
+['DHCP Server อยู่คนละ Subnet กับ Client ต้องตั้งอะไรบน Router?',['ip nat inside','ip helper-address','default-router','ip dhcp snooping'],1,'Broadcast ข้าม Router ไม่ได้ Relay จะแปลงเป็น Unicast ส่งไป Server'],
+['Lease ผ่านไป 50% Client ทำอะไร?',['คืน IP ทันที','Broadcast DISCOVER ใหม่','ส่ง REQUEST แบบ Unicast ไปต่ออายุกับ Server เดิม','ไม่ทำอะไรจนหมด Lease'],2,'T1 = 50% Unicast Renew · T2 = 87.5% Broadcast Rebind'],
+['ผู้ไม่หวังดีเอาเครื่องมาแจก Default Gateway ปลอมใน LAN คือการโจมตีแบบ?',['DHCP Starvation','Rogue DHCP Server','APIPA','Lease Expiry'],1,'Rogue DHCP · ป้องกันด้วย DHCP Snooping'],
+];
+let qi=0,sc=0,done=false;
+function drawQ(){const q=Q[qi];$('#qs').textContent=`ข้อ ${qi+1} / ${Q.length} · คะแนน ${sc}`;const b=$('#qb');b.innerHTML='';const h=document.createElement('h3');h.textContent=q[0];b.appendChild(h);
+q[1].forEach((t,i)=>{const o=document.createElement('button');o.className='opt';o.textContent=t;o.onclick=()=>{if(done)return;done=true;if(i===q[2])sc++;[...b.querySelectorAll('.opt')].forEach((x,j)=>{x.disabled=true;if(j===q[2])x.classList.add('ok');else if(j===i)x.classList.add('no')});const e=document.createElement('div');e.className='box '+(i===q[2]?'tip':'warn');e.textContent=(i===q[2]?'ถูกต้อง · ':'ยังไม่ถูก · ')+q[3];b.appendChild(e);$('#qs').textContent=`ข้อ ${qi+1} / ${Q.length} · คะแนน ${sc}`;if(qi<Q.length-1)$('#qn').hidden=false;else{$('#qr').hidden=false;const r=document.createElement('div');r.className='box add';r.textContent=`จบแล้ว: ${sc} / ${Q.length} คะแนน`+(sc<Q.length?' ข้อที่พลาดให้กลับไปอ่านหัวข้อ DORA และ ส่วนที่งานจริงต้องรู้':' ครบทุกข้อ');b.appendChild(r)}};b.appendChild(o)})}
+$('#qn').onclick=()=>{qi++;done=false;$('#qn').hidden=true;drawQ()};
+$('#qr').onclick=()=>{qi=0;sc=0;done=false;$('#qr').hidden=true;$('#qn').hidden=true;drawQ()};drawQ();
+</script></body></html>

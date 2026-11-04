@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network basics 10 — IPv6</title>
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--ink:#14213d;--mut:#5b6678;--acc:#0f766e;--accbg:#d9f0ec;--bad:#b42318;--badbg:#fde8e6;--warn:#92400e;--warnbg:#fdf0d5;--ln:#d5dbe3;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1722;--card:#17212f;--ink:#e6ebf2;--mut:#9aa7ba;--acc:#4fd1c0;--accbg:#12332f;--bad:#ff8f84;--badbg:#3a1b19;--warn:#f5c26b;--warnbg:#3a2c10;--ln:#2a3749;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Noto Sans Thai","Sarabun",sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+main{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.25rem;margin:1.6em 0 .5em}h3{font-size:1.02rem;margin:1.2em 0 .3em}
+.sub{color:var(--mut);margin:0 0 14px}code,.m{font-family:ui-monospace,Menlo,Consolas,monospace}
+nav{display:flex;gap:6px;overflow-x:auto;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5;border-bottom:1px solid var(--ln)}
+nav button{flex:none;border:1px solid var(--ln);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:8px;font:inherit;font-size:.92rem;cursor:pointer}
+nav button[aria-selected=true]{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:600}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:10px;padding:14px 16px;margin:10px 0}
+.tip{border-left:4px solid var(--acc);background:var(--accbg);padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0}
+.fix{border-left:4px solid var(--warn);background:var(--warnbg);padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{border:1px solid var(--ln);padding:6px 9px;text-align:left;vertical-align:top}th{background:var(--accbg)}
+.sc{overflow-x:auto}
+.hx{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.hx span{font-family:ui-monospace,Menlo,monospace;background:var(--accbg);border:1px solid var(--acc);border-radius:6px;padding:6px 9px;text-align:center}.hx small{display:block;font-size:.65rem;color:var(--mut)}.hx .z{background:var(--card);border-style:dashed;border-color:var(--mut)}
+input[type=text]{width:100%;font:1rem ui-monospace,Menlo,monospace;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink)}
+.b{border:0;background:var(--acc);color:var(--bg);font:inherit;font-weight:600;padding:9px 16px;border-radius:8px;cursor:pointer;margin:8px 6px 0 0}.b.g{background:var(--card);color:var(--ink);border:1px solid var(--ln)}
+.o{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border:1px solid var(--ln);background:var(--card);color:var(--ink);border-radius:8px;font:inherit;cursor:pointer}
+.o.ok{border-color:var(--acc);background:var(--accbg)}.o.no{border-color:var(--bad);background:var(--badbg)}
+.ex{margin-top:8px;color:var(--mut);font-size:.93rem}.bar{height:8px;background:var(--ln);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><main>
+<h1>Network basics 10 — IPv6</h1>
+<p class="sub">Cisco Module 10 · สรุป + แก้ข้อมูลที่ผิด + เพิ่มสิ่งที่ Cloud Engineer ต้องรู้ + แบบฝึกหัด</p>
+<nav role="tablist" id="nav"></nav>
+
+<section id="t0"><h2>ลองย่อ IPv6 เอง</h2>
+<div class="card"><input type="text" id="ip" value="2001:0db8:0000:1111:0000:0000:0000:0200" aria-label="IPv6 address" spellcheck="false">
+<button class="b" onclick="run()">ย่อ / ขยาย</button><div id="out"></div></div>
+
+<h2>1. ทำไมต้อง IPv6</h2>
+<p>IPv4 = 32 bits ≈ 4.3 พันล้าน address ไม่พอกับอุปกรณ์/IoT → เกิด <b>address depletion</b>. NAT ช่วยยืดอายุ แต่ไม่ได้เพิ่ม address จริง และทำให้ P2P/บางแอปยากขึ้น. IPv6 = 128 bits ≈ 3.4×10<sup>38</sup> (340 undecillion).</p>
+<div class="sc"><table><tr><th></th><th>IPv4</th><th>IPv6</th></tr>
+<tr><td>ขนาด</td><td>32 bits</td><td>128 bits</td></tr><tr><td>รูปแบบ</td><td>Decimal (dotted), 4 octets</td><td>Hex, 8 hextets คั่นด้วย :</td></tr>
+<tr><td>ตัวอย่าง</td><td class="m">192.168.1.10</td><td class="m">2001:db8::1</td></tr>
+<tr><td>Address resolution</td><td>ARP</td><td>ICMPv6 Neighbor Discovery</td></tr>
+<tr><td>Broadcast</td><td>มี</td><td>ไม่มี (ใช้ multicast)</td></tr></table></div>
+<div class="tip"><b>ข้อสอบชอบหลอก:</b> IPv6 ไม่ได้ “เร็วกว่า” โดยอัตโนมัติ. เหตุผลหลักคือ address หมด ไม่ใช่ความเร็ว/ความปลอดภัย.</div>
+
+<h2>2. โครงสร้าง address</h2>
+<div class="hx"><span>2001<small>16 bit</small></span><span>0db8<small>16 bit</small></span><span class="z">0000<small>zero</small></span><span>1111<small>16 bit</small></span><span class="z">0000<small>zero</small></span><span class="z">0000<small>zero</small></span><span class="z">0000<small>zero</small></span><span>0200<small>16 bit</small></span></div>
+<p>1 hex digit = 4 bits · 1 hextet = 4 digits = 16 bits · 8 hextets = 32 digits = 128 bits. Hex ใช้ 0–9, A–F (ไม่มี G) และไม่แยกตัวพิมพ์เล็ก/ใหญ่.</p>
+
+<h2>3. กฎการย่อ (ทำตามลำดับ)</h2>
+<div class="card"><b>Rule 1:</b> ตัด leading zeros ในแต่ละ hextet (เหลืออย่างน้อย 1 หลัก) — <code>0db8→db8</code>, <code>0000→0</code>, แต่ <code>ab00</code> และ <code>1000</code> ห้ามแตะ.<br>
+<b>Rule 2:</b> ใช้ <code>::</code> แทน hextet ที่เป็น 0 ติดกัน <b>ครั้งเดียว</b> · เลือกชุดที่ยาวที่สุด · ยาวเท่ากันเลือกชุดแรก.</div>
+<p><code>2001:0db8:0000:0000:ab00:0000:0000:0000</code> → <code>2001:db8:0:0:ab00::</code></p>
+<p>ทำไม :: ได้ครั้งเดียว? ถ้ามี 2 ที่ จะรู้ไม่ได้ว่าแต่ละที่แทนกี่ hextet.</p>
+
+<h2>4. IPv4/IPv6 Coexistence</h2>
+<div class="sc"><table><tr><th>วิธี</th><th>ทำอะไร</th><th>จำ</th></tr>
+<tr><td>Dual stack</td><td>มี IPv4+IPv6 บน interface เดียวกัน</td><td>“Native IPv6” ในข้อสอบ</td></tr>
+<tr><td>Tunneling</td><td>ห่อ IPv6 packet ใน IPv4 packet</td><td>encapsulation</td></tr>
+<tr><td>Translation (NAT64)</td><td>แปลง IPv6-only ↔ IPv4-only</td><td>ต้องคู่กับ DNS64</td></tr></table></div>
+<p>เป้าหมายระยะยาว: native IPv6 end-to-end และลด tunnel/translation.</p></section>
+
+<section id="t1"><h2>จุดที่ในเอกสารผิดหรือคลาดเคลื่อน</h2>
+<div class="fix"><b>1. ลำดับ RIR หมด สลับกัน</b> — ในไฟล์สรุป 10.0–10.1 ตารางวันที่ผิดชื่อ (LACNIC ≠ เม.ย. 2011) และไฟล์ Check Your Understanding เรียงชื่อผิดลำดับ. ลำดับตามที่ Cisco สอน: <b>APNIC (เม.ย. 2011) → RIPE NCC (ก.ย. 2012) → LACNIC (มิ.ย. 2014) → ARIN (ก.ค. 2015) → AfriNIC (2020, ยังอยู่ช่วงทยอยแจกเหลือ)</b>. ข้อสอบ True = 4 ใน 5 ยังถูก. วันที่จริงแต่ละ RIR นิยามต่างกัน (เริ่ม soft landing vs หมดเกลี้ยง) ควรเช็กกับเว็บ RIR ถ้าจะอ้างในงานจริง.</div>
+<div class="fix"><b>2. “Native IPv6 = Dual stack”</b> ถูกแค่ในบริบทข้อสอบ Cisco. ความจริง native IPv6 คือส่ง IPv6 ตรงโดยไม่ห่อ/แปล; dual stack คือโหมดที่ให้ native IPv6 อยู่ข้าง IPv4 ได้ ส่วน IPv6-only ก็ native เหมือนกัน.</div>
+<div class="fix"><b>3. ตารางเปรียบเทียบในไฟล์ 5</b> มีแถว “bits ต่อหลัก Hex” ของ IPv4 ที่ไม่สื่อความหมาย และช่องจำนวน address ว่าง. ใช้ตารางในแท็บสรุปแทน.</div>
+<div class="fix"><b>4. “ICMPv6 มีสิ่งที่ ICMPv4 ไม่มี”</b> ควรพูดให้ชัด: ICMPv6 รวม Neighbor Discovery (แทน ARP) และ Router Advertisement สำหรับ SLAAC — ทำให้ ICMPv6 <b>จำเป็นต่อการทำงาน</b> ห้าม block ทิ้งทั้งหมดบน firewall.</div>
+<div class="fix"><b>5. :: แทน 1 hextet</b> — Cisco ยอมให้ แต่ RFC 5952 (แนวปฏิบัติจริง) แนะนำ <b>ไม่ใช้ :: กับศูนย์เพียงกลุ่มเดียว</b> (เขียน <code>:0:</code>) และให้ใช้ตัวพิมพ์เล็กเพื่อให้ log/grep ตรงกัน.</div>
+
+<h2>สิ่งที่ขาดและควรเพิ่ม</h2>
+<h3>ชนิด address</h3>
+<div class="sc"><table><tr><th>ชนิด</th><th>Prefix</th><th>ใช้ทำอะไร</th></tr>
+<tr><td>Global unicast (GUA)</td><td class="m">2000::/3</td><td>routable บน internet (ปกติ 2001:db8::/32 ใช้เป็นตัวอย่างในเอกสารเท่านั้น)</td></tr>
+<tr><td>Link-local</td><td class="m">fe80::/10</td><td>ใช้ในลิงก์เดียว, ทุก interface มี, ใช้เป็น next-hop</td></tr>
+<tr><td>Unique local (ULA)</td><td class="m">fc00::/7</td><td>เทียบ private IPv4 (ใช้จริง fd00::/8)</td></tr>
+<tr><td>Multicast</td><td class="m">ff00::/8</td><td>แทน broadcast</td></tr>
+<tr><td>Loopback / Unspecified</td><td class="m">::1 / ::</td><td>เทียบ 127.0.0.1 / 0.0.0.0</td></tr></table></div>
+<h3>โครงสร้างและการตั้งค่า</h3>
+<ul><li>Prefix length เขียน <code>/n</code> เหมือน CIDR; subnet ทั่วไป = <b>/64</b> (64 bit network + 64 bit interface ID). ลูกค้า/ไซต์มักได้ /48–/56.</li>
+<li>การได้ address: <b>SLAAC</b> (Router Advertisement), <b>DHCPv6</b>, หรือ static.</li>
+<li>Header ของ IPv6 คงที่ 40 bytes, ไม่มี header checksum, router ไม่ fragment (ส่งผ่าน Path MTU Discovery) → block ICMPv6 “Packet Too Big” แล้ว connection จะค้างแบบหาสาเหตุยาก.</li>
+<li>NAT64 ใช้คู่กับ <b>DNS64</b>; มี 464XLAT สำหรับแอปที่ hardcode IPv4. Tunneling ในงานจริง: 6in4, GRE, (6to4/Teredo เลิกใช้แล้ว).</li>
+<li>ถ้าไม่มี NAT ไม่ได้แปลว่าปลอดภัยน้อยลง — ความปลอดภัยมาจาก firewall/security group ไม่ใช่ NAT.</li></ul></section>
+
+<section id="t2"><h2>มุม Cloud Engineer</h2>
+<div class="card"><b>AWS VPC:</b> เปิด IPv6 ได้โดยให้ VPC CIDR แบบ /56 (Amazon จัดสรรให้) และ subnet เป็น /64. Dual stack subnet ต้องเพิ่ม route <code>::/0</code> ไป Internet Gateway และเพิ่มกฎ IPv6 ใน security group/NACL แยกจากกฎ IPv4. Private subnet ที่ต้องออก internet แบบ IPv6 ใช้ <b>Egress-only Internet Gateway</b> (เทียบ NAT gateway แต่ไม่ต้องแปล).</div>
+<div class="card"><b>เหตุผลเชิงต้นทุน:</b> AWS คิดค่า public IPv4 ต่อชั่วโมงตั้งแต่ต้นปี 2024 ทำให้การใช้ IPv6 ลดต้นทุนได้จริง (เช็กราคาปัจจุบันในเอกสาร AWS ก่อนใช้งาน). Azure และ GCP ก็รองรับ dual stack VNet/VPC เช่นกัน แต่รายละเอียดต่างกัน.</div>
+<div class="card"><b>Checklist เวลา debug:</b><ol><li><code>ip -6 addr</code> / <code>ip -6 route</code> — มี GUA และ default route ไหม</li><li><code>ping -6</code>, <code>curl -6</code>, <code>dig AAAA</code> — AAAA record มีและ resolve ถูกไหม</li><li>security group / NACL มีกฎ IPv6 ไหม (มักลืม)</li><li>ICMPv6 ถูก block ไหม (ND, PMTUD)</li><li>แอป bind แค่ 0.0.0.0 แทน :: หรือเปล่า</li></ol></div>
+<div class="tip">หัวข้อต่อไปที่ควรเรียนต่อ: subnetting IPv6, SLAAC/EUI-64, DHCPv6, DNS AAAA, security group แบบ dual stack.</div></section>
+
+<section id="t3"><h2>แบบฝึกหัด</h2>
+<div class="bar"><i id="pb"></i></div><p class="sub" id="pt">0 / 0</p>
+<div id="qz"></div>
+<h3>ฝึกย่อ address</h3>
+<div class="card"><p class="m" id="dq"></p><input type="text" id="da" aria-label="คำตอบ" placeholder="พิมพ์รูปย่อ" spellcheck="false"><button class="b" onclick="dchk()">ตรวจ</button><button class="b g" onclick="dnew()">โจทย์ใหม่</button><div id="dr" class="ex"></div></div></section>
+
+<script>
+const T=["สรุป","แก้ไขข้อมูล","Cloud","แบบฝึกหัด"],nav=document.getElementById('nav');
+T.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.setAttribute('role','tab');b.onclick=()=>show(i);nav.appendChild(b)});
+function show(i){T.forEach((_,j)=>{document.getElementById('t'+j).classList.toggle('on',i==j);nav.children[j].setAttribute('aria-selected',i==j)});scrollTo(0,0)}
+function expand(s){s=s.trim().toLowerCase();if((s.match(/::/g)||[]).length>1||/[^0-9a-f:]/.test(s)||/:::/.test(s))return null;let h;
+if(s.includes('::')){let[a,b]=s.split('::');a=a?a.split(':'):[];b=b?b.split(':'):[];let n=8-a.length-b.length;if(n<1)return null;h=[...a,...Array(n).fill('0'),...b]}else h=s.split(':');
+if(h.length!=8||h.some(x=>x.length<1||x.length>4))return null;return h.map(x=>x.padStart(4,'0'))}
+function compress(full){let h=full.map(x=>x.replace(/^0+(?=.)/,'')),bs=-1,bl=0;for(let i=0;i<8;){if(h[i]=='0'){let j=i;while(j<8&&h[j]=='0')j++;if(j-i>bl){bl=j-i;bs=i}i=j}else i++}
+if(bl<2)return h.join(':');return(h.slice(0,bs).join(':')+'::'+h.slice(bs+bl).join(':'))}
+function run(){const f=expand(document.getElementById('ip').value),o=document.getElementById('out');
+if(!f){o.innerHTML='<div class="fix">address ไม่ถูกต้อง — ตรวจ: ใช้ :: เกิน 1 ครั้ง, มีตัวอักษรนอก 0–9/A–F, hextet เกิน 4 หลัก หรือรวมแล้วไม่ครบ 8 hextets</div>';return}
+o.innerHTML='<p><b>เต็ม (8 hextets):</b><br><code>'+f.join(':')+'</code></p><p><b>หลัง Rule 1:</b><br><code>'+f.map(x=>x.replace(/^0+(?=.)/,'')).join(':')+'</code></p><p><b>ย่อสุด (Rule 2):</b><br><code>'+compress(f)+'</code></p>'}
+const Q=[["เหตุผลหลักที่สร้าง IPv6","IPv4 address ใกล้หมด","IPv6 เร็วกว่า","IPv6 ปลอดภัยกว่าโดยอัตโนมัติ","ต้องเลิกใช้ NAT",0,"ปัจจัยหลักคือ address depletion"],
+["IPv6 มีกี่ bits","32","64","128","256",2,"128 bits = 8 hextets × 16"],
+["1 hextet คือ","8 bits","16 bits","32 bits","4 bits",1,"4 hex digits × 4 bits = 16 bits"],
+["ตัวอักษรไหนคือ decimal 15 ใน hex","E","G","F","H",2,"A=10 … F=15 (ไม่มี G)"],
+["ข้อใดย่อ IPv6 ถูกต้อง","ตัด trailing zeros","ตัด leading zeros และใช้ :: กับ zero hextets ติดกัน","ใช้ :: แทนค่าซ้ำที่ไม่ใช่ 0","ใช้ :: กี่ครั้งก็ได้",1,"ตัดได้เฉพาะ leading zeros; :: ได้ครั้งเดียว"],
+["2001:db8:0:1111::200 ขยายแล้วมีกี่ hextet","6","7","8","ไม่แน่นอน",2,"ขยายแล้วต้องครบ 8 เสมอ"],
+["PC มี IPv4 และ IPv6 บน adapter เดียว","NAT64","Dual stack","Tunneling","Translation",1,"ใช้สองโปรโตคอลพร้อมกัน"],
+["ห่อ IPv6 ไว้ใน IPv4 packet","Tunneling","Dual stack","NAT64","ARP",0,"encapsulation = tunneling"],
+["IPv6-only ต้องคุยกับ IPv4-only","Tunneling","DHCP","Link-local","NAT64 (คู่กับ DNS64)",3,"translation แปลระหว่างสองโปรโตคอล"],
+["fe80::/10 คือ","Global unicast","Link-local","Multicast","Loopback",1,"link-local ใช้ในลิงก์เดียว"],
+["subnet IPv6 ทั่วไปใช้ prefix","/24","/48","/64","/128",2,"64 bit network + 64 bit interface ID"],
+["firewall block ICMPv6 ทั้งหมด จะเกิดอะไร","ไม่มีผล","Neighbor Discovery และ PMTUD พัง","เร็วขึ้น","DNS พัง",1,"ICMPv6 จำเป็นต่อการทำงานของ IPv6"],
+["AWS private subnet ต้องออก internet ด้วย IPv6 แบบฝั่งเดียว","NAT gateway","Egress-only Internet Gateway","VPN เท่านั้น","ไม่มีทาง",1,"IPv6 ไม่ต้องแปล address จึงใช้ egress-only IGW"]];
+let sc=0,dn=0;const qz=document.getElementById('qz');
+Q.forEach((q,i)=>{const d=document.createElement('div');d.className='card';d.innerHTML='<b>'+(i+1)+'. '+q[0]+'</b>';
+for(let k=1;k<=4;k++){const b=document.createElement('button');b.className='o';b.textContent=q[k];b.onclick=()=>{if(d.dataset.d)return;d.dataset.d=1;dn++;
+if(k-1==q[5]){b.classList.add('ok');sc++}else{b.classList.add('no');d.querySelectorAll('.o')[q[5]].classList.add('ok')}
+const e=document.createElement('div');e.className='ex';e.textContent=q[6];d.appendChild(e);
+document.getElementById('pt').textContent='ถูก '+sc+' จาก '+dn+' (ทั้งหมด '+Q.length+')';document.getElementById('pb').style.width=dn/Q.length*100+'%'};d.appendChild(b)}qz.appendChild(d)});
+document.getElementById('pt').textContent='ถูก 0 จาก 0 (ทั้งหมด '+Q.length+')';
+const D=["2001:0db8:0000:0000:0000:0000:0000:0001","fe80:0000:0000:0000:0123:4567:89ab:cdef","2001:0db8:0000:0000:ab00:0000:0000:0000","0000:0000:0000:0000:0000:0000:0000:0001","2001:0db8:0000:0001:0000:0000:0000:0200","2001:0db8:0000:0000:0000:ab00:0000:0000"];let cur;
+function dnew(){let n;do{n=D[Math.floor(Math.random()*D.length)]}while(n==cur);cur=n;document.getElementById('dq').textContent=n;document.getElementById('da').value='';document.getElementById('dr').textContent=''}
+function dchk(){const a=expand(document.getElementById('da').value),r=document.getElementById('dr'),ans=compress(expand(cur)),u=document.getElementById('da').value.trim().toLowerCase();
+if(!a)r.textContent='รูปแบบไม่ถูกต้อง ลองใหม่';else if(u==ans)r.textContent='ถูก ✔ '+ans;else if(a.join(':')==expand(cur).join(':'))r.textContent='ค่าเท่ากัน แต่ยังย่อไม่สุด ตอบสั้นสุดคือ '+ans;else r.textContent='ยังไม่ใช่ address เดียวกัน คำตอบ: '+ans}
+dnew();show(0);run();
+</script></main></body></html>
