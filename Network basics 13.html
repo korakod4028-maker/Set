@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Network basics 13 — MAC, IP, Broadcast และ ARP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#edf1f5;--card:#fff;--ink:#12263f;--mute:#5a6b80;--line:#d3dbe5;--mac:#9a5b00;--macbg:#fff1d0;--ip:#1b55c4;--ipbg:#e2ecff;--ok:#0b7a60;--okbg:#dff5ec;--bad:#b83a34;--badbg:#fde5e3;--acc:#12263f}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1824;--card:#16253a;--ink:#e6edf6;--mute:#93a4b8;--line:#2b3d55;--mac:#f3be5b;--macbg:#3a2d12;--ip:#8db4ff;--ipbg:#15294f;--ok:#4fd1a5;--okbg:#0f3329;--bad:#ff8c85;--badbg:#401a19;--acc:#e6edf6}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 Sarabun,"Noto Sans Thai",system-ui,sans-serif}
+code,.m{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.88em}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;padding:8px 14px;white-space:nowrap}
+nav a{color:var(--ink);text-decoration:none;font-size:14px;padding:3px 11px;border:1px solid var(--line);border-radius:99px;background:var(--card)}
+nav a:hover,nav a:focus-visible{border-color:var(--ip);outline:none}
+main{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+h1{font-size:clamp(28px,6vw,42px);line-height:1.15;margin:8px 0 6px;letter-spacing:-.5px}
+h2{font-size:24px;margin:44px 0 10px;line-height:1.3}
+h3{font-size:18px;margin:22px 0 6px}
+p{margin:8px 0}
+.sub{color:var(--mute);margin:0 0 18px}
+.tag{display:inline-block;padding:0 8px;border-radius:5px;font-weight:600;font-size:.92em}
+.tm{background:var(--macbg);color:var(--mac)}.ti{background:var(--ipbg);color:var(--ip)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+.topo{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.nd{border:2px solid var(--line);border-radius:8px;padding:4px 14px;font-weight:700}
+.nd.on{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.ar{color:var(--line);font-size:22px;padding:0 4px}.ar.on{color:var(--ip);font-weight:700}
+.blk{border-radius:8px;padding:8px 12px;margin:8px 0}
+.blk h4{margin:0 0 4px;font-size:15px}
+.blk.e{background:var(--macbg);color:var(--mac)}.blk.i{background:var(--ipbg);color:var(--ip)}.blk.t{background:var(--okbg);color:var(--ok)}
+.row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:2px 6px;border-radius:5px}
+.row code{font-weight:600}
+.row.ch{animation:fl 1.4s ease-out;outline:2px solid currentColor}
+@keyframes fl{0%{background:var(--ink);color:var(--bg)}100%{background:transparent}}
+@media (prefers-reduced-motion:reduce){.row.ch{animation:none}}
+.note{color:var(--ink);margin:6px 0 0;font-size:15px}
+.ctl{display:flex;align-items:center;gap:10px;margin-top:12px}
+.cnt{color:var(--mute);font-size:14px;flex:1;text-align:center}
+button,.b{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 14px}
+button:hover{border-color:var(--ip)}button:focus-visible{outline:2px solid var(--ip);outline-offset:2px}
+button.p,.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:disabled{opacity:.4;cursor:default}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:8px 0}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--card)}
+ul,ol{padding-left:22px;margin:6px 0}li{margin:3px 0}
+.rule{border-left:4px solid var(--ok);background:var(--okbg);padding:8px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.warn{border-left:4px solid var(--mac);background:var(--macbg);padding:8px 14px;border-radius:0 8px 8px 0;margin:12px 0}
+.fix{border-left:4px solid var(--bad);background:var(--badbg);padding:8px 14px;border-radius:0 8px 8px 0;margin:10px 0}
+.fix b,.warn b,.rule b{display:block}
+input{font:inherit;font-family:"IBM Plex Mono",monospace;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 10px;width:100%}
+.g3{display:grid;grid-template-columns:1fr 1fr 90px;gap:8px}
+label{font-size:13px;color:var(--mute)}
+.res{margin-top:12px;font-weight:600}
+.q{margin:14px 0}.q p{font-weight:600}
+.opt{display:block;width:100%;text-align:left;margin:5px 0}
+.opt.right{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.opt.wrong{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.exp{font-size:15px;color:var(--mute);margin:4px 0 0}
+#score{position:sticky;bottom:10px;background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:99px;width:max-content;margin:12px auto 0;font-weight:600}
+</style>
+</head>
+<body>
+<nav>
+<a href="#sim">จำลองการส่ง</a><a href="#core">MAC vs IP</a><a href="#bc">Broadcast/Switch</a><a href="#arp">ARP</a><a href="#nd">IPv6 ND</a><a href="#ops">ใช้งานจริง</a><a href="#fix">แก้/เพิ่ม</a><a href="#quiz">แบบฝึกหัด</a>
+</nav>
+<main>
+<h1>Network basics 13</h1>
+<p class="sub">MAC Address · IP Address · Broadcast · ARP — สรุปสำหรับเตรียมเป็น Cloud Engineer รวมจากบท 13.0–13.3 พร้อมจุดที่แก้และเพิ่ม</p>
+
+<div class="rule"><b>4 หลักการที่ต้องตอบได้ทันที</b>
+1) Same network → Dst MAC = MAC ปลายทาง &nbsp; 2) Remote network → Dst MAC ของ Frame แรก = MAC ของ Default Gateway &nbsp; 3) IPv4 ใช้ ARP / IPv6 ใช้ ND หา MAC &nbsp; 4) Router เปลี่ยน MAC ทุก Link แต่ IP โดยทั่วไปคงเดิม</div>
+
+<h2 id="sim">1. จำลองการส่งข้อมูล: อะไรเปลี่ยน อะไรไม่เปลี่ยน</h2>
+<p>กด “ถัดไป” เพื่อเดินตาม Link ช่องที่ <b>กระพริบพร้อมกรอบ</b> คือค่าที่เปลี่ยนจากขั้นก่อนหน้า</p>
+<div class="card">
+<div class="tabs"><button class="on" id="t1">Remote network</button><button id="t2">Same network</button></div>
+<div id="sim"></div>
+</div>
+<p><span class="tag tm">MAC</span> บอกว่า Frame รอบนี้ (Link นี้) ส่งให้ใคร &nbsp; <span class="tag ti">IP</span> บอกว่า Packet ต้องไปหาใครในที่สุด</p>
+
+<h2 id="core">2. MAC Address vs IP Address</h2>
+<div class="tw"><table>
+<tr><th></th><th>MAC Address</th><th>IP Address</th></tr>
+<tr><td>ประเภท / ขนาด</td><td>Physical, 48 bits (hex)</td><td>Logical, IPv4 32 bits / IPv6 128 bits</td></tr>
+<tr><td>Layer / PDU</td><td>Layer 2 / Ethernet <b>Frame</b></td><td>Layer 3 / IP <b>Packet</b></td></tr>
+<tr><td>ใครใช้ตัดสินใจส่งต่อ</td><td>Switch (ดู Dst MAC)</td><td>Router (ดู Dst IP + Routing Table)</td></tr>
+<tr><td>ขอบเขต</td><td>เฉพาะ Link/LAN เดียวกัน</td><td>ตลอดเส้นทางต้นทาง→ปลายทาง</td></tr>
+<tr><td>เมื่อผ่าน Router</td><td>เปลี่ยนทุก Link (Frame ถูกสร้างใหม่)</td><td>โดยทั่วไปคงเดิม (ยกเว้น NAT)</td></tr>
+</table></div>
+<h3>Router ทำอะไรเมื่อรับ Frame</h3>
+<ol><li>รับ Frame → ถอด Header/Trailer Layer 2 (de-encapsulate)</li><li>ดู Destination IP</li><li>ค้น Routing Table หา Next-hop และ Outgoing Interface</li><li>ห่อ Packet ด้วย Frame ใหม่ (Src MAC = Interface ขาออก, Dst MAC = Next-hop หรือปลายทางสุดท้าย)</li><li>ส่งออก (ถ้ายังไม่รู้ MAC ของ Next-hop จะ ARP/ND บน Link ขาออก)</li></ol>
+<h3>เครื่องมือเช็กว่า Same หรือ Remote network</h3>
+<div class="card">
+<div class="g3"><div><label>IP เครื่องต้นทาง</label><input id="ca" value="192.168.10.10"></div><div><label>IP ปลายทาง</label><input id="cb" value="10.1.1.10"></div><div><label>Prefix</label><input id="cp" value="24" inputmode="numeric"></div></div>
+<div class="res" id="cr"></div>
+</div>
+<p>Host ทำ AND ระหว่าง IP กับ Subnet Mask ถ้า Network ID ตรงกัน = Same network ไม่ตรง = ส่งให้ Default Gateway (ซึ่งต้องอยู่ใน Subnet เดียวกับ Host)</p>
+
+<h2 id="bc">3. Broadcast, Switch และ Broadcast Domain</h2>
+<ul>
+<li>Broadcast MAC = <code>FF:FF:FF:FF:FF:FF</code> = <code>FFFF.FFFF.FFFF</code> (Cisco) = 48 bits เป็น 1 ทั้งหมด (F หนึ่งตัว = 1111)</li>
+<li>NIC รับ Frame เมื่อ Dst MAC เป็น MAC ตัวเอง, Broadcast หรือ Multicast ที่ตัวเองเข้าร่วม ถ้าเป็น MAC คนอื่นจะไม่รับ</li>
+<li>Switch รับ Broadcast → <b>Flood</b> ออกทุก Port ใน VLAN เดียวกัน ยกเว้นพอร์ตขาเข้า</li>
+<li>Router ไม่ Forward Ethernet Broadcast ข้าม Network → Router (และ VLAN) แบ่ง Broadcast Domain</li>
+<li>Host มากเกินใน Domain เดียว = Broadcast traffic สูง ประสิทธิภาพตก → แบ่ง Subnet/VLAN</li>
+</ul>
+<h3>Switch เรียนรู้ MAC อย่างไร (เพิ่มเติม)</h3>
+<ul><li><b>Learn:</b> ดู Source MAC ของ Frame ที่เข้ามา แล้วจดคู่ MAC ↔ Port ใน MAC Address Table</li><li><b>Forward:</b> ดู Dst MAC ถ้ารู้ Port → ส่งเฉพาะพอร์ตนั้น (Unicast)</li><li><b>Flood:</b> ถ้า Dst เป็น Broadcast หรือ Unicast ที่ยังไม่รู้จัก (unknown unicast) → ส่งออกทุกพอร์ตยกเว้นขาเข้า</li></ul>
+
+<h2 id="arp">4. ARP — หา MAC จาก IPv4</h2>
+<p>ใช้เมื่อรู้ IPv4 ปลายทาง (ใน Local network) แต่ยังไม่รู้ MAC ขั้นตอน: ตรวจ ARP Table → ส่ง Request (Broadcast) → เจ้าของ IP ตอบ Reply → เก็บลง ARP Table</p>
+<div class="card"><div id="arps"></div></div>
+<div class="tw"><table>
+<tr><th></th><th>ARP Request</th><th>ARP Reply</th></tr>
+<tr><td>หน้าที่</td><td>ถาม “ใครมี IP นี้”</td><td>ตอบ “IP นี้ฉันเอง MAC คือ …”</td></tr>
+<tr><td>Dst MAC</td><td>FFFF.FFFF.FFFF</td><td>MAC ของผู้ถาม (Unicast)</td></tr>
+<tr><td>ผู้ส่ง</td><td>เครื่องที่ต้องการ MAC</td><td>เครื่องที่ IP ตรงเท่านั้น (เครื่องอื่นเงียบ)</td></tr>
+</table></div>
+<div class="warn"><b>จุดที่สับสนบ่อย</b>ถ้าปลายทางอยู่คนละ Network Host จะ <u>ไม่</u> ARP หา MAC ของ Server แต่ ARP หา MAC ของ Default Gateway ส่วน Router จะ ARP หา Next-hop/ปลายทางบน Link ขาออกของตัวเอง</div>
+<h3>ARP ที่ Engineer ต้องรู้เพิ่ม</h3>
+<ul>
+<li><b>ARP Table/Cache มีอายุ</b> (ต่างกันตาม OS/อุปกรณ์) หมดอายุแล้วต้อง ARP ใหม่</li>
+<li><b>Gratuitous ARP:</b> เครื่องประกาศ IP↔MAC ของตัวเองโดยไม่มีใครถาม ใช้ตรวจ IP ซ้ำและอัปเดต Cache เมื่อ Failover (เช่น VRRP/HSRP, floating IP)</li>
+<li><b>Proxy ARP:</b> Router ตอบ ARP แทนเครื่องปลายทางที่อยู่ Network อื่น</li>
+<li><b>ARP Spoofing:</b> ARP ไม่มีการยืนยันตัวตน ผู้โจมตีตอบ Reply ปลอมเพื่อดักข้อมูล (Man-in-the-Middle) ป้องกันด้วย Dynamic ARP Inspection (DAI) บน Switch</li>
+<li>EtherType ของ ARP = <code>0x0806</code>, ของ IPv4 = <code>0x0800</code>, ของ IPv6 = <code>0x86DD</code></li>
+</ul>
+
+<h2 id="nd">5. IPv6: Neighbor Discovery (ND)</h2>
+<div class="tw"><table>
+<tr><th></th><th>ARP (IPv4)</th><th>ND (IPv6)</th></tr>
+<tr><td>ทำงานบน</td><td>Ethernet โดยตรง (ไม่ใช่ IP)</td><td>ICMPv6</td></tr>
+<tr><td>ข้อความถาม/ตอบ</td><td>Request / Reply</td><td>Neighbor Solicitation (NS) / Neighbor Advertisement (NA)</td></tr>
+<tr><td>การส่งคำถาม</td><td>Broadcast</td><td>Multicast (Solicited-node <code>ff02::1:ffXX:XXXX</code> → MAC <code>33:33:ff:XX:XX:XX</code>)</td></tr>
+<tr><td>ตาราง</td><td>ARP Table</td><td>Neighbor Cache</td></tr>
+</table></div>
+<p>IPv6 ไม่มี Broadcast เลย ND ยังทำ Router Solicitation/Advertisement (หา Gateway, SLAAC) และ Duplicate Address Detection ด้วย</p>
+<h3>Ping = ICMP Echo</h3>
+<p>Echo Request (ICMPv4 type 8 / ICMPv6 128) ไป แล้ว Echo Reply (type 0 / 129) กลับ Src กับ Dst IP สลับกัน ส่วน MAC เปลี่ยนตามแต่ละ Link ตามเดิม</p>
+
+<h2 id="ops">6. ใช้งานจริงในฐานะ Cloud Engineer</h2>
+<h3>คำสั่งที่ต้องคล่อง</h3>
+<div class="tw"><table>
+<tr><th>งาน</th><th>Windows</th><th>Linux</th><th>Cisco IOS</th></tr>
+<tr><td>ดู IP/MAC ตัวเอง</td><td><code>ipconfig /all</code></td><td><code>ip -br addr</code>, <code>ip link</code></td><td><code>show ip interface brief</code></td></tr>
+<tr><td>ดู ARP Table</td><td><code>arp -a</code></td><td><code>ip neigh</code></td><td><code>show ip arp</code></td></tr>
+<tr><td>ดู IPv6 Neighbor</td><td><code>netsh interface ipv6 show neighbors</code></td><td><code>ip -6 neigh</code></td><td><code>show ipv6 neighbors</code></td></tr>
+<tr><td>ดู Gateway/Route</td><td><code>route print</code></td><td><code>ip route</code></td><td><code>show ip route</code></td></tr>
+<tr><td>MAC Table ของ Switch</td><td>—</td><td><code>bridge fdb show</code></td><td><code>show mac address-table</code></td></tr>
+<tr><td>ล้าง ARP Cache</td><td><code>arp -d *</code></td><td><code>ip neigh flush all</code></td><td><code>clear arp-cache</code></td></tr>
+<tr><td>ตามเส้นทาง</td><td><code>tracert</code></td><td><code>traceroute</code></td><td><code>traceroute</code></td></tr>
+</table></div>
+<p>Wireshark: filter <code>arp</code>, <code>eth.dst == ff:ff:ff:ff:ff:ff</code>, <code>icmp</code>, <code>icmpv6</code> เปิดดู Frame/Packet แล้วเทียบกับสิ่งที่เรียนได้ทันที</p>
+<h3>Troubleshooting ตามลำดับ Layer</h3>
+<ol>
+<li>เช็ก IP / Mask / Gateway ถูกต้อง และ Gateway อยู่ Subnet เดียวกับเครื่อง</li>
+<li>Ping Gateway ไม่ได้ → ดู ARP Table: ถ้า Gateway ไม่มี MAC (หรือ incomplete) ปัญหาอยู่ที่ L1/L2 เช่น สาย, พอร์ต, VLAN, Gateway ล่ม</li>
+<li>Ping Gateway ได้แต่ปลายทางนอก Subnet ไม่ได้ → ปัญหา L3: Route, ACL/Firewall, NAT</li>
+<li>Ping IP ได้แต่ชื่อไม่ได้ → DNS</li>
+<li>MAC ของ Gateway เปลี่ยนเอง หรือหลาย IP ใช้ MAC เดียวกัน → สงสัย ARP Spoofing หรือ IP ซ้ำ</li>
+</ol>
+<h3>เชื่อมกับ Cloud (AWS / Azure / GCP)</h3>
+<ul>
+<li>VPC/VNet เป็นเครือข่ายเสมือนที่ SDN จัดการ ไม่มี L2 Broadcast แบบ LAN จริง (Hypervisor ตอบ ARP/ND ให้) แต่ OS ในเครื่องยังเห็น ARP, Gateway และ MAC ตามหลักเดียวกัน ออกแบบระบบให้พึ่ง L3 Routing ไม่พึ่ง Broadcast</li>
+<li>ตัวอย่าง AWS: Subnet <code>10.0.1.0/24</code> → Gateway ของ Instance คือ VPC Router ที่ <code>10.0.1.1</code> (Subnet คนละก้อนต้องผ่าน Route Table เสมอ)</li>
+<li>MAC ผูกกับ Network Interface เสมือน (เช่น ENI) ย้าย/สร้างใหม่ MAC อาจเปลี่ยน อย่าใช้ MAC เป็นตัวระบุเครื่องถาวร</li>
+<li>Security Group/NACL/Route Table ทำงานที่ L3–L4 ไม่ดู MAC</li>
+<li>NAT Gateway เปลี่ยน Source IP — เป็นข้อยกเว้นของกฎ “IP ไม่เปลี่ยน”</li>
+<li>Overlay (เช่น VXLAN) ห่อ Ethernet Frame ไว้ใน UDP Packet เพื่อขยาย L2 ข้ามเครือข่าย L3 — พื้นฐานของ Virtual Network ฝั่ง Cloud</li>
+</ul>
+
+<h2 id="fix">7. จุดที่แก้ / เพิ่มจากเอกสารต้นฉบับ</h2>
+<div class="fix"><b>รูปแบบเขียน MAC ไม่ควรปนกัน</b>บางจุดเขียน <code>000C:85CC:1DA7</code> รูปแบบ Cisco คือ <code>000C.85CC.1DA7</code> (จุด) ส่วน Linux/Wireshark ใช้ <code>00:0c:85:cc:1d:a7</code> และ Windows ใช้ <code>00-0C-85-CC-1D-A7</code></div>
+<div class="fix"><b>“Flood ทุก Port” ต้องจำกัดที่ VLAN</b>Switch Flood เฉพาะพอร์ตใน VLAN เดียวกัน ยกเว้นพอร์ตขาเข้า</div>
+<div class="fix"><b>เอกสารขาดเรื่อง MAC Address Table</b>Switch เรียนรู้จาก Source MAC และ Flood เมื่อ Dst เป็น unknown unicast (ดูหัวข้อ 3)</div>
+<div class="fix"><b>NIC ไม่ได้รับแค่ “MAC ตัวเอง + Broadcast”</b>ยังรับ Multicast ที่เข้าร่วมด้วย ตัวเลือก <code>01-00-5E-…</code> ในข้อสอบคือ MAC ของ IPv4 Multicast ส่วน IPv6 ใช้ <code>33:33:…</code></div>
+<div class="fix"><b>“ND ใช้ Multicast” ให้เจาะจง</b>NS ส่งไป Solicited-node Multicast ส่วน NA ตอบเป็น Unicast ND ไม่ได้แค่แทน ARP แต่ทำ RS/RA และ DAD ด้วย</div>
+<div class="fix"><b>“Router ไม่ Forward Broadcast” มีรายละเอียด</b>Router รับและประมวลผล ARP Request ที่ถามหา IP ของตัวเองได้ แต่ไม่ส่งต่อข้าม Interface (บริการอย่าง DHCP Relay คือ Router สร้างข้อความใหม่ ไม่ได้ส่ง Broadcast เดิมต่อ)</div>
+<div class="fix"><b>“MAC คงเดิมตลอด” ไม่เสมอไป</b>ปลอมได้ มือถือสมัยใหม่ใช้ MAC สุ่มตาม Wi-Fi และ NIC เสมือนบน Cloud เปลี่ยนได้</div>
+<div class="warn"><b>ข้อสอบ Packet Tracer (เช่น ข้อ 10)</b>คำตอบอย่าง <code>0001.43EA.3E03</code> ขึ้นกับ Topology ในไฟล์ อย่าท่องค่า ให้ท่องวิธีคิด: Frame ออกจาก Interface ไหน → Source MAC คือ MAC ของ Interface นั้น</div>
+
+<h2 id="quiz">8. แบบฝึกหัดทบทวน</h2>
+<div id="qz"></div>
+<div id="score">คะแนน 0 / 0</div>
+<p style="text-align:center"><button id="rs">เริ่มใหม่</button></p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function stepper(el,nodes,steps){
+ let i=0;
+ el.innerHTML='<div class="topo"></div><div class="sb"></div><div class="ctl"><button id="pv">ก่อนหน้า</button><span class="cnt"></span><button class="p" id="nx">ถัดไป</button></div>';
+ const q=s=>el.querySelector(s);
+ function draw(){
+  const s=steps[i],p=steps[i-1];
+  q('.topo').innerHTML=nodes.map((n,k)=>{
+   let h='<span class="nd'+(s.link.includes(k)?' on':'')+'">'+n+'</span>';
+   if(k<nodes.length-1){const on=s.link.includes(k)&&s.link.includes(k+1);h+='<span class="ar'+(on?' on':'')+'">'+(on?(s.link[0]<s.link[1]?'→':'←'):'·')+'</span>';}
+   return h}).join('');
+  q('.sb').innerHTML='<b>'+s.t+'</b>'+s.b.map((b,bi)=>'<div class="blk '+b.c+'"><h4>'+b.n+'</h4>'+b.r.map((r,j)=>{
+   const ch=p&&p.b[bi]&&p.b[bi].r[j]&&p.b[bi].r[j][1]!==r[1];
+   return '<div class="row'+(ch?' ch':'')+'"><span>'+r[0]+'</span><code>'+r[1]+'</code></div>'}).join('')+'</div>').join('')+'<p class="note">'+s.n+'</p>';
+  q('.cnt').textContent='ขั้น '+(i+1)+' / '+steps.length;
+  q('#pv').disabled=i==0;q('#nx').disabled=i==steps.length-1;
+ }
+ q('#pv').onclick=()=>{i--;draw()};q('#nx').onclick=()=>{i++;draw()};draw();
+}
+const P1='192.168.10.10',P2='10.1.1.10';
+const E=(s,d)=>({n:'Ethernet Frame (Layer 2)',c:'e',r:[['Source MAC',s],['Destination MAC',d]]});
+const I=(s,d)=>({n:'IP Packet (Layer 3)',c:'i',r:[['Source IP',s],['Destination IP',d]]});
+const remote=[
+ {link:[0,1],t:'Link 1: PC1 → R1',b:[E('AAAA.AAAA.AAAA','BBBB.BBBB.BBBB'),I(P1,P2)],n:'PC2 อยู่คนละ Network PC1 จึงส่งให้ Default Gateway (192.168.10.1) โดยได้ MAC ของ R1 จาก ARP'},
+ {link:[1,2],t:'Link 2: R1 → PC2',b:[E('CCCC.CCCC.CCCC','5555.5555.5555'),I(P1,P2)],n:'R1 ถอด Frame เดิม ดู Dst IP เลือกเส้นทาง แล้วสร้าง Frame ใหม่ MAC เปลี่ยนทั้งคู่ แต่ IP ไม่เปลี่ยน (ไม่มี NAT)'}];
+const same=[{link:[0,1],t:'PC1 → PC2 (Network เดียวกัน)',b:[E('AAAA.AAAA.AAAA','5555.5555.5555'),I(P1,'192.168.10.11')],n:'อยู่ Subnet เดียวกัน ส่ง Frame ตรงถึง PC2 ไม่ผ่าน Gateway Dst MAC = MAC ของ PC2'}];
+function sim(m){$('t1').className=m?'':'on';$('t2').className=m?'on':'';stepper($('sim'),m?['PC1','PC2']:['PC1','R1','PC2'],m?same:remote)}
+$('t1').onclick=()=>sim(0);$('t2').onclick=()=>sim(1);sim(0);
+const A=(a,b,c,d)=>({n:'ARP Message',c:'i',r:[['Sender IP / MAC',a],['Target IP / MAC',b]]});
+stepper($('arps'),['PC1','PC2'],[
+ {link:[0,1],t:'1) ARP Request (Broadcast)',b:[E('AAAA.AAAA.AAAA','FFFF.FFFF.FFFF'),A('192.168.10.10 / AAAA.AAAA.AAAA','192.168.10.11 / 0000.0000.0000')],n:'“Who has 192.168.10.11? Tell 192.168.10.10” Switch Flood ไปทุกพอร์ตใน VLAN ยกเว้นขาเข้า ทุกเครื่องเทียบ Target IP กับ IP ตัวเอง'},
+ {link:[1,0],t:'2) ARP Reply (Unicast)',b:[E('5555.5555.5555','AAAA.AAAA.AAAA'),A('192.168.10.11 / 5555.5555.5555','192.168.10.10 / AAAA.AAAA.AAAA')],n:'เฉพาะ PC2 ที่ IP ตรงจึงตอบ ส่งตรงกลับ PC1 ไม่ใช่ Broadcast'},
+ {link:[0,1],t:'3) บันทึก ARP Table แล้วส่งข้อมูลจริง',b:[{n:'ARP Table ของ PC1',c:'t',r:[['192.168.10.11','5555.5555.5555']]},E('AAAA.AAAA.AAAA','5555.5555.5555')],n:'PC1 ใช้ MAC ที่ได้เป็น Dst MAC ครั้งต่อไปถ้ายังไม่หมดอายุ ไม่ต้อง ARP ใหม่'}]);
+const ip2n=s=>{const p=s.trim().split('.').map(Number);return p.length==4&&p.every(x=>x>=0&&x<=255&&Number.isInteger(x))?((p[0]<<24)|(p[1]<<16)|(p[2]<<8)|p[3])>>>0:null};
+function chk(){const a=ip2n($('ca').value),b=ip2n($('cb').value),n=parseInt($('cp').value);const r=$('cr');
+ if(a===null||b===null||!(n>=0&&n<=32)){r.textContent='กรอก IPv4 และ Prefix 0–32 ให้ถูกต้อง';return}
+ const m=n?(0xFFFFFFFF<<(32-n))>>>0:0;
+ r.innerHTML=((a&m)>>>0)===((b&m)>>>0)?'<span class="tag tm">Same network</span> → ARP หา MAC ของปลายทางโดยตรง':'<span class="tag ti">Remote network</span> → ARP หา MAC ของ Default Gateway แล้วส่ง Frame แรกไปที่ Router'}
+['ca','cb','cp'].forEach(k=>$(k).oninput=chk);chk();
+const Q=[
+ ['PC1 และ PC2 อยู่ Network เดียวกัน Dst MAC ของ Frame คืออะไร',['MAC ของ PC2','MAC ของ Router','FFFF.FFFF.FFFF'],0,'Same network ส่งตรงถึงปลายทาง'],
+ ['PC1 ส่งไป Server คนละ Network Dst MAC ของ Frame แรกคือ',['MAC ของ Server','MAC ของ Default Gateway','MAC ของ Switch'],1,'ส่งให้ Router ก่อน แต่ Dst IP ยังเป็น Server'],
+ ['ARP Request ใช้ Dst MAC ใด',['01-00-5E-00-AA-23','0000.0000.0000','FFFF.FFFF.FFFF'],2,'Broadcast ที่ Layer 2 ส่วน 01-00-5E คือ IPv4 Multicast'],
+ ['ใครส่ง ARP Reply',['Switch','เครื่องที่ IP ตรงกับ Target IP','Router เสมอ'],1,'เครื่องอื่นเงียบ'],
+ ['Router ส่งต่อ Packet ไป Link ถัดไป อะไรถูกสร้างใหม่',['Ethernet Frame','Destination IP','Application data'],0,'Frame สร้างใหม่ทุก Link IP เดิม (ถ้าไม่มี NAT)'],
+ ['Switch รับ Broadcast Frame จะ…',['ทิ้ง','Flood ทุกพอร์ตใน VLAN ยกเว้นขาเข้า','ส่งเฉพาะ Router'],1,'Flooding ภายใน Broadcast Domain'],
+ ['Switch ได้ Frame Unicast ที่ Dst MAC ยังไม่อยู่ใน MAC Table จะ…',['Flood ยกเว้นขาเข้า','ทิ้ง','ส่งกลับต้นทาง'],0,'unknown unicast flooding'],
+ ['IPv6 ใช้อะไรแทน ARP',['DHCPv6','Neighbor Discovery (ICMPv6)','NAT64'],1,'ND ใช้ NS/NA และ Multicast ไม่มี Broadcast'],
+ ['PC 192.168.1.10/24 (Gateway 192.168.1.1) Ping 192.168.2.5 PC จะ ARP ถามหา IP ใด',['192.168.2.5','192.168.1.1','255.255.255.255'],1,'คนละ Network ต้องหา MAC ของ Gateway'],
+ ['arp -a แสดง Gateway เป็น incomplete / ไม่มี MAC ควรสงสัยที่…',['DNS','L1/L2 เช่น สาย VLAN พอร์ต หรือ Gateway ล่ม','Route ในอีกฟากของ Internet'],1,'ARP ไม่สำเร็จ = ยังคุยกับ Gateway ใน Link เดียวกันไม่ได้'],
+ ['Echo Reply เทียบกับ Echo Request',['Src/Dst IP สลับกัน','IP เหมือนเดิมทุกช่อง','ใช้ ARP แทน'],0,'ขากลับ Src กับ Dst IP สลับ'],
+ ['AWS Subnet 10.0.1.0/24 Gateway ที่ Instance ใช้คือ',['10.0.1.0','10.0.1.1 (VPC Router)','10.0.1.255'],1,'.1 คือ VPC Router ส่วน .0 และ .255 เป็น Network/Broadcast address']];
+let sc=0,dn=0;
+function build(){sc=0;dn=0;$('qz').innerHTML=Q.map((q,i)=>'<div class="card q" data-i="'+i+'"><p>ข้อ '+(i+1)+'. '+q[0]+'</p>'+q[1].map((o,j)=>'<button class="opt" data-j="'+j+'">'+o+'</button>').join('')+'<div class="exp" hidden>'+q[3]+'</div></div>').join('');
+ document.querySelectorAll('.q').forEach(c=>c.onclick=e=>{const b=e.target.closest('.opt');if(!b||c.dataset.done)return;c.dataset.done=1;
+  const i=+c.dataset.i,j=+b.dataset.j,ok=j===Q[i][2];dn++;if(ok)sc++;
+  c.querySelectorAll('.opt')[Q[i][2]].classList.add('right');if(!ok)b.classList.add('wrong');c.querySelector('.exp').hidden=false;upd()});upd()}
+function upd(){$('score').textContent='คะแนน '+sc+' / '+dn+' (ทั้งหมด '+Q.length+' ข้อ)'}
+$('rs').onclick=build;build();
+</script>
+</body>
+</html>

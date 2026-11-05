@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Network basics 12</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e17;--s:#111827;--s2:#1a2236;--bd:#1e2d47;--ac:#00d4ff;--ac2:#7c3aed;--ac3:#10b981;--warn:#f59e0b;--bad:#ef4444;--tx:#e2e8f0;--mu:#94a3b8;--mono:'JetBrains Mono',monospace;--sans:'Sarabun',sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--tx);font:16px/1.7 var(--sans)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:rgba(10,14,23,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:0 1.2rem;display:flex;align-items:center;gap:1rem;height:52px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#0a0e17;z-index:10}
+.badge{font:.7rem var(--mono);background:var(--ac2);color:#fff;padding:2px 8px;border-radius:4px}
+header h1{font-size:.95rem;color:var(--ac);flex:1}
+#pt{font:.75rem var(--mono);color:var(--ac)}
+.hero{text-align:center;padding:3rem 1.2rem 2rem;border-bottom:1px solid var(--bd);background:radial-gradient(ellipse 80% 60% at 50% 0,rgba(0,212,255,.08),transparent 70%)}
+.eye{font:.72rem var(--mono);color:var(--ac);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem}
+.hero h2{font-size:clamp(2rem,6vw,3.2rem);line-height:1.1;background:linear-gradient(135deg,#e2e8f0,var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.8rem}
+.hero p{color:var(--mu);max-width:560px;margin:0 auto}
+.wrap{max-width:1050px;margin:0 auto;padding:1.5rem 1.2rem 4rem}
+.tabs{display:flex;border-bottom:1px solid var(--bd);margin-bottom:1.5rem;overflow-x:auto}
+.tb{font:.8rem var(--mono);background:none;border:none;border-bottom:2px solid transparent;color:var(--mu);cursor:pointer;padding:.7rem 1.1rem;white-space:nowrap}
+.tb.on{color:var(--ac);border-color:var(--ac)}
+.pn{display:none}.pn.on{display:block}
+h3.t{font-size:1.35rem;margin:2rem 0 .3rem}
+.lb{font:.68rem var(--mono);color:var(--ac2);letter-spacing:.15em;text-transform:uppercase;margin-top:1.8rem}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:1rem 0}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:10px;padding:1.1rem}
+.card h4{color:var(--ac);font-size:.95rem;margin-bottom:.3rem}
+.card p,.card li{font-size:.85rem;color:var(--mu)}
+.card ul{padding-left:1.1rem}
+.ib{background:var(--s2);border-left:3px solid var(--ac);border-radius:0 8px 8px 0;padding:.9rem 1.1rem;margin:1rem 0;font-size:.88rem;color:var(--mu)}
+.ib.w{border-color:var(--warn)}.ib.g{border-color:var(--ac3)}.ib b{color:var(--tx)}
+.tw{overflow-x:auto;margin:1rem 0}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:var(--s2);color:var(--ac);font:.73rem var(--mono);padding:.6rem .9rem;text-align:left;border-bottom:1px solid var(--bd)}
+td{padding:.55rem .9rem;border-bottom:1px solid var(--bd);color:var(--mu)}
+code,.cb{font-family:var(--mono)}
+.cb{background:#0d1117;border:1px solid var(--bd);border-radius:8px;padding:1rem;margin:1rem 0;font-size:.8rem;color:#a5d6ff;overflow-x:auto;white-space:pre;line-height:1.8}
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem}
+.fc{background:var(--s);border:1px solid var(--bd);border-radius:10px;min-height:130px;padding:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.9rem}
+.fc.f{background:var(--s2);border-color:var(--ac3);color:var(--ac3)}
+.qc{background:var(--s);border:1px solid var(--bd);border-radius:12px;padding:1.3rem;margin-bottom:1.2rem}
+.qc.ok{border-color:var(--ac3)}.qc.no{border-color:var(--bad)}
+.qn{font:.68rem var(--mono);color:var(--ac2);margin-bottom:.4rem}
+.qq{font-weight:600;margin-bottom:.8rem}
+.qo{display:block;width:100%;text-align:left;font:.85rem var(--sans);background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:.6rem 1rem;margin-bottom:.45rem;cursor:pointer;color:var(--mu)}
+.qo:hover{border-color:var(--ac2);color:var(--tx)}
+.qo.r{background:rgba(16,185,129,.12);border-color:var(--ac3);color:var(--ac3)}
+.qo.x{background:rgba(239,68,68,.12);border-color:var(--bad);color:#fca5a5}
+.fb{display:none;margin-top:.6rem;font-size:.82rem;padding:.6rem .9rem;border-radius:6px;background:var(--s2);color:var(--mu)}
+.fb.s{display:block}
+.btn{font:.8rem var(--mono);border:none;border-radius:8px;padding:.6rem 1.3rem;cursor:pointer;background:var(--ac2);color:#fff}
+input,select{font:.9rem var(--mono);background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:.5rem .8rem;margin:.3rem .4rem .3rem 0}
+.res{font:.85rem var(--mono);background:#0d1117;border:1px solid var(--bd);border-radius:8px;padding:1rem;margin-top:.8rem;color:var(--ac3);line-height:1.9}
+</style>
+</head>
+<body>
+<header><span class="badge">CCNA</span><h1>Network basics 12</h1><span id="pt">0 / 10</span></header>
+<div class="hero"><div class="eyebrow eye">Cisco Networking · เตรียมเป็น Cloud Engineer</div><h2>Network basics 12</h2><p>สรุป + Flashcards + Quiz + เครื่องมือคำนวณ Subnet จากโน้ต Module 12 ที่แก้ไขและเติมเนื้อหาแล้ว</p></div>
+<div class="wrap">
+<div class="tabs">
+<button class="tb on" onclick="sw(0)">📖 เนื้อหา</button><button class="tb" onclick="sw(1)">🃏 Flashcards</button><button class="tb" onclick="sw(2)">✅ Quiz</button><button class="tb" onclick="sw(3)">🔧 Subnet Tool</button>
+</div>
+
+<div class="pn on">
+<div class="lb">1 · Big Picture</div><h3 class="t" style="margin-top:.3rem">Host ตัดสินใจส่ง Packet อย่างไร</h3>
+<div class="cb">IP + Subnet Mask ของตัวเอง  →  เทียบกับ Destination IP
+ เครือข่ายเดียวกัน → ARP หา MAC ปลายทาง → ส่ง Frame ตรงผ่าน Switch
+ คนละเครือข่าย   → ARP หา MAC ของ Default Gateway → Router ส่งต่อทีละ Hop</div>
+<div class="ib w"><b>🔧 แก้จากต้นฉบับ:</b> ผู้ตัดสินว่าปลายทางอยู่ใน LAN หรือไม่คือ <b>Host ต้นทาง</b> ไม่ใช่ Router (Module 12.3 เขียนว่า "Router รู้อย่างไร")</div>
+
+<div class="lb">2 · Subnetting ➕</div><h3 class="t" style="margin-top:.3rem">ตาราง Prefix ที่ต้องจำ</h3>
+<div class="tw"><table><tr><th>Prefix</th><th>Mask</th><th>Block</th><th>Host ใช้ได้</th></tr>
+<tr><td>/24</td><td>255.255.255.0</td><td>256</td><td>254</td></tr><tr><td>/25</td><td>…128</td><td>128</td><td>126</td></tr><tr><td>/26</td><td>…192</td><td>64</td><td>62</td></tr><tr><td>/27</td><td>…224</td><td>32</td><td>30</td></tr><tr><td>/28</td><td>…240</td><td>16</td><td>14</td></tr><tr><td>/29</td><td>…248</td><td>8</td><td>6</td></tr><tr><td>/30</td><td>…252</td><td>4</td><td>2</td></tr></table></div>
+<div class="ib g"><b>สูตร:</b> Host ใช้ได้ = 2<sup>(32−prefix)</sup> − 2 · ตัวอย่าง 192.168.1.130/26 → Block 64 → Network <code>.128</code>, Broadcast <code>.191</code>, Host <code>.129–.190</code></div>
+
+<div class="lb">3 · Gateway · MAC · ARP</div>
+<div class="grid"><div class="card"><h4>Default Gateway</h4><p>IP ของ Router Interface ที่อยู่เครือข่ายเดียวกับ Host · ตั้งผิด = คุยใน LAN ได้ แต่ออกนอก Network ไม่ได้</p></div>
+<div class="card"><h4>ARP</h4><p>รู้ IP แต่ไม่รู้ MAC → ส่ง Broadcast "Who has x.x.x.x?" → เจ้าของตอบ Unicast กลับ แล้วเก็บใน ARP Cache ➕</p></div>
+<div class="card"><h4>Switch ➕</h4><p>เรียน Source MAC → ใส่ MAC Table · ปลายทางที่ไม่รู้จักหรือ Broadcast จะ Flood ออกทุก Port</p></div></div>
+<div class="tw"><table><tr><th>ต่อ Hop</th><th>Src/Dst IP</th><th>Src/Dst MAC</th></tr><tr><td>PC → Router</td><td>PC → Server</td><td>PC → <b>Router</b></td></tr><tr><td>Router → Server</td><td>เหมือนเดิม*</td><td>Router → Server (เปลี่ยนใหม่)</td></tr></table></div>
+<p style="font-size:.8rem;color:var(--mu)">*ยกเว้นเมื่อผ่าน NAT ที่เปลี่ยน Source IP · MAC เปลี่ยนทุก Hop, IP ไม่เปลี่ยน (ตัว TTL ลดลง 1)</p>
+
+<div class="lb">4 · DHCP</div>
+<div class="cb">D iscover  (Broadcast)  Client หา Server
+O ffer     Server เสนอ IP
+R equest   (Broadcast)  Client ขอรับ IP นี้
+A ck       Server ยืนยัน     → ได้ IP + Mask + Gateway + DNS</div>
+<div class="ib"><b>➕ เพิ่ม:</b> ใช้ UDP 67 (Server) / 68 (Client) · ต่ออายุ Lease ที่ 50% ด้วย Unicast REQUEST · ได้ 169.254.x.x = DHCP ไม่ตอบ · Server/Printer ควรใช้ Static IP</div>
+
+<div class="lb">5 · NAT</div>
+<div class="tw"><table><tr><th>ทิศทาง</th><th>Source IP</th><th>Destination IP</th></tr>
+<tr><td>PC ส่งออก (ก่อน NAT)</td><td>192.168.1.100</td><td>209.165.200.228</td></tr><tr><td>หลัง NAT</td><td><b>200.100.58.51</b></td><td>209.165.200.228</td></tr><tr><td>ขากลับ (ก่อน NAT)</td><td>209.165.200.228</td><td>200.100.58.51</td></tr><tr><td>หลัง NAT</td><td>209.165.200.228</td><td><b>192.168.1.100</b></td></tr></table></div>
+<div class="ib g"><b>➕ ชนิด NAT:</b> Static (1:1 ใช้กับ Server) · Dynamic (Pool) · <b>PAT</b> (หลายเครื่อง:1 Public IP แยกด้วย Port) · NAT ไม่ใช่ Firewall</div>
+<div class="ib w"><b>🔧 หมายเหตุ:</b> Private IPv4 คือ 3 <b>บล็อก CIDR</b> (10/8, 172.16/12, 192.168/16) ไม่ใช่ "Class" · 100.64.0.0/10 คือ CGNAT ที่ ISP ใช้ ทำให้ Router บ้านอาจไม่ได้ Public IP จริง</div>
+
+<div class="lb">6 · IPv6</div>
+<div class="cb">128 bits · Hex · 8 Hextet  | Rule 1: ตัด 0 นำหน้า | Rule 2: :: แทน 0 ติดกัน (ใช้ได้ครั้งเดียว)
+2001:0DB8:0000:AB00:0000:0000:0000:1234  →  2001:DB8:0:AB00::1234
+2001:db8:0:0:ab00:0:0:0                  →  2001:db8:0:0:ab00::</div>
+<div class="ib w"><b>🔧 แก้/เติม:</b> ให้ใช้ :: กับกลุ่มศูนย์ที่ <b>ยาวที่สุด</b> (เท่ากัน เลือกซ้ายสุด) · IPv6 ไม่มี Broadcast ใช้ Multicast · ไม่ใช้ ARP แต่ใช้ ICMPv6 Neighbor Discovery · Link-local fe80::/10, Global 2000::/3 ➕<br>อยู่ร่วมกัน: <b>Dual-stack</b> (ใช้คู่กัน) · <b>Tunneling</b> (IPv6 ใน IPv4) · <b>Translation</b> (NAT64)</div>
+
+<div class="lb">7 · Cloud Mapping ☁️ ➕</div>
+<div class="tw"><table><tr><th>Cisco</th><th>AWS / Cloud</th></tr><tr><td>Network + Mask</td><td>VPC CIDR / Subnet CIDR (ห้ามซ้อนทับกัน)</td></tr><tr><td>Default Route 0.0.0.0/0</td><td>Route Table → Internet Gateway (Public) / NAT Gateway (Private)</td></tr><tr><td>NAT/PAT</td><td>NAT Gateway · IGW ทำ 1:1 NAT ให้ Public IP</td></tr><tr><td>ACL / Firewall</td><td>Security Group (Stateful) · NACL (Stateless)</td></tr><tr><td>DHCP</td><td>DHCP Option Set (DNS, Domain)</td></tr></table></div>
+<p style="font-size:.8rem;color:var(--mu)">AWS และ Azure สงวน 5 IP ต่อ Subnet (ตรวจ Docs ปัจจุบันก่อนใช้งานจริง)</p>
+<div class="ib"><b>🛠 Troubleshoot ตามลำดับ:</b> ipconfig/ip a (169.254?) → ping Gateway → ping 8.8.8.8 (ถ้าไม่ผ่าน = Route/NAT) → ping ชื่อโดเมน (ไม่ผ่าน = DNS) → traceroute · nslookup · arp -a</div>
+</div>
+
+<div class="pn"><p style="color:var(--mu);margin-bottom:1rem">คลิกการ์ดเพื่อพลิกดูคำตอบ</p><div class="fg" id="fg"></div></div>
+
+<div class="pn"><div id="qz"></div><button class="btn" onclick="rq()">↺ ทำใหม่</button><p id="sc" style="font:.9rem var(--mono);color:var(--ac);margin-top:1rem"></p></div>
+
+<div class="pn">
+<div class="card"><h4>Subnet Calculator</h4>
+<input id="ip" value="192.168.1.130" placeholder="IP"><select id="px"></select><button class="btn" onclick="calc()">คำนวณ</button>
+<div class="res" id="r1">กด “คำนวณ”</div></div>
+<div class="card" style="margin-top:1rem"><h4>ตรวจว่า 2 Host อยู่ Network เดียวกันไหม</h4>
+<input id="a" value="192.168.1.10"><input id="b" value="192.168.1.200"><select id="px2"></select><button class="btn" onclick="same()">เช็ก</button>
+<div class="res" id="r2">กด “เช็ก”</div></div>
+</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+function sw(i){document.querySelectorAll('.pn').forEach((p,j)=>p.classList.toggle('on',i==j));document.querySelectorAll('.tb').forEach((b,j)=>b.classList.toggle('on',i==j))}
+const cards=[["Subnet Mask ใช้ทำอะไร","แยก Network portion กับ Host portion"],["Default Gateway คือ","IP ของ Router Interface ที่อยู่ Network เดียวกับ Host"],["ปลายทางคนละ Network: Dst MAC ของ Frame แรก","MAC ของ Default Gateway (Dst IP ยังเป็นปลายทางจริง)"],["ARP ทำอะไร","หา MAC จาก IP (Broadcast ถาม, Unicast ตอบ)"],["ลำดับ DHCP","Discover → Offer → Request → Ack (DORA)"],["Message DHCP ไหนใช้ Broadcast (ข้อสอบ)","DHCPDISCOVER และ DHCPREQUEST"],["169.254.x.x หมายถึง","APIPA: ไม่ได้รับ IP จาก DHCP"],["Private IPv4","10/8 · 172.16–172.31 (/12) · 192.168/16"],["NAT ขาออกเปลี่ยนอะไร","Source IP: Private → Public ของ Router"],["PAT คือ","หลายเครื่องใช้ Public IP เดียว แยกด้วย Port"],["IPv6 :: ใช้ได้กี่ครั้ง","ครั้งเดียวต่อ Address (เลือกกลุ่ม 0 ที่ยาวที่สุด)"],["3 วิธี IPv4/IPv6 อยู่ร่วมกัน","Dual-stack · Tunneling · Translation (NAT64)"]];
+$('fg').innerHTML=cards.map((c,i)=>`<div class="fc" onclick="this.classList.toggle('f');this.textContent=this.classList.contains('f')?cards[${i}][1]:cards[${i}][0]">${c[0]}</div>`).join('');
+const Q=[["PC 192.168.1.10/24 ส่งไป 192.168.1.20 ต้องทำอย่างไร",["ผ่าน Default Gateway","ส่งตรงถึง Host ปลายทาง","ทำ NAT ก่อน"],1,"Network เดียวกัน → ส่งตรง ไม่ต้องใช้ Gateway/NAT"],
+["ค่าใดต้องตั้งบน PC เพื่อออก Internet (เลือกชุดที่ถูก)",["IP + Mask + Default Gateway","IP + Hostname + DHCP Server","Mask + DNS + Hostname"],0,"3 ค่าหลักคือ IP, Subnet Mask, Default Gateway"],
+["ข้อใดเป็น Private IPv4",["172.32.0.0","172.16.0.0","192.157.0.0"],1,"Private 172 คือ 172.16–172.31 เท่านั้น"],
+["Frame แรกจาก PC1 ไป PC2 คนละ Network มี Dst MAC เป็นของใคร",["PC2","Switch","Default Gateway"],2,"IP ปลายทางคือ PC2 แต่ MAC ปลายทางช่วงแรกคือ Gateway"],
+["ลำดับ DHCP ที่ถูกต้อง",["Request→Ack→Discover→Offer","Discover→Offer→Request→Ack","Offer→Discover→Ack→Request"],1,"DORA"],
+["Client เพิ่งเปิดเครื่อง ชุด Message ใดที่ใช้ Broadcast (ข้อสอบ Cisco เลือก 2)",["DHCPOFFER+DHCPACK","DHCPDISCOVER+DHCPREQUEST","DHCPACK+DHCPNAK"],1,"Client ยังไม่รู้ Server จึง Broadcast ทั้ง Discover และ Request"],
+["NAT ขาออก เปลี่ยนค่าใดของ Packet",["Source IP Private → Public","Destination IP","Subnet Mask"],0,"Router แทน Source IP ด้วย Public IP ของตัวเอง"],
+["ย่อ 2001:0DB8:0000:AB00:0000:0000:0000:1234 ได้เป็น",["2001:DB8::AB00::1234","2001:DB8:0:AB00::1234","2001:DB8:0:AB00:0:0:0:1234"],1,":: ใช้ครั้งเดียว กับกลุ่ม 0 ที่ยาวที่สุด (ข้อ 3 ยังไม่ย่อสูงสุด)"],
+["192.168.1.130/26 มี Broadcast Address ใด",["192.168.1.191","192.168.1.255","192.168.1.129"],0,"Block 64: ช่วง .128–.191 → Broadcast .191"],
+["ping 8.8.8.8 ได้ แต่ ping google.com ไม่ได้ น่าจะเป็นที่",["Default Gateway ผิด","DNS","Subnet Mask"],1,"ไปถึง Internet ได้ แต่แปลงชื่อเป็น IP ไม่ได้ → DNS"]];
+let ans={};
+function bq(){$('qz').innerHTML=Q.map((q,i)=>`<div class="qc" id="c${i}"><div class="qn">Q${String(i+1).padStart(2,'0')} / ${Q.length}</div><div class="qq">${q[0]}</div>${q[1].map((o,j)=>`<button class="qo" id="o${i}_${j}" onclick="pk(${i},${j})">${o}</button>`).join('')}<div class="fb" id="f${i}"></div></div>`).join('')}
+function pk(i,j){if(i in ans)return;ans[i]=j;const ok=j==Q[i][2];$('o'+i+'_'+j).classList.add(ok?'r':'x');if(!ok)$('o'+i+'_'+Q[i][2]).classList.add('r');$('c'+i).classList.add(ok?'ok':'no');$('f'+i).textContent=(ok?'✅ ถูก · ':'❌ ผิด · ')+Q[i][3];$('f'+i).classList.add('s');const d=Object.keys(ans).length,s=Object.keys(ans).filter(k=>ans[k]==Q[k][2]).length;$('pt').textContent=d+' / '+Q.length;$('sc').textContent=d==Q.length?`คะแนน ${s} / ${Q.length}`:''}
+function rq(){ans={};$('pt').textContent='0 / '+Q.length;$('sc').textContent='';bq()}
+bq();
+const pxs=[...Array(31).keys()].map(i=>i+1).map(n=>`<option value="${n}" ${n==24?'selected':''}>/${n}</option>`).join('');$('px').innerHTML=pxs;$('px2').innerHTML=pxs;
+function p4(s){const a=s.trim().split('.').map(Number);return a.length==4&&a.every(x=>x>=0&&x<=255)?((a[0]<<24)|(a[1]<<16)|(a[2]<<8)|a[3])>>>0:null}
+function s4(n){return[n>>>24,(n>>>16)&255,(n>>>8)&255,n&255].join('.')}
+const mk=p=>p==0?0:(0xFFFFFFFF<<(32-p))>>>0;
+function calc(){const ip=p4($('ip').value),p=+$('px').value;if(ip===null){$('r1').textContent='IP ไม่ถูกต้อง';return}const m=mk(p),n=(ip&m)>>>0,b=(n|~m)>>>0,h=Math.pow(2,32-p)-2;$('r1').innerHTML=`Mask: ${s4(m)}<br>Network: ${s4(n)}/${p}<br>Broadcast: ${s4(b)}<br>Host: ${h>0?s4(n+1)+' – '+s4(b-1):'-'}<br>Host ใช้ได้: ${Math.max(h,0).toLocaleString()}`}
+function same(){const a=p4($('a').value),b=p4($('b').value),m=mk(+$('px2').value);if(a===null||b===null){$('r2').textContent='IP ไม่ถูกต้อง';return}const x=(a&m)>>>0,y=(b&m)>>>0;$('r2').innerHTML=`${s4(x)} vs ${s4(y)}<br>${x==y?'✅ Network เดียวกัน → ส่งตรง':'❌ คนละ Network → ส่งผ่าน Default Gateway'}`}
+</script>
+</body>
+</html>

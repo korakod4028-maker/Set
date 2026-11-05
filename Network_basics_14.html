@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCNA Module 14 — Routing Basics</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
+:root{--bg:#0a0e17;--s:#111827;--s2:#1a2236;--b:#1e2d47;--a:#00d4ff;--a2:#7c3aed;--ok:#10b981;--w:#f59e0b;--bad:#ef4444;--t:#e2e8f0;--m:#8392a8;--mono:'JetBrains Mono',monospace;--sans:'Sarabun',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t);font-family:var(--sans);line-height:1.7;font-size:16px}
+header{position:sticky;top:0;z-index:9;background:rgba(10,14,23,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--b);padding:.6rem 1.2rem;display:flex;gap:.8rem;align-items:center}
+.badge{font-family:var(--mono);font-size:.7rem;background:var(--a2);padding:2px 8px;border-radius:4px}
+header h1{font-size:.95rem;color:var(--a);font-weight:600}
+.hero{text-align:center;padding:3rem 1.2rem 2rem;border-bottom:1px solid var(--b);background:radial-gradient(ellipse 80% 70% at 50% 0,rgba(0,212,255,.09),transparent 70%)}
+.hero small{font-family:var(--mono);color:var(--a);letter-spacing:.15em;font-size:.72rem}
+.hero h2{font-size:clamp(1.8rem,5vw,3rem);line-height:1.15;margin:.6rem 0;background:linear-gradient(135deg,#e2e8f0,var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--m);max-width:560px;margin:0 auto}
+.wrap{max-width:1000px;margin:0 auto;padding:1.5rem 1.2rem 4rem}
+.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--b);margin-bottom:1.5rem;scrollbar-width:none}
+.tabs button{font-family:var(--mono);font-size:.78rem;background:none;border:0;border-bottom:2px solid transparent;color:var(--m);padding:.75rem 1.1rem;cursor:pointer;white-space:nowrap}
+.tabs button.on{color:var(--a);border-bottom-color:var(--a)}
+.pn{display:none}.pn.on{display:block}
+h3{font-size:1.25rem;margin:2rem 0 .6rem;color:var(--a)}
+h3 span{font-family:var(--mono);font-size:.7rem;color:var(--a2);display:block;letter-spacing:.12em}
+h4{margin:1rem 0 .3rem;color:var(--t)}
+p,li{color:#cbd5e1}ul{margin:.3rem 0 .8rem 1.3rem}
+.card{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:1rem 1.2rem;margin:.8rem 0}
+.tip,.warn,.err,.add{border-left:3px solid;padding:.7rem 1rem;border-radius:0 8px 8px 0;margin:.8rem 0;background:var(--s)}
+.tip{border-color:var(--ok)}.warn{border-color:var(--w)}.err{border-color:var(--bad)}.add{border-color:var(--a2)}
+.tip b:first-child,.warn b:first-child,.err b:first-child,.add b:first-child{display:block;font-size:.8rem;font-family:var(--mono)}
+table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--b);padding:.45rem .7rem;text-align:left;white-space:nowrap}
+td{white-space:normal;min-width:90px}
+th{background:var(--s2);color:var(--a);font-weight:600}
+pre,code{font-family:var(--mono);font-size:.82rem}
+code{background:var(--s2);padding:1px 6px;border-radius:4px;color:var(--a)}
+pre{background:#060912;border:1px solid var(--b);border-radius:8px;padding:.9rem;overflow-x:auto;color:#a5f3fc;margin:.7rem 0;line-height:1.5}
+.fc{perspective:900px;height:190px;cursor:pointer;margin:1rem 0}
+.fci{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.fc.fl .fci{transform:rotateY(180deg)}
+.fcf,.fcb{position:absolute;inset:0;backface-visibility:hidden;background:var(--s);border:1px solid var(--b);border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:1.2rem;font-size:1.1rem}
+.fcb{transform:rotateY(180deg);border-color:var(--a);color:var(--a)}
+.btn{font-family:var(--mono);background:var(--s2);border:1px solid var(--b);color:var(--t);padding:.5rem 1rem;border-radius:6px;cursor:pointer}
+.btn:hover{border-color:var(--a);color:var(--a)}
+.row{display:flex;gap:.6rem;align-items:center;justify-content:center;flex-wrap:wrap}
+.q{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0}
+.q p{color:var(--t);font-weight:500}
+.o{display:block;width:100%;text-align:left;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:8px;padding:.55rem .9rem;margin:.4rem 0;cursor:pointer;font-family:var(--sans);font-size:.95rem}
+.o:hover{border-color:var(--a)}.o.ok{border-color:var(--ok);background:rgba(16,185,129,.15)}.o.no{border-color:var(--bad);background:rgba(239,68,68,.15)}
+.ex{display:none;margin-top:.5rem;font-size:.9rem;color:var(--m)}.ex.show{display:block}
+details{background:var(--s);border:1px solid var(--b);border-radius:10px;margin:.7rem 0;padding:.8rem 1.1rem}
+summary{cursor:pointer;font-weight:600;color:var(--t)}
+details .ans{margin-top:.6rem;color:#cbd5e1}
+.sc{font-family:var(--mono);color:var(--a);text-align:center;font-size:1.1rem;margin:1rem 0}
+@media(max-width:600px){.fc{height:230px}}
+</style>
+</head>
+<body>
+<header><span class="badge">CCNA</span><h1>Module 14 — Routing Basics</h1></header>
+<div class="hero"><small>NETWORK FUNDAMENTALS</small><h2>Dividing Networks &amp; Routing</h2><p>รวม 14.1, 14.2, NAT/ARP (Default Gateway/Routing Table), Packet Tracer Create a LAN และ 14.4 พร้อมเติมเนื้อหาที่ Network Engineer ต้องใช้จริง</p></div>
+<div class="wrap">
+<div class="tabs" id="tabs">
+<button class="on" data-t="c">📖 เนื้อหา</button><button data-t="f">🃏 Flashcards</button><button data-t="lab">🔧 Lab &amp; Commands</button><button data-t="ex">📝 Cisco Q&amp;A</button><button data-t="tr">🇹🇭 แปลศัพท์ 20 ข้อ</button><button data-t="cs">⚡ Cheat Sheet</button><button data-t="qz">✅ Quiz</button>
+</div>
+
+<!-- CONTENT -->
+<div class="pn on" id="c">
+
+<h3><span>01</span>ทำไมต้องแบ่ง Network?</h3>
+<p>Network เดียวขนาดใหญ่ = Broadcast Domain ใหญ่ ทุกเครื่องต้องรับและตรวจ Broadcast ทุกเฟรม ทำให้ช้าและคุมยาก วิธีแก้คือแบ่งเป็น Network (Subnet) เล็ก ๆ แล้วใช้ <b>Router</b> เชื่อมกัน</p>
+<table><tr><th>เหตุผล</th><th>ความหมาย</th><th>ตัวอย่าง</th></tr>
+<tr><td>Broadcast containment</td><td>จำกัดขอบเขต Broadcast</td><td>ARP/DHCP Broadcast ไม่ท่วมทั้งองค์กร</td></tr>
+<tr><td>Security</td><td>คุมการสื่อสารระหว่างกลุ่มด้วย ACL/Firewall</td><td>Sales เข้า Server บัญชีไม่ได้</td></tr>
+<tr><td>Physical location</td><td>แยกตามอาคาร/สาขา</td><td>บัญชีย้ายไปอาคาร B</td></tr>
+<tr><td>Logical grouping</td><td>แยกตามหน้าที่</td><td>IT / HR / Finance</td></tr></table>
+<div class="tip"><b>TIP</b>การแบ่ง Network ไม่ได้ปลอดภัยในตัวเอง แต่ทำให้ "มีจุดควบคุม" ระหว่าง Network ได้ (ACL ที่ Router)</div>
+
+<h4>Broadcast Domain vs Collision Domain</h4>
+<table><tr><th>อุปกรณ์</th><th>แบ่ง Collision Domain</th><th>แบ่ง Broadcast Domain</th></tr>
+<tr><td>Hub</td><td>ไม่</td><td>ไม่</td></tr><tr><td>Switch (L2) / Bridge</td><td>ใช่ (ทุกพอร์ต)</td><td>ไม่ (ยกเว้นแยก VLAN)</td></tr><tr><td>Router</td><td>ใช่</td><td>ใช่ (ทุก Interface)</td></tr></table>
+<div class="add"><b>เพิ่มเติม — VLAN</b>VLAN แบ่ง Broadcast Domain บน Switch ตัวเดียวได้ แต่ VLAN ต่างกันจะคุยกันต้องผ่าน Router หรือ Layer 3 Switch (Inter-VLAN Routing) เสมอ ในงานจริงเกือบทุกองค์กรใช้ VLAN + Routing คู่กัน</div>
+
+<h3><span>02</span>Switch vs Router</h3>
+<table><tr><th>หัวข้อ</th><th>Switch (L2)</th><th>Router (L3)</th></tr>
+<tr><td>ตัดสินใจจาก</td><td>Destination MAC</td><td>Destination IP</td></tr>
+<tr><td>หน่วยข้อมูล</td><td>Frame</td><td>Packet</td></tr>
+<tr><td>ตารางที่ใช้</td><td>MAC Address Table</td><td>Routing Table</td></tr>
+<tr><td>Broadcast</td><td>Flood ไปพอร์ตอื่นใน Domain</td><td>ไม่ Forward ข้าม Interface</td></tr>
+<tr><td>หน้าที่</td><td>เชื่อมอุปกรณ์ใน LAN</td><td>เชื่อมหลาย IP Network</td></tr></table>
+<p>ทุก Interface ของ Router เชื่อมและกำหนด Network แยกกัน เช่น G0/0 = 192.168.1.0/24, G0/1 = 192.168.2.0/24</p>
+<div class="add"><b>เพิ่มเติม — Layer 3 Switch</b>Switch ที่ทำ Routing ได้ ใช้ SVI (Switch Virtual Interface) หรือ Routed Port ในองค์กรจริงใช้ทำ Inter-VLAN Routing เพราะเร็วกว่า Router ธรรมดา ส่วน Router ใช้ที่ขอบเครือข่าย (WAN/Internet)</div>
+
+<h3><span>03</span>Host ตัดสินใจอย่างไร: Local หรือ Remote?</h3>
+<p>Host เอา Subnet Mask มา AND กับ IP ของตัวเองและของปลายทาง แล้วเทียบ Network Address</p>
+<pre>PC A = 192.168.1.10/24  → Network 192.168.1.0
+PC B = 192.168.1.20/24  → Network 192.168.1.0   เท่ากัน = Local  → ARP หา MAC ของ B แล้วส่งตรง
+PC C = 192.168.2.20/24  → Network 192.168.2.0   ต่างกัน = Remote → ส่งไป Default Gateway</pre>
+<div class="warn"><b>กฎที่ต้องจำ</b>Same Network → Dest MAC = เครื่องปลายทาง | Different Network → Dest MAC = Default Gateway (แต่ Dest IP ยังเป็นปลายทางจริง)</div>
+
+<h3><span>04</span>Packet เดินทางผ่าน Router: MAC เปลี่ยน IP คงเดิม</h3>
+<p>PC A (10.0.0.1) → PC B (192.168.1.5) ผ่าน R1 (G0/0 = 10.0.0.254, G0/1 = 192.168.1.1)</p>
+<table><tr><th>ฟิลด์</th><th>Frame 1: A → R1</th><th>Frame 2: R1 → B</th></tr>
+<tr><td>Src MAC</td><td>MAC ของ A</td><td>MAC ของ R1 G0/1</td></tr>
+<tr><td>Dst MAC</td><td>MAC ของ R1 G0/0</td><td>MAC ของ B</td></tr>
+<tr><td>Src IP</td><td>10.0.0.1</td><td>10.0.0.1</td></tr>
+<tr><td>Dst IP</td><td>192.168.1.5</td><td>192.168.1.5</td></tr></table>
+<h4>ขั้นตอนของ Router</h4>
+<ul><li>1. รับ Frame → ตรวจ Dst MAC ว่าเป็นของตัวเอง</li><li>2. De-encapsulate ทิ้ง Header/Trailer L2 → ได้ IP Packet</li><li>3. อ่าน Dst IP → ค้น Routing Table</li><li>4. ลด TTL ลง 1 (ถ้า 0 → ทิ้ง + ส่ง ICMP Time Exceeded)</li><li>5. ใช้ ARP Table หา MAC ของ Next Hop / Host ปลายทาง</li><li>6. Re-encapsulate ด้วย Frame ใหม่ แล้วส่งออก Interface ที่เลือก</li></ul>
+<div class="add"><b>เพิ่มเติม — TTL</b>TTL (Time To Live) ใน IP Header ลดลง 1 ทุก Hop ป้องกัน Packet วนลูปไม่รู้จบ และเป็นกลไกที่ <code>tracert</code> ใช้ทำงาน</div>
+<div class="tip"><b>ยกเว้น</b>IP เปลี่ยนได้เมื่อมี NAT (เช่น Private IP ออก Internet) แต่ไม่ใช่การ Routing ปกติในบทนี้</div>
+
+<h3><span>05</span>Routing Table</h3>
+<p>ตารางที่ Router ใช้เลือก Interface/Next Hop ตาม Destination Network มาจาก 3 แหล่ง:</p>
+<table><tr><th>ชนิด</th><th>รหัส</th><th>ที่มา</th></tr>
+<tr><td>Connected</td><td>C</td><td>Interface ที่ตั้ง IP และ Up แล้ว</td></tr>
+<tr><td>Local</td><td>L</td><td>IP ของ Interface ตัวเอง (/32)</td></tr>
+<tr><td>Static</td><td>S</td><td>Admin ใส่เอง (<code>S*</code> = Default Route)</td></tr>
+<tr><td>Dynamic</td><td>O, D, R, B</td><td>เรียนรู้ผ่าน OSPF, EIGRP, RIP, BGP</td></tr></table>
+<pre>R1# show ip route
+C    10.0.0.0/24 is directly connected, GigabitEthernet0/0
+L    10.0.0.254/32 is directly connected, GigabitEthernet0/0
+C    192.168.1.0/24 is directly connected, GigabitEthernet0/1
+S    172.16.0.0/16 [1/0] via 192.168.1.2
+S*   0.0.0.0/0 [1/0] via 10.0.0.1</pre>
+<div class="add"><b>เพิ่มเติม — Longest Prefix Match</b>ถ้าหลายเส้นทางตรงกับ Dst IP Router เลือกอันที่ Prefix <b>ยาวที่สุด</b> (เจาะจงที่สุด) เช่น Dst 172.16.5.9 ตรงทั้ง 172.16.0.0/16 และ 0.0.0.0/0 → ใช้ /16 &nbsp;Default Route (0.0.0.0/0) จึงเป็นตัวเลือกสุดท้ายเสมอ</div>
+<div class="add"><b>เพิ่มเติม — Next Hop vs Exit Interface</b>เส้นทางระบุได้ 2 แบบ: ออกพอร์ตตรง (Connected) หรือส่งต่อให้ Router ถัดไป (Next Hop IP) &nbsp;สถานะ Interface ต้อง up/up จึงจะเข้า Routing Table</div>
+<h4>ถ้าไม่เจอ Route?</h4>
+<ul><li>มี Default Route → ใช้ Default Route</li><li>ไม่มีเลย → <b>Drop Packet</b> (ปกติส่ง ICMP Destination Unreachable กลับต้นทาง) ไม่ Broadcast และไม่ส่งออกทุกพอร์ต</li></ul>
+<h4>Static vs Dynamic</h4>
+<table><tr><th>Static</th><th>Dynamic</th></tr><tr><td>Admin กำหนดเอง ควบคุมชัด เหมาะเครือข่ายเล็ก/Stub</td><td>เรียนรู้ผ่าน Protocol ปรับตัวเมื่อ Topology เปลี่ยน เหมาะเครือข่ายใหญ่</td></tr><tr><td>ต้องแก้เองเมื่อเส้นทางเปลี่ยน</td><td>ใช้ CPU/Bandwidth แลกข้อมูลเส้นทาง</td></tr></table>
+
+<h3><span>06</span>Default Gateway</h3>
+<p>คือ <b>IPv4 ของ Router Interface ใน LAN เดียวกับ Host</b> (ไม่ใช่ MAC, ไม่ใช่ IP ของ Switch ที่ไม่เกี่ยวข้อง) Host ใช้เมื่อปลายทางอยู่คนละ Network</p>
+<table><tr><th>Gateway ผิด/ไม่มี</th><th>ผล</th></tr><tr><td>คุยใน LAN เดียวกัน</td><td>ยังได้ปกติ</td></tr><tr><td>คุยข้าม Network / Internet</td><td>ไม่ได้</td></tr></table>
+<div class="warn"><b>Default Gateway vs Default Route</b>Gateway = ตั้งบน <b>Host</b> (ทางออกจาก LAN) | Default Route = ตั้งบน <b>Router</b> (0.0.0.0/0 ทางออกเมื่อไม่มี Route ที่ตรง) อย่าสับสนสองคำนี้</div>
+
+<h3><span>07</span>ARP และ 3 ตารางที่ต้องแยกให้ออก</h3>
+<p>ARP หา MAC จาก IPv4 ภายใน LAN: ส่ง ARP Request แบบ Broadcast (FF:FF:FF:FF:FF:FF) แล้วรับ ARP Reply แบบ Unicast ข้ามเครือข่ายเราจะ ARP หา MAC ของ <b>Gateway</b> ไม่ใช่ของปลายทางไกล</p>
+<table><tr><th>ตาราง</th><th>ใครใช้</th><th>จับคู่</th></tr><tr><td>MAC Address Table</td><td>Switch</td><td>MAC ↔ พอร์ต</td></tr><tr><td>Routing Table</td><td>Router</td><td>Network ↔ Interface/Next Hop</td></tr><tr><td>ARP Table</td><td>Host &amp; Router</td><td>IPv4 ↔ MAC</td></tr></table>
+
+<div class="add"><b>เพิ่มเติม — ARP ทีละขั้น</b>Host ต้องสร้าง Frame แต่ ARP Cache ไม่มี IP→MAC → ส่ง ARP Request (Dst MAC = FF:FF:FF:FF:FF:FF) ทุกเครื่องใน Broadcast Domain ได้รับ แต่เฉพาะเจ้าของ IP นั้นตอบ ARP Reply แบบ Unicast แล้วทุกฝ่ายบันทึกลง ARP Cache &nbsp;ปลายทางอยู่ Remote Network → ARP หา MAC ของ <b>Default Gateway</b> เสมอ &nbsp;(ARP Request ใช้ <b>MAC</b> Broadcast ไม่ใช่ IP 255.255.255.255)</div>
+<div class="err"><b>ระวังข้อสอบ</b>ข้อสอบ Cisco เคยถามว่า "ARP table ใน Switch จับคู่ L3↔L2" คำตอบข้อสอบคือ IP→MAC แต่ในความจริง Switch L2 ใช้ <b>MAC Address Table</b> (MAC↔พอร์ต) ส่วน ARP Table อยู่บน Host และ Router (หรือ L3 Switch)</div>
+<h3><span>08</span>Broadcast ที่ Router</h3>
+<ul><li>Layer 2 Broadcast (Dst MAC FF:FF:FF:FF:FF:FF) → Router ไม่ Forward</li><li>Limited Broadcast 255.255.255.255 → Router รับมาตรวจ แต่ไม่ Forward ข้าม Network</li></ul>
+<div class="add"><b>เพิ่มเติม — DHCP ข้าม Network</b>เพราะ Router ไม่ส่ง Broadcast ต่อ DHCP Discover จาก Subnet ที่ไม่มี DHCP Server จะไปไม่ถึง Server วิธีแก้คือตั้ง <code>ip helper-address</code> บน Router Interface ให้ Relay แบบ Unicast ไปยัง DHCP Server (DHCP Relay)</div>
+
+<h3><span>09</span>Create a LAN: IP, DHCP, DNS</h3>
+<table><tr><th>อุปกรณ์</th><th>วิธีกำหนด IP</th><th>เหตุผล</th></tr><tr><td>PC / Laptop</td><td>DHCP</td><td>ไม่ต้องตั้งเอง ลดความผิดพลาด</td></tr><tr><td>Printer / Server</td><td>Static</td><td>IP คงที่ ค้นหา/เชื่อมต่อง่าย</td></tr></table>
+<ul><li>DHCP แจก: IP, Subnet Mask, Default Gateway, DNS Server (ผ่านขั้นตอน DORA: Discover, Offer, Request, Acknowledge)</li><li>IP ต้องไม่ซ้ำกัน, Mask และ Gateway เหมือนกันได้เพราะอยู่ Network/ทางออกเดียวกัน</li><li>192.168.1.0/24 → Network .0 | ใช้งานได้ .1–.254 (254 เครื่อง) | Broadcast .255</li><li>เข้า IP ได้แต่เข้า URL ไม่ได้ → ตรวจ <b>DNS</b></li></ul>
+<div class="add"><b>เพิ่มเติม — APIPA</b>ถ้า Windows ขอ DHCP ไม่ได้ จะตั้ง IP เองเป็น 169.254.x.x/16 เห็น IP นี้แปลว่า "DHCP มีปัญหา" แทบทันที</div>
+
+<h3><span>10</span>Troubleshooting จากล่างขึ้นบน (วิธีคิดแบบ Engineer)</h3>
+<pre>1. ping 127.0.0.1          ทดสอบ TCP/IP stack ของเครื่องเอง
+2. ipconfig /all           IP / Mask / Gateway / DNS ถูกต้องไหม มีวง 169.254 ไหม
+3. ping Default Gateway    LAN + Gateway ถึงกันไหม
+4. ping IP นอก Network     (เช่น 209.165.200.225) Routing ผ่านไหม
+5. ping ชื่อโดเมน / nslookup  DNS ใช้ได้ไหม
+6. tracert                 ดูว่าติดที่ Hop ไหน</pre>
+<table><tr><th>อาการ</th><th>สาเหตุที่น่าสงสัย</th></tr>
+<tr><td>Ping Gateway ได้ ออก Internet ไม่ได้</td><td>Router ไม่มี Default Route / ปัญหา ISP / NAT</td></tr>
+<tr><td>Ping Gateway ไม่ได้</td><td>สาย, VLAN, IP/Mask ผิด, Interface shutdown</td></tr>
+<tr><td>Ping IP ได้ ชื่อไม่ได้</td><td>DNS</td></tr>
+<tr><td>IP 169.254.x.x</td><td>DHCP ไม่ตอบ/ไม่มี Relay</td></tr>
+<tr><td>Ping ได้ใน LAN แต่ข้าม Network ไม่ได้</td><td>Gateway ผิด หรือไม่มี Route กลับ (Return Route)</td></tr></table>
+<div class="warn"><b>Ping ไม่ตอบ ≠ เชื่อมต่อไม่ได้เสมอไป</b>Firewall/ACL อาจบล็อก ICMP ได้ ส่วน Ping สำเร็จก็ยืนยันแค่ระดับ IP/ICMP ไม่ได้ยืนยันว่าทุก Service ทำงาน</div>
+
+<h3><span>11</span>จุดที่ต้นฉบับควรแก้/ระวัง</h3>
+<div class="err"><b>ปรับให้ตรงความเป็นจริง</b>
+<ul><li>"Large networks are harder to troubleshoot" ในโจทย์ Cisco ถูกจัดเป็นตัวหลอก แต่ในงานจริงก็เป็นข้อเสียจริง จำว่า <b>คำตอบข้อสอบ = Broadcast Domain เล็กลง + Security</b></li><li>Router ทิ้ง Packet ที่ไม่มี Route แต่ปกติจะส่ง ICMP Unreachable ให้ต้นทาง ไม่ได้ "เงียบ" เสมอไป</li><li>Layer 2 Switch ไม่แบ่ง Broadcast Domain "ตามค่าเริ่มต้น" แต่ VLAN แบ่งได้</li><li>ต้นฉบับ Printer Gateway 192.168.1.1 เป็นแค่ตัวอย่าง ให้ดูค่าจริงจาก <code>ipconfig</code> ของ PC หรือ IP ของ Router Interface</li><li>tracert บน Windows ใช้ ICMP Echo + TTL เพิ่มทีละ 1 (Linux/macOS <code>traceroute</code> ใช้ UDP เป็นค่าเริ่มต้น)</li><li>Hop ที่ 2 ของ tracert ใน Packet Tracer ให้ดูจากผลจริงของ Topology ห้ามเดา</li></ul></div>
+
+<h3><span>12</span>NAT / PAT (บ้านและ SOHO)</h3>
+<p>Host ใน LAN ใช้ Private IP (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) ซึ่งไม่ถูก Route บน Internet Router ที่ขอบเครือข่ายจึงทำ <b>NAT</b> แปลง Source IP เป็น Public IP ของ Interface ด้านนอก</p>
+<pre>PC 192.168.1.10:51000 → Web Server
+Router (NAT/PAT) แปลง Src → 203.0.113.5:40001  (Public IP ของ Router)
+Web Server เห็น Src = 203.0.113.5 ไม่เห็น 192.168.1.10
+ตอบกลับมา → Router ดู NAT Table แล้วแปลงกลับเป็น 192.168.1.10:51000</pre>
+<ul><li>ทุกเครื่องใน LAN ใช้ <b>Public IPv4 เดียว</b> ร่วมกัน (ที่ ISP ให้ Router)</li><li>ที่บ้านจริง ๆ ใช้ <b>PAT</b> (NAT Overload) แยกแต่ละการเชื่อมต่อด้วย Port Number</li><li>NAT เป็นข้อยกเว้นของกฎ "IP ไม่เปลี่ยนเมื่อผ่าน Router" เพราะ Src IP ถูกเปลี่ยน</li></ul>
+<div class="add"><b>เพิ่มเติม</b>NAT ไม่ใช่ระบบความปลอดภัยโดยตรง (เพียงบังเอิญซ่อนที่อยู่ภายใน) และขาเข้าจากภายนอกต้องตั้ง Port Forwarding จึงจะเข้าถึงเครื่องภายในได้ ส่วน IPv6 ออกแบบให้ไม่ต้องพึ่ง NAT</div>
+</div>
+
+<!-- FLASHCARDS -->
+<div class="pn" id="f">
+<div class="sc" id="fcn"></div>
+<div class="fc" id="fc"><div class="fci"><div class="fcf" id="fq"></div><div class="fcb" id="fa"></div></div></div>
+<div class="row"><button class="btn" id="fp">← ก่อนหน้า</button><button class="btn" id="fsh">🔀 สุ่ม</button><button class="btn" id="fn">ถัดไป →</button></div>
+<p style="text-align:center;color:var(--m);margin-top:1rem;font-size:.85rem">คลิกการ์ดเพื่อพลิก</p>
+</div>
+
+<!-- LAB -->
+<div class="pn" id="lab">
+<h3><span>LAB 1</span>Packet Tracer — Create a LAN</h3>
+<ul><li>เปิดเครื่อง Admin PC, Manager PC, Printer, Office Router (Switch ไม่มีสวิตช์เปิด/ปิด)</li><li>ต่อสาย Copper Straight-Through: Router G0/0↔ISP1 G0/0 | Router G0/1↔Switch G0/1 | Admin PC↔F0/1 | Manager PC↔F0/2 | Printer↔F0/24</li><li>Admin/Manager PC: Desktop → IP Configuration → เลือก DHCP</li><li>Printer: Config → FastEthernet0 → IP 192.168.1.100, Mask 255.255.255.0, Gateway ตามที่ PC ได้</li><li>ตรวจด้วย <code>ipconfig /all</code> แล้ว <code>ping 192.168.1.100</code> จากทั้งสอง PC</li><li>เปิดเว็บ 209.165.200.225 แล้วลอง www.cisco.pt (ถ้า IP ได้ URL ไม่ได้ = DNS)</li><li>รัน <code>tracert www.cisco.pt</code> ดู Hop ที่ 1 (Gateway) และ Hop ถัดไป</li></ul>
+<h3><span>LAB 2</span>ลองเอง: Router 2 Network</h3>
+<pre>Router(config)# interface g0/0
+Router(config-if)# ip address 192.168.1.1 255.255.255.0
+Router(config-if)# no shutdown
+Router(config-if)# interface g0/1
+Router(config-if)# ip address 192.168.2.1 255.255.255.0
+Router(config-if)# no shutdown
+Router(config-if)# end
+Router# show ip interface brief
+Router# show ip route
+Router# show arp</pre>
+<p>ตั้ง PC1 = 192.168.1.10 gw .1.1 และ PC2 = 192.168.2.10 gw .2.1 แล้ว ping ข้าม Network จากนั้นลองแก้ Gateway ของ PC1 ให้ผิด และสังเกตว่าอะไรยังได้/ไม่ได้</p>
+<div class="tip"><b>จุดสังเกต</b>ping ครั้งแรกอาจ timeout 1 ครั้ง เพราะต้อง ARP ก่อน ครั้งต่อไปจะผ่านเพราะ MAC อยู่ใน ARP Table แล้ว</div>
+<h3><span>COMMANDS</span>คำสั่งที่ต้องคล่อง</h3>
+<table><tr><th>คำสั่ง</th><th>ใช้ทำอะไร</th></tr>
+<tr><td><code>ipconfig</code></td><td>IP / Mask / Gateway</td></tr><tr><td><code>ipconfig /all</code></td><td>เพิ่ม MAC, DHCP Server, DNS, Lease</td></tr><tr><td><code>ipconfig /release</code> <code>/renew</code></td><td>คืน/ขอ IP ใหม่จาก DHCP</td></tr><tr><td><code>ping</code></td><td>ทดสอบ IP connectivity (ICMP)</td></tr><tr><td><code>tracert</code></td><td>ดู Hop ที่ Packet ผ่าน (Linux: <code>traceroute</code>)</td></tr><tr><td><code>arp -a</code> / <code>arp -d</code></td><td>ดู/ลบ ARP Cache</td></tr><tr><td><code>nslookup</code></td><td>ทดสอบ DNS</td></tr><tr><td><code>show ip route</code></td><td>ดู Routing Table (Cisco)</td></tr><tr><td><code>show ip interface brief</code></td><td>สถานะ Interface + IP</td></tr><tr><td><code>show arp</code></td><td>ARP Table ของ Router</td></tr><tr><td><code>show mac address-table</code></td><td>MAC Table ของ Switch</td></tr></table>
+</div>
+
+<!-- Q&A -->
+<div class="pn" id="ex"><p style="color:var(--m)">แบบฝึกหัด Cisco จากทุกบท กดที่ข้อเพื่อดูเฉลย ลองตอบในใจก่อน</p><div id="exl"></div></div>
+
+<!-- TRANSLATE -->
+<div class="pn" id="tr"><p style="color:var(--m)">คำแปล ศัพท์ และตัวเลือกของทั้ง 20 ข้อ กดที่ข้อเพื่อดูรายละเอียด (✅ = คำตอบที่ถูก)</p><div id="trl"></div></div>
+
+<!-- CHEAT -->
+<div class="pn" id="cs">
+<h3><span>CHEAT SHEET</span>จำก่อนสอบ / ก่อนสัมภาษณ์</h3>
+<div class="card"><pre>Switch = L2 = MAC   = Frame  = MAC Table      = ใน LAN
+Router = L3 = IP    = Packet = Routing Table  = ข้าม Network</pre></div>
+<div class="card"><pre>Host เทียบ Network Address (IP AND Mask)
+ เท่ากัน → ARP หาเครื่องปลายทาง → Dst MAC = ปลายทาง
+ ต่างกัน → ARP หา Gateway      → Dst MAC = Gateway
+Router: Dst IP → Routing Table (Longest Prefix) → Interface/Next Hop
+ ไม่เจอ + ไม่มี Default Route → Drop (+ICMP Unreachable)</pre></div>
+<table><tr><th>สิ่งที่ถาม</th><th>คำตอบ</th></tr>
+<tr><td>แบ่ง Network ทำไม</td><td>Broadcast Domain เล็ก + Security (+ สถานที่, กลุ่มใช้งาน)</td></tr>
+<tr><td>อะไรแบ่ง Broadcast Domain</td><td>Router (และ VLAN/L3)</td></tr>
+<tr><td>Routing คือ</td><td>กระบวนการหาเส้นทางที่ดีที่สุดไปปลายทาง</td></tr>
+<tr><td>Router ใช้อะไรเลือกเส้นทาง</td><td>Destination IP + Routing Table</td></tr>
+<tr><td>Default Gateway คือ</td><td>IPv4 ของ Router Interface ใน LAN เดียวกับ Host</td></tr>
+<tr><td>Gateway ผิด</td><td>ใน LAN ได้ ข้าม Network ไม่ได้</td></tr>
+<tr><td>Default Route ใช้เมื่อ</td><td>Dst Network ไม่มีใน Routing Table</td></tr>
+<tr><td>Router ผ่านแล้ว</td><td>MAC เปลี่ยน, IP เดิม (ถ้าไม่มี NAT), TTL ลด 1</td></tr>
+<tr><td>Broadcast</td><td>Router ไม่ Forward (รวม 255.255.255.255)</td></tr>
+<tr><td>IP ได้ URL ไม่ได้</td><td>DNS</td></tr>
+<tr><td>Printer/Server</td><td>Static IP</td></tr>
+<tr><td>NAT</td><td>Private Src IP → Public IP ของ Router (PAT แยกด้วย Port)</td></tr>
+<tr><td>ARP</td><td>IP → MAC | Request = Broadcast MAC FF:FF:FF:FF:FF:FF | Remote → ARP หา Gateway</td></tr>
+<tr><td>/24</td><td>255.255.255.0 | Host ใช้ได้ 254</td></tr></table>
+<h3><span>สรุป 20 ข้อ</span>เรื่องที่ควรจำ</h3>
+<table><tr><th>เรื่อง</th><th>จำว่า</th></tr>
+<tr><td>Default Gateway ผิด</td><td>ติดต่อ LAN เดียวกันได้ แต่ไป Remote Network ไม่ได้</td></tr>
+<tr><td>Switch</td><td>ทำงานหลักที่ Layer 2 / ใช้ MAC</td></tr>
+<tr><td>Router</td><td>ทำงานหลักที่ Layer 3 / ใช้ IP</td></tr>
+<tr><td>Router ดูอะไร</td><td>Destination IP (ส่วน Network Portion)</td></tr>
+<tr><td>Router ทำอะไร</td><td>Path Selection + Packet Forwarding</td></tr>
+<tr><td>Router เชื่อมอะไร</td><td>Multiple IP Networks</td></tr>
+<tr><td>Router ข้าม Network</td><td>เปลี่ยน Layer 2 Header / MAC</td></tr>
+<tr><td>Layer 3 IP</td><td>โดยทั่วไปคงเดิมเมื่อผ่าน Router (ยกเว้น NAT)</td></tr>
+<tr><td>IP Address</td><td>Network Portion + Host Portion</td></tr></table>
+<div class="warn"><b>จำให้ขึ้นใจ</b>เครื่องเดียวกัน LAN เดียวกัน → MAC | ข้าม Network → IP + Router</div>
+<div class="card"><pre>ส่งไป Remote Network:
+PC → ตรวจ Dst IP → อยู่นอก Network → ส่งให้ Default Gateway
+→ ARP หา MAC ของ Gateway → ส่ง Frame → Router รับ
+→ ถอด L2 → ดู Dst IP → เลือกเส้นทาง → สร้าง L2 Frame ใหม่ → ส่งต่อ</pre></div>
+</div>
+
+<!-- QUIZ -->
+<div class="pn" id="qz"><div class="sc" id="qs">0 / 0</div><div id="ql"></div><div class="row"><button class="btn" id="qr">🔄 เริ่มใหม่</button></div></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.pn').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');$('#'+b.dataset.t).classList.add('on');window.scrollTo({top:0});
+});
+
+/* Flashcards */
+const FC=[
+["Router ใช้อะไรตัดสินใจ Forward Packet?","Destination IP Address + Routing Table"],
+["Switch ใช้อะไรตัดสินใจ Forward Frame?","Destination MAC Address (MAC Address Table)"],
+["Broadcast Domain คืออะไร?","ขอบเขตของอุปกรณ์ที่ได้รับ Broadcast ชุดเดียวกัน Router แบ่งได้"],
+["Routing คืออะไร?","กระบวนการหาเส้นทางที่ดีที่สุดไปยังปลายทาง"],
+["Default Gateway คืออะไร?","IPv4 ของ Router Interface ใน LAN เดียวกับ Host ใช้ส่งออกนอก Network"],
+["Default Route คืออะไร?","เส้นทาง 0.0.0.0/0 บน Router ใช้เมื่อไม่มี Route ที่ตรงกับปลายทาง"],
+["Host ส่ง Packet ไป Gateway เมื่อไร?","เมื่อ Destination IP อยู่คนละ Network"],
+["ส่งข้ามNetwork: Dst MAC ของ Frame แรกคือ?","MAC ของ Default Gateway (Dst IP ยังเป็นปลายทางจริง)"],
+["ผ่าน Router แล้วอะไรเปลี่ยน?","MAC (Src/Dst) เปลี่ยน, TTL ลด 1 | IP เดิม (ถ้าไม่มี NAT)"],
+["Router ไม่เจอ Route และไม่มี Default Route?","Drop Packet (ปกติส่ง ICMP Unreachable)"],
+["Longest Prefix Match?","เลือก Route ที่ Prefix ยาวที่สุดที่ตรงกับ Dst IP"],
+["ARP ทำอะไร?","หา MAC จาก IPv4 ใน LAN (Request = Broadcast, Reply = Unicast)"],
+["ARP Table / MAC Table / Routing Table ต่างกันไง?","ARP: IP↔MAC | MAC Table: MAC↔พอร์ต (Switch) | Routing: Network↔Interface (Router)"],
+["Connected route รหัสอะไร?","C (และ L สำหรับ IP ของ Interface เอง)"],
+["Gateway ผิดจะเกิดอะไร?","คุยใน LAN ได้ ข้าม Network ไม่ได้"],
+["Router จัดการ 255.255.255.255 อย่างไร?","ตรวจแล้ว ไม่ Forward ข้าม Network"],
+["DHCP แจกอะไรบ้าง?","IP, Subnet Mask, Default Gateway, DNS (DORA)"],
+["เข้า IP ได้ แต่เข้า URL ไม่ได้?","ปัญหา DNS"],
+["169.254.x.x หมายถึง?","APIPA: เครื่องขอ DHCP ไม่ได้"],
+["tracert ใช้ทำอะไร?","ดู Router (Hop) ที่ Packet ผ่านไปปลายทาง ใช้ TTL เพิ่มทีละ 1"],
+["ipconfig /all ต่างจาก ipconfig?","เพิ่ม MAC, DHCP Server, DNS, Lease"],
+["ทำไม Printer ใช้ Static IP?","ให้ IP คงที่ อุปกรณ์อื่นค้นหาและเชื่อมต่อได้ง่าย"],
+["DHCP Relay (ip helper-address)?","ส่งต่อ DHCP Discover ข้าม Router แบบ Unicast ไปหา DHCP Server"],
+["NAT ทำอะไร?","แปลง Private Src IP เป็น Public IP ของ Interface ด้านนอก Router (Web Server เห็น Public IP ของ Router)"],
+["PAT (NAT Overload) คืออะไร?","หลาย Host ใช้ Public IP เดียว แยกด้วย Port Number"],
+["ARP Request ใช้ Dst MAC อะไร?","FF:FF:FF:FF:FF:FF (Broadcast MAC) ไม่ใช่ IP 255.255.255.255"],
+["ARP Cache ไม่มีข้อมูล จะเกิดอะไร?","ส่ง ARP Request แบบ Broadcast เพื่อหา MAC ของปลายทาง"],
+["Router ใช้ส่วนไหนของ IP ในการส่งต่อ?","Network Portion"],
+["2 หน้าที่หลักของ Router?","Path Selection + Packet Forwarding (เชื่อมหลาย IP Network)"],
+["Router รับ Frame แล้วทำอะไรกับ L2 Header?","ถอด L2 Header → ดู L3 → สร้าง L2 Header ใหม่ที่มี MAC ใหม่"]
+];
+let fi=0,fo=FC.map((_,i)=>i);
+function showF(){const c=FC[fo[fi]];$('#fc').classList.remove('fl');$('#fq').textContent=c[0];$('#fa').textContent=c[1];$('#fcn').textContent=(fi+1)+' / '+FC.length}
+$('#fc').onclick=()=>$('#fc').classList.toggle('fl');
+$('#fn').onclick=()=>{fi=(fi+1)%FC.length;showF()};
+$('#fp').onclick=()=>{fi=(fi-1+FC.length)%FC.length;showF()};
+$('#fsh').onclick=()=>{fo.sort(()=>Math.random()-.5);fi=0;showF()};
+showF();
+
+/* Cisco Q&A [en, th, answer, why] */
+const EX=[
+["14.1 Q1: Reasons to divide a network into smaller networks. (Choose two.)","✅ To maintain smaller broadcast domains\n✅ Increase network security\n❌ Large networks are more difficult to troubleshoot → จริงในงานจริง แต่ไม่ใช่คำตอบของโจทย์นี้\n❌ Devices receive all the network traffic → เป็นปัญหาที่เกิด ไม่ใช่เหตุผลหลัก"],
+["14.1 Q2: Which device is used to divide a network into smaller networks?","✅ Routers\n❌ Bridges, Switches, Hubs → ไม่แบ่ง Broadcast Domain"],
+["14.1 Q3: What is routing?","✅ A process to determine the best path to a destination.\n❌ transfers data between devices → กว้างเกินไป\n❌ connect devices within a LAN → นั่นคือหน้าที่ Switch"],
+["14.2 Q1: What is the default gateway for H1 (192.168.1.3/24, GW 192.168.1.1)?","✅ 192.168.1.1 → IP ของ Router Interface ใน Network เดียวกับ H1"],
+["14.2 Q2: What information in the IP packet does the router use to choose the interface?","✅ destination IP address → เทียบกับ Routing Table (ไม่ใช่ MAC)"],
+["14.2 Q3: If Host-A finds Host-B on a different network, it encapsulates the IP packet in a frame with the destination MAC of its default gateway.","✅ True → ต้องส่งให้ Gateway ก่อน"],
+["14.2 Q4: A default route is the interface through which the router forwards…","✅ a packet with a destination IP network address that is not in the routing table"],
+["14.2 Q5: A host sends a packet to the default gateway when…","✅ the destination IP address is on a different network"],
+["14.4 Q1: Which information is used by routers to forward a packet toward its destination?","✅ destination IP address"],
+["14.4 Q2: Default gateway configured incorrectly on the host → impact?","✅ The host can communicate with other hosts on the local network, but not with hosts on remote networks."],
+["14.4 Q3: What role does a router play on a network?","✅ selecting the path to destination networks"],
+["14.4 Q4: Which address should be the default gateway of a client?","✅ the IPv4 address of the router interface connected to the same LAN"],
+["14.4 Q5/Q6: Device to move data between IP networks (e.g. 192.168.1.0/24 ↔ 192.168.2.0/24)?","✅ router"],
+["14.4 Q7: Benefit of adding a router within an IP network?","✅ keeps broadcasts contained within a local network"],
+["14.4 Q8: H7 sends a packet to 255.255.255.255. What does the router do?","✅ examines the packet received on Fa0/1 and does not forward it\n❌ ส่งออกทุก Interface / เปลี่ยน Dst IP → Router ไม่ Forward Limited Broadcast"],
+["14.4 Q9: Router receives a frame with a broadcast MAC address?","✅ It will not forward the frame to another network."],
+["14.4 Q10: Two reasons to install routers to segment a network? (Choose two.)","✅ to expand the network to a different geographic location\n✅ to create smaller broadcast domains"],
+["14.4 Q11: Which table does a router use to choose the interface?","✅ routing table"],
+["14.4 Q12: No route to the destination in the routing table?","✅ It drops the packet. (ถ้ามี Default Route จะใช้ Default Route ก่อน)"],
+["Packet Tracer: ทำไมเรียกว่า Hop และ tracert ใช้ทำอะไร?","Hop = การผ่าน Router 1 ตัว | tracert แสดงลำดับ Router ระหว่างต้นทางและปลายทาง"],
+["ชุดเพิ่ม Q1 & Q6: Default gateway ตั้งผิดบน Host จะเกิดอะไร?","✅ The host cannot communicate with hosts in other networks. (Q6: คุยในเครือข่ายเดียวกันได้ แต่ Remote ไม่ได้)\n❌ cannot communicate in the local network → LAN ไม่ผ่าน Gateway\n❌ use ARP to find the correct gateway → ARP หาแค่ MAC ของ IP ที่ตั้งไว้\n❌ ping 127.0.0.1 fails → Loopback ไม่เกี่ยวกับ Gateway"],
+["Q2: ผู้ใช้คุยใน Network เดียวกันได้ แต่ไป Remote ไม่ได้ และ ping Gateway ที่ตั้งไว้ไม่ได้ สาเหตุ?","✅ The default gateway address is incorrect."],
+["Q3: Home network ใช้ NAT PC ส่งไป Web Server Src IP ที่ปลายทางเห็น?","✅ a registered public IP address assigned to the external router interface\n(PC = Private → Router NAT แปลง → Internet เห็น Public ของ Router)"],
+["Q4: LAN ต่อ Internet ผ่าน Wireless Router ใช้ NAT อย่างไร?","✅ All devices must share the single public IPv4 address assigned to the wireless router"],
+["Q5: Address ประเภทใดที่ NAT แชร์ให้อุปกรณ์ในบ้านออก Internet?","✅ registered public IP address"],
+["Q7: Protocol ที่ใช้หา MAC ของ Default Gateway?","✅ ARP\n❌ DHCP แจก IP | TCP/UDP เป็น Transport"],
+["Q8: ARP table ใน Switch จับคู่ Address 2 ประเภทใด?","✅ Layer 3 address to a Layer 2 address (IP → MAC)\n⚠️ ตามความจริง Switch L2 ใช้ MAC Table ข้อนี้คือคำตอบตามข้อสอบ"],
+["Q9: Host ต้องสร้าง Frame แต่ ARP Cache ไม่มี mapping?","✅ sends an ARP request to the Ethernet broadcast address to discover the destination MAC"],
+["Q10: Host A ไม่มี MAC ของ Gateway ใครรับ ARP Request?","✅ only hosts B, C, and router R1 → Switch Flood ไปทุกพอร์ตยกเว้นพอร์ตต้นทาง อุปกรณ์ใน Broadcast Domain เดียวกันได้รับ (Host D อยู่ Remote Network ตามโจทย์จึงไม่ได้รับ)"],
+["Q11: Remote Host แต่ ARP Cache ว่าง ARP Request ส่งไป Dst Address ใด?","✅ the broadcast MAC address (FF:FF:FF:FF:FF:FF) เพื่อหา MAC ของ Gateway"],
+["Q12: จุดประสงค์ของ ARP ใน IPv4?","✅ to obtain a specific MAC address when an IP address is known"],
+["Q13: Dst Address ใน ARP Request Frame?","✅ FFFF.FFFF.FFFF\n❌ 255.255.255.255 → เป็น IP Broadcast ไม่ใช่ MAC | ❌ 0.0.0.0 | ❌ MAC ปลายทาง (ยังไม่รู้)"],
+["Q14: Encapsulation ผ่าน Network ข้อใดถูก? (เลือก 2)","✅ The Layer 2 header is stripped from the frame when received by each router.\n✅ The Layer 2 header is reassembled when forwarded by each router."],
+["Q15: Router ตรวจข้อมูลอะไรเพื่อส่งไป Remote Destination?","✅ destination IP address"],
+["Q16: หน้าที่หลักของ Router 2 ข้อ?","✅ packet forwarding\n✅ path selection\n❌ MAC address assignment | ❌ domain name resolution (หน้าที่ DNS)"],
+["Q17: PC1 192.168.1.95/24 GW 192.168.1.254 คืออะไร?","✅ It is the IP address of the Router1 interface that connects the PC1 LAN to Router1."],
+["Q18: Router ใช้ส่วนใดของ Network layer address ส่งต่อ?","✅ network portion"],
+["Q19: Router ตัดสินแล้วว่าต้องส่ง Packet จาก Network 1 ไป Network 2 ทำอะไรต่อ?","✅ It reassembles the frame with different MAC addresses than the original frame."],
+["Q20: 2 หน้าที่ของ Router?","✅ connects multiple IP networks\n✅ determines the best path to send packets\n❌ controls flow via Layer 2 addresses | ❌ builds routing table from ARP requests | ❌ Layer 2 segmentation"]
+];
+$('#exl').innerHTML=EX.map(e=>`<details><summary>${e[0]}</summary><div class="ans">${e[1].replace(/\n/g,'<br>')}</div></details>`).join('');
+
+/* Translation: [title, thai, vocab, lines, tip] */
+const TR=[
+["Q1 Default Gateway ผิดบน Host","จะเกิดอะไรขึ้นถ้าที่อยู่ Default Gateway ถูกกำหนดค่าผิดบน Host?","default gateway=เกตเวย์เริ่มต้น · incorrectly configured=กำหนดค่าผิด · host=อุปกรณ์ปลายทาง · other networks=เครือข่ายอื่น",["✅ The host cannot communicate with hosts in other networks. = สื่อสารกับ Host ในเครือข่ายอื่นไม่ได้","The host will have to use ARP to determine the correct address of the default gateway. = ต้องใช้ ARP หา Gateway ที่ถูก","The host cannot communicate with other hosts in the local network. = สื่อสารใน LAN ไม่ได้","The switch will not forward packets initiated by the host. = Switch ไม่ส่งต่อแพ็กเก็ต","A ping from the host to 127.0.0.1 would not be successful. = Ping 127.0.0.1 ไม่สำเร็จ"],"Gateway ผิด → คุยใน LAN ได้ แต่ไปเครือข่ายอื่นไม่ได้"],
+["Q2 ผู้ใช้ออก Remote Network ไม่ได้","ผู้ดูแลระบบตรวจปัญหา: ผู้ใช้ติดต่อ Host ใน Network เดียวกันได้ แต่ติดต่อ Remote Network ไม่ได้ และ Ping Gateway ที่ตั้งไว้ไม่สำเร็จ สาเหตุที่เป็นไปได้มากที่สุด?","investigates=ตรวจสอบ · reach=เข้าถึง · unable to=ไม่สามารถ · remote networks=เครือข่ายอื่น · most likely cause=สาเหตุที่เป็นไปได้มากที่สุด",["TCP/IP is not installed = ไม่ได้ติดตั้ง TCP/IP","✅ The default gateway address is incorrect. = Default Gateway ไม่ถูกต้อง","The address of the remote device is incorrect. = ที่อยู่อุปกรณ์ปลายทางผิด","The IP address of the user is incorrectly configured. = IP ของผู้ใช้ผิด"],"คุย LAN ได้ = IP ตัวเองใช้ได้ ปัญหาอยู่ที่ Gateway"],
+["Q3 NAT: Src IP ที่ Web Server เห็น","เครือข่ายบ้านใช้ NAT PC ได้ Private IP ผ่าน DHCP เมื่อ PC ส่ง Packet ไป Web Server บน Internet Source IP ใน Header ตอนถึง Server คืออะไร?","source IP=IP ต้นทาง · packet header=ส่วนหัวของ Packet · arrives=ไปถึง",["✅ a registered public IP address assigned to the external router interface = Public IP ของ Interface ด้านนอก Router"],"PC → Private IP | Router NAT → แปลงเป็น Public | Internet เห็น Public IP ของ Router"],
+["Q4 NAT บน Wireless Router","LAN ต่อ Internet ผ่าน Wireless Router อุปกรณ์ใน LAN สื่อสารบน Internet ด้วย NAT อย่างไร?","share=ใช้ร่วมกัน · single public IPv4=Public IPv4 เพียงหนึ่งที่อยู่ · assigned=ถูกกำหนดให้",["✅ All devices must share the single public IPv4 address assigned to the wireless router = ทุกอุปกรณ์ใช้ Public IPv4 เดียวของ Router ร่วมกัน"],""],
+["Q5 Address ที่ NAT แชร์","Address ประเภทใดที่แชร์ผ่าน NAT เพื่อให้อุปกรณ์ในบ้านรับส่งข้อมูลทาง Internet ได้?","shared=ใช้ร่วมกัน · enable=ทำให้สามารถ · send and receive=ส่งและรับ",["✅ registered public IP address = Public IP ที่ลงทะเบียนแล้ว"],""],
+["Q6 Gateway ผิดบน PC","ผลลัพธ์คืออะไรถ้า Default Gateway ถูกกำหนดผิดบน PC?","result=ผลลัพธ์ · misconfigured=กำหนดค่าผิด",["✅ The PC can communicate with devices in the same network but not with those in remote networks. = คุยในเครือข่ายเดียวกันได้ แต่ไป Remote ไม่ได้"],"หลักเดียวกับข้อ 1"],
+["Q7 Protocol หา MAC ของ Gateway","Computer ใช้ Protocol ใดค้นหา MAC Address ของ Default Gateway บน Ethernet?","protocol=โปรโตคอล · find=ค้นหา",["DHCP","TCP","✅ ARP","UDP"],"ARP = Address Resolution Protocol ใช้หา MAC เมื่อรู้ IP"],
+["Q8 ARP table จับคู่อะไร","ARP Table ใน Switch จับคู่ Address สองประเภทใดเข้าด้วยกัน?","maps=จับคู่ · Layer 3 address=IP · Layer 2 address=MAC",["✅ Layer 3 address to a Layer 2 address = IP → MAC"],"ARP = IP → MAC (ตามความจริง Switch L2 ใช้ MAC Table ข้อนี้คือคำตอบตามข้อสอบ)"],
+["Q9 ARP Cache ไม่มี mapping","ARP ทำอะไรเมื่อ Host ต้องสร้าง Frame แต่ ARP Cache ไม่มีการจับคู่ Address?","build a frame=สร้าง Frame · ARP cache=ข้อมูล ARP ที่เก็บไว้ · address mapping=การจับคู่ Address",["✅ The ARP process sends out an ARP request to the Ethernet broadcast address to discover the MAC address of the destination device. = ส่ง ARP Request แบบ Broadcast เพื่อหา MAC ปลายทาง"],"ARP Request → Broadcast → FF:FF:FF:FF:FF:FF"],
+["Q10 ใครได้รับ ARP Request","Host A ต้องการติดต่อ Host D แต่ไม่มี MAC ของ Default Gateway อุปกรณ์ใดจะได้รับ ARP Request ที่ Host A ส่ง?","",["✅ only hosts B, C, and router R1 = เฉพาะ Host B, C และ Router R1"],"ARP Request เป็น Broadcast Switch ส่งออกทุกพอร์ตยกเว้นพอร์ตที่รับเข้า อุปกรณ์ใน Broadcast Domain เดียวกันได้รับ"],
+["Q11 ARP Request ไป Remote Network","Host ต้องการติดต่อ Host ใน Remote Network แต่ ARP Cache ไม่มีข้อมูล Host จะส่ง ARP Request ไป Destination Address ใด?","",["✅ the broadcast MAC address = Broadcast MAC (FF:FF:FF:FF:FF:FF)"],"ปลายทางอยู่ไกล แต่ต้องหา MAC ของ Default Gateway ก่อน"],
+["Q12 จุดประสงค์ของ ARP","จุดประสงค์ของ ARP ใน IPv4 Network คืออะไร?","",["✅ to obtain a specific MAC address when an IP address is known = หา MAC เมื่อรู้ IP"],"ARP: IP → MAC"],
+["Q13 Dst Address ใน ARP Request","Destination Address ใดถูกใช้ใน ARP Request Frame?","",["AAAA.AAAA.AAAA ❌","MAC ของปลายทาง ❌ (ยังไม่รู้)","0.0.0.0 ❌","255.255.255.255 ❌ (IP Broadcast)","✅ FFFF.FFFF.FFFF = Broadcast MAC"],"FF:FF:FF:FF:FF:FF"],
+["Q14 Encapsulation ผ่าน Router","Workstation A ส่ง IP Packet ไป Workstation B ข้อใด 2 ข้ออธิบาย Encapsulation ขณะผ่าน Network?","",["✅ The Layer 2 header of the frame is reassembled when it is forwarded by each router. = L2 Header ถูกสร้างใหม่เมื่อ Router ส่งต่อ","✅ The Layer 2 header is stripped from the frame when it is received by each router. = L2 Header ถูกถอดเมื่อ Router รับ Frame"],"Frame → Router → ถอด L2 → ดู L3 → สร้าง L2 ใหม่ (Src/Dst IP คงเดิมถ้าไม่มี NAT)"],
+["Q15 Router ตรวจข้อมูลอะไร","เมื่อ Router รับ Packet ต้องตรวจข้อมูลใดเพื่อส่งไปปลายทางระยะไกล?","",["✅ destination IP address = IP ปลายทาง"],"Router → ดู Destination IP"],
+["Q16 หน้าที่หลักของ Router","หน้าที่หลัก 2 อย่างของ Router คืออะไร?","packet forwarding=ส่งต่อ Packet · path selection=เลือกเส้นทาง",["✅ packet forwarding","✅ path selection","MAC address assignment ❌","domain name resolution ❌ (หน้าที่ DNS)"],"Router = Path Selection + Packet Forwarding"],
+["Q17 Default Gateway ของ PC1","PC1: IP 192.168.1.95, Mask 255.255.255.0, Gateway 192.168.1.254 คำอธิบายใดถูกเกี่ยวกับ Default Gateway?","",["✅ It is the IP address of the Router1 interface that connects the PC1 LAN to Router1. = IP ของ Interface บน Router1 ที่ต่อ LAN ของ PC1"],"Default Gateway = IP ของ Router Interface ใน LAN เดียวกับ Host"],
+["Q18 ส่วนของ IP ที่ Router ใช้","Router ใช้ส่วนใดของ Network Layer Address เพื่อส่งต่อ Packet?","",["✅ network portion = ส่วน Network"],"IP = Network Portion + Host Portion Router สนใจว่า Packet ต้องไป Network ไหน"],
+["Q19 Router หลังตัดสินใจ Forward","หลัง Router ตรวจพบว่า Packet จาก Network 1 ต้องไป Network 2 Router ทำอะไร?","",["✅ It reassembles the frame with different MAC addresses than the original frame. = สร้าง Frame ใหม่ที่มี MAC ต่างจากเดิม"],"IP เดิม | Frame เดิมถูกถอด | สร้าง Frame ใหม่ตาม Link ใหม่"],
+["Q20 2 หน้าที่ของ Router","หน้าที่ 2 อย่างของ Router คืออะไร?","",["✅ A router connects multiple IP networks. = เชื่อมหลาย IP Networks","✅ It determines the best path to send packets. = เลือกเส้นทางที่ดีที่สุด","It controls the flow of data via Layer 2 addresses. ❌","It builds a routing table based on ARP requests. ❌","It provides segmentation at Layer 2. ❌"],""]
+];
+$('#trl').innerHTML=TR.map(r=>`<details><summary>${r[0]}</summary><div class="ans"><p>${r[1]}</p>${r[2]?`<p style="color:var(--m);font-size:.9rem">📌 ${r[2]}</p>`:''}<ul>${r[3].map(l=>`<li${l.startsWith('✅')?' style="color:var(--ok)"':''}>${l}</li>`).join('')}</ul>${r[4]?`<div class="tip"><b>จำ</b>${r[4]}</div>`:''}</div></details>`).join('');
+
+/* Quiz [q, opts, correctIdx, why] */
+const Q=[
+["เหตุผลหลักที่แบ่ง Network เป็นส่วนเล็ก ๆ?",["เพิ่มจำนวน MAC Address","ลด Broadcast Domain และเพิ่มความปลอดภัย","ให้ทุกเครื่องใช้ IP เดียวกัน","เลิกใช้ Switch"],1,"แบ่งเพื่อจำกัด Broadcast และควบคุมการเข้าถึงระหว่างกลุ่ม"],
+["อุปกรณ์ใดแบ่ง Broadcast Domain ในเครือข่ายพื้นฐาน?",["Hub","Layer 2 Switch","Router","Repeater"],2,"Router ไม่ Forward Broadcast ข้าม Interface"],
+["PC A 192.168.1.10/24 และ PC B 192.168.2.10/24 อยู่ Network เดียวกันไหม?",["ใช่","ไม่ใช่ (192.168.1.0 กับ 192.168.2.0)","ขึ้นกับ MAC","ระบุไม่ได้"],1,"Network Address ต่างกัน ต้องผ่าน Router"],
+["PC ส่งไป Remote Host ข้อมูลแรกส่งไป MAC ของใคร?",["Remote Host","Default Gateway","DNS Server","Broadcast MAC"],1,"Dst MAC = Gateway, Dst IP = ปลายทางจริง"],
+["หลังผ่าน Router สิ่งใดเปลี่ยนตามปกติ?",["Src IP และ Dst IP","เฉพาะ Dst IP","Src MAC และ Dst MAC","ไม่มี"],2,"MAC เปลี่ยนทุก Link IP คงเดิม (ถ้าไม่มี NAT)"],
+["Router ใช้ข้อมูลใดเลือกเส้นทาง?",["Dst MAC","Dst IP + Routing Table","ชื่อเครื่อง","ชื่อผู้ใช้"],1,"Router = L3 = IP"],
+["Routing Table มี 10.0.0.0/8 → Fa0/0 และ 10.1.0.0/16 → Fa0/1 Dst = 10.1.5.5 ออกพอร์ตไหน?",["Fa0/0","Fa0/1","ทั้งสองพอร์ต","Drop"],1,"Longest Prefix Match: /16 เจาะจงกว่า /8"],
+["ไม่มี Route และไม่มี Default Route Router ทำอย่างไร?",["Broadcast","ส่งออกทุกพอร์ต","Drop Packet","ให้ Switch เลือก"],2,"ไม่รู้ทาง = ทิ้ง (ปกติส่ง ICMP Unreachable)"],
+["Default Gateway ของ Host ควรเป็นอะไร?",["MAC ของ Switch","IPv4 ของ Router Interface ใน LAN เดียวกัน","IP ของ PC อื่น","IP ของ DNS เสมอ"],1,"ต้องเป็น IP ของ Router ใน Subnet เดียวกัน"],
+["Gateway ตั้งผิด Host จะเป็นอย่างไร?",["ติดต่อใครไม่ได้","คุยใน LAN ได้ ข้าม Network ไม่ได้","ใช้ Internet ได้ปกติ","Switch หยุดทำงาน"],1,"ใน LAN ไม่ผ่าน Gateway"],
+["Router ได้รับ 255.255.255.255 ทำอย่างไร?",["Forward ทุก Interface","เปลี่ยน IP ปลายทาง","ไม่ Forward ข้าม Network","ส่งกลับต้นทาง"],2,"Limited Broadcast อยู่แค่ Local Network"],
+["ตารางใดจับคู่ IPv4 กับ MAC?",["Routing Table","MAC Address Table","ARP Table","DNS Table"],2,"ARP Table; MAC Table เป็นของ Switch (MAC↔พอร์ต)"],
+["เข้า 209.165.200.225 ได้ แต่ www.cisco.pt ไม่ได้ ควรตรวจอะไร?",["DNS","Subnet Mask เท่านั้น","Printer","NIC ของ Switch"],0,"IP ได้ = Routing ปกติ ปัญหาคือการแปลงชื่อ"],
+["PC ได้ IP 169.254.8.4 สื่อว่าอะไร?",["DHCP ให้ IP สำเร็จ","ขอ DHCP ไม่ได้ (APIPA)","Router ล่ม","DNS ผิด"],1,"APIPA เกิดเมื่อไม่ได้รับคำตอบจาก DHCP"],
+["ping Gateway ได้ แต่ออก Internet ไม่ได้ น่าสงสัยอะไรบน Router?",["ไม่มี Default Route / ปัญหา ISP","MAC ซ้ำ","สายใน LAN","Printer"],0,"LAN ถึง Gateway ปกติ ปัญหาอยู่ขาออก"],
+["Windows คำสั่งใดดูเส้นทางที่ Packet ผ่านแต่ละ Router?",["ipconfig","tracert","arp -a","ipconfig /renew"],1,"tracert (Linux: traceroute)"],
+["PC ใน LAN ใช้ NAT ส่งไป Web Server Src IP ที่ Server เห็นคืออะไร?",["Private IP ของ PC","Public IP ของ Router (Interface ด้านนอก)","IP ของ DNS","MAC ของ Router"],1,"NAT/PAT แปลง Src เป็น Public IP ของ Router"],
+["ARP Request Frame ใช้ Dst Address อะไร?",["255.255.255.255","FFFF.FFFF.FFFF","0.0.0.0","MAC ของปลายทาง"],1,"ARP ทำงานที่ L2 ใช้ Broadcast MAC (255.255.255.255 เป็น IP)"],
+["Host ส่งไป Remote Network ARP Request หา MAC ของใคร?",["Remote Host","Default Gateway","DNS Server","Switch"],1,"Frame แรกต้องส่งให้ Gateway"],
+["หน้าที่หลักของ Router 2 ข้อคือ?",["Path selection + Packet forwarding","MAC assignment + Path selection","DNS resolution + Forwarding","L2 segmentation + ARP"],0,"Router เลือกเส้นทางและส่งต่อ Packet"],
+["Router ใช้ส่วนใดของ IP Address ตัดสินใจ?",["Host portion","Network portion","MAC portion","Port number"],1,"Router ดูว่าต้องไป Network ไหน"],
+["เมื่อ Frame ผ่าน Router เกิดอะไรกับ L2 Header?",["คงเดิมทั้งหมด","ถูกถอดและสร้างใหม่","ถูกส่งต่อตามเดิม","ถูกเปลี่ยนเป็น Broadcast"],1,"ถอด L2 → ดู L3 → สร้าง L2 ใหม่"]
+];
+let sc=0,an=0;
+function buildQ(){sc=0;an=0;upd();
+$('#ql').innerHTML=Q.map((q,i)=>`<div class="q"><p>ข้อ ${i+1}. ${q[0]}</p>${q[1].map((o,j)=>`<button class="o" data-i="${i}" data-j="${j}">${o}</button>`).join('')}<div class="ex" id="e${i}"></div></div>`).join('');
+document.querySelectorAll('.o').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.i,j=+b.dataset.j,box=b.parentElement;
+  if(box.dataset.done)return;box.dataset.done=1;an++;
+  const ok=j===Q[i][2];if(ok)sc++;
+  box.querySelectorAll('.o').forEach((x,k)=>{if(k===Q[i][2])x.classList.add('ok')});
+  if(!ok)b.classList.add('no');
+  const e=$('#e'+i);e.textContent=(ok?'✅ ถูก — ':'❌ ผิด — ')+Q[i][3];e.classList.add('show');upd();
+})}
+function upd(){$('#qs').textContent=`คะแนน ${sc} / ${Q.length}  (ตอบแล้ว ${an})`}
+$('#qr').onclick=buildQ;buildQ();
+</script>
+</body>
+</html>
