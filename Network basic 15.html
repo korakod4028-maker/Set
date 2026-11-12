@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network Basics 15 — TCP, UDP, Ports & Sockets</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
+:root{--bg:#0a0e17;--s:#111827;--s2:#1a2236;--b:#1e2d47;--a:#00d4ff;--a2:#7c3aed;--ok:#10b981;--w:#f59e0b;--bad:#ef4444;--t:#e2e8f0;--m:#8091ab;--mono:'JetBrains Mono',monospace;--sans:'Sarabun',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font:16px/1.7 var(--sans)}
+header{position:sticky;top:0;z-index:9;background:rgba(10,14,23,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--b);padding:0 1.2rem;height:52px;display:flex;align-items:center;gap:1rem;overflow-x:auto}
+.badge{font:.7rem var(--mono);background:var(--a2);padding:2px 8px;border-radius:4px;white-space:nowrap}
+header a{font:.76rem var(--mono);color:var(--m);text-decoration:none;white-space:nowrap}header a:hover{color:var(--a)}
+.hero{padding:3.5rem 1.2rem 2.5rem;text-align:center;border-bottom:1px solid var(--b);background:radial-gradient(ellipse 80% 60% at 50% 0,rgba(0,212,255,.1),transparent 70%)}
+.eye{font:.72rem var(--mono);color:var(--a);letter-spacing:.15em;margin-bottom:.8rem}
+.hero h1{font-size:clamp(1.9rem,6vw,3.2rem);line-height:1.15;background:linear-gradient(135deg,#e2e8f0,var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--m);max-width:560px;margin:.8rem auto}
+.stats{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:1.5rem}.stats b{font:700 1.7rem var(--mono);color:var(--a);display:block}.stats span{font-size:.75rem;color:var(--m)}
+#bar{height:3px;background:var(--b);position:sticky;top:52px;z-index:9}#bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--a2))}
+main{max-width:900px;margin:auto;padding:0 1.2rem 4rem}
+section{padding:2.8rem 0 .5rem;border-bottom:1px solid var(--b)}
+.lab{font:.7rem var(--mono);color:var(--a);letter-spacing:.12em}
+h2{font-size:1.6rem;margin:.2rem 0 .4rem}h3{font-size:1.05rem;color:var(--a);margin:1.2rem 0 .4rem}
+p,li{color:#cbd5e1}ul{padding-left:1.2rem;margin:.4rem 0}
+code,.mono{font-family:var(--mono);font-size:.85em;background:var(--s2);padding:1px 6px;border-radius:4px;color:var(--a)}
+pre{font:.8rem/1.6 var(--mono);background:#060910;border:1px solid var(--b);border-radius:8px;padding:.9rem;overflow-x:auto;margin:.7rem 0;color:#a7f3d0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1rem 0}
+.card{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:1.1rem;transition:.2s}.card:hover{border-color:var(--a);transform:translateY(-2px)}
+.card h4{color:var(--t);margin-bottom:.3rem}.tcp{border-top:3px solid var(--a)}.udp{border-top:3px solid var(--w)}
+.box{border-left:4px solid var(--a);background:var(--s);padding:.8rem 1rem;border-radius:0 8px 8px 0;margin:1rem 0}
+.box.warn{border-color:var(--w)}.box.ok{border-color:var(--ok)}.box.bad{border-color:var(--bad)}
+.box b.k{display:block;font:.7rem var(--mono);letter-spacing:.1em;margin-bottom:.2rem}
+.tw{overflow-x:auto;margin:1rem 0}table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:520px}
+th{background:var(--s2);color:var(--a);text-align:left;font:.75rem var(--mono)}th,td{padding:.55rem .8rem;border-bottom:1px solid var(--b)}tr:hover td{background:rgba(0,212,255,.04)}
+button{font:600 .9rem var(--sans);background:var(--s2);color:var(--t);border:1px solid var(--b);border-radius:8px;padding:.5rem 1rem;cursor:pointer;transition:.2s}
+button:hover{border-color:var(--a);color:var(--a)}button.p{background:var(--a);color:#06202a;border-color:var(--a)}
+.hs{display:grid;grid-template-columns:90px 1fr 90px;gap:.5rem;align-items:center;margin:1rem 0;min-height:150px}
+.node{background:var(--s2);border:1px solid var(--a);border-radius:10px;padding:.6rem;text-align:center;font:.8rem var(--mono)}
+.arrows{display:flex;flex-direction:column;gap:.6rem}
+.ar{opacity:.15;font:.8rem var(--mono);padding:.35rem .6rem;border-radius:6px;background:var(--s2);transition:.4s}.ar.on{opacity:1;border:1px solid var(--ok);color:var(--ok)}
+.ar.r{text-align:right}
+.qq{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:1rem;margin:1rem 0}
+.qq .o{display:block;width:100%;text-align:left;margin:.35rem 0}.o.c{border-color:var(--ok);background:rgba(16,185,129,.12)}.o.x{border-color:var(--bad);background:rgba(239,68,68,.12)}
+.ex{display:none;margin-top:.6rem;font-size:.9rem;color:var(--m)}.ex.s{display:block}
+input{font:1rem var(--mono);background:#060910;color:var(--t);border:1px solid var(--b);border-radius:8px;padding:.5rem .8rem;width:130px}
+#score{font:700 1.1rem var(--mono);color:var(--ok);margin:.8rem 0}
+footer{text-align:center;color:var(--m);font-size:.8rem;padding:2rem}
+</style></head><body>
+<header><span class="badge">NET 15</span><a href="#s1">Overview</a><a href="#s2">TCP/UDP</a><a href="#s3">Handshake</a><a href="#s4">Ports</a><a href="#s5">Tools</a><a href="#s6">Cloud</a><a href="#s7">แก้ไข</a><a href="#s8">Quiz</a><a href="#s9">Drill</a></header>
+<div id="bar"><i></i></div>
+<div class="hero"><div class="eye">CCNA MODULE 15 · CLOUD ENGINEER TRACK</div><h1>TCP, UDP, Ports &amp; Sockets</h1><p>สรุปรวมจากทุกไฟล์ + แก้จุดผิด + เติมสิ่งที่ขาด พร้อมแบบฝึกหัดและโจทย์สถานการณ์แบบงานจริง</p>
+<div class="stats"><div><b>2</b><span>Protocols</span></div><div><b>14</b><span>Key Ports</span></div><div><b>12</b><span>Quiz</span></div><div><b>5</b><span>Cloud Scenarios</span></div></div></div>
+<main>
+
+<section id="s1"><div class="lab">01 / OVERVIEW</div><h2>Transport Layer คืออะไร</h2>
+<p>ชั้นที่ 4 ของ OSI (อยู่ใน Transport Layer ของ TCP/IP) ทำหน้าที่ส่งข้อมูลระหว่าง <b>แอปพลิเคชัน</b> ต้นทาง–ปลายทาง ไม่ใช่แค่ระหว่างเครื่อง</p>
+<ul><li><b>Segmentation / Reassembly</b> — แบ่งข้อมูลก่อนส่ง ประกอบกลับที่ปลายทาง</li><li><b>Multiplexing</b> — หลายแอปใช้เครือข่ายพร้อมกัน แยกด้วย Port</li><li><b>Reliability &amp; Flow Control</b> — เฉพาะ TCP</li></ul>
+<div class="tw"><table><tr><th>TCP/IP Layer</th><th>ตัวอย่าง</th><th>PDU</th></tr><tr><td>Application</td><td>HTTP, DNS, SSH, SMTP</td><td>Data</td></tr><tr><td><b>Transport</b></td><td><b>TCP, UDP</b></td><td>Segment (TCP) / Datagram (UDP)</td></tr><tr><td>Internet</td><td>IP, ICMP</td><td>Packet</td></tr><tr><td>Network Access</td><td>Ethernet, Wi-Fi</td><td>Frame</td></tr></table></div>
+<div class="box"><b class="k">จำ</b>IP = ไปเครื่องไหน · Port = ไปแอปไหน · Transport Layer = ดูแลการคุยระหว่างแอป</div></section>
+
+<section id="s2"><div class="lab">02 / TCP vs UDP</div><h2>เปรียบเทียบ TCP และ UDP</h2>
+<div class="grid"><div class="card tcp"><h4>TCP — Reliable</h4><p>เหมือนพัสดุมีระบบติดตาม: Handshake, ACK, Sequence Number, Retransmission, Flow &amp; Congestion Control</p></div>
+<div class="card udp"><h4>UDP — Low Latency</h4><p>เหมือนประกาศผ่านลำโพง: ส่งเลย ไม่รอยืนยัน ไม่ส่งซ้ำให้ ภาระน้อย</p></div></div>
+<div class="tw"><table><tr><th>หัวข้อ</th><th>TCP</th><th>UDP</th></tr>
+<tr><td>รูปแบบ</td><td>Connection-oriented</td><td>Connectionless</td></tr>
+<tr><td>ความน่าเชื่อถือ</td><td>มี (ACK + Retransmit)</td><td>ไม่รับประกัน</td></tr>
+<tr><td>ลำดับข้อมูล</td><td>Sequence Number</td><td>ไม่มี (แอปจัดการเอง)</td></tr>
+<tr><td>Flow / Congestion Control</td><td>มี (Window)</td><td>ไม่มี</td></tr>
+<tr><td>Header</td><td>ขั้นต่ำ 20 B</td><td>8 B คงที่</td></tr>
+<tr><td>ใช้กับ</td><td>HTTP/1.1-2, HTTPS, SSH, FTP, SMTP, DB</td><td>DNS, DHCP, VoIP, สตรีม, เกม, TFTP, SNMP, <b>QUIC/HTTP3</b></td></tr></table></div>
+<h3>Header ที่ควรรู้</h3>
+<ul><li><b>UDP (4 ฟิลด์ × 2 B = 8 B):</b> Source Port, Destination Port, Length, Checksum</li><li><b>TCP:</b> Src/Dst Port, Seq, Ack Number, Flags (SYN, ACK, FIN, RST, PSH, URG), Window Size, Checksum</li></ul>
+<h3>Window = Flow Control + Congestion Control</h3>
+<p><b>Flow Control</b>: ผู้รับบอกผ่าน Window Size ว่ารับได้เท่าไร · <b>Congestion Control</b>: ผู้ส่งลดอัตราเมื่อเครือข่ายแออัด (Slow Start, Congestion Window)</p>
+<div class="box warn"><b class="k">ข้อสอบชอบหลอก</b>Window Size ไม่ได้ทำ Segmentation — มันคุมปริมาณข้อมูลที่ส่งได้ก่อนรอ ACK</div></section>
+
+<section id="s3"><div class="lab">03 / HANDSHAKE</div><h2>TCP Three-Way Handshake &amp; Teardown</h2>
+<p>กดปุ่มเพื่อดูทีละขั้น (ตัวเลข Seq เป็นตัวอย่าง)</p>
+<div class="hs"><div class="node">Client<br>10.1.1.10</div><div class="arrows" id="arr"></div><div class="node">Server<br>10.1.1.254:80</div></div>
+<button class="p" id="nx">ขั้นถัดไป ▶</button> <button id="rs">รีเซ็ต</button>
+<div class="box ok" id="hsx" style="margin-top:1rem">เริ่มต้น: Client ยังไม่ได้ติดต่อ Server</div>
+<h3>ปิดการเชื่อมต่อ</h3><p>ปกติใช้ <code>FIN → ACK → FIN → ACK</code> (4 ขั้น) ส่วน <code>RST</code> คือตัดทันที เช่น เชื่อมไปพอร์ตที่ไม่เปิด จะได้ RST กลับมา = <i>Connection refused</i> ต่างจากโดน Firewall DROP ที่เงียบจน <i>timeout</i></p></section>
+
+<section id="s4"><div class="lab">04 / PORTS &amp; SOCKETS</div><h2>Port Numbers และ Socket Pair</h2>
+<p>Port ยาว 16 บิต → <code>0–65535</code></p>
+<div class="tw"><table><tr><th>กลุ่ม</th><th>ช่วง</th><th>ตัวอย่าง</th></tr><tr><td>Well-Known</td><td>0–1023</td><td>80, 443, 22</td></tr><tr><td>Registered</td><td>1024–49151</td><td>3306, 5432, 8080</td></tr><tr><td>Dynamic / Private</td><td>49152–65535</td><td>Source Port ชั่วคราวของ Client</td></tr></table></div>
+<div class="tw"><table id="pt"><tr><th>Port</th><th>Service</th><th>Proto</th></tr></table></div>
+<h3>Socket = IP + Port</h3>
+<pre>Client  10.1.1.10:1099  ──►  10.1.1.254:80  Server
+Socket Pair = (Src IP, Src Port, Dst IP, Dst Port, Protocol)</pre>
+<p>Source Port คือ "ที่อยู่ตอบกลับ" ทำให้เครื่องเดียวเปิดหลายการเชื่อมต่อไปเซิร์ฟเวอร์เดียวกันได้ ใน Linux/OS จริงมักใช้ช่วง ephemeral เช่น 32768–60999 (Linux) ไม่ใช่ 1099 เสมอไป</p>
+<div class="box"><b class="k">รู้ไว้</b>DNS ใช้ 53 ทั้ง UDP (query ทั่วไป) และ TCP (zone transfer, response ใหญ่) · DHCP: Server 67, Client 68 (UDP)</div></section>
+
+<section id="s5"><div class="lab">05 / TOOLS</div><h2>เครื่องมือตรวจ Connection</h2>
+<pre>:: Windows
+netstat -ano          # ทุก connection เป็นตัวเลข + PID
+netstat -n            # IP/Port เป็นตัวเลข
+tasklist | findstr 1234
+
+# Linux (ใช้ ss แทน netstat ที่เลิกพัฒนา)
+ss -tuln              # TCP/UDP ที่ LISTEN เป็นตัวเลข
+ss -tnp               # connection + process
+nc -vz host 443       # ทดสอบว่า port เปิดไหม
+curl -v https://host  # ดู TCP/TLS/HTTP
+sudo tcpdump -i any port 53</pre>
+<div class="tw"><table><tr><th>State</th><th>ความหมาย</th></tr><tr><td>LISTENING / LISTEN</td><td>รอรับการเชื่อมต่อ</td></tr><tr><td>ESTABLISHED</td><td>เชื่อมต่อแล้ว</td></tr><tr><td>SYN_SENT</td><td>ส่ง SYN แล้ว รอ SYN-ACK (ค้างนาน = ถูก block/ปลายทางไม่ตอบ)</td></tr><tr><td>TIME_WAIT</td><td>รอก่อนปิดสมบูรณ์</td></tr><tr><td>CLOSE_WAIT</td><td>อีกฝั่งปิดแล้ว แอปเรายังไม่ปิด (เยอะมาก = bug แอปไม่ close socket)</td></tr></table></div></section>
+
+<section id="s6"><div class="lab">06 / CLOUD ENGINEER</div><h2>นำไปใช้ในงานจริง</h2>
+<div class="grid">
+<div class="card"><h4>Security Group / NACL / Firewall</h4><p>กฎอ้างอิง Protocol + Port เช่น เปิด TCP 443 เข้า, TCP 22 เฉพาะ IP แอดมิน ห้ามเปิด 0.0.0.0/0 ที่ 22/3389</p></div>
+<div class="card"><h4>Load Balancer L4 vs L7</h4><p>L4 (NLB) ตัดสินจาก IP+Port (TCP/UDP) เร็ว · L7 (ALB) อ่าน HTTP path/header</p></div>
+<div class="card"><h4>Health Check</h4><p>TCP check = พอร์ตเปิดไหม · HTTP check = ตอบ 200 ไหม แอปค้างแต่พอร์ตเปิด TCP check ยังผ่าน</p></div>
+<div class="card"><h4>NAT &amp; Ephemeral Ports</h4><p>NAT Gateway แมปหลายเครื่องผ่าน IP เดียวด้วย Port ถ้าหมด = <i>port exhaustion</i> เชื่อมต่อออกไม่ได้</p></div>
+<div class="card"><h4>DNS &amp; Latency</h4><p>DNS ใช้ UDP 53 ถ้า SG/NACL ปิด UDP 53 ระบบจะ "เน็ตไม่ได้" ทั้งที่ ping IP ได้</p></div>
+<div class="card"><h4>QUIC / HTTP/3</h4><p>วิ่งบน UDP 443 ถ้าเปิดแค่ TCP 443 ผู้ใช้จะ fallback เป็น HTTP/2</p></div></div>
+<h3>Troubleshooting Flow</h3><pre>1 DNS resolve ได้ไหม?      dig / nslookup
+2 Route ถึงไหม?            ping / traceroute
+3 Port เปิดไหม?            nc -vz host port
+4 Firewall/SG ผ่านไหม?     timeout = DROP · refused = ไม่มี service
+5 แอปตอบถูกไหม?            curl -v / logs</pre></section>
+
+<section id="s7"><div class="lab">07 / CORRECTIONS</div><h2>ข้อมูลที่แก้ไข / เพิ่มจากเอกสารต้นฉบับ</h2>
+<div class="box bad"><b class="k">แก้</b>Cisco เขียน "Transport Control Protocol" ชื่อที่ถูกคือ <b>Transmission Control Protocol</b></div>
+<div class="box bad"><b class="k">แก้</b>เอกสารระบุ Well-Known = 1–1023 บางที่และ 0–1023 บางที่ ช่วงทางการคือ <b>0–1023</b> (พอร์ต 0 สงวนไว้)</div>
+<div class="box bad"><b class="k">Typo โจทย์</b>"TFP" = <b>TFTP</b> (UDP 69) และ "UP" = <b>UDP</b></div>
+<div class="box bad"><b class="k">แก้</b>"TCP Window ขึ้นกับความน่าเชื่อถือเครือข่าย" ไม่ครบ: Window Size คือ Flow Control (ฝั่งรับ) ส่วน Congestion Window คือฝั่งส่ง</div>
+<div class="box bad"><b class="k">แก้</b>"UDP ไม่มี Flow Control" ถูก แต่เอกสารบางจุดว่า "ไม่มี Sequence Number" — แอป (เช่น RTP, QUIC) ใส่ลำดับเองได้</div>
+<div class="box ok"><b class="k">เพิ่ม</b>TCP flags/RST, teardown, UDP header fields, ss/nc/tcpdump, QUIC, L4 vs L7, port exhaustion, troubleshooting flow</div></section>
+
+<section id="s8"><div class="lab">08 / PRACTICE</div><h2>แบบฝึกหัด 12 ข้อ</h2><div id="score">คะแนน 0 / 12</div><div id="qz"></div></section>
+
+<section id="s9" style="border:0"><div class="lab">09 / PORT DRILL</div><h2>ฝึกจำ Port</h2>
+<div class="card"><p id="dq" style="font-size:1.2rem;margin-bottom:.6rem"></p><input id="di" type="number" placeholder="Port"> <button class="p" id="dc">ตอบ</button> <button id="dn">ข้อต่อไป</button><p id="dr" style="margin-top:.6rem"></p><p class="mono" id="ds">ถูก 0 / ตอบ 0</p></div></section>
+</main><footer>Network Basics 15 · เตรียมเป็น Cloud Engineer ☁️</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const P=[[20,'FTP Data','TCP'],[21,'FTP Control','TCP'],[22,'SSH','TCP'],[23,'Telnet','TCP'],[25,'SMTP','TCP'],[53,'DNS','UDP/TCP'],[67,'DHCP Server','UDP'],[68,'DHCP Client','UDP'],[69,'TFTP','UDP'],[80,'HTTP','TCP'],[110,'POP3','TCP'],[143,'IMAP','TCP'],[161,'SNMP','UDP'],[443,'HTTPS','TCP (+UDP QUIC)']];
+$('#pt').insertAdjacentHTML('beforeend',P.map(p=>`<tr><td class="mono">${p[0]}</td><td>${p[1]}</td><td>${p[2]}</td></tr>`).join(''));
+// handshake
+const H=[['SYN  seq=100','','Client ขอเริ่มเชื่อมต่อ (SYN)'],['','SYN-ACK  seq=300 ack=101','Server ตอบรับและขอเชื่อมกลับ'],['ACK  ack=301','','Client ยืนยัน → ESTABLISHED เริ่มส่งข้อมูลได้']];
+let st=0;const A=$('#arr');
+function draw(){A.innerHTML=H.map((h,i)=>`<div class="ar ${h[1]?'r':''} ${i<st?'on':''}">${h[0]?'→ '+h[0]:'← '+h[1]}</div>`).join('');$('#hsx').textContent=st?H[st-1][2]:'เริ่มต้น: Client ยังไม่ได้ติดต่อ Server'}
+$('#nx').onclick=()=>{st=Math.min(3,st+1);draw()};$('#rs').onclick=()=>{st=0;draw()};draw();
+// quiz
+const Q=[
+['TCP/UDP ทำงานที่ชั้นใดของ TCP/IP?',['Internet','Transport','Application','Network Access'],1,'Transport Layer ทั้งคู่'],
+['ข้อมูลใน Header ที่ใช้ระบุแอปพลิเคชันเป้าหมายคือ?',['MAC Address','IP Address','Port Number','Sequence Number'],2,'IP ระบุเครื่อง Port ระบุแอป'],
+['ข้อใดเป็นลักษณะของ UDP?',['Three-way handshake','Unreliable delivery','ใช้ Sequence Number จัดเรียง','Header 20 B'],1,'UDP ไม่รับประกันการส่ง Header 8 B'],
+['แอปแบบใดเหมาะกับ UDP?',['ต้องการ Flow Control','ต้องการ Delay ต่ำ ยอมสูญเสียบ้าง','ต้องเรียงลำดับเป๊ะ','ต้อง Stateful session'],1,'VoIP, สตรีม, เกม'],
+['ข้อใดถูกต้อง?',['UDP ส่งซ้ำแพ็กเก็ตที่หาย','TCP และ UDP ใช้ Port Number','Window Size ทำ Segmentation','Datagram มีทั้ง TCP+UDP Header'],1,'ทั้งคู่มี Src/Dst Port'],
+['Handshake ของ TCP เรียงถูกต้องคือ?',['SYN, ACK, SYN-ACK','ACK, SYN, FIN','SYN, SYN-ACK, ACK','SYN, FIN, ACK'],2,'SYN → SYN-ACK → ACK'],
+['Socket Pair ที่ถูกสำหรับ 10.1.1.10 ขอเว็บจาก 10.1.1.254?',['10.1.1.10:80, 10.1.1.254:1099','10.1.1.10:1099, 10.1.1.254:80','80:10.1.1.10, 1099:10.1.1.254','1099:10.1.1.10, 80:10.1.1.254'],1,'Client ใช้ Dynamic port, Server ใช้ 80'],
+['Port 8080 อยู่กลุ่มใด?',['Well-Known','Registered','Dynamic','Reserved'],1,'1024–49151 = Registered'],
+['connect ไป port แล้ว "Connection refused" ทันที แปลว่า?',['Firewall DROP','ไม่มี service ฟังที่ port (ได้ RST)','DNS ผิด','MTU ผิด'],1,'DROP จะ timeout ส่วน refused = RST'],
+['ปัญหา: ping IP ได้ แต่เปิดเว็บด้วยชื่อไม่ได้ ตรวจอะไรก่อน?',['TCP 443','UDP/TCP 53 (DNS)','Port 22','DHCP 68'],1,'ชื่อ→IP ใช้ DNS'],
+['netstat/ss แสดง CLOSE_WAIT จำนวนมาก มักเป็นเพราะ?',['Server ปิดไฟร์วอลล์','แอปเรายังไม่ close socket หลังอีกฝั่งปิด','Handshake ล้มเหลว','UDP ล้น'],1,'ตรวจ code ที่จัดการ connection'],
+['NLB (L4) ตัดสินใจ route จากอะไร?',['URL path','HTTP header','IP + Port + Protocol','Cookie'],2,'L7 ถึงจะอ่าน HTTP']];
+let sc=0;$('#qz').innerHTML=Q.map((q,i)=>`<div class="qq"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<button class="o" data-i="${i}" data-j="${j}">${o}</button>`).join('')}<div class="ex" id="e${i}">${q[3]}</div></div>`).join('');
+document.querySelectorAll('.o').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,j=+b.dataset.j,bs=document.querySelectorAll(`[data-i="${i}"]`);if(bs[0].disabled)return;bs.forEach(x=>x.disabled=true);bs[Q[i][2]].classList.add('c');if(j==Q[i][2])sc++;else b.classList.add('x');$('#e'+i).classList.add('s');$('#score').textContent=`คะแนน ${sc} / 12`});
+// drill
+let cur,n=0,ok=0;
+function nq(){cur=P[Math.random()*P.length|0];$('#dq').textContent=`${cur[1]} ใช้ Port อะไร?`;$('#di').value='';$('#dr').textContent=''}
+$('#dc').onclick=()=>{if(!$('#di').value)return;n++;const r=+$('#di').value==cur[0];if(r)ok++;$('#dr').textContent=r?'✅ ถูก!':`❌ คำตอบคือ ${cur[0]} (${cur[2]})`;$('#ds').textContent=`ถูก ${ok} / ตอบ ${n}`};
+$('#dn').onclick=nq;$('#di').onkeydown=e=>{if(e.key=='Enter')$('#dc').click()};nq();
+addEventListener('scroll',()=>{$('#bar i').style.width=scrollY/(document.body.scrollHeight-innerHeight)*100+'%'});
+</script></body></html>

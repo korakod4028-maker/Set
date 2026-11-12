@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network basics 16 — Application Layer Services</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Sarabun:wght@300;400;600;700&display=swap');
+:root{--bg:#0a0e17;--s:#111827;--s2:#1a2236;--b:#1e2d47;--a:#00d4ff;--a2:#7c3aed;--a3:#10b981;--w:#f59e0b;--d:#ef4444;--t:#e2e8f0;--m:#8a9ab3;--mono:'JetBrains Mono',monospace;--sans:'Sarabun',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:var(--t);font-family:var(--sans);line-height:1.7}
+header{position:sticky;top:0;z-index:9;background:rgba(10,14,23,.95);border-bottom:1px solid var(--b);padding:.6rem 1.2rem;display:flex;gap:1rem;align-items:center}
+.badge{font-family:var(--mono);font-size:.7rem;background:var(--a2);padding:2px 8px;border-radius:4px}header h1{font-size:.95rem;color:var(--a);flex:1}
+#pt{font-family:var(--mono);font-size:.75rem;color:var(--a)}.track{height:3px;background:var(--b)}#pf{height:100%;width:0;background:linear-gradient(90deg,var(--a2),var(--a));transition:width .4s}
+.hero{text-align:center;padding:3rem 1rem 2rem;border-bottom:1px solid var(--b)}.hero small{font-family:var(--mono);color:var(--a);letter-spacing:.15em}
+.hero h2{font-size:clamp(1.8rem,5vw,3rem);background:linear-gradient(135deg,#e2e8f0,var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:.5rem 0}.hero p{color:var(--m);max-width:600px;margin:auto}
+.wrap{max-width:1050px;margin:auto;padding:1.5rem}.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--b);margin-bottom:1.5rem}
+.tb{font-family:var(--mono);font-size:.8rem;background:none;border:0;border-bottom:2px solid transparent;color:var(--m);padding:.7rem 1.1rem;cursor:pointer;white-space:nowrap}.tb.on{color:var(--a);border-color:var(--a)}
+.p{display:none}.p.on{display:block}h3.st{font-size:1.4rem;margin-bottom:.3rem}.sub{color:var(--m);margin-bottom:1.2rem;font-size:.9rem}
+details{background:var(--s);border:1px solid var(--b);border-radius:10px;margin-bottom:.8rem}summary{cursor:pointer;padding:.9rem 1.2rem;font-weight:600;color:var(--a);list-style:none}summary::before{content:'▸ ';color:var(--a2)}details[open] summary::before{content:'▾ '}
+.body{padding:0 1.2rem 1rem;font-size:.92rem;color:#b9c6da}.body p{margin:.4rem 0}.body ul{padding-left:1.2rem}
+.box{background:var(--s2);border-left:3px solid var(--a);border-radius:0 8px 8px 0;padding:.8rem 1rem;margin:.8rem 0;font-size:.88rem;color:var(--m)}.box.w{border-color:var(--w)}.box.g{border-color:var(--a3)}.box.r{border-color:var(--d)}.box b{color:var(--t)}
+table{width:100%;border-collapse:collapse;font-size:.84rem;margin:.6rem 0}th{background:var(--s2);color:var(--a);font-family:var(--mono);font-size:.72rem;text-align:left;padding:.55rem .8rem}td{padding:.5rem .8rem;border-bottom:1px solid var(--b);color:var(--m)}tr:hover td{color:var(--t);background:var(--s2)}.tw{overflow-x:auto}
+pre{background:#0d1117;border:1px solid var(--b);border-radius:8px;padding:.9rem 1.1rem;margin:.7rem 0;font-family:var(--mono);font-size:.78rem;color:#a5d6ff;overflow-x:auto;line-height:1.8}pre i{color:var(--m);font-style:normal}pre b{color:var(--a3)}
+.flow{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin:.7rem 0}.flow span{background:var(--s2);border:1px solid var(--b);border-radius:6px;padding:.3rem .7rem;font-family:var(--mono);font-size:.75rem;color:var(--a)}.flow em{color:var(--m);font-style:normal}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.9rem}.fc{height:150px;perspective:700px;cursor:pointer}.fi{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}.fc.f .fi{transform:rotateY(180deg)}
+.ff,.fb{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--b);border-radius:10px;padding:1rem;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.9rem}.ff{background:var(--s);color:var(--a);font-weight:600}.fb{background:var(--s2);transform:rotateY(180deg);color:var(--t);font-size:.82rem}
+.q{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:1.2rem;margin-bottom:1rem}.q.ok{border-color:var(--a3)}.q.no{border-color:var(--d)}.qn{font-family:var(--mono);font-size:.7rem;color:var(--a2)}.qq{font-weight:600;margin:.3rem 0 .8rem}
+.o{display:block;width:100%;text-align:left;background:var(--s2);border:1px solid var(--b);color:var(--t);font-family:var(--sans);padding:.55rem .9rem;border-radius:8px;margin-bottom:.4rem;cursor:pointer;font-size:.88rem}.o:hover{border-color:var(--a)}.o.c{border-color:var(--a3);background:rgba(16,185,129,.12)}.o.x{border-color:var(--d);background:rgba(239,68,68,.12)}
+.ex{display:none;margin-top:.6rem;font-size:.84rem;color:var(--m)}.q.ok .ex,.q.no .ex{display:block}.btn{font-family:var(--mono);background:var(--a2);color:#fff;border:0;padding:.5rem 1.1rem;border-radius:6px;cursor:pointer}
+input[type=text]{background:var(--s2);border:1px solid var(--b);color:var(--t);padding:.5rem .8rem;border-radius:6px;width:100%;margin-bottom:.6rem;font-family:var(--mono)}
+.drill{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:.5rem 0}.drill select{background:var(--s2);color:var(--t);border:1px solid var(--b);padding:.4rem;border-radius:6px;font-family:var(--sans)}
+</style></head><body>
+<header><span class="badge">NET-16</span><h1>Network basics 16 — Application Layer Services</h1><span id="pt">0/14</span></header><div class="track"><div id="pf"></div></div>
+<div class="hero"><small>CISCO MODULE 16 · CLOUD / NETWORK ENGINEER PREP</small><h2>Application Layer Services</h2><p>DNS · DHCP · HTTP(S) · SMTP/POP3/IMAP · FTP · SSH/Telnet · VoIP — สรุป แก้ข้อมูลที่คลาดเคลื่อน เพิ่มเนื้อหาระดับงานจริง พร้อมแบบฝึกหัด</p></div>
+<div class="wrap">
+<div class="tabs"><button class="tb on" data-t="sum">📘 สรุป</button><button class="tb" data-t="cs">📋 Cheat Sheet</button><button class="tb" data-t="fc">🃏 Flashcards</button><button class="tb" data-t="lab">🧪 Lab</button><button class="tb" data-t="quiz">✅ Quiz</button></div>
+
+<div class="p on" id="sum"><h3 class="st">สรุปเนื้อหา</h3><p class="sub">กดหัวข้อเพื่อขยาย · กล่อง <b style="color:var(--w)">ส่วนเสริม</b> = เนื้อหาที่เพิ่มเกินต้นฉบับ/แก้ไขให้ถูกต้อง</p>
+
+<details open><summary>1. Client–Server และ Protocol คืออะไร</summary><div class="body">
+<p><b>Client</b> = ผู้ร้องขอ (Browser, PC) · <b>Server</b> = ผู้ให้บริการ (Web/DNS/Mail Server) — เป็น "บทบาท" ไม่ใช่ชนิดเครื่อง เครื่องเดียวเป็นได้ทั้งสองอย่าง</p>
+<p><b>Protocol</b> = ชุดกฎที่กำหนดรูปแบบข้อความ ลำดับการสื่อสาร ต้นทาง/ปลายทาง และการจัดการข้อผิดพลาด ทำงานได้ทุกชั้นของ TCP/IP (ไม่ได้อยู่แค่ Network Access Layer และไม่ได้ใช้เฉพาะเครือข่ายระยะไกล)</p>
+<div class="box g"><b>PDU / Encapsulation:</b> Data (App) → Segment (TCP) / Datagram (UDP) → Packet (IP) → Frame (Ethernet) → Bits</div></div></details>
+
+<details><summary>2. DNS — แปลงชื่อเป็น IP (UDP/TCP 53)</summary><div class="body">
+<div class="flow"><span>พิมพ์ www.cisco.com</span><em>→</em><span>DNS Query</span><em>→</em><span>DNS Response (IP)</span><em>→</em><span>HTTP Request</span><em>→</em><span>HTTP Response</span><em>→</em><span>Browser render</span></div>
+<p>DNS Request ≠ HTTP Request: DNS ขอ "ที่อยู่" ส่วน HTTP ขอ "หน้าเว็บ" · ถ้ามี <b>DNS Cache</b> ก็ข้ามการถามได้</p>
+<p>ที่บ้าน: ISP ให้ DNS address แก่ Router → Router แจกต่อผ่าน DHCP (และมักทำหน้าที่ DNS Forwarder)</p>
+<div class="box w"><b>ส่วนเสริม:</b> DNS Record ที่ต้องรู้ — <b>A</b> (name→IPv4), <b>AAAA</b> (IPv6), <b>CNAME</b> (alias), <b>MX</b> (mail server ของโดเมน), <b>NS</b> (name server), <b>TXT</b> (SPF/DKIM/verify), <b>PTR</b> (IP→name), <b>SOA</b>. ใช้ UDP เป็นหลัก แต่ใช้ TCP เมื่อคำตอบใหญ่เกิน, Zone Transfer, หรือ DNS over TLS (853). เครื่องมือ: <code>nslookup</code>, <code>dig</code>, <code>host</code></div>
+<pre><i># Windows / Linux</i>
+nslookup www.cisco.com
+nslookup -type=MX gmail.com
+dig +short A www.cisco.com
+dig @8.8.8.8 www.cisco.com <i># ถามผ่าน DNS Server ที่เลือก</i>
+ipconfig /flushdns <i># Windows ล้าง cache</i></pre></div></details>
+
+<details><summary>3. DHCP — แจก IP อัตโนมัติ (UDP 67 server / 68 client)</summary><div class="body">
+<p>แจก IP, Subnet Mask, Default Gateway, DNS Server · ถ้าไม่มี DHCP ต้องตั้ง Static เอง</p>
+<div class="flow"><span>D iscover (broadcast)</span><em>→</em><span>O ffer</span><em>→</em><span>R equest</span><em>→</em><span>A cknowledge</span></div>
+<div class="box w"><b>ส่วนเสริม:</b> IP ที่ได้มี <b>Lease time</b> (ต่ออายุที่ 50% ของ lease) · ถ้าไม่ได้ DHCP เครื่อง Windows จะได้ <b>APIPA 169.254.x.x</b> = สัญญาณว่า "DHCP Server ติดต่อไม่ได้" · DHCP Relay (<code>ip helper-address</code>) ส่ง Discover ข้ามเครือข่ายไปหา server กลาง · Server/Router ควรกัน Static IP ออกจาก Pool</div>
+<pre>ipconfig /all <i># ดู DHCP Server, Lease</i>
+ipconfig /release &amp;&amp; ipconfig /renew
+sudo dhclient -v eth0 <i># Linux</i></pre></div></details>
+
+<details><summary>4. HTTP / HTTPS / HTML (TCP 80 / 443)</summary><div class="body">
+<p><b>HTTP</b> = โปรโตคอลรับส่งเว็บ · <b>HTML</b> = ภาษา Markup กำหนดโครงสร้างหน้าเว็บ (ไม่ใช่ Protocol — ตัวหลอกยอดนิยมในข้อสอบ) · <b>HTTPS</b> = HTTP + TLS (เข้ารหัส + ตรวจตัวตน server ด้วย certificate)</p>
+<p>HTTP ทำงานบน TCP จึงต้อง <b>3-way handshake</b> (SYN → SYN-ACK → ACK) และมี ACK → เกิด <b>Traffic Overhead</b> แลกกับความน่าเชื่อถือ</p>
+<div class="tw"><table><tr><th>Method</th><th>หน้าที่</th><th>Status code</th><th>ความหมาย</th></tr><tr><td>GET</td><td>ขอข้อมูล</td><td>200 / 301 / 302</td><td>OK / Redirect</td></tr><tr><td>POST</td><td>ส่งข้อมูล</td><td>403 / 404</td><td>Forbidden / Not Found</td></tr><tr><td>PUT</td><td>สร้าง/แทนที่</td><td>500 / 502 / 503</td><td>Server error / Bad gateway / Unavailable</td></tr><tr><td>DELETE</td><td>ลบ</td><td>401</td><td>ต้อง Authenticate</td></tr></table></div>
+<div class="box w"><b>ส่วนเสริม:</b> HTTP/1.1 และ HTTP/2 ใช้ TCP แต่ <b>HTTP/3 ใช้ QUIC บน UDP 443</b> · ห้ามใช้ HTTP ธรรมดากับข้อมูลสำคัญ</div>
+<pre>curl -I https://www.cisco.com <i># ดู header + status</i>
+curl -v http://example.com <i># ดู request/response ทั้งหมด</i></pre></div></details>
+
+<details><summary>5. Email — SMTP / POP3 / IMAP4</summary><div class="body">
+<div class="flow"><span>Email Client</span><em>—SMTP→</em><span>Mail Server ผู้ส่ง</span><em>—SMTP→</em><span>Mail Server ผู้รับ</span><em>—POP3/IMAP→</em><span>Client ผู้รับ</span></div>
+<div class="tw"><table><tr><th>Protocol</th><th>หน้าที่</th><th>Port</th><th>แบบเข้ารหัส</th></tr><tr><td>SMTP</td><td>ส่ง</td><td>25</td><td>587 (submission, STARTTLS) / 465 (implicit TLS)</td></tr><tr><td>POP3</td><td>ดาวน์โหลด (ค่าเริ่มต้นลบจาก server)</td><td>110</td><td>995</td></tr><tr><td>IMAP4</td><td>เข้าถึง/ซิงก์ ต้นฉบับอยู่บน server</td><td>143</td><td>993</td></tr></table></div>
+<div class="box w"><b>ส่วนเสริม:</b> Client ส่งเมลควรใช้ 587 ส่วน 25 ใช้ server-to-server (ISP หลายแห่งบล็อก 25 ขาออก) · Mail server หา server ปลายทางจาก <b>MX record</b> · กันปลอมอีเมลด้วย SPF/DKIM/DMARC (เก็บใน TXT record)</div>
+<div class="box g"><b>ข้อสอบ:</b> "ส่งและรับอีเมล เลือก 2" = <b>SMTP + POP</b> · "Client ดึงอีเมล เลือก 2" = <b>POP + IMAP</b></div></div></details>
+
+<details><summary>6. FTP — ถ่ายโอนไฟล์ (TCP 21 control / 20 data)</summary><div class="body">
+<p>2 การเชื่อมต่อ: <b>Control (21)</b> ส่งคำสั่ง · <b>Data</b> ส่งไฟล์ · Client เป็นฝ่ายเริ่ม Control เสมอ · ไฟล์ใหญ่ไม่ได้แปลว่าต้องมีมากกว่า 2 connection</p>
+<div class="tw"><table><tr><th>โหมด</th><th>ใครเริ่ม Data Connection</th><th>พอร์ต</th></tr><tr><td>Active</td><td>Server → Client</td><td>Server ใช้ 20 เป็นต้นทาง</td></tr><tr><td>Passive</td><td>Client → Server</td><td>พอร์ตสูงที่ server กำหนด (ไม่ใช่ 20) — Lab ของ Cisco เป็น Passive</td></tr></table></div>
+<p>คำสั่ง: <code>put</code>=upload · <code>get</code>=download · <code>dir</code> · <code>rename</code> · <code>delete</code> · <code>cd</code> · <code>pwd</code> · <code>quit</code> · Login สำเร็จ = <b>230</b></p>
+<div class="box r"><b>FTP ไม่เข้ารหัส</b> (user/pass เป็น plaintext) → ใช้ <b>SFTP</b> (ทำงานบน SSH, port 22 — คนละโปรโตคอลกับ FTP) หรือ <b>FTPS</b> (FTP+TLS, 990)</div></div></details>
+
+<details><summary>7. SSH vs Telnet — Remote Access</summary><div class="body">
+<div class="tw"><table><tr><th></th><th>Telnet</th><th>SSH</th></tr><tr><td>Port</td><td>TCP 23</td><td>TCP 22</td></tr><tr><td>เข้ารหัส</td><td>ไม่มี (plaintext)</td><td>มี</td></tr><tr><td>Authentication</td><td>มี (แต่ส่งรหัสผ่านโล่ง)</td><td>มี (password / public key)</td></tr></table></div>
+<div class="box w"><b>แก้ความเข้าใจ:</b> ข้อ "ข้อดีของ SSH" คำตอบคือ <b>การสื่อสารที่ปลอดภัย (encryption)</b> — ไม่ใช่ "รองรับ authentication" เพราะ Telnet ก็ถามรหัสผ่านเช่นกัน</div>
+<div class="box w"><b>ส่วนเสริม:</b> งานจริงใช้ <b>SSH key</b> แทนรหัสผ่าน · ปิด root login · SSH ทำ port forwarding/tunnel และ <code>scp</code>/<code>sftp</code> ได้ · Prompt <code>Router&gt;</code> = User EXEC, <code>Router#</code> = Privileged EXEC</div>
+<pre>ssh -l admin 64.100.1.1 <i># = ssh admin@64.100.1.1</i>
+ssh-keygen -t ed25519
+ssh-copy-id user@server
+<i># Router: เปิด SSH</i>
+hostname HQ
+ip domain-name lab.local
+crypto key generate rsa modulus 2048
+username admin secret ********
+line vty 0 4
+ transport input ssh
+ login local</pre>
+<p><b>Lab ใน Packet Tracer:</b> ping 64.100.1.1 สำเร็จ ≠ เข้า Router ได้ — Telnet ถูกปิดโดย config จึงขึ้น "closed by foreign host" แต่ SSH เข้าได้</p></div></details>
+
+<details><summary>8. Text Messaging และ VoIP</summary><div class="body">
+<p><b>Text messaging</b>: ใช้ได้ทั้งมือถือ คอมพิวเตอร์ และเว็บ (Web-based / Standalone client) ส่งไฟล์ วิดีโอ เสียงได้ → "ใช้ได้เฉพาะสมาร์ตโฟน" = <b>False</b></p>
+<p><b>VoIP</b>: เสียง Analog → Digital → Encapsulate ใน IP Packet → ปลายทางแปลงกลับ · โทรหาเบอร์ทั่วไปต้องผ่าน <b>PSTN Gateway</b> · <b>Call Manager</b> จัดการสาย ไม่จำเป็นต้องส่งเสียงทั้งหมด</p>
+<div class="box w"><b>ส่วนเสริม:</b> VoIP ไวต่อ delay/jitter/packet loss → ใช้ <b>UDP + RTP</b> สำหรับเสียง, <b>SIP</b> (5060/5061) สำหรับสร้างสาย และตั้ง <b>QoS</b> ให้ voice มาก่อน</div></div></details>
+
+<details><summary>9. ระบบอื่นที่ Engineer ต้องเจอ</summary><div class="body"><div class="tw"><table><tr><th>Protocol</th><th>Port</th><th>หน้าที่</th></tr><tr><td>TFTP</td><td>UDP 69</td><td>ถ่ายไฟล์แบบง่าย ไม่มี login (backup IOS/config)</td></tr><tr><td>NTP</td><td>UDP 123</td><td>ซิงก์เวลา (จำเป็นต่อ log และ certificate)</td></tr><tr><td>SNMP</td><td>UDP 161/162</td><td> monitor อุปกรณ์ (ใช้ v3 ที่เข้ารหัส)</td></tr><tr><td>Syslog</td><td>UDP 514</td><td>ส่ง log</td></tr><tr><td>LDAP / LDAPS</td><td>389 / 636</td><td>directory/ยืนยันตัวตน</td></tr><tr><td>RDP</td><td>TCP 3389</td><td>Remote desktop Windows</td></tr></table></div></div></details>
+</div>
+
+<div class="p" id="cs"><h3 class="st">Cheat Sheet</h3><p class="sub">ค้นหาด้วยชื่อ / พอร์ต / หน้าที่</p><input type="text" id="srch" placeholder="ลอง: 443, dhcp, ส่งอีเมล, remote…">
+<div class="tw"><table id="pt-tbl"><thead><tr><th>Protocol</th><th>Port</th><th>Transport</th><th>หน้าที่</th></tr></thead><tbody></tbody></table></div>
+<h3 class="st" style="margin-top:1.5rem">โจทย์ Cisco: คำใบ้ → คำตอบ</h3>
+<div class="tw"><table><tr><th>คำใบ้</th><th>ตอบ</th></tr><tr><td>automatically configure IP</td><td>DHCP</td></tr><tr><td>resolve names / web address to IP</td><td>DNS</td></tr><tr><td>send email</td><td>SMTP</td></tr><tr><td>retrieve email (2)</td><td>POP + IMAP</td></tr><tr><td>send and receive email (2)</td><td>SMTP + POP</td></tr><tr><td>virtual terminal access (2)</td><td>SSH + Telnet</td></tr><tr><td>web browser ↔ web server (2)</td><td>DNS + HTTP</td></tr><tr><td>transfer web pages</td><td>HTTP (HTML ไม่ใช่ protocol)</td></tr><tr><td>transfer files</td><td>FTP</td></tr></table></div>
+<h3 class="st" style="margin-top:1.5rem">Troubleshooting: "ต่อ Wi-Fi ได้ แต่เข้าเว็บไม่ได้"</h3>
+<div class="flow"><span>1 ipconfig</span><em>มี IP?</em><span>2 ping Gateway</span><em>ถึง?</em><span>3 ping 8.8.8.8</span><em>ถึง?</em><span>4 nslookup</span><em>resolve?</em><span>5 curl -I</span></div>
+<div class="tw"><table><tr><th>อาการ</th><th>สาเหตุที่น่าสงสัย</th></tr><tr><td>ได้ 169.254.x.x</td><td>DHCP ล่ม/สายหลุด/VLAN ผิด</td></tr><tr><td>ping 8.8.8.8 ได้ แต่ ping google.com ไม่ได้</td><td>DNS Server ผิด/ล่ม → ปัญหา DNS</td></tr><tr><td>nslookup ได้ แต่ curl ไม่ติด</td><td>firewall/port 80,443 ถูกบล็อก หรือ web server ล่ม</td></tr><tr><td>SSH: connection refused / timeout</td><td>sshd ไม่รัน / firewall ปิด 22 (refused = port ปิด, timeout = ถูก drop)</td></tr></table></div></div>
+
+<div class="p" id="fc"><h3 class="st">Flashcards</h3><p class="sub">คลิกเพื่อพลิก</p><div class="grid" id="fcg"></div></div>
+
+<div class="p" id="lab"><h3 class="st">Lab & แบบฝึกปฏิบัติ</h3><p class="sub">ทบทวน Packet Tracer ทั้ง 3 แล็บ + ฝึกวินิจฉัย</p>
+<div class="box g"><b>Lab A — Observe Web Request:</b> ping ciscolearn.web.com → เปิดเว็บ → ดู index.html ที่ Server &gt; Services &gt; HTTP → Simulation Mode (Filter: TCP, HTTP) → Complex PDU: HTTP, Source Port 1000, Interval 120 s → เห็น SYN, SYN-ACK, ACK ก่อน HTTP</div>
+<pre>PC&gt; ftp 209.165.200.226 <i># user: student / pass: class → 230 Logged in</i>
+ftp&gt; put sampleFile.txt
+ftp&gt; rename sampleFile.txt sampleFile_FTP.txt
+ftp&gt; get sampleFile_FTP.txt
+ftp&gt; delete sampleFile_FTP.txt
+ftp&gt; quit
+C:\&gt; telnet 64.100.1.1 <i>→ closed by foreign host</i>
+C:\&gt; ssh -l admin 64.100.1.1 <i>→ password: class → HQ#</i></pre>
+<h3 class="st" style="margin-top:1.2rem">Drill: จับคู่สถานการณ์กับโปรโตคอล</h3><div id="drill"></div></div>
+
+<div class="p" id="quiz"><h3 class="st">Quiz 14 ข้อ</h3><p class="sub">รวมข้อสอบ Cisco ที่ให้มา + ข้อฝึกระดับงานจริง</p><div id="qc"></div><div class="q" id="res" style="display:none"><b id="sc"></b> <button class="btn" onclick="location.reload()">ทำใหม่</button></div></div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+document.querySelectorAll('.tb').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tb,.p').forEach(e=>e.classList.remove('on'));b.classList.add('on');$('#'+b.dataset.t).classList.add('on')});
+const PORTS=[["FTP","20/21","TCP","ถ่ายโอนไฟล์ (21 control, 20 active data)"],["SSH / SFTP","22","TCP","Remote access ปลอดภัย / ถ่ายไฟล์ผ่าน SSH"],["Telnet","23","TCP","Remote access ไม่เข้ารหัส"],["SMTP","25","TCP","ส่งอีเมลระหว่าง server"],["DNS","53","UDP/TCP","แปลงชื่อเป็น IP"],["DHCP","67/68","UDP","แจก IP อัตโนมัติ (server/client)"],["TFTP","69","UDP","ถ่ายไฟล์แบบง่าย"],["HTTP","80","TCP","รับส่งเว็บ"],["POP3","110","TCP","ดาวน์โหลดอีเมล"],["NTP","123","UDP","ซิงก์เวลา"],["IMAP4","143","TCP","เข้าถึง/ซิงก์อีเมลบน server"],["SNMP","161/162","UDP","monitor อุปกรณ์"],["HTTPS","443","TCP (HTTP/3: UDP)","เว็บเข้ารหัส TLS"],["SMTP submission","587","TCP","Client ส่งอีเมล (STARTTLS)"],["SMTPS","465","TCP","SMTP + implicit TLS"],["IMAPS","993","TCP","IMAP + TLS"],["POP3S","995","TCP","POP3 + TLS"],["RDP","3389","TCP","Remote desktop"]];
+function rp(f=''){f=f.toLowerCase();$('#pt-tbl tbody').innerHTML=PORTS.filter(r=>r.join(' ').toLowerCase().includes(f)).map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')}
+rp();$('#srch').oninput=e=>rp(e.target.value);
+const FC=[["DNS ทำอะไร / port?","แปลงชื่อโดเมนเป็น IP · 53 UDP/TCP"],["DHCP DORA?","Discover, Offer, Request, Acknowledge"],["169.254.x.x หมายถึง?","APIPA — เครื่องไม่ได้ IP จาก DHCP"],["HTTP vs HTML?","HTTP = protocol รับส่งเว็บ · HTML = ภาษา markup"],["HTTPS port / ใช้อะไรเข้ารหัส?","443 · TLS"],["SMTP / POP3 / IMAP4 port?","25 / 110 / 143"],["POP3 vs IMAP4?","POP3 ดาวน์โหลด · IMAP เก็บต้นฉบับบน server ซิงก์หลายเครื่อง"],["FTP ใช้กี่ connection?","2 — control (21) + data"],["Active vs Passive FTP?","Active: server เริ่ม data จาก port 20 · Passive: client เริ่ม"],["FTP คำสั่ง upload/download?","put / get"],["SSH vs Telnet?","22 เข้ารหัส / 23 plaintext"],["ping สำเร็จ แปลว่าอะไร?","ถึงกันระดับ IP/ICMP เท่านั้น ไม่รับประกันว่า SSH/HTTP ใช้ได้"],["3-way handshake?","SYN → SYN-ACK → ACK"],["ทำไม TCP มี overhead?","handshake + ACK + header แลกกับความน่าเชื่อถือ"],["VoIP ทำงานอย่างไร?","Analog → Digital → ใส่ใน IP packet → ส่ง"],["PSTN Gateway?","เชื่อม IP network กับโทรศัพท์ทั่วไป"],["Inbound/Outbound?","ขึ้นกับมุมมองอุปกรณ์ — request ของ PC เป็น outbound ที่ PC และ inbound ที่ server"],["MX record?","ระบุ mail server ของโดเมน"]];
+$('#fcg').innerHTML=FC.map(c=>`<div class="fc" onclick="this.classList.toggle('f')"><div class="fi"><div class="ff">${c[0]}</div><div class="fb">${c[1]}</div></div></div>`).join('');
+const DR=[["ตั้งค่า Router จากบ้านอย่างปลอดภัย","SSH"],["เครื่องใหม่ในออฟฟิศต้องได้ IP เอง","DHCP"],["เว็บเปิดด้วย IP ได้ แต่เปิดด้วยชื่อไม่ได้","DNS"],["ส่งไฟล์เว็บขึ้น server ที่ติด firewall ต้องเลือกโหมด","FTP"],["ดูอีเมลเดิมได้ทั้งมือถือและโน้ตบุ๊ก","IMAP"],["ส่งอีเมลออกจาก Outlook","SMTP"],["เว็บธนาคารต้องเข้ารหัส","HTTPS"],["Router log เวลาไม่ตรงกัน","NTP"]];
+const OPT=["SSH","DHCP","DNS","FTP","IMAP","SMTP","HTTPS","NTP"];
+$('#drill').innerHTML=DR.map((d,i)=>`<div class="drill"><span style="flex:1;min-width:230px">${d[0]}</span><select id="d${i}"><option value="">เลือก…</option>${OPT.map(o=>`<option>${o}</option>`).join('')}</select><span id="r${i}"></span></div>`).join('')+'<button class="btn" onclick="chk()">ตรวจ</button>';
+function chk(){DR.forEach((d,i)=>{const v=$('#d'+i).value;$('#r'+i).textContent=v==d[1]?'✅':'❌ '+(v?'':'ยังไม่เลือก')})}
+const Q=[
+["Protocol ใดที่ Client ใช้ส่งอีเมลไปยัง Mail Server?",["IMAP","HTTP","SMTP","POP"],2,"SMTP = Send Mail. POP/IMAP ใช้รับ, HTTP ใช้เว็บ"],
+["ข้อใดเป็นคุณสมบัติของ IMAP?",["อัปโหลดอีเมลไปยัง server","ดาวน์โหลดสำเนา โดยเก็บต้นฉบับไว้บน server","รอรับ request ที่ port 110"],1,"110 คือ POP3 · IMAP ใช้ 143 และซิงก์หลายอุปกรณ์"],
+["จริงหรือเท็จ: Text messaging ใช้ได้เฉพาะสมาร์ตโฟน",["True","False"],1,"ใช้ได้บนคอมพิวเตอร์ แท็บเล็ต และเว็บด้วย"],
+["สอง protocol ที่ใช้ในการส่งและรับอีเมล",["SMTP + POP","HTTP + FTP","SSH + DNS","DHCP + SMTP"],0,"SMTP ส่ง, POP3 (หรือ IMAP) รับ"],
+["ลักษณะของ FTP 2 ข้อ (เลือกที่ถูกที่สุดใน 4)",["ใช้ connection แรกควบคุม และ connection ที่สองส่งไฟล์","ไฟล์ใหญ่ต้องใช้ connection มากกว่า 2","Server เป็นฝ่ายเริ่ม control connection","FTP ปกติเข้ารหัสข้อมูล"],0,"Client เป็นฝ่ายเริ่ม control (21) แล้วมี data connection แยก · FTP ปกติไม่เข้ารหัส"],
+["ข้อดีของ SSH เหนือ Telnet",["เร็วกว่า","ใช้ง่ายกว่า","สื่อสารปลอดภัย (encryption)","มี authentication แต่ Telnet ไม่มี"],2,"ทั้งคู่มี authentication แต่ Telnet ส่งรหัสผ่านแบบ plaintext"],
+["PC พิมพ์ www.example.com แต่ยังไม่รู้ IP ใช้อะไรก่อน?",["HTTP","DNS","TFTP","TCP ACK"],1,"DNS Query มาก่อน HTTP Request"],
+["ลำดับใดถูกต้องตอนเปิดเว็บ (ไม่มี cache)?",["HTTP → DNS → TCP","DNS → TCP handshake → HTTP request → response","TCP → HTTP → DNS","DNS → HTTP → SYN"],1,"ต้องรู้ IP ก่อน → ตั้ง TCP → ค่อยส่ง HTTP"],
+["เครื่องได้ IP 169.254.10.5 บ่งชี้ว่า",["DNS ผิด","ติดต่อ DHCP Server ไม่ได้","Gateway ผิด","HTTPS ถูกบล็อก"],1,"APIPA เกิดเมื่อ DHCP ไม่ตอบ"],
+["ping 8.8.8.8 ได้ แต่ ping google.com ไม่ได้ ปัญหาน่าจะอยู่ที่",["สายแลน","DHCP lease","DNS","TCP handshake"],2,"IP ถึงกันได้ แต่ resolve ชื่อไม่ได้"],
+["Client ที่ส่งอีเมลผ่านผู้ให้บริการ ควรตั้ง SMTP port ใด",["110","587","143","53"],1,"587 submission (ISP มักบล็อก 25 ขาออก)"],
+["ping Router สำเร็จ แต่ SSH เข้าไม่ได้ ข้อใดสมเหตุผลที่สุด",["ping ผิดปกติ","Router ไม่ได้เปิด SSH/ถูก firewall บล็อก port 22","DNS ล่ม","DHCP หมดอายุ"],1,"ping = ICMP ไม่ได้บอกสถานะ service"],
+["HTTP/3 ใช้ transport อะไร?",["TCP 80","QUIC บน UDP 443","TCP 8080","SCTP"],1,"HTTP/1.1,2 ใช้ TCP · HTTP/3 ใช้ QUIC"],
+["Passive FTP ต่างจาก Active อย่างไร",["Client เริ่ม data connection","ไม่ใช้ control","ใช้ UDP","เข้ารหัสทั้งหมด"],0,"แก้ปัญหา firewall/NAT ฝั่ง client"]];
+let done=0,ok=0;const N=Q.length;
+$('#qc').innerHTML=Q.map((q,i)=>`<div class="q" id="q${i}"><div class="qn">Q${i+1}/${N}</div><div class="qq">${q[0]}</div>${q[1].map((o,j)=>`<button class="o" onclick="ans(${i},${j})">${o}</button>`).join('')}<div class="ex">${q[3]}</div></div>`).join('');
+function ans(i,j){const c=$('#q'+i);if(c.classList.contains('ok')||c.classList.contains('no'))return;const r=j==Q[i][2];c.classList.add(r?'ok':'no');const o=c.querySelectorAll('.o');o[Q[i][2]].classList.add('c');if(!r)o[j].classList.add('x');done++;if(r)ok++;$('#pt').textContent=done+'/'+N;$('#pf').style.width=done/N*100+'%';if(done==N){$('#res').style.display='block';$('#sc').textContent='คะแนน '+ok+'/'+N+(ok>=12?' 🏆 พร้อมมาก':ok>=9?' 👍 ทบทวนข้อที่ผิดอีกนิด':' 📖 กลับไปอ่านสรุปอีกรอบ')}}
+$('#pt').textContent='0/'+N;
+</script></body></html>
