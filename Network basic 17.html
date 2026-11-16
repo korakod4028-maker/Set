@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Network basic 17</title>
+<style>
+:root{--bg:#0f1420;--card:#171e2e;--tx:#e6ebf5;--mu:#93a0b8;--ac:#4fb3ff;--ok:#3ddc97;--bad:#ff6b6b;--wa:#ffc857;--bd:#27314a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f6fb;--card:#fff;--tx:#18202f;--mu:#566178;--ac:#0b6fc2;--ok:#12805a;--bad:#c62f2f;--wa:#9a6a00;--bd:#d8deeb}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.65 system-ui,"Noto Sans Thai",Tahoma,sans-serif}
+header{padding:20px 16px 8px;max-width:960px;margin:auto}h1{margin:0;font-size:1.6rem}header p{margin:4px 0;color:var(--mu)}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 16px;max-width:960px;margin:auto;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+nav button{flex:none;background:var(--card);color:var(--mu);border:1px solid var(--bd);border-radius:20px;padding:7px 14px;font:inherit;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{max-width:960px;margin:auto;padding:8px 16px 40px}section{display:none}section.on{display:block}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin:12px 0}
+h2{font-size:1.25rem;margin:18px 0 6px}h3{font-size:1.05rem;margin:0 0 6px;color:var(--ac)}
+code,pre{font-family:ui-monospace,Consolas,monospace;background:rgba(127,127,127,.15);border-radius:5px}code{padding:1px 6px}pre{padding:10px;overflow-x:auto;margin:6px 0}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:520px}th,td{border:1px solid var(--bd);padding:7px 9px;text-align:left;vertical-align:top}th{background:rgba(127,127,127,.12)}
+.tip{border-left:4px solid var(--wa);padding:6px 12px;margin:10px 0;background:rgba(255,200,87,.08)}.fix{border-left:4px solid var(--bad);padding:6px 12px;margin:10px 0;background:rgba(255,107,107,.08)}.add{border-left:4px solid var(--ok);padding:6px 12px;margin:10px 0;background:rgba(61,220,151,.08)}
+select,button.b{font:inherit;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:7px 10px}button.b{cursor:pointer;background:var(--ac);color:#fff;border:0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:6px 0}.row label{min-width:210px}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 12px;background:transparent;color:var(--tx);border:1px solid var(--bd);border-radius:8px;font:inherit;cursor:pointer}
+.opt.ok{border-color:var(--ok);background:rgba(61,220,151,.15)}.opt.no{border-color:var(--bad);background:rgba(255,107,107,.15)}
+.ex{margin-top:8px;color:var(--mu)}.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ok);width:0;transition:.3s}
+</style></head><body>
+<header><h1>Network basic 17 — Network Troubleshooting</h1><p>ping · ipconfig · nslookup · tracert · netstat — สรุป คำสั่ง วิเคราะห์อาการ และแบบฝึกหัด สำหรับเตรียมเป็น Cloud Engineer</p></header>
+<nav id="nav"></nav>
+<main>
+
+<section id="s0"><h2>1. แนวคิดหลักของ Troubleshooting</h2>
+<div class="c"><h3>เป้าหมาย: "แยกชั้นปัญหา" ให้เร็วที่สุด</h3>
+ปัญหาเครือข่ายอาจอยู่ที่ <b>IP config → Local network → Gateway/Routing → DNS → Application/Port</b> ห้ามเดาว่า "เน็ตเสีย" ให้ทดสอบทีละชั้นแล้วตัดสาเหตุออก
+<pre>1) ipconfig /all        → IP, Mask, Gateway, DNS ถูกไหม? (169.254.x.x = DHCP ล้มเหลว)
+2) ping 127.0.0.1       → TCP/IP stack ของเครื่องเองปกติไหม
+3) ping [Gateway]       → ออกจาก LAN ได้ไหม
+4) ping 8.8.8.8         → ออกอินเทอร์เน็ตด้วย IP ได้ไหม
+5) ping google.com      → DNS แปลงชื่อได้ไหม (ไม่ได้ → nslookup)
+6) tracert [ปลายทาง]    → หยุดที่ hop ไหน
+7) netstat -an          → Port/Connection ของ App เปิดอยู่ไหม</pre></div>
+<div class="c"><h3>5 คำสั่ง = 5 คำถาม (ออกข้อสอบบ่อย)</h3>
+<div class="tw"><table><tr><th>คำสั่ง</th><th>คำถามที่ตอบ</th></tr>
+<tr><td><code>ipconfig</code></td><td>เครื่องฉันตั้งค่า IP อย่างไร</td></tr>
+<tr><td><code>ping</code></td><td>ติดต่อปลายทางได้ไหม</td></tr>
+<tr><td><code>nslookup</code></td><td>ชื่อนี้แปลงเป็น IP อะไร (ถาม DNS ตรง ๆ)</td></tr>
+<tr><td><code>tracert</code></td><td>packet ผ่าน router ตัวไหนบ้าง</td></tr>
+<tr><td><code>netstat</code></td><td>เครื่องกำลังเชื่อมต่อ/เปิดพอร์ตอะไรอยู่</td></tr></table></div></div>
+<div class="tip"><b>หลักสำคัญ:</b> ping ผ่าน = ถึง IP ได้ (Layer 3) เท่านั้น ไม่ได้พิสูจน์ว่า Application ใช้ได้ ส่วน ping ไม่ผ่าน ≠ เครือข่ายเสียเสมอไป เพราะ Firewall/Security Group อาจบล็อก ICMP</div></section>
+
+<section id="s1"><h2>2. Cheat Sheet คำสั่ง</h2>
+<div class="c"><h3>ipconfig (Windows)</h3><div class="tw"><table>
+<tr><th>คำสั่ง</th><th>หน้าที่</th></tr>
+<tr><td><code>ipconfig</code></td><td>แสดง IPv4, Subnet Mask, Default Gateway</td></tr>
+<tr><td><code>ipconfig /all</code></td><td>เพิ่ม MAC (Physical Address), DHCP Server, DNS Servers, Lease</td></tr>
+<tr><td><code>ipconfig /release</code></td><td>ปล่อย DHCP lease (IPv4 หลุดชั่วคราว)</td></tr>
+<tr><td><code>ipconfig /renew</code></td><td>ขอ IP ใหม่จาก DHCP (ใช้กับ Static ไม่ได้)</td></tr>
+<tr><td><code>ipconfig /displaydns</code> · <code>/flushdns</code></td><td>ดู/ล้าง DNS cache ของเครื่อง</td></tr></table></div></div>
+<div class="c"><h3>ping — option ที่ใช้จริง</h3><div class="tw"><table>
+<tr><th>Windows</th><th>Linux/macOS</th><th>หน้าที่</th></tr>
+<tr><td><code>-t</code></td><td>(ค่าเริ่มต้นส่งต่อเนื่อง, Ctrl+C หยุด)</td><td>ส่งต่อเนื่อง</td></tr>
+<tr><td><code>-n 10</code></td><td><code>-c 10</code></td><td>กำหนดจำนวนครั้ง</td></tr>
+<tr><td><code>-l 1472</code></td><td><code>-s 1472</code></td><td>ขนาด payload</td></tr>
+<tr><td><code>-f</code> (ใช้คู่ -l)</td><td><code>-M do</code></td><td>Don't Fragment (ทดสอบ MTU)</td></tr>
+<tr><td><code>-w 2000</code> (ms)</td><td><code>-W 2</code> (วินาที)</td><td>timeout</td></tr>
+<tr><td><code>-a</code></td><td><code>-a</code> ต่างความหมาย</td><td>Windows: IP→Hostname</td></tr>
+<tr><td><code>-4</code> / <code>-6</code></td><td><code>ping -4</code> / <code>ping6</code></td><td>บังคับ IPv4 / IPv6</td></tr></table></div></div>
+<div class="c"><h3>nslookup · tracert · netstat</h3>
+<pre>nslookup www.cisco.com            # ถาม DNS ที่ตั้งไว้
+nslookup www.cisco.com 8.8.8.8    # ถาม DNS ตัวที่ระบุ (แยกว่า DNS ตัวเดิมเสียไหม)
+tracert -d www.cisco.com          # -d ไม่ resolve ชื่อ เร็วกว่า
+netstat -an                       # ทุก connection/port แบบตัวเลข
+netstat -ano                      # + PID ของโปรเซส
+netstat -r                        # ตาราง routing</pre>
+<b>อ่านผล tracert:</b> <code>* * *</code> = hop นั้นไม่ตอบ ICMP (อาจแค่ปิด ICMP ไม่ได้แปลว่าเสีย) ถ้าทุก hop หลังจากนั้นเป็น * ทั้งหมดจึงสงสัยว่าเส้นทางขาดตรงนั้น</div></section>
+
+<section id="s2"><h2>3. Ping ในเชิงลึก</h2>
+<div class="c"><h3>ICMP คืออะไร</h3>ICMP อยู่ที่ <b>Layer 3 (Network)</b> ไม่ใช้ TCP/UDP จึง<b>ไม่มีหมายเลขพอร์ต</b> Ping ใช้ Echo Request (Type 8) และ Echo Reply (Type 0) ใน IPv6 ใช้ ICMPv6 ซึ่งสำคัญกว่ามาก (ND, PMTUD) จึงไม่ควรบล็อกทั้งหมด</div>
+<div class="c"><h3>อ่านผลลัพธ์</h3><pre>Reply from 10.1.1.1: bytes=32 time=2ms TTL=64</pre>
+<code>time</code> = RTT (ไป-กลับ) · <code>TTL</code> = อายุแพ็กเก็ต ลดลง 1 ต่อ router ค่าเริ่มต้นโดยประมาณ: Linux/Cisco IOS ~64/255, Windows 128 (ใช้เดา OS/จำนวน hop ได้คร่าว ๆ)
+<div class="tw"><table><tr><th>ข้อความ</th><th>ความหมายจริง</th></tr>
+<tr><td><code>Request timed out</code></td><td>ไม่มีคำตอบเลย: ปลายทางปิด/บล็อก ICMP/เส้นทางย้อนกลับขาด</td></tr>
+<tr><td><code>Destination host unreachable</code></td><td>มี router (หรือเครื่องเอง) ตอบว่าไปไม่ได้ เช่น ไม่มี route หรือ ARP ไม่ได้ผล อ่านดูว่า "Reply from" IP ไหน ถ้าเป็น IP เครื่องเองแปลว่าไม่มี route/gateway</td></tr>
+<tr><td><code>General failure</code></td><td>ปัญหาที่เครื่องต้นทาง เช่น NIC/driver/ไม่มี IP</td></tr>
+<tr><td><code>TTL expired in transit</code></td><td>แพ็กเก็ตวน (routing loop) หรือกำหนด TTL ต่ำเกิน</td></tr>
+<tr><td><code>could not find host</code></td><td>DNS แปลงชื่อไม่ได้ (ยังไม่ได้ส่ง ping)</td></tr></table></div></div>
+<div class="c"><h3>Loopback และสถิติ</h3><code>ping 127.0.0.1</code> (IPv6: <code>::1</code>) ทดสอบ TCP/IP stack ของตัวเองโดยไม่ออกสาย (ข้อสอบ Q1 ตัวเลือก A คือสิ่งนี้ ไม่ใช่ ping 10.1.1.1)
+Packet loss สูง = สายหลวม/Wi-Fi แย่/อุปกรณ์โหลดหนัก · ค่า RTT แกว่งมาก (jitter) = เครือข่ายแออัด</div></section>
+
+<section id="s3"><h2>4. จำลองการวินิจฉัย</h2>
+<div class="c">เลือกผลทดสอบ แล้วกดวิเคราะห์ ฝึกคิดเป็นลำดับก่อนเปิดคำตอบ
+<div class="row"><label>ping Default Gateway</label><select id="d1"><option value="1">ผ่าน</option><option value="0">ไม่ผ่าน</option></select></div>
+<div class="row"><label>ping IP ภายนอก (8.8.8.8)</label><select id="d2"><option value="1">ผ่าน</option><option value="0">ไม่ผ่าน</option></select></div>
+<div class="row"><label>ping ชื่อโดเมน</label><select id="d3"><option value="1">ผ่าน</option><option value="0">ไม่ผ่าน</option></select></div>
+<div class="row"><label>เปิดเว็บ/แอปได้</label><select id="d4"><option value="1">ได้</option><option value="0">ไม่ได้</option></select></div>
+<button class="b" onclick="diag()">วิเคราะห์</button><div id="dout" class="tip" style="display:none"></div></div></section>
+
+<section id="s4"><h2>5. เนื้อหาเสริมสำหรับ Cloud Engineer</h2>
+<div class="add"><b>เพิ่มเติม (ต้นฉบับไม่มี)</b> — ส่วนนี้คือสิ่งที่งานจริงใช้บ่อย</div>
+<div class="c"><h3>APIPA 169.254.0.0/16</h3>ถ้า Windows ขอ DHCP ไม่ได้ จะตั้ง IP 169.254.x.x เอง คุยได้เฉพาะ LAN เดียวกัน เห็นเลขนี้ = ปัญหาอยู่ที่ DHCP/สายเชื่อมต่อ ลอง <code>ipconfig /renew</code></div>
+<div class="c"><h3>Ping ผ่านแต่แอปไม่ได้ → ทดสอบพอร์ตจริง</h3>
+<pre># Windows PowerShell
+Test-NetConnection example.com -Port 443
+# Linux/macOS
+nc -zv example.com 443
+curl -v https://example.com        # ดู DNS, TCP, TLS, HTTP ทีละขั้น
+curl -I -m 5 http://10.0.1.20:8080</pre></div>
+<div class="c"><h3>เครื่องมือที่ใช้บน Linux/Cloud</h3><div class="tw"><table>
+<tr><th>แทนที่</th><th>Linux</th></tr>
+<tr><td>ipconfig</td><td><code>ip a</code> · <code>ip route</code> · <code>resolvectl status</code></td></tr>
+<tr><td>netstat</td><td><code>ss -tulpn</code> (พอร์ตที่ listen + โปรเซส)</td></tr>
+<tr><td>tracert</td><td><code>traceroute</code> (UDP ค่าเริ่มต้น) · <code>mtr</code> (ping+trace ต่อเนื่อง)</td></tr>
+<tr><td>nslookup</td><td><code>dig example.com</code> · <code>dig +short example.com @8.8.8.8</code></td></tr>
+<tr><td>—</td><td><code>tcpdump -i eth0 icmp</code> ดูแพ็กเก็ตจริง</td></tr></table></div></div>
+<div class="c"><h3>ทำไมใน Cloud ping ไม่ผ่านบ่อย</h3>
+AWS/Azure/GCP ปิด ICMP ไว้ตามค่าเริ่มต้น ต้องเปิดกฎ Inbound <b>ICMP</b> ที่ Security Group / NSG / Firewall rule และตรวจ NACL (stateless ต้องเปิดทั้งขาไป-กลับ) เช็คลิสต์เมื่อ VM เข้าไม่ได้:
+<pre>1. Security Group / NSG เปิดพอร์ต (22/443) และ source ถูกไหม
+2. Route table มีเส้นทางไป Internet Gateway / NAT ไหม
+3. NACL อนุญาตทั้งสองทิศทางไหม
+4. VM มี Public IP / ใช้ NAT ถูกไหม
+5. Firewall ในตัว OS (iptables/ufw/Windows Firewall)
+6. Service listen ที่ 0.0.0.0 ไม่ใช่ 127.0.0.1 (ดูด้วย ss -tulpn)</pre></div>
+<div class="c"><h3>MTU ทดสอบด้วย ping</h3>Ethernet MTU 1500 = payload ping สูงสุด 1472 (หัก IP 20 + ICMP 8) · <code>ping -f -l 1472 host</code> ถ้าแตกต้องลดขนาด แสดงว่ามีลิงก์ MTU เล็กกว่า (VPN/Tunnel) พบบ่อยเมื่อเว็บเปิดช้าหรือค้างเฉพาะหน้าใหญ่</div>
+<div class="c"><h3>DNS ที่ต้องรู้เพิ่ม</h3>Record: A (IPv4), AAAA (IPv6), CNAME (ชื่อแทน), MX (เมล), TXT · มี cache และ TTL ของ record: แก้ DNS แล้วยังเห็นของเก่าให้ <code>ipconfig /flushdns</code> · ถ้า <code>nslookup name</code> ไม่ได้แต่ <code>nslookup name 8.8.8.8</code> ได้ → DNS ที่ตั้งไว้มีปัญหา</div></section>
+
+<section id="s5"><h2>6. จุดที่แก้ไขจากสรุปต้นฉบับ</h2>
+<div class="fix"><b>ผิด/ไม่ชัด:</b> ตาราง "Ping ชื่อสำเร็จ แต่ Ping IP ไม่สำเร็จ" ที่ว่าให้ตรวจ IP ที่ใช้ทดสอบ ในทางปฏิบัติแทบไม่เกิดขึ้น เพราะการ ping ชื่อต้อง ping IP ที่ได้มา ถ้าเกิดจริงมักเป็นเพราะ DNS ให้ IP คนละตัว หรือ IPv4/IPv6 ต่างกัน (ใช้ <code>-4</code> / <code>-6</code> แยกทดสอบ)</div>
+<div class="fix"><b>ผิด:</b> "Ping ทั้งชื่อและ IP ไม่สำเร็จ → สงสัย Network หรือ ICMP ถูกบล็อก" ถูกต้องแต่ครบน้อยไป ต้องแยกต่อด้วย ping Gateway และตรวจ ipconfig ก่อนสรุป</div>
+<div class="fix"><b>ไม่ครบ:</b> ต้นฉบับอธิบาย TTL ว่าลดลงเมื่อผ่าน router แต่ไม่ได้บอกว่า <b>TTL ที่เห็นคือค่าที่เหลือ</b> ไม่ใช่ค่าตั้งต้น (เช่น 128 → ผ่าน 3 hop เหลือ 125)</div>
+<div class="fix"><b>ต้องระวัง:</b> ตัวเลือก ping -a (IP→Hostname) ใช้ได้ตามนั้นเฉพาะ Windows · "tracert" เป็นของ Windows (Linux/macOS ใช้ <code>traceroute</code>) · ค่า timeout <code>-w</code> หน่วยเป็น ms ใน Windows แต่ <code>-W</code> หน่วยวินาทีใน Linux</div>
+<div class="fix"><b>ข้อสอบ Q1:</b> ตัวเลือก A ("TCP/IP stack... without putting traffic on the wire") เป็นคำอธิบายของ <code>ping 127.0.0.1</code> ไม่ใช่ 10.1.1.1</div>
+<div class="fix"><b>ไม่ใช่ข้อมูลอ้างอิง:</b> ลิงก์รูป/บทความ Medium ในไฟล์สรุป 17.1.4–17.1.5 ไม่ใช่เนื้อหา Cisco ให้ข้ามได้</div>
+<div class="add"><b>ส่วนที่เพิ่มแล้ว:</b> loopback, APIPA, ข้อความ error เชิงลึก, flush DNS, Linux/Cloud equivalents, Security Group/NACL, MTU, Test-NetConnection/curl/dig/ss/mtr</div></section>
+
+<section id="s6"><h2>7. แบบฝึกหัด</h2>
+<div class="c"><div class="bar"><i id="pb"></i></div><div id="qm" class="ex"></div><div id="qa"></div></div></section>
+</main>
+<script>
+const T=["สรุป","Cheat Sheet","Ping ลึก","จำลอง","Cloud","แก้ไข","ฝึก"];
+const nav=document.getElementById("nav");
+T.forEach((t,i)=>{const b=document.createElement("button");b.textContent=t;b.onclick=()=>show(i);nav.appendChild(b)});
+function show(i){document.querySelectorAll("section").forEach((s,j)=>s.classList.toggle("on",i==j));[...nav.children].forEach((b,j)=>b.classList.toggle("on",i==j));try{history.replaceState(null,"","#t"+i)}catch(e){}scrollTo(0,0)}
+function diag(){const[a,b,c,d]=["d1","d2","d3","d4"].map(x=>+document.getElementById(x).value);let m;
+if(!a&&!b&&!c)m="<b>ปัญหา Local network/IP config:</b> ตรวจ ipconfig /all (มี 169.254 ไหม), สาย/Wi-Fi, Mask, Gateway ถูกไหม หรือ Gateway ปิด ICMP (ถ้าเว็บยังใช้ได้)";
+else if(a&&!b&&!c)m="<b>ออกนอก LAN ไม่ได้:</b> Gateway ไป ISP/Route ขาด, NAT, Firewall ใช้ tracert 8.8.8.8 หาว่าหยุดที่ hop ใด";
+else if(a&&b&&!c)m="<b>สงสัย DNS:</b> nslookup ชื่อ · ทดลอง nslookup ชื่อ 8.8.8.8 · ตรวจ DNS Servers ใน ipconfig /all · ipconfig /flushdns";
+else if(a&&b&&c&&!d)m="<b>ปัญหา Application/Port:</b> เว็บเซิร์ฟเวอร์หยุด, Service ไม่ listen, Firewall/Security Group บล็อกพอร์ต ลอง Test-NetConnection -Port 443 / curl -v";
+else if(a&&b&&c&&d)m="<b>ปกติ:</b> การเชื่อมต่อ, DNS และ Application ใช้ได้";
+else if(!a&&(b||c))m="<b>ผลขัดแย้งกัน:</b> ถ้า ping Gateway ไม่ผ่านแต่ออกภายนอกได้ แปลว่า Gateway ปิดตอบ ICMP ไม่ใช่เส้นทางเสีย";
+else m="<b>ping IP ภายนอกไม่ผ่านแต่ชื่อผ่าน:</b> ผิดปกติ ตรวจ IPv4/IPv6 (ping -4 / -6) และว่า 8.8.8.8 ถูกบล็อกเฉพาะหรือไม่";
+const o=document.getElementById("dout");o.style.display="block";o.innerHTML=m}
+const Q=[
+["ผู้ใช้ ping 10.1.1.1 ต้องการทราบอะไร",["TCP/IP stack ทำงานโดยไม่ส่งสัญญาณ","ประเภทอุปกรณ์ปลายทาง","เส้นทางที่ traffic ใช้","ติดต่อกับอุปกรณ์ปลายทางได้หรือไม่"],3,"ping ทดสอบ connectivity ถ้าจะทดสอบ stack ตัวเองใช้ 127.0.0.1 และเส้นทางใช้ tracert"],
+["Ping Default Gateway มีจุดประสงค์ใด",["แปลงโดเมนเป็น IP","ตรวจว่า host ติดต่อ Gateway (ทางออกไปเครือข่ายอื่น) ได้","ขอ IP จาก DHCP","สั่งให้ Gateway ส่งต่อไปยัง file server"],1,"ผ่านแค่พิสูจน์ว่า LAN ถึง Gateway ยังไม่การันตีอินเทอร์เน็ต"],
+["ipconfig (ไม่มี /all) แสดงข้อมูลใด",["IP, Subnet Mask, Default Gateway","MAC, DNS, DHCP","IP, MAC, DNS","Lease time, DHCP, Gateway"],0,"MAC, DNS Server, DHCP Server, Lease ต้องใช้ /all"],
+["ping 8.8.8.8 ผ่าน แต่ ping www.cisco.com ไม่ผ่าน ควรสงสัยอะไรก่อน",["Subnet Mask","DNS","สาย LAN","Gateway"],1,"IP ภายนอกถึงได้ แต่แปลงชื่อไม่ได้"],
+["เครื่องได้ IP 169.254.12.5 หมายถึงอะไร",["ได้ IP จาก ISP สาธารณะ","APIPA: ขอ DHCP ไม่ได้","เครื่องตั้ง Static IP","Gateway ล่ม"],1,"Windows ตั้ง APIPA เอง เมื่อไม่มี DHCP ตอบ"],
+["คำสั่งใดร้องขอ IP ใหม่จาก DHCP",["ipconfig /release","ipconfig /renew","ipconfig /flushdns","netstat -r"],1,"/release ปล่อย /renew ขอใหม่ /flushdns ล้าง DNS cache"],
+["ต้องการดูว่าพอร์ตใดของเครื่อง listen อยู่ และ PID ใด (Windows)",["ping -t","tracert -d","netstat -ano","nslookup"],2,"Linux ใช้ ss -tulpn"],
+["ping ผ่านทั้งชื่อและ IP แต่เว็บเปิดไม่ได้ ตรวจอะไรต่อ",["Subnet Mask","Application/Service และพอร์ต 80/443","MAC Address","TTL"],1,"ICMP ไม่มีพอร์ต ผ่านจึงไม่รับรอง TCP"],
+["VM ใน AWS ping ไม่ผ่านแต่ SSH ได้ มักเป็นเพราะ",["Security Group ไม่ได้เปิด ICMP","SSH ใช้ UDP","DNS เสีย","ping ใช้พอร์ต 22"],0,"ICMP ต้องมีกฎแยก เปิดเฉพาะ TCP 22 ไม่ได้ทำให้ ping ผ่าน"],
+["TCP/IP stack ของเครื่องเองปกติไหม ตรวจด้วย",["ping 127.0.0.1","ping Gateway","tracert 8.8.8.8","nslookup localhost"],0,"Loopback ไม่ออกสาย ถ้าไม่ผ่านปัญหาที่ NIC/stack/driver"],
+["tracert แสดง * * * ที่ hop 5 แต่ hop 6 ตอบปกติ หมายถึง",["เส้นทางขาดที่ hop 5","hop 5 ไม่ตอบ ICMP แต่ forward ได้","DNS เสีย","TTL เป็น 0"],1,"มีการ forward แล้ว (hop 6 ตอบ) จึงไม่ใช่ปัญหา"],
+["Windows ใช้ ping ต่อเนื่อง ส่วน Linux ต้องใช้ -c เพื่อจำกัดจำนวน จริงหรือไม่",["จริงทั้งสองอย่าง","Windows ใช้ -t ต่อเนื่อง, Linux ต่อเนื่องเป็นค่าเริ่มต้น จำกัดด้วย -c","Windows ต่อเนื่องเป็นค่าเริ่มต้น","ไม่มีความต่าง"],1,"Windows ค่าเริ่มต้น 4 ครั้ง, -t ส่งต่อเนื่อง · Linux ค่าเริ่มต้นต่อเนื่อง ใช้ -c จำกัด"],
+["ping TTL=125 จากเครื่อง Windows (ค่าเริ่มต้น 128) หมายถึง",["ผ่านประมาณ 3 hop","ผ่านประมาณ 125 hop","ปลายทางเป็น Linux","แพ็กเก็ตวนลูป"],0,"TTL ที่เห็นคือค่าเหลือ ลดลง 1 ต่อ hop (แต่ TTL ตอบกลับขึ้นกับ OS ปลายทาง)"],
+["เปลี่ยน DNS record แล้วยังเห็น IP เก่า ควรทำอะไร",["ipconfig /renew","ipconfig /flushdns และ nslookup ถาม DNS ตัวอื่น","tracert","รีสตาร์ท Gateway"],1,"ปัญหามักมาจาก cache ฝั่งเครื่องหรือ TTL ของ record"],
+["จับคู่: 'ถาม DNS Server โดยตรง' คือคำสั่งใด",["nslookup","tracert","ping","netstat"],0,"นอกจากนี้บน Linux ใช้ dig"]
+];
+let qi=0,sc=0,done=false;
+function rq(){const qa=document.getElementById("qa"),qm=document.getElementById("qm");
+document.getElementById("pb").style.width=(qi/Q.length*100)+"%";
+if(qi>=Q.length){qm.textContent="";qa.innerHTML="<h3>คะแนน "+sc+" / "+Q.length+"</h3><p class='ex'>"+(sc>=13?"พร้อมมาก ไปทดลองใช้จริงใน Packet Tracer หรือ Lab ได้":"ทบทวนแท็บที่ผิดแล้วลองใหม่")+"</p><button class='b' onclick='qi=0;sc=0;rq()'>ทำใหม่</button>";return}
+const q=Q[qi];qm.textContent="ข้อ "+(qi+1)+" / "+Q.length;done=false;
+qa.innerHTML="<p><b>"+q[0]+"</b></p>";
+q[1].forEach((o,i)=>{const b=document.createElement("button");b.className="opt";b.textContent=o;b.onclick=()=>ans(i,b);qa.appendChild(b)})}
+function ans(i,b){if(done)return;done=true;const q=Q[qi],bs=document.querySelectorAll(".opt");
+if(i==q[2]){sc++;b.classList.add("ok")}else{b.classList.add("no");bs[q[2]].classList.add("ok")}
+const e=document.createElement("div");e.className="ex";e.textContent=q[3];const n=document.createElement("button");n.className="b";n.textContent="ข้อต่อไป";n.onclick=()=>{qi++;rq()};const qa=document.getElementById("qa");qa.appendChild(e);qa.appendChild(document.createElement("br"));qa.appendChild(n)}
+rq();
+const h=parseInt((location.hash||"").replace("#t",""));show(isNaN(h)||h<0||h>6?0:h);
+</script></body></html>
