@@ -1,142 +1,17 @@
 <!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linux Foundation — Module 2: การเคลื่อนที่ในระบบไฟล์</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Foundation — สารบัญ 1-21</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--h:264;--bg:#0a0e1a;--card:#121a2e;--card2:#182240;--line:#25314f;--txt:#e7ecf8;--mut:#93a0c2;--acc:hsl(var(--h) 90% 66%);--acc2:hsl(calc(var(--h) + 40) 85% 62%);--ok:#3ddc97;--bad:#ff6b81;--mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Sarabun',system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.65;min-height:100vh;background-image:radial-gradient(900px 420px at 85% -10%,hsl(var(--h) 80% 50% / .18),transparent 60%),radial-gradient(700px 380px at -10% 10%,hsl(calc(var(--h) + 60) 80% 50% / .12),transparent 60%);background-attachment:fixed}
-code{font-family:var(--mono);font-size:.88em;background:#0d1426;border:1px solid var(--line);padding:1px 6px;border-radius:6px;color:var(--acc)}
-.wrap{max-width:980px;margin:0 auto;padding:0 18px 60px}
-.hero{padding:46px 0 22px;text-align:center}
-.badge{display:inline-block;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);border:1px solid hsl(var(--h) 80% 60% / .4);background:hsl(var(--h) 80% 60% / .1);padding:4px 14px;border-radius:99px;margin-bottom:16px}
-.ic{font-size:3rem;line-height:1;margin-bottom:8px}
-h1{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.25}
-.sub{color:var(--mut);margin-top:8px;font-size:1.05rem}
-.stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 16px;font-size:.88rem;color:var(--mut)}
-.stat b{color:var(--txt)}
-.tabs{position:sticky;top:0;z-index:5;display:flex;gap:6px;padding:10px 0;background:linear-gradient(var(--bg) 70%,transparent);backdrop-filter:blur(6px);margin-bottom:10px;overflow-x:auto}
-.tab{flex:1;min-width:max-content;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--mut);font:inherit;font-weight:500;padding:10px 16px;border-radius:12px;transition:.2s}
-.tab:hover{color:var(--txt);border-color:var(--acc)}
-.tab.on{background:linear-gradient(135deg,hsl(var(--h) 80% 55% / .25),hsl(calc(var(--h) + 40) 80% 55% / .2));color:var(--txt);border-color:var(--acc)}
-.panel{display:none;animation:in .35s ease}
-.panel.on{display:block}
-@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.sec{margin:22px 0 10px;font-size:1.15rem;font-weight:700;display:flex;align-items:center;gap:10px}
-.sec:before{content:"";width:5px;height:22px;border-radius:3px;background:linear-gradient(var(--acc),var(--acc2))}
-.grid{display:grid;gap:8px}
-.row{display:grid;grid-template-columns:minmax(150px,34%) 1fr;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;transition:.2s}
-.row:hover{border-color:hsl(var(--h) 70% 60% / .6);transform:translateX(3px)}
-.cmd{font-family:var(--mono);font-size:.9rem;font-weight:600;color:var(--acc);cursor:pointer;word-break:break-word;position:relative}
-.cmd.ok:after{content:"คัดลอกแล้ว";position:absolute;right:0;top:-2px;font:500 .7rem 'Sarabun';color:var(--bg);background:var(--ok);padding:0 8px;border-radius:99px}
-.desc{color:#c9d2ea;font-size:.95rem}
-.warn,.tips{margin-top:26px;border-radius:14px;padding:14px 18px}
-.warn{background:rgba(255,107,129,.09);border:1px solid rgba(255,107,129,.4)}
-.warn h3{color:var(--bad);font-size:1rem;margin-bottom:4px}
-.tips{background:hsl(var(--h) 80% 60% / .08);border:1px solid hsl(var(--h) 80% 60% / .35)}
-.tips h3{color:var(--acc);font-size:1rem;margin-bottom:6px}
-.tips li{margin-left:20px;margin-bottom:4px}
-.search{width:100%;background:var(--card);border:1px solid var(--line);color:var(--txt);font:inherit;padding:12px 16px;border-radius:12px;margin-bottom:12px;outline:none}
-.search:focus{border-color:var(--acc)}
-.hint{color:var(--mut);font-size:.85rem;margin-bottom:10px}
-.q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
-.q h4{font-size:1.02rem;font-weight:500;margin-bottom:12px}
-.q h4 span{display:inline-grid;place-items:center;width:28px;height:28px;margin-right:8px;border-radius:50%;background:hsl(var(--h) 80% 60% / .2);color:var(--acc);font-size:.85rem;font-weight:700}
-.opt{display:block;width:100%;text-align:left;font:inherit;color:var(--txt);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:8px;cursor:pointer;transition:.15s}
-.opt:hover:not(:disabled){border-color:var(--acc);transform:translateX(3px)}
-.opt:disabled{cursor:default}
-.opt.right{border-color:var(--ok);background:rgba(61,220,151,.12)}
-.opt.wrong{border-color:var(--bad);background:rgba(255,107,129,.12)}
-.why{display:none;margin-top:6px;font-size:.92rem;color:var(--mut);border-left:3px solid var(--acc);padding-left:12px}
-.why.on{display:block}
-.score{position:sticky;bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--acc);border-radius:14px;padding:10px 16px;box-shadow:0 8px 30px #0008}
-.score b{font-size:1.1rem;color:var(--acc)}
-.btn{font:inherit;font-weight:500;cursor:pointer;color:var(--bg);background:linear-gradient(135deg,var(--acc),var(--acc2));border:0;border-radius:10px;padding:8px 16px}
-.res{display:none;text-align:center;margin:16px 0;font-size:1.1rem}
-.res.on{display:block}
-.pager{display:flex;justify-content:space-between;gap:10px;margin-top:40px}
-.pager a{flex:1;text-decoration:none;color:var(--txt);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;transition:.2s}
-.pager a:hover{border-color:var(--acc)}
-.pager a small{display:block;color:var(--mut);font-size:.78rem}
-.pager a.nx{text-align:right}
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
-.chips a{width:42px;height:42px;display:grid;place-items:center;text-decoration:none;color:var(--mut);background:var(--card);border:1px solid var(--line);border-radius:12px;font-weight:700;transition:.2s}
-.chips a:hover{color:var(--txt);border-color:var(--acc);transform:translateY(-2px)}
-.chips a.cur{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--bg);border-color:transparent}
-footer{text-align:center;color:var(--mut);font-size:.82rem;margin-top:30px}
-@media(max-width:620px){.row{grid-template-columns:1fr;gap:4px}.hero{padding-top:30px}}
-</style>
-</head>
-<body>
-<div class="wrap">
-<header class="hero">
-<div class="badge">Linux Foundation · Module 2 / 21</div>
-<div class="ic">🧭</div>
-<h1>การเคลื่อนที่ในระบบไฟล์</h1>
-<p class="sub">pwd, cd และ path แบบ absolute / relative</p>
-<div class="stats"><div class="stat"><b>13</b> คำสั่ง/แนวคิด</div><div class="stat"><b>4</b> ข้อสอบ</div><div class="stat">Cloud Engineer Edition</div></div>
-</header>
-<nav class="tabs">
-<button class="tab on" data-p="ref">📚 Reference</button>
-<button class="tab" data-p="cheat">📋 Cheat Sheet</button>
-<button class="tab" data-p="quiz">✏️ Quiz 4 ข้อ</button>
-</nav>
-
-<section class="panel on" id="ref">
-<h2 class="sec">คำสั่งหลัก</h2><div class="grid"><div class="row"><div class="cmd">pwd</div><div class="desc">แสดงตำแหน่งปัจจุบัน (Print Working Directory)</div></div><div class="row"><div class="cmd">cd /var/log</div><div class="desc">ไปยัง absolute path</div></div><div class="row"><div class="cmd">cd project</div><div class="desc">ไปยัง relative path จากตำแหน่งปัจจุบัน</div></div><div class="row"><div class="cmd">cd ..</div><div class="desc">ขึ้นไปหนึ่งชั้น (parent directory)</div></div><div class="row"><div class="cmd">cd ~</div><div class="desc">กลับ home directory (หรือพิมพ์ <code>cd</code> เฉยๆ)</div></div><div class="row"><div class="cmd">cd -</div><div class="desc">กลับไปโฟลเดอร์ก่อนหน้า (สลับไปมาได้)</div></div><div class="row"><div class="cmd">cd ../..</div><div class="desc">ขึ้นสองชั้น</div></div><div class="row"><div class="cmd">echo $HOME</div><div class="desc">ดู path ของ home</div></div></div><h2 class="sec">แนวคิด Path</h2><div class="grid"><div class="row"><div class="cmd">/</div><div class="desc">Root ของระบบไฟล์ — path ที่ขึ้นต้นด้วย <code>/</code> คือ absolute</div></div><div class="row"><div class="cmd">.</div><div class="desc">ไดเรกทอรีปัจจุบัน</div></div><div class="row"><div class="cmd">..</div><div class="desc">ไดเรกทอรีแม่</div></div><div class="row"><div class="cmd">~user</div><div class="desc">home ของผู้ใช้ที่ระบุ เช่น <code>~root</code></div></div><div class="row"><div class="cmd">Tab</div><div class="desc">กด Tab เพื่อเติมชื่อ path อัตโนมัติ</div></div></div><div class="warn"><h3>⚠️ กับดักข้อสอบ</h3>Linux แยกตัวพิมพ์เล็ก-ใหญ่: <code>/Home</code> ≠ <code>/home</code> และชื่อที่มีเว้นวรรคต้องใส่ quotes เช่น <code>cd "My Docs"</code></div><div class="tips"><h3>💡 Engineer Tips</h3><ul><li>ใช้ <code>cd -</code> สลับระหว่างสองโฟลเดอร์ที่ทำงานอยู่บ่อยๆ</li><li>Absolute path ปลอดภัยกว่าใน script เพราะไม่ขึ้นกับตำแหน่งที่รัน</li></ul></div>
-</section>
-
-<section class="panel" id="cheat">
-<input class="search" id="s" placeholder="🔍 ค้นหาคำสั่งหรือคำอธิบาย...">
-<p class="hint">คลิกที่คำสั่งเพื่อคัดลอก</p>
-<div class="grid" id="cg"><div class="row"><div class="cmd">pwd</div><div class="desc">แสดงตำแหน่งปัจจุบัน (Print Working Directory)</div></div><div class="row"><div class="cmd">cd /var/log</div><div class="desc">ไปยัง absolute path</div></div><div class="row"><div class="cmd">cd project</div><div class="desc">ไปยัง relative path จากตำแหน่งปัจจุบัน</div></div><div class="row"><div class="cmd">cd ..</div><div class="desc">ขึ้นไปหนึ่งชั้น (parent directory)</div></div><div class="row"><div class="cmd">cd ~</div><div class="desc">กลับ home directory (หรือพิมพ์ <code>cd</code> เฉยๆ)</div></div><div class="row"><div class="cmd">cd -</div><div class="desc">กลับไปโฟลเดอร์ก่อนหน้า (สลับไปมาได้)</div></div><div class="row"><div class="cmd">cd ../..</div><div class="desc">ขึ้นสองชั้น</div></div><div class="row"><div class="cmd">echo $HOME</div><div class="desc">ดู path ของ home</div></div><div class="row"><div class="cmd">/</div><div class="desc">Root ของระบบไฟล์ — path ที่ขึ้นต้นด้วย <code>/</code> คือ absolute</div></div><div class="row"><div class="cmd">.</div><div class="desc">ไดเรกทอรีปัจจุบัน</div></div><div class="row"><div class="cmd">..</div><div class="desc">ไดเรกทอรีแม่</div></div><div class="row"><div class="cmd">~user</div><div class="desc">home ของผู้ใช้ที่ระบุ เช่น <code>~root</code></div></div><div class="row"><div class="cmd">Tab</div><div class="desc">กด Tab เพื่อเติมชื่อ path อัตโนมัติ</div></div></div>
-</section>
-
-<section class="panel" id="quiz">
-<div id="qs"></div>
-<div class="res" id="res"></div>
-<div class="score"><span>คะแนน: <b id="sc">0</b> / <span id="tot"></span></span><button class="btn" id="rs">↺ เริ่มใหม่</button></div>
-</section>
-
-<div class="pager"><a href="Linux%20Foundation%201"><small>← ก่อนหน้า</small>1. คำสั่ง ls</a><a class="nx" href="Linux%20Foundation%203"><small>ถัดไป →</small>3. จัดการไฟล์และโฟลเดอร์</a></div>
-<div class="chips"><a href="Linux%20Foundation%201" class="" title="คำสั่ง ls">1</a><a href="Linux%20Foundation%202" class="cur" title="การเคลื่อนที่ในระบบไฟล์">2</a><a href="Linux%20Foundation%203" class="" title="จัดการไฟล์และโฟลเดอร์">3</a><a href="Linux%20Foundation%204" class="" title="ดูเนื้อหาไฟล์">4</a><a href="Linux%20Foundation%205" class="" title="Wildcards และ Globbing">5</a><a href="Linux%20Foundation%206" class="" title="Vim Editor">6</a><a href="Linux%20Foundation%207" class="" title="สิทธิ์ไฟล์ (Permissions)">7</a><a href="Linux%20Foundation%208" class="" title="ผู้ใช้และกลุ่ม">8</a><a href="Linux%20Foundation%209" class="" title="โปรเซส (ps)">9</a><a href="Linux%20Foundation%2010" class="" title="Aliases">10</a><a href="Linux%20Foundation%2011" class="" title="ค้นหาไฟล์">11</a><a href="Linux%20Foundation%2012" class="" title="grep ค้นข้อความ">12</a><a href="Linux%20Foundation%2013" class="" title="ประมวลผลข้อความ">13</a><a href="Linux%20Foundation%2014" class="" title="ตัวแปรสภาพแวดล้อมและ PATH">14</a><a href="Linux%20Foundation%2015" class="" title="Streams และ Redirection">15</a><a href="Linux%20Foundation%2016" class="" title="Pipes และการต่อคำสั่ง">16</a><a href="Linux%20Foundation%2017" class="" title="จัดการแพ็กเกจ">17</a><a href="Linux%20Foundation%2018" class="" title="บีบอัดและ Archive">18</a><a href="Linux%20Foundation%2019" class="" title="ดิสก์และข้อมูลระบบ">19</a><a href="Linux%20Foundation%2020" class="" title="เครือข่ายและ SSH">20</a><a href="Linux%20Foundation%2021" class="" title="Services และ Logs">21</a></div>
-<footer>Linux Foundation · Module 2: การเคลื่อนที่ในระบบไฟล์ · Cloud Engineer Study Card</footer>
-</div>
-<script>
-const Q=[{"q": "Mix อยู่ที่ /home/mix/work แล้วพิมพ์ cd ../.. จะไปอยู่ที่ใด", "o": ["/home/mix", "/home", "/", "/home/mix/work/.."], "a": 1, "w": "ขึ้นสองชั้น: work → mix → home"}, {"q": "สลับกลับไปโฟลเดอร์ก่อนหน้าอย่างรวดเร็วใช้คำสั่งใด", "o": ["cd ..", "cd ~", "cd -", "cd /"], "a": 2, "w": "<code>cd -<\/code> กลับไป OLDPWD"}, {"q": "path ใดเป็น relative path", "o": ["/etc/hosts", "~/notes.txt", "docs/readme.md", "/var/log"], "a": 2, "w": "relative ไม่ขึ้นต้นด้วย <code>/<\/code>"}, {"q": "พิมพ์ cd เฉยๆ โดยไม่มี argument จะเกิดอะไร", "o": ["ไปที่ root", "ไปที่ home", "ไม่ทำอะไร", "แสดง error"], "a": 1, "w": "<code>cd<\/code> ตัวเดียวพากลับ $HOME"}];
-const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
-$$('.tab').forEach(t=>t.onclick=()=>{$$('.tab').forEach(x=>x.classList.toggle('on',x===t));$$('.panel').forEach(p=>p.classList.toggle('on',p.id===t.dataset.p));window.scrollTo({top:0,behavior:'smooth'})});
-$$('.cmd').forEach(c=>c.onclick=()=>{try{navigator.clipboard.writeText(c.textContent)}catch(e){}c.classList.add('ok');setTimeout(()=>c.classList.remove('ok'),800)});
-$('#s').oninput=e=>{const v=e.target.value.toLowerCase();$$('#cg .row').forEach(r=>r.style.display=r.textContent.toLowerCase().includes(v)?'':'none')};
-let score=0,done=0;
-function build(){
-  score=0;done=0;$('#sc').textContent=0;$('#tot').textContent=Q.length;$('#res').className='res';
-  const box=$('#qs');box.innerHTML='';
-  Q.forEach((q,i)=>{
-    const d=document.createElement('div');d.className='q';
-    d.innerHTML='<h4><span>'+(i+1)+'</span>'+q.q+'</h4>';
-    q.o.forEach((o,j)=>{
-      const b=document.createElement('button');b.className='opt';b.textContent=o;
-      b.onclick=()=>{
-        d.querySelectorAll('.opt').forEach((x,k)=>{x.disabled=true;if(k===q.a)x.classList.add('right')});
-        if(j===q.a){score++}else{b.classList.add('wrong')}
-        done++;$('#sc').textContent=score;w.classList.add('on');
-        if(done===Q.length){const r=$('#res');r.className='res on';r.textContent=score===Q.length?'🎉 เต็ม! พร้อมไปบทต่อไป':score>=Q.length*0.6?'👍 ดีมาก ทบทวนข้อที่พลาดอีกนิด':'📖 ลองอ่าน Reference อีกรอบแล้วทำใหม่'}
-      };
-      d.appendChild(b);
-    });
-    const w=document.createElement('div');w.className='why';w.innerHTML='💡 '+q.w;d.appendChild(w);
-    box.appendChild(d);
-  });
-}
-$('#rs').onclick=()=>{build();window.scrollTo({top:0,behavior:'smooth'})};
-build();
-</script>
-</body>
-</html>
+body{min-height:100vh;display:grid;place-items:center;padding:24px;font-family:'Sarabun',system-ui,sans-serif;color:#e7ecf8;background:#0a0e1a radial-gradient(900px 420px at 85% -10%,hsl(270 80% 50% / .22),transparent 60%),radial-gradient(700px 380px at -10% 100%,hsl(190 80% 50% / .15),transparent 60%);background-attachment:fixed}
+.box{width:100%;max-width:640px;text-align:center}
+.badge{display:inline-block;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:#b78cff;border:1px solid #b78cff66;background:#b78cff1a;padding:4px 14px;border-radius:99px;margin-bottom:14px}
+h1{font-size:clamp(1.8rem,6vw,2.6rem);background:linear-gradient(90deg,#b78cff,#5cd6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));gap:10px;margin-top:28px}
+.chips a{aspect-ratio:1;display:grid;place-items:center;text-decoration:none;font-size:1.3rem;font-weight:700;color:#93a0c2;background:#121a2e;border:1px solid #25314f;border-radius:16px;transition:.2s}
+.chips a:hover{color:#0a0e1a;background:linear-gradient(135deg,#b78cff,#5cd6ff);border-color:transparent;transform:translateY(-3px)}
+</style></head><body>
+<div class="box"><div class="badge">Linux Foundation</div><h1>เลือกบทเรียน</h1>
+<div class="chips"><a href="Linux%20Foundation%201" title="บทที่ 1">1</a><a href="Linux%20Foundation%202" title="บทที่ 2">2</a><a href="Linux%20Foundation%203" title="บทที่ 3">3</a><a href="Linux%20Foundation%204" title="บทที่ 4">4</a><a href="Linux%20Foundation%205" title="บทที่ 5">5</a><a href="Linux%20Foundation%206" title="บทที่ 6">6</a><a href="Linux%20Foundation%207" title="บทที่ 7">7</a><a href="Linux%20Foundation%208" title="บทที่ 8">8</a><a href="Linux%20Foundation%209" title="บทที่ 9">9</a><a href="Linux%20Foundation%2010" title="บทที่ 10">10</a><a href="Linux%20Foundation%2011" title="บทที่ 11">11</a><a href="Linux%20Foundation%2012" title="บทที่ 12">12</a><a href="Linux%20Foundation%2013" title="บทที่ 13">13</a><a href="Linux%20Foundation%2014" title="บทที่ 14">14</a><a href="Linux%20Foundation%2015" title="บทที่ 15">15</a><a href="Linux%20Foundation%2016" title="บทที่ 16">16</a><a href="Linux%20Foundation%2017" title="บทที่ 17">17</a><a href="Linux%20Foundation%2018" title="บทที่ 18">18</a><a href="Linux%20Foundation%2019" title="บทที่ 19">19</a><a href="Linux%20Foundation%2020" title="บทที่ 20">20</a><a href="Linux%20Foundation%2021" title="บทที่ 21">21</a></div></div>
+</body></html>
